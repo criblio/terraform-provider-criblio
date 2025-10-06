@@ -61,7 +61,7 @@ func (i *InputRawUDPConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputRawUDPMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputRawUDPMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputRawUDPMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputRawUDPCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputRawUDPPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputRawUDPMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
@@ -245,7 +245,7 @@ type InputRawUDP struct {
 	Host *string `default:"0.0.0.0" json:"host"`
 	// Port to listen on
 	Port float64 `json:"port"`
-	// Maximum number of events to buffer when downstream is blocking.
+	// Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
 	// Regex matching IP addresses that are allowed to send data
 	IPWhitelistRegex *string `default:"/.*/" json:"ipWhitelistRegex"`

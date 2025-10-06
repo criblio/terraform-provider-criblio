@@ -61,7 +61,7 @@ func (i *InputOpenTelemetryConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputOpenTelemetryMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputOpenTelemetryMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputOpenTelemetryMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputOpenTelemetryCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputOpenTelemetryPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputOpenTelemetryMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
@@ -588,7 +588,7 @@ type InputOpenTelemetry struct {
 	SocketTimeout *float64 `default:"0" json:"socketTimeout"`
 	// After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
 	KeepAliveTimeout *float64 `default:"15" json:"keepAliveTimeout"`
-	// Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+	// Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 	EnableHealthCheck *bool `default:"false" json:"enableHealthCheck"`
 	// Messages from matched IP addresses will be processed, unless also matched by the denylist.
 	IPAllowlistRegex *string `default:"/.*/" json:"ipAllowlistRegex"`

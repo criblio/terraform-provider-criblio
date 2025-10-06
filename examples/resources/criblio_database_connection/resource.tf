@@ -1,14 +1,14 @@
 resource "criblio_database_connection" "my_databaseconnection" {
-  auth_type          = "...my_auth_type..."
-  config_obj         = "...my_config_obj..."
-  connection_string  = "...my_connection_string..."
-  connection_timeout = 9.28
-  database_type      = "oracle"
-  description        = "...my_description..."
-  group_id           = "...my_group_id..."
-  id                 = "...my_id..."
-  password           = "...my_password..."
-  request_timeout    = 0.19
-  tags               = "...my_tags..."
-  user               = "...my_user..."
+  auth_type          = "password"
+  config_obj         = "{\"ssl\":true}"
+  connection_string  = "postgresql://db.example.com:5432/appdb"
+  connection_timeout = 30
+  database_type      = "postgres"
+  description        = "Primary application database"
+  group_id           = "Cribl"
+  id                 = "db-prod-01"
+  password           = "$${{secret:db_password}"
+  request_timeout    = 60
+  tags               = "prod,db"
+  user               = "appuser"
 }

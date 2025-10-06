@@ -61,7 +61,7 @@ func (i *InputTCPConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputTCPMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputTCPMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputTCPMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputTCPCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputTCPPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputTCPMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
@@ -495,7 +495,7 @@ type InputTCP struct {
 	SocketEndingMaxWait *float64 `default:"30" json:"socketEndingMaxWait"`
 	// The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 	SocketMaxLifespan *float64 `default:"0" json:"socketMaxLifespan"`
-	// Enable if the connection is proxied by a device that supports proxy protocol v1 or v2
+	// Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2
 	EnableProxyHeader *bool `default:"false" json:"enableProxyHeader"`
 	// Fields to add to events from this input
 	Metadata []InputTCPMetadatum `json:"metadata,omitempty"`

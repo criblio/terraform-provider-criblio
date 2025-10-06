@@ -14,8 +14,8 @@ Group DataSource
 
 ```terraform
 data "criblio_group" "my_group" {
-  fields = "...my_fields..."
-  id     = "...my_id..."
+  fields = "git.commit,git.localChanges"
+  id     = "workers-west"
 }
 ```
 

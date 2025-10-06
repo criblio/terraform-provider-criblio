@@ -14,7 +14,7 @@ SearchDataset DataSource
 
 ```terraform
 data "criblio_search_dataset" "my_searchdataset" {
-  id = "...my_id..."
+  id = "web-logs"
 }
 ```
 
@@ -71,10 +71,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_aws_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_aws_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_aws_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -100,10 +112,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_azure_data_explorer_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_azure_data_explorer_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_azure_data_explorer_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -125,10 +149,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_azure_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_azure_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_azure_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -150,10 +186,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_elastic_search_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_elastic_search_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_elastic_search_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -183,10 +231,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_gcp_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_gcp_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_gcp_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -207,10 +267,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_google_workspace_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_google_workspace_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_google_workspace_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -231,10 +303,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_ms_graph_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_ms_graph_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_ms_graph_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -255,10 +339,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_okta_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_okta_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_okta_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -280,10 +376,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_open_search_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_open_search_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_open_search_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -304,10 +412,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_tailscale_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_tailscale_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_tailscale_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -328,10 +448,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_zoom_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--api_zoom_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_zoom_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -352,10 +484,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--apihttp_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--apihttp_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `apihttp_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -378,10 +522,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--aws_security_lake_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--aws_security_lake_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `aws_security_lake_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 <a id="nestedatt--aws_security_lake_dataset--selected_buckets"></a>
@@ -390,7 +546,7 @@ Read-Only:
 Read-Only:
 
 - `name` (String) S3 bucket name
-- `region` (String) Region where the bucket is located
+- `region` (String) AWS region where the bucket is located
 
 
 
@@ -416,9 +572,9 @@ Read-Only:
 
 Read-Only:
 
-- `container_name` (String) Azure Blob Storage container name
+- `container_name` (String) Name of the additional container
 - `filter` (String) A JavaScript filter expression to be evaluated against the provided path
-- `path` (String) The templated path under which to look for data
+- `path` (String) Path inside the additional container
 
 
 <a id="nestedatt--azure_blob_dataset--metadata"></a>
@@ -426,10 +582,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--azure_blob_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--azure_blob_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `azure_blob_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -452,10 +620,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--click_house_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--click_house_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `click_house_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -469,7 +649,7 @@ Read-Only:
 - `filter` (String) A JavaScript filter expression to be evaluated against the provided path
 - `id` (String) Unique identifier for the dataset
 - `metadata` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_dataset--metadata))
-- `path` (String) The directory from which to collect data. Environment variables are supported. Supports templating.
+- `path` (String) The directory from which to collect data
 - `provider_id` (String) Dataset provider ID
 - `type` (String) Dataset provider type, set automatically from the dataset provider
 
@@ -487,10 +667,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--cribl_leader_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `cribl_leader_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -513,10 +705,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--edge_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--edge_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `edge_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -544,7 +748,7 @@ Read-Only:
 
 - `bucket` (String) Google Cloud Storage bucket path
 - `filter` (String) A JavaScript filter expression to be evaluated against the provided path
-- `region` (String) Where the bucket is located
+- `region` (String) Where the extra bucket is located
 
 
 <a id="nestedatt--gcs_dataset--metadata"></a>
@@ -552,10 +756,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--gcs_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--gcs_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `gcs_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -576,10 +792,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--meta_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--meta_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `meta_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -589,7 +817,7 @@ Read-Only:
 Read-Only:
 
 - `description` (String) Description of the dataset
-- `desired_num_data_points` (Number) Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a "step" predicate.
+- `desired_num_data_points` (Number) Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a 'step' predicate.
 - `id` (String) Unique identifier for the dataset
 - `metadata` (Attributes) (see [below for nested schema](#nestedatt--prometheus_dataset--metadata))
 - `metric_name_pattern` (String) Optional regular expression used to filter metric names. When defined, only metrics whose name matches this pattern will be searched.
@@ -602,10 +830,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--prometheus_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--prometheus_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `prometheus_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -645,10 +885,22 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--s3_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--s3_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `s3_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -674,7 +926,18 @@ Read-Only:
 
 Read-Only:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String)
+- `enable_acceleration` (Boolean)
+- `field_list` (List of String)
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--snowflake_dataset--metadata--latest_run_info))
+- `scan_mode` (String)
+
+<a id="nestedatt--snowflake_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `snowflake_dataset.metadata.latest_run_info`
+
+Read-Only:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)

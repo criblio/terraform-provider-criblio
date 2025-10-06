@@ -14,153 +14,156 @@ PackSource Resource
 
 ```terraform
 resource "criblio_pack_source" "my_packsource" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "Cribl"
+  id       = "pack-input-hec"
   input_appscope = {
-    auth_token = "...my_auth_token..."
-    auth_type  = "secret"
+    auth_token = "***REDACTED***"
+    auth_type  = "manual"
     breaker_rulesets = [
-      "..."
+      "appscope-lines",
     ]
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-appscope"
+        pipeline = "default"
       }
     ]
-    description         = "...my_description..."
+    description         = "Receive AppScope telemetry over TCP or UNIX socket"
     disabled            = false
-    enable_proxy_header = true
+    enable_proxy_header = false
     enable_unix_path    = false
-    environment         = "...my_environment..."
+    environment         = "main"
     filter = {
       allow = [
         {
-          arg      = "...my_arg..."
-          config   = "...my_config..."
-          procname = "...my_procname..."
+          arg      = "-c /etc/nginx/nginx.conf"
+          config   = "default"
+          procname = "nginx"
         }
       ]
-      transport_url = "...my_transport_url..."
+      transport_url = "unix:///var/run/appscope.sock"
     }
-    host               = "...my_host..."
-    id                 = "...my_id..."
-    ip_whitelist_regex = "...my_ip_whitelist_regex..."
-    max_active_cxn     = 1.37
+    host               = "0.0.0.0"
+    id                 = "appscope-ingest"
+    ip_whitelist_regex = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_active_cxn     = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"appscope\""
       }
     ]
     persistence = {
       compress      = "gzip"
-      dest_path     = "...my_dest_path..."
+      dest_path     = "/var/lib/cribl/state/appscope"
       enable        = true
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
-    port     = 28161.43
+    pipeline = "default"
+    port     = 57000
     pq = {
-      commit_frequency = 5.85
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 47.94
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
     send_to_routes         = true
-    socket_ending_max_wait = 1.65
-    socket_idle_timeout    = 1.4
-    socket_max_lifespan    = 9.58
-    stale_channel_flush_ms = 41730255.43
+    socket_ending_max_wait = 30
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "appscope",
+      "observability",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "appscope-auth-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "appscope-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
+      disabled            = true
       max_version         = "TLSv1.3"
       min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type              = "appscope"
-    unix_socket_path  = "...my_unix_socket_path..."
-    unix_socket_perms = "...my_unix_socket_perms..."
+    unix_socket_path  = "/var/run/appscope.sock"
+    unix_socket_perms = "770"
   }
   input_azure_blob = {
-    auth_type   = "manual"
+    auth_type   = "clientSecret"
     azure_cloud = "...my_azure_cloud..."
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
+      "json-breaker",
     ]
     certificate = {
       certificate_name = "...my_certificate_name..."
     }
     client_id          = "...my_client_id..."
     client_text_secret = "...my_client_text_secret..."
-    connection_string  = "...my_connection_string..."
+    connection_string  = "$${{secret:azure_storage_connection_string}"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description     = "...my_description..."
+    description     = "Azure Blob queue events ingester"
     disabled        = false
     endpoint_suffix = "...my_endpoint_suffix..."
-    environment     = "...my_environment..."
-    file_filter     = "...my_file_filter..."
-    id              = "...my_id..."
-    max_messages    = 14.25
+    environment     = "main"
+    file_filter     = "^logs/.*\\.json$"
+    id              = "azure-blob-queue"
+    max_messages    = 16
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"azure_blob\""
       }
     ]
-    num_receivers                  = 13.36
-    parquet_chunk_download_timeout = 3208.34
-    parquet_chunk_size_mb          = 75.95
-    pipeline                       = "...my_pipeline..."
+    num_receivers                  = 4
+    parquet_chunk_download_timeout = 900
+    parquet_chunk_size_mb          = 10
+    pipeline                       = "default"
     pq = {
-      commit_frequency = 5.88
-      compress         = "none"
-      max_buffer_size  = 48.23
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    queue_name             = "...my_queue_name..."
+    queue_name             = "my-blob-notify-queue"
     send_to_routes         = true
-    service_period_secs    = 6.29
+    service_period_secs    = 5
     skip_on_error          = true
-    stale_channel_flush_ms = 19720963.38
+    stale_channel_flush_ms = 15000
     storage_account_name   = "...my_storage_account_name..."
     streamtags = [
-      "..."
+      "prod",
+      "azure",
     ]
     tenant_id          = "...my_tenant_id..."
     text_secret        = "...my_text_secret..."
     type               = "azure_blob"
-    visibility_timeout = 231727.65
+    visibility_timeout = 300
   }
   input_collection = {
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
     ]
     connections = [
       {
@@ -168,136 +171,139 @@ resource "criblio_pack_source" "my_packsource" {
         pipeline = "...my_pipeline..."
       }
     ]
-    disabled    = true
-    environment = "...my_environment..."
-    id          = "...my_id..."
+    disabled    = false
+    environment = "main"
+    id          = "collect-nginx"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"collection\""
       }
     ]
-    output   = "...my_output..."
-    pipeline = "...my_pipeline..."
+    output   = "datalake"
+    pipeline = "default"
     pq = {
-      commit_frequency = 3.08
-      compress         = "none"
-      max_buffer_size  = 42.51
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     preprocess = {
       args = [
-        "..."
+        "-c",
+        ".message |= upcase",
       ]
-      command  = "...my_command..."
-      disabled = false
+      command  = "jq"
+      disabled = true
     }
     send_to_routes         = true
-    stale_channel_flush_ms = 21269562.73
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "nginx",
     ]
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
+    throttle_rate_per_sec = "10 MB"
     type                  = "collection"
   }
   input_confluent_cloud = {
-    authentication_timeout = 2937234.14
-    auto_commit_interval   = 659880.71
-    auto_commit_threshold  = 5879.65
-    backoff_rate           = 11.16
+    authentication_timeout = 15000
+    auto_commit_interval   = 5000
+    auto_commit_threshold  = 1000
+    backoff_rate           = 3
     brokers = [
-      "..."
+      "pkc-12345.us-central1.gcp.confluent.cloud:9092",
     ]
-    connection_timeout = 2914293.03
+    connection_timeout = 15000
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description        = "...my_description..."
+    description        = "Confluent Cloud consumer for nginx access logs"
     disabled           = false
-    environment        = "...my_environment..."
-    from_beginning     = false
-    group_id           = "...my_group_id..."
-    heartbeat_interval = 3166951.53
-    id                 = "...my_id..."
-    initial_backoff    = 419145.49
+    environment        = "main"
+    from_beginning     = true
+    group_id           = "web-team"
+    heartbeat_interval = 3000
+    id                 = "ccloud-nginx"
+    initial_backoff    = 500
     kafka_schema_registry = {
       auth = {
-        credentials_secret = "...my_credentials_secret..."
+        credentials_secret = "ccloud-schema-basic"
         disabled           = true
       }
-      connection_timeout  = 3962.74
-      disabled            = false
-      max_retries         = 46.18
-      request_timeout     = 31813.85
-      schema_registry_url = "...my_schema_registry_url..."
+      connection_timeout  = 30000
+      disabled            = true
+      max_retries         = 3
+      request_timeout     = 30000
+      schema_registry_url = "https://psrc-12345.us-central1.gcp.confluent.cloud"
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
-        disabled            = false
-        max_version         = "TLSv1"
-        min_version         = "TLSv1"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
+        ca_path             = "/etc/ssl/certs/ca.pem"
+        cert_path           = "/etc/ssl/certs/client.crt"
+        certificate_name    = "ccloud-schema-cert"
+        disabled            = true
+        max_version         = "TLSv1.3"
+        min_version         = "TLSv1.2"
+        passphrase          = "$${{secret:ccloud_key_pass}"
+        priv_key_path       = "/etc/ssl/private/client.key"
         reject_unauthorized = true
-        servername          = "...my_servername..."
+        servername          = "psrc-12345.us-central1.gcp.confluent.cloud"
       }
     }
-    max_back_off            = 134471.78
-    max_bytes               = 393370490.01
-    max_bytes_per_partition = 9387222.15
-    max_retries             = 91.99
-    max_socket_errors       = 53.98
+    max_back_off            = 120000
+    max_bytes               = 10485760
+    max_bytes_per_partition = 1048576
+    max_retries             = 10
+    max_socket_errors       = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"ccloud\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 7.13
-      compress         = "none"
-      max_buffer_size  = 49.55
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled                 = true
-    reauthentication_threshold = 1675705.38
-    rebalance_timeout          = 422499.3
-    request_timeout            = 3058268.79
+    pq_enabled                 = false
+    reauthentication_threshold = 300000
+    rebalance_timeout          = 60000
+    request_timeout            = 60000
     sasl = {
       disabled  = true
-      mechanism = "scram-sha-256"
+      mechanism = "scram-sha-512"
     }
-    send_to_routes  = false
-    session_timeout = 3060629.99
+    send_to_routes  = true
+    session_timeout = 30000
     streamtags = [
-      "..."
+      "prod",
+      "ccloud",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = true
-      max_version         = "TLSv1"
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/client.crt"
+      certificate_name    = "ccloud-client-cert"
+      disabled            = false
+      max_version         = "TLSv1.3"
       min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = false
-      servername          = "...my_servername..."
+      passphrase          = "$${{secret:ccloud_key_pass}"
+      priv_key_path       = "/etc/ssl/private/client.key"
+      reject_unauthorized = true
+      servername          = "pkc-12345.us-central1.gcp.confluent.cloud"
     }
     topics = [
-      "..."
+      "nginx_access",
     ]
     type = "confluent_cloud"
   }
@@ -308,195 +314,164 @@ resource "criblio_pack_source" "my_packsource" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description = "...my_description..."
+    description = "Internal Cribl-generated events"
     disabled    = false
-    environment = "...my_environment..."
-    filter      = "...my_filter..."
-    id          = "...my_id..."
+    environment = "main"
+    filter      = "host=\"edge-*\" AND sourcetype!=\"metrics\""
+    id          = "cribl-internal"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"cribl_internal\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 9.9
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 43.66
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled     = true
+    pq_enabled     = false
     send_to_routes = true
     streamtags = [
-      "..."
+      "internal",
+      "cribl",
     ]
     type = "cribl"
   }
   input_cribl_http = {
-    activity_log_sample_rate = 3.47
+    activity_log_sample_rate = 10
     auth_tokens = [
-      "..."
+      "secret-token-1",
+      "secret-token-2",
     ]
-    capture_headers = false
+    capture_headers = true
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
+    description             = "Cribl HTTP-compatible ingestion endpoint"
     disabled                = false
     enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 585.48
-    max_active_req          = 4.61
-    max_requests_per_socket = 1
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "cribl-http-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"cribl_http\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 7127.76
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 5.87
-      compress         = "none"
-      max_buffer_size  = 49.68
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled      = true
-    request_timeout = 2.4
+    pq_enabled      = false
+    request_timeout = 30
     send_to_routes  = true
-    socket_timeout  = 5.36
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "prod",
+      "cribl_http",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "cribl-http-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:cribl_http_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type = "cribl_http"
   }
   input_cribl_lake_http = {
-    activity_log_sample_rate = 1.57
+    activity_log_sample_rate = 10
     auth_tokens = [
-      "..."
+      "lake-token-1",
+      "lake-token-2",
     ]
-    capture_headers = false
+    capture_headers = true
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
-    enable_health_check     = false
+    description             = "Cribl Lake HTTP ingestion endpoint"
+    disabled                = false
+    enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 447.43
-    max_active_req          = 5.44
-    max_requests_per_socket = 9
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "lake-http-ingest"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"cribl_lake_http\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 26909.28
+    pipeline = "lake-default"
+    port     = 9088
     pq = {
-      commit_frequency = 5.05
-      compress         = "none"
-      max_buffer_size  = 47.49
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled      = false
-    request_timeout = 5.06
-    send_to_routes  = false
-    socket_timeout  = 0.26
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "lake",
+      "ingest",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "lake-http-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:lake_http_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type = "cribl_lake_http"
-  }
-  input_criblmetrics = {
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    description   = "...my_description..."
-    disabled      = false
-    environment   = "...my_environment..."
-    full_fidelity = false
-    id            = "...my_id..."
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    pipeline = "...my_pipeline..."
-    pq = {
-      commit_frequency = 1.52
-      compress         = "none"
-      max_buffer_size  = 50.12
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
-    }
-    pq_enabled     = false
-    prefix         = "...my_prefix..."
-    send_to_routes = false
-    streamtags = [
-      "..."
-    ]
-    type = "criblmetrics"
   }
   input_cribl_tcp = {
     connections = [
@@ -505,190 +480,230 @@ resource "criblio_pack_source" "my_packsource" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description           = "...my_description..."
-    disabled              = true
-    enable_load_balancing = false
-    enable_proxy_header   = true
-    environment           = "...my_environment..."
-    host                  = "...my_host..."
-    id                    = "...my_id..."
-    max_active_cxn        = 1.27
+    description           = "This is the field used for description for this input"
+    disabled              = false
+    enable_load_balancing = true
+    enable_proxy_header   = false
+    environment           = "main"
+    host                  = "0.0.0.0"
+    id                    = "cribl-tcp-listener"
+    max_active_cxn        = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"cribl_tcp\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 52135.7
+    pipeline = "default"
+    port     = 9514
     pq = {
-      commit_frequency = 4.41
-      compress         = "none"
-      max_buffer_size  = 42.78
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    send_to_routes         = false
-    socket_ending_max_wait = 7.99
-    socket_idle_timeout    = 6.78
-    socket_max_lifespan    = 3.77
+    send_to_routes         = true
+    socket_ending_max_wait = 15
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
     streamtags = [
-      "..."
+      "prod",
+      "cribl_tcp",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "cribl-tcp-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:cribl_tcp_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type = "cribl_tcp"
   }
+  input_criblmetrics = {
+    connections = [
+      {
+        output   = "s3-metrics"
+        pipeline = "default"
+      }
+    ]
+    description   = "Emit Cribl internal metrics"
+    disabled      = false
+    environment   = "main"
+    full_fidelity = true
+    id            = "cribl-metrics"
+    metadata = [
+      {
+        name  = "source"
+        value = "\"criblmetrics\""
+      }
+    ]
+    pipeline = "default"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled     = false
+    prefix         = "cribl.logstream."
+    send_to_routes = true
+    streamtags = [
+      "cribl",
+      "internal",
+    ]
+    type = "criblmetrics"
+  }
   input_crowdstrike = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-s3-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
     breaker_rulesets = [
-      "..."
+      "crowdstrike-breaker",
     ]
     checkpointing = {
       enabled = true
-      retries = 14.14
+      retries = 3
     }
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-crowdstrike"
+        pipeline = "default"
       }
     ]
-    description            = "...my_description..."
-    disabled               = true
-    duration_seconds       = 3017.54
-    enable_assume_role     = false
+    description            = "Ingest CrowdStrike S3 notifications and objects"
+    disabled               = false
+    duration_seconds       = 3600
+    enable_assume_role     = true
     enable_sqs_assume_role = true
-    encoding               = "...my_encoding..."
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    file_filter            = "...my_file_filter..."
-    id                     = "...my_id..."
-    max_messages           = 6
+    encoding               = "utf-8"
+    endpoint               = "https://s3.us-east-1.amazonaws.com"
+    environment            = "main"
+    file_filter            = ".*\\.json(\\.gz)?$"
+    id                     = "crowdstrike-sqs"
+    max_messages           = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"crowdstrike\""
       }
     ]
-    num_receivers = 34.07
-    pipeline      = "...my_pipeline..."
-    poll_timeout  = 14.09
+    num_receivers = 4
+    pipeline      = "default"
+    poll_timeout  = 10
     pq = {
-      commit_frequency = 4.32
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 42.07
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     preprocess = {
       args = [
-        "..."
+        "--compact-output",
       ]
-      command  = "...my_command..."
+      command  = "jq -r .message"
       disabled = true
     }
-    processed_tag_key      = "...my_processed_tag_key..."
-    processed_tag_value    = "...my_processed_tag_value..."
-    queue_name             = "...my_queue_name..."
-    region                 = "...my_region..."
-    reject_unauthorized    = false
-    reuse_connections      = false
-    send_to_routes         = false
-    signature_version      = "v2"
+    processed_tag_key      = "processed-by"
+    processed_tag_value    = "cribl-processed"
+    queue_name             = "https://sqs.us-east-1.amazonaws.com/123456789012/crowdstrike-events"
+    region                 = "us-east-1"
+    reject_unauthorized    = true
+    reuse_connections      = true
+    send_to_routes         = true
+    signature_version      = "v4"
     skip_on_error          = true
-    socket_timeout         = 22004.07
-    stale_channel_flush_ms = 14290632.13
+    socket_timeout         = 600
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "crowdstrike",
+      "edr",
     ]
-    tag_after_processing = "true"
+    tag_after_processing = "...my_tag_after_processing..."
     type                 = "crowdstrike"
-    visibility_timeout   = 662.93
+    visibility_timeout   = 300
   }
   input_datadog_agent = {
-    activity_log_sample_rate = 2.98
+    activity_log_sample_rate = 100
     capture_headers          = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-dd"
+        pipeline = "default"
       }
     ]
-    description             = "...my_description..."
+    description             = "Accept Datadog Agent intake and forward to destinations"
     disabled                = false
-    enable_health_check     = false
-    enable_proxy_header     = true
-    environment             = "...my_environment..."
+    enable_health_check     = true
+    enable_proxy_header     = false
+    environment             = "main"
     extract_metrics         = false
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 57.71
-    max_active_req          = 5.65
-    max_requests_per_socket = 2
+    host                    = "0.0.0.0"
+    id                      = "datadog-agent-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"datadog_agent\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 14790.78
+    pipeline = "default"
+    port     = 10518
     pq = {
-      commit_frequency = 10.88
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 45.59
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     proxy_mode = {
-      enabled             = false
+      enabled             = true
       reject_unauthorized = true
     }
-    request_timeout = 3.2
+    request_timeout = 30
     send_to_routes  = true
-    socket_timeout  = 6.91
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "datadog",
+      "metrics",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "dd-agent-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
+      disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
@@ -697,112 +712,116 @@ resource "criblio_pack_source" "my_packsource" {
   input_datagen = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-synthetic"
+        pipeline = "default"
       }
     ]
-    description = "...my_description..."
+    description = "Generate synthetic log events for testing"
     disabled    = false
-    environment = "...my_environment..."
-    id          = "...my_id..."
+    environment = "main"
+    id          = "datagen-synthetic"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"datagen\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 8.51
-      compress         = "none"
-      max_buffer_size  = 44.45
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     samples = [
       {
-        events_per_sec = 7.37
-        sample         = "...my_sample..."
+        events_per_sec = 200
+        sample         = "apache_common.log"
       }
     ]
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "synthetic",
+      "test",
     ]
     type = "datagen"
   }
   input_edge_prometheus = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    auth_type                 = "manual"
-    aws_authentication_method = "secret"
-    aws_secret_key            = "...my_aws_secret_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/edge-prom-discovery"
+    assume_role_external_id   = "external-123"
+    auth_type                 = "kubernetes"
+    aws_authentication_method = "auto"
+    aws_secret_key            = "$${{secret:aws_secret_access_key}"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret = "...my_credentials_secret..."
-    description        = "...my_description..."
+    credentials_secret = "edge-prom-credentials"
+    description        = "Edge Prometheus scraper with K8s discovery"
     dimension_list = [
-      "..."
+      "host",
+      "source",
+      "region",
     ]
     disabled           = false
     discovery_type     = "k8s-pods"
-    duration_seconds   = 4666.4
-    enable_assume_role = true
-    endpoint           = "...my_endpoint..."
-    environment        = "...my_environment..."
-    id                 = "...my_id..."
-    interval           = 3.21
+    duration_seconds   = 3600
+    enable_assume_role = false
+    endpoint           = "https://ec2.us-east-1.amazonaws.com"
+    environment        = "main"
+    id                 = "edge-prom-scraper"
+    interval           = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"edge_prometheus\""
       }
     ]
     name_list = [
-      "..."
+      "web-*.example.com",
+      "node-exporter.internal.example.com",
     ]
-    password = "...my_password..."
+    password = "$${{secret:edge_prom_password}"
     persistence = {
       compress      = "gzip"
-      enable        = false
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      enable        = true
+      max_data_size = "4GB"
+      max_data_time = "48h"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pod_filter = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Scrape pod if annotation is true"
+        filter      = "metadata.annotations['prometheus.io/scrape']"
       }
     ]
     pq = {
-      commit_frequency = 8.56
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 48.47
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled           = true
-    record_type          = "AAAA"
-    region               = "...my_region..."
+    pq_enabled           = false
+    record_type          = "SRV"
+    region               = "us-east-1"
     reject_unauthorized  = true
-    reuse_connections    = false
-    scrape_path          = "...my_scrape_path..."
-    scrape_path_expr     = "...my_scrape_path_expr..."
-    scrape_port          = 37487.6
-    scrape_port_expr     = "...my_scrape_port_expr..."
+    reuse_connections    = true
+    scrape_path          = "/metrics"
+    scrape_path_expr     = "metadata.annotations['prometheus.io/path'] || '/metrics'"
+    scrape_port          = 9100
+    scrape_port_expr     = "metadata.annotations['prometheus.io/port'] || 9100"
     scrape_protocol      = "http"
-    scrape_protocol_expr = "...my_scrape_protocol_expr..."
+    scrape_protocol_expr = "metadata.annotations['prometheus.io/scheme'] || 'http'"
     search_filter = [
       {
         name = "...my_name..."
@@ -814,28 +833,30 @@ resource "criblio_pack_source" "my_packsource" {
     send_to_routes    = true
     signature_version = "v4"
     streamtags = [
-      "..."
+      "edge",
+      "prometheus",
     ]
     targets = [
       {
-        host     = "...my_host..."
-        path     = "...my_path..."
-        port     = 9226.3
+        host     = "node-exporter"
+        path     = "/metrics"
+        port     = 9100
         protocol = "http"
       }
     ]
-    timeout       = 11361.91
+    timeout       = 5000
     type          = "edge_prometheus"
     use_public_ip = true
-    username      = "...my_username..."
+    username      = "edge_user"
   }
   input_elastic = {
-    activity_log_sample_rate = 3.46
-    api_version              = "custom"
+    activity_log_sample_rate = 10
+    api_version              = "8.3.2"
     auth_tokens = [
-      "..."
+      "es-api-token-1",
+      "es-api-token-2",
     ]
-    auth_type       = "credentialsSecret"
+    auth_type       = "basic"
     capture_headers = true
     connections = [
       {
@@ -843,246 +864,253 @@ resource "criblio_pack_source" "my_packsource" {
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret  = "...my_credentials_secret..."
-    custom_api_version  = "...my_custom_api_version..."
-    description         = "...my_description..."
-    disabled            = true
-    elastic_api         = "...my_elastic_api..."
-    enable_health_check = false
+    credentials_secret  = "elastic-proxy-credentials"
+    custom_api_version  = "{\n    \"name\": \"Cribl Elastic Proxy\",\n    \"cluster_name\": \"cribl\",\n    \"cluster_uuid\": \"abcd1234efgh5678ijkl9012\",\n    \"version\": {\n        \"number\": \"8.11.1\",\n        \"build_type\": \"tar\",\n        \"build_hash\": \"1a2b3c4\",\n        \"build_date\": \"2025-09-01T00:00:00.000Z\",\n        \"build_snapshot\": false,\n        \"lucene_version\": \"9.10.0\",\n        \"minimum_wire_compatibility_version\": \"7.17.0\",\n        \"minimum_index_compatibility_version\": \"7.0.0\"\n    },\n    \"tagline\": \"You Know, for Search\"\n}"
+    description         = "Elasticsearch bulk listener with proxy for non-bulk APIs"
+    disabled            = false
+    elastic_api         = "/ingest"
+    enable_health_check = true
     enable_proxy_header = false
-    environment         = "...my_environment..."
+    environment         = "main"
     extra_http_headers = [
       {
         name  = "...my_name..."
         value = "...my_value..."
       }
     ]
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 519.14
-    max_active_req          = 9.4
-    max_requests_per_socket = 7
+    host                    = "0.0.0.0"
+    id                      = "elastic-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"elastic\""
       }
     ]
-    password = "...my_password..."
-    pipeline = "...my_pipeline..."
-    port     = 63358.75
+    password = "$${{secret:elastic_proxy_password}"
+    pipeline = "default"
+    port     = 9200
     pq = {
-      commit_frequency = 7.29
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 46.69
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     proxy_mode = {
-      auth_type           = "secret"
+      auth_type           = "manual"
       enabled             = true
-      reject_unauthorized = true
+      reject_unauthorized = false
       remove_headers = [
-        "..."
+        "Authorization",
+        "Content-Length",
       ]
-      timeout_sec = 3207862514268799.5
-      url         = "...my_url..."
+      timeout_sec = 60
+      url         = "https://elastic.example.com:9200"
     }
-    request_timeout = 1
-    send_to_routes  = false
-    socket_timeout  = 8.18
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "prod",
+      "elastic",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "elastic-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:elastic_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type     = "elastic"
-    username = "...my_username..."
+    username = "elastic"
   }
   input_eventhub = {
-    authentication_timeout = 2856176.19
-    auto_commit_interval   = 1319807.47
-    auto_commit_threshold  = 9173.68
-    backoff_rate           = 10.91
+    authentication_timeout = 15000
+    auto_commit_interval   = 5000
+    auto_commit_threshold  = 1000
+    backoff_rate           = 3
     brokers = [
-      "..."
+      "yourspace.servicebus.windows.net:9093",
     ]
-    connection_timeout = 3004423.35
+    connection_timeout = 15000
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
-    environment             = "...my_environment..."
-    from_beginning          = false
-    group_id                = "...my_group_id..."
-    heartbeat_interval      = 1973630.58
-    id                      = "...my_id..."
-    initial_backoff         = 435093.88
-    max_back_off            = 131350
-    max_bytes               = 228637439.84
-    max_bytes_per_partition = 6765683.06
-    max_retries             = 90.41
-    max_socket_errors       = 90.71
+    description             = "Azure Event Hubs Kafka consumer"
+    disabled                = false
+    environment             = "main"
+    from_beginning          = true
+    group_id                = "web-team"
+    heartbeat_interval      = 3000
+    id                      = "eventhub-nginx"
+    initial_backoff         = 500
+    max_back_off            = 120000
+    max_bytes               = 10485760
+    max_bytes_per_partition = 1048576
+    max_retries             = 10
+    max_socket_errors       = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"eventhub\""
       }
     ]
     minimize_duplicates = true
-    pipeline            = "...my_pipeline..."
+    pipeline            = "default"
     pq = {
-      commit_frequency = 6.67
-      compress         = "none"
-      max_buffer_size  = 50.4
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled                 = true
-    reauthentication_threshold = 408790.3
-    rebalance_timeout          = 2000665.85
-    request_timeout            = 77186.25
+    pq_enabled                 = false
+    reauthentication_threshold = 300000
+    rebalance_timeout          = 60000
+    request_timeout            = 60000
     sasl = {
       disabled  = false
-      mechanism = "oauthbearer"
+      mechanism = "plain"
     }
     send_to_routes  = true
-    session_timeout = 198201.45
+    session_timeout = 30000
     streamtags = [
-      "..."
+      "prod",
+      "eventhub",
     ]
     tls = {
-      disabled            = true
-      reject_unauthorized = false
+      disabled            = false
+      reject_unauthorized = true
     }
     topics = [
-      "..."
+      "logs",
     ]
     type = "eventhub"
   }
   input_exec = {
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
     ]
-    command = "...my_command..."
+    command = "tail -F /var/log/nginx/access.log"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    cron_schedule = "...my_cron_schedule..."
-    description   = "...my_description..."
+    cron_schedule = "*/5 * * * *"
+    description   = "Exec tail of nginx access logs"
     disabled      = false
-    environment   = "...my_environment..."
-    id            = "...my_id..."
-    interval      = 2.17
+    environment   = "main"
+    id            = "exec-tail-logs"
+    interval      = 60
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"exec\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 4.61
-      compress         = "none"
-      max_buffer_size  = 44.51
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    retries                = 2.16
+    retries                = 5
     schedule_type          = "interval"
     send_to_routes         = true
-    stale_channel_flush_ms = 3982835.68
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "exec",
     ]
     type = "exec"
   }
   input_file = {
     breaker_rulesets = [
-      "..."
+      "multiline-java",
     ]
     check_file_mod_time = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-logs"
+        pipeline = "default"
       }
     ]
     delete_files = false
-    depth        = 0.56
-    description  = "...my_description..."
-    disabled     = true
-    environment  = "...my_environment..."
+    depth        = 2
+    description  = "Watch local files and tail new content"
+    disabled     = false
+    environment  = "main"
     filenames = [
-      "..."
+      "/var/log/*.log",
+      "/opt/app/logs/*log",
     ]
     force_text                    = false
-    hash_len                      = 9.59
-    id                            = "...my_id..."
-    idle_timeout                  = 2.16
-    include_unidentifiable_binary = false
-    interval                      = 10.53
-    max_age_dur                   = "...my_max_age_dur..."
+    hash_len                      = 256
+    id                            = "file-watcher"
+    idle_timeout                  = 600
+    include_unidentifiable_binary = true
+    interval                      = 10
+    max_age_dur                   = "3d"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"file\""
       }
     ]
-    mode     = "manual"
-    path     = "...my_path..."
-    pipeline = "...my_pipeline..."
+    mode     = "auto"
+    path     = "/var/log"
+    pipeline = "default"
     pq = {
-      commit_frequency = 10.43
-      compress         = "none"
-      max_buffer_size  = 43.03
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled             = true
-    send_to_routes         = false
-    stale_channel_flush_ms = 7766576.84
+    pq_enabled             = false
+    send_to_routes         = true
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "filesystem",
+      "logs",
     ]
-    suppress_missing_path_errors = false
+    suppress_missing_path_errors = true
     tail_only                    = true
     type                         = "file"
   }
   input_firehose = {
-    activity_log_sample_rate = 1.98
+    activity_log_sample_rate = 10
     auth_tokens = [
-      "..."
+      "secret-token-1",
+      "secret-token-2",
     ]
     capture_headers = true
     connections = [
@@ -1091,106 +1119,108 @@ resource "criblio_pack_source" "my_packsource" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
-    enable_health_check     = false
+    description             = "Kinesis Firehose-compatible HTTP listener"
+    disabled                = false
+    enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 287.57
-    max_active_req          = 9.93
-    max_requests_per_socket = 10
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "firehose-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"firehose\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 53600.14
+    pipeline = "default"
+    port     = 9000
     pq = {
-      commit_frequency = 9.1
-      compress         = "none"
-      max_buffer_size  = 50.79
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled      = true
-    request_timeout = 2.73
-    send_to_routes  = false
-    socket_timeout  = 5.78
+    pq_enabled      = false
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "prod",
+      "firehose",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "firehose-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:firehose_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type = "firehose"
   }
   input_google_pubsub = {
-    concurrency = 49.72
+    concurrency = 10
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    create_subscription = false
-    create_topic        = true
-    description         = "...my_description..."
-    disabled            = true
-    environment         = "...my_environment..."
-    google_auth_method  = "auto"
-    id                  = "...my_id..."
-    max_backlog         = 4.09
+    create_subscription = true
+    create_topic        = false
+    description         = "Google Pub/Sub pull subscription consumer"
+    disabled            = false
+    environment         = "main"
+    google_auth_method  = "secret"
+    id                  = "gpubsub-nginx"
+    max_backlog         = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"gpubsub\""
       }
     ]
     ordered_delivery = false
-    pipeline         = "...my_pipeline..."
+    pipeline         = "default"
     pq = {
-      commit_frequency = 8.56
-      compress         = "none"
-      max_buffer_size  = 51.86
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled                  = false
-    region                      = "...my_region..."
-    request_timeout             = 10003
-    secret                      = "...my_secret..."
-    send_to_routes              = false
-    service_account_credentials = "...my_service_account_credentials..."
+    region                      = "us-central1"
+    request_timeout             = 45000
+    secret                      = "gcp-service-account"
+    send_to_routes              = true
+    service_account_credentials = "$${{file:/secrets/gcp-service-account.json}"
     streamtags = [
-      "..."
+      "prod",
+      "gpubsub",
     ]
-    subscription_name = "...my_subscription_name..."
-    topic_name        = "...my_topic_name..."
+    subscription_name = "projects/my-project/subscriptions/nginx-logs-sub"
+    topic_name        = "projects/my-project/topics/nginx-logs"
     type              = "google_pubsub"
   }
   input_grafana = {
     input_grafana_grafana1 = {
-      activity_log_sample_rate = 4.98
+      activity_log_sample_rate = 10
       capture_headers          = true
       connections = [
         {
@@ -1198,113 +1228,114 @@ resource "criblio_pack_source" "my_packsource" {
           pipeline = "...my_pipeline..."
         }
       ]
-      description         = "...my_description..."
-      disabled            = true
-      enable_health_check = false
-      enable_proxy_header = true
-      environment         = "...my_environment..."
-      host                = "...my_host..."
-      id                  = "...my_id..."
-      ip_allowlist_regex  = "...my_ip_allowlist_regex..."
-      ip_denylist_regex   = "...my_ip_denylist_regex..."
-      keep_alive_timeout  = 78.37
-      loki_api            = "...my_loki_api..."
+      description         = "Grafana listener supporting Prom remote write and Loki logs"
+      disabled            = false
+      enable_health_check = true
+      enable_proxy_header = false
+      environment         = "main"
+      host                = "0.0.0.0"
+      id                  = "grafana-listener"
+      ip_allowlist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+      ip_denylist_regex   = "^192\\.168\\.0\\.\\d{1,3}$"
+      keep_alive_timeout  = 30
+      loki_api            = "/loki/api/v1/push"
       loki_auth = {
-        auth_header_expr   = "...my_auth_header_expr..."
-        auth_type          = "textSecret"
-        credentials_secret = "...my_credentials_secret..."
-        login_url          = "...my_login_url..."
+        auth_header_expr   = "`Bearer ${token}`"
+        auth_type          = "token"
+        credentials_secret = "loki-credentials"
+        login_url          = "https://loki.example.com/oauth/token"
         oauth_headers = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "Accept"
+            value = "application/json"
           }
         ]
         oauth_params = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "grant_type"
+            value = "client_credentials"
           }
         ]
-        password             = "...my_password..."
-        secret               = "...my_secret..."
-        secret_param_name    = "...my_secret_param_name..."
-        text_secret          = "...my_text_secret..."
-        token                = "...my_token..."
-        token_attribute_name = "...my_token_attribute_name..."
-        token_timeout_secs   = 153201.44
-        username             = "...my_username..."
+        password             = "$${{secret:loki_password}"
+        secret               = "$${{secret:loki_oauth_secret}"
+        secret_param_name    = "client_secret"
+        text_secret          = "loki-token-secret"
+        token                = "$${{secret:loki_token}"
+        token_attribute_name = "access_token"
+        token_timeout_secs   = 3600
+        username             = "loki_user"
       }
-      max_active_req          = 2.9
-      max_requests_per_socket = 8
+      max_active_req          = 512
+      max_requests_per_socket = 1000
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "source"
+          value = "\"grafana\""
         }
       ]
-      pipeline = "...my_pipeline..."
-      port     = 50121.26
+      pipeline = "default"
+      port     = 4318
       pq = {
-        commit_frequency = 7.49
+        commit_frequency = 100
         compress         = "gzip"
-        max_buffer_size  = 46.8
-        max_file_size    = "...my_max_file_size..."
-        max_size         = "...my_max_size..."
+        max_buffer_size  = 5000
+        max_file_size    = "128 MB"
+        max_size         = "20GB"
         mode             = "smart"
-        path             = "...my_path..."
+        path             = "/opt/cribl/state/queues"
       }
-      pq_enabled     = true
-      prometheus_api = "...my_prometheus_api..."
+      pq_enabled     = false
+      prometheus_api = "/api/prom/push"
       prometheus_auth = {
-        auth_header_expr   = "...my_auth_header_expr..."
-        auth_type          = "credentialsSecret"
-        credentials_secret = "...my_credentials_secret..."
-        login_url          = "...my_login_url..."
+        auth_header_expr   = "`Bearer ${token}`"
+        auth_type          = "basic"
+        credentials_secret = "prom-credentials"
+        login_url          = "https://grafana.example.com/oauth/token"
         oauth_headers = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "Accept"
+            value = "application/json"
           }
         ]
         oauth_params = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "grant_type"
+            value = "client_credentials"
           }
         ]
-        password             = "...my_password..."
-        secret               = "...my_secret..."
-        secret_param_name    = "...my_secret_param_name..."
-        text_secret          = "...my_text_secret..."
-        token                = "...my_token..."
-        token_attribute_name = "...my_token_attribute_name..."
-        token_timeout_secs   = 226188.99
-        username             = "...my_username..."
+        password             = "$${{secret:prom_password}"
+        secret               = "$${{secret:prom_oauth_secret}"
+        secret_param_name    = "client_secret"
+        text_secret          = "prom-token-secret"
+        token                = "$${{secret:prom_token}"
+        token_attribute_name = "access_token"
+        token_timeout_secs   = 3600
+        username             = "grafana"
       }
-      request_timeout = 9.92
+      request_timeout = 30
       send_to_routes  = true
-      socket_timeout  = 0.76
+      socket_timeout  = 60
       streamtags = [
-        "..."
+        "prod",
+        "grafana",
       ]
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
+        ca_path             = "/etc/ssl/certs/ca.pem"
+        cert_path           = "/etc/ssl/certs/server.crt"
+        certificate_name    = "grafana-listener-cert"
         common_name_regex   = "{ \"see\": \"documentation\" }"
-        disabled            = false
-        max_version         = "TLSv1.2"
-        min_version         = "TLSv1.3"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
+        disabled            = true
+        max_version         = "TLSv1.3"
+        min_version         = "TLSv1.2"
+        passphrase          = "$${{secret:grafana_key_pass}"
+        priv_key_path       = "/etc/ssl/private/server.key"
         reject_unauthorized = "{ \"see\": \"documentation\" }"
         request_cert        = false
       }
       type = "grafana"
     }
     input_grafana_grafana2 = {
-      activity_log_sample_rate = 8.39
+      activity_log_sample_rate = 10
       capture_headers          = true
       connections = [
         {
@@ -1312,127 +1343,129 @@ resource "criblio_pack_source" "my_packsource" {
           pipeline = "...my_pipeline..."
         }
       ]
-      description         = "...my_description..."
-      disabled            = true
-      enable_health_check = false
+      description         = "Grafana listener supporting Prom remote write and Loki logs"
+      disabled            = false
+      enable_health_check = true
       enable_proxy_header = false
-      environment         = "...my_environment..."
-      host                = "...my_host..."
-      id                  = "...my_id..."
-      ip_allowlist_regex  = "...my_ip_allowlist_regex..."
-      ip_denylist_regex   = "...my_ip_denylist_regex..."
-      keep_alive_timeout  = 481.89
-      loki_api            = "...my_loki_api..."
+      environment         = "main"
+      host                = "0.0.0.0"
+      id                  = "grafana-listener"
+      ip_allowlist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+      ip_denylist_regex   = "^192\\.168\\.0\\.\\d{1,3}$"
+      keep_alive_timeout  = 30
+      loki_api            = "/loki/api/v1/push"
       loki_auth = {
-        auth_header_expr   = "...my_auth_header_expr..."
-        auth_type          = "oauth"
-        credentials_secret = "...my_credentials_secret..."
-        login_url          = "...my_login_url..."
+        auth_header_expr   = "`Bearer ${token}`"
+        auth_type          = "token"
+        credentials_secret = "loki-credentials"
+        login_url          = "https://loki.example.com/oauth/token"
         oauth_headers = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "Accept"
+            value = "application/json"
           }
         ]
         oauth_params = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "grant_type"
+            value = "client_credentials"
           }
         ]
-        password             = "...my_password..."
-        secret               = "...my_secret..."
-        secret_param_name    = "...my_secret_param_name..."
-        text_secret          = "...my_text_secret..."
-        token                = "...my_token..."
-        token_attribute_name = "...my_token_attribute_name..."
-        token_timeout_secs   = 71960.83
-        username             = "...my_username..."
+        password             = "$${{secret:loki_password}"
+        secret               = "$${{secret:loki_oauth_secret}"
+        secret_param_name    = "client_secret"
+        text_secret          = "loki-token-secret"
+        token                = "$${{secret:loki_token}"
+        token_attribute_name = "access_token"
+        token_timeout_secs   = 3600
+        username             = "loki_user"
       }
-      max_active_req          = 0.92
-      max_requests_per_socket = 0
+      max_active_req          = 512
+      max_requests_per_socket = 1000
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "source"
+          value = "\"grafana\""
         }
       ]
-      pipeline = "...my_pipeline..."
-      port     = 22887.21
+      pipeline = "default"
+      port     = 4318
       pq = {
-        commit_frequency = 7.32
-        compress         = "none"
-        max_buffer_size  = 48.08
-        max_file_size    = "...my_max_file_size..."
-        max_size         = "...my_max_size..."
+        commit_frequency = 100
+        compress         = "gzip"
+        max_buffer_size  = 5000
+        max_file_size    = "128 MB"
+        max_size         = "20GB"
         mode             = "smart"
-        path             = "...my_path..."
+        path             = "/opt/cribl/state/queues"
       }
       pq_enabled     = false
-      prometheus_api = "...my_prometheus_api..."
+      prometheus_api = "/api/prom/push"
       prometheus_auth = {
-        auth_header_expr   = "...my_auth_header_expr..."
-        auth_type          = "none"
-        credentials_secret = "...my_credentials_secret..."
-        login_url          = "...my_login_url..."
+        auth_header_expr   = "`Bearer ${token}`"
+        auth_type          = "basic"
+        credentials_secret = "prom-credentials"
+        login_url          = "https://grafana.example.com/oauth/token"
         oauth_headers = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "Accept"
+            value = "application/json"
           }
         ]
         oauth_params = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "grant_type"
+            value = "client_credentials"
           }
         ]
-        password             = "...my_password..."
-        secret               = "...my_secret..."
-        secret_param_name    = "...my_secret_param_name..."
-        text_secret          = "...my_text_secret..."
-        token                = "...my_token..."
-        token_attribute_name = "...my_token_attribute_name..."
-        token_timeout_secs   = 72520.14
-        username             = "...my_username..."
+        password             = "$${{secret:prom_password}"
+        secret               = "$${{secret:prom_oauth_secret}"
+        secret_param_name    = "client_secret"
+        text_secret          = "prom-token-secret"
+        token                = "$${{secret:prom_token}"
+        token_attribute_name = "access_token"
+        token_timeout_secs   = 3600
+        username             = "grafana"
       }
-      request_timeout = 1.09
+      request_timeout = 30
       send_to_routes  = true
-      socket_timeout  = 6.68
+      socket_timeout  = 60
       streamtags = [
-        "..."
+        "prod",
+        "grafana",
       ]
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
+        ca_path             = "/etc/ssl/certs/ca.pem"
+        cert_path           = "/etc/ssl/certs/server.crt"
+        certificate_name    = "grafana-listener-cert"
         common_name_regex   = "{ \"see\": \"documentation\" }"
-        disabled            = false
-        max_version         = "TLSv1.1"
+        disabled            = true
+        max_version         = "TLSv1.3"
         min_version         = "TLSv1.2"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
+        passphrase          = "$${{secret:grafana_key_pass}"
+        priv_key_path       = "/etc/ssl/private/server.key"
         reject_unauthorized = "{ \"see\": \"documentation\" }"
-        request_cert        = true
+        request_cert        = false
       }
       type = "grafana"
     }
   }
   input_http = {
-    activity_log_sample_rate = 4.81
+    activity_log_sample_rate = 10
     auth_tokens = [
-      "..."
+      "secret-token-1",
+      "secret-token-2",
     ]
     auth_tokens_ext = [
       {
-        description = "...my_description..."
+        description = "Token for webhook ingestion"
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "sourcetype"
+            value = "\"http:webhook\""
           }
         ]
-        token = "...my_token..."
+        token = "secret-token-1"
       }
     ]
     capture_headers = true
@@ -1442,141 +1475,146 @@ resource "criblio_pack_source" "my_packsource" {
         pipeline = "...my_pipeline..."
       }
     ]
-    cribl_api               = "...my_cribl_api..."
-    description             = "...my_description..."
+    cribl_api               = "/cribl"
+    description             = "HTTP listener for webhook events"
     disabled                = false
-    elastic_api             = "...my_elastic_api..."
+    elastic_api             = "/elastic"
     enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 253.68
-    max_active_req          = 2.7
-    max_requests_per_socket = 3
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "http-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"http\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 45701.82
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 5.79
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 51.73
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled      = true
-    request_timeout = 4.91
+    pq_enabled      = false
+    request_timeout = 30
     send_to_routes  = true
-    socket_timeout  = 6.77
-    splunk_hec_acks = true
-    splunk_hec_api  = "...my_splunk_hec_api..."
+    socket_timeout  = 60
+    splunk_hec_acks = false
+    splunk_hec_api  = "/services/collector"
     streamtags = [
-      "..."
+      "prod",
+      "http",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "http-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:http_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type = "http"
   }
   input_http_raw = {
-    activity_log_sample_rate = 9.27
+    activity_log_sample_rate = 100
     allowed_methods = [
-      "..."
+      "POST",
+      "PUT",
     ]
     allowed_paths = [
-      "..."
+      "/api/v1/hook",
+      "/webhook/*",
     ]
     auth_tokens = [
-      "..."
+      "supersecrettoken",
     ]
     auth_tokens_ext = [
       {
-        description = "...my_description..."
+        description = "CI webhook"
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "team"
+            value = "\"platform\""
           }
         ]
-        token = "...my_token..."
+        token = "supersecrettoken"
       }
     ]
     breaker_rulesets = [
-      "..."
+      "http-raw-breaker",
+      "multiline-json",
     ]
-    capture_headers = false
+    capture_headers = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-raw"
+        pipeline = "default"
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
-    enable_health_check     = false
+    description             = "Accept raw HTTP payloads"
+    disabled                = false
+    enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 108.11
-    max_active_req          = 2.4
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "http-raw-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
     max_requests_per_socket = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"http_raw\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 36582.64
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 6.83
-      compress         = "none"
-      max_buffer_size  = 44.79
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled             = true
-    request_timeout        = 4.77
-    send_to_routes         = false
-    socket_timeout         = 5.89
-    stale_channel_flush_ms = 15090330.96
+    pq_enabled             = false
+    request_timeout        = 30
+    send_to_routes         = true
+    socket_timeout         = 60
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "http",
+      "raw",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "http-raw-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
@@ -1585,200 +1623,205 @@ resource "criblio_pack_source" "my_packsource" {
   input_journal_files = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-journald"
+        pipeline = "default"
       }
     ]
-    current_boot = false
-    description  = "...my_description..."
+    current_boot = true
+    description  = "Ingest systemd journal files from disk"
     disabled     = false
-    environment  = "...my_environment..."
-    id           = "...my_id..."
-    interval     = 6.22
+    environment  = "main"
+    id           = "journal-files"
+    interval     = 10
     journals = [
-      "..."
+      "system",
+      "user-*.journal",
     ]
-    max_age_dur = "...my_max_age_dur..."
+    max_age_dur = "24h"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"journal_files\""
       }
     ]
-    path     = "...my_path..."
-    pipeline = "...my_pipeline..."
+    path     = "/var/log/journal"
+    pipeline = "default"
     pq = {
-      commit_frequency = 6.19
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 50.96
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     rules = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Allow warnings or higher, exclude authpriv"
+        filter      = "severity <= 4 && facility != 'authpriv'"
       }
     ]
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "systemd",
+      "journald",
     ]
     type = "journal_files"
   }
   input_kafka = {
-    authentication_timeout = 2652921.72
-    auto_commit_interval   = 3478352.95
-    auto_commit_threshold  = 6316.75
-    backoff_rate           = 17.82
+    authentication_timeout = 15000
+    auto_commit_interval   = 5000
+    auto_commit_threshold  = 1000
+    backoff_rate           = 3
     brokers = [
-      "..."
+      "kafka-1:9092",
+      "kafka-2:9092",
     ]
-    connection_timeout = 2290406.81
+    connection_timeout = 15000
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description        = "...my_description..."
-    disabled           = true
-    environment        = "...my_environment..."
-    from_beginning     = false
-    group_id           = "...my_group_id..."
-    heartbeat_interval = 2743984.37
-    id                 = "...my_id..."
-    initial_backoff    = 196819.38
+    description        = "My Kafka Input description for documentation"
+    disabled           = false
+    environment        = "main"
+    from_beginning     = true
+    group_id           = "web-team"
+    heartbeat_interval = 3000
+    id                 = "kafka-nginx"
+    initial_backoff    = 500
     kafka_schema_registry = {
       auth = {
-        credentials_secret = "...my_credentials_secret..."
-        disabled           = false
+        credentials_secret = "schema-basic-auth"
+        disabled           = true
       }
-      connection_timeout  = 37034.38
+      connection_timeout  = 30000
       disabled            = true
-      max_retries         = 67.48
-      request_timeout     = 47589.14
-      schema_registry_url = "...my_schema_registry_url..."
+      max_retries         = 3
+      request_timeout     = 30000
+      schema_registry_url = "http://schema-registry:8081"
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
-        disabled            = false
+        ca_path             = "/etc/ssl/certs/ca.pem"
+        cert_path           = "/etc/ssl/certs/client.crt"
+        certificate_name    = "schema-registry-cert"
+        disabled            = true
         max_version         = "TLSv1.3"
-        min_version         = "TLSv1"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
-        reject_unauthorized = false
-        servername          = "...my_servername..."
+        min_version         = "TLSv1.2"
+        passphrase          = "$${{secret:kafka_key_pass}"
+        priv_key_path       = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername          = "schema-registry"
       }
     }
-    max_back_off            = 164531.11
-    max_bytes               = 248872825.96
-    max_bytes_per_partition = 9344616.68
-    max_retries             = 34.78
-    max_socket_errors       = 68.55
+    max_back_off            = 120000
+    max_bytes               = 10485760
+    max_bytes_per_partition = 1048576
+    max_retries             = 10
+    max_socket_errors       = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kafka\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 2.69
-      compress         = "none"
-      max_buffer_size  = 44.12
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled                 = true
-    reauthentication_threshold = 1606181.62
-    rebalance_timeout          = 2248660.36
-    request_timeout            = 2721416.33
+    pq_enabled                 = false
+    reauthentication_threshold = 300000
+    rebalance_timeout          = 60000
+    request_timeout            = 60000
     sasl = {
-      disabled  = false
-      mechanism = "plain"
+      disabled  = true
+      mechanism = "scram-sha-512"
     }
-    send_to_routes  = false
-    session_timeout = 362328.16
+    send_to_routes  = true
+    session_timeout = 30000
     streamtags = [
-      "..."
+      "prod",
+      "kafka",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/client.crt"
+      certificate_name    = "kafka-client-cert"
       disabled            = true
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = false
-      servername          = "...my_servername..."
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:kafka_key_pass}"
+      priv_key_path       = "/etc/ssl/private/client.key"
+      reject_unauthorized = true
+      servername          = "kafka-1"
     }
     topics = [
-      "..."
+      "nginx_access",
     ]
     type = "kafka"
   }
   input_kinesis = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-kinesis-access"
+    assume_role_external_id   = "cribl-external-123"
     avoid_duplicates          = false
-    aws_api_key               = "...my_aws_api_key..."
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-kinesis"
+        pipeline = "default"
       }
     ]
-    description              = "...my_description..."
+    description              = "Ingest AWS Kinesis stream records"
     disabled                 = false
-    duration_seconds         = 29491.68
+    duration_seconds         = 3600
     enable_assume_role       = true
-    endpoint                 = "...my_endpoint..."
-    environment              = "...my_environment..."
-    get_records_limit        = 6889.36
-    get_records_limit_total  = 20005.23
-    id                       = "...my_id..."
-    load_balancing_algorithm = "RoundRobin"
+    endpoint                 = "https://kinesis.us-east-1.amazonaws.com"
+    environment              = "main"
+    get_records_limit        = 8000
+    get_records_limit_total  = 30000
+    id                       = "kinesis-stream-ingest"
+    load_balancing_algorithm = "ConsistentHashing"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kinesis\""
       }
     ]
     payload_format = "ndjson"
-    pipeline       = "...my_pipeline..."
+    pipeline       = "default"
     pq = {
-      commit_frequency = 5.87
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 49.57
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled          = true
-    region              = "...my_region..."
-    reject_unauthorized = false
+    pq_enabled          = false
+    region              = "us-east-1"
+    reject_unauthorized = true
     reuse_connections   = true
     send_to_routes      = true
-    service_interval    = 4.81
-    shard_expr          = "...my_shard_expr..."
-    shard_iterator_type = "TRIM_HORIZON"
-    signature_version   = "v2"
-    stream_name         = "...my_stream_name..."
+    service_interval    = 1
+    shard_expr          = "shardId.endsWith('1')"
+    shard_iterator_type = "LATEST"
+    signature_version   = "v4"
+    stream_name         = "app-logs-stream"
     streamtags = [
-      "..."
+      "aws",
+      "kinesis",
     ]
     type                  = "kinesis"
     verify_kpl_check_sums = true
@@ -1786,634 +1829,499 @@ resource "criblio_pack_source" "my_packsource" {
   input_kube_events = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-events"
+        pipeline = "default"
       }
     ]
-    description = "...my_description..."
+    description = "Collect Kubernetes cluster events"
     disabled    = false
-    environment = "...my_environment..."
-    id          = "...my_id..."
+    environment = "main"
+    id          = "kube-events"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kube_events\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 1.98
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 51.69
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     rules = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Only warning events"
+        filter      = "type == 'Warning'"
       }
     ]
     send_to_routes = true
     streamtags = [
-      "..."
+      "kubernetes",
+      "events",
     ]
     type = "kube_events"
   }
   input_kube_logs = {
     breaker_rulesets = [
-      "..."
+      "kube-logs-breaker",
+      "multiline-java",
     ]
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-logs"
+        pipeline = "default"
       }
     ]
-    description           = "...my_description..."
-    disabled              = true
-    enable_load_balancing = false
-    environment           = "...my_environment..."
-    id                    = "...my_id..."
-    interval              = 2.81
+    description           = "the Description for KubeLogs type inputs"
+    disabled              = false
+    enable_load_balancing = true
+    environment           = "main"
+    id                    = "kube-logs"
+    interval              = 15
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kube_logs\""
       }
     ]
     persistence = {
-      compress      = "none"
-      enable        = false
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      compress      = "gzip"
+      enable        = true
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 1.41
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 43.46
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     rules = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Include default namespace"
+        filter      = "metadata.namespace == 'default'"
       }
     ]
-    send_to_routes         = false
-    stale_channel_flush_ms = 9527792.95
+    send_to_routes         = true
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "kubernetes",
+      "logs",
     ]
-    timestamps = false
+    timestamps = true
     type       = "kube_logs"
   }
   input_kube_metrics = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-main"
+        pipeline = "default"
       }
     ]
-    description = "...my_description..."
+    description = "Collect Kubernetes metrics from the API server"
     disabled    = false
-    environment = "...my_environment..."
-    id          = "...my_id..."
-    interval    = 9.33
+    environment = "main"
+    id          = "kube-metrics"
+    interval    = 15
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kube_metrics\""
       }
     ]
     persistence = {
-      compress      = "none"
-      dest_path     = "...my_dest_path..."
-      enable        = false
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      compress      = "gzip"
+      dest_path     = "/var/lib/cribl/state/kube_metrics"
+      enable        = true
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 7.59
-      compress         = "none"
-      max_buffer_size  = 48.01
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     rules = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Include default namespace"
+        filter      = "metadata.namespace == 'default'"
       }
     ]
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "kubernetes",
+      "prod",
     ]
     type = "kube_metrics"
   }
   input_loki = {
-    activity_log_sample_rate = 2.82
-    auth_header_expr         = "...my_auth_header_expr..."
-    auth_type                = "none"
-    capture_headers          = false
+    activity_log_sample_rate = 10
+    auth_header_expr         = "`Bearer ${token}`"
+    auth_type                = "token"
+    capture_headers          = true
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret      = "...my_credentials_secret..."
-    description             = "...my_description..."
+    credentials_secret      = "loki-credentials"
+    description             = "Loki logs listener"
     disabled                = false
-    enable_health_check     = false
+    enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 258.94
-    login_url               = "...my_login_url..."
-    loki_api                = "...my_loki_api..."
-    max_active_req          = 2.08
-    max_requests_per_socket = 5
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "loki-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    login_url               = "https://loki.example.com/oauth/token"
+    loki_api                = "/loki/api/v1/push"
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"loki\""
       }
     ]
     oauth_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Accept"
+        value = "application/json"
       }
     ]
     oauth_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "grant_type"
+        value = "client_credentials"
       }
     ]
-    password = "...my_password..."
-    pipeline = "...my_pipeline..."
-    port     = 4252.49
+    password = "$${{secret:loki_password}"
+    pipeline = "default"
+    port     = 3100
     pq = {
-      commit_frequency = 7.66
-      compress         = "none"
-      max_buffer_size  = 48.78
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled        = true
-    request_timeout   = 4.82
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
-    send_to_routes    = false
-    socket_timeout    = 8.29
+    pq_enabled        = false
+    request_timeout   = 30
+    secret            = "$${{secret:loki_oauth_secret}"
+    secret_param_name = "client_secret"
+    send_to_routes    = true
+    socket_timeout    = 60
     streamtags = [
-      "..."
+      "prod",
+      "loki",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "loki-token-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "loki-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:loki_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 207624.84
+    token                = "$${{secret:loki_token}"
+    token_attribute_name = "access_token"
+    token_timeout_secs   = 3600
     type                 = "loki"
-    username             = "...my_username..."
+    username             = "loki_user"
   }
   input_metrics = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-metrics"
+        pipeline = "default"
       }
     ]
     description         = "...my_description..."
     disabled            = false
     enable_proxy_header = false
-    environment         = "...my_environment..."
-    host                = "...my_host..."
-    id                  = "...my_id..."
-    ip_whitelist_regex  = "...my_ip_whitelist_regex..."
-    max_buffer_size     = 3.84
+    environment         = "main"
+    host                = "0.0.0.0"
+    id                  = "metrics-listener"
+    ip_whitelist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_buffer_size     = 20000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"metrics\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 7.61
-      compress         = "none"
-      max_buffer_size  = 49.38
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled     = true
+    pq_enabled     = false
     send_to_routes = true
     streamtags = [
-      "..."
+      "metrics",
+      "udp",
     ]
-    tcp_port = 11197.86
+    tcp_port = 8126
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "metrics-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
-      max_version         = "TLSv1.1"
+      max_version         = "TLSv1.3"
       min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type                   = "metrics"
-    udp_port               = 35923.63
+    udp_port               = 8125
     udp_socket_rx_buf_size = 2905545357.22
   }
   input_model_driven_telemetry = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-network"
+        pipeline = "default"
       }
     ]
-    description    = "...my_description..."
-    disabled       = true
-    environment    = "...my_environment..."
-    host           = "...my_host..."
-    id             = "...my_id..."
-    max_active_cxn = 3.31
+    description    = "Receive MDT telemetry over gRPC"
+    disabled       = false
+    environment    = "main"
+    host           = "0.0.0.0"
+    id             = "mdt-grpc"
+    max_active_cxn = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"model_driven_telemetry\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 23604.97
+    pipeline = "default"
+    port     = 57000
     pq = {
-      commit_frequency = 1.29
-      compress         = "none"
-      max_buffer_size  = 49.43
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled          = false
     send_to_routes      = true
-    shutdown_timeout_ms = 8.1
+    shutdown_timeout_ms = 5000
     streamtags = [
-      "..."
+      "mdt",
+      "grpc",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "mdt-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1.3"
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type = "model_driven_telemetry"
   }
   input_msk = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    authentication_timeout    = 2337527.72
-    auto_commit_interval      = 2808196.34
-    auto_commit_threshold     = 3614.49
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    backoff_rate              = 2.05
+    assume_role_arn           = "arn:aws:iam::123456789012:role/msk-readonly"
+    assume_role_external_id   = "external-123"
+    authentication_timeout    = 15000
+    auto_commit_interval      = 5000
+    auto_commit_threshold     = 1000
+    aws_api_key               = "$${{secret:aws_access_key_id}"
+    aws_authentication_method = "instanceRole"
+    aws_secret                = "aws-msk-credentials"
+    aws_secret_key            = "$${{secret:aws_secret_access_key}"
+    backoff_rate              = 3
     brokers = [
-      "..."
+      "b-1.msk-cluster.a1b2c3d4.e1.kafka.us-east-1.amazonaws.com:9092",
+      "b-2.msk-cluster.a1b2c3d4.e1.kafka.us-east-1.amazonaws.com:9092",
     ]
-    connection_timeout = 675079.56
+    connection_timeout = 15000
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description        = "...my_description..."
-    disabled           = true
-    duration_seconds   = 32002.83
+    description        = "MSK consumer for nginx access logs"
+    disabled           = false
+    duration_seconds   = 3600
     enable_assume_role = false
-    endpoint           = "...my_endpoint..."
-    environment        = "...my_environment..."
-    from_beginning     = false
-    group_id           = "...my_group_id..."
-    heartbeat_interval = 2373003.56
-    id                 = "...my_id..."
-    initial_backoff    = 363083.16
+    endpoint           = "https://kafka.us-east-1.amazonaws.com"
+    environment        = "main"
+    from_beginning     = true
+    group_id           = "web-team"
+    heartbeat_interval = 3000
+    id                 = "msk-nginx"
+    initial_backoff    = 500
     kafka_schema_registry = {
       auth = {
-        credentials_secret = "...my_credentials_secret..."
+        credentials_secret = "schema-basic-auth"
         disabled           = true
       }
-      connection_timeout  = 32986.14
-      disabled            = false
-      max_retries         = 80.94
-      request_timeout     = 18578.18
-      schema_registry_url = "...my_schema_registry_url..."
+      connection_timeout  = 30000
+      disabled            = true
+      max_retries         = 3
+      request_timeout     = 30000
+      schema_registry_url = "http://schema-registry:8081"
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
-        disabled            = false
-        max_version         = "TLSv1.2"
-        min_version         = "TLSv1.3"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
-        reject_unauthorized = false
-        servername          = "...my_servername..."
+        ca_path             = "/etc/ssl/certs/ca.pem"
+        cert_path           = "/etc/ssl/certs/client.crt"
+        certificate_name    = "schema-registry-cert"
+        disabled            = true
+        max_version         = "TLSv1.3"
+        min_version         = "TLSv1.2"
+        passphrase          = "$${{secret:kafka_key_pass}"
+        priv_key_path       = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername          = "schema-registry"
       }
     }
-    max_back_off            = 137439.93
-    max_bytes               = 520222029.03
-    max_bytes_per_partition = 2007697
-    max_retries             = 53.77
-    max_socket_errors       = 58.9
+    max_back_off            = 120000
+    max_bytes               = 10485760
+    max_bytes_per_partition = 1048576
+    max_retries             = 10
+    max_socket_errors       = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"msk\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 10.02
-      compress         = "none"
-      max_buffer_size  = 49.16
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled                 = true
-    reauthentication_threshold = 681492.4
-    rebalance_timeout          = 2684656.55
-    region                     = "...my_region..."
+    pq_enabled                 = false
+    reauthentication_threshold = 300000
+    rebalance_timeout          = 60000
+    region                     = "us-east-1"
     reject_unauthorized        = true
-    request_timeout            = 811027.57
+    request_timeout            = 60000
     reuse_connections          = true
     send_to_routes             = true
-    session_timeout            = 1819829.34
-    signature_version          = "v2"
+    session_timeout            = 30000
+    signature_version          = "v4"
     streamtags = [
-      "..."
+      "prod",
+      "msk",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = true
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/client.crt"
+      certificate_name    = "msk-client-cert"
+      disabled            = false
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:kafka_key_pass}"
+      priv_key_path       = "/etc/ssl/private/client.key"
       reject_unauthorized = true
-      servername          = "...my_servername..."
+      servername          = "msk-broker-1"
     }
     topics = [
-      "..."
+      "nginx_access",
     ]
     type = "msk"
   }
   input_netflow = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-netflow"
+        pipeline = "default"
       }
     ]
-    description         = "...my_description..."
+    description         = "Receive NetFlow v5/v9/IPFIX on UDP 2055"
     disabled            = false
-    enable_pass_through = true
-    environment         = "...my_environment..."
-    host                = "...my_host..."
-    id                  = "...my_id..."
-    ip_allowlist_regex  = "...my_ip_allowlist_regex..."
-    ip_denylist_regex   = "...my_ip_denylist_regex..."
-    ipfix_enabled       = false
+    enable_pass_through = false
+    environment         = "main"
+    host                = "0.0.0.0"
+    id                  = "netflow-listener"
+    ip_allowlist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex   = "^192\\.168\\.1\\.\\d{1,3}$"
+    ipfix_enabled       = true
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"netflow\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 39962.65
+    pipeline = "default"
+    port     = 2055
     pq = {
-      commit_frequency = 2.83
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 51.9
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled     = true
+    pq_enabled     = false
     send_to_routes = true
     streamtags = [
-      "..."
+      "netflow",
+      "network",
     ]
-    template_cache_minutes = 269.34
+    template_cache_minutes = 60
     type                   = "netflow"
-    udp_socket_rx_buf_size = 423502369.93
+    udp_socket_rx_buf_size = 4194304
     v5_enabled             = true
     v9_enabled             = true
   }
   input_office365_mgmt = {
-    app_id        = "...my_app_id..."
-    auth_type     = "secret"
-    client_secret = "...my_client_secret..."
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    content_config = [
-      {
-        content_type = "...my_content_type..."
-        description  = "...my_description..."
-        enabled      = false
-        interval     = 39.73
-        log_level    = "warn"
-      }
-    ]
-    description             = "...my_description..."
-    disabled                = true
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
-    ingestion_lag           = 5131.61
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 16.08
-    max_missed_keep_alives  = 5.52
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    pipeline  = "...my_pipeline..."
-    plan_type = "dod"
-    pq = {
-      commit_frequency = 8.47
-      compress         = "none"
-      max_buffer_size  = 45.85
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
-    }
-    pq_enabled           = true
-    publisher_identifier = "...my_publisher_identifier..."
-    retry_rules = {
-      codes = [
-        5.84
-      ]
-      enable_header         = true
-      interval              = 16425.8
-      limit                 = 3.42
-      multiplier            = 6.3
-      retry_connect_reset   = false
-      retry_connect_timeout = false
-      type                  = "none"
-    }
-    send_to_routes = true
-    streamtags = [
-      "..."
-    ]
-    tenant_id   = "...my_tenant_id..."
-    text_secret = "...my_text_secret..."
-    timeout     = 1210.68
-    ttl         = "...my_ttl..."
-    type        = "office365_mgmt"
-  }
-  input_office365_msg_trace = {
-    auth_type = "manual"
-    cert_options = {
-      cert_path        = "...my_cert_path..."
-      certificate_name = "...my_certificate_name..."
-      passphrase       = "...my_passphrase..."
-      priv_key_path    = "...my_priv_key_path..."
-    }
-    client_id     = "...my_client_id..."
-    client_secret = "...my_client_secret..."
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    credentials_secret      = "...my_credentials_secret..."
-    description             = "...my_description..."
-    disable_time_filter     = false
-    disabled                = true
-    end_date                = "...my_end_date..."
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = false
-    interval                = 1.29
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 17.57
-    log_level               = "silly"
-    max_missed_keep_alives  = 7.45
-    max_task_reschedule     = 5.6
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    password  = "...my_password..."
-    pipeline  = "...my_pipeline..."
-    plan_type = "gcc_high"
-    pq = {
-      commit_frequency = 9.74
-      compress         = "none"
-      max_buffer_size  = 46.49
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
-    }
-    pq_enabled               = false
-    reschedule_dropped_tasks = false
-    resource                 = "...my_resource..."
-    retry_rules = {
-      codes = [
-        2.83
-      ]
-      enable_header         = false
-      interval              = 17938.05
-      limit                 = 0.54
-      multiplier            = 6.89
-      retry_connect_reset   = false
-      retry_connect_timeout = false
-      type                  = "none"
-    }
-    send_to_routes = true
-    start_date     = "...my_start_date..."
-    streamtags = [
-      "..."
-    ]
-    tenant_id   = "...my_tenant_id..."
-    text_secret = "...my_text_secret..."
-    timeout     = 2229.18
-    ttl         = "...my_ttl..."
-    type        = "office365_msg_trace"
-    url         = "...my_url..."
-    username    = "...my_username..."
-  }
-  input_office365_service = {
-    app_id        = "...my_app_id..."
+    app_id        = "99999999-aaaa-bbbb-cccc-111111111111"
     auth_type     = "manual"
-    client_secret = "...my_client_secret..."
+    client_secret = "$${{secret:o365_client_secret}"
     connections = [
       {
         output   = "...my_output..."
@@ -2422,209 +2330,367 @@ resource "criblio_pack_source" "my_packsource" {
     ]
     content_config = [
       {
-        content_type = "...my_content_type..."
+        content_type = "Exchange"
         description  = "...my_description..."
-        enabled      = false
-        interval     = 59.2
+        enabled      = true
+        interval     = 5
         log_level    = "info"
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
+    description             = "Office 365 Management API collector"
+    disabled                = false
+    environment             = "main"
+    id                      = "o365-mgmt"
     ignore_group_jobs_limit = false
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 10.67
-    max_missed_keep_alives  = 10.35
+    ingestion_lag           = 90
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    max_missed_keep_alives  = 3
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"office365_mgmt\""
       }
     ]
-    pipeline  = "...my_pipeline..."
-    plan_type = "gcc_high"
+    pipeline  = "default"
+    plan_type = "enterprise_gcc"
     pq = {
-      commit_frequency = 8.14
-      compress         = "none"
-      max_buffer_size  = 42.92
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled           = false
+    publisher_identifier = "my-company-cribl"
+    retry_rules = {
+      codes = [
+        429,
+        500,
+        503,
+      ]
+      enable_header         = true
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
+      retry_connect_reset   = true
+      retry_connect_timeout = true
+      type                  = "backoff"
+    }
+    send_to_routes = true
+    streamtags = [
+      "prod",
+      "o365",
+    ]
+    tenant_id   = "11111111-2222-3333-4444-555555555555"
+    text_secret = "o365-client-secret"
+    timeout     = 300
+    ttl         = "4h"
+    type        = "office365_mgmt"
+  }
+  input_office365_msg_trace = {
+    auth_type = "oauth"
+    cert_options = {
+      cert_path        = "/etc/ssl/certs/client.crt"
+      certificate_name = "o365-cert"
+      passphrase       = "$${{secret:o365_cert_pass}"
+      priv_key_path    = "/etc/ssl/private/client.key"
+    }
+    client_id     = "99999999-aaaa-bbbb-cccc-111111111111"
+    client_secret = "$${{secret:o365_client_secret}"
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    credentials_secret      = "o365-credentials"
+    description             = "Office 365 Message Trace collector"
+    disable_time_filter     = true
+    disabled                = false
+    end_date                = "-2h@h"
+    environment             = "main"
+    id                      = "o365-msg-trace"
+    ignore_group_jobs_limit = false
+    interval                = 15
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    log_level               = "info"
+    max_missed_keep_alives  = 3
+    max_task_reschedule     = 3
+    metadata = [
+      {
+        name  = "source"
+        value = "\"office365_msg_trace\""
+      }
+    ]
+    password  = "$${{secret:o365_password}"
+    pipeline  = "default"
+    plan_type = "enterprise_gcc"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled               = false
+    reschedule_dropped_tasks = true
+    resource                 = "https://outlook.office365.com"
+    retry_rules = {
+      codes = [
+        429,
+        500,
+        503,
+      ]
+      enable_header         = true
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
+      retry_connect_reset   = true
+      retry_connect_timeout = true
+      type                  = "backoff"
+    }
+    send_to_routes = true
+    start_date     = "-3h@h"
+    streamtags = [
+      "prod",
+      "o365",
+    ]
+    tenant_id   = "11111111-2222-3333-4444-555555555555"
+    text_secret = "o365-client-secret"
+    timeout     = 300
+    ttl         = "4h"
+    type        = "office365_msg_trace"
+    url         = "https://reports.office365.com/ecp/reportingwebservice/reporting.svc/MessageTrace"
+    username    = "o365_user"
+  }
+  input_office365_service = {
+    app_id        = "99999999-aaaa-bbbb-cccc-111111111111"
+    auth_type     = "manual"
+    client_secret = "$${{secret:o365_client_secret}"
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    content_config = [
+      {
+        content_type = "Messages"
+        description  = "Poll interval minutes (1-60)"
+        enabled      = true
+        interval     = 5
+        log_level    = "info"
+      }
+    ]
+    description             = "Office 365 Service Health collector"
+    disabled                = false
+    environment             = "main"
+    id                      = "o365-service"
+    ignore_group_jobs_limit = false
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    max_missed_keep_alives  = 3
+    metadata = [
+      {
+        name  = "source"
+        value = "\"office365_service\""
+      }
+    ]
+    pipeline  = "default"
+    plan_type = "enterprise_gcc"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     retry_rules = {
       codes = [
-        3.08
+        429,
+        500,
+        503,
       ]
       enable_header         = true
-      interval              = 9947.1
-      limit                 = 17.64
-      multiplier            = 14.96
-      retry_connect_reset   = false
-      retry_connect_timeout = false
-      type                  = "none"
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
+      retry_connect_reset   = true
+      retry_connect_timeout = true
+      type                  = "backoff"
     }
     send_to_routes = true
     streamtags = [
-      "..."
+      "prod",
+      "o365",
     ]
-    tenant_id   = "...my_tenant_id..."
-    text_secret = "...my_text_secret..."
-    timeout     = 1175.99
-    ttl         = "...my_ttl..."
+    tenant_id   = "11111111-2222-3333-4444-555555555555"
+    text_secret = "o365-client-secret"
+    timeout     = 300
+    ttl         = "4h"
     type        = "office365_service"
   }
   input_open_telemetry = {
     activity_log_sample_rate = "{ \"see\": \"documentation\" }"
-    auth_header_expr         = "...my_auth_header_expr..."
-    auth_type                = "textSecret"
+    auth_header_expr         = "`Bearer ${token}`"
+    auth_type                = "token"
     capture_headers          = "{ \"see\": \"documentation\" }"
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-otel"
+        pipeline = "default"
       }
     ]
-    credentials_secret      = "...my_credentials_secret..."
-    description             = "...my_description..."
-    disabled                = true
-    enable_health_check     = false
+    credentials_secret      = "otel-credentials-secret"
+    description             = "Receive OpenTelemetry traces, metrics, and logs"
+    disabled                = false
+    enable_health_check     = true
     enable_proxy_header     = "{ \"see\": \"documentation\" }"
-    environment             = "...my_environment..."
-    extract_logs            = false
+    environment             = "main"
+    extract_logs            = true
     extract_metrics         = false
-    extract_spans           = false
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 125.91
-    login_url               = "...my_login_url..."
-    max_active_cxn          = 5.36
-    max_active_req          = 7.62
-    max_requests_per_socket = 4
+    extract_spans           = true
+    host                    = "0.0.0.0"
+    id                      = "otel-grpc"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    login_url               = "https://auth.example.com/oauth/token"
+    max_active_cxn          = 2000
+    max_active_req          = 512
+    max_requests_per_socket = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"open_telemetry\""
       }
     ]
     oauth_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Accept"
+        value = "application/json"
       }
     ]
     oauth_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "grant_type"
+        value = "client_credentials"
       }
     ]
     otlp_version = "1.3.1"
-    password     = "...my_password..."
-    pipeline     = "...my_pipeline..."
-    port         = 24313.31
+    password     = "***REDACTED***"
+    pipeline     = "default"
+    port         = 4317
     pq = {
-      commit_frequency = 10.7
-      compress         = "none"
-      max_buffer_size  = 48.88
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled        = false
     protocol          = "grpc"
-    request_timeout   = 0.09
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
+    request_timeout   = 30
+    secret            = "s3cr3t"
+    secret_param_name = "client_secret"
     send_to_routes    = true
-    socket_timeout    = 8.67
+    socket_timeout    = 60
     streamtags = [
-      "..."
+      "otel",
+      "grpc",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "otel-token-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "otel-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 292620.71
+    token                = "***REDACTED***"
+    token_attribute_name = "access_token"
+    token_timeout_secs   = 3600
     type                 = "open_telemetry"
-    username             = "...my_username..."
+    username             = "otel-user"
   }
   input_prometheus = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/prometheus-discovery"
+    assume_role_external_id   = "external-123"
     auth_type                 = "manual"
-    aws_authentication_method = "secret"
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_authentication_method = "auto"
+    aws_secret_key            = "$${{secret:aws_secret_access_key}"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret = "...my_credentials_secret..."
-    description        = "...my_description..."
+    credentials_secret = "prom-credentials"
+    description        = "Prometheus pull-based scraper"
     dimension_list = [
-      "..."
+      "host",
+      "source",
+      "region",
     ]
-    disabled                = true
-    discovery_type          = "ec2"
-    duration_seconds        = 40827.31
-    enable_assume_role      = true
-    endpoint                = "...my_endpoint..."
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
+    disabled                = false
+    discovery_type          = "static"
+    duration_seconds        = 3600
+    enable_assume_role      = false
+    endpoint                = "https://ec2.us-east-1.amazonaws.com"
+    environment             = "main"
+    id                      = "prometheus-scraper"
     ignore_group_jobs_limit = false
-    interval                = 36.27
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 17.9
-    log_level               = "error"
-    max_missed_keep_alives  = 8.4
+    interval                = 5
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    log_level               = "info"
+    max_missed_keep_alives  = 3
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"prometheus\""
       }
     ]
     name_list = [
-      "..."
+      "web-*.example.com",
+      "db-1.internal.example.com",
     ]
-    password = "...my_password..."
-    pipeline = "...my_pipeline..."
+    password = "$${{secret:prom_password}"
+    pipeline = "default"
     pq = {
-      commit_frequency = 4.85
-      compress         = "none"
-      max_buffer_size  = 46.51
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled          = false
     record_type         = "SRV"
-    region              = "...my_region..."
-    reject_unauthorized = false
-    reuse_connections   = false
-    scrape_path         = "...my_scrape_path..."
-    scrape_port         = 32569.25
-    scrape_protocol     = "https"
+    region              = "us-east-1"
+    reject_unauthorized = true
+    reuse_connections   = true
+    scrape_path         = "/metrics"
+    scrape_port         = 9100
+    scrape_protocol     = "http"
     search_filter = [
       {
         name = "...my_name..."
@@ -2633,23 +2699,26 @@ resource "criblio_pack_source" "my_packsource" {
         ]
       }
     ]
-    send_to_routes    = false
+    send_to_routes    = true
     signature_version = "v4"
     streamtags = [
-      "..."
+      "prod",
+      "prometheus",
     ]
     target_list = [
-      "..."
+      "http://localhost:9090/metrics",
+      "node-exporter:9100",
+      "db:9200/metrics",
     ]
-    ttl           = "...my_ttl..."
+    ttl           = "4h"
     type          = "prometheus"
-    use_public_ip = false
-    username      = "...my_username..."
+    use_public_ip = true
+    username      = "prom_user"
   }
   input_prometheus_rw = {
-    activity_log_sample_rate = 8.82
-    auth_header_expr         = "...my_auth_header_expr..."
-    auth_type                = "credentialsSecret"
+    activity_log_sample_rate = 10
+    auth_header_expr         = "`Bearer ${token}`"
+    auth_type                = "basic"
     capture_headers          = true
     connections = [
       {
@@ -2657,503 +2726,515 @@ resource "criblio_pack_source" "my_packsource" {
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret      = "...my_credentials_secret..."
-    description             = "...my_description..."
-    disabled                = true
+    credentials_secret      = "prom-credentials"
+    description             = "Prometheus Remote Write listener"
+    disabled                = false
     enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 475.59
-    login_url               = "...my_login_url..."
-    max_active_req          = 2.98
-    max_requests_per_socket = 1
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "prom-rw-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    login_url               = "https://prom.example.com/oauth/token"
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"prometheus_rw\""
       }
     ]
     oauth_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Accept"
+        value = "application/json"
       }
     ]
     oauth_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "grant_type"
+        value = "client_credentials"
       }
     ]
-    password = "...my_password..."
-    pipeline = "...my_pipeline..."
-    port     = 5688.01
+    password = "$${{secret:prom_password}"
+    pipeline = "default"
+    port     = 9090
     pq = {
-      commit_frequency = 2.2
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 45.62
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled        = false
-    prometheus_api    = "...my_prometheus_api..."
-    request_timeout   = 5.95
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
+    prometheus_api    = "/write"
+    request_timeout   = 30
+    secret            = "$${{secret:prom_oauth_secret}"
+    secret_param_name = "client_secret"
     send_to_routes    = true
-    socket_timeout    = 6.86
+    socket_timeout    = 60
     streamtags = [
-      "..."
+      "prod",
+      "prometheus",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "prom-token-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "prom-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:prom_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 176398.89
+    token                = "$${{secret:prom_token}"
+    token_attribute_name = "access_token"
+    token_timeout_secs   = 3600
     type                 = "prometheus_rw"
-    username             = "...my_username..."
+    username             = "prom_user"
   }
   input_raw_udp = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-raw"
+        pipeline = "default"
       }
     ]
-    description        = "...my_description..."
+    description        = "Receive raw UDP datagrams and split on newlines"
     disabled           = false
-    environment        = "...my_environment..."
-    host               = "...my_host..."
-    id                 = "...my_id..."
-    ingest_raw_bytes   = true
-    ip_whitelist_regex = "...my_ip_whitelist_regex..."
-    max_buffer_size    = 2.36
+    environment        = "main"
+    host               = "0.0.0.0"
+    id                 = "raw-udp-listener"
+    ingest_raw_bytes   = false
+    ip_whitelist_regex = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_buffer_size    = 20000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"raw_udp\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 41946.99
+    pipeline = "default"
+    port     = 1514
     pq = {
-      commit_frequency = 10.54
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 47
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled             = true
+    pq_enabled             = false
     send_to_routes         = true
     single_msg_udp_packets = true
     streamtags = [
-      "..."
+      "udp",
+      "raw",
     ]
     type                   = "raw_udp"
-    udp_socket_rx_buf_size = 2207313577.18
+    udp_socket_rx_buf_size = 4194304
   }
   input_s3 = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "manual"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-s3-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
     breaker_rulesets = [
-      "..."
+      "s3-breaker",
     ]
     checkpointing = {
-      enabled = false
-      retries = 93.53
+      enabled = true
+      retries = 3
     }
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-main"
+        pipeline = "default"
       }
     ]
-    description            = "...my_description..."
-    disabled               = true
-    duration_seconds       = 7333.11
+    description            = "Ingest S3 notifications and objects"
+    disabled               = false
+    duration_seconds       = 3600
     enable_assume_role     = true
     enable_sqs_assume_role = true
-    encoding               = "...my_encoding..."
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    file_filter            = "...my_file_filter..."
-    id                     = "...my_id..."
-    max_messages           = 9.83
+    encoding               = "utf-8"
+    endpoint               = "https://s3.us-east-1.amazonaws.com"
+    environment            = "main"
+    file_filter            = ".*\\.json(\\.gz)?$"
+    id                     = "s3-notifications"
+    max_messages           = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"s3\""
       }
     ]
-    num_receivers                  = 10.24
-    parquet_chunk_download_timeout = 630.07
-    parquet_chunk_size_mb          = 47.7
-    pipeline                       = "...my_pipeline..."
-    poll_timeout                   = 17.37
+    num_receivers                  = 4
+    parquet_chunk_download_timeout = 300
+    parquet_chunk_size_mb          = 10
+    pipeline                       = "default"
+    poll_timeout                   = 10
     pq = {
-      commit_frequency = 3.11
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 48.81
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     preprocess = {
       args = [
-        "..."
+        "--compact-output",
       ]
-      command  = "...my_command..."
+      command  = "jq -r .message"
       disabled = true
     }
-    processed_tag_key      = "...my_processed_tag_key..."
-    processed_tag_value    = "...my_processed_tag_value..."
-    queue_name             = "...my_queue_name..."
-    region                 = "...my_region..."
+    processed_tag_key      = "processed-by"
+    processed_tag_value    = "cribl-processed"
+    queue_name             = "https://sqs.us-east-1.amazonaws.com/123456789012/my-s3-queue"
+    region                 = "us-east-1"
     reject_unauthorized    = true
     reuse_connections      = true
     send_to_routes         = true
     signature_version      = "v4"
     skip_on_error          = true
-    socket_timeout         = 1535.43
-    stale_channel_flush_ms = 4285303.66
+    socket_timeout         = 600
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "aws",
+      "s3",
     ]
-    tag_after_processing = false
+    tag_after_processing = true
     type                 = "s3"
-    visibility_timeout   = 25858.09
+    visibility_timeout   = 300
   }
   input_s3_inventory = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-s3-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
     breaker_rulesets = [
-      "..."
-    ]
-    checkpointing = {
-      enabled = false
-      retries = 92.48
-    }
-    checksum_suffix = "...my_checksum_suffix..."
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    description            = "...my_description..."
-    disabled               = false
-    duration_seconds       = 32892.34
-    enable_assume_role     = true
-    enable_sqs_assume_role = true
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    file_filter            = "...my_file_filter..."
-    id                     = "...my_id..."
-    max_manifest_size_kb   = 8
-    max_messages           = 9.96
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    num_receivers                  = 31.6
-    parquet_chunk_download_timeout = 969.93
-    parquet_chunk_size_mb          = 91.52
-    pipeline                       = "...my_pipeline..."
-    poll_timeout                   = 8.14
-    pq = {
-      commit_frequency = 5.96
-      compress         = "none"
-      max_buffer_size  = 46.48
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
-    }
-    pq_enabled = true
-    preprocess = {
-      args = [
-        "..."
-      ]
-      command  = "...my_command..."
-      disabled = true
-    }
-    processed_tag_key      = "...my_processed_tag_key..."
-    processed_tag_value    = "...my_processed_tag_value..."
-    queue_name             = "...my_queue_name..."
-    region                 = "...my_region..."
-    reject_unauthorized    = true
-    reuse_connections      = true
-    send_to_routes         = false
-    signature_version      = "v4"
-    skip_on_error          = false
-    socket_timeout         = 31558.99
-    stale_channel_flush_ms = 41327873.14
-    streamtags = [
-      "..."
-    ]
-    tag_after_processing     = "false"
-    type                     = "s3_inventory"
-    validate_inventory_files = true
-    visibility_timeout       = 8804.03
-  }
-  input_security_lake = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    breaker_rulesets = [
-      "..."
+      "s3-inventory-breaker",
     ]
     checkpointing = {
       enabled = true
-      retries = 9.49
+      retries = 3
     }
+    checksum_suffix = "checksum"
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-archive"
+        pipeline = "default"
       }
     ]
-    description            = "...my_description..."
+    description            = "Ingest S3 inventory manifests and listed objects"
     disabled               = false
-    duration_seconds       = 21288.08
+    duration_seconds       = 3600
     enable_assume_role     = true
     enable_sqs_assume_role = true
-    encoding               = "...my_encoding..."
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    file_filter            = "...my_file_filter..."
-    id                     = "...my_id..."
-    max_messages           = 3.31
+    endpoint               = "https://s3.us-east-1.amazonaws.com"
+    environment            = "main"
+    file_filter            = "^.*inventory.*\\.csv(\\.gz)?$"
+    id                     = "s3-inventory"
+    max_manifest_size_kb   = 4096
+    max_messages           = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"s3_inventory\""
       }
     ]
-    num_receivers                  = 48.52
-    parquet_chunk_download_timeout = 1197.61
-    parquet_chunk_size_mb          = 74.21
-    pipeline                       = "...my_pipeline..."
-    poll_timeout                   = 11.12
+    num_receivers                  = 4
+    parquet_chunk_download_timeout = 300
+    parquet_chunk_size_mb          = 10
+    pipeline                       = "default"
+    poll_timeout                   = 10
     pq = {
-      commit_frequency = 3.79
-      compress         = "none"
-      max_buffer_size  = 42.44
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     preprocess = {
       args = [
-        "..."
+        "--compact-output",
       ]
-      command  = "...my_command..."
-      disabled = false
+      command  = "jq -r .message"
+      disabled = true
     }
-    processed_tag_key      = "...my_processed_tag_key..."
-    processed_tag_value    = "...my_processed_tag_value..."
-    queue_name             = "...my_queue_name..."
-    region                 = "...my_region..."
+    processed_tag_key      = "processed-by"
+    processed_tag_value    = "cribl-processed"
+    queue_name             = "https://sqs.us-east-1.amazonaws.com/123456789012/inventory-queue"
+    region                 = "us-east-1"
     reject_unauthorized    = true
     reuse_connections      = true
-    send_to_routes         = false
+    send_to_routes         = true
     signature_version      = "v4"
-    skip_on_error          = false
-    socket_timeout         = 32105.81
-    stale_channel_flush_ms = 27690302.35
+    skip_on_error          = true
+    socket_timeout         = 600
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "aws",
+      "s3-inventory",
     ]
-    tag_after_processing = "false"
+    tag_after_processing     = "...my_tag_after_processing..."
+    type                     = "s3_inventory"
+    validate_inventory_files = true
+    visibility_timeout       = 300
+  }
+  input_security_lake = {
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-security-lake-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
+    breaker_rulesets = [
+      "security-lake-breaker",
+    ]
+    checkpointing = {
+      enabled = true
+      retries = 3
+    }
+    connections = [
+      {
+        output   = "s3-security-lake"
+        pipeline = "default"
+      }
+    ]
+    description            = "Ingest AWS Security Lake notifications and objects"
+    disabled               = false
+    duration_seconds       = 3600
+    enable_assume_role     = true
+    enable_sqs_assume_role = true
+    encoding               = "utf-8"
+    endpoint               = "https://s3.us-east-1.amazonaws.com"
+    environment            = "main"
+    file_filter            = ".*\\.json(\\.gz)?$"
+    id                     = "security-lake-ingest"
+    max_messages           = 10
+    metadata = [
+      {
+        name  = "source"
+        value = "\"security_lake\""
+      }
+    ]
+    num_receivers                  = 4
+    parquet_chunk_download_timeout = 300
+    parquet_chunk_size_mb          = 10
+    pipeline                       = "default"
+    poll_timeout                   = 10
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled = false
+    preprocess = {
+      args = [
+        "--compact-output",
+      ]
+      command  = "jq -r .message"
+      disabled = true
+    }
+    processed_tag_key      = "processed-by"
+    processed_tag_value    = "cribl-processed"
+    queue_name             = "https://sqs.us-east-1.amazonaws.com/123456789012/security-lake-queue"
+    region                 = "us-east-1"
+    reject_unauthorized    = true
+    reuse_connections      = true
+    send_to_routes         = true
+    signature_version      = "v4"
+    skip_on_error          = true
+    socket_timeout         = 600
+    stale_channel_flush_ms = 1500
+    streamtags = [
+      "aws",
+      "security-lake",
+    ]
+    tag_after_processing = "...my_tag_after_processing..."
     type                 = "security_lake"
-    visibility_timeout   = 8868.64
+    visibility_timeout   = 300
   }
   input_snmp = {
     best_effort_parsing = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-network"
+        pipeline = "default"
       }
     ]
-    description        = "...my_description..."
-    disabled           = true
-    environment        = "...my_environment..."
-    host               = "...my_host..."
-    id                 = "...my_id..."
-    ip_whitelist_regex = "...my_ip_whitelist_regex..."
-    max_buffer_size    = 7.7
+    description        = "Receive SNMP traps and forward to destinations"
+    disabled           = false
+    environment        = "main"
+    host               = "0.0.0.0"
+    id                 = "snmp-traps"
+    ip_whitelist_regex = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_buffer_size    = 20000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"snmp\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 37824.81
+    pipeline = "default"
+    port     = 162
     pq = {
-      commit_frequency = 2.53
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 44.33
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled     = true
-    send_to_routes = false
+    pq_enabled     = false
+    send_to_routes = true
     snmp_v3_auth = {
-      allow_unmatched_trap = true
-      v3_auth_enabled      = false
+      allow_unmatched_trap = false
+      v3_auth_enabled      = true
       v3_users = [
         {
           auth_key      = "{ \"see\": \"documentation\" }"
           auth_protocol = "sha256"
-          name          = "...my_name..."
-          priv_protocol = "{ \"see\": \"documentation\" }"
+          name          = "snmp-user"
+          priv_protocol = "none"
         }
       ]
     }
     streamtags = [
-      "..."
+      "network",
+      "snmp",
     ]
     type                   = "snmp"
-    udp_socket_rx_buf_size = 918882948.42
-    varbinds_with_types    = false
+    udp_socket_rx_buf_size = 4194304
+    varbinds_with_types    = true
   }
   input_splunk = {
     auth_tokens = [
       {
-        description = "...my_description..."
-        token       = "...my_token..."
+        description = "Token for prod universal forwarders"
+        token       = "UF-secret-1"
       }
     ]
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
+      "syslog-breaker",
     ]
-    compress = "disabled"
+    compress = "auto"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description         = "...my_description..."
+    description         = "Splunk S2S listener for UF/HF"
     disabled            = false
-    drop_control_fields = false
-    enable_proxy_header = true
-    environment         = "...my_environment..."
+    drop_control_fields = true
+    enable_proxy_header = false
+    environment         = "main"
     extract_metrics     = true
-    host                = "...my_host..."
-    id                  = "...my_id..."
-    ip_whitelist_regex  = "...my_ip_whitelist_regex..."
-    max_active_cxn      = 3.36
+    host                = "0.0.0.0"
+    id                  = "splunk-listener"
+    ip_whitelist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_active_cxn      = 2000
     max_s2_sversion     = "v4"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"splunk\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 30244.35
+    pipeline = "default"
+    port     = 8089
     pq = {
-      commit_frequency = 9.29
-      compress         = "none"
-      max_buffer_size  = 46.84
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
     send_to_routes         = true
-    socket_ending_max_wait = 1.4
-    socket_idle_timeout    = 0.89
-    socket_max_lifespan    = 1.32
-    stale_channel_flush_ms = 4831222.63
+    socket_ending_max_wait = 15
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "splunk",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "splunk-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:splunk_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type             = "splunk"
-    use_fwd_timezone = false
+    use_fwd_timezone = true
   }
   input_splunk_hec = {
     access_control_allow_headers = [
-      "..."
+      "Authorization",
+      "Content-Type",
     ]
     access_control_allow_origin = [
-      "..."
+      "https://app.example.com",
+      "https://grafana.example.com",
     ]
-    activity_log_sample_rate = 7.44
+    activity_log_sample_rate = 10
     allowed_indexes = [
-      "..."
+      "main",
+      "metrics",
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
-          "..."
+          "main",
+          "metrics",
         ]
-        auth_type   = "secret"
-        description = "...my_description..."
+        auth_type   = "manual"
+        description = "Token for HEC webhooks"
         enabled     = true
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "sourcetype"
+            value = "\"http:hec\""
           }
         ]
         token        = "{ \"see\": \"documentation\" }"
@@ -3161,78 +3242,81 @@ resource "criblio_pack_source" "my_packsource" {
       }
     ]
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
+      "syslog-breaker",
     ]
-    capture_headers = false
+    capture_headers = true
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
-    drop_control_fields     = false
+    description             = "Splunk HEC listener for webhooks"
+    disabled                = false
+    drop_control_fields     = true
     emit_token_metrics      = true
-    enable_health_check     = "{ \"see\": \"documentation\" }"
+    enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
+    environment             = "main"
     extract_metrics         = true
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 480.42
-    max_active_req          = 7.27
-    max_requests_per_socket = 8
+    host                    = "0.0.0.0"
+    id                      = "splunk-hec-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"hec\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 45730.24
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 7.55
-      compress         = "none"
-      max_buffer_size  = 48.46
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    request_timeout        = 7.68
-    send_to_routes         = false
-    socket_timeout         = 0.26
-    splunk_hec_acks        = true
-    splunk_hec_api         = "...my_splunk_hec_api..."
-    stale_channel_flush_ms = 1355570.83
+    request_timeout        = 30
+    send_to_routes         = true
+    socket_timeout         = 60
+    splunk_hec_acks        = false
+    splunk_hec_api         = "/services/collector"
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "splunk",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "splunk-hec-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.2"
+      disabled            = true
+      max_version         = "TLSv1.3"
       min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      passphrase          = "$${{secret:hec_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type             = "splunk_hec"
-    use_fwd_timezone = false
+    use_fwd_timezone = true
   }
   input_splunk_search = {
-    auth_header_expr = "...my_auth_header_expr..."
-    auth_type        = "oauth"
+    auth_header_expr = "`Bearer ${token}`"
+    auth_type        = "basic"
     breaker_rulesets = [
-      "..."
+      "Splunk Search Ruleset",
+      "access-logs-v1",
     ]
     connections = [
       {
@@ -3240,221 +3324,227 @@ resource "criblio_pack_source" "my_packsource" {
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret = "...my_credentials_secret..."
-    cron_schedule      = "...my_cron_schedule..."
-    description        = "...my_description..."
-    disabled           = true
-    earliest           = "...my_earliest..."
-    encoding           = "...my_encoding..."
-    endpoint           = "...my_endpoint..."
+    credentials_secret = "splunk-credentials"
+    cron_schedule      = "*/5 * * * *"
+    description        = "Scheduled Splunk search for error rates"
+    disabled           = false
+    earliest           = "-1h@h"
+    encoding           = "UTF-8"
+    endpoint           = "/services/search/v2/jobs/export"
     endpoint_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Authorization"
+        value = "\"Bearer $${{secret:splunk_token}\""
       }
     ]
     endpoint_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "earliest_time"
+        value = "${earliest}"
       }
     ]
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
+    environment             = "main"
+    id                      = "splunk-search-errors"
     ignore_group_jobs_limit = false
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 12.35
-    latest                  = "...my_latest..."
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    latest                  = "now"
     log_level               = "info"
-    login_url               = "...my_login_url..."
-    max_missed_keep_alives  = 4.86
+    login_url               = "https://splunk.example.com:8089/services/auth/login"
+    max_missed_keep_alives  = 3
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"splunk_search\""
       }
     ]
     oauth_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Accept"
+        value = "application/json"
       }
     ]
     oauth_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "grant_type"
+        value = "client_credentials"
       }
     ]
-    output_mode = "csv"
-    password    = "...my_password..."
-    pipeline    = "...my_pipeline..."
+    output_mode = "json"
+    password    = "$${{secret:splunk_password}"
+    pipeline    = "default"
     pq = {
-      commit_frequency = 4.05
-      compress         = "none"
-      max_buffer_size  = 45.31
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled          = false
-    reject_unauthorized = true
-    request_timeout     = 586.16
+    reject_unauthorized = false
+    request_timeout     = 120
     retry_rules = {
       codes = [
-        9.39
+        429,
+        503,
+        502,
       ]
       enable_header         = true
-      interval              = 6165.82
-      limit                 = 15.85
-      multiplier            = 10.91
-      retry_connect_reset   = false
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
+      retry_connect_reset   = true
       retry_connect_timeout = true
       type                  = "backoff"
     }
-    search                 = "...my_search..."
-    search_head            = "...my_search_head..."
-    secret                 = "...my_secret..."
-    secret_param_name      = "...my_secret_param_name..."
-    send_to_routes         = false
-    stale_channel_flush_ms = 27372045.99
+    search                 = "search index=main sourcetype=access_combined status>=500 | stats count by host"
+    search_head            = "https://splunk.example.com:8089"
+    secret                 = "$${{secret:splunk_oauth_secret}"
+    secret_param_name      = "password"
+    send_to_routes         = true
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "splunk",
     ]
-    text_secret          = "...my_text_secret..."
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 245461.79
-    ttl                  = "...my_ttl..."
+    text_secret          = "splunk-token-secret"
+    token                = "$${{secret:splunk_token}"
+    token_attribute_name = "access_token"
+    token_timeout_secs   = 3600
+    ttl                  = "4h"
     type                 = "splunk_search"
-    use_round_robin_dns  = false
-    username             = "...my_username..."
+    use_round_robin_dns  = true
+    username             = "splunk_user"
   }
   input_sqs = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-sqs-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-raw"
+        pipeline = "default"
       }
     ]
     create_queue       = false
-    description        = "...my_description..."
-    disabled           = true
-    duration_seconds   = 34384.07
-    enable_assume_role = false
-    endpoint           = "...my_endpoint..."
-    environment        = "...my_environment..."
-    id                 = "...my_id..."
-    max_messages       = 5.23
+    description        = "Ingest SQS messages"
+    disabled           = false
+    duration_seconds   = 3600
+    enable_assume_role = true
+    endpoint           = "https://sqs.us-east-1.amazonaws.com"
+    environment        = "main"
+    id                 = "sqs-events"
+    max_messages       = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"sqs\""
       }
     ]
-    num_receivers = 45.55
-    pipeline      = "...my_pipeline..."
-    poll_timeout  = 19.8
+    num_receivers = 4
+    pipeline      = "default"
+    poll_timeout  = 10
     pq = {
-      commit_frequency = 4.03
-      compress         = "none"
-      max_buffer_size  = 46.43
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled          = false
-    queue_name          = "...my_queue_name..."
-    queue_type          = "fifo"
-    region              = "...my_region..."
+    queue_name          = "https://sqs.us-east-1.amazonaws.com/123456789012/events-queue"
+    queue_type          = "standard"
+    region              = "us-east-1"
     reject_unauthorized = true
-    reuse_connections   = false
+    reuse_connections   = true
     send_to_routes      = true
     signature_version   = "v4"
     streamtags = [
-      "..."
+      "aws",
+      "sqs",
     ]
     type               = "sqs"
-    visibility_timeout = 16398.99
+    visibility_timeout = 300
   }
   input_syslog = {
     input_syslog_syslog1 = {
-      allow_non_standard_app_name = false
+      allow_non_standard_app_name = true
       connections = [
         {
-          output   = "...my_output..."
-          pipeline = "...my_pipeline..."
+          output   = "s3-syslog"
+          pipeline = "default"
         }
       ]
-      description                          = "...my_description..."
+      description                          = "Receive syslog over UDP/TCP with framing detection"
       disabled                             = false
       enable_enhanced_proxy_header_parsing = true
-      enable_load_balancing                = false
+      enable_load_balancing                = true
       enable_proxy_header                  = false
-      environment                          = "...my_environment..."
-      host                                 = "...my_host..."
-      id                                   = "...my_id..."
-      infer_framing                        = false
-      ip_whitelist_regex                   = "...my_ip_whitelist_regex..."
+      environment                          = "main"
+      host                                 = "0.0.0.0"
+      id                                   = "syslog-listener"
+      infer_framing                        = true
+      ip_whitelist_regex                   = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
       keep_fields_list = [
-        "..."
+        "host",
+        "app",
       ]
-      max_active_cxn  = 9.27
-      max_buffer_size = 4.44
+      max_active_cxn  = 2000
+      max_buffer_size = 20000
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "source"
+          value = "\"syslog\""
         }
       ]
-      octet_counting = true
-      pipeline       = "...my_pipeline..."
+      octet_counting = false
+      pipeline       = "default"
       pq = {
-        commit_frequency = 2.22
-        compress         = "none"
-        max_buffer_size  = 46.68
-        max_file_size    = "...my_max_file_size..."
-        max_size         = "...my_max_size..."
-        mode             = "smart"
-        path             = "...my_path..."
+        commit_frequency = 100
+        compress         = "gzip"
+        max_buffer_size  = 5000
+        max_file_size    = "100 MB"
+        max_size         = "10GB"
+        mode             = "always"
+        path             = "/opt/cribl/state/queues"
       }
       pq_enabled             = false
       send_to_routes         = true
-      single_msg_udp_packets = false
-      socket_ending_max_wait = 4.48
-      socket_idle_timeout    = 8.62
-      socket_max_lifespan    = 8.74
+      single_msg_udp_packets = true
+      socket_ending_max_wait = 30
+      socket_idle_timeout    = 60
+      socket_max_lifespan    = 3600
       streamtags = [
-        "..."
+        "syslog",
+        "network",
       ]
       strictly_infer_octet_counting = true
-      tcp_port                      = 54010.44
-      timestamp_timezone            = "...my_timestamp_timezone..."
+      tcp_port                      = 514
+      timestamp_timezone            = "UTC"
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
+        ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+        cert_path           = "/etc/ssl/certs/server.crt"
+        certificate_name    = "syslog-cert"
         common_name_regex   = "{ \"see\": \"documentation\" }"
         disabled            = true
         max_version         = "TLSv1.3"
-        min_version         = "TLSv1"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
+        min_version         = "TLSv1.2"
+        passphrase          = "***REDACTED***"
+        priv_key_path       = "/etc/ssl/private/server.key"
         reject_unauthorized = "{ \"see\": \"documentation\" }"
         request_cert        = false
       }
       type                   = "syslog"
-      udp_port               = 45541.65
-      udp_socket_rx_buf_size = 2227773755.28
+      udp_port               = 514
+      udp_socket_rx_buf_size = 4194304
     }
   }
   input_system_metrics = {
@@ -3465,56 +3555,61 @@ resource "criblio_pack_source" "my_packsource" {
       }
     ]
     container = {
-      all_containers = false
-      detail         = false
+      all_containers = true
+      detail         = true
       docker_socket = [
-        "..."
+        "/var/run/docker.sock",
       ]
-      docker_timeout = 5.24
+      docker_timeout = 10
       filters = [
         {
-          expr = "...my_expr..."
+          expr = "container.name =~ /nginx|redis/"
         }
       ]
-      mode       = "basic"
+      mode       = "all"
       per_device = true
     }
-    description = "...my_description..."
+    description = "Host, CPU, memory, network, disk, process and container metrics"
     disabled    = false
-    environment = "...my_environment..."
+    environment = "main"
     host = {
       custom = {
         cpu = {
-          detail  = false
-          mode    = "disabled"
+          detail  = true
+          mode    = "all"
           per_cpu = true
-          time    = false
+          time    = true
         }
         disk = {
-          detail = false
+          detail = true
           devices = [
-            "..."
+            "!loop*",
+            "sda*",
           ]
           fstypes = [
-            "..."
+            "ext4",
+            "!*tmpfs",
           ]
-          mode = "basic"
+          mode = "all"
           mountpoints = [
-            "..."
+            "/",
+            "/var",
+            "!/proc*",
           ]
           per_device = true
         }
         memory = {
           detail = true
-          mode   = "disabled"
+          mode   = "all"
         }
         network = {
-          detail = false
+          detail = true
           devices = [
-            "..."
+            "!lo",
+            "eth0",
           ]
-          mode          = "basic"
-          per_interface = false
+          mode          = "custom"
+          per_interface = true
         }
         system = {
           mode      = "basic"
@@ -3523,45 +3618,46 @@ resource "criblio_pack_source" "my_packsource" {
       }
       mode = "basic"
     }
-    id       = "...my_id..."
-    interval = 9.24
+    id       = "sysmetrics"
+    interval = 15
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"system_metrics\""
       }
     ]
     persistence = {
       compress      = "gzip"
-      dest_path     = "...my_dest_path..."
+      dest_path     = "/opt/cribl/state/system_metrics"
       enable        = true
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      max_data_size = "4GB"
+      max_data_time = "48h"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 6.83
-      compress         = "none"
-      max_buffer_size  = 48.26
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     process = {
       sets = [
         {
-          filter           = "...my_filter..."
+          filter           = "proc.name == 'nginx'"
           include_children = true
-          name             = "...my_name..."
+          name             = "nginx-workers"
         }
       ]
     }
     send_to_routes = true
     streamtags = [
-      "..."
+      "sys",
+      "metrics",
     ]
     type = "system_metrics"
   }
@@ -3571,22 +3667,22 @@ resource "criblio_pack_source" "my_packsource" {
         enable = true
       }
       dns = {
-        enable = false
+        enable = true
       }
       firewall = {
-        enable = false
+        enable = true
       }
       hostsfile = {
         enable = true
       }
       interfaces = {
-        enable = false
+        enable = true
       }
       login_users = {
         enable = true
       }
       metadata = {
-        enable = false
+        enable = true
       }
       ports = {
         enable = true
@@ -3595,7 +3691,7 @@ resource "criblio_pack_source" "my_packsource" {
         enable = true
       }
       services = {
-        enable = false
+        enable = true
       }
       user = {
         enable = true
@@ -3607,402 +3703,415 @@ resource "criblio_pack_source" "my_packsource" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description           = "...my_description..."
-    disable_native_module = true
+    description           = "Collect system state metrics and spool to disk"
+    disable_native_module = false
     disabled              = false
-    environment           = "...my_environment..."
-    id                    = "...my_id..."
-    interval              = 5.13
+    environment           = "main"
+    id                    = "system-state"
+    interval              = 600
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"system_state\""
       }
     ]
     persistence = {
       compress      = "gzip"
-      dest_path     = "...my_dest_path..."
+      dest_path     = "/var/lib/cribl/state/system_state"
       enable        = true
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 3.31
-      compress         = "none"
-      max_buffer_size  = 50.09
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled     = false
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "sys",
+      "state",
     ]
     type = "system_state"
   }
   input_tcp = {
     auth_type = "manual"
     breaker_rulesets = [
-      "..."
+      "multiline-json",
+      "tcp-syslog-breaker",
     ]
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-raw"
+        pipeline = "default"
       }
     ]
-    description         = "...my_description..."
-    disabled            = true
+    description         = "Receive generic TCP payloads"
+    disabled            = false
     enable_header       = false
-    enable_proxy_header = true
-    environment         = "...my_environment..."
-    host                = "...my_host..."
-    id                  = "...my_id..."
-    ip_whitelist_regex  = "...my_ip_whitelist_regex..."
-    max_active_cxn      = 8.41
+    enable_proxy_header = false
+    environment         = "main"
+    host                = "0.0.0.0"
+    id                  = "tcp-listener"
+    ip_whitelist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_active_cxn      = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"tcp\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 7592.47
+    pipeline = "default"
+    port     = 9000
     pq = {
-      commit_frequency = 7.04
-      compress         = "none"
-      max_buffer_size  = 51.06
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     preprocess = {
       args = [
-        "..."
+        "--compact-output",
       ]
-      command  = "...my_command..."
+      command  = "jq -r .message"
       disabled = true
     }
-    send_to_routes         = false
-    socket_ending_max_wait = 8.02
-    socket_idle_timeout    = 5.47
-    socket_max_lifespan    = 9.38
-    stale_channel_flush_ms = 8313205.9
+    send_to_routes         = true
+    socket_ending_max_wait = 30
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "tcp",
+      "ingest",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "tcp-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type = "tcp"
   }
   input_tcpjson = {
-    auth_token = "...my_auth_token..."
-    auth_type  = "secret"
+    auth_token = "$${{secret:tcpjson_token}"
+    auth_type  = "manual"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description           = "...my_description..."
-    disabled              = true
+    description           = "TCP JSON listener for app logs"
+    disabled              = false
     enable_load_balancing = true
     enable_proxy_header   = false
-    environment           = "...my_environment..."
-    host                  = "...my_host..."
-    id                    = "...my_id..."
-    ip_whitelist_regex    = "...my_ip_whitelist_regex..."
-    max_active_cxn        = 1.87
+    environment           = "main"
+    host                  = "0.0.0.0"
+    id                    = "tcpjson-listener"
+    ip_whitelist_regex    = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_active_cxn        = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"tcpjson\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 21110.14
+    pipeline = "default"
+    port     = 9001
     pq = {
-      commit_frequency = 4.14
-      compress         = "none"
-      max_buffer_size  = 43.17
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    send_to_routes         = false
-    socket_ending_max_wait = 6.74
-    socket_idle_timeout    = 6.02
-    socket_max_lifespan    = 6.18
+    send_to_routes         = true
+    socket_ending_max_wait = 15
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
     streamtags = [
-      "..."
+      "prod",
+      "tcpjson",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "tcpjson-token-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "tcpjson-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.2"
+      disabled            = true
+      max_version         = "TLSv1.3"
       min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      passphrase          = "$${{secret:tcpjson_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type = "tcpjson"
   }
   input_wef = {
     allow_machine_id_mismatch = false
     auth_method               = "clientCert"
-    ca_fingerprint            = "...my_ca_fingerprint..."
+    ca_fingerprint            = "9A:4F:2B:8E:1D:3C:A7:5B:9E:0F:11:22:33:44:55:66:77:88:99:AA"
     capture_headers           = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-wef"
+        pipeline = "default"
       }
     ]
-    description              = "...my_description..."
-    disabled                 = true
-    enable_health_check      = false
+    description              = "Receive Windows Event Forwarding (WEF) over HTTPS"
+    disabled                 = false
+    enable_health_check      = true
     enable_proxy_header      = true
-    environment              = "...my_environment..."
-    host                     = "...my_host..."
-    id                       = "...my_id..."
-    ip_allowlist_regex       = "...my_ip_allowlist_regex..."
-    ip_denylist_regex        = "...my_ip_denylist_regex..."
-    keep_alive_timeout       = 338.86
-    keytab                   = "...my_keytab..."
+    environment              = "main"
+    host                     = "0.0.0.0"
+    id                       = "wef-listener"
+    ip_allowlist_regex       = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex        = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout       = 60
+    keytab                   = "/etc/krb5.keytab"
     log_fingerprint_mismatch = true
-    max_active_req           = 0.44
-    max_requests_per_socket  = 5
+    max_active_req           = 512
+    max_requests_per_socket  = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"wef\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 906.42
+    pipeline = "default"
+    port     = 5986
     pq = {
-      commit_frequency = 7.64
-      compress         = "none"
-      max_buffer_size  = 43.08
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled     = false
-    principal      = "...my_principal..."
-    send_to_routes = false
-    socket_timeout = 8.64
+    principal      = "HTTP/wef.example.com@EXAMPLE.COM"
+    send_to_routes = true
+    socket_timeout = 60
     streamtags = [
-      "..."
+      "windows",
+      "wef",
     ]
     subscriptions = [
       {
-        batch_timeout      = 4.05
-        compress           = false
-        content_format     = "RenderedText"
-        heartbeat_interval = 2.46
-        id                 = "...my_id..."
-        locale             = "...my_locale..."
+        batch_timeout      = 30
+        compress           = true
+        content_format     = "Raw"
+        heartbeat_interval = 60
+        id                 = "default-subscription"
+        locale             = "en-US"
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "subscription"
+            value = "\"wef-security\""
           }
         ]
         query_selector       = "simple"
         read_existing_events = false
         send_bookmarks       = true
-        subscription_name    = "...my_subscription_name..."
+        subscription_name    = "Security"
         targets = [
-          "..."
+          "wef1.corp.local",
+          "*.corp.local",
         ]
-        version = "...my_version..."
+        version = "7f0c2f2e-1c3b-4d2a-9d6e-5a1b2c3d4e5f"
       }
     ]
     tls = {
-      ca_path               = "...my_ca_path..."
-      cert_path             = "...my_cert_path..."
-      certificate_name      = "...my_certificate_name..."
-      common_name_regex     = "...my_common_name_regex..."
-      disabled              = true
+      ca_path               = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path             = "/etc/ssl/certs/server.crt"
+      certificate_name      = "wef-cert"
+      common_name_regex     = "^WEF-CLIENT-.*$"
+      disabled              = false
       keytab                = "{ \"see\": \"documentation\" }"
       max_version           = "TLSv1.3"
-      min_version           = "TLSv1.1"
-      ocsp_check            = true
-      ocsp_check_fail_close = true
-      passphrase            = "...my_passphrase..."
+      min_version           = "TLSv1.2"
+      ocsp_check            = false
+      ocsp_check_fail_close = false
+      passphrase            = "***REDACTED***"
       principal             = "{ \"see\": \"documentation\" }"
-      priv_key_path         = "...my_priv_key_path..."
-      reject_unauthorized   = false
+      priv_key_path         = "/etc/ssl/private/server.key"
+      reject_unauthorized   = true
       request_cert          = true
     }
     type = "wef"
   }
+  input_win_event_logs = {
+    batch_size = 500
+    connections = [
+      {
+        output   = "s3-logs"
+        pipeline = "default"
+      }
+    ]
+    description           = "Collect Windows Event Logs from local system"
+    disable_native_module = false
+    disabled              = false
+    environment           = "main"
+    event_format          = "json"
+    id                    = "win-event-logs"
+    interval              = 10
+    log_names = [
+      "Application",
+      "Security",
+      "System",
+      "Microsoft-Windows-Sysmon/Operational",
+    ]
+    max_event_bytes = 131072
+    metadata = [
+      {
+        name  = "source"
+        value = "\"win_event_logs\""
+      }
+    ]
+    pipeline = "default"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled     = false
+    read_mode      = "newest"
+    send_to_routes = true
+    streamtags = [
+      "windows",
+      "eventlogs",
+    ]
+    type = "win_event_logs"
+  }
   input_windows_metrics = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-main"
+        pipeline = "default"
       }
     ]
-    description           = "...my_description..."
-    disable_native_module = true
-    disabled              = true
-    environment           = "...my_environment..."
+    description           = "Collect Windows performance counters and spool to disk"
+    disable_native_module = false
+    disabled              = false
+    environment           = "main"
     host = {
       custom = {
         cpu = {
-          detail  = false
-          mode    = "custom"
+          detail  = true
+          mode    = "basic"
           per_cpu = true
-          time    = false
+          time    = true
         }
         disk = {
-          mode       = "disabled"
-          per_volume = false
+          mode       = "all"
+          per_volume = true
           volumes = [
-            "..."
+            "...",
+            "!E:",
           ]
         }
         memory = {
           detail = true
-          mode   = "all"
+          mode   = "basic"
         }
         network = {
-          detail = false
+          detail = true
           devices = [
-            "..."
+            "Ethernet*",
+            "!Loopback*",
           ]
           mode          = "basic"
-          per_interface = false
+          per_interface = true
         }
         system = {
           detail = true
-          mode   = "custom"
+          mode   = "basic"
         }
       }
-      mode = "custom"
+      mode = "basic"
     }
-    id       = "...my_id..."
-    interval = 8.96
+    id       = "windows-metrics"
+    interval = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"windows_metrics\""
       }
     ]
     persistence = {
-      compress      = "none"
-      dest_path     = "...my_dest_path..."
+      compress      = "gzip"
+      dest_path     = "/var/lib/cribl/state/windows_metrics"
       enable        = true
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 4.01
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 47.63
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     process = {
       sets = [
         {
-          filter           = "...my_filter..."
-          include_children = false
-          name             = "...my_name..."
+          filter           = "name == \"w3wp.exe\""
+          include_children = true
+          name             = "IIS worker processes"
         }
       ]
     }
     send_to_routes = true
     streamtags = [
-      "..."
+      "windows",
+      "metrics",
     ]
     type = "windows_metrics"
   }
-  input_win_event_logs = {
-    batch_size = 8.86
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    description           = "...my_description..."
-    disable_native_module = false
-    disabled              = true
-    environment           = "...my_environment..."
-    event_format          = "xml"
-    id                    = "...my_id..."
-    interval              = 8.53
-    log_names = [
-      "..."
-    ]
-    max_event_bytes = 60321986.88
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    pipeline = "...my_pipeline..."
-    pq = {
-      commit_frequency = 8.03
-      compress         = "gzip"
-      max_buffer_size  = 50.86
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
-    }
-    pq_enabled     = true
-    read_mode      = "newest"
-    send_to_routes = true
-    streamtags = [
-      "..."
-    ]
-    type = "win_event_logs"
-  }
   input_wiz = {
-    auth_audience_override = "...my_auth_audience_override..."
+    auth_audience_override = "wiz-api"
     auth_type              = "manual"
-    auth_url               = "...my_auth_url..."
-    client_id              = "...my_client_id..."
-    client_secret          = "...my_client_secret..."
+    auth_url               = "https://auth.app.wiz.io/oauth/token"
+    client_id              = "123e4567-client-id"
+    client_secret          = "***REDACTED***"
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-wiz"
+        pipeline = "default"
       }
     ]
     content_config = [
@@ -4012,143 +4121,147 @@ resource "criblio_pack_source" "my_packsource" {
         enabled             = true
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
-    endpoint                = "...my_endpoint..."
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
-    keep_alive_time         = 14.78
-    max_missed_keep_alives  = 5.49
+    description             = "Ingest Wiz content via GraphQL API"
+    disabled                = false
+    endpoint                = "https://api.us1.app.wiz.io/graphql"
+    environment             = "main"
+    id                      = "wiz-ingest"
+    ignore_group_jobs_limit = false
+    keep_alive_time         = 30
+    max_missed_keep_alives  = 3
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"wiz\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 10.85
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 46.92
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled      = true
-    request_timeout = 1826.58
+    pq_enabled      = false
+    request_timeout = 300
     retry_rules = {
       codes = [
-        5.48
+        429,
+        503,
       ]
-      enable_header         = false
-      interval              = 10483.06
-      limit                 = 15.93
-      multiplier            = 14.76
-      retry_connect_reset   = true
-      retry_connect_timeout = true
-      type                  = "none"
+      enable_header         = true
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
+      retry_connect_reset   = false
+      retry_connect_timeout = false
+      type                  = "backoff"
     }
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "wiz",
+      "security",
     ]
-    text_secret = "...my_text_secret..."
-    ttl         = "...my_ttl..."
+    text_secret = "wiz-client-secret"
+    ttl         = "4h"
     type        = "wiz"
   }
   input_zscaler_hec = {
     access_control_allow_headers = [
-      "..."
+      "Authorization",
+      "Content-Type",
     ]
     access_control_allow_origin = [
-      "..."
+      "https://*.zscaler.com",
     ]
-    activity_log_sample_rate = 10.12
+    activity_log_sample_rate = 100
     allowed_indexes = [
-      "..."
+      "zscaler-*",
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
-          "..."
+          "zscaler-*",
         ]
-        auth_type   = "secret"
-        description = "...my_description..."
+        auth_type   = "manual"
+        description = "Zscaler Collector"
         enabled     = true
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "source"
+            value = "\"zscaler_hec\""
           }
         ]
         token        = "{ \"see\": \"documentation\" }"
         token_secret = "{ \"see\": \"documentation\" }"
       }
     ]
-    capture_headers = false
+    capture_headers = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-zscaler"
+        pipeline = "default"
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
+    description             = "Receive Zscaler HEC events over HTTP(S)"
+    disabled                = false
     emit_token_metrics      = true
     enable_health_check     = "{ \"see\": \"documentation\" }"
     enable_proxy_header     = false
-    environment             = "...my_environment..."
+    environment             = "main"
     hec_acks                = false
-    hec_api                 = "...my_hec_api..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 361.81
-    max_active_req          = 7.46
-    max_requests_per_socket = 7
+    hec_api                 = "/services/collector"
+    host                    = "0.0.0.0"
+    id                      = "zscaler-hec-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"zscaler_hec\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 56574.01
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 5.64
-      compress         = "none"
-      max_buffer_size  = 43.74
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled      = true
-    request_timeout = 0.75
-    send_to_routes  = false
-    socket_timeout  = 5.43
+    pq_enabled      = false
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "zscaler",
+      "hec",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "zscaler-hec-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.1"
+      disabled            = true
+      max_version         = "TLSv1.3"
       min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type = "zscaler_hec"
   }
-  pack = "...my_pack..."
+  pack = "observability-pack"
 }
 ```
 
@@ -4332,7 +4445,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -4436,7 +4549,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -4497,7 +4610,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -4557,7 +4670,7 @@ Default: 60000
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--input_confluent_cloud--sasl))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities.
-      If the client sends no heartbeats to the broker before the timeout expires, 
+      If the client sends no heartbeats to the broker before the timeout expires,
       the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
@@ -4640,7 +4753,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -4726,7 +4839,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -4798,7 +4911,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -4888,7 +5001,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -4972,7 +5085,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5049,7 +5162,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5146,7 +5259,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5229,7 +5342,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5326,7 +5439,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5438,7 +5551,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5557,7 +5670,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5678,7 +5791,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5760,7 +5873,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5833,7 +5946,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5905,7 +6018,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -5992,7 +6105,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -6114,7 +6227,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -6285,7 +6398,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -6442,7 +6555,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -6559,7 +6672,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -6640,7 +6753,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -6678,8 +6791,8 @@ Optional:
 - `from_beginning` (Boolean) Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message. Default: true
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Default: "Cribl"
 - `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
-      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
-      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
+    Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 Default: 3000
 - `id` (String) Unique ID for this input
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes). Default: 300
@@ -6695,17 +6808,17 @@ Default: 3000
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000
 - `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance begins.
-      If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
+    If the timeout is exceeded, the coordinator broker will remove the worker from the group.
+    See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 Default: 60000
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request. Default: 60000
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--input_kafka--sasl))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities.
-      If the client sends no heartbeats to the broker before the timeout expires, 
-      the broker will remove the client from the group and initiate a rebalance.
-      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
-      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
+    If the client sends no heartbeats to the broker before the timeout expires, 
+    the broker will remove the client from the group and initiate a rebalance.
+    Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
+    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 Default: 30000
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--tls))
@@ -6785,7 +6898,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -6893,7 +7006,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -6951,7 +7064,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7039,7 +7152,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7124,7 +7237,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7240,7 +7353,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7323,7 +7436,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7400,7 +7513,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7427,8 +7540,9 @@ Optional:
 
 Required:
 
+- `aws_authentication_method` (String) must be one of ["instanceRole", "accessKeys", "profile"]
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).
-- `region` (String) Region where the MSK cluster is located
+- `region` (String) AWS region where the MSK cluster is running
 
 Optional:
 
@@ -7438,7 +7552,6 @@ Optional:
 - `auto_commit_interval` (Number) How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `auto_commit_threshold` (Number) How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `aws_api_key` (String)
-- `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles. Default: "auto"; must be one of ["auto", "manual", "secret"]
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details. Default: 2
@@ -7453,8 +7566,8 @@ Optional:
 - `from_beginning` (Boolean) Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message. Default: true
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Default: "Cribl"
 - `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
-      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
-      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
+    Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 Default: 3000
 - `id` (String) Unique ID for this input
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes). Default: 300
@@ -7470,18 +7583,18 @@ Default: 3000
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000
 - `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance begins.
-      If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
+    If the timeout is exceeded, the coordinator broker will remove the worker from the group.
+    See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 Default: 60000
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request. Default: 60000
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities.
-      If the client sends no heartbeats to the broker before the timeout expires, 
-      the broker will remove the client from the group and initiate a rebalance.
-      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
-      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
+    If the client sends no heartbeats to the broker before the timeout expires, 
+    the broker will remove the client from the group and initiate a rebalance.
+    Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
+    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 Default: 30000
 - `signature_version` (String) Signature version to use for signing MSK cluster requests. Default: "v4"; must be one of ["v2", "v4"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
@@ -7562,7 +7675,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7579,7 +7692,8 @@ Optional:
 - `min_version` (String) must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 Default: true
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -7645,7 +7759,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7702,13 +7816,16 @@ Optional:
 <a id="nestedatt--input_office365_mgmt--content_config"></a>
 ### Nested Schema for `input_office365_mgmt.content_config`
 
-Optional:
+Required:
 
 - `content_type` (String) Office 365 Management Activity API Content Type
-- `description` (String) If interval type is minutes the value entered must evenly divisible by 60 or save will fail
 - `enabled` (Boolean)
-- `interval` (Number)
-- `log_level` (String) Collector runtime Log Level. must be one of ["error", "warn", "info", "debug"]
+- `interval` (Number) Interval, in minutes, between polls
+- `log_level` (String) must be one of ["error", "warn", "info", "debug"]
+
+Optional:
+
+- `description` (String) If interval type is minutes the value entered must evenly divisible by 60 or save will fail
 
 
 <a id="nestedatt--input_office365_mgmt--metadata"></a>
@@ -7730,7 +7847,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7839,7 +7956,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7937,7 +8054,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -7970,7 +8087,7 @@ Optional:
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `disabled` (Boolean) Default: false
-- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false
 - `enable_proxy_header` (String) Parsed as JSON.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_logs` (Boolean) Enable to extract each incoming log record to a separate event. Default: false
@@ -8058,7 +8175,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -8162,7 +8279,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -8278,7 +8395,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -8318,7 +8435,7 @@ Optional:
 - `id` (String) Unique ID for this input
 - `ingest_raw_bytes` (Boolean) If true, a __rawBytes field will be added to each event containing the raw bytes of the datagram. Default: false
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to send data. Default: "/.*/"
-- `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Default: 1000
+- `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_raw_udp--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_raw_udp--pq))
@@ -8360,7 +8477,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -8459,7 +8576,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -8570,7 +8687,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -8679,7 +8796,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -8751,7 +8868,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -8789,7 +8906,7 @@ Required:
 
 Optional:
 
-- `auth_tokens` (Attributes List) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_splunk--auth_tokens))
+- `auth_tokens` (Attributes List) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_splunk--auth_tokens))
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `compress` (String) Controls whether to support reading compressed data from a forwarder. Select 'Automatic' to match the forwarder's configuration, or 'Disabled' to reject compressed connections. Default: "disabled"; must be one of ["disabled", "auto", "always"]
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_splunk--connections))
@@ -8823,7 +8940,7 @@ Optional:
 
 Required:
 
-- `token` (String) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
+- `token` (String) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
 
 Optional:
 
@@ -8861,7 +8978,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -8905,7 +9022,7 @@ Optional:
 - `disabled` (Boolean) Default: false
 - `drop_control_fields` (Boolean) Drop Splunk control fields such as `crcSalt` and `_savedPort`. If disabled, control fields are stored in the internal field `__ctrlFields`. Default: true
 - `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false
-- `enable_health_check` (String) Parsed as JSON.
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_metrics` (Boolean) Extract and process Splunk-generated metrics as Cribl metrics. Default: false
@@ -8988,7 +9105,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -9086,7 +9203,7 @@ Optional:
 Required:
 
 - `name` (String)
-- `value` (String) JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
+- `value` (String) JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
 
 
 <a id="nestedatt--input_splunk_search--endpoint_params"></a>
@@ -9095,7 +9212,7 @@ Required:
 Required:
 
 - `name` (String)
-- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
+- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
 
 
 <a id="nestedatt--input_splunk_search--metadata"></a>
@@ -9135,7 +9252,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -9228,7 +9345,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -9314,7 +9431,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -9410,7 +9527,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -9600,7 +9717,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -9661,7 +9778,7 @@ Optional:
 - `firewall` (Attributes) Creates events for Firewall rules entries (see [below for nested schema](#nestedatt--input_system_state--collectors--firewall))
 - `hostsfile` (Attributes) Creates events based on entries collected from the hosts file (see [below for nested schema](#nestedatt--input_system_state--collectors--hostsfile))
 - `interfaces` (Attributes) Creates events for each of the host’s network interfaces (see [below for nested schema](#nestedatt--input_system_state--collectors--interfaces))
-- `login_users` (Attributes) Creates events from list of logged-in users (see [below for nested schema](#nestedatt--input_system_state--collectors--login_users))
+- `login_users` (Attributes) Creates events for logged-in users (see [below for nested schema](#nestedatt--input_system_state--collectors--login_users))
 - `metadata` (Attributes) Creates events based on the host system’s current state (see [below for nested schema](#nestedatt--input_system_state--collectors--metadata))
 - `ports` (Attributes) Creates events from list of listening ports (see [below for nested schema](#nestedatt--input_system_state--collectors--ports))
 - `routes` (Attributes) Creates events based on entries collected from the host’s network routes (see [below for nested schema](#nestedatt--input_system_state--collectors--routes))
@@ -9801,7 +9918,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -9821,7 +9938,7 @@ Optional:
 - `description` (String)
 - `disabled` (Boolean) Default: false
 - `enable_header` (Boolean) Client will pass the header record with every new connection. The header can contain an authToken, and an object with a list of fields and values to add to every event. These fields can be used to simplify Event Breaker selection, routing, etc. Header has this format, and must be followed by a newline: { "authToken" : "myToken", "fields": { "field1": "value1", "field2": "value2" } }. Default: false
-- `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports proxy protocol v1 or v2. Default: false
+- `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2. Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"
 - `id` (String) Unique ID for this input
@@ -9872,7 +9989,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -9970,7 +10087,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -10096,7 +10213,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -10185,7 +10302,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -10331,7 +10448,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -10436,7 +10553,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -10555,7 +10672,7 @@ Optional:
 - `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
@@ -10672,9 +10789,9 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_source.my_criblio_pack_source
   id = jsonencode({
-    group_id = "..."
-    id = "..."
-    pack = "..."
+    group_id = "Cribl"
+    id = "pack-input-hec"
+    pack = "observability-pack"
   })
 }
 ```
@@ -10682,5 +10799,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_source.my_criblio_pack_source '{"group_id": "...", "id": "...", "pack": "..."}'
+terraform import criblio_pack_source.my_criblio_pack_source '{"group_id": "Cribl", "id": "pack-input-hec", "pack": "observability-pack"}'
 ```

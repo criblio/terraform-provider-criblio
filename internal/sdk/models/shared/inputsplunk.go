@@ -61,7 +61,7 @@ func (i *InputSplunkConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputSplunkMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputSplunkMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputSplunkMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputSplunkPqCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputSplunkPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputSplunkMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
@@ -396,7 +396,7 @@ func (i *InputSplunkMetadatum) GetValue() string {
 }
 
 type InputSplunkAuthToken struct {
-	// Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
+	// Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
 	Token       string  `json:"token"`
 	Description *string `json:"description,omitempty"`
 }
@@ -524,7 +524,7 @@ type InputSplunk struct {
 	BreakerRulesets []string `json:"breakerRulesets,omitempty"`
 	// How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 	StaleChannelFlushMs *float64 `default:"10000" json:"staleChannelFlushMs"`
-	// Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
+	// Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
 	AuthTokens []InputSplunkAuthToken `json:"authTokens,omitempty"`
 	// The highest S2S protocol version to advertise during handshake
 	MaxS2Sversion *InputSplunkMaxS2SVersion `default:"v3" json:"maxS2Sversion"`

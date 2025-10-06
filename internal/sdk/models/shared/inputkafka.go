@@ -61,7 +61,7 @@ func (i *InputKafkaConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputKafkaMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputKafkaMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputKafkaMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputKafkaCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputKafkaPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputKafkaMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
@@ -771,19 +771,22 @@ type InputKafka struct {
 	// Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.
 	Sasl *InputKafkaAuthentication        `json:"sasl,omitempty"`
 	TLS  *InputKafkaTLSSettingsClientSide `json:"tls,omitempty"`
-	//       Timeout used to detect client failures when using Kafka's group-management facilities.
-	//       If the client sends no heartbeats to the broker before the timeout expires,
-	//       the broker will remove the client from the group and initiate a rebalance.
-	//       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
-	//       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
+	//
+	//     Timeout used to detect client failures when using Kafka's group-management facilities.
+	//     If the client sends no heartbeats to the broker before the timeout expires,
+	//     the broker will remove the client from the group and initiate a rebalance.
+	//     Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
+	//     See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 	SessionTimeout *float64 `default:"30000" json:"sessionTimeout"`
-	//       Maximum allowed time for each worker to join the group after a rebalance begins.
-	//       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-	//       See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
+	//
+	//     Maximum allowed time for each worker to join the group after a rebalance begins.
+	//     If the timeout is exceeded, the coordinator broker will remove the worker from the group.
+	//     See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 	RebalanceTimeout *float64 `default:"60000" json:"rebalanceTimeout"`
-	//       Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
-	//       Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
-	//       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
+	//
+	//     Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
+	//     Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+	//     See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 	HeartbeatInterval *float64 `default:"3000" json:"heartbeatInterval"`
 	// How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 	AutoCommitInterval *float64 `json:"autoCommitInterval,omitempty"`

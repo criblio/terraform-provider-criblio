@@ -14,12 +14,12 @@ LookupFile Resource
 
 ```terraform
 resource "criblio_lookup_file" "my_lookupfile" {
-  content     = "...my_content..."
-  description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
-  mode        = "disk"
-  tags        = "...my_tags..."
+  content     = "US,United States\nCA,Canada"
+  description = "Country code to name lookup"
+  group_id    = "Cribl"
+  id          = "countries.csv"
+  mode        = "memory"
+  tags        = "geo,reference"
 }
 ```
 
@@ -47,12 +47,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_lookup_file.my_criblio_lookup_file
-  id = "..."
+  id = "Cribl"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_lookup_file.my_criblio_lookup_file "..."
+terraform import criblio_lookup_file.my_criblio_lookup_file "Cribl"
 ```

@@ -1,6 +1,6 @@
 data "criblio_pack" "my_pack" {
-  disabled = true
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
-  with     = "...my_with..."
+  disabled = false
+  group_id = "Cribl"
+  id       = "observability-pack"
+  with     = "outputs,inputs"
 }

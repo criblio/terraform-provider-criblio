@@ -1,151 +1,154 @@
 resource "criblio_source" "my_source" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "Cribl"
+  id       = "input-hec-1"
   input_appscope = {
-    auth_token = "...my_auth_token..."
+    auth_token = "***REDACTED***"
     auth_type  = "manual"
     breaker_rulesets = [
-      "..."
+      "appscope-lines",
     ]
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-appscope"
+        pipeline = "default"
       }
     ]
-    description         = "...my_description..."
+    description         = "Receive AppScope telemetry over TCP or UNIX socket"
     disabled            = false
     enable_proxy_header = false
-    enable_unix_path    = true
-    environment         = "...my_environment..."
+    enable_unix_path    = false
+    environment         = "main"
     filter = {
       allow = [
         {
-          arg      = "...my_arg..."
-          config   = "...my_config..."
-          procname = "...my_procname..."
+          arg      = "-c /etc/nginx/nginx.conf"
+          config   = "default"
+          procname = "nginx"
         }
       ]
-      transport_url = "...my_transport_url..."
+      transport_url = "unix:///var/run/appscope.sock"
     }
-    host               = "...my_host..."
-    id                 = "...my_id..."
-    ip_whitelist_regex = "...my_ip_whitelist_regex..."
-    max_active_cxn     = 9.71
+    host               = "0.0.0.0"
+    id                 = "appscope-ingest"
+    ip_whitelist_regex = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_active_cxn     = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"appscope\""
       }
     ]
     persistence = {
-      compress      = "none"
-      dest_path     = "...my_dest_path..."
+      compress      = "gzip"
+      dest_path     = "/var/lib/cribl/state/appscope"
       enable        = true
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
-    port     = 10821.34
+    pipeline = "default"
+    port     = 57000
     pq = {
-      commit_frequency = 7.46
-      compress         = "none"
-      max_buffer_size  = 49.62
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    send_to_routes         = false
-    socket_ending_max_wait = 1.44
-    socket_idle_timeout    = 1.69
-    socket_max_lifespan    = 4.11
-    stale_channel_flush_ms = 34410614.39
+    send_to_routes         = true
+    socket_ending_max_wait = 30
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "appscope",
+      "observability",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "appscope-auth-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "appscope-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type              = "appscope"
-    unix_socket_path  = "...my_unix_socket_path..."
-    unix_socket_perms = "...my_unix_socket_perms..."
+    unix_socket_path  = "/var/run/appscope.sock"
+    unix_socket_perms = "770"
   }
   input_azure_blob = {
-    auth_type   = "manual"
+    auth_type   = "clientSecret"
     azure_cloud = "...my_azure_cloud..."
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
+      "json-breaker",
     ]
     certificate = {
       certificate_name = "...my_certificate_name..."
     }
     client_id          = "...my_client_id..."
     client_text_secret = "...my_client_text_secret..."
-    connection_string  = "...my_connection_string..."
+    connection_string  = "$${{secret:azure_storage_connection_string}"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description     = "...my_description..."
-    disabled        = true
+    description     = "Azure Blob queue events ingester"
+    disabled        = false
     endpoint_suffix = "...my_endpoint_suffix..."
-    environment     = "...my_environment..."
-    file_filter     = "...my_file_filter..."
-    id              = "...my_id..."
-    max_messages    = 29.53
+    environment     = "main"
+    file_filter     = "^logs/.*\\.json$"
+    id              = "azure-blob-queue"
+    max_messages    = 16
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"azure_blob\""
       }
     ]
-    num_receivers                  = 76.24
-    parquet_chunk_download_timeout = 2916.04
-    parquet_chunk_size_mb          = 82.71
-    pipeline                       = "...my_pipeline..."
+    num_receivers                  = 4
+    parquet_chunk_download_timeout = 900
+    parquet_chunk_size_mb          = 10
+    pipeline                       = "default"
     pq = {
-      commit_frequency = 2.18
-      compress         = "none"
-      max_buffer_size  = 47.2
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    queue_name             = "...my_queue_name..."
-    send_to_routes         = false
-    service_period_secs    = 8.37
-    skip_on_error          = false
-    stale_channel_flush_ms = 42632985.63
+    queue_name             = "my-blob-notify-queue"
+    send_to_routes         = true
+    service_period_secs    = 5
+    skip_on_error          = true
+    stale_channel_flush_ms = 15000
     storage_account_name   = "...my_storage_account_name..."
     streamtags = [
-      "..."
+      "prod",
+      "azure",
     ]
     tenant_id          = "...my_tenant_id..."
     text_secret        = "...my_text_secret..."
     type               = "azure_blob"
-    visibility_timeout = 246960.5
+    visibility_timeout = 300
   }
   input_collection = {
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
     ]
     connections = [
       {
@@ -154,135 +157,138 @@ resource "criblio_source" "my_source" {
       }
     ]
     disabled    = false
-    environment = "...my_environment..."
-    id          = "...my_id..."
+    environment = "main"
+    id          = "collect-nginx"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"collection\""
       }
     ]
-    output   = "...my_output..."
-    pipeline = "...my_pipeline..."
+    output   = "datalake"
+    pipeline = "default"
     pq = {
-      commit_frequency = 4.72
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 42.52
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     preprocess = {
       args = [
-        "..."
+        "-c",
+        ".message |= upcase",
       ]
-      command  = "...my_command..."
+      command  = "jq"
       disabled = true
     }
-    send_to_routes         = false
-    stale_channel_flush_ms = 15919396.49
+    send_to_routes         = true
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "nginx",
     ]
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
+    throttle_rate_per_sec = "10 MB"
     type                  = "collection"
   }
   input_confluent_cloud = {
-    authentication_timeout = 3228010.08
-    auto_commit_interval   = 574056.62
-    auto_commit_threshold  = 6088.43
-    backoff_rate           = 19.92
+    authentication_timeout = 15000
+    auto_commit_interval   = 5000
+    auto_commit_threshold  = 1000
+    backoff_rate           = 3
     brokers = [
-      "..."
+      "pkc-12345.us-central1.gcp.confluent.cloud:9092",
     ]
-    connection_timeout = 2896733.84
+    connection_timeout = 15000
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description        = "...my_description..."
-    disabled           = true
-    environment        = "...my_environment..."
+    description        = "Confluent Cloud consumer for nginx access logs"
+    disabled           = false
+    environment        = "main"
     from_beginning     = true
-    group_id           = "...my_group_id..."
-    heartbeat_interval = 2878745.25
-    id                 = "...my_id..."
-    initial_backoff    = 385771.01
+    group_id           = "web-team"
+    heartbeat_interval = 3000
+    id                 = "ccloud-nginx"
+    initial_backoff    = 500
     kafka_schema_registry = {
       auth = {
-        credentials_secret = "...my_credentials_secret..."
+        credentials_secret = "ccloud-schema-basic"
         disabled           = true
       }
-      connection_timeout  = 2801.98
+      connection_timeout  = 30000
       disabled            = true
-      max_retries         = 54.65
-      request_timeout     = 2510.62
-      schema_registry_url = "...my_schema_registry_url..."
+      max_retries         = 3
+      request_timeout     = 30000
+      schema_registry_url = "https://psrc-12345.us-central1.gcp.confluent.cloud"
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
-        disabled            = false
-        max_version         = "TLSv1"
+        ca_path             = "/etc/ssl/certs/ca.pem"
+        cert_path           = "/etc/ssl/certs/client.crt"
+        certificate_name    = "ccloud-schema-cert"
+        disabled            = true
+        max_version         = "TLSv1.3"
         min_version         = "TLSv1.2"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
+        passphrase          = "$${{secret:ccloud_key_pass}"
+        priv_key_path       = "/etc/ssl/private/client.key"
         reject_unauthorized = true
-        servername          = "...my_servername..."
+        servername          = "psrc-12345.us-central1.gcp.confluent.cloud"
       }
     }
-    max_back_off            = 138634.92
-    max_bytes               = 153342787.93
-    max_bytes_per_partition = 1122269.7
-    max_retries             = 39.15
-    max_socket_errors       = 26.42
+    max_back_off            = 120000
+    max_bytes               = 10485760
+    max_bytes_per_partition = 1048576
+    max_retries             = 10
+    max_socket_errors       = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"ccloud\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 10.5
-      compress         = "none"
-      max_buffer_size  = 48.51
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled                 = false
-    reauthentication_threshold = 715684.29
-    rebalance_timeout          = 655450.51
-    request_timeout            = 1506422.44
+    reauthentication_threshold = 300000
+    rebalance_timeout          = 60000
+    request_timeout            = 60000
     sasl = {
-      disabled  = false
-      mechanism = "plain"
+      disabled  = true
+      mechanism = "scram-sha-512"
     }
-    send_to_routes  = false
-    session_timeout = 865848.25
+    send_to_routes  = true
+    session_timeout = 30000
     streamtags = [
-      "..."
+      "prod",
+      "ccloud",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = true
-      max_version         = "TLSv1"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/client.crt"
+      certificate_name    = "ccloud-client-cert"
+      disabled            = false
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:ccloud_key_pass}"
+      priv_key_path       = "/etc/ssl/private/client.key"
       reject_unauthorized = true
-      servername          = "...my_servername..."
+      servername          = "pkc-12345.us-central1.gcp.confluent.cloud"
     }
     topics = [
-      "..."
+      "nginx_access",
     ]
     type = "confluent_cloud"
   }
@@ -293,101 +299,40 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description = "...my_description..."
+    description = "Internal Cribl-generated events"
     disabled    = false
-    environment = "...my_environment..."
-    filter      = "...my_filter..."
-    id          = "...my_id..."
+    environment = "main"
+    filter      = "host=\"edge-*\" AND sourcetype!=\"metrics\""
+    id          = "cribl-internal"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"cribl_internal\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 7.2
-      compress         = "none"
-      max_buffer_size  = 51.06
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled     = true
+    pq_enabled     = false
     send_to_routes = true
     streamtags = [
-      "..."
+      "internal",
+      "cribl",
     ]
     type = "cribl"
   }
   input_cribl_http = {
-    activity_log_sample_rate = 2.54
+    activity_log_sample_rate = 10
     auth_tokens = [
-      "..."
-    ]
-    capture_headers = false
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    description             = "...my_description..."
-    disabled                = false
-    enable_health_check     = false
-    enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 303.71
-    max_active_req          = 0.57
-    max_requests_per_socket = 4
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    pipeline = "...my_pipeline..."
-    port     = 4736.58
-    pq = {
-      commit_frequency = 5.31
-      compress         = "none"
-      max_buffer_size  = 47.65
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
-    }
-    pq_enabled      = true
-    request_timeout = 1.46
-    send_to_routes  = true
-    socket_timeout  = 0.8
-    streamtags = [
-      "..."
-    ]
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = true
-      max_version         = "TLSv1.3"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = false
-    }
-    type = "cribl_http"
-  }
-  input_cribl_lake_http = {
-    activity_log_sample_rate = 3.4
-    auth_tokens = [
-      "..."
+      "secret-token-1",
+      "secret-token-2",
     ]
     capture_headers = true
     connections = [
@@ -396,92 +341,122 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
+    description             = "Cribl HTTP-compatible ingestion endpoint"
     disabled                = false
     enable_health_check     = true
-    enable_proxy_header     = true
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 51.28
-    max_active_req          = 2.72
-    max_requests_per_socket = 0
+    enable_proxy_header     = false
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "cribl-http-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"cribl_http\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 3239.03
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 3.02
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 45.66
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled      = true
-    request_timeout = 7.38
-    send_to_routes  = false
-    socket_timeout  = 5.22
+    pq_enabled      = false
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "prod",
+      "cribl_http",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "cribl-http-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:cribl_http_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
-    type = "cribl_lake_http"
+    type = "cribl_http"
   }
-  input_criblmetrics = {
+  input_cribl_lake_http = {
+    activity_log_sample_rate = 10
+    auth_tokens = [
+      "lake-token-1",
+      "lake-token-2",
+    ]
+    capture_headers = true
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description   = "...my_description..."
-    disabled      = false
-    environment   = "...my_environment..."
-    full_fidelity = true
-    id            = "...my_id..."
+    description             = "Cribl Lake HTTP ingestion endpoint"
+    disabled                = false
+    enable_health_check     = true
+    enable_proxy_header     = false
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "lake-http-ingest"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"cribl_lake_http\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "lake-default"
+    port     = 9088
     pq = {
-      commit_frequency = 10.03
-      compress         = "none"
-      max_buffer_size  = 49.75
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled     = false
-    prefix         = "...my_prefix..."
-    send_to_routes = false
+    pq_enabled      = false
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "lake",
+      "ingest",
     ]
-    type = "criblmetrics"
+    tls = {
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "lake-http-cert"
+      common_name_regex   = "{ \"see\": \"documentation\" }"
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:lake_http_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
+      reject_unauthorized = "{ \"see\": \"documentation\" }"
+      request_cert        = false
+    }
+    type = "cribl_lake_http"
   }
   input_cribl_tcp = {
     connections = [
@@ -490,190 +465,230 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description           = "...my_description..."
+    description           = "This is the field used for description for this input"
     disabled              = false
-    enable_load_balancing = false
-    enable_proxy_header   = true
-    environment           = "...my_environment..."
-    host                  = "...my_host..."
-    id                    = "...my_id..."
-    max_active_cxn        = 2.66
+    enable_load_balancing = true
+    enable_proxy_header   = false
+    environment           = "main"
+    host                  = "0.0.0.0"
+    id                    = "cribl-tcp-listener"
+    max_active_cxn        = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"cribl_tcp\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 44126.06
+    pipeline = "default"
+    port     = 9514
     pq = {
-      commit_frequency = 7.04
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 51.37
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    send_to_routes         = false
-    socket_ending_max_wait = 7.39
-    socket_idle_timeout    = 2.54
-    socket_max_lifespan    = 7.93
+    send_to_routes         = true
+    socket_ending_max_wait = 15
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
     streamtags = [
-      "..."
+      "prod",
+      "cribl_tcp",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "cribl-tcp-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:cribl_tcp_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type = "cribl_tcp"
   }
+  input_criblmetrics = {
+    connections = [
+      {
+        output   = "s3-metrics"
+        pipeline = "default"
+      }
+    ]
+    description   = "Emit Cribl internal metrics"
+    disabled      = false
+    environment   = "main"
+    full_fidelity = true
+    id            = "cribl-metrics"
+    metadata = [
+      {
+        name  = "source"
+        value = "\"criblmetrics\""
+      }
+    ]
+    pipeline = "default"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled     = false
+    prefix         = "cribl.logstream."
+    send_to_routes = true
+    streamtags = [
+      "cribl",
+      "internal",
+    ]
+    type = "criblmetrics"
+  }
   input_crowdstrike = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-s3-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
     breaker_rulesets = [
-      "..."
+      "crowdstrike-breaker",
     ]
     checkpointing = {
       enabled = true
-      retries = 70.42
+      retries = 3
     }
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-crowdstrike"
+        pipeline = "default"
       }
     ]
-    description            = "...my_description..."
+    description            = "Ingest CrowdStrike S3 notifications and objects"
     disabled               = false
-    duration_seconds       = 21127.93
+    duration_seconds       = 3600
     enable_assume_role     = true
     enable_sqs_assume_role = true
-    encoding               = "...my_encoding..."
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    file_filter            = "...my_file_filter..."
-    id                     = "...my_id..."
-    max_messages           = 8.34
+    encoding               = "utf-8"
+    endpoint               = "https://s3.us-east-1.amazonaws.com"
+    environment            = "main"
+    file_filter            = ".*\\.json(\\.gz)?$"
+    id                     = "crowdstrike-sqs"
+    max_messages           = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"crowdstrike\""
       }
     ]
-    num_receivers = 51.77
-    pipeline      = "...my_pipeline..."
-    poll_timeout  = 7.64
+    num_receivers = 4
+    pipeline      = "default"
+    poll_timeout  = 10
     pq = {
-      commit_frequency = 4.56
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 50.14
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     preprocess = {
       args = [
-        "..."
+        "--compact-output",
       ]
-      command  = "...my_command..."
+      command  = "jq -r .message"
       disabled = true
     }
-    processed_tag_key      = "...my_processed_tag_key..."
-    processed_tag_value    = "...my_processed_tag_value..."
-    queue_name             = "...my_queue_name..."
-    region                 = "...my_region..."
+    processed_tag_key      = "processed-by"
+    processed_tag_value    = "cribl-processed"
+    queue_name             = "https://sqs.us-east-1.amazonaws.com/123456789012/crowdstrike-events"
+    region                 = "us-east-1"
     reject_unauthorized    = true
     reuse_connections      = true
     send_to_routes         = true
     signature_version      = "v4"
     skip_on_error          = true
-    socket_timeout         = 39471.85
-    stale_channel_flush_ms = 26602939.6
+    socket_timeout         = 600
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "crowdstrike",
+      "edr",
     ]
-    tag_after_processing = "false"
+    tag_after_processing = "...my_tag_after_processing..."
     type                 = "crowdstrike"
-    visibility_timeout   = 38346.71
+    visibility_timeout   = 300
   }
   input_datadog_agent = {
-    activity_log_sample_rate = 7.52
+    activity_log_sample_rate = 100
     capture_headers          = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-dd"
+        pipeline = "default"
       }
     ]
-    description             = "...my_description..."
+    description             = "Accept Datadog Agent intake and forward to destinations"
     disabled                = false
     enable_health_check     = true
-    enable_proxy_header     = true
-    environment             = "...my_environment..."
-    extract_metrics         = true
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 336.23
-    max_active_req          = 6.62
-    max_requests_per_socket = 8
+    enable_proxy_header     = false
+    environment             = "main"
+    extract_metrics         = false
+    host                    = "0.0.0.0"
+    id                      = "datadog-agent-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"datadog_agent\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 32867.01
+    pipeline = "default"
+    port     = 10518
     pq = {
-      commit_frequency = 8.04
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 46.32
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     proxy_mode = {
-      enabled             = false
+      enabled             = true
       reject_unauthorized = true
     }
-    request_timeout = 0.77
+    request_timeout = 30
     send_to_routes  = true
-    socket_timeout  = 5.24
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "datadog",
+      "metrics",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "dd-agent-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
+      disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
@@ -682,112 +697,116 @@ resource "criblio_source" "my_source" {
   input_datagen = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-synthetic"
+        pipeline = "default"
       }
     ]
-    description = "...my_description..."
+    description = "Generate synthetic log events for testing"
     disabled    = false
-    environment = "...my_environment..."
-    id          = "...my_id..."
+    environment = "main"
+    id          = "datagen-synthetic"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"datagen\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 2.34
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 45.98
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     samples = [
       {
-        events_per_sec = 10.97
-        sample         = "...my_sample..."
+        events_per_sec = 200
+        sample         = "apache_common.log"
       }
     ]
     send_to_routes = true
     streamtags = [
-      "..."
+      "synthetic",
+      "test",
     ]
     type = "datagen"
   }
   input_edge_prometheus = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    auth_type                 = "secret"
-    aws_authentication_method = "secret"
-    aws_secret_key            = "...my_aws_secret_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/edge-prom-discovery"
+    assume_role_external_id   = "external-123"
+    auth_type                 = "kubernetes"
+    aws_authentication_method = "auto"
+    aws_secret_key            = "$${{secret:aws_secret_access_key}"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret = "...my_credentials_secret..."
-    description        = "...my_description..."
+    credentials_secret = "edge-prom-credentials"
+    description        = "Edge Prometheus scraper with K8s discovery"
     dimension_list = [
-      "..."
+      "host",
+      "source",
+      "region",
     ]
-    disabled           = true
+    disabled           = false
     discovery_type     = "k8s-pods"
-    duration_seconds   = 6194.66
-    enable_assume_role = true
-    endpoint           = "...my_endpoint..."
-    environment        = "...my_environment..."
-    id                 = "...my_id..."
-    interval           = 5.37
+    duration_seconds   = 3600
+    enable_assume_role = false
+    endpoint           = "https://ec2.us-east-1.amazonaws.com"
+    environment        = "main"
+    id                 = "edge-prom-scraper"
+    interval           = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"edge_prometheus\""
       }
     ]
     name_list = [
-      "..."
+      "web-*.example.com",
+      "node-exporter.internal.example.com",
     ]
-    password = "...my_password..."
+    password = "$${{secret:edge_prom_password}"
     persistence = {
       compress      = "gzip"
       enable        = true
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      max_data_size = "4GB"
+      max_data_time = "48h"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pod_filter = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Scrape pod if annotation is true"
+        filter      = "metadata.annotations['prometheus.io/scrape']"
       }
     ]
     pq = {
-      commit_frequency = 10.89
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 48.13
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled           = false
     record_type          = "SRV"
-    region               = "...my_region..."
-    reject_unauthorized  = false
+    region               = "us-east-1"
+    reject_unauthorized  = true
     reuse_connections    = true
-    scrape_path          = "...my_scrape_path..."
-    scrape_path_expr     = "...my_scrape_path_expr..."
-    scrape_port          = 37287.67
-    scrape_port_expr     = "...my_scrape_port_expr..."
-    scrape_protocol      = "https"
-    scrape_protocol_expr = "...my_scrape_protocol_expr..."
+    scrape_path          = "/metrics"
+    scrape_path_expr     = "metadata.annotations['prometheus.io/path'] || '/metrics'"
+    scrape_port          = 9100
+    scrape_port_expr     = "metadata.annotations['prometheus.io/port'] || 9100"
+    scrape_protocol      = "http"
+    scrape_protocol_expr = "metadata.annotations['prometheus.io/scheme'] || 'http'"
     search_filter = [
       {
         name = "...my_name..."
@@ -797,338 +816,348 @@ resource "criblio_source" "my_source" {
       }
     ]
     send_to_routes    = true
-    signature_version = "v2"
+    signature_version = "v4"
     streamtags = [
-      "..."
+      "edge",
+      "prometheus",
     ]
     targets = [
       {
-        host     = "...my_host..."
-        path     = "...my_path..."
-        port     = 52043
+        host     = "node-exporter"
+        path     = "/metrics"
+        port     = 9100
         protocol = "http"
       }
     ]
-    timeout       = 51072.71
+    timeout       = 5000
     type          = "edge_prometheus"
-    use_public_ip = false
-    username      = "...my_username..."
+    use_public_ip = true
+    username      = "edge_user"
   }
   input_elastic = {
-    activity_log_sample_rate = 6.95
+    activity_log_sample_rate = 10
     api_version              = "8.3.2"
     auth_tokens = [
-      "..."
+      "es-api-token-1",
+      "es-api-token-2",
     ]
-    auth_type       = "credentialsSecret"
-    capture_headers = false
+    auth_type       = "basic"
+    capture_headers = true
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret  = "...my_credentials_secret..."
-    custom_api_version  = "...my_custom_api_version..."
-    description         = "...my_description..."
-    disabled            = true
-    elastic_api         = "...my_elastic_api..."
-    enable_health_check = false
+    credentials_secret  = "elastic-proxy-credentials"
+    custom_api_version  = "{\n    \"name\": \"Cribl Elastic Proxy\",\n    \"cluster_name\": \"cribl\",\n    \"cluster_uuid\": \"abcd1234efgh5678ijkl9012\",\n    \"version\": {\n        \"number\": \"8.11.1\",\n        \"build_type\": \"tar\",\n        \"build_hash\": \"1a2b3c4\",\n        \"build_date\": \"2025-09-01T00:00:00.000Z\",\n        \"build_snapshot\": false,\n        \"lucene_version\": \"9.10.0\",\n        \"minimum_wire_compatibility_version\": \"7.17.0\",\n        \"minimum_index_compatibility_version\": \"7.0.0\"\n    },\n    \"tagline\": \"You Know, for Search\"\n}"
+    description         = "Elasticsearch bulk listener with proxy for non-bulk APIs"
+    disabled            = false
+    elastic_api         = "/ingest"
+    enable_health_check = true
     enable_proxy_header = false
-    environment         = "...my_environment..."
+    environment         = "main"
     extra_http_headers = [
       {
         name  = "...my_name..."
         value = "...my_value..."
       }
     ]
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 211.92
-    max_active_req          = 8.3
-    max_requests_per_socket = 6
+    host                    = "0.0.0.0"
+    id                      = "elastic-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"elastic\""
       }
     ]
-    password = "...my_password..."
-    pipeline = "...my_pipeline..."
-    port     = 63401.42
+    password = "$${{secret:elastic_proxy_password}"
+    pipeline = "default"
+    port     = 9200
     pq = {
-      commit_frequency = 4.42
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 44.97
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     proxy_mode = {
-      auth_type           = "secret"
-      enabled             = false
+      auth_type           = "manual"
+      enabled             = true
       reject_unauthorized = false
       remove_headers = [
-        "..."
+        "Authorization",
+        "Content-Length",
       ]
-      timeout_sec = 1740239672156922.5
-      url         = "...my_url..."
+      timeout_sec = 60
+      url         = "https://elastic.example.com:9200"
     }
-    request_timeout = 9.56
-    send_to_routes  = false
-    socket_timeout  = 5.73
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "prod",
+      "elastic",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "elastic-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:elastic_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type     = "elastic"
-    username = "...my_username..."
+    username = "elastic"
   }
   input_eventhub = {
-    authentication_timeout = 3263569.37
-    auto_commit_interval   = 2913798.47
-    auto_commit_threshold  = 3921.24
-    backoff_rate           = 9.93
+    authentication_timeout = 15000
+    auto_commit_interval   = 5000
+    auto_commit_threshold  = 1000
+    backoff_rate           = 3
     brokers = [
-      "..."
+      "yourspace.servicebus.windows.net:9093",
     ]
-    connection_timeout = 952191.45
+    connection_timeout = 15000
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
+    description             = "Azure Event Hubs Kafka consumer"
     disabled                = false
-    environment             = "...my_environment..."
+    environment             = "main"
     from_beginning          = true
-    group_id                = "...my_group_id..."
-    heartbeat_interval      = 1250654.13
-    id                      = "...my_id..."
-    initial_backoff         = 142635.29
-    max_back_off            = 116091.33
-    max_bytes               = 495245237.32
-    max_bytes_per_partition = 9802527.45
-    max_retries             = 96.14
-    max_socket_errors       = 80.56
+    group_id                = "web-team"
+    heartbeat_interval      = 3000
+    id                      = "eventhub-nginx"
+    initial_backoff         = 500
+    max_back_off            = 120000
+    max_bytes               = 10485760
+    max_bytes_per_partition = 1048576
+    max_retries             = 10
+    max_socket_errors       = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"eventhub\""
       }
     ]
-    minimize_duplicates = false
-    pipeline            = "...my_pipeline..."
+    minimize_duplicates = true
+    pipeline            = "default"
     pq = {
-      commit_frequency = 8.3
-      compress         = "none"
-      max_buffer_size  = 42.21
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled                 = true
-    reauthentication_threshold = 1753553.62
-    rebalance_timeout          = 3367948.39
-    request_timeout            = 8615.05
+    pq_enabled                 = false
+    reauthentication_threshold = 300000
+    rebalance_timeout          = 60000
+    request_timeout            = 60000
     sasl = {
-      disabled  = true
-      mechanism = "oauthbearer"
+      disabled  = false
+      mechanism = "plain"
     }
     send_to_routes  = true
-    session_timeout = 199043.15
+    session_timeout = 30000
     streamtags = [
-      "..."
+      "prod",
+      "eventhub",
     ]
     tls = {
       disabled            = false
       reject_unauthorized = true
     }
     topics = [
-      "..."
+      "logs",
     ]
     type = "eventhub"
   }
   input_exec = {
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
     ]
-    command = "...my_command..."
+    command = "tail -F /var/log/nginx/access.log"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    cron_schedule = "...my_cron_schedule..."
-    description   = "...my_description..."
+    cron_schedule = "*/5 * * * *"
+    description   = "Exec tail of nginx access logs"
     disabled      = false
-    environment   = "...my_environment..."
-    id            = "...my_id..."
-    interval      = 4.15
+    environment   = "main"
+    id            = "exec-tail-logs"
+    interval      = 60
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"exec\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 5.86
-      compress         = "none"
-      max_buffer_size  = 44.63
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    retries                = 8.16
+    retries                = 5
     schedule_type          = "interval"
     send_to_routes         = true
-    stale_channel_flush_ms = 5570369.95
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "exec",
     ]
     type = "exec"
   }
   input_file = {
     breaker_rulesets = [
-      "..."
+      "multiline-java",
     ]
-    check_file_mod_time = false
+    check_file_mod_time = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-logs"
+        pipeline = "default"
       }
     ]
-    delete_files = true
-    depth        = 3.86
-    description  = "...my_description..."
-    disabled     = true
-    environment  = "...my_environment..."
+    delete_files = false
+    depth        = 2
+    description  = "Watch local files and tail new content"
+    disabled     = false
+    environment  = "main"
     filenames = [
-      "..."
+      "/var/log/*.log",
+      "/opt/app/logs/*log",
     ]
-    force_text                    = true
-    hash_len                      = 10.09
-    id                            = "...my_id..."
-    idle_timeout                  = 9.52
+    force_text                    = false
+    hash_len                      = 256
+    id                            = "file-watcher"
+    idle_timeout                  = 600
     include_unidentifiable_binary = true
-    interval                      = 9.61
-    max_age_dur                   = "...my_max_age_dur..."
+    interval                      = 10
+    max_age_dur                   = "3d"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"file\""
       }
     ]
     mode     = "auto"
-    path     = "...my_path..."
-    pipeline = "...my_pipeline..."
+    path     = "/var/log"
+    pipeline = "default"
     pq = {
-      commit_frequency = 4.04
-      compress         = "none"
-      max_buffer_size  = 43.27
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    send_to_routes         = false
-    stale_channel_flush_ms = 38380929.61
+    send_to_routes         = true
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "filesystem",
+      "logs",
     ]
     suppress_missing_path_errors = true
     tail_only                    = true
     type                         = "file"
   }
   input_firehose = {
-    activity_log_sample_rate = 3.21
+    activity_log_sample_rate = 10
     auth_tokens = [
-      "..."
+      "secret-token-1",
+      "secret-token-2",
     ]
-    capture_headers = false
+    capture_headers = true
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
+    description             = "Kinesis Firehose-compatible HTTP listener"
     disabled                = false
-    enable_health_check     = false
+    enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 14.72
-    max_active_req          = 1.19
-    max_requests_per_socket = 4
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "firehose-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"firehose\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 5325.25
+    pipeline = "default"
+    port     = 9000
     pq = {
-      commit_frequency = 4.21
-      compress         = "none"
-      max_buffer_size  = 46.88
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled      = false
-    request_timeout = 2.37
+    request_timeout = 30
     send_to_routes  = true
-    socket_timeout  = 1.73
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "prod",
+      "firehose",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "firehose-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
-      max_version         = "TLSv1"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:firehose_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type = "firehose"
   }
   input_google_pubsub = {
-    concurrency = 63.78
+    concurrency = 10
     connections = [
       {
         output   = "...my_output..."
@@ -1137,60 +1166,62 @@ resource "criblio_source" "my_source" {
     ]
     create_subscription = true
     create_topic        = false
-    description         = "...my_description..."
+    description         = "Google Pub/Sub pull subscription consumer"
     disabled            = false
-    environment         = "...my_environment..."
+    environment         = "main"
     google_auth_method  = "secret"
-    id                  = "...my_id..."
-    max_backlog         = 8.38
+    id                  = "gpubsub-nginx"
+    max_backlog         = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"gpubsub\""
       }
     ]
     ordered_delivery = false
-    pipeline         = "...my_pipeline..."
+    pipeline         = "default"
     pq = {
-      commit_frequency = 5.28
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 48.44
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled                  = false
-    region                      = "...my_region..."
-    request_timeout             = 10003.11
-    secret                      = "...my_secret..."
+    region                      = "us-central1"
+    request_timeout             = 45000
+    secret                      = "gcp-service-account"
     send_to_routes              = true
-    service_account_credentials = "...my_service_account_credentials..."
+    service_account_credentials = "$${{file:/secrets/gcp-service-account.json}"
     streamtags = [
-      "..."
+      "prod",
+      "gpubsub",
     ]
-    subscription_name = "...my_subscription_name..."
-    topic_name        = "...my_topic_name..."
+    subscription_name = "projects/my-project/subscriptions/nginx-logs-sub"
+    topic_name        = "projects/my-project/topics/nginx-logs"
     type              = "google_pubsub"
   }
   input_grafana = {
     # ...
   }
   input_http = {
-    activity_log_sample_rate = 3.13
+    activity_log_sample_rate = 10
     auth_tokens = [
-      "..."
+      "secret-token-1",
+      "secret-token-2",
     ]
     auth_tokens_ext = [
       {
-        description = "...my_description..."
+        description = "Token for webhook ingestion"
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "sourcetype"
+            value = "\"http:webhook\""
           }
         ]
-        token = "...my_token..."
+        token = "secret-token-1"
       }
     ]
     capture_headers = true
@@ -1200,343 +1231,353 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    cribl_api               = "...my_cribl_api..."
-    description             = "...my_description..."
+    cribl_api               = "/cribl"
+    description             = "HTTP listener for webhook events"
     disabled                = false
-    elastic_api             = "...my_elastic_api..."
+    elastic_api             = "/elastic"
     enable_health_check     = true
-    enable_proxy_header     = true
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 511.57
-    max_active_req          = 2.9
-    max_requests_per_socket = 8
+    enable_proxy_header     = false
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "http-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"http\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 42584.61
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 2.24
-      compress         = "none"
-      max_buffer_size  = 45.05
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled      = false
-    request_timeout = 1.82
+    request_timeout = 30
     send_to_routes  = true
-    socket_timeout  = 9.84
+    socket_timeout  = 60
     splunk_hec_acks = false
-    splunk_hec_api  = "...my_splunk_hec_api..."
+    splunk_hec_api  = "/services/collector"
     streamtags = [
-      "..."
+      "prod",
+      "http",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "http-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
+      disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:http_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type = "http"
   }
   input_http_raw = {
-    activity_log_sample_rate = 9.97
+    activity_log_sample_rate = 100
     allowed_methods = [
-      "..."
+      "POST",
+      "PUT",
     ]
     allowed_paths = [
-      "..."
+      "/api/v1/hook",
+      "/webhook/*",
     ]
     auth_tokens = [
-      "..."
+      "supersecrettoken",
     ]
     auth_tokens_ext = [
       {
-        description = "...my_description..."
+        description = "CI webhook"
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "team"
+            value = "\"platform\""
           }
         ]
-        token = "...my_token..."
+        token = "supersecrettoken"
       }
     ]
     breaker_rulesets = [
-      "..."
+      "http-raw-breaker",
+      "multiline-json",
     ]
     capture_headers = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-raw"
+        pipeline = "default"
       }
     ]
-    description             = "...my_description..."
+    description             = "Accept raw HTTP payloads"
     disabled                = false
-    enable_health_check     = false
-    enable_proxy_header     = true
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 315.47
-    max_active_req          = 0.01
-    max_requests_per_socket = 9
+    enable_health_check     = true
+    enable_proxy_header     = false
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "http-raw-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"http_raw\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 840.25
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 1.36
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 46.1
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled             = true
-    request_timeout        = 4.25
-    send_to_routes         = false
-    socket_timeout         = 3.94
-    stale_channel_flush_ms = 17162456.39
+    pq_enabled             = false
+    request_timeout        = 30
+    send_to_routes         = true
+    socket_timeout         = 60
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "http",
+      "raw",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "http-raw-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type = "http_raw"
   }
   input_journal_files = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-journald"
+        pipeline = "default"
       }
     ]
     current_boot = true
-    description  = "...my_description..."
+    description  = "Ingest systemd journal files from disk"
     disabled     = false
-    environment  = "...my_environment..."
-    id           = "...my_id..."
-    interval     = 8.87
+    environment  = "main"
+    id           = "journal-files"
+    interval     = 10
     journals = [
-      "..."
+      "system",
+      "user-*.journal",
     ]
-    max_age_dur = "...my_max_age_dur..."
+    max_age_dur = "24h"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"journal_files\""
       }
     ]
-    path     = "...my_path..."
-    pipeline = "...my_pipeline..."
+    path     = "/var/log/journal"
+    pipeline = "default"
     pq = {
-      commit_frequency = 5.71
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 44.06
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     rules = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Allow warnings or higher, exclude authpriv"
+        filter      = "severity <= 4 && facility != 'authpriv'"
       }
     ]
     send_to_routes = true
     streamtags = [
-      "..."
+      "systemd",
+      "journald",
     ]
     type = "journal_files"
   }
   input_kafka = {
-    authentication_timeout = 2612811.22
-    auto_commit_interval   = 1980921.22
-    auto_commit_threshold  = 6446.97
-    backoff_rate           = 16.34
+    authentication_timeout = 15000
+    auto_commit_interval   = 5000
+    auto_commit_threshold  = 1000
+    backoff_rate           = 3
     brokers = [
-      "..."
+      "kafka-1:9092",
+      "kafka-2:9092",
     ]
-    connection_timeout = 2340192.34
+    connection_timeout = 15000
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description        = "...my_description..."
-    disabled           = true
-    environment        = "...my_environment..."
+    description        = "My Kafka Input description for documentation"
+    disabled           = false
+    environment        = "main"
     from_beginning     = true
-    group_id           = "...my_group_id..."
-    heartbeat_interval = 2828908.53
-    id                 = "...my_id..."
-    initial_backoff    = 100808.83
+    group_id           = "web-team"
+    heartbeat_interval = 3000
+    id                 = "kafka-nginx"
+    initial_backoff    = 500
     kafka_schema_registry = {
       auth = {
-        credentials_secret = "...my_credentials_secret..."
-        disabled           = false
+        credentials_secret = "schema-basic-auth"
+        disabled           = true
       }
-      connection_timeout  = 45495.99
+      connection_timeout  = 30000
       disabled            = true
-      max_retries         = 97.38
-      request_timeout     = 8439.49
-      schema_registry_url = "...my_schema_registry_url..."
+      max_retries         = 3
+      request_timeout     = 30000
+      schema_registry_url = "http://schema-registry:8081"
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
+        ca_path             = "/etc/ssl/certs/ca.pem"
+        cert_path           = "/etc/ssl/certs/client.crt"
+        certificate_name    = "schema-registry-cert"
         disabled            = true
-        max_version         = "TLSv1.1"
-        min_version         = "TLSv1.1"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
+        max_version         = "TLSv1.3"
+        min_version         = "TLSv1.2"
+        passphrase          = "$${{secret:kafka_key_pass}"
+        priv_key_path       = "/etc/ssl/private/client.key"
         reject_unauthorized = true
-        servername          = "...my_servername..."
+        servername          = "schema-registry"
       }
     }
-    max_back_off            = 134271.89
-    max_bytes               = 808758177.23
-    max_bytes_per_partition = 8916916.4
-    max_retries             = 6.98
-    max_socket_errors       = 84.62
+    max_back_off            = 120000
+    max_bytes               = 10485760
+    max_bytes_per_partition = 1048576
+    max_retries             = 10
+    max_socket_errors       = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kafka\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 6.49
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 44.7
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled                 = false
-    reauthentication_threshold = 1231299.62
-    rebalance_timeout          = 3002374.89
-    request_timeout            = 2736560.86
+    reauthentication_threshold = 300000
+    rebalance_timeout          = 60000
+    request_timeout            = 60000
     sasl = {
       disabled  = true
       mechanism = "scram-sha-512"
     }
-    send_to_routes  = false
-    session_timeout = 1308790.91
+    send_to_routes  = true
+    session_timeout = 30000
     streamtags = [
-      "..."
+      "prod",
+      "kafka",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/client.crt"
+      certificate_name    = "kafka-client-cert"
       disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = false
-      servername          = "...my_servername..."
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:kafka_key_pass}"
+      priv_key_path       = "/etc/ssl/private/client.key"
+      reject_unauthorized = true
+      servername          = "kafka-1"
     }
     topics = [
-      "..."
+      "nginx_access",
     ]
     type = "kafka"
   }
   input_kinesis = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    avoid_duplicates          = true
-    aws_api_key               = "...my_aws_api_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-kinesis-access"
+    assume_role_external_id   = "cribl-external-123"
+    avoid_duplicates          = false
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-kinesis"
+        pipeline = "default"
       }
     ]
-    description              = "...my_description..."
+    description              = "Ingest AWS Kinesis stream records"
     disabled                 = false
-    duration_seconds         = 26349.88
+    duration_seconds         = 3600
     enable_assume_role       = true
-    endpoint                 = "...my_endpoint..."
-    environment              = "...my_environment..."
-    get_records_limit        = 7947.22
-    get_records_limit_total  = 20004.93
-    id                       = "...my_id..."
+    endpoint                 = "https://kinesis.us-east-1.amazonaws.com"
+    environment              = "main"
+    get_records_limit        = 8000
+    get_records_limit_total  = 30000
+    id                       = "kinesis-stream-ingest"
     load_balancing_algorithm = "ConsistentHashing"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kinesis\""
       }
     ]
-    payload_format = "line"
-    pipeline       = "...my_pipeline..."
+    payload_format = "ndjson"
+    pipeline       = "default"
     pq = {
-      commit_frequency = 7.77
-      compress         = "none"
-      max_buffer_size  = 43.27
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled          = true
-    region              = "...my_region..."
-    reject_unauthorized = false
-    reuse_connections   = false
+    pq_enabled          = false
+    region              = "us-east-1"
+    reject_unauthorized = true
+    reuse_connections   = true
     send_to_routes      = true
-    service_interval    = 2.32
-    shard_expr          = "...my_shard_expr..."
+    service_interval    = 1
+    shard_expr          = "shardId.endsWith('1')"
     shard_iterator_type = "LATEST"
-    signature_version   = "v2"
-    stream_name         = "...my_stream_name..."
+    signature_version   = "v4"
+    stream_name         = "app-logs-stream"
     streamtags = [
-      "..."
+      "aws",
+      "kinesis",
     ]
     type                  = "kinesis"
     verify_kpl_check_sums = true
@@ -1544,150 +1585,154 @@ resource "criblio_source" "my_source" {
   input_kube_events = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-events"
+        pipeline = "default"
       }
     ]
-    description = "...my_description..."
+    description = "Collect Kubernetes cluster events"
     disabled    = false
-    environment = "...my_environment..."
-    id          = "...my_id..."
+    environment = "main"
+    id          = "kube-events"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kube_events\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 9.09
-      compress         = "none"
-      max_buffer_size  = 50.31
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     rules = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Only warning events"
+        filter      = "type == 'Warning'"
       }
     ]
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "kubernetes",
+      "events",
     ]
     type = "kube_events"
   }
   input_kube_logs = {
     breaker_rulesets = [
-      "..."
+      "kube-logs-breaker",
+      "multiline-java",
     ]
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-logs"
+        pipeline = "default"
       }
     ]
-    description           = "...my_description..."
+    description           = "the Description for KubeLogs type inputs"
     disabled              = false
     enable_load_balancing = true
-    environment           = "...my_environment..."
-    id                    = "...my_id..."
-    interval              = 7.59
+    environment           = "main"
+    id                    = "kube-logs"
+    interval              = 15
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kube_logs\""
       }
     ]
     persistence = {
-      compress      = "none"
+      compress      = "gzip"
       enable        = true
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 8.47
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 45.63
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     rules = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Include default namespace"
+        filter      = "metadata.namespace == 'default'"
       }
     ]
     send_to_routes         = true
-    stale_channel_flush_ms = 25164066.67
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "kubernetes",
+      "logs",
     ]
-    timestamps = false
+    timestamps = true
     type       = "kube_logs"
   }
   input_kube_metrics = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-main"
+        pipeline = "default"
       }
     ]
-    description = "...my_description..."
+    description = "Collect Kubernetes metrics from the API server"
     disabled    = false
-    environment = "...my_environment..."
-    id          = "...my_id..."
-    interval    = 2.3
+    environment = "main"
+    id          = "kube-metrics"
+    interval    = 15
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"kube_metrics\""
       }
     ]
     persistence = {
       compress      = "gzip"
-      dest_path     = "...my_dest_path..."
-      enable        = false
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      dest_path     = "/var/lib/cribl/state/kube_metrics"
+      enable        = true
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 4.98
-      compress         = "none"
-      max_buffer_size  = 44.58
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     rules = [
       {
-        description = "...my_description..."
-        filter      = "...my_filter..."
+        description = "Include default namespace"
+        filter      = "metadata.namespace == 'default'"
       }
     ]
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "kubernetes",
+      "prod",
     ]
     type = "kube_metrics"
   }
   input_loki = {
-    activity_log_sample_rate = 4.33
-    auth_header_expr         = "...my_auth_header_expr..."
-    auth_type                = "credentialsSecret"
+    activity_log_sample_rate = 10
+    auth_header_expr         = "`Bearer ${token}`"
+    auth_type                = "token"
     capture_headers          = true
     connections = [
       {
@@ -1695,338 +1740,344 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret      = "...my_credentials_secret..."
-    description             = "...my_description..."
-    disabled                = true
-    enable_health_check     = false
-    enable_proxy_header     = true
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 23.89
-    login_url               = "...my_login_url..."
-    loki_api                = "...my_loki_api..."
-    max_active_req          = 0.4
-    max_requests_per_socket = 3
+    credentials_secret      = "loki-credentials"
+    description             = "Loki logs listener"
+    disabled                = false
+    enable_health_check     = true
+    enable_proxy_header     = false
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "loki-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    login_url               = "https://loki.example.com/oauth/token"
+    loki_api                = "/loki/api/v1/push"
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"loki\""
       }
     ]
     oauth_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Accept"
+        value = "application/json"
       }
     ]
     oauth_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "grant_type"
+        value = "client_credentials"
       }
     ]
-    password = "...my_password..."
-    pipeline = "...my_pipeline..."
-    port     = 27049.39
+    password = "$${{secret:loki_password}"
+    pipeline = "default"
+    port     = 3100
     pq = {
-      commit_frequency = 2.01
-      compress         = "none"
-      max_buffer_size  = 43.95
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled        = false
-    request_timeout   = 1.12
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
+    request_timeout   = 30
+    secret            = "$${{secret:loki_oauth_secret}"
+    secret_param_name = "client_secret"
     send_to_routes    = true
-    socket_timeout    = 0.37
+    socket_timeout    = 60
     streamtags = [
-      "..."
+      "prod",
+      "loki",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "loki-token-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "loki-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:loki_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 148445.66
+    token                = "$${{secret:loki_token}"
+    token_attribute_name = "access_token"
+    token_timeout_secs   = 3600
     type                 = "loki"
-    username             = "...my_username..."
+    username             = "loki_user"
   }
   input_metrics = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-metrics"
+        pipeline = "default"
       }
     ]
     description         = "...my_description..."
     disabled            = false
     enable_proxy_header = false
-    environment         = "...my_environment..."
-    host                = "...my_host..."
-    id                  = "...my_id..."
-    ip_whitelist_regex  = "...my_ip_whitelist_regex..."
-    max_buffer_size     = 3.81
+    environment         = "main"
+    host                = "0.0.0.0"
+    id                  = "metrics-listener"
+    ip_whitelist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_buffer_size     = 20000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"metrics\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 2.12
-      compress         = "none"
-      max_buffer_size  = 48.63
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled     = false
     send_to_routes = true
     streamtags = [
-      "..."
+      "metrics",
+      "udp",
     ]
-    tcp_port = 1867.09
+    tcp_port = 8126
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "metrics-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type                   = "metrics"
-    udp_port               = 22216.87
+    udp_port               = 8125
     udp_socket_rx_buf_size = 2294508638.44
   }
   input_model_driven_telemetry = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-network"
+        pipeline = "default"
       }
     ]
-    description    = "...my_description..."
+    description    = "Receive MDT telemetry over gRPC"
     disabled       = false
-    environment    = "...my_environment..."
-    host           = "...my_host..."
-    id             = "...my_id..."
-    max_active_cxn = 7.7
+    environment    = "main"
+    host           = "0.0.0.0"
+    id             = "mdt-grpc"
+    max_active_cxn = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"model_driven_telemetry\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 27675.62
+    pipeline = "default"
+    port     = 57000
     pq = {
-      commit_frequency = 4.63
-      compress         = "none"
-      max_buffer_size  = 43.89
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled          = false
-    send_to_routes      = false
-    shutdown_timeout_ms = 8.84
+    send_to_routes      = true
+    shutdown_timeout_ms = 5000
     streamtags = [
-      "..."
+      "mdt",
+      "grpc",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "mdt-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1"
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type = "model_driven_telemetry"
   }
   input_msk = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    authentication_timeout    = 995810.31
-    auto_commit_interval      = 481775.08
-    auto_commit_threshold     = 1754.67
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "secret"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    backoff_rate              = 3.39
+    assume_role_arn           = "arn:aws:iam::123456789012:role/msk-readonly"
+    assume_role_external_id   = "external-123"
+    authentication_timeout    = 15000
+    auto_commit_interval      = 5000
+    auto_commit_threshold     = 1000
+    aws_api_key               = "$${{secret:aws_access_key_id}"
+    aws_authentication_method = "instanceRole"
+    aws_secret                = "aws-msk-credentials"
+    aws_secret_key            = "$${{secret:aws_secret_access_key}"
+    backoff_rate              = 3
     brokers = [
-      "..."
+      "b-1.msk-cluster.a1b2c3d4.e1.kafka.us-east-1.amazonaws.com:9092",
+      "b-2.msk-cluster.a1b2c3d4.e1.kafka.us-east-1.amazonaws.com:9092",
     ]
-    connection_timeout = 306053.8
+    connection_timeout = 15000
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description        = "...my_description..."
-    disabled           = true
-    duration_seconds   = 40267.7
-    enable_assume_role = true
-    endpoint           = "...my_endpoint..."
-    environment        = "...my_environment..."
+    description        = "MSK consumer for nginx access logs"
+    disabled           = false
+    duration_seconds   = 3600
+    enable_assume_role = false
+    endpoint           = "https://kafka.us-east-1.amazonaws.com"
+    environment        = "main"
     from_beginning     = true
-    group_id           = "...my_group_id..."
-    heartbeat_interval = 792040.64
-    id                 = "...my_id..."
-    initial_backoff    = 595314.32
+    group_id           = "web-team"
+    heartbeat_interval = 3000
+    id                 = "msk-nginx"
+    initial_backoff    = 500
     kafka_schema_registry = {
       auth = {
-        credentials_secret = "...my_credentials_secret..."
-        disabled           = false
+        credentials_secret = "schema-basic-auth"
+        disabled           = true
       }
-      connection_timeout  = 17882.16
+      connection_timeout  = 30000
       disabled            = true
-      max_retries         = 1.41
-      request_timeout     = 30438.96
-      schema_registry_url = "...my_schema_registry_url..."
+      max_retries         = 3
+      request_timeout     = 30000
+      schema_registry_url = "http://schema-registry:8081"
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
+        ca_path             = "/etc/ssl/certs/ca.pem"
+        cert_path           = "/etc/ssl/certs/client.crt"
+        certificate_name    = "schema-registry-cert"
         disabled            = true
         max_version         = "TLSv1.3"
         min_version         = "TLSv1.2"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
-        reject_unauthorized = false
-        servername          = "...my_servername..."
+        passphrase          = "$${{secret:kafka_key_pass}"
+        priv_key_path       = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername          = "schema-registry"
       }
     }
-    max_back_off            = 140556.78
-    max_bytes               = 658141657.62
-    max_bytes_per_partition = 6885585.41
-    max_retries             = 25.31
-    max_socket_errors       = 4.21
+    max_back_off            = 120000
+    max_bytes               = 10485760
+    max_bytes_per_partition = 1048576
+    max_retries             = 10
+    max_socket_errors       = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"msk\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 1.63
-      compress         = "none"
-      max_buffer_size  = 50.29
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled                 = false
-    reauthentication_threshold = 52754.92
-    rebalance_timeout          = 371225.77
-    region                     = "...my_region..."
-    reject_unauthorized        = false
-    request_timeout            = 1734742.82
+    reauthentication_threshold = 300000
+    rebalance_timeout          = 60000
+    region                     = "us-east-1"
+    reject_unauthorized        = true
+    request_timeout            = 60000
     reuse_connections          = true
     send_to_routes             = true
-    session_timeout            = 656767.91
+    session_timeout            = 30000
     signature_version          = "v4"
     streamtags = [
-      "..."
+      "prod",
+      "msk",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/client.crt"
+      certificate_name    = "msk-client-cert"
       disabled            = false
-      max_version         = "TLSv1.1"
+      max_version         = "TLSv1.3"
       min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      passphrase          = "$${{secret:kafka_key_pass}"
+      priv_key_path       = "/etc/ssl/private/client.key"
       reject_unauthorized = true
-      servername          = "...my_servername..."
+      servername          = "msk-broker-1"
     }
     topics = [
-      "..."
+      "nginx_access",
     ]
     type = "msk"
   }
   input_netflow = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-netflow"
+        pipeline = "default"
       }
     ]
-    description         = "...my_description..."
-    disabled            = true
+    description         = "Receive NetFlow v5/v9/IPFIX on UDP 2055"
+    disabled            = false
     enable_pass_through = false
-    environment         = "...my_environment..."
-    host                = "...my_host..."
-    id                  = "...my_id..."
-    ip_allowlist_regex  = "...my_ip_allowlist_regex..."
-    ip_denylist_regex   = "...my_ip_denylist_regex..."
-    ipfix_enabled       = false
+    environment         = "main"
+    host                = "0.0.0.0"
+    id                  = "netflow-listener"
+    ip_allowlist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex   = "^192\\.168\\.1\\.\\d{1,3}$"
+    ipfix_enabled       = true
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"netflow\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 55240.21
+    pipeline = "default"
+    port     = 2055
     pq = {
-      commit_frequency = 5.86
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 46.86
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled     = true
+    pq_enabled     = false
     send_to_routes = true
     streamtags = [
-      "..."
+      "netflow",
+      "network",
     ]
-    template_cache_minutes = 405.69
+    template_cache_minutes = 60
     type                   = "netflow"
-    udp_socket_rx_buf_size = 2487129551.16
+    udp_socket_rx_buf_size = 4194304
     v5_enabled             = true
     v9_enabled             = true
   }
   input_office365_mgmt = {
-    app_id        = "...my_app_id..."
+    app_id        = "99999999-aaaa-bbbb-cccc-111111111111"
     auth_type     = "manual"
-    client_secret = "...my_client_secret..."
+    client_secret = "$${{secret:o365_client_secret}"
     connections = [
       {
         output   = "...my_output..."
@@ -2035,353 +2086,366 @@ resource "criblio_source" "my_source" {
     ]
     content_config = [
       {
-        content_type = "...my_content_type..."
+        content_type = "Exchange"
         description  = "...my_description..."
         enabled      = true
-        interval     = 3.17
-        log_level    = "error"
+        interval     = 5
+        log_level    = "info"
       }
     ]
-    description             = "...my_description..."
+    description             = "Office 365 Management API collector"
     disabled                = false
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
-    ingestion_lag           = 3871.05
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 14.09
-    max_missed_keep_alives  = 10.26
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    pipeline  = "...my_pipeline..."
-    plan_type = "enterprise_gcc"
-    pq = {
-      commit_frequency = 5.53
-      compress         = "gzip"
-      max_buffer_size  = 47.16
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
-    }
-    pq_enabled           = true
-    publisher_identifier = "...my_publisher_identifier..."
-    retry_rules = {
-      codes = [
-        2.04
-      ]
-      enable_header         = false
-      interval              = 6479.66
-      limit                 = 9.17
-      multiplier            = 7.61
-      retry_connect_reset   = true
-      retry_connect_timeout = false
-      type                  = "static"
-    }
-    send_to_routes = false
-    streamtags = [
-      "..."
-    ]
-    tenant_id   = "...my_tenant_id..."
-    text_secret = "...my_text_secret..."
-    timeout     = 2134.41
-    ttl         = "...my_ttl..."
-    type        = "office365_mgmt"
-  }
-  input_office365_msg_trace = {
-    auth_type = "manual"
-    cert_options = {
-      cert_path        = "...my_cert_path..."
-      certificate_name = "...my_certificate_name..."
-      passphrase       = "...my_passphrase..."
-      priv_key_path    = "...my_priv_key_path..."
-    }
-    client_id     = "...my_client_id..."
-    client_secret = "...my_client_secret..."
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    credentials_secret      = "...my_credentials_secret..."
-    description             = "...my_description..."
-    disable_time_filter     = false
-    disabled                = true
-    end_date                = "...my_end_date..."
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
-    interval                = 32.97
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 10.76
-    log_level               = "debug"
-    max_missed_keep_alives  = 10.83
-    max_task_reschedule     = 3.22
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    password  = "...my_password..."
-    pipeline  = "...my_pipeline..."
-    plan_type = "enterprise_gcc"
-    pq = {
-      commit_frequency = 9.56
-      compress         = "gzip"
-      max_buffer_size  = 43.6
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
-    }
-    pq_enabled               = false
-    reschedule_dropped_tasks = true
-    resource                 = "...my_resource..."
-    retry_rules = {
-      codes = [
-        3.69
-      ]
-      enable_header         = false
-      interval              = 16223.83
-      limit                 = 3.89
-      multiplier            = 17.73
-      retry_connect_reset   = false
-      retry_connect_timeout = false
-      type                  = "static"
-    }
-    send_to_routes = true
-    start_date     = "...my_start_date..."
-    streamtags = [
-      "..."
-    ]
-    tenant_id   = "...my_tenant_id..."
-    text_secret = "...my_text_secret..."
-    timeout     = 47.49
-    ttl         = "...my_ttl..."
-    type        = "office365_msg_trace"
-    url         = "...my_url..."
-    username    = "...my_username..."
-  }
-  input_office365_service = {
-    app_id        = "...my_app_id..."
-    auth_type     = "manual"
-    client_secret = "...my_client_secret..."
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    content_config = [
-      {
-        content_type = "...my_content_type..."
-        description  = "...my_description..."
-        enabled      = false
-        interval     = 52.06
-        log_level    = "warn"
-      }
-    ]
-    description             = "...my_description..."
-    disabled                = true
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
+    environment             = "main"
+    id                      = "o365-mgmt"
     ignore_group_jobs_limit = false
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 15.91
-    max_missed_keep_alives  = 4.02
+    ingestion_lag           = 90
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    max_missed_keep_alives  = 3
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"office365_mgmt\""
       }
     ]
-    pipeline  = "...my_pipeline..."
-    plan_type = "dod"
+    pipeline  = "default"
+    plan_type = "enterprise_gcc"
     pq = {
-      commit_frequency = 9.79
-      compress         = "none"
-      max_buffer_size  = 50.31
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = false
+    pq_enabled           = false
+    publisher_identifier = "my-company-cribl"
     retry_rules = {
       codes = [
-        6.75
+        429,
+        500,
+        503,
       ]
       enable_header         = true
-      interval              = 13866.62
-      limit                 = 16.32
-      multiplier            = 15.13
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
       retry_connect_reset   = true
       retry_connect_timeout = true
       type                  = "backoff"
     }
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "prod",
+      "o365",
     ]
-    tenant_id   = "...my_tenant_id..."
-    text_secret = "...my_text_secret..."
-    timeout     = 1674.45
-    ttl         = "...my_ttl..."
+    tenant_id   = "11111111-2222-3333-4444-555555555555"
+    text_secret = "o365-client-secret"
+    timeout     = 300
+    ttl         = "4h"
+    type        = "office365_mgmt"
+  }
+  input_office365_msg_trace = {
+    auth_type = "oauth"
+    cert_options = {
+      cert_path        = "/etc/ssl/certs/client.crt"
+      certificate_name = "o365-cert"
+      passphrase       = "$${{secret:o365_cert_pass}"
+      priv_key_path    = "/etc/ssl/private/client.key"
+    }
+    client_id     = "99999999-aaaa-bbbb-cccc-111111111111"
+    client_secret = "$${{secret:o365_client_secret}"
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    credentials_secret      = "o365-credentials"
+    description             = "Office 365 Message Trace collector"
+    disable_time_filter     = true
+    disabled                = false
+    end_date                = "-2h@h"
+    environment             = "main"
+    id                      = "o365-msg-trace"
+    ignore_group_jobs_limit = false
+    interval                = 15
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    log_level               = "info"
+    max_missed_keep_alives  = 3
+    max_task_reschedule     = 3
+    metadata = [
+      {
+        name  = "source"
+        value = "\"office365_msg_trace\""
+      }
+    ]
+    password  = "$${{secret:o365_password}"
+    pipeline  = "default"
+    plan_type = "enterprise_gcc"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled               = false
+    reschedule_dropped_tasks = true
+    resource                 = "https://outlook.office365.com"
+    retry_rules = {
+      codes = [
+        429,
+        500,
+        503,
+      ]
+      enable_header         = true
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
+      retry_connect_reset   = true
+      retry_connect_timeout = true
+      type                  = "backoff"
+    }
+    send_to_routes = true
+    start_date     = "-3h@h"
+    streamtags = [
+      "prod",
+      "o365",
+    ]
+    tenant_id   = "11111111-2222-3333-4444-555555555555"
+    text_secret = "o365-client-secret"
+    timeout     = 300
+    ttl         = "4h"
+    type        = "office365_msg_trace"
+    url         = "https://reports.office365.com/ecp/reportingwebservice/reporting.svc/MessageTrace"
+    username    = "o365_user"
+  }
+  input_office365_service = {
+    app_id        = "99999999-aaaa-bbbb-cccc-111111111111"
+    auth_type     = "manual"
+    client_secret = "$${{secret:o365_client_secret}"
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    content_config = [
+      {
+        content_type = "Messages"
+        description  = "Poll interval minutes (1-60)"
+        enabled      = true
+        interval     = 5
+        log_level    = "info"
+      }
+    ]
+    description             = "Office 365 Service Health collector"
+    disabled                = false
+    environment             = "main"
+    id                      = "o365-service"
+    ignore_group_jobs_limit = false
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    max_missed_keep_alives  = 3
+    metadata = [
+      {
+        name  = "source"
+        value = "\"office365_service\""
+      }
+    ]
+    pipeline  = "default"
+    plan_type = "enterprise_gcc"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled = false
+    retry_rules = {
+      codes = [
+        429,
+        500,
+        503,
+      ]
+      enable_header         = true
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
+      retry_connect_reset   = true
+      retry_connect_timeout = true
+      type                  = "backoff"
+    }
+    send_to_routes = true
+    streamtags = [
+      "prod",
+      "o365",
+    ]
+    tenant_id   = "11111111-2222-3333-4444-555555555555"
+    text_secret = "o365-client-secret"
+    timeout     = 300
+    ttl         = "4h"
     type        = "office365_service"
   }
   input_open_telemetry = {
     activity_log_sample_rate = "{ \"see\": \"documentation\" }"
-    auth_header_expr         = "...my_auth_header_expr..."
-    auth_type                = "basic"
+    auth_header_expr         = "`Bearer ${token}`"
+    auth_type                = "token"
     capture_headers          = "{ \"see\": \"documentation\" }"
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-otel"
+        pipeline = "default"
       }
     ]
-    credentials_secret      = "...my_credentials_secret..."
-    description             = "...my_description..."
-    disabled                = true
-    enable_health_check     = false
+    credentials_secret      = "otel-credentials-secret"
+    description             = "Receive OpenTelemetry traces, metrics, and logs"
+    disabled                = false
+    enable_health_check     = true
     enable_proxy_header     = "{ \"see\": \"documentation\" }"
-    environment             = "...my_environment..."
-    extract_logs            = false
+    environment             = "main"
+    extract_logs            = true
     extract_metrics         = false
-    extract_spans           = false
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 383.32
-    login_url               = "...my_login_url..."
-    max_active_cxn          = 6.15
-    max_active_req          = 8.73
-    max_requests_per_socket = 8
+    extract_spans           = true
+    host                    = "0.0.0.0"
+    id                      = "otel-grpc"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    login_url               = "https://auth.example.com/oauth/token"
+    max_active_cxn          = 2000
+    max_active_req          = 512
+    max_requests_per_socket = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"open_telemetry\""
       }
     ]
     oauth_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Accept"
+        value = "application/json"
       }
     ]
     oauth_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "grant_type"
+        value = "client_credentials"
       }
     ]
-    otlp_version = "0.10.0"
-    password     = "...my_password..."
-    pipeline     = "...my_pipeline..."
-    port         = 18349.27
+    otlp_version = "1.3.1"
+    password     = "***REDACTED***"
+    pipeline     = "default"
+    port         = 4317
     pq = {
-      commit_frequency = 6.78
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 49.56
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled        = false
-    protocol          = "http"
-    request_timeout   = 3.78
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
+    protocol          = "grpc"
+    request_timeout   = 30
+    secret            = "s3cr3t"
+    secret_param_name = "client_secret"
     send_to_routes    = true
-    socket_timeout    = 1.89
+    socket_timeout    = 60
     streamtags = [
-      "..."
+      "otel",
+      "grpc",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "otel-token-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "otel-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1.2"
+      disabled            = true
+      max_version         = "TLSv1.3"
       min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 200638.53
+    token                = "***REDACTED***"
+    token_attribute_name = "access_token"
+    token_timeout_secs   = 3600
     type                 = "open_telemetry"
-    username             = "...my_username..."
+    username             = "otel-user"
   }
   input_prometheus = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/prometheus-discovery"
+    assume_role_external_id   = "external-123"
     auth_type                 = "manual"
     aws_authentication_method = "auto"
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_secret_key            = "$${{secret:aws_secret_access_key}"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret = "...my_credentials_secret..."
-    description        = "...my_description..."
+    credentials_secret = "prom-credentials"
+    description        = "Prometheus pull-based scraper"
     dimension_list = [
-      "..."
+      "host",
+      "source",
+      "region",
     ]
     disabled                = false
-    discovery_type          = "ec2"
-    duration_seconds        = 4736.3
-    enable_assume_role      = true
-    endpoint                = "...my_endpoint..."
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
-    interval                = 51.04
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 17.36
-    log_level               = "debug"
-    max_missed_keep_alives  = 4
+    discovery_type          = "static"
+    duration_seconds        = 3600
+    enable_assume_role      = false
+    endpoint                = "https://ec2.us-east-1.amazonaws.com"
+    environment             = "main"
+    id                      = "prometheus-scraper"
+    ignore_group_jobs_limit = false
+    interval                = 5
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    log_level               = "info"
+    max_missed_keep_alives  = 3
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"prometheus\""
       }
     ]
     name_list = [
-      "..."
+      "web-*.example.com",
+      "db-1.internal.example.com",
     ]
-    password = "...my_password..."
-    pipeline = "...my_pipeline..."
+    password = "$${{secret:prom_password}"
+    pipeline = "default"
     pq = {
-      commit_frequency = 9.53
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 47.62
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled          = false
-    record_type         = "A"
-    region              = "...my_region..."
-    reject_unauthorized = false
-    reuse_connections   = false
-    scrape_path         = "...my_scrape_path..."
-    scrape_port         = 61082.45
+    record_type         = "SRV"
+    region              = "us-east-1"
+    reject_unauthorized = true
+    reuse_connections   = true
+    scrape_path         = "/metrics"
+    scrape_port         = 9100
     scrape_protocol     = "http"
     search_filter = [
       {
@@ -2391,23 +2455,26 @@ resource "criblio_source" "my_source" {
         ]
       }
     ]
-    send_to_routes    = false
-    signature_version = "v2"
+    send_to_routes    = true
+    signature_version = "v4"
     streamtags = [
-      "..."
+      "prod",
+      "prometheus",
     ]
     target_list = [
-      "..."
+      "http://localhost:9090/metrics",
+      "node-exporter:9100",
+      "db:9200/metrics",
     ]
-    ttl           = "...my_ttl..."
+    ttl           = "4h"
     type          = "prometheus"
     use_public_ip = true
-    username      = "...my_username..."
+    username      = "prom_user"
   }
   input_prometheus_rw = {
-    activity_log_sample_rate = 9.93
-    auth_header_expr         = "...my_auth_header_expr..."
-    auth_type                = "none"
+    activity_log_sample_rate = 10
+    auth_header_expr         = "`Bearer ${token}`"
+    auth_type                = "basic"
     capture_headers          = true
     connections = [
       {
@@ -2415,503 +2482,515 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret      = "...my_credentials_secret..."
-    description             = "...my_description..."
+    credentials_secret      = "prom-credentials"
+    description             = "Prometheus Remote Write listener"
     disabled                = false
     enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "...my_environment..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 106.5
-    login_url               = "...my_login_url..."
-    max_active_req          = 6.12
-    max_requests_per_socket = 3
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "prom-rw-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    login_url               = "https://prom.example.com/oauth/token"
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"prometheus_rw\""
       }
     ]
     oauth_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Accept"
+        value = "application/json"
       }
     ]
     oauth_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "grant_type"
+        value = "client_credentials"
       }
     ]
-    password = "...my_password..."
-    pipeline = "...my_pipeline..."
-    port     = 16545.91
+    password = "$${{secret:prom_password}"
+    pipeline = "default"
+    port     = 9090
     pq = {
-      commit_frequency = 4.86
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 50.83
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled        = true
-    prometheus_api    = "...my_prometheus_api..."
-    request_timeout   = 8.19
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
-    send_to_routes    = false
-    socket_timeout    = 8.67
+    pq_enabled        = false
+    prometheus_api    = "/write"
+    request_timeout   = 30
+    secret            = "$${{secret:prom_oauth_secret}"
+    secret_param_name = "client_secret"
+    send_to_routes    = true
+    socket_timeout    = 60
     streamtags = [
-      "..."
+      "prod",
+      "prometheus",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "prom-token-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "prom-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:prom_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 293746.84
+    token                = "$${{secret:prom_token}"
+    token_attribute_name = "access_token"
+    token_timeout_secs   = 3600
     type                 = "prometheus_rw"
-    username             = "...my_username..."
+    username             = "prom_user"
   }
   input_raw_udp = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-raw"
+        pipeline = "default"
       }
     ]
-    description        = "...my_description..."
-    disabled           = true
-    environment        = "...my_environment..."
-    host               = "...my_host..."
-    id                 = "...my_id..."
+    description        = "Receive raw UDP datagrams and split on newlines"
+    disabled           = false
+    environment        = "main"
+    host               = "0.0.0.0"
+    id                 = "raw-udp-listener"
     ingest_raw_bytes   = false
-    ip_whitelist_regex = "...my_ip_whitelist_regex..."
-    max_buffer_size    = 0.95
+    ip_whitelist_regex = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_buffer_size    = 20000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"raw_udp\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 21267.65
+    pipeline = "default"
+    port     = 1514
     pq = {
-      commit_frequency = 3.81
-      compress         = "none"
-      max_buffer_size  = 43
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
-    send_to_routes         = false
-    single_msg_udp_packets = false
+    send_to_routes         = true
+    single_msg_udp_packets = true
     streamtags = [
-      "..."
+      "udp",
+      "raw",
     ]
     type                   = "raw_udp"
-    udp_socket_rx_buf_size = 2133363074.21
+    udp_socket_rx_buf_size = 4194304
   }
   input_s3 = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "manual"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    breaker_rulesets = [
-      "..."
-    ]
-    checkpointing = {
-      enabled = false
-      retries = 61.98
-    }
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    description            = "...my_description..."
-    disabled               = false
-    duration_seconds       = 34856.34
-    enable_assume_role     = true
-    enable_sqs_assume_role = true
-    encoding               = "...my_encoding..."
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    file_filter            = "...my_file_filter..."
-    id                     = "...my_id..."
-    max_messages           = 8.96
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    num_receivers                  = 69.55
-    parquet_chunk_download_timeout = 499.25
-    parquet_chunk_size_mb          = 17.08
-    pipeline                       = "...my_pipeline..."
-    poll_timeout                   = 18.2
-    pq = {
-      commit_frequency = 6.29
-      compress         = "gzip"
-      max_buffer_size  = 47.48
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
-    }
-    pq_enabled = false
-    preprocess = {
-      args = [
-        "..."
-      ]
-      command  = "...my_command..."
-      disabled = false
-    }
-    processed_tag_key      = "...my_processed_tag_key..."
-    processed_tag_value    = "...my_processed_tag_value..."
-    queue_name             = "...my_queue_name..."
-    region                 = "...my_region..."
-    reject_unauthorized    = false
-    reuse_connections      = false
-    send_to_routes         = false
-    signature_version      = "v4"
-    skip_on_error          = false
-    socket_timeout         = 29705.33
-    stale_channel_flush_ms = 18587902.44
-    streamtags = [
-      "..."
-    ]
-    tag_after_processing = true
-    type                 = "s3"
-    visibility_timeout   = 16414.35
-  }
-  input_s3_inventory = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-s3-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
     breaker_rulesets = [
-      "..."
+      "s3-breaker",
     ]
     checkpointing = {
       enabled = true
-      retries = 66.46
-    }
-    checksum_suffix = "...my_checksum_suffix..."
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    description            = "...my_description..."
-    disabled               = true
-    duration_seconds       = 32507.46
-    enable_assume_role     = false
-    enable_sqs_assume_role = true
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    file_filter            = "...my_file_filter..."
-    id                     = "...my_id..."
-    max_manifest_size_kb   = 8
-    max_messages           = 9.2
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    num_receivers                  = 88.47
-    parquet_chunk_download_timeout = 589.64
-    parquet_chunk_size_mb          = 57.64
-    pipeline                       = "...my_pipeline..."
-    poll_timeout                   = 5.74
-    pq = {
-      commit_frequency = 10.03
-      compress         = "gzip"
-      max_buffer_size  = 48.72
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
-    }
-    pq_enabled = true
-    preprocess = {
-      args = [
-        "..."
-      ]
-      command  = "...my_command..."
-      disabled = false
-    }
-    processed_tag_key      = "...my_processed_tag_key..."
-    processed_tag_value    = "...my_processed_tag_value..."
-    queue_name             = "...my_queue_name..."
-    region                 = "...my_region..."
-    reject_unauthorized    = true
-    reuse_connections      = false
-    send_to_routes         = false
-    signature_version      = "v4"
-    skip_on_error          = false
-    socket_timeout         = 9696.9
-    stale_channel_flush_ms = 26256833.64
-    streamtags = [
-      "..."
-    ]
-    tag_after_processing     = "false"
-    type                     = "s3_inventory"
-    validate_inventory_files = false
-    visibility_timeout       = 26709.77
-  }
-  input_security_lake = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    breaker_rulesets = [
-      "..."
-    ]
-    checkpointing = {
-      enabled = false
-      retries = 86.82
+      retries = 3
     }
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-main"
+        pipeline = "default"
       }
     ]
-    description            = "...my_description..."
-    disabled               = true
-    duration_seconds       = 2917.34
+    description            = "Ingest S3 notifications and objects"
+    disabled               = false
+    duration_seconds       = 3600
     enable_assume_role     = true
     enable_sqs_assume_role = true
-    encoding               = "...my_encoding..."
-    endpoint               = "...my_endpoint..."
-    environment            = "...my_environment..."
-    file_filter            = "...my_file_filter..."
-    id                     = "...my_id..."
-    max_messages           = 8.06
+    encoding               = "utf-8"
+    endpoint               = "https://s3.us-east-1.amazonaws.com"
+    environment            = "main"
+    file_filter            = ".*\\.json(\\.gz)?$"
+    id                     = "s3-notifications"
+    max_messages           = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"s3\""
       }
     ]
-    num_receivers                  = 6.73
-    parquet_chunk_download_timeout = 2933.58
-    parquet_chunk_size_mb          = 41.45
-    pipeline                       = "...my_pipeline..."
-    poll_timeout                   = 14.18
+    num_receivers                  = 4
+    parquet_chunk_download_timeout = 300
+    parquet_chunk_size_mb          = 10
+    pipeline                       = "default"
+    poll_timeout                   = 10
     pq = {
-      commit_frequency = 9.12
-      compress         = "none"
-      max_buffer_size  = 46.18
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     preprocess = {
       args = [
-        "..."
+        "--compact-output",
       ]
-      command  = "...my_command..."
-      disabled = false
+      command  = "jq -r .message"
+      disabled = true
     }
-    processed_tag_key      = "...my_processed_tag_key..."
-    processed_tag_value    = "...my_processed_tag_value..."
-    queue_name             = "...my_queue_name..."
-    region                 = "...my_region..."
-    reject_unauthorized    = false
+    processed_tag_key      = "processed-by"
+    processed_tag_value    = "cribl-processed"
+    queue_name             = "https://sqs.us-east-1.amazonaws.com/123456789012/my-s3-queue"
+    region                 = "us-east-1"
+    reject_unauthorized    = true
     reuse_connections      = true
-    send_to_routes         = false
-    signature_version      = "v2"
-    skip_on_error          = false
-    socket_timeout         = 26799.94
-    stale_channel_flush_ms = 29469341.99
+    send_to_routes         = true
+    signature_version      = "v4"
+    skip_on_error          = true
+    socket_timeout         = 600
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "aws",
+      "s3",
     ]
-    tag_after_processing = "false"
+    tag_after_processing = true
+    type                 = "s3"
+    visibility_timeout   = 300
+  }
+  input_s3_inventory = {
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-s3-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
+    breaker_rulesets = [
+      "s3-inventory-breaker",
+    ]
+    checkpointing = {
+      enabled = true
+      retries = 3
+    }
+    checksum_suffix = "checksum"
+    connections = [
+      {
+        output   = "s3-archive"
+        pipeline = "default"
+      }
+    ]
+    description            = "Ingest S3 inventory manifests and listed objects"
+    disabled               = false
+    duration_seconds       = 3600
+    enable_assume_role     = true
+    enable_sqs_assume_role = true
+    endpoint               = "https://s3.us-east-1.amazonaws.com"
+    environment            = "main"
+    file_filter            = "^.*inventory.*\\.csv(\\.gz)?$"
+    id                     = "s3-inventory"
+    max_manifest_size_kb   = 4096
+    max_messages           = 10
+    metadata = [
+      {
+        name  = "source"
+        value = "\"s3_inventory\""
+      }
+    ]
+    num_receivers                  = 4
+    parquet_chunk_download_timeout = 300
+    parquet_chunk_size_mb          = 10
+    pipeline                       = "default"
+    poll_timeout                   = 10
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled = false
+    preprocess = {
+      args = [
+        "--compact-output",
+      ]
+      command  = "jq -r .message"
+      disabled = true
+    }
+    processed_tag_key      = "processed-by"
+    processed_tag_value    = "cribl-processed"
+    queue_name             = "https://sqs.us-east-1.amazonaws.com/123456789012/inventory-queue"
+    region                 = "us-east-1"
+    reject_unauthorized    = true
+    reuse_connections      = true
+    send_to_routes         = true
+    signature_version      = "v4"
+    skip_on_error          = true
+    socket_timeout         = 600
+    stale_channel_flush_ms = 1500
+    streamtags = [
+      "aws",
+      "s3-inventory",
+    ]
+    tag_after_processing     = "...my_tag_after_processing..."
+    type                     = "s3_inventory"
+    validate_inventory_files = true
+    visibility_timeout       = 300
+  }
+  input_security_lake = {
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-security-lake-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
+    breaker_rulesets = [
+      "security-lake-breaker",
+    ]
+    checkpointing = {
+      enabled = true
+      retries = 3
+    }
+    connections = [
+      {
+        output   = "s3-security-lake"
+        pipeline = "default"
+      }
+    ]
+    description            = "Ingest AWS Security Lake notifications and objects"
+    disabled               = false
+    duration_seconds       = 3600
+    enable_assume_role     = true
+    enable_sqs_assume_role = true
+    encoding               = "utf-8"
+    endpoint               = "https://s3.us-east-1.amazonaws.com"
+    environment            = "main"
+    file_filter            = ".*\\.json(\\.gz)?$"
+    id                     = "security-lake-ingest"
+    max_messages           = 10
+    metadata = [
+      {
+        name  = "source"
+        value = "\"security_lake\""
+      }
+    ]
+    num_receivers                  = 4
+    parquet_chunk_download_timeout = 300
+    parquet_chunk_size_mb          = 10
+    pipeline                       = "default"
+    poll_timeout                   = 10
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled = false
+    preprocess = {
+      args = [
+        "--compact-output",
+      ]
+      command  = "jq -r .message"
+      disabled = true
+    }
+    processed_tag_key      = "processed-by"
+    processed_tag_value    = "cribl-processed"
+    queue_name             = "https://sqs.us-east-1.amazonaws.com/123456789012/security-lake-queue"
+    region                 = "us-east-1"
+    reject_unauthorized    = true
+    reuse_connections      = true
+    send_to_routes         = true
+    signature_version      = "v4"
+    skip_on_error          = true
+    socket_timeout         = 600
+    stale_channel_flush_ms = 1500
+    streamtags = [
+      "aws",
+      "security-lake",
+    ]
+    tag_after_processing = "...my_tag_after_processing..."
     type                 = "security_lake"
-    visibility_timeout   = 16801.61
+    visibility_timeout   = 300
   }
   input_snmp = {
     best_effort_parsing = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-network"
+        pipeline = "default"
       }
     ]
-    description        = "...my_description..."
-    disabled           = true
-    environment        = "...my_environment..."
-    host               = "...my_host..."
-    id                 = "...my_id..."
-    ip_whitelist_regex = "...my_ip_whitelist_regex..."
-    max_buffer_size    = 5.96
+    description        = "Receive SNMP traps and forward to destinations"
+    disabled           = false
+    environment        = "main"
+    host               = "0.0.0.0"
+    id                 = "snmp-traps"
+    ip_whitelist_regex = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_buffer_size    = 20000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"snmp\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 16809.21
+    pipeline = "default"
+    port     = 162
     pq = {
-      commit_frequency = 7.41
-      compress         = "none"
-      max_buffer_size  = 50.16
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled     = true
+    pq_enabled     = false
     send_to_routes = true
     snmp_v3_auth = {
-      allow_unmatched_trap = true
+      allow_unmatched_trap = false
       v3_auth_enabled      = true
       v3_users = [
         {
           auth_key      = "{ \"see\": \"documentation\" }"
-          auth_protocol = "sha224"
-          name          = "...my_name..."
-          priv_protocol = "{ \"see\": \"documentation\" }"
+          auth_protocol = "sha256"
+          name          = "snmp-user"
+          priv_protocol = "none"
         }
       ]
     }
     streamtags = [
-      "..."
+      "network",
+      "snmp",
     ]
     type                   = "snmp"
-    udp_socket_rx_buf_size = 2286477561.21
+    udp_socket_rx_buf_size = 4194304
     varbinds_with_types    = true
   }
   input_splunk = {
     auth_tokens = [
       {
-        description = "...my_description..."
-        token       = "...my_token..."
+        description = "Token for prod universal forwarders"
+        token       = "UF-secret-1"
       }
     ]
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
+      "syslog-breaker",
     ]
-    compress = "always"
+    compress = "auto"
     connections = [
       {
         output   = "...my_output..."
         pipeline = "...my_pipeline..."
       }
     ]
-    description         = "...my_description..."
-    disabled            = true
+    description         = "Splunk S2S listener for UF/HF"
+    disabled            = false
     drop_control_fields = true
     enable_proxy_header = false
-    environment         = "...my_environment..."
-    extract_metrics     = false
-    host                = "...my_host..."
-    id                  = "...my_id..."
-    ip_whitelist_regex  = "...my_ip_whitelist_regex..."
-    max_active_cxn      = 8.13
-    max_s2_sversion     = "v3"
+    environment         = "main"
+    extract_metrics     = true
+    host                = "0.0.0.0"
+    id                  = "splunk-listener"
+    ip_whitelist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_active_cxn      = 2000
+    max_s2_sversion     = "v4"
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"splunk\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 46299.32
+    pipeline = "default"
+    port     = 8089
     pq = {
-      commit_frequency = 7.19
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 42.3
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled             = false
     send_to_routes         = true
-    socket_ending_max_wait = 4.19
-    socket_idle_timeout    = 8.04
-    socket_max_lifespan    = 9.33
-    stale_channel_flush_ms = 24735904.72
+    socket_ending_max_wait = 15
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "splunk",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "splunk-listener-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:splunk_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }
     type             = "splunk"
-    use_fwd_timezone = false
+    use_fwd_timezone = true
   }
   input_splunk_hec = {
     access_control_allow_headers = [
-      "..."
+      "Authorization",
+      "Content-Type",
     ]
     access_control_allow_origin = [
-      "..."
+      "https://app.example.com",
+      "https://grafana.example.com",
     ]
-    activity_log_sample_rate = 5.25
+    activity_log_sample_rate = 10
     allowed_indexes = [
-      "..."
+      "main",
+      "metrics",
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
-          "..."
+          "main",
+          "metrics",
         ]
         auth_type   = "manual"
-        description = "...my_description..."
-        enabled     = false
+        description = "Token for HEC webhooks"
+        enabled     = true
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "sourcetype"
+            value = "\"http:hec\""
           }
         ]
         token        = "{ \"see\": \"documentation\" }"
@@ -2919,7 +2998,8 @@ resource "criblio_source" "my_source" {
       }
     ]
     breaker_rulesets = [
-      "..."
+      "access-logs-v1",
+      "syslog-breaker",
     ]
     capture_headers = true
     connections = [
@@ -2928,69 +3008,71 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description             = "...my_description..."
+    description             = "Splunk HEC listener for webhooks"
     disabled                = false
-    drop_control_fields     = false
+    drop_control_fields     = true
     emit_token_metrics      = true
-    enable_health_check     = "{ \"see\": \"documentation\" }"
-    enable_proxy_header     = true
-    environment             = "...my_environment..."
+    enable_health_check     = true
+    enable_proxy_header     = false
+    environment             = "main"
     extract_metrics         = true
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 128.31
-    max_active_req          = 9.63
-    max_requests_per_socket = 5
+    host                    = "0.0.0.0"
+    id                      = "splunk-hec-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"hec\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 58949.4
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 10.82
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 45.5
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled             = true
-    request_timeout        = 4.49
-    send_to_routes         = false
-    socket_timeout         = 4.38
-    splunk_hec_acks        = true
-    splunk_hec_api         = "...my_splunk_hec_api..."
-    stale_channel_flush_ms = 42109803.47
+    pq_enabled             = false
+    request_timeout        = 30
+    send_to_routes         = true
+    socket_timeout         = 60
+    splunk_hec_acks        = false
+    splunk_hec_api         = "/services/collector"
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "splunk",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "splunk-hec-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
+      disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:hec_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type             = "splunk_hec"
-    use_fwd_timezone = false
+    use_fwd_timezone = true
   }
   input_splunk_search = {
-    auth_header_expr = "...my_auth_header_expr..."
-    auth_type        = "none"
+    auth_header_expr = "`Bearer ${token}`"
+    auth_type        = "basic"
     breaker_rulesets = [
-      "..."
+      "Splunk Search Ruleset",
+      "access-logs-v1",
     ]
     connections = [
       {
@@ -2998,221 +3080,227 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    credentials_secret = "...my_credentials_secret..."
-    cron_schedule      = "...my_cron_schedule..."
-    description        = "...my_description..."
+    credentials_secret = "splunk-credentials"
+    cron_schedule      = "*/5 * * * *"
+    description        = "Scheduled Splunk search for error rates"
     disabled           = false
-    earliest           = "...my_earliest..."
-    encoding           = "...my_encoding..."
-    endpoint           = "...my_endpoint..."
+    earliest           = "-1h@h"
+    encoding           = "UTF-8"
+    endpoint           = "/services/search/v2/jobs/export"
     endpoint_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Authorization"
+        value = "\"Bearer $${{secret:splunk_token}\""
       }
     ]
     endpoint_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "earliest_time"
+        value = "${earliest}"
       }
     ]
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
-    job_timeout             = "...my_job_timeout..."
-    keep_alive_time         = 13.53
-    latest                  = "...my_latest..."
-    log_level               = "debug"
-    login_url               = "...my_login_url..."
-    max_missed_keep_alives  = 3.83
+    environment             = "main"
+    id                      = "splunk-search-errors"
+    ignore_group_jobs_limit = false
+    job_timeout             = "15m"
+    keep_alive_time         = 30
+    latest                  = "now"
+    log_level               = "info"
+    login_url               = "https://splunk.example.com:8089/services/auth/login"
+    max_missed_keep_alives  = 3
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"splunk_search\""
       }
     ]
     oauth_headers = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "Accept"
+        value = "application/json"
       }
     ]
     oauth_params = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "grant_type"
+        value = "client_credentials"
       }
     ]
     output_mode = "json"
-    password    = "...my_password..."
-    pipeline    = "...my_pipeline..."
+    password    = "$${{secret:splunk_password}"
+    pipeline    = "default"
     pq = {
-      commit_frequency = 5.71
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 44.06
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "always"
-      path             = "...my_path..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled          = false
     reject_unauthorized = false
-    request_timeout     = 1851.98
+    request_timeout     = 120
     retry_rules = {
       codes = [
-        6.05
+        429,
+        503,
+        502,
       ]
-      enable_header         = false
-      interval              = 7602.68
-      limit                 = 18.39
-      multiplier            = 16.13
-      retry_connect_reset   = false
-      retry_connect_timeout = false
-      type                  = "static"
+      enable_header         = true
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
+      retry_connect_reset   = true
+      retry_connect_timeout = true
+      type                  = "backoff"
     }
-    search                 = "...my_search..."
-    search_head            = "...my_search_head..."
-    secret                 = "...my_secret..."
-    secret_param_name      = "...my_secret_param_name..."
+    search                 = "search index=main sourcetype=access_combined status>=500 | stats count by host"
+    search_head            = "https://splunk.example.com:8089"
+    secret                 = "$${{secret:splunk_oauth_secret}"
+    secret_param_name      = "password"
     send_to_routes         = true
-    stale_channel_flush_ms = 2870608.4
+    stale_channel_flush_ms = 15000
     streamtags = [
-      "..."
+      "prod",
+      "splunk",
     ]
-    text_secret          = "...my_text_secret..."
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 219176.87
-    ttl                  = "...my_ttl..."
+    text_secret          = "splunk-token-secret"
+    token                = "$${{secret:splunk_token}"
+    token_attribute_name = "access_token"
+    token_timeout_secs   = 3600
+    ttl                  = "4h"
     type                 = "splunk_search"
-    use_round_robin_dns  = false
-    username             = "...my_username..."
+    use_round_robin_dns  = true
+    username             = "splunk_user"
   }
   input_sqs = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
+    assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-sqs-access"
+    assume_role_external_id   = "cribl-external-123"
+    aws_account_id            = "123456789012"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
+    aws_secret                = "aws-credentials-secret"
+    aws_secret_key            = "***REDACTED***"
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-raw"
+        pipeline = "default"
       }
     ]
     create_queue       = false
-    description        = "...my_description..."
-    disabled           = true
-    duration_seconds   = 23574.97
-    enable_assume_role = false
-    endpoint           = "...my_endpoint..."
-    environment        = "...my_environment..."
-    id                 = "...my_id..."
-    max_messages       = 1.93
+    description        = "Ingest SQS messages"
+    disabled           = false
+    duration_seconds   = 3600
+    enable_assume_role = true
+    endpoint           = "https://sqs.us-east-1.amazonaws.com"
+    environment        = "main"
+    id                 = "sqs-events"
+    max_messages       = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"sqs\""
       }
     ]
-    num_receivers = 60.31
-    pipeline      = "...my_pipeline..."
-    poll_timeout  = 7.51
+    num_receivers = 4
+    pipeline      = "default"
+    poll_timeout  = 10
     pq = {
-      commit_frequency = 1.7
-      compress         = "none"
-      max_buffer_size  = 47.38
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled          = false
-    queue_name          = "...my_queue_name..."
-    queue_type          = "fifo"
-    region              = "...my_region..."
+    queue_name          = "https://sqs.us-east-1.amazonaws.com/123456789012/events-queue"
+    queue_type          = "standard"
+    region              = "us-east-1"
     reject_unauthorized = true
-    reuse_connections   = false
-    send_to_routes      = false
-    signature_version   = "v2"
+    reuse_connections   = true
+    send_to_routes      = true
+    signature_version   = "v4"
     streamtags = [
-      "..."
+      "aws",
+      "sqs",
     ]
     type               = "sqs"
-    visibility_timeout = 42454.5
+    visibility_timeout = 300
   }
   input_syslog = {
     input_syslog_syslog2 = {
       allow_non_standard_app_name = true
       connections = [
         {
-          output   = "...my_output..."
-          pipeline = "...my_pipeline..."
+          output   = "s3-syslog"
+          pipeline = "default"
         }
       ]
-      description                          = "...my_description..."
+      description                          = "Receive syslog over UDP/TCP with framing detection"
       disabled                             = false
       enable_enhanced_proxy_header_parsing = true
       enable_load_balancing                = true
-      enable_proxy_header                  = true
-      environment                          = "...my_environment..."
-      host                                 = "...my_host..."
-      id                                   = "...my_id..."
+      enable_proxy_header                  = false
+      environment                          = "main"
+      host                                 = "0.0.0.0"
+      id                                   = "syslog-listener"
       infer_framing                        = true
-      ip_whitelist_regex                   = "...my_ip_whitelist_regex..."
+      ip_whitelist_regex                   = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
       keep_fields_list = [
-        "..."
+        "host",
+        "app",
       ]
-      max_active_cxn  = 7.64
-      max_buffer_size = 3.56
+      max_active_cxn  = 2000
+      max_buffer_size = 20000
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "source"
+          value = "\"syslog\""
         }
       ]
-      octet_counting = true
-      pipeline       = "...my_pipeline..."
+      octet_counting = false
+      pipeline       = "default"
       pq = {
-        commit_frequency = 6.96
-        compress         = "none"
-        max_buffer_size  = 45.65
-        max_file_size    = "...my_max_file_size..."
-        max_size         = "...my_max_size..."
+        commit_frequency = 100
+        compress         = "gzip"
+        max_buffer_size  = 5000
+        max_file_size    = "100 MB"
+        max_size         = "10GB"
         mode             = "always"
-        path             = "...my_path..."
+        path             = "/opt/cribl/state/queues"
       }
-      pq_enabled             = true
-      send_to_routes         = false
-      single_msg_udp_packets = false
-      socket_ending_max_wait = 3.23
-      socket_idle_timeout    = 2.03
-      socket_max_lifespan    = 7.57
+      pq_enabled             = false
+      send_to_routes         = true
+      single_msg_udp_packets = true
+      socket_ending_max_wait = 30
+      socket_idle_timeout    = 60
+      socket_max_lifespan    = 3600
       streamtags = [
-        "..."
+        "syslog",
+        "network",
       ]
       strictly_infer_octet_counting = true
-      tcp_port                      = 62520.25
-      timestamp_timezone            = "...my_timestamp_timezone..."
+      tcp_port                      = 514
+      timestamp_timezone            = "UTC"
       tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
+        ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+        cert_path           = "/etc/ssl/certs/server.crt"
+        certificate_name    = "syslog-cert"
         common_name_regex   = "{ \"see\": \"documentation\" }"
         disabled            = true
-        max_version         = "TLSv1.2"
+        max_version         = "TLSv1.3"
         min_version         = "TLSv1.2"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
+        passphrase          = "***REDACTED***"
+        priv_key_path       = "/etc/ssl/private/server.key"
         reject_unauthorized = "{ \"see\": \"documentation\" }"
-        request_cert        = true
+        request_cert        = false
       }
       type                   = "syslog"
-      udp_port               = 59552.67
-      udp_socket_rx_buf_size = 635379092.96
+      udp_port               = 514
+      udp_socket_rx_buf_size = 4194304
     }
   }
   input_system_metrics = {
@@ -3223,103 +3311,109 @@ resource "criblio_source" "my_source" {
       }
     ]
     container = {
-      all_containers = false
+      all_containers = true
       detail         = true
       docker_socket = [
-        "..."
+        "/var/run/docker.sock",
       ]
-      docker_timeout = 1.14
+      docker_timeout = 10
       filters = [
         {
-          expr = "...my_expr..."
+          expr = "container.name =~ /nginx|redis/"
         }
       ]
-      mode       = "custom"
-      per_device = false
+      mode       = "all"
+      per_device = true
     }
-    description = "...my_description..."
-    disabled    = true
-    environment = "...my_environment..."
+    description = "Host, CPU, memory, network, disk, process and container metrics"
+    disabled    = false
+    environment = "main"
     host = {
       custom = {
         cpu = {
-          detail  = false
-          mode    = "disabled"
-          per_cpu = false
-          time    = false
+          detail  = true
+          mode    = "all"
+          per_cpu = true
+          time    = true
         }
         disk = {
           detail = true
           devices = [
-            "..."
+            "!loop*",
+            "sda*",
           ]
           fstypes = [
-            "..."
+            "ext4",
+            "!*tmpfs",
           ]
-          mode = "disabled"
+          mode = "all"
           mountpoints = [
-            "..."
+            "/",
+            "/var",
+            "!/proc*",
           ]
           per_device = true
         }
         memory = {
-          detail = false
-          mode   = "disabled"
+          detail = true
+          mode   = "all"
         }
         network = {
-          detail = false
+          detail = true
           devices = [
-            "..."
+            "!lo",
+            "eth0",
           ]
-          mode          = "all"
+          mode          = "custom"
           per_interface = true
         }
         system = {
-          mode      = "disabled"
-          processes = false
+          mode      = "basic"
+          processes = true
         }
       }
-      mode = "custom"
+      mode = "basic"
     }
-    id       = "...my_id..."
-    interval = 10.53
+    id       = "sysmetrics"
+    interval = 15
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"system_metrics\""
       }
     ]
     persistence = {
-      compress      = "none"
-      dest_path     = "...my_dest_path..."
+      compress      = "gzip"
+      dest_path     = "/opt/cribl/state/system_metrics"
       enable        = true
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      max_data_size = "4GB"
+      max_data_time = "48h"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 7.36
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 48
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled = true
+    pq_enabled = false
     process = {
       sets = [
         {
-          filter           = "...my_filter..."
+          filter           = "proc.name == 'nginx'"
           include_children = true
-          name             = "...my_name..."
+          name             = "nginx-workers"
         }
       ]
     }
     send_to_routes = true
     streamtags = [
-      "..."
+      "sys",
+      "metrics",
     ]
     type = "system_metrics"
   }
@@ -3332,22 +3426,22 @@ resource "criblio_source" "my_source" {
         enable = true
       }
       firewall = {
-        enable = false
+        enable = true
       }
       hostsfile = {
         enable = true
       }
       interfaces = {
-        enable = false
+        enable = true
       }
       login_users = {
         enable = true
       }
       metadata = {
-        enable = false
+        enable = true
       }
       ports = {
-        enable = false
+        enable = true
       }
       routes = {
         enable = true
@@ -3365,113 +3459,116 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description           = "...my_description..."
-    disable_native_module = true
-    disabled              = true
-    environment           = "...my_environment..."
-    id                    = "...my_id..."
-    interval              = 9.73
+    description           = "Collect system state metrics and spool to disk"
+    disable_native_module = false
+    disabled              = false
+    environment           = "main"
+    id                    = "system-state"
+    interval              = 600
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"system_state\""
       }
     ]
     persistence = {
-      compress      = "none"
-      dest_path     = "...my_dest_path..."
-      enable        = false
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      compress      = "gzip"
+      dest_path     = "/var/lib/cribl/state/system_state"
+      enable        = true
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 1.29
-      compress         = "none"
-      max_buffer_size  = 48.67
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled     = false
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "sys",
+      "state",
     ]
     type = "system_state"
   }
   input_tcp = {
     auth_type = "manual"
     breaker_rulesets = [
-      "..."
+      "multiline-json",
+      "tcp-syslog-breaker",
     ]
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-raw"
+        pipeline = "default"
       }
     ]
-    description         = "...my_description..."
+    description         = "Receive generic TCP payloads"
     disabled            = false
     enable_header       = false
     enable_proxy_header = false
-    environment         = "...my_environment..."
-    host                = "...my_host..."
-    id                  = "...my_id..."
-    ip_whitelist_regex  = "...my_ip_whitelist_regex..."
-    max_active_cxn      = 5.5
+    environment         = "main"
+    host                = "0.0.0.0"
+    id                  = "tcp-listener"
+    ip_whitelist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_active_cxn      = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"tcp\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 47674.49
+    pipeline = "default"
+    port     = 9000
     pq = {
-      commit_frequency = 1.66
-      compress         = "none"
-      max_buffer_size  = 51.41
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     preprocess = {
       args = [
-        "..."
+        "--compact-output",
       ]
-      command  = "...my_command..."
-      disabled = false
+      command  = "jq -r .message"
+      disabled = true
     }
-    send_to_routes         = false
-    socket_ending_max_wait = 6.18
-    socket_idle_timeout    = 0.36
-    socket_max_lifespan    = 5.19
-    stale_channel_flush_ms = 8063309.13
+    send_to_routes         = true
+    socket_ending_max_wait = 30
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
+    stale_channel_flush_ms = 1500
     streamtags = [
-      "..."
+      "tcp",
+      "ingest",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "tcp-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type = "tcp"
   }
   input_tcpjson = {
-    auth_token = "...my_auth_token..."
+    auth_token = "$${{secret:tcpjson_token}"
     auth_type  = "manual"
     connections = [
       {
@@ -3479,288 +3576,298 @@ resource "criblio_source" "my_source" {
         pipeline = "...my_pipeline..."
       }
     ]
-    description           = "...my_description..."
-    disabled              = true
+    description           = "TCP JSON listener for app logs"
+    disabled              = false
     enable_load_balancing = true
-    enable_proxy_header   = true
-    environment           = "...my_environment..."
-    host                  = "...my_host..."
-    id                    = "...my_id..."
-    ip_whitelist_regex    = "...my_ip_whitelist_regex..."
-    max_active_cxn        = 6.9
+    enable_proxy_header   = false
+    environment           = "main"
+    host                  = "0.0.0.0"
+    id                    = "tcpjson-listener"
+    ip_whitelist_regex    = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    max_active_cxn        = 2000
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"tcpjson\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 44098.72
+    pipeline = "default"
+    port     = 9001
     pq = {
-      commit_frequency = 5.4
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 43.12
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
       mode             = "smart"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled             = true
+    pq_enabled             = false
     send_to_routes         = true
-    socket_ending_max_wait = 5.57
-    socket_idle_timeout    = 8.47
-    socket_max_lifespan    = 3.88
+    socket_ending_max_wait = 15
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
     streamtags = [
-      "..."
+      "prod",
+      "tcpjson",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "tcpjson-token-secret"
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "tcpjson-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
-      disabled            = false
-      max_version         = "TLSv1"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:tcpjson_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
-      request_cert        = true
+      request_cert        = false
     }
     type = "tcpjson"
   }
   input_wef = {
     allow_machine_id_mismatch = false
-    auth_method               = "kerberos"
-    ca_fingerprint            = "...my_ca_fingerprint..."
+    auth_method               = "clientCert"
+    ca_fingerprint            = "9A:4F:2B:8E:1D:3C:A7:5B:9E:0F:11:22:33:44:55:66:77:88:99:AA"
     capture_headers           = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-wef"
+        pipeline = "default"
       }
     ]
-    description              = "...my_description..."
-    disabled                 = true
+    description              = "Receive Windows Event Forwarding (WEF) over HTTPS"
+    disabled                 = false
     enable_health_check      = true
-    enable_proxy_header      = false
-    environment              = "...my_environment..."
-    host                     = "...my_host..."
-    id                       = "...my_id..."
-    ip_allowlist_regex       = "...my_ip_allowlist_regex..."
-    ip_denylist_regex        = "...my_ip_denylist_regex..."
-    keep_alive_timeout       = 375.33
-    keytab                   = "...my_keytab..."
+    enable_proxy_header      = true
+    environment              = "main"
+    host                     = "0.0.0.0"
+    id                       = "wef-listener"
+    ip_allowlist_regex       = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex        = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout       = 60
+    keytab                   = "/etc/krb5.keytab"
     log_fingerprint_mismatch = true
-    max_active_req           = 7.34
-    max_requests_per_socket  = 3
+    max_active_req           = 512
+    max_requests_per_socket  = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"wef\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 55639.99
+    pipeline = "default"
+    port     = 5986
     pq = {
-      commit_frequency = 1.25
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 42.29
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled     = true
-    principal      = "...my_principal..."
-    send_to_routes = false
-    socket_timeout = 7.92
+    pq_enabled     = false
+    principal      = "HTTP/wef.example.com@EXAMPLE.COM"
+    send_to_routes = true
+    socket_timeout = 60
     streamtags = [
-      "..."
+      "windows",
+      "wef",
     ]
     subscriptions = [
       {
-        batch_timeout      = 5.23
-        compress           = false
-        content_format     = "RenderedText"
-        heartbeat_interval = 5.28
-        id                 = "...my_id..."
-        locale             = "...my_locale..."
+        batch_timeout      = 30
+        compress           = true
+        content_format     = "Raw"
+        heartbeat_interval = 60
+        id                 = "default-subscription"
+        locale             = "en-US"
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "subscription"
+            value = "\"wef-security\""
           }
         ]
-        query_selector       = "xml"
+        query_selector       = "simple"
         read_existing_events = false
-        send_bookmarks       = false
-        subscription_name    = "...my_subscription_name..."
+        send_bookmarks       = true
+        subscription_name    = "Security"
         targets = [
-          "..."
+          "wef1.corp.local",
+          "*.corp.local",
         ]
-        version = "...my_version..."
+        version = "7f0c2f2e-1c3b-4d2a-9d6e-5a1b2c3d4e5f"
       }
     ]
     tls = {
-      ca_path               = "...my_ca_path..."
-      cert_path             = "...my_cert_path..."
-      certificate_name      = "...my_certificate_name..."
-      common_name_regex     = "...my_common_name_regex..."
+      ca_path               = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path             = "/etc/ssl/certs/server.crt"
+      certificate_name      = "wef-cert"
+      common_name_regex     = "^WEF-CLIENT-.*$"
       disabled              = false
       keytab                = "{ \"see\": \"documentation\" }"
-      max_version           = "TLSv1"
-      min_version           = "TLSv1.1"
+      max_version           = "TLSv1.3"
+      min_version           = "TLSv1.2"
       ocsp_check            = false
-      ocsp_check_fail_close = true
-      passphrase            = "...my_passphrase..."
+      ocsp_check_fail_close = false
+      passphrase            = "***REDACTED***"
       principal             = "{ \"see\": \"documentation\" }"
-      priv_key_path         = "...my_priv_key_path..."
-      reject_unauthorized   = false
-      request_cert          = false
+      priv_key_path         = "/etc/ssl/private/server.key"
+      reject_unauthorized   = true
+      request_cert          = true
     }
     type = "wef"
+  }
+  input_win_event_logs = {
+    batch_size = 500
+    connections = [
+      {
+        output   = "s3-logs"
+        pipeline = "default"
+      }
+    ]
+    description           = "Collect Windows Event Logs from local system"
+    disable_native_module = false
+    disabled              = false
+    environment           = "main"
+    event_format          = "json"
+    id                    = "win-event-logs"
+    interval              = 10
+    log_names = [
+      "Application",
+      "Security",
+      "System",
+      "Microsoft-Windows-Sysmon/Operational",
+    ]
+    max_event_bytes = 131072
+    metadata = [
+      {
+        name  = "source"
+        value = "\"win_event_logs\""
+      }
+    ]
+    pipeline = "default"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled     = false
+    read_mode      = "newest"
+    send_to_routes = true
+    streamtags = [
+      "windows",
+      "eventlogs",
+    ]
+    type = "win_event_logs"
   }
   input_windows_metrics = {
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-main"
+        pipeline = "default"
       }
     ]
-    description           = "...my_description..."
-    disable_native_module = true
+    description           = "Collect Windows performance counters and spool to disk"
+    disable_native_module = false
     disabled              = false
-    environment           = "...my_environment..."
+    environment           = "main"
     host = {
       custom = {
         cpu = {
           detail  = true
-          mode    = "disabled"
+          mode    = "basic"
           per_cpu = true
-          time    = false
+          time    = true
         }
         disk = {
-          mode       = "disabled"
+          mode       = "all"
           per_volume = true
           volumes = [
-            "..."
+            "...",
+            "!E:",
           ]
         }
         memory = {
           detail = true
-          mode   = "disabled"
+          mode   = "basic"
         }
         network = {
           detail = true
           devices = [
-            "..."
+            "Ethernet*",
+            "!Loopback*",
           ]
-          mode          = "custom"
-          per_interface = false
+          mode          = "basic"
+          per_interface = true
         }
         system = {
           detail = true
-          mode   = "custom"
+          mode   = "basic"
         }
       }
-      mode = "disabled"
+      mode = "basic"
     }
-    id       = "...my_id..."
-    interval = 10.39
+    id       = "windows-metrics"
+    interval = 10
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"windows_metrics\""
       }
     ]
     persistence = {
-      compress      = "none"
-      dest_path     = "...my_dest_path..."
+      compress      = "gzip"
+      dest_path     = "/var/lib/cribl/state/windows_metrics"
       enable        = true
-      max_data_size = "...my_max_data_size..."
-      max_data_time = "...my_max_data_time..."
-      time_window   = "...my_time_window..."
+      max_data_size = "4GB"
+      max_data_time = "4d"
+      time_window   = "10m"
     }
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 8.52
-      compress         = "none"
-      max_buffer_size  = 48.56
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
     pq_enabled = false
     process = {
       sets = [
         {
-          filter           = "...my_filter..."
+          filter           = "name == \"w3wp.exe\""
           include_children = true
-          name             = "...my_name..."
+          name             = "IIS worker processes"
         }
       ]
     }
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "windows",
+      "metrics",
     ]
     type = "windows_metrics"
   }
-  input_win_event_logs = {
-    batch_size = 9.54
-    connections = [
-      {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
-      }
-    ]
-    description           = "...my_description..."
-    disable_native_module = true
-    disabled              = true
-    environment           = "...my_environment..."
-    event_format          = "json"
-    id                    = "...my_id..."
-    interval              = 2.52
-    log_names = [
-      "..."
-    ]
-    max_event_bytes = 82427367.56
-    metadata = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    pipeline = "...my_pipeline..."
-    pq = {
-      commit_frequency = 8.61
-      compress         = "gzip"
-      max_buffer_size  = 49.04
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
-    }
-    pq_enabled     = true
-    read_mode      = "oldest"
-    send_to_routes = false
-    streamtags = [
-      "..."
-    ]
-    type = "win_event_logs"
-  }
   input_wiz = {
-    auth_audience_override = "...my_auth_audience_override..."
+    auth_audience_override = "wiz-api"
     auth_type              = "manual"
-    auth_url               = "...my_auth_url..."
-    client_id              = "...my_client_id..."
-    client_secret          = "...my_client_secret..."
+    auth_url               = "https://auth.app.wiz.io/oauth/token"
+    client_id              = "123e4567-client-id"
+    client_secret          = "***REDACTED***"
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-wiz"
+        pipeline = "default"
       }
     ]
     content_config = [
@@ -3770,137 +3877,141 @@ resource "criblio_source" "my_source" {
         enabled             = true
       }
     ]
-    description             = "...my_description..."
+    description             = "Ingest Wiz content via GraphQL API"
     disabled                = false
-    endpoint                = "...my_endpoint..."
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
-    keep_alive_time         = 14
-    max_missed_keep_alives  = 9.47
+    endpoint                = "https://api.us1.app.wiz.io/graphql"
+    environment             = "main"
+    id                      = "wiz-ingest"
+    ignore_group_jobs_limit = false
+    keep_alive_time         = 30
+    max_missed_keep_alives  = 3
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"wiz\""
       }
     ]
-    pipeline = "...my_pipeline..."
+    pipeline = "default"
     pq = {
-      commit_frequency = 6.65
+      commit_frequency = 100
       compress         = "gzip"
-      max_buffer_size  = 45.65
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
       mode             = "always"
-      path             = "...my_path..."
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled      = true
-    request_timeout = 1833.22
+    pq_enabled      = false
+    request_timeout = 300
     retry_rules = {
       codes = [
-        4.2
+        429,
+        503,
       ]
-      enable_header         = false
-      interval              = 4792.78
-      limit                 = 16.43
-      multiplier            = 19.92
-      retry_connect_reset   = true
-      retry_connect_timeout = true
+      enable_header         = true
+      interval              = 1000
+      limit                 = 5
+      multiplier            = 2
+      retry_connect_reset   = false
+      retry_connect_timeout = false
       type                  = "backoff"
     }
-    send_to_routes = false
+    send_to_routes = true
     streamtags = [
-      "..."
+      "wiz",
+      "security",
     ]
-    text_secret = "...my_text_secret..."
-    ttl         = "...my_ttl..."
+    text_secret = "wiz-client-secret"
+    ttl         = "4h"
     type        = "wiz"
   }
   input_zscaler_hec = {
     access_control_allow_headers = [
-      "..."
+      "Authorization",
+      "Content-Type",
     ]
     access_control_allow_origin = [
-      "..."
+      "https://*.zscaler.com",
     ]
-    activity_log_sample_rate = 8.55
+    activity_log_sample_rate = 100
     allowed_indexes = [
-      "..."
+      "zscaler-*",
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
-          "..."
+          "zscaler-*",
         ]
         auth_type   = "manual"
-        description = "...my_description..."
+        description = "Zscaler Collector"
         enabled     = true
         metadata = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "source"
+            value = "\"zscaler_hec\""
           }
         ]
         token        = "{ \"see\": \"documentation\" }"
         token_secret = "{ \"see\": \"documentation\" }"
       }
     ]
-    capture_headers = false
+    capture_headers = true
     connections = [
       {
-        output   = "...my_output..."
-        pipeline = "...my_pipeline..."
+        output   = "s3-zscaler"
+        pipeline = "default"
       }
     ]
-    description             = "...my_description..."
-    disabled                = true
+    description             = "Receive Zscaler HEC events over HTTP(S)"
+    disabled                = false
     emit_token_metrics      = true
     enable_health_check     = "{ \"see\": \"documentation\" }"
-    enable_proxy_header     = true
-    environment             = "...my_environment..."
+    enable_proxy_header     = false
+    environment             = "main"
     hec_acks                = false
-    hec_api                 = "...my_hec_api..."
-    host                    = "...my_host..."
-    id                      = "...my_id..."
-    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
-    ip_denylist_regex       = "...my_ip_denylist_regex..."
-    keep_alive_timeout      = 162.87
-    max_active_req          = 0.89
-    max_requests_per_socket = 5
+    hec_api                 = "/services/collector"
+    host                    = "0.0.0.0"
+    id                      = "zscaler-hec-listener"
+    ip_allowlist_regex      = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex       = "^192\\.168\\.1\\.\\d{1,3}$"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 0
     metadata = [
       {
-        name  = "...my_name..."
-        value = "...my_value..."
+        name  = "source"
+        value = "\"zscaler_hec\""
       }
     ]
-    pipeline = "...my_pipeline..."
-    port     = 3454.48
+    pipeline = "default"
+    port     = 8088
     pq = {
-      commit_frequency = 5.32
-      compress         = "none"
-      max_buffer_size  = 49.79
-      max_file_size    = "...my_max_file_size..."
-      max_size         = "...my_max_size..."
-      mode             = "smart"
-      path             = "...my_path..."
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
     }
-    pq_enabled      = true
-    request_timeout = 2.41
-    send_to_routes  = false
-    socket_timeout  = 5.66
+    pq_enabled      = false
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
     streamtags = [
-      "..."
+      "zscaler",
+      "hec",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
+      ca_path             = "/etc/ssl/certs/ca-bundle.crt"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "zscaler-hec-cert"
       common_name_regex   = "{ \"see\": \"documentation\" }"
       disabled            = true
       max_version         = "TLSv1.3"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
+      min_version         = "TLSv1.2"
+      passphrase          = "***REDACTED***"
+      priv_key_path       = "/etc/ssl/private/server.key"
       reject_unauthorized = "{ \"see\": \"documentation\" }"
       request_cert        = false
     }

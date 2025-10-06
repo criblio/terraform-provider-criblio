@@ -13,7 +13,7 @@ import (
 type S3Bucket struct {
 	// S3 bucket name
 	Name *string `json:"name,omitempty"`
-	// Region where the bucket is located
+	// AWS region where the bucket is located
 	Region *string `json:"region,omitempty"`
 }
 
@@ -132,7 +132,7 @@ type GcsDatasetExtraPath struct {
 	Bucket string `json:"bucket"`
 	// A JavaScript filter expression to be evaluated against the provided path
 	Filter *string `default:"true" json:"filter"`
-	// Where the bucket is located
+	// Where the extra bucket is located
 	Region *string `json:"region,omitempty"`
 }
 
@@ -281,9 +281,9 @@ func (g *GcsDataset) GetSkipEventTimeFilter() *bool {
 }
 
 type AzureBlobDatasetExtraPath struct {
-	// Azure Blob Storage container name
+	// Name of the additional container
 	ContainerName string `json:"containerName"`
-	// The templated path under which to look for data
+	// Path inside the additional container
 	Path *string `json:"path,omitempty"`
 	// A JavaScript filter expression to be evaluated against the provided path
 	Filter *string `default:"true" json:"filter"`
@@ -627,7 +627,7 @@ type CriblLeaderDataset struct {
 	// Dataset provider type, set automatically from the dataset provider
 	Type     string           `json:"type"`
 	Metadata *DatasetMetadata `json:"metadata,omitempty"`
-	// The directory from which to collect data. Environment variables are supported. Supports templating.
+	// The directory from which to collect data
 	Path string `json:"path"`
 	// A JavaScript filter expression to be evaluated against the provided path
 	Filter *string `default:"true" json:"filter"`
@@ -1080,7 +1080,7 @@ type PrometheusDataset struct {
 	// Dataset provider type, set automatically from the dataset provider
 	Type     string           `json:"type"`
 	Metadata *DatasetMetadata `json:"metadata,omitempty"`
-	// Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a "step" predicate.
+	// Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a 'step' predicate.
 	DesiredNumDataPoints *float64 `default:"250" json:"desiredNumDataPoints"`
 	// How to calculate the "step," or time range increment per data point, for the Prometheus query request
 	StepMode *StepMode `default:"exact" json:"stepMode"`

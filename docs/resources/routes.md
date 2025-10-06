@@ -28,19 +28,19 @@ resource "criblio_routes" "my_routes" {
       name        = "...my_name..."
     }
   }
-  id = "...my_id..."
+  id = "default"
   routes = [
     {
       additional_properties    = "{ \"see\": \"documentation\" }"
-      description              = "...my_description..."
+      description              = "Route application errors to Splunk output"
       disabled                 = false
       enable_output_expression = false
-      filter                   = "...my_filter..."
-      final                    = false
-      name                     = "...my_name..."
+      filter                   = "level == 'error'"
+      final                    = true
+      name                     = "Errors to Splunk"
       output                   = "{ \"see\": \"documentation\" }"
       output_expression        = "{ \"see\": \"documentation\" }"
-      pipeline                 = "...my_pipeline..."
+      pipeline                 = "main"
     }
   ]
 }

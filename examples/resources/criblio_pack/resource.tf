@@ -1,22 +1,23 @@
 resource "criblio_pack" "my_pack" {
   allow_custom_functions = false
-  author                 = "...my_author..."
-  description            = "...my_description..."
-  disabled               = true
-  display_name           = "...my_display_name..."
+  author                 = "Cribl"
+  description            = "Parsers and routes for Apache logs"
+  disabled               = false
+  display_name           = "Apache Logs Pack"
   exports = [
-    "..."
+    "pipelines/parse_apache",
+    "routes/apache_to_clickhouse",
   ]
-  filename               = "...my_filename..."
-  force                  = true
-  group_id               = "...my_group_id..."
-  id                     = "...my_id..."
-  inputs                 = 8.61
+  filename               = "observability-pack-1.2.3.tgz"
+  force                  = false
+  group_id               = "Cribl"
+  id                     = "pack-apache-logs"
+  inputs                 = 2
   is_disabled            = false
-  min_log_stream_version = "...my_min_log_stream_version..."
-  outputs                = 6.97
-  source                 = "...my_source..."
-  spec                   = "...my_spec..."
+  min_log_stream_version = "4.10.0"
+  outputs                = 1
+  source                 = "https://github.com/org/packs/apache"
+  spec                   = "1.0.0"
   tags = {
     data_type = [
       "..."
@@ -31,5 +32,5 @@ resource "criblio_pack" "my_pack" {
       "..."
     ]
   }
-  version = "...my_version..."
+  version = "2.3.1"
 }

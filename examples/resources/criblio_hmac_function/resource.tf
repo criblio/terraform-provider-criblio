@@ -1,12 +1,14 @@
 resource "criblio_hmac_function" "my_hmacfunction" {
-  description       = "...my_description..."
-  group_id          = "...my_group_id..."
-  header_expression = "...my_header_expression..."
-  header_name       = "...my_header_name..."
-  id                = "...my_id..."
+  description       = "Compute HMAC-SHA256 over method:path:timestamp"
+  group_id          = "Cribl"
+  header_expression = "hmac('sha256', secret, parts.join(':'))"
+  header_name       = "X-Signature"
+  id                = "hmac-default"
   lib               = "cribl"
   string_builders = [
-    "..."
+    "request.method",
+    "request.path",
+    "request.headers['x-timestamp']",
   ]
-  string_delim = "...my_string_delim..."
+  string_delim = ":"
 }

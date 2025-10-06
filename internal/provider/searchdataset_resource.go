@@ -7,7 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	speakeasy_boolvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/boolvalidators"
 	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
@@ -19,7 +19,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
@@ -114,33 +113,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -246,33 +276,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -378,33 +439,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -493,33 +585,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -627,33 +750,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -733,33 +887,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -788,111 +973,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
 						path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
 						path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-						path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-						path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-						path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-						path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-						path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-						path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-						path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-						path.MatchRelative().AtParent().AtName("click_house_dataset"),
-						path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-						path.MatchRelative().AtParent().AtName("edge_dataset"),
-						path.MatchRelative().AtParent().AtName("gcs_dataset"),
-						path.MatchRelative().AtParent().AtName("meta_dataset"),
-						path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-						path.MatchRelative().AtParent().AtName("s3_dataset"),
-						path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-					}...),
-				},
-			},
-			"apihttp_dataset": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Description of the dataset`,
-					},
-					"enabled_endpoints": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						ElementType: types.StringType,
-						Description: `A list of the endpoints that are enabled in this dataset. Not Null`,
-						Validators: []validator.List{
-							speakeasy_listvalidators.NotNull(),
-						},
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique identifier for the dataset. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-							stringvalidator.UTF8LengthAtMost(512),
-							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-						},
-					},
-					"metadata": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Creation timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
-								},
-							},
-							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
-								},
-							},
-							"tags": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
-							},
-						},
-					},
-					"provider_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Dataset provider ID. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Dataset provider type, set automatically from the dataset provider. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-				},
-				Validators: []validator.Object{
-					objectvalidator.ConflictsWith(path.Expressions{
-						path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-						path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-						path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-						path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-						path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-						path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
 						path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
 						path.MatchRelative().AtParent().AtName("api_okta_dataset"),
 						path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
@@ -944,33 +1024,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -1050,33 +1161,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -1155,33 +1297,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -1270,33 +1443,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -1376,33 +1580,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -1449,6 +1684,142 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 					}...),
 				},
 			},
+			"apihttp_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset. Not Null`,
+						Validators: []validator.List{
+							speakeasy_listvalidators.NotNull(),
+						},
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Unique identifier for the dataset. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+							stringvalidator.UTF8LengthAtMost(512),
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
+						},
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"earliest": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+								},
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
+								},
+							},
+							"field_list": schema.ListAttribute{
+								Computed:    true,
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Dataset provider ID. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("api_aws_dataset"),
+						path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
+						path.MatchRelative().AtParent().AtName("api_azure_dataset"),
+						path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
+						path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
+						path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
+						path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
+						path.MatchRelative().AtParent().AtName("api_okta_dataset"),
+						path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
+						path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
+						path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
+						path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
+						path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
+						path.MatchRelative().AtParent().AtName("click_house_dataset"),
+						path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
+						path.MatchRelative().AtParent().AtName("edge_dataset"),
+						path.MatchRelative().AtParent().AtName("gcs_dataset"),
+						path.MatchRelative().AtParent().AtName("meta_dataset"),
+						path.MatchRelative().AtParent().AtName("prometheus_dataset"),
+						path.MatchRelative().AtParent().AtName("s3_dataset"),
+						path.MatchRelative().AtParent().AtName("snowflake_dataset"),
+					}...),
+				},
+			},
 			"aws_security_lake_dataset": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
@@ -1481,33 +1852,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -1547,7 +1949,7 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"region": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Region where the bucket is located`,
+									Description: `AWS region where the bucket is located`,
 								},
 							},
 						},
@@ -1621,7 +2023,7 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"container_name": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Azure Blob Storage container name. Not Null`,
+									Description: `Name of the additional container. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.UTF8LengthAtLeast(1),
@@ -1639,7 +2041,7 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"path": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `The templated path under which to look for data`,
+									Description: `Path inside the additional container`,
 									Validators: []validator.String{
 										stringvalidator.UTF8LengthAtLeast(1),
 									},
@@ -1671,33 +2073,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -1797,33 +2230,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -1949,40 +2413,71 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
 					"path": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `The directory from which to collect data. Environment variables are supported. Supports templating. Not Null`,
+						Description: `The directory from which to collect data. Not Null`,
 						Validators: []validator.String{
 							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.UTF8LengthAtLeast(1),
@@ -2077,33 +2572,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -2206,7 +2732,7 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"region": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Where the bucket is located`,
+									Description: `Where the extra bucket is located`,
 								},
 							},
 						},
@@ -2235,33 +2761,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -2368,33 +2925,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -2454,7 +3042,7 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(250),
-						Description: `Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a "step" predicate. Default: 250`,
+						Description: `Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a 'step' predicate. Default: 250`,
 						Validators: []validator.Float64{
 							float64validator.Between(1, 11000),
 						},
@@ -2473,33 +3061,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -2661,33 +3280,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -2792,33 +3442,64 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},

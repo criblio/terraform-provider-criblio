@@ -15,25 +15,35 @@ CriblLakeDataset Resource
 ```terraform
 resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
   accelerated_fields = [
-    "..."
+    "fields",
+    "to",
+    "accelerate",
   ]
-  bucket_name              = "...my_bucket_name..."
-  description              = "...my_description..."
+  bucket_name              = "my-Lake-bucket-name"
+  description              = "My description for this beautiful lake dataset"
   format                   = "json"
-  id                       = "test_lake_dataset"
+  id                       = "myLakeDatasetId"
   lake_id                  = "default"
-  retention_period_in_days = 3.75
+  retention_period_in_days = 30
   search_config = {
     datatypes = [
-      "..."
+      "json",
+      "parquet",
     ]
     metadata = {
-      created             = "2021-06-18T21:07:29.756Z"
-      enable_acceleration = false
-      modified            = "2022-10-01T07:28:47.966Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
   }
 }
@@ -69,10 +79,21 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--search_config--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--search_config--metadata--latest_run_info"></a>
+### Nested Schema for `search_config.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
 
 ## Import
 
@@ -84,7 +105,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_cribl_lake_dataset.my_criblio_cribl_lake_dataset
   id = jsonencode({
-    id = "test_lake_dataset"
+    id = "web-logs"
     lake_id = "default"
   })
 }
@@ -93,5 +114,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_cribl_lake_dataset.my_criblio_cribl_lake_dataset '{"id": "test_lake_dataset", "lake_id": "default"}'
+terraform import criblio_cribl_lake_dataset.my_criblio_cribl_lake_dataset '{"id": "web-logs", "lake_id": "default"}'
 ```

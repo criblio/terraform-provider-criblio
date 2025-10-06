@@ -15,56 +15,57 @@ Group Resource
 ```terraform
 resource "criblio_group" "my_group" {
   cloud = {
-    provider = "azure"
-    region   = "...my_region..."
+    provider = "aws"
+    region   = "us-east-1"
   }
-  config_version         = "...my_config_version..."
-  deploying_worker_count = 4.87
-  description            = "...my_description..."
-  estimated_ingest_rate  = 4.46
+  config_version         = "v12"
+  deploying_worker_count = 3
+  description            = "Production Edge configuration group"
+  estimated_ingest_rate  = 500000
   git = {
-    commit        = "...my_commit..."
-    local_changes = 8.64
+    commit        = "1a2b3c4d5e6f"
+    local_changes = 0
     log = [
       {
-        author_email = "...my_author_email..."
-        author_name  = "...my_author_name..."
-        date         = "...my_date..."
-        hash         = "...my_hash..."
-        message      = "...my_message..."
-        short        = "...my_short..."
+        author_email = "dev@acme.com"
+        author_name  = "Acme Dev"
+        date         = "2025-10-06T12:00:00Z"
+        hash         = "1a2b3c4d5e6f7g8h9i0j"
+        message      = "Deploy config for prod edge group"
+        short        = "1a2b3c4"
       }
     ]
   }
-  id                        = "...my_id..."
-  incompatible_worker_count = 0.87
-  inherits                  = "...my_inherits..."
+  id                        = "config-group-prod-edge"
+  incompatible_worker_count = 0
+  inherits                  = "base-config"
   is_fleet                  = false
-  is_search                 = true
+  is_search                 = false
   lookup_deployments = [
     {
-      context = "...my_context..."
+      context = "prod"
       lookups = [
         {
-          deployed_version = "...my_deployed_version..."
-          file             = "...my_file..."
-          version          = "...my_version..."
+          deployed_version = "v3"
+          file             = "lookups/ip_to_region.csv"
+          version          = "v4"
         }
       ]
     }
   ]
-  name        = "...my_name..."
-  on_prem     = false
+  name        = "Prod Edge"
+  on_prem     = true
   product     = "stream"
   provisioned = true
   streamtags = [
-    "..."
+    "prod",
+    "edge",
   ]
-  tags                 = "...my_tags..."
+  tags                 = "environment=prod,team=platform"
   type                 = "lake_access"
-  upgrade_version      = "...my_upgrade_version..."
-  worker_count         = 7.37
-  worker_remote_access = false
+  upgrade_version      = "6.0.1"
+  worker_count         = 12
+  worker_remote_access = true
 }
 ```
 
@@ -195,12 +196,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_group.my_criblio_group
-  id = "..."
+  id = "workers-west"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_group.my_criblio_group "..."
+terraform import criblio_group.my_criblio_group "workers-west"
 ```

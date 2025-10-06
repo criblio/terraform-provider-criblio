@@ -1,8 +1,9 @@
 resource "criblio_commit" "my_commit" {
   effective = true
   files = [
-    "..."
+    "config/system.yml",
+    "routes/default.yml",
   ]
-  group   = "...my_group..."
-  message = "...my_message..."
+  group   = "ops"
+  message = "Update system settings and routes"
 }

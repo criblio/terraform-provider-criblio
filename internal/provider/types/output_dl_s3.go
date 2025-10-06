@@ -45,7 +45,6 @@ type OutputDlS3 struct {
 	MaxOpenFiles                  types.Float64                 `tfsdk:"max_open_files"`
 	MaxRetryNum                   types.Float64                 `tfsdk:"max_retry_num"`
 	ObjectACL                     types.String                  `tfsdk:"object_acl"`
-	OnBackpressure                types.String                  `tfsdk:"on_backpressure"`
 	OnDiskFullBackpressure        types.String                  `tfsdk:"on_disk_full_backpressure"`
 	ParquetDataPageVersion        types.String                  `tfsdk:"parquet_data_page_version"`
 	ParquetPageSize               types.String                  `tfsdk:"parquet_page_size"`

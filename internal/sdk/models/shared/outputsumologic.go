@@ -359,9 +359,9 @@ type OutputSumoLogic struct {
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Sumo Logic HTTP collector URL to which events should be sent
 	URL string `json:"url"`
-	// Override the source name configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceName field.
+	// Override the source name configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceName field.
 	CustomSource *string `json:"customSource,omitempty"`
-	// Override the source category configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceCategory field.
+	// Override the source category configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceCategory field.
 	CustomCategory *string `json:"customCategory,omitempty"`
 	// Preserve the raw event format instead of JSONifying it
 	Format *OutputSumoLogicDataFormat `default:"json" json:"format"`

@@ -15,393 +15,548 @@ SearchDataset Resource
 ```terraform
 resource "criblio_search_dataset" "my_searchdataset" {
   api_aws_dataset = {
-    description = "...my_description..."
+    description = "This is a generic dataset"
     enabled_endpoints = [
-      "..."
+      "CloudTrail",
+      "CloudWatch",
     ]
-    id = "...my_id..."
+    id = "myGenericDatasetId"
     metadata = {
-      created             = "2022-10-29T14:30:18.805Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2022-05-30T21:53:13.848Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id = "...my_provider_id..."
+    provider_id = "myProviderId"
     regions = [
-      "..."
+      "us-east-1",
+      "us-west-2",
     ]
-    type = "...my_type..."
+    type = "cribl_lake"
   }
   api_azure_data_explorer_dataset = {
-    cluster     = "...my_cluster..."
-    database    = "...my_database..."
-    description = "...my_description..."
-    id          = "...my_id..."
-    location    = "...my_location..."
+    cluster     = "myadxcluster"
+    database    = "logsdb"
+    description = "This is a generic dataset"
+    id          = "myGenericDatasetId"
+    location    = "eastus2"
     metadata = {
-      created             = "2022-07-20T04:53:40.059Z"
-      enable_acceleration = false
-      modified            = "2022-11-08T20:24:44.740Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id              = "...my_provider_id..."
-    table                    = "...my_table..."
-    timestamp_field          = "...my_timestamp_field..."
-    timestamp_field_contents = "...my_timestamp_field_contents..."
-    type                     = "...my_type..."
+    provider_id              = "myProviderId"
+    table                    = "logs"
+    timestamp_field          = "event_time"
+    timestamp_field_contents = "kusto_datetime"
+    type                     = "cribl_lake"
   }
   api_azure_dataset = {
-    description = "...my_description..."
+    description = "This is a generic dataset"
     enabled_endpoints = [
-      "..."
+      "ActivityLogs",
+      "SignInLogs",
     ]
-    id = "...my_id..."
+    id = "myGenericDatasetId"
     metadata = {
-      created             = "2022-03-07T23:49:14.581Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2022-02-07T03:37:04.121Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id = "...my_provider_id..."
+    provider_id = "myProviderId"
     subscription_ids = [
-      "..."
+      "sub-12345",
+      "sub-67890",
     ]
-    type = "...my_type..."
+    type = "cribl_lake"
   }
   api_elastic_search_dataset = {
-    description = "...my_description..."
-    id          = "...my_id..."
-    index       = "...my_index..."
+    description = "This is a generic dataset"
+    id          = "myGenericDatasetId"
+    index       = "metrics-*"
     metadata = {
-      created             = "2021-06-28T12:13:39.681Z"
-      enable_acceleration = false
-      modified            = "2022-04-18T23:19:36.636Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id     = "...my_provider_id..."
-    timestamp_field = "...my_timestamp_field..."
-    type            = "...my_type..."
+    provider_id     = "myProviderId"
+    timestamp_field = "@timestamp"
+    type            = "cribl_lake"
   }
   api_gcp_dataset = {
-    description = "...my_description..."
+    description = "This is a generic dataset"
     endpoint_configs = [
       {
-        endpoint_name = "...my_endpoint_name..."
-        region        = "...my_region..."
+        endpoint_name = "pubsub"
+        region        = "us-central1"
       }
     ]
-    id = "...my_id..."
+    id = "myGenericDatasetId"
     metadata = {
-      created             = "2022-02-09T05:56:26.955Z"
-      enable_acceleration = false
-      modified            = "2021-03-15T00:41:17.850Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
   api_google_workspace_dataset = {
-    description = "...my_description..."
+    description = "This is a generic dataset"
     enabled_endpoints = [
-      "..."
+      "login",
+      "admin",
     ]
-    id = "...my_id..."
+    id = "myGenericDatasetId"
     metadata = {
-      created             = "2021-10-11T07:46:25.909Z"
-      enable_acceleration = false
-      modified            = "2022-02-08T09:33:22.326Z"
-      tags = [
-        "..."
-      ]
-    }
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
-  }
-  apihttp_dataset = {
-    description = "...my_description..."
-    enabled_endpoints = [
-      "..."
-    ]
-    id = "...my_id..."
-    metadata = {
-      created             = "2021-07-10T14:32:53.487Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2022-07-12T22:13:15.898Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
   api_ms_graph_dataset = {
-    description = "...my_description..."
+    description = "This is a generic dataset"
     enabled_endpoints = [
-      "..."
+      "auditLogs",
+      "signIns",
     ]
-    id = "...my_id..."
+    id = "myGenericDatasetId"
     metadata = {
-      created             = "2021-05-13T08:00:21.989Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2020-10-03T02:51:12.191Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
   api_okta_dataset = {
-    description = "...my_description..."
+    description = "This is a generic dataset"
     enabled_endpoints = [
-      "..."
+      "users",
+      "events",
     ]
-    id = "...my_id..."
+    id = "myGenericDatasetId"
     metadata = {
-      created             = "2022-05-24T06:54:16.236Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2022-01-26T18:51:46.178Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
   api_open_search_dataset = {
-    description = "...my_description..."
-    id          = "...my_id..."
-    index       = "...my_index..."
+    description = "This is a generic dataset"
+    id          = "myGenericDatasetId"
+    index       = "logs-*"
     metadata = {
-      created             = "2020-05-21T05:08:14.917Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2022-12-04T14:39:26.054Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id     = "...my_provider_id..."
-    timestamp_field = "...my_timestamp_field..."
-    type            = "...my_type..."
+    provider_id     = "myProviderId"
+    timestamp_field = "@timestamp"
+    type            = "cribl_lake"
   }
   api_tailscale_dataset = {
-    description = "...my_description..."
+    description = "This is a generic dataset"
     enabled_endpoints = [
-      "..."
+      "devices",
+      "connections",
     ]
-    id = "...my_id..."
+    id = "myGenericDatasetId"
     metadata = {
-      created             = "2022-05-01T05:02:01.580Z"
-      enable_acceleration = false
-      modified            = "2022-06-06T11:24:52.881Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
   api_zoom_dataset = {
-    description = "...my_description..."
+    description = "This is a generic dataset"
     enabled_endpoints = [
-      "..."
+      "users",
+      "meetings",
+      "recordings",
     ]
-    id = "...my_id..."
+    id = "myGenericDatasetId"
     metadata = {
-      created             = "2020-04-05T02:30:33.102Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2022-03-03T21:04:42.705Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
+  }
+  apihttp_dataset = {
+    description = "This is a generic dataset"
+    enabled_endpoints = [
+      "getUsers",
+      "getEvents",
+    ]
+    id = "myGenericDatasetId"
+    metadata = {
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
+      ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
+    }
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
   aws_security_lake_dataset = {
-    description = "...my_description..."
-    filter      = "...my_filter..."
-    id          = "...my_id..."
+    description = "This is a generic dataset"
+    filter      = "path.includes('CloudTrail')"
+    id          = "myGenericDatasetId"
     metadata = {
-      created             = "2020-05-23T05:15:35.526Z"
-      enable_acceleration = false
-      modified            = "2022-11-20T18:24:50.959Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    path        = "...my_path..."
-    provider_id = "...my_provider_id..."
+    path        = "AWS/CloudTrail/v1/region=us-east-1/accountId=123456789012/eventDay=20251001/"
+    provider_id = "myProviderId"
     selected_buckets = [
       {
-        name   = "...my_name..."
-        region = "...my_region..."
+        name   = "aws-securitylake-us-east-1"
+        region = "us-east-1"
       }
     ]
-    type = "...my_type..."
+    type = "cribl_lake"
   }
   azure_blob_dataset = {
-    container_name = "...my_container_name..."
-    description    = "...my_description..."
+    container_name = "my-container"
+    description    = "This is a generic dataset"
     extra_paths = [
       {
-        container_name = "...my_container_name..."
-        filter         = "...my_filter..."
-        path           = "...my_path..."
+        container_name = "my-other-container"
+        filter         = "truthy"
+        path           = "archive/2025/"
       }
     ]
-    filter = "...my_filter..."
-    id     = "...my_id..."
+    filter = "path.endsWith('.json')"
+    id     = "myGenericDatasetId"
     metadata = {
-      created             = "2022-01-25T19:43:50.033Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2022-11-05T01:20:11.254Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    path                   = "...my_path..."
-    provider_id            = "...my_provider_id..."
+    path                   = "logs/2025/10/01/"
+    provider_id            = "myProviderId"
     skip_event_time_filter = true
     storage_classes = [
-      "..."
+      "glacier",
+      "standard",
     ]
-    type = "...my_type..."
+    type = "cribl_lake"
   }
   click_house_dataset = {
-    database    = "...my_database..."
-    description = "...my_description..."
-    id          = "...my_id..."
+    database    = "analytics_db"
+    description = "This is a generic dataset"
+    id          = "myGenericDatasetId"
     metadata = {
-      created             = "2022-11-26T03:12:16.392Z"
-      enable_acceleration = false
-      modified            = "2020-08-24T23:52:27.143Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id     = "...my_provider_id..."
-    table           = "...my_table..."
-    timestamp_field = "...my_timestamp_field..."
-    type            = "...my_type..."
+    provider_id     = "myProviderId"
+    table           = "logs"
+    timestamp_field = "event_time"
+    type            = "cribl_lake"
   }
   cribl_leader_dataset = {
-    description = "...my_description..."
+    description = "This is a generic dataset"
     extra_paths = [
       {
-        filter = "...my_filter..."
-        path   = "...my_path..."
+        filter = "truthy"
+        path   = "path/to/dir"
       }
     ]
-    filter = "...my_filter..."
-    id     = "...my_id..."
+    filter = "filename.endsWith('.log')"
+    id     = "myGenericDatasetId"
     metadata = {
-      created             = "2022-02-07T19:14:43.710Z"
-      enable_acceleration = false
-      modified            = "2022-01-10T14:50:59.619Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    path        = "...my_path..."
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
+    path        = "/var/log/cribl"
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
   edge_dataset = {
-    description = "...my_description..."
-    filter      = "...my_filter..."
+    description = "This is a generic dataset"
+    filter      = "size > 0"
     fleets = [
-      "..."
+      "fleetA",
+      "fleetB",
     ]
-    id = "...my_id..."
+    id = "myGenericDatasetId"
     metadata = {
-      created             = "2022-02-27T21:57:20.492Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2022-10-15T11:38:53.888Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    path        = "...my_path..."
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
+    path        = "/data/edge"
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
   gcs_dataset = {
-    bucket      = "...my_bucket..."
-    description = "...my_description..."
+    bucket      = "my-gcs-bucket"
+    description = "This is a generic dataset"
     extra_paths = [
       {
-        bucket = "...my_bucket..."
-        filter = "...my_filter..."
-        region = "...my_region..."
+        bucket = "my-extra-bucket"
+        filter = "path.includes('archive')"
+        region = "europe-west1"
       }
     ]
-    filter = "...my_filter..."
-    id     = "...my_id..."
+    filter = "path.endsWith('.json')"
+    id     = "myGenericDatasetId"
     metadata = {
-      created             = "2022-12-28T19:28:14.296Z"
-      enable_acceleration = false
-      modified            = "2021-10-12T18:14:25.523Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id            = "...my_provider_id..."
-    region                 = "...my_region..."
-    skip_event_time_filter = true
+    provider_id            = "myProviderId"
+    region                 = "us-central1"
+    skip_event_time_filter = false
     storage_classes = [
-      "..."
+      "STANDARD",
+      "NEARLINE",
     ]
-    type = "...my_type..."
+    type = "cribl_lake"
   }
   meta_dataset = {
     datasets = [
-      "..."
+      "dataset1",
+      "dataset2",
     ]
-    description = "...my_description..."
-    id          = "...my_id..."
+    description = "This is a generic dataset"
+    id          = "myGenericDatasetId"
     metadata = {
-      created             = "2022-11-13T06:28:12.532Z"
-      enable_acceleration = false
-      modified            = "2022-10-25T23:22:09.388Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id = "...my_provider_id..."
-    type        = "...my_type..."
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
   prometheus_dataset = {
-    description             = "...my_description..."
-    desired_num_data_points = 7957.12
-    id                      = "...my_id..."
+    description             = "This is a generic dataset"
+    desired_num_data_points = 500
+    id                      = "myGenericDatasetId"
     metadata = {
-      created             = "2022-06-15T23:01:13.239Z"
+      earliest            = "2025-09-30T13:41:44Z"
       enable_acceleration = true
-      modified            = "2022-09-30T02:38:42.892Z"
-      tags = [
-        "..."
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    metric_name_pattern = "...my_metric_name_pattern..."
-    provider_id         = "...my_provider_id..."
+    metric_name_pattern = "http_requests_total"
+    provider_id         = "myProviderId"
     step_mode           = "nearest_unit"
-    type                = "...my_type..."
+    type                = "cribl_lake"
   }
   s3_dataset = {
     auto_detect_region = false
     bucket             = "...my_bucket..."
-    description        = "...my_description..."
+    description        = "This is a generic dataset"
     extra_paths = [
       {
         auto_detect_region = true
@@ -412,43 +567,57 @@ resource "criblio_search_dataset" "my_searchdataset" {
       }
     ]
     filter = "...my_filter..."
-    id     = "...my_id..."
+    id     = "myGenericDatasetId"
     metadata = {
-      created             = "2021-10-01T19:20:31.326Z"
-      enable_acceleration = false
-      modified            = "2021-02-10T22:10:18.036Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
     path                   = "...my_path..."
-    provider_id            = "...my_provider_id..."
+    provider_id            = "myProviderId"
     region                 = "...my_region..."
     skip_event_time_filter = true
     storage_classes = [
       "..."
     ]
-    type = "...my_type..."
+    type = "cribl_lake"
   }
   snowflake_dataset = {
-    database    = "...my_database..."
-    description = "...my_description..."
-    id          = "...my_id..."
+    database    = "analytics_db"
+    description = "This is a generic dataset"
+    id          = "myGenericDatasetId"
     metadata = {
-      created             = "2021-03-22T17:16:32.304Z"
-      enable_acceleration = false
-      modified            = "2021-12-25T19:38:56.916Z"
-      tags = [
-        "..."
+      earliest            = "2025-09-30T13:41:44Z"
+      enable_acceleration = true
+      field_list = [
+        "field1",
+        "field2",
       ]
+      latest_run_info = {
+        earliest_scanned_time = 1759324416
+        finished_at           = 1759325416
+        latest_scanned_time   = 1759326416
+        object_count          = 5000
+      }
+      scan_mode = "detailed"
     }
-    provider_id     = "...my_provider_id..."
-    role            = "...my_role..."
-    schema          = "...my_schema..."
-    table           = "...my_table..."
-    timestamp_field = "...my_timestamp_field..."
-    type            = "...my_type..."
-    warehouse       = "...my_warehouse..."
+    provider_id     = "myProviderId"
+    role            = "SYSADMIN"
+    schema          = "public"
+    table           = "logs"
+    timestamp_field = "event_time"
+    type            = "cribl_lake"
+    warehouse       = "COMPUTE_WH"
   }
 }
 ```
@@ -506,10 +675,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_aws_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_aws_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_aws_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -535,10 +716,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_azure_data_explorer_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_azure_data_explorer_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_azure_data_explorer_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -560,10 +753,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_azure_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_azure_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_azure_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -585,10 +790,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_elastic_search_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_elastic_search_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_elastic_search_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -618,10 +835,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_gcp_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_gcp_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_gcp_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -642,10 +871,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_google_workspace_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_google_workspace_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_google_workspace_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -666,10 +907,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_ms_graph_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_ms_graph_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_ms_graph_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -690,10 +943,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_okta_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_okta_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_okta_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -715,10 +980,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_open_search_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_open_search_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_open_search_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -739,10 +1016,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_tailscale_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_tailscale_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_tailscale_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -763,10 +1052,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_zoom_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--api_zoom_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `api_zoom_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -787,10 +1088,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--apihttp_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--apihttp_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `apihttp_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -813,10 +1126,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--aws_security_lake_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--aws_security_lake_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `aws_security_lake_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 <a id="nestedatt--aws_security_lake_dataset--selected_buckets"></a>
@@ -825,7 +1150,7 @@ Optional:
 Optional:
 
 - `name` (String) S3 bucket name
-- `region` (String) Region where the bucket is located
+- `region` (String) AWS region where the bucket is located
 
 
 
@@ -851,9 +1176,9 @@ Optional:
 
 Optional:
 
-- `container_name` (String) Azure Blob Storage container name. Not Null
+- `container_name` (String) Name of the additional container. Not Null
 - `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
-- `path` (String) The templated path under which to look for data
+- `path` (String) Path inside the additional container
 
 
 <a id="nestedatt--azure_blob_dataset--metadata"></a>
@@ -861,10 +1186,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--azure_blob_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--azure_blob_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `azure_blob_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -887,10 +1224,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--click_house_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--click_house_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `click_house_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -904,7 +1253,7 @@ Optional:
 - `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
 - `id` (String) Unique identifier for the dataset. Not Null
 - `metadata` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_dataset--metadata))
-- `path` (String) The directory from which to collect data. Environment variables are supported. Supports templating. Not Null
+- `path` (String) The directory from which to collect data. Not Null
 - `provider_id` (String) Dataset provider ID. Not Null
 - `type` (String) Dataset provider type, set automatically from the dataset provider. Not Null
 
@@ -922,10 +1271,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--cribl_leader_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `cribl_leader_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -948,10 +1309,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--edge_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--edge_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `edge_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -979,7 +1352,7 @@ Optional:
 
 - `bucket` (String) Google Cloud Storage bucket path. Not Null
 - `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
-- `region` (String) Where the bucket is located
+- `region` (String) Where the extra bucket is located
 
 
 <a id="nestedatt--gcs_dataset--metadata"></a>
@@ -987,10 +1360,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--gcs_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--gcs_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `gcs_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -1011,10 +1396,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--meta_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--meta_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `meta_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -1024,7 +1421,7 @@ Optional:
 Optional:
 
 - `description` (String) Description of the dataset
-- `desired_num_data_points` (Number) Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a "step" predicate. Default: 250
+- `desired_num_data_points` (Number) Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a 'step' predicate. Default: 250
 - `id` (String) Unique identifier for the dataset. Not Null
 - `metadata` (Attributes) (see [below for nested schema](#nestedatt--prometheus_dataset--metadata))
 - `metric_name_pattern` (String) Optional regular expression used to filter metric names. When defined, only metrics whose name matches this pattern will be searched.
@@ -1037,10 +1434,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--prometheus_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--prometheus_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `prometheus_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -1080,10 +1489,22 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--s3_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--s3_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `s3_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
+
 
 
 
@@ -1109,10 +1530,21 @@ Optional:
 
 Optional:
 
-- `created` (String) Creation timestamp
-- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
-- `modified` (String) Last modification timestamp
-- `tags` (List of String) Tags associated with the dataset
+- `earliest` (String) Not Null
+- `enable_acceleration` (Boolean) Not Null
+- `field_list` (List of String) Not Null
+- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--snowflake_dataset--metadata--latest_run_info))
+- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+
+<a id="nestedatt--snowflake_dataset--metadata--latest_run_info"></a>
+### Nested Schema for `snowflake_dataset.metadata.latest_run_info`
+
+Optional:
+
+- `earliest_scanned_time` (Number)
+- `finished_at` (Number)
+- `latest_scanned_time` (Number)
+- `object_count` (Number)
 
 ## Import
 
@@ -1123,12 +1555,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_search_dataset.my_criblio_search_dataset
-  id = "..."
+  id = "web-logs"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_search_dataset.my_criblio_search_dataset "..."
+terraform import criblio_search_dataset.my_criblio_search_dataset "web-logs"
 ```

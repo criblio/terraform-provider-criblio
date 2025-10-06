@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"github.com/criblio/terraform-provider-criblio/internal/provider/typeconvert"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -40,13 +39,22 @@ func (r *CriblLakeDatasetDataSourceModel) RefreshFromSharedCriblLakeDataset(ctx 
 			r.SearchConfig.Metadata = nil
 		} else {
 			r.SearchConfig.Metadata = &tfTypes.DatasetMetadata{}
-			r.SearchConfig.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.SearchConfig.Metadata.Created))
-			r.SearchConfig.Metadata.EnableAcceleration = types.BoolPointerValue(resp.SearchConfig.Metadata.EnableAcceleration)
-			r.SearchConfig.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.SearchConfig.Metadata.Modified))
-			r.SearchConfig.Metadata.Tags = make([]types.String, 0, len(resp.SearchConfig.Metadata.Tags))
-			for _, v := range resp.SearchConfig.Metadata.Tags {
-				r.SearchConfig.Metadata.Tags = append(r.SearchConfig.Metadata.Tags, types.StringValue(v))
+			r.SearchConfig.Metadata.Earliest = types.StringValue(resp.SearchConfig.Metadata.Earliest)
+			r.SearchConfig.Metadata.EnableAcceleration = types.BoolValue(resp.SearchConfig.Metadata.EnableAcceleration)
+			r.SearchConfig.Metadata.FieldList = make([]types.String, 0, len(resp.SearchConfig.Metadata.FieldList))
+			for _, v := range resp.SearchConfig.Metadata.FieldList {
+				r.SearchConfig.Metadata.FieldList = append(r.SearchConfig.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.SearchConfig.Metadata.LatestRunInfo == nil {
+				r.SearchConfig.Metadata.LatestRunInfo = nil
+			} else {
+				r.SearchConfig.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.SearchConfig.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.SearchConfig.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.SearchConfig.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.SearchConfig.Metadata.LatestRunInfo.FinishedAt)
+				r.SearchConfig.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.SearchConfig.Metadata.LatestRunInfo.LatestScannedTime)
+				r.SearchConfig.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.SearchConfig.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.SearchConfig.Metadata.ScanMode = types.StringValue(string(resp.SearchConfig.Metadata.ScanMode))
 		}
 	}
 

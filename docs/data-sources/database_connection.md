@@ -14,8 +14,8 @@ DatabaseConnection DataSource
 
 ```terraform
 data "criblio_database_connection" "my_databaseconnection" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "Cribl"
+  id       = "conn-clickhouse"
 }
 ```
 
@@ -29,12 +29,20 @@ data "criblio_database_connection" "my_databaseconnection" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `auth_type` (String)
 - `config_obj` (String)
 - `connection_string` (String)
 - `connection_timeout` (Number)
 - `database_type` (String)
 - `description` (String)
+- `id` (String)
 - `password` (String)
 - `request_timeout` (Number)
 - `tags` (String)

@@ -5,7 +5,7 @@ resource "criblio_pack_routes" "my_packroutes" {
       comment               = "...my_comment..."
     }
   ]
-  group_id = "...my_group_id..."
+  group_id = "Cribl"
   groups = {
     key = {
       description = "...my_description..."
@@ -13,20 +13,20 @@ resource "criblio_pack_routes" "my_packroutes" {
       name        = "...my_name..."
     }
   }
-  id   = "...my_id..."
-  pack = "...my_pack..."
+  id   = "default"
+  pack = "observability-pack"
   routes = [
     {
       additional_properties    = "{ \"see\": \"documentation\" }"
-      description              = "...my_description..."
-      disabled                 = true
-      enable_output_expression = true
-      filter                   = "...my_filter..."
-      final                    = false
-      name                     = "...my_name..."
+      description              = "Route application errors to Splunk output"
+      disabled                 = false
+      enable_output_expression = false
+      filter                   = "level == 'error'"
+      final                    = true
+      name                     = "Errors to Splunk"
       output                   = "{ \"see\": \"documentation\" }"
       output_expression        = "{ \"see\": \"documentation\" }"
-      pipeline                 = "...my_pipeline..."
+      pipeline                 = "main"
     }
   ]
 }

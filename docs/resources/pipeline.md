@@ -15,19 +15,19 @@ Pipeline Resource
 ```terraform
 resource "criblio_pipeline" "my_pipeline" {
   conf = {
-    async_func_timeout = 9527
-    description        = "...my_description..."
+    async_func_timeout = 5000
+    description        = "Main pipeline for app logs"
     functions = [
       {
         conf = {
           key = jsonencode("value")
         }
-        description = "...my_description..."
-        disabled    = true
-        filter      = "...my_filter..."
-        final       = true
-        group_id    = "...my_group_id..."
-        id          = "...my_id..."
+        description = "Parse and enrich fields"
+        disabled    = false
+        filter      = "_source == \"app\""
+        final       = false
+        group_id    = "default"
+        id          = "eval"
       }
     ]
     groups = {
@@ -37,13 +37,14 @@ resource "criblio_pipeline" "my_pipeline" {
         name        = "...my_name..."
       }
     }
-    output = "...my_output..."
+    output = "OutputSplunk"
     streamtags = [
-      "..."
+      "prod",
+      "app",
     ]
   }
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "Cribl"
+  id       = "main"
 }
 ```
 
@@ -101,8 +102,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pipeline.my_criblio_pipeline
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "Cribl"
+    id = "main"
   })
 }
 ```
@@ -110,5 +111,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pipeline.my_criblio_pipeline '{"group_id": "...", "id": "..."}'
+terraform import criblio_pipeline.my_criblio_pipeline '{"group_id": "Cribl", "id": "main"}'
 ```

@@ -18,7 +18,7 @@ type CreateSubscriptionRequest struct {
 	Filter *string `queryParam:"style=form,explode=true,name=filter"`
 	// pipeline to be used
 	Pipeline string `queryParam:"style=form,explode=true,name=pipeline"`
-	// pipeline to be used
+	// new Id to be used for subscription to be created
 	ID string `queryParam:"style=form,explode=true,name=id"`
 	// Subscription object
 	Subscription shared.Subscription `request:"mediaType=application/json"`

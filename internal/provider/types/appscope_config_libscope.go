@@ -2,13 +2,6 @@
 
 package types
 
-import (
-	"github.com/hashicorp/terraform-plugin-framework/types"
-)
-
 type AppscopeConfigLibscope struct {
-	Commanddir    types.String       `tfsdk:"commanddir"`
-	Configevent   types.Bool         `tfsdk:"configevent"`
-	Log           *AppscopeConfigLog `tfsdk:"log"`
-	Summaryperiod types.Float64      `tfsdk:"summaryperiod"`
+	Config *AppscopeConfigConfig `tfsdk:"config"`
 }

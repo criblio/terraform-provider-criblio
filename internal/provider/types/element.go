@@ -3,22 +3,25 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type Element struct {
-	Description     types.String                    `tfsdk:"description"`
-	Empty           types.Bool                      `tfsdk:"empty"`
-	HidePanel       types.Bool                      `tfsdk:"hide_panel"`
-	HorizontalChart types.Bool                      `tfsdk:"horizontal_chart"`
-	ID              types.String                    `tfsdk:"id"`
-	Index           types.Float64                   `tfsdk:"index"`
-	InputID         types.String                    `tfsdk:"input_id"`
-	Layout          DashboardLayout                 `tfsdk:"layout"`
-	Search          SearchQuery                     `tfsdk:"search"`
-	Title           types.String                    `tfsdk:"title"`
-	Type            types.String                    `tfsdk:"type"`
-	Value           map[string]jsontypes.Normalized `tfsdk:"value"`
-	Variant         types.String                    `tfsdk:"variant"`
+	ColorPalette    types.String     `tfsdk:"color_palette"`
+	Description     types.String     `tfsdk:"description"`
+	Empty           types.Bool       `tfsdk:"empty"`
+	H               types.Float64    `tfsdk:"h"`
+	HidePanel       types.Bool       `tfsdk:"hide_panel"`
+	HorizontalChart types.Bool       `tfsdk:"horizontal_chart"`
+	ID              types.String     `tfsdk:"id"`
+	Layout          *DashboardLayout `tfsdk:"layout"`
+	Query           *SearchQuery     `tfsdk:"query"`
+	Title           types.String     `tfsdk:"title"`
+	Type            types.String     `tfsdk:"type"`
+	Variant         types.String     `tfsdk:"variant"`
+	W               types.Float64    `tfsdk:"w"`
+	X               types.Float64    `tfsdk:"x"`
+	XAxis           *XAxis           `tfsdk:"x_axis"`
+	Y               types.Float64    `tfsdk:"y"`
+	YAxis           *YAxis           `tfsdk:"y_axis"`
 }

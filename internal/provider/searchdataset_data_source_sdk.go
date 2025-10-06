@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"github.com/criblio/terraform-provider-criblio/internal/provider/typeconvert"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -29,13 +28,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIAwsDataset.Metadata = nil
 		} else {
 			r.APIAwsDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIAwsDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAwsDataset.Metadata.Created))
-			r.APIAwsDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIAwsDataset.Metadata.EnableAcceleration)
-			r.APIAwsDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAwsDataset.Metadata.Modified))
-			r.APIAwsDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIAwsDataset.Metadata.Tags))
-			for _, v := range resp.APIAwsDataset.Metadata.Tags {
-				r.APIAwsDataset.Metadata.Tags = append(r.APIAwsDataset.Metadata.Tags, types.StringValue(v))
+			r.APIAwsDataset.Metadata.Earliest = types.StringValue(resp.APIAwsDataset.Metadata.Earliest)
+			r.APIAwsDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIAwsDataset.Metadata.EnableAcceleration)
+			r.APIAwsDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIAwsDataset.Metadata.FieldList))
+			for _, v := range resp.APIAwsDataset.Metadata.FieldList {
+				r.APIAwsDataset.Metadata.FieldList = append(r.APIAwsDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIAwsDataset.Metadata.LatestRunInfo == nil {
+				r.APIAwsDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIAwsDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIAwsDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIAwsDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIAwsDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIAwsDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIAwsDataset.Metadata.ScanMode = types.StringValue(string(resp.APIAwsDataset.Metadata.ScanMode))
 		}
 		r.APIAwsDataset.ProviderID = types.StringValue(resp.APIAwsDataset.ProviderID)
 		r.ProviderID = r.APIAwsDataset.ProviderID
@@ -59,13 +67,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIAzureDataExplorerDataset.Metadata = nil
 		} else {
 			r.APIAzureDataExplorerDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIAzureDataExplorerDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAzureDataExplorerDataset.Metadata.Created))
-			r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIAzureDataExplorerDataset.Metadata.EnableAcceleration)
-			r.APIAzureDataExplorerDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAzureDataExplorerDataset.Metadata.Modified))
-			r.APIAzureDataExplorerDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIAzureDataExplorerDataset.Metadata.Tags))
-			for _, v := range resp.APIAzureDataExplorerDataset.Metadata.Tags {
-				r.APIAzureDataExplorerDataset.Metadata.Tags = append(r.APIAzureDataExplorerDataset.Metadata.Tags, types.StringValue(v))
+			r.APIAzureDataExplorerDataset.Metadata.Earliest = types.StringValue(resp.APIAzureDataExplorerDataset.Metadata.Earliest)
+			r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIAzureDataExplorerDataset.Metadata.EnableAcceleration)
+			r.APIAzureDataExplorerDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIAzureDataExplorerDataset.Metadata.FieldList))
+			for _, v := range resp.APIAzureDataExplorerDataset.Metadata.FieldList {
+				r.APIAzureDataExplorerDataset.Metadata.FieldList = append(r.APIAzureDataExplorerDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo == nil {
+				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIAzureDataExplorerDataset.Metadata.ScanMode = types.StringValue(string(resp.APIAzureDataExplorerDataset.Metadata.ScanMode))
 		}
 		r.APIAzureDataExplorerDataset.ProviderID = types.StringValue(resp.APIAzureDataExplorerDataset.ProviderID)
 		r.ProviderID = r.APIAzureDataExplorerDataset.ProviderID
@@ -89,13 +106,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIAzureDataset.Metadata = nil
 		} else {
 			r.APIAzureDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIAzureDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAzureDataset.Metadata.Created))
-			r.APIAzureDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIAzureDataset.Metadata.EnableAcceleration)
-			r.APIAzureDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAzureDataset.Metadata.Modified))
-			r.APIAzureDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIAzureDataset.Metadata.Tags))
-			for _, v := range resp.APIAzureDataset.Metadata.Tags {
-				r.APIAzureDataset.Metadata.Tags = append(r.APIAzureDataset.Metadata.Tags, types.StringValue(v))
+			r.APIAzureDataset.Metadata.Earliest = types.StringValue(resp.APIAzureDataset.Metadata.Earliest)
+			r.APIAzureDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIAzureDataset.Metadata.EnableAcceleration)
+			r.APIAzureDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIAzureDataset.Metadata.FieldList))
+			for _, v := range resp.APIAzureDataset.Metadata.FieldList {
+				r.APIAzureDataset.Metadata.FieldList = append(r.APIAzureDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIAzureDataset.Metadata.LatestRunInfo == nil {
+				r.APIAzureDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIAzureDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIAzureDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIAzureDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIAzureDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIAzureDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIAzureDataset.Metadata.ScanMode = types.StringValue(string(resp.APIAzureDataset.Metadata.ScanMode))
 		}
 		r.APIAzureDataset.ProviderID = types.StringValue(resp.APIAzureDataset.ProviderID)
 		r.ProviderID = r.APIAzureDataset.ProviderID
@@ -117,13 +143,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIElasticSearchDataset.Metadata = nil
 		} else {
 			r.APIElasticSearchDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIElasticSearchDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIElasticSearchDataset.Metadata.Created))
-			r.APIElasticSearchDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIElasticSearchDataset.Metadata.EnableAcceleration)
-			r.APIElasticSearchDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIElasticSearchDataset.Metadata.Modified))
-			r.APIElasticSearchDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIElasticSearchDataset.Metadata.Tags))
-			for _, v := range resp.APIElasticSearchDataset.Metadata.Tags {
-				r.APIElasticSearchDataset.Metadata.Tags = append(r.APIElasticSearchDataset.Metadata.Tags, types.StringValue(v))
+			r.APIElasticSearchDataset.Metadata.Earliest = types.StringValue(resp.APIElasticSearchDataset.Metadata.Earliest)
+			r.APIElasticSearchDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIElasticSearchDataset.Metadata.EnableAcceleration)
+			r.APIElasticSearchDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIElasticSearchDataset.Metadata.FieldList))
+			for _, v := range resp.APIElasticSearchDataset.Metadata.FieldList {
+				r.APIElasticSearchDataset.Metadata.FieldList = append(r.APIElasticSearchDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIElasticSearchDataset.Metadata.LatestRunInfo == nil {
+				r.APIElasticSearchDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIElasticSearchDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIElasticSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIElasticSearchDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIElasticSearchDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIElasticSearchDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIElasticSearchDataset.Metadata.ScanMode = types.StringValue(string(resp.APIElasticSearchDataset.Metadata.ScanMode))
 		}
 		r.APIElasticSearchDataset.ProviderID = types.StringValue(resp.APIElasticSearchDataset.ProviderID)
 		r.ProviderID = r.APIElasticSearchDataset.ProviderID
@@ -151,13 +186,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIGcpDataset.Metadata = nil
 		} else {
 			r.APIGcpDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIGcpDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIGcpDataset.Metadata.Created))
-			r.APIGcpDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIGcpDataset.Metadata.EnableAcceleration)
-			r.APIGcpDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIGcpDataset.Metadata.Modified))
-			r.APIGcpDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIGcpDataset.Metadata.Tags))
-			for _, v := range resp.APIGcpDataset.Metadata.Tags {
-				r.APIGcpDataset.Metadata.Tags = append(r.APIGcpDataset.Metadata.Tags, types.StringValue(v))
+			r.APIGcpDataset.Metadata.Earliest = types.StringValue(resp.APIGcpDataset.Metadata.Earliest)
+			r.APIGcpDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIGcpDataset.Metadata.EnableAcceleration)
+			r.APIGcpDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIGcpDataset.Metadata.FieldList))
+			for _, v := range resp.APIGcpDataset.Metadata.FieldList {
+				r.APIGcpDataset.Metadata.FieldList = append(r.APIGcpDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIGcpDataset.Metadata.LatestRunInfo == nil {
+				r.APIGcpDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIGcpDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIGcpDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIGcpDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIGcpDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIGcpDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIGcpDataset.Metadata.ScanMode = types.StringValue(string(resp.APIGcpDataset.Metadata.ScanMode))
 		}
 		r.APIGcpDataset.ProviderID = types.StringValue(resp.APIGcpDataset.ProviderID)
 		r.ProviderID = r.APIGcpDataset.ProviderID
@@ -178,13 +222,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIGoogleWorkspaceDataset.Metadata = nil
 		} else {
 			r.APIGoogleWorkspaceDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIGoogleWorkspaceDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIGoogleWorkspaceDataset.Metadata.Created))
-			r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration)
-			r.APIGoogleWorkspaceDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIGoogleWorkspaceDataset.Metadata.Modified))
-			r.APIGoogleWorkspaceDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIGoogleWorkspaceDataset.Metadata.Tags))
-			for _, v := range resp.APIGoogleWorkspaceDataset.Metadata.Tags {
-				r.APIGoogleWorkspaceDataset.Metadata.Tags = append(r.APIGoogleWorkspaceDataset.Metadata.Tags, types.StringValue(v))
+			r.APIGoogleWorkspaceDataset.Metadata.Earliest = types.StringValue(resp.APIGoogleWorkspaceDataset.Metadata.Earliest)
+			r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration)
+			r.APIGoogleWorkspaceDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIGoogleWorkspaceDataset.Metadata.FieldList))
+			for _, v := range resp.APIGoogleWorkspaceDataset.Metadata.FieldList {
+				r.APIGoogleWorkspaceDataset.Metadata.FieldList = append(r.APIGoogleWorkspaceDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo == nil {
+				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIGoogleWorkspaceDataset.Metadata.ScanMode = types.StringValue(string(resp.APIGoogleWorkspaceDataset.Metadata.ScanMode))
 		}
 		r.APIGoogleWorkspaceDataset.ProviderID = types.StringValue(resp.APIGoogleWorkspaceDataset.ProviderID)
 		r.ProviderID = r.APIGoogleWorkspaceDataset.ProviderID
@@ -205,13 +258,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIHTTPDataset.Metadata = nil
 		} else {
 			r.APIHTTPDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIHTTPDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIHTTPDataset.Metadata.Created))
-			r.APIHTTPDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIHTTPDataset.Metadata.EnableAcceleration)
-			r.APIHTTPDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIHTTPDataset.Metadata.Modified))
-			r.APIHTTPDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIHTTPDataset.Metadata.Tags))
-			for _, v := range resp.APIHTTPDataset.Metadata.Tags {
-				r.APIHTTPDataset.Metadata.Tags = append(r.APIHTTPDataset.Metadata.Tags, types.StringValue(v))
+			r.APIHTTPDataset.Metadata.Earliest = types.StringValue(resp.APIHTTPDataset.Metadata.Earliest)
+			r.APIHTTPDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIHTTPDataset.Metadata.EnableAcceleration)
+			r.APIHTTPDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIHTTPDataset.Metadata.FieldList))
+			for _, v := range resp.APIHTTPDataset.Metadata.FieldList {
+				r.APIHTTPDataset.Metadata.FieldList = append(r.APIHTTPDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIHTTPDataset.Metadata.LatestRunInfo == nil {
+				r.APIHTTPDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIHTTPDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIHTTPDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIHTTPDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIHTTPDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIHTTPDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIHTTPDataset.Metadata.ScanMode = types.StringValue(string(resp.APIHTTPDataset.Metadata.ScanMode))
 		}
 		r.APIHTTPDataset.ProviderID = types.StringValue(resp.APIHTTPDataset.ProviderID)
 		r.ProviderID = r.APIHTTPDataset.ProviderID
@@ -232,13 +294,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIMsGraphDataset.Metadata = nil
 		} else {
 			r.APIMsGraphDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIMsGraphDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIMsGraphDataset.Metadata.Created))
-			r.APIMsGraphDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIMsGraphDataset.Metadata.EnableAcceleration)
-			r.APIMsGraphDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIMsGraphDataset.Metadata.Modified))
-			r.APIMsGraphDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIMsGraphDataset.Metadata.Tags))
-			for _, v := range resp.APIMsGraphDataset.Metadata.Tags {
-				r.APIMsGraphDataset.Metadata.Tags = append(r.APIMsGraphDataset.Metadata.Tags, types.StringValue(v))
+			r.APIMsGraphDataset.Metadata.Earliest = types.StringValue(resp.APIMsGraphDataset.Metadata.Earliest)
+			r.APIMsGraphDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIMsGraphDataset.Metadata.EnableAcceleration)
+			r.APIMsGraphDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIMsGraphDataset.Metadata.FieldList))
+			for _, v := range resp.APIMsGraphDataset.Metadata.FieldList {
+				r.APIMsGraphDataset.Metadata.FieldList = append(r.APIMsGraphDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIMsGraphDataset.Metadata.LatestRunInfo == nil {
+				r.APIMsGraphDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIMsGraphDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIMsGraphDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIMsGraphDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIMsGraphDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIMsGraphDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIMsGraphDataset.Metadata.ScanMode = types.StringValue(string(resp.APIMsGraphDataset.Metadata.ScanMode))
 		}
 		r.APIMsGraphDataset.ProviderID = types.StringValue(resp.APIMsGraphDataset.ProviderID)
 		r.ProviderID = r.APIMsGraphDataset.ProviderID
@@ -259,13 +330,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIOktaDataset.Metadata = nil
 		} else {
 			r.APIOktaDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIOktaDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIOktaDataset.Metadata.Created))
-			r.APIOktaDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIOktaDataset.Metadata.EnableAcceleration)
-			r.APIOktaDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIOktaDataset.Metadata.Modified))
-			r.APIOktaDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIOktaDataset.Metadata.Tags))
-			for _, v := range resp.APIOktaDataset.Metadata.Tags {
-				r.APIOktaDataset.Metadata.Tags = append(r.APIOktaDataset.Metadata.Tags, types.StringValue(v))
+			r.APIOktaDataset.Metadata.Earliest = types.StringValue(resp.APIOktaDataset.Metadata.Earliest)
+			r.APIOktaDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIOktaDataset.Metadata.EnableAcceleration)
+			r.APIOktaDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIOktaDataset.Metadata.FieldList))
+			for _, v := range resp.APIOktaDataset.Metadata.FieldList {
+				r.APIOktaDataset.Metadata.FieldList = append(r.APIOktaDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIOktaDataset.Metadata.LatestRunInfo == nil {
+				r.APIOktaDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIOktaDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIOktaDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIOktaDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIOktaDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIOktaDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIOktaDataset.Metadata.ScanMode = types.StringValue(string(resp.APIOktaDataset.Metadata.ScanMode))
 		}
 		r.APIOktaDataset.ProviderID = types.StringValue(resp.APIOktaDataset.ProviderID)
 		r.ProviderID = r.APIOktaDataset.ProviderID
@@ -283,13 +363,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIOpenSearchDataset.Metadata = nil
 		} else {
 			r.APIOpenSearchDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIOpenSearchDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIOpenSearchDataset.Metadata.Created))
-			r.APIOpenSearchDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIOpenSearchDataset.Metadata.EnableAcceleration)
-			r.APIOpenSearchDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIOpenSearchDataset.Metadata.Modified))
-			r.APIOpenSearchDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIOpenSearchDataset.Metadata.Tags))
-			for _, v := range resp.APIOpenSearchDataset.Metadata.Tags {
-				r.APIOpenSearchDataset.Metadata.Tags = append(r.APIOpenSearchDataset.Metadata.Tags, types.StringValue(v))
+			r.APIOpenSearchDataset.Metadata.Earliest = types.StringValue(resp.APIOpenSearchDataset.Metadata.Earliest)
+			r.APIOpenSearchDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIOpenSearchDataset.Metadata.EnableAcceleration)
+			r.APIOpenSearchDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIOpenSearchDataset.Metadata.FieldList))
+			for _, v := range resp.APIOpenSearchDataset.Metadata.FieldList {
+				r.APIOpenSearchDataset.Metadata.FieldList = append(r.APIOpenSearchDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIOpenSearchDataset.Metadata.LatestRunInfo == nil {
+				r.APIOpenSearchDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIOpenSearchDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIOpenSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIOpenSearchDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIOpenSearchDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIOpenSearchDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIOpenSearchDataset.Metadata.ScanMode = types.StringValue(string(resp.APIOpenSearchDataset.Metadata.ScanMode))
 		}
 		r.APIOpenSearchDataset.ProviderID = types.StringValue(resp.APIOpenSearchDataset.ProviderID)
 		r.ProviderID = r.APIOpenSearchDataset.ProviderID
@@ -311,13 +400,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APITailscaleDataset.Metadata = nil
 		} else {
 			r.APITailscaleDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APITailscaleDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APITailscaleDataset.Metadata.Created))
-			r.APITailscaleDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APITailscaleDataset.Metadata.EnableAcceleration)
-			r.APITailscaleDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APITailscaleDataset.Metadata.Modified))
-			r.APITailscaleDataset.Metadata.Tags = make([]types.String, 0, len(resp.APITailscaleDataset.Metadata.Tags))
-			for _, v := range resp.APITailscaleDataset.Metadata.Tags {
-				r.APITailscaleDataset.Metadata.Tags = append(r.APITailscaleDataset.Metadata.Tags, types.StringValue(v))
+			r.APITailscaleDataset.Metadata.Earliest = types.StringValue(resp.APITailscaleDataset.Metadata.Earliest)
+			r.APITailscaleDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APITailscaleDataset.Metadata.EnableAcceleration)
+			r.APITailscaleDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APITailscaleDataset.Metadata.FieldList))
+			for _, v := range resp.APITailscaleDataset.Metadata.FieldList {
+				r.APITailscaleDataset.Metadata.FieldList = append(r.APITailscaleDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APITailscaleDataset.Metadata.LatestRunInfo == nil {
+				r.APITailscaleDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APITailscaleDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APITailscaleDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APITailscaleDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APITailscaleDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APITailscaleDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APITailscaleDataset.Metadata.ScanMode = types.StringValue(string(resp.APITailscaleDataset.Metadata.ScanMode))
 		}
 		r.APITailscaleDataset.ProviderID = types.StringValue(resp.APITailscaleDataset.ProviderID)
 		r.ProviderID = r.APITailscaleDataset.ProviderID
@@ -338,13 +436,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.APIZoomDataset.Metadata = nil
 		} else {
 			r.APIZoomDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIZoomDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIZoomDataset.Metadata.Created))
-			r.APIZoomDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIZoomDataset.Metadata.EnableAcceleration)
-			r.APIZoomDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIZoomDataset.Metadata.Modified))
-			r.APIZoomDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIZoomDataset.Metadata.Tags))
-			for _, v := range resp.APIZoomDataset.Metadata.Tags {
-				r.APIZoomDataset.Metadata.Tags = append(r.APIZoomDataset.Metadata.Tags, types.StringValue(v))
+			r.APIZoomDataset.Metadata.Earliest = types.StringValue(resp.APIZoomDataset.Metadata.Earliest)
+			r.APIZoomDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIZoomDataset.Metadata.EnableAcceleration)
+			r.APIZoomDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIZoomDataset.Metadata.FieldList))
+			for _, v := range resp.APIZoomDataset.Metadata.FieldList {
+				r.APIZoomDataset.Metadata.FieldList = append(r.APIZoomDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.APIZoomDataset.Metadata.LatestRunInfo == nil {
+				r.APIZoomDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.APIZoomDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.APIZoomDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.APIZoomDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.APIZoomDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.APIZoomDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.APIZoomDataset.Metadata.ScanMode = types.StringValue(string(resp.APIZoomDataset.Metadata.ScanMode))
 		}
 		r.APIZoomDataset.ProviderID = types.StringValue(resp.APIZoomDataset.ProviderID)
 		r.ProviderID = r.APIZoomDataset.ProviderID
@@ -362,13 +469,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.AwsSecurityLakeDataset.Metadata = nil
 		} else {
 			r.AwsSecurityLakeDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.AwsSecurityLakeDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.AwsSecurityLakeDataset.Metadata.Created))
-			r.AwsSecurityLakeDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.AwsSecurityLakeDataset.Metadata.EnableAcceleration)
-			r.AwsSecurityLakeDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.AwsSecurityLakeDataset.Metadata.Modified))
-			r.AwsSecurityLakeDataset.Metadata.Tags = make([]types.String, 0, len(resp.AwsSecurityLakeDataset.Metadata.Tags))
-			for _, v := range resp.AwsSecurityLakeDataset.Metadata.Tags {
-				r.AwsSecurityLakeDataset.Metadata.Tags = append(r.AwsSecurityLakeDataset.Metadata.Tags, types.StringValue(v))
+			r.AwsSecurityLakeDataset.Metadata.Earliest = types.StringValue(resp.AwsSecurityLakeDataset.Metadata.Earliest)
+			r.AwsSecurityLakeDataset.Metadata.EnableAcceleration = types.BoolValue(resp.AwsSecurityLakeDataset.Metadata.EnableAcceleration)
+			r.AwsSecurityLakeDataset.Metadata.FieldList = make([]types.String, 0, len(resp.AwsSecurityLakeDataset.Metadata.FieldList))
+			for _, v := range resp.AwsSecurityLakeDataset.Metadata.FieldList {
+				r.AwsSecurityLakeDataset.Metadata.FieldList = append(r.AwsSecurityLakeDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo == nil {
+				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.AwsSecurityLakeDataset.Metadata.ScanMode = types.StringValue(string(resp.AwsSecurityLakeDataset.Metadata.ScanMode))
 		}
 		r.AwsSecurityLakeDataset.Path = types.StringPointerValue(resp.AwsSecurityLakeDataset.Path)
 		r.AwsSecurityLakeDataset.ProviderID = types.StringValue(resp.AwsSecurityLakeDataset.ProviderID)
@@ -409,13 +525,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.AzureBlobDataset.Metadata = nil
 		} else {
 			r.AzureBlobDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.AzureBlobDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.AzureBlobDataset.Metadata.Created))
-			r.AzureBlobDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.AzureBlobDataset.Metadata.EnableAcceleration)
-			r.AzureBlobDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.AzureBlobDataset.Metadata.Modified))
-			r.AzureBlobDataset.Metadata.Tags = make([]types.String, 0, len(resp.AzureBlobDataset.Metadata.Tags))
-			for _, v := range resp.AzureBlobDataset.Metadata.Tags {
-				r.AzureBlobDataset.Metadata.Tags = append(r.AzureBlobDataset.Metadata.Tags, types.StringValue(v))
+			r.AzureBlobDataset.Metadata.Earliest = types.StringValue(resp.AzureBlobDataset.Metadata.Earliest)
+			r.AzureBlobDataset.Metadata.EnableAcceleration = types.BoolValue(resp.AzureBlobDataset.Metadata.EnableAcceleration)
+			r.AzureBlobDataset.Metadata.FieldList = make([]types.String, 0, len(resp.AzureBlobDataset.Metadata.FieldList))
+			for _, v := range resp.AzureBlobDataset.Metadata.FieldList {
+				r.AzureBlobDataset.Metadata.FieldList = append(r.AzureBlobDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.AzureBlobDataset.Metadata.LatestRunInfo == nil {
+				r.AzureBlobDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.AzureBlobDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.AzureBlobDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.AzureBlobDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.AzureBlobDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.AzureBlobDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.AzureBlobDataset.Metadata.ScanMode = types.StringValue(string(resp.AzureBlobDataset.Metadata.ScanMode))
 		}
 		r.AzureBlobDataset.Path = types.StringPointerValue(resp.AzureBlobDataset.Path)
 		r.AzureBlobDataset.ProviderID = types.StringValue(resp.AzureBlobDataset.ProviderID)
@@ -439,13 +564,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.ClickHouseDataset.Metadata = nil
 		} else {
 			r.ClickHouseDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.ClickHouseDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ClickHouseDataset.Metadata.Created))
-			r.ClickHouseDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.ClickHouseDataset.Metadata.EnableAcceleration)
-			r.ClickHouseDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ClickHouseDataset.Metadata.Modified))
-			r.ClickHouseDataset.Metadata.Tags = make([]types.String, 0, len(resp.ClickHouseDataset.Metadata.Tags))
-			for _, v := range resp.ClickHouseDataset.Metadata.Tags {
-				r.ClickHouseDataset.Metadata.Tags = append(r.ClickHouseDataset.Metadata.Tags, types.StringValue(v))
+			r.ClickHouseDataset.Metadata.Earliest = types.StringValue(resp.ClickHouseDataset.Metadata.Earliest)
+			r.ClickHouseDataset.Metadata.EnableAcceleration = types.BoolValue(resp.ClickHouseDataset.Metadata.EnableAcceleration)
+			r.ClickHouseDataset.Metadata.FieldList = make([]types.String, 0, len(resp.ClickHouseDataset.Metadata.FieldList))
+			for _, v := range resp.ClickHouseDataset.Metadata.FieldList {
+				r.ClickHouseDataset.Metadata.FieldList = append(r.ClickHouseDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.ClickHouseDataset.Metadata.LatestRunInfo == nil {
+				r.ClickHouseDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.ClickHouseDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.ClickHouseDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.ClickHouseDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.ClickHouseDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.ClickHouseDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.ClickHouseDataset.Metadata.ScanMode = types.StringValue(string(resp.ClickHouseDataset.Metadata.ScanMode))
 		}
 		r.ClickHouseDataset.ProviderID = types.StringValue(resp.ClickHouseDataset.ProviderID)
 		r.ProviderID = r.ClickHouseDataset.ProviderID
@@ -475,13 +609,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.CriblLeaderDataset.Metadata = nil
 		} else {
 			r.CriblLeaderDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.CriblLeaderDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CriblLeaderDataset.Metadata.Created))
-			r.CriblLeaderDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.CriblLeaderDataset.Metadata.EnableAcceleration)
-			r.CriblLeaderDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CriblLeaderDataset.Metadata.Modified))
-			r.CriblLeaderDataset.Metadata.Tags = make([]types.String, 0, len(resp.CriblLeaderDataset.Metadata.Tags))
-			for _, v := range resp.CriblLeaderDataset.Metadata.Tags {
-				r.CriblLeaderDataset.Metadata.Tags = append(r.CriblLeaderDataset.Metadata.Tags, types.StringValue(v))
+			r.CriblLeaderDataset.Metadata.Earliest = types.StringValue(resp.CriblLeaderDataset.Metadata.Earliest)
+			r.CriblLeaderDataset.Metadata.EnableAcceleration = types.BoolValue(resp.CriblLeaderDataset.Metadata.EnableAcceleration)
+			r.CriblLeaderDataset.Metadata.FieldList = make([]types.String, 0, len(resp.CriblLeaderDataset.Metadata.FieldList))
+			for _, v := range resp.CriblLeaderDataset.Metadata.FieldList {
+				r.CriblLeaderDataset.Metadata.FieldList = append(r.CriblLeaderDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.CriblLeaderDataset.Metadata.LatestRunInfo == nil {
+				r.CriblLeaderDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.CriblLeaderDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.CriblLeaderDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.CriblLeaderDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.CriblLeaderDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.CriblLeaderDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.CriblLeaderDataset.Metadata.ScanMode = types.StringValue(string(resp.CriblLeaderDataset.Metadata.ScanMode))
 		}
 		r.CriblLeaderDataset.Path = types.StringValue(resp.CriblLeaderDataset.Path)
 		r.CriblLeaderDataset.ProviderID = types.StringValue(resp.CriblLeaderDataset.ProviderID)
@@ -504,13 +647,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.EdgeDataset.Metadata = nil
 		} else {
 			r.EdgeDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.EdgeDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EdgeDataset.Metadata.Created))
-			r.EdgeDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.EdgeDataset.Metadata.EnableAcceleration)
-			r.EdgeDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EdgeDataset.Metadata.Modified))
-			r.EdgeDataset.Metadata.Tags = make([]types.String, 0, len(resp.EdgeDataset.Metadata.Tags))
-			for _, v := range resp.EdgeDataset.Metadata.Tags {
-				r.EdgeDataset.Metadata.Tags = append(r.EdgeDataset.Metadata.Tags, types.StringValue(v))
+			r.EdgeDataset.Metadata.Earliest = types.StringValue(resp.EdgeDataset.Metadata.Earliest)
+			r.EdgeDataset.Metadata.EnableAcceleration = types.BoolValue(resp.EdgeDataset.Metadata.EnableAcceleration)
+			r.EdgeDataset.Metadata.FieldList = make([]types.String, 0, len(resp.EdgeDataset.Metadata.FieldList))
+			for _, v := range resp.EdgeDataset.Metadata.FieldList {
+				r.EdgeDataset.Metadata.FieldList = append(r.EdgeDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.EdgeDataset.Metadata.LatestRunInfo == nil {
+				r.EdgeDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.EdgeDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.EdgeDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.EdgeDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.EdgeDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.EdgeDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.EdgeDataset.Metadata.ScanMode = types.StringValue(string(resp.EdgeDataset.Metadata.ScanMode))
 		}
 		r.EdgeDataset.Path = types.StringValue(resp.EdgeDataset.Path)
 		r.EdgeDataset.ProviderID = types.StringValue(resp.EdgeDataset.ProviderID)
@@ -541,13 +693,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.GcsDataset.Metadata = nil
 		} else {
 			r.GcsDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.GcsDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.GcsDataset.Metadata.Created))
-			r.GcsDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.GcsDataset.Metadata.EnableAcceleration)
-			r.GcsDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.GcsDataset.Metadata.Modified))
-			r.GcsDataset.Metadata.Tags = make([]types.String, 0, len(resp.GcsDataset.Metadata.Tags))
-			for _, v := range resp.GcsDataset.Metadata.Tags {
-				r.GcsDataset.Metadata.Tags = append(r.GcsDataset.Metadata.Tags, types.StringValue(v))
+			r.GcsDataset.Metadata.Earliest = types.StringValue(resp.GcsDataset.Metadata.Earliest)
+			r.GcsDataset.Metadata.EnableAcceleration = types.BoolValue(resp.GcsDataset.Metadata.EnableAcceleration)
+			r.GcsDataset.Metadata.FieldList = make([]types.String, 0, len(resp.GcsDataset.Metadata.FieldList))
+			for _, v := range resp.GcsDataset.Metadata.FieldList {
+				r.GcsDataset.Metadata.FieldList = append(r.GcsDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.GcsDataset.Metadata.LatestRunInfo == nil {
+				r.GcsDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.GcsDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.GcsDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.GcsDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.GcsDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.GcsDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.GcsDataset.Metadata.ScanMode = types.StringValue(string(resp.GcsDataset.Metadata.ScanMode))
 		}
 		r.GcsDataset.ProviderID = types.StringValue(resp.GcsDataset.ProviderID)
 		r.ProviderID = r.GcsDataset.ProviderID
@@ -574,13 +735,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.MetaDataset.Metadata = nil
 		} else {
 			r.MetaDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.MetaDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.MetaDataset.Metadata.Created))
-			r.MetaDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.MetaDataset.Metadata.EnableAcceleration)
-			r.MetaDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.MetaDataset.Metadata.Modified))
-			r.MetaDataset.Metadata.Tags = make([]types.String, 0, len(resp.MetaDataset.Metadata.Tags))
-			for _, v := range resp.MetaDataset.Metadata.Tags {
-				r.MetaDataset.Metadata.Tags = append(r.MetaDataset.Metadata.Tags, types.StringValue(v))
+			r.MetaDataset.Metadata.Earliest = types.StringValue(resp.MetaDataset.Metadata.Earliest)
+			r.MetaDataset.Metadata.EnableAcceleration = types.BoolValue(resp.MetaDataset.Metadata.EnableAcceleration)
+			r.MetaDataset.Metadata.FieldList = make([]types.String, 0, len(resp.MetaDataset.Metadata.FieldList))
+			for _, v := range resp.MetaDataset.Metadata.FieldList {
+				r.MetaDataset.Metadata.FieldList = append(r.MetaDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.MetaDataset.Metadata.LatestRunInfo == nil {
+				r.MetaDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.MetaDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.MetaDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.MetaDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.MetaDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.MetaDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.MetaDataset.Metadata.ScanMode = types.StringValue(string(resp.MetaDataset.Metadata.ScanMode))
 		}
 		r.MetaDataset.ProviderID = types.StringValue(resp.MetaDataset.ProviderID)
 		r.ProviderID = r.MetaDataset.ProviderID
@@ -598,13 +768,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.PrometheusDataset.Metadata = nil
 		} else {
 			r.PrometheusDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.PrometheusDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.PrometheusDataset.Metadata.Created))
-			r.PrometheusDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.PrometheusDataset.Metadata.EnableAcceleration)
-			r.PrometheusDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.PrometheusDataset.Metadata.Modified))
-			r.PrometheusDataset.Metadata.Tags = make([]types.String, 0, len(resp.PrometheusDataset.Metadata.Tags))
-			for _, v := range resp.PrometheusDataset.Metadata.Tags {
-				r.PrometheusDataset.Metadata.Tags = append(r.PrometheusDataset.Metadata.Tags, types.StringValue(v))
+			r.PrometheusDataset.Metadata.Earliest = types.StringValue(resp.PrometheusDataset.Metadata.Earliest)
+			r.PrometheusDataset.Metadata.EnableAcceleration = types.BoolValue(resp.PrometheusDataset.Metadata.EnableAcceleration)
+			r.PrometheusDataset.Metadata.FieldList = make([]types.String, 0, len(resp.PrometheusDataset.Metadata.FieldList))
+			for _, v := range resp.PrometheusDataset.Metadata.FieldList {
+				r.PrometheusDataset.Metadata.FieldList = append(r.PrometheusDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.PrometheusDataset.Metadata.LatestRunInfo == nil {
+				r.PrometheusDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.PrometheusDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.PrometheusDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.PrometheusDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.PrometheusDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.PrometheusDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.PrometheusDataset.Metadata.ScanMode = types.StringValue(string(resp.PrometheusDataset.Metadata.ScanMode))
 		}
 		r.PrometheusDataset.MetricNamePattern = types.StringPointerValue(resp.PrometheusDataset.MetricNamePattern)
 		r.PrometheusDataset.ProviderID = types.StringValue(resp.PrometheusDataset.ProviderID)
@@ -643,13 +822,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.S3Dataset.Metadata = nil
 		} else {
 			r.S3Dataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.S3Dataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.S3Dataset.Metadata.Created))
-			r.S3Dataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.S3Dataset.Metadata.EnableAcceleration)
-			r.S3Dataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.S3Dataset.Metadata.Modified))
-			r.S3Dataset.Metadata.Tags = make([]types.String, 0, len(resp.S3Dataset.Metadata.Tags))
-			for _, v := range resp.S3Dataset.Metadata.Tags {
-				r.S3Dataset.Metadata.Tags = append(r.S3Dataset.Metadata.Tags, types.StringValue(v))
+			r.S3Dataset.Metadata.Earliest = types.StringValue(resp.S3Dataset.Metadata.Earliest)
+			r.S3Dataset.Metadata.EnableAcceleration = types.BoolValue(resp.S3Dataset.Metadata.EnableAcceleration)
+			r.S3Dataset.Metadata.FieldList = make([]types.String, 0, len(resp.S3Dataset.Metadata.FieldList))
+			for _, v := range resp.S3Dataset.Metadata.FieldList {
+				r.S3Dataset.Metadata.FieldList = append(r.S3Dataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.S3Dataset.Metadata.LatestRunInfo == nil {
+				r.S3Dataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.S3Dataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.S3Dataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.S3Dataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.FinishedAt)
+				r.S3Dataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.S3Dataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.S3Dataset.Metadata.ScanMode = types.StringValue(string(resp.S3Dataset.Metadata.ScanMode))
 		}
 		r.S3Dataset.Path = types.StringPointerValue(resp.S3Dataset.Path)
 		r.S3Dataset.ProviderID = types.StringValue(resp.S3Dataset.ProviderID)
@@ -674,13 +862,22 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 			r.SnowflakeDataset.Metadata = nil
 		} else {
 			r.SnowflakeDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.SnowflakeDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.SnowflakeDataset.Metadata.Created))
-			r.SnowflakeDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.SnowflakeDataset.Metadata.EnableAcceleration)
-			r.SnowflakeDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.SnowflakeDataset.Metadata.Modified))
-			r.SnowflakeDataset.Metadata.Tags = make([]types.String, 0, len(resp.SnowflakeDataset.Metadata.Tags))
-			for _, v := range resp.SnowflakeDataset.Metadata.Tags {
-				r.SnowflakeDataset.Metadata.Tags = append(r.SnowflakeDataset.Metadata.Tags, types.StringValue(v))
+			r.SnowflakeDataset.Metadata.Earliest = types.StringValue(resp.SnowflakeDataset.Metadata.Earliest)
+			r.SnowflakeDataset.Metadata.EnableAcceleration = types.BoolValue(resp.SnowflakeDataset.Metadata.EnableAcceleration)
+			r.SnowflakeDataset.Metadata.FieldList = make([]types.String, 0, len(resp.SnowflakeDataset.Metadata.FieldList))
+			for _, v := range resp.SnowflakeDataset.Metadata.FieldList {
+				r.SnowflakeDataset.Metadata.FieldList = append(r.SnowflakeDataset.Metadata.FieldList, types.StringValue(v))
 			}
+			if resp.SnowflakeDataset.Metadata.LatestRunInfo == nil {
+				r.SnowflakeDataset.Metadata.LatestRunInfo = nil
+			} else {
+				r.SnowflakeDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
+				r.SnowflakeDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.EarliestScannedTime)
+				r.SnowflakeDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.FinishedAt)
+				r.SnowflakeDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.LatestScannedTime)
+				r.SnowflakeDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.ObjectCount)
+			}
+			r.SnowflakeDataset.Metadata.ScanMode = types.StringValue(string(resp.SnowflakeDataset.Metadata.ScanMode))
 		}
 		r.SnowflakeDataset.ProviderID = types.StringValue(resp.SnowflakeDataset.ProviderID)
 		r.ProviderID = r.SnowflakeDataset.ProviderID

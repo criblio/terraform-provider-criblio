@@ -1,67 +1,74 @@
 resource "criblio_search_dashboard" "my_searchdashboard" {
-  cache_ttl_seconds   = 6.24
-  category            = "...my_category..."
-  created             = 6.32
-  created_by          = "...my_created_by..."
-  description         = "...my_description..."
-  display_created_by  = "...my_display_created_by..."
-  display_modified_by = "...my_display_modified_by..."
+  cache_ttl_seconds   = 300
+  category            = "observability"
+  created             = 1696166400
+  created_by          = "user123"
+  description         = "Dashboard for monitoring system metrics"
+  display_created_by  = "User 123"
+  display_modified_by = "User 456"
   elements = [
     {
       element = {
-        description      = "...my_description..."
+        color_palette    = "blue"
+        description      = "CPU usage chart"
         empty            = false
+        h                = 4
         hide_panel       = false
         horizontal_chart = true
-        id               = "...my_id..."
-        index            = 5.35
-        input_id         = "...my_input_id..."
+        id               = "element1"
         layout = {
-          h = 3.81
-          w = 5.73
-          x = 5.53
-          y = 6.72
+          h = 0
+          w = 9
+          x = 8
+          y = 2
         }
-        search = {
-          search_query_inline = {
-            earliest = {
-              number = 2.23
-            }
-            latest = {
-              number = 2.43
-            }
-            parent_search_id = "...my_parent_search_id..."
-            query            = "...my_query..."
-            sample_rate      = 5.02
-            timezone         = "...my_timezone..."
-            type             = "inline"
+        query = {
+          search_query_saved = {
+            query    = "dataset=my_dataset | stats count"
+            query_id = "query123"
+            run_mode = "lastRun"
+            type     = "saved"
           }
         }
-        title = "...my_title..."
-        type  = "chart.line"
-        value = {
-          key = jsonencode("value")
+        title   = "CPU Usage"
+        type    = "chart.line"
+        variant = "default"
+        w       = 6
+        x       = 0
+        x_axis = {
+          data_field        = "time"
+          inverse           = false
+          label_interval    = "1m"
+          label_orientation = 0
+          name              = "Time"
+          offset            = 0
+          position          = "bottom"
+          type              = "time"
         }
-        variant = "input"
+        y = 0
+        y_axis = {
+          data_field = [
+            "cpu",
+          ]
+          interval   = 10
+          max        = 100
+          min        = 0
+          position   = "left"
+          scale      = "linear"
+          split_line = true
+          type       = "value"
+        }
       }
     }
   ]
-  id           = "...my_id..."
-  modified     = 3.77
-  modified_by  = "...my_modified_by..."
-  name         = "...my_name..."
-  pack_id      = "...my_pack_id..."
-  refresh_rate = 2.1
-  resolved_dataset_ids = [
-    "..."
+  id          = "dashboard123"
+  modified    = 1696170000
+  modified_by = "user456"
+  name        = "System Metrics Dashboard"
+  owner       = "teamA"
+  tags = [
+    "monitoring",
+    "system",
+    "cpu",
   ]
-  schedule = {
-    cron_schedule = "...my_cron_schedule..."
-    enabled       = true
-    keep_last_n   = 5.1
-    notifications = {
-      disabled = false
-    }
-    tz = "...my_tz..."
-  }
 }

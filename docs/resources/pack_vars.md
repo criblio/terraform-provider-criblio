@@ -15,10 +15,10 @@ PackVars Resource
 ```terraform
 resource "criblio_pack_vars" "my_packvars" {
   description = "This is a test var."
-  group_id    = "...my_group_id..."
+  group_id    = "Cribl"
   id          = "test_var"
   lib         = "custom"
-  pack        = "...my_pack..."
+  pack        = "example-pack"
   tags        = "test"
   type        = "number"
   value       = 100
@@ -52,8 +52,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_vars.my_criblio_pack_vars
   id = jsonencode({
-    group_id = "..."
-    pack = "..."
+    group_id = "Cribl"
+    pack = "example-pack"
   })
 }
 ```
@@ -61,5 +61,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_vars.my_criblio_pack_vars '{"group_id": "...", "pack": "..."}'
+terraform import criblio_pack_vars.my_criblio_pack_vars '{"group_id": "Cribl", "pack": "example-pack"}'
 ```

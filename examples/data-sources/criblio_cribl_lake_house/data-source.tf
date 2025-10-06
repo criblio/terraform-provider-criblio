@@ -1,3 +1,3 @@
 data "criblio_cribl_lake_house" "my_cribllakehouse" {
-  id = "...my_id..."
+  id = "lakehouse-01"
 }

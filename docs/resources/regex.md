@@ -14,13 +14,13 @@ Regex Resource
 
 ```terraform
 resource "criblio_regex" "my_regex" {
-  description = "A sample regex"
+  description = "Regex for IPv4 addresses"
   group_id    = "default"
-  id          = "test_id"
+  id          = "regexEntry1"
   lib         = "custom"
-  regex       = "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/"
-  sample_data = "192.168.1.1, 10.0.0.1, 172.16.0.1"
-  tags        = "test"
+  regex       = "\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b"
+  sample_data = "192.168.1.1, 10.0.0.1"
+  tags        = "network,ip"
 }
 ```
 
@@ -50,8 +50,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_regex.my_criblio_regex
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "Cribl"
+    id = "apache"
   })
 }
 ```
@@ -59,5 +59,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_regex.my_criblio_regex '{"group_id": "...", "id": "..."}'
+terraform import criblio_regex.my_criblio_regex '{"group_id": "Cribl", "id": "apache"}'
 ```

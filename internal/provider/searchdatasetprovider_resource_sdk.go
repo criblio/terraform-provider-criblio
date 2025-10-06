@@ -1446,11 +1446,11 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 				BlobSasURL:    blobSasURL,
 			})
 		}
-		storageAccountName := new(string)
-		if !r.AzureBlobProvider.StorageAccountName.IsUnknown() && !r.AzureBlobProvider.StorageAccountName.IsNull() {
-			*storageAccountName = r.AzureBlobProvider.StorageAccountName.ValueString()
+		clientId5 := new(string)
+		if !r.AzureBlobProvider.ClientID.IsUnknown() && !r.AzureBlobProvider.ClientID.IsNull() {
+			*clientId5 = r.AzureBlobProvider.ClientID.ValueString()
 		} else {
-			storageAccountName = nil
+			clientId5 = nil
 		}
 		tenantId3 := new(string)
 		if !r.AzureBlobProvider.TenantID.IsUnknown() && !r.AzureBlobProvider.TenantID.IsNull() {
@@ -1458,17 +1458,17 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 		} else {
 			tenantId3 = nil
 		}
-		clientId5 := new(string)
-		if !r.AzureBlobProvider.ClientID.IsUnknown() && !r.AzureBlobProvider.ClientID.IsNull() {
-			*clientId5 = r.AzureBlobProvider.ClientID.ValueString()
-		} else {
-			clientId5 = nil
-		}
 		clientSecret5 := new(string)
 		if !r.AzureBlobProvider.ClientSecret.IsUnknown() && !r.AzureBlobProvider.ClientSecret.IsNull() {
 			*clientSecret5 = r.AzureBlobProvider.ClientSecret.ValueString()
 		} else {
 			clientSecret5 = nil
+		}
+		storageAccountName := new(string)
+		if !r.AzureBlobProvider.StorageAccountName.IsUnknown() && !r.AzureBlobProvider.StorageAccountName.IsNull() {
+			*storageAccountName = r.AzureBlobProvider.StorageAccountName.ValueString()
+		} else {
+			storageAccountName = nil
 		}
 		azureBlobProvider = &shared.AzureBlobProvider{
 			ID:                   id20,
@@ -1478,10 +1478,10 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			Location:             location,
 			ConnectionString:     connectionString,
 			SasConfigs:           sasConfigs,
-			StorageAccountName:   storageAccountName,
-			TenantID:             tenantId3,
 			ClientID:             clientId5,
+			TenantID:             tenantId3,
 			ClientSecret:         clientSecret5,
+			StorageAccountName:   storageAccountName,
 		}
 	}
 	if azureBlobProvider != nil {

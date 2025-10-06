@@ -7,12 +7,12 @@ resource "criblio_search_saved_query" "my_searchsavedquery" {
   name        = "test_saved"
   query       = "dataset=\"cribl_edge_appscope_metrics\" | limit 1000"
   schedule = {
-    cron_schedule = "...my_cron_schedule..."
+    cron_schedule = "0 * * * *"
     enabled       = true
-    keep_last_n   = 7.78
+    keep_last_n   = 5
     notifications = {
       disabled = false
     }
-    tz = "...my_tz..."
+    tz = "UTC"
   }
 }

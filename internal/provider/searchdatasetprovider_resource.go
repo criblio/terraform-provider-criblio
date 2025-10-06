@@ -604,148 +604,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					}...),
 				},
 			},
-			"apihttp_provider": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"authentication_method": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`none`),
-						Description: `The authentication method for API calls. Default: "none"; must be one of ["none", "basic", "login", "oauth"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"none",
-								"basic",
-								"login",
-								"oauth",
-							),
-						},
-					},
-					"available_endpoints": schema.ListNestedAttribute{
-						Computed: true,
-						Optional: true,
-						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
-							Attributes: map[string]schema.Attribute{
-								"data_field": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Within the response JSON, name of the field or array element to pull results from`,
-								},
-								"headers": schema.ListNestedAttribute{
-									Computed: true,
-									Optional: true,
-									NestedObject: schema.NestedAttributeObject{
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
-										Attributes: map[string]schema.Attribute{
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `Header name. Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
-											},
-											"value": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `Header value. Not Null`,
-												Validators: []validator.String{
-													speakeasy_stringvalidators.NotNull(),
-												},
-											},
-										},
-									},
-									Description: `Optional headers for the endpoint`,
-								},
-								"method": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     stringdefault.StaticString(`GET`),
-									Description: `Method for the endpoint. Default: "GET"; must be one of ["GET", "POST"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"GET",
-											"POST",
-										),
-									},
-								},
-								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
-								},
-								"url": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `The URL for this endpoint. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
-								},
-							},
-						},
-						Description: `A list of the available endpoints for this provider. Not Null`,
-						Validators: []validator.List{
-							speakeasy_listvalidators.NotNull(),
-						},
-					},
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Description of the provider`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique identifier for the provider. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Type of the provider. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-				},
-				Validators: []validator.Object{
-					objectvalidator.ConflictsWith(path.Expressions{
-						path.MatchRelative().AtParent().AtName("api_aws_provider"),
-						path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-						path.MatchRelative().AtParent().AtName("api_azure_provider"),
-						path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-						path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-						path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-						path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-						path.MatchRelative().AtParent().AtName("api_okta_provider"),
-						path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-						path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-						path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-						path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-						path.MatchRelative().AtParent().AtName("click_house_provider"),
-						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-						path.MatchRelative().AtParent().AtName("edge_provider"),
-						path.MatchRelative().AtParent().AtName("gcs_provider"),
-						path.MatchRelative().AtParent().AtName("meta_provider"),
-						path.MatchRelative().AtParent().AtName("prometheus_provider"),
-						path.MatchRelative().AtParent().AtName("s3_provider"),
-						path.MatchRelative().AtParent().AtName("snowflake_provider"),
-					}...),
-				},
-			},
 			"api_ms_graph_provider": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
@@ -1205,6 +1063,148 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					}...),
 				},
 			},
+			"apihttp_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"authentication_method": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`none`),
+						Description: `The authentication method for API calls. Default: "none"; must be one of ["none", "basic", "login", "oauth"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"none",
+								"basic",
+								"login",
+								"oauth",
+							),
+						},
+					},
+					"available_endpoints": schema.ListNestedAttribute{
+						Computed: true,
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
+							Attributes: map[string]schema.Attribute{
+								"data_field": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Within the response JSON, name of the field or array element to pull results from`,
+								},
+								"headers": schema.ListNestedAttribute{
+									Computed: true,
+									Optional: true,
+									NestedObject: schema.NestedAttributeObject{
+										Validators: []validator.Object{
+											speakeasy_objectvalidators.NotNull(),
+										},
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Description: `Header name. Not Null`,
+												Validators: []validator.String{
+													speakeasy_stringvalidators.NotNull(),
+												},
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Description: `Header value. Not Null`,
+												Validators: []validator.String{
+													speakeasy_stringvalidators.NotNull(),
+												},
+											},
+										},
+									},
+									Description: `Optional headers for the endpoint`,
+								},
+								"method": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Default:     stringdefault.StaticString(`GET`),
+									Description: `Method for the endpoint. Default: "GET"; must be one of ["GET", "POST"]`,
+									Validators: []validator.String{
+										stringvalidator.OneOf(
+											"GET",
+											"POST",
+										),
+									},
+								},
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `The URL for this endpoint. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+							},
+						},
+						Description: `A list of the available endpoints for this provider. Not Null`,
+						Validators: []validator.List{
+							speakeasy_listvalidators.NotNull(),
+						},
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Unique identifier for the provider. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Type of the provider. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("api_aws_provider"),
+						path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+						path.MatchRelative().AtParent().AtName("api_azure_provider"),
+						path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+						path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+						path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+						path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+						path.MatchRelative().AtParent().AtName("api_okta_provider"),
+						path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+						path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+						path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+						path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+						path.MatchRelative().AtParent().AtName("click_house_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("edge_provider"),
+						path.MatchRelative().AtParent().AtName("gcs_provider"),
+						path.MatchRelative().AtParent().AtName("meta_provider"),
+						path.MatchRelative().AtParent().AtName("prometheus_provider"),
+						path.MatchRelative().AtParent().AtName("s3_provider"),
+						path.MatchRelative().AtParent().AtName("snowflake_provider"),
+					}...),
+				},
+			},
 			"aws_security_lake_provider": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
@@ -1277,15 +1277,12 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					"client_id": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `The service principal's client ID`,
+						Description: `Azure AD application client ID`,
 					},
 					"client_secret": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `The service principal's client secret`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtLeast(1),
-						},
+						Description: `Azure AD application client secret`,
 					},
 					"connection_string": schema.StringAttribute{
 						Computed:    true,
@@ -1327,7 +1324,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"blob_sas_url": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Container-specific Blob SAS URL. Not Null`,
+									Description: `Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
@@ -1335,7 +1332,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"container_name": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Name of the Azure Blob Storage container. Not Null`,
+									Description: `Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
@@ -1352,7 +1349,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					"tenant_id": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `The service principal's tenant ID`,
+						Description: `Azure AD tenant ID`,
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -1878,7 +1875,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Whether to reuse connections`,
+						Description: `Reuse existing S3 connections`,
 					},
 					"session_token": schema.StringAttribute{
 						Computed:    true,

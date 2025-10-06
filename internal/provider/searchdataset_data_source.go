@@ -90,22 +90,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -150,22 +163,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -210,22 +236,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -262,22 +301,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -325,22 +377,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -373,70 +438,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
 							},
-						},
-					},
-					"provider_id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Dataset provider ID`,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Description: `Dataset provider type, set automatically from the dataset provider`,
-					},
-				},
-			},
-			"apihttp_dataset": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Description: `Description of the dataset`,
-					},
-					"enabled_endpoints": schema.ListAttribute{
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `A list of the endpoints that are enabled in this dataset`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the dataset`,
-					},
-					"metadata": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
 							},
-							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -469,22 +499,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -517,22 +560,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -564,22 +620,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -616,22 +685,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -664,22 +746,96 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"apihttp_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"earliest": schema.StringAttribute{
+								Computed: true,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed: true,
+							},
+							"field_list": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -711,22 +867,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -748,7 +917,7 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
-									Description: `Region where the bucket is located`,
+									Description: `AWS region where the bucket is located`,
 								},
 							},
 						},
@@ -777,7 +946,7 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 							Attributes: map[string]schema.Attribute{
 								"container_name": schema.StringAttribute{
 									Computed:    true,
-									Description: `Azure Blob Storage container name`,
+									Description: `Name of the additional container`,
 								},
 								"filter": schema.StringAttribute{
 									Computed:    true,
@@ -785,7 +954,7 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 								},
 								"path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The templated path under which to look for data`,
+									Description: `Path inside the additional container`,
 								},
 							},
 						},
@@ -802,22 +971,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -861,22 +1043,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -932,28 +1127,41 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
 					"path": schema.StringAttribute{
 						Computed:    true,
-						Description: `The directory from which to collect data. Environment variables are supported. Supports templating.`,
+						Description: `The directory from which to collect data`,
 					},
 					"provider_id": schema.StringAttribute{
 						Computed:    true,
@@ -992,22 +1200,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -1050,7 +1271,7 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
-									Description: `Where the bucket is located`,
+									Description: `Where the extra bucket is located`,
 								},
 							},
 						},
@@ -1067,22 +1288,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -1136,22 +1370,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -1174,7 +1421,7 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					},
 					"desired_num_data_points": schema.Float64Attribute{
 						Computed:    true,
-						Description: `Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a "step" predicate.`,
+						Description: `Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a 'step' predicate.`,
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -1183,22 +1430,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -1278,22 +1538,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},
@@ -1341,22 +1614,35 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
-								Computed:    true,
-								Description: `Creation timestamp`,
+							"earliest": schema.StringAttribute{
+								Computed: true,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether acceleration is enabled for this dataset`,
+								Computed: true,
 							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Description: `Last modification timestamp`,
-							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed: true,
 							},
 						},
 					},

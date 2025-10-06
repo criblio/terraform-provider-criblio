@@ -241,6 +241,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1000),
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -376,7 +379,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -409,18 +412,27 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(30),
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"stale_channel_flush_ms": schema.Float64Attribute{
 						Computed:    true,
@@ -791,7 +803,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -881,7 +893,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(600),
 						Description: `The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a ReceiveMessage request. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(604800),
+							float64validator.Between(0, 604800),
 						},
 					},
 				},
@@ -1061,7 +1073,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -1364,7 +1376,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(1),
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry. Default: 1`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 							"request_timeout": schema.Float64Attribute{
@@ -1484,7 +1496,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"max_socket_errors": schema.Float64Attribute{
@@ -1493,7 +1505,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of network errors before the consumer re-creates a socket. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
@@ -1570,7 +1582,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -1659,7 +1671,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Default:  float64default.StaticFloat64(30000),
 						MarkdownDescription: `Timeout used to detect client failures when using Kafka's group-management facilities.` + "\n" +
-							`      If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
+							`      If the client sends no heartbeats to the broker before the timeout expires,` + "\n" +
 							`      the broker will remove the client from the group and initiate a rebalance.` + "\n" +
 							`      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
 							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.` + "\n" +
@@ -1935,7 +1947,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -2138,6 +2150,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -2226,7 +2241,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -2253,6 +2268,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -2265,6 +2283,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -2514,6 +2535,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -2602,7 +2626,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -2629,6 +2653,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -2641,6 +2668,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -2740,6 +2770,353 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
+						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
+						path.MatchRelative().AtParent().AtName("input_datagen"),
+						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_elastic"),
+						path.MatchRelative().AtParent().AtName("input_eventhub"),
+						path.MatchRelative().AtParent().AtName("input_exec"),
+						path.MatchRelative().AtParent().AtName("input_file"),
+						path.MatchRelative().AtParent().AtName("input_firehose"),
+						path.MatchRelative().AtParent().AtName("input_google_pubsub"),
+						path.MatchRelative().AtParent().AtName("input_grafana"),
+						path.MatchRelative().AtParent().AtName("input_http"),
+						path.MatchRelative().AtParent().AtName("input_http_raw"),
+						path.MatchRelative().AtParent().AtName("input_journal_files"),
+						path.MatchRelative().AtParent().AtName("input_kafka"),
+						path.MatchRelative().AtParent().AtName("input_kinesis"),
+						path.MatchRelative().AtParent().AtName("input_kube_events"),
+						path.MatchRelative().AtParent().AtName("input_kube_logs"),
+						path.MatchRelative().AtParent().AtName("input_kube_metrics"),
+						path.MatchRelative().AtParent().AtName("input_loki"),
+						path.MatchRelative().AtParent().AtName("input_metrics"),
+						path.MatchRelative().AtParent().AtName("input_model_driven_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_msk"),
+						path.MatchRelative().AtParent().AtName("input_netflow"),
+						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
+						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
+						path.MatchRelative().AtParent().AtName("input_office365_service"),
+						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
+						path.MatchRelative().AtParent().AtName("input_raw_udp"),
+						path.MatchRelative().AtParent().AtName("input_s3"),
+						path.MatchRelative().AtParent().AtName("input_s3_inventory"),
+						path.MatchRelative().AtParent().AtName("input_security_lake"),
+						path.MatchRelative().AtParent().AtName("input_snmp"),
+						path.MatchRelative().AtParent().AtName("input_splunk"),
+						path.MatchRelative().AtParent().AtName("input_splunk_hec"),
+						path.MatchRelative().AtParent().AtName("input_splunk_search"),
+						path.MatchRelative().AtParent().AtName("input_sqs"),
+						path.MatchRelative().AtParent().AtName("input_syslog"),
+						path.MatchRelative().AtParent().AtName("input_system_metrics"),
+						path.MatchRelative().AtParent().AtName("input_system_state"),
+						path.MatchRelative().AtParent().AtName("input_tcp"),
+						path.MatchRelative().AtParent().AtName("input_tcpjson"),
+						path.MatchRelative().AtParent().AtName("input_wef"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
+						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
+					}...),
+				},
+			},
+			"input_cribl_tcp": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"connections": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"output": schema.StringAttribute{
+									Required: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Optional: true,
+								},
+							},
+						},
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+					},
+					"description": schema.StringAttribute{
+						Optional: true,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"enable_load_balancing": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Load balance traffic across all Worker Processes. Default: false`,
+					},
+					"enable_proxy_header": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Enable if the connection is proxied by a device that supports proxy protocol v1 or v2. Default: false`,
+					},
+					"environment": schema.StringAttribute{
+						Optional:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"host": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`0.0.0.0`),
+						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
+					},
+					"id": schema.StringAttribute{
+						Optional:    true,
+						Description: `Unique ID for this input`,
+					},
+					"max_active_cxn": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(1000),
+						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"metadata": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required: true,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+								},
+							},
+						},
+						Description: `Fields to add to events from this input`,
+					},
+					"pipeline": schema.StringAttribute{
+						Optional:    true,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"port": schema.Float64Attribute{
+						Required:    true,
+						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
+					},
+					"pq": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"commit_frequency": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(42),
+								Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"compress": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`none`),
+								Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"none",
+										"gzip",
+									),
+								},
+							},
+							"max_buffer_size": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1000),
+								Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
+							},
+							"max_file_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`1 MB`),
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"max_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`5GB`),
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`always`),
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"smart",
+										"always",
+									),
+								},
+							},
+							"path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
+							},
+						},
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
+					},
+					"socket_ending_max_wait": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(30),
+						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"socket_idle_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"socket_max_lifespan": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"ca_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
+								Optional:    true,
+								Description: `Parsed as JSON.`,
+							},
+							"disabled": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Default: true`,
+							},
+							"max_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"min_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"passphrase": schema.StringAttribute{
+								Optional:    true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
+								Optional:    true,
+								Description: `Parsed as JSON.`,
+							},
+							"request_cert": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
+							},
+						},
+					},
+					"type": schema.StringAttribute{
+						Optional:    true,
+						Description: `must be "cribl_tcp"`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"cribl_tcp",
+							),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_appscope"),
+						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collection"),
+						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
+						path.MatchRelative().AtParent().AtName("input_cribl"),
+						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -2906,7 +3283,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -2967,341 +3344,6 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
-						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
-						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
-						path.MatchRelative().AtParent().AtName("input_datagen"),
-						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
-						path.MatchRelative().AtParent().AtName("input_elastic"),
-						path.MatchRelative().AtParent().AtName("input_eventhub"),
-						path.MatchRelative().AtParent().AtName("input_exec"),
-						path.MatchRelative().AtParent().AtName("input_file"),
-						path.MatchRelative().AtParent().AtName("input_firehose"),
-						path.MatchRelative().AtParent().AtName("input_google_pubsub"),
-						path.MatchRelative().AtParent().AtName("input_grafana"),
-						path.MatchRelative().AtParent().AtName("input_http"),
-						path.MatchRelative().AtParent().AtName("input_http_raw"),
-						path.MatchRelative().AtParent().AtName("input_journal_files"),
-						path.MatchRelative().AtParent().AtName("input_kafka"),
-						path.MatchRelative().AtParent().AtName("input_kinesis"),
-						path.MatchRelative().AtParent().AtName("input_kube_events"),
-						path.MatchRelative().AtParent().AtName("input_kube_logs"),
-						path.MatchRelative().AtParent().AtName("input_kube_metrics"),
-						path.MatchRelative().AtParent().AtName("input_loki"),
-						path.MatchRelative().AtParent().AtName("input_metrics"),
-						path.MatchRelative().AtParent().AtName("input_model_driven_telemetry"),
-						path.MatchRelative().AtParent().AtName("input_msk"),
-						path.MatchRelative().AtParent().AtName("input_netflow"),
-						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
-						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
-						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
-						path.MatchRelative().AtParent().AtName("input_prometheus"),
-						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
-						path.MatchRelative().AtParent().AtName("input_raw_udp"),
-						path.MatchRelative().AtParent().AtName("input_s3"),
-						path.MatchRelative().AtParent().AtName("input_s3_inventory"),
-						path.MatchRelative().AtParent().AtName("input_security_lake"),
-						path.MatchRelative().AtParent().AtName("input_snmp"),
-						path.MatchRelative().AtParent().AtName("input_splunk"),
-						path.MatchRelative().AtParent().AtName("input_splunk_hec"),
-						path.MatchRelative().AtParent().AtName("input_splunk_search"),
-						path.MatchRelative().AtParent().AtName("input_sqs"),
-						path.MatchRelative().AtParent().AtName("input_syslog"),
-						path.MatchRelative().AtParent().AtName("input_system_metrics"),
-						path.MatchRelative().AtParent().AtName("input_system_state"),
-						path.MatchRelative().AtParent().AtName("input_tcp"),
-						path.MatchRelative().AtParent().AtName("input_tcpjson"),
-						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
-						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
-						path.MatchRelative().AtParent().AtName("input_wiz"),
-						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
-					}...),
-				},
-			},
-			"input_cribl_tcp": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"connections": schema.ListNestedAttribute{
-						Optional: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"output": schema.StringAttribute{
-									Required: true,
-								},
-								"pipeline": schema.StringAttribute{
-									Optional: true,
-								},
-							},
-						},
-						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-					},
-					"description": schema.StringAttribute{
-						Optional: true,
-					},
-					"disabled": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Default: false`,
-					},
-					"enable_load_balancing": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Load balance traffic across all Worker Processes. Default: false`,
-					},
-					"enable_proxy_header": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Enable if the connection is proxied by a device that supports proxy protocol v1 or v2. Default: false`,
-					},
-					"environment": schema.StringAttribute{
-						Optional:    true,
-						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-					},
-					"host": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`0.0.0.0`),
-						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
-					},
-					"id": schema.StringAttribute{
-						Optional:    true,
-						Description: `Unique ID for this input`,
-					},
-					"max_active_cxn": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     float64default.StaticFloat64(1000),
-						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
-					},
-					"metadata": schema.ListNestedAttribute{
-						Optional: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"name": schema.StringAttribute{
-									Required: true,
-								},
-								"value": schema.StringAttribute{
-									Required:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-								},
-							},
-						},
-						Description: `Fields to add to events from this input`,
-					},
-					"pipeline": schema.StringAttribute{
-						Optional:    true,
-						Description: `Pipeline to process data from this Source before sending it through the Routes`,
-					},
-					"port": schema.Float64Attribute{
-						Required:    true,
-						Description: `Port to listen on`,
-						Validators: []validator.Float64{
-							float64validator.AtMost(65535),
-						},
-					},
-					"pq": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"commit_frequency": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(42),
-								Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(1),
-								},
-							},
-							"compress": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`none`),
-								Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"none",
-										"gzip",
-									),
-								},
-							},
-							"max_buffer_size": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1000),
-								Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(42),
-								},
-							},
-							"max_file_size": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`1 MB`),
-								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-								},
-							},
-							"max_size": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`5GB`),
-								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-								},
-							},
-							"mode": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"smart",
-										"always",
-									),
-								},
-							},
-							"path": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
-								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
-							},
-						},
-					},
-					"pq_enabled": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
-					},
-					"send_to_routes": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(true),
-						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-					},
-					"socket_ending_max_wait": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     float64default.StaticFloat64(30),
-						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
-					},
-					"socket_idle_timeout": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     float64default.StaticFloat64(0),
-						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
-					},
-					"socket_max_lifespan": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     float64default.StaticFloat64(0),
-						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
-					},
-					"streamtags": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
-					},
-					"tls": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"ca_path": schema.StringAttribute{
-								Optional:    true,
-								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-							},
-							"cert_path": schema.StringAttribute{
-								Optional:    true,
-								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-							},
-							"certificate_name": schema.StringAttribute{
-								Optional:    true,
-								Description: `The name of the predefined certificate`,
-							},
-							"common_name_regex": schema.StringAttribute{
-								CustomType:  jsontypes.NormalizedType{},
-								Optional:    true,
-								Description: `Parsed as JSON.`,
-							},
-							"disabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Default: true`,
-							},
-							"max_version": schema.StringAttribute{
-								Optional:    true,
-								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"TLSv1",
-										"TLSv1.1",
-										"TLSv1.2",
-										"TLSv1.3",
-									),
-								},
-							},
-							"min_version": schema.StringAttribute{
-								Optional:    true,
-								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"TLSv1",
-										"TLSv1.1",
-										"TLSv1.2",
-										"TLSv1.3",
-									),
-								},
-							},
-							"passphrase": schema.StringAttribute{
-								Optional:    true,
-								Description: `Passphrase to use to decrypt private key`,
-							},
-							"priv_key_path": schema.StringAttribute{
-								Optional:    true,
-								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-							},
-							"reject_unauthorized": schema.StringAttribute{
-								CustomType:  jsontypes.NormalizedType{},
-								Optional:    true,
-								Description: `Parsed as JSON.`,
-							},
-							"request_cert": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
-							},
-						},
-					},
-					"type": schema.StringAttribute{
-						Optional:    true,
-						Description: `must be "cribl_tcp"`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"cribl_tcp",
-							),
-						},
-					},
-				},
-				Validators: []validator.Object{
-					objectvalidator.ConflictsWith(path.Expressions{
-						path.MatchRelative().AtParent().AtName("input_appscope"),
-						path.MatchRelative().AtParent().AtName("input_azure_blob"),
-						path.MatchRelative().AtParent().AtName("input_collection"),
-						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
-						path.MatchRelative().AtParent().AtName("input_cribl"),
-						path.MatchRelative().AtParent().AtName("input_cribl_http"),
-						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -3416,7 +3458,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(5),
 								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored. Default: 5`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 						},
@@ -3588,7 +3630,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -3729,7 +3771,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(21600),
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 21600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(43200),
+							float64validator.Between(0, 43200),
 						},
 					},
 				},
@@ -3894,6 +3936,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -3982,7 +4027,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -4026,6 +4071,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -4038,6 +4086,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -4297,7 +4348,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -4704,7 +4755,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -4894,7 +4945,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(5000),
 						Description: `Timeout, in milliseconds, before aborting HTTP connection attempts; 1-60000 or 0 to disable. Default: 5000`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(60000),
+							float64validator.Between(0, 60000),
 						},
 					},
 					"type": schema.StringAttribute{
@@ -5152,6 +5203,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -5243,7 +5297,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -5318,6 +5372,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -5330,6 +5387,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -5631,7 +5691,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"max_socket_errors": schema.Float64Attribute{
@@ -5640,7 +5700,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of network errors before the consumer re-creates a socket. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
@@ -5723,7 +5783,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -6054,7 +6114,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -6081,6 +6141,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(10),
 						Description: `Maximum number of retry attempts in the event that the command fails. Default: 10`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"schedule_type": schema.StringAttribute{
 						Computed:    true,
@@ -6223,6 +6286,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"depth": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Set how many subdirectories deep to search. Use 0 to search only files in the given path, 1 to also look in its immediate subdirectories, etc. Leave it empty for unlimited depth.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"description": schema.StringAttribute{
 						Optional: true,
@@ -6379,7 +6445,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -6603,6 +6669,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -6691,7 +6760,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -6718,6 +6787,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -6730,6 +6802,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -7036,7 +7111,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -7382,6 +7457,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(256),
 								Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"max_requests_per_socket": schema.Int64Attribute{
 								Computed:    true,
@@ -7470,7 +7548,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Computed:    true,
 										Optional:    true,
 										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"smart",
@@ -7611,6 +7689,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Computed:    true,
@@ -7623,6 +7704,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
@@ -7923,6 +8007,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(256),
 								Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"max_requests_per_socket": schema.Int64Attribute{
 								Computed:    true,
@@ -8011,7 +8098,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Computed:    true,
 										Optional:    true,
 										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"smart",
@@ -8152,6 +8239,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"send_to_routes": schema.BoolAttribute{
 								Computed:    true,
@@ -8164,6 +8254,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
@@ -8466,6 +8559,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -8554,7 +8650,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -8581,6 +8677,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -8593,6 +8692,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"splunk_hec_acks": schema.BoolAttribute{
 						Computed:    true,
@@ -8900,6 +9002,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -8988,7 +9093,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -9015,6 +9120,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -9027,6 +9135,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"stale_channel_flush_ms": schema.Float64Attribute{
 						Computed:    true,
@@ -9321,7 +9432,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -9540,8 +9651,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Default:  float64default.StaticFloat64(3000),
 						MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.` + "\n" +
-							`      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
-							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.` + "\n" +
+							`    Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
+							`    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.` + "\n" +
 							`Default: 3000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -9600,7 +9711,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(1),
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry. Default: 1`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 							"request_timeout": schema.Float64Attribute{
@@ -9720,7 +9831,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"max_socket_errors": schema.Float64Attribute{
@@ -9729,7 +9840,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of network errors before the consumer re-creates a socket. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
@@ -9806,7 +9917,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -9842,8 +9953,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Default:  float64default.StaticFloat64(60000),
 						MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance begins.` + "\n" +
-							`      If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
-							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.` + "\n" +
+							`    If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
+							`    See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.` + "\n" +
 							`Default: 60000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -9895,10 +10006,10 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Default:  float64default.StaticFloat64(30000),
 						MarkdownDescription: `Timeout used to detect client failures when using Kafka's group-management facilities.` + "\n" +
-							`      If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
-							`      the broker will remove the client from the group and initiate a rebalance.` + "\n" +
-							`      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
-							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.` + "\n" +
+							`    If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
+							`    the broker will remove the client from the group and initiate a rebalance.` + "\n" +
+							`    Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
+							`    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.` + "\n" +
 							`Default: 30000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -10270,7 +10381,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -10545,7 +10656,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -10843,7 +10954,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -11151,7 +11262,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -11409,6 +11520,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -11532,7 +11646,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -11559,6 +11673,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"secret": schema.StringAttribute{
 						Optional:    true,
@@ -11579,6 +11696,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -11809,6 +11929,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1000),
 						Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -11884,7 +12007,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -12126,6 +12249,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1000),
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -12210,7 +12336,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -12435,15 +12561,13 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`auto`),
-						Description: `AWS authentication method. Choose Auto to use IAM roles. Default: "auto"; must be one of ["auto", "manual", "secret"]`,
+						Required:    true,
+						Description: `must be one of ["instanceRole", "accessKeys", "profile"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
-								"auto",
-								"manual",
-								"secret",
+								"instanceRole",
+								"accessKeys",
+								"profile",
 							),
 						},
 					},
@@ -12543,8 +12667,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Default:  float64default.StaticFloat64(3000),
 						MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.` + "\n" +
-							`      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
-							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.` + "\n" +
+							`    Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
+							`    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.` + "\n" +
 							`Default: 3000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -12603,7 +12727,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(1),
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry. Default: 1`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 							"request_timeout": schema.Float64Attribute{
@@ -12723,7 +12847,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"max_socket_errors": schema.Float64Attribute{
@@ -12732,7 +12856,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of network errors before the consumer re-creates a socket. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"metadata": schema.ListNestedAttribute{
@@ -12809,7 +12933,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -12845,8 +12969,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Default:  float64default.StaticFloat64(60000),
 						MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance begins.` + "\n" +
-							`      If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
-							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.` + "\n" +
+							`    If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
+							`    See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.` + "\n" +
 							`Default: 60000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -12854,7 +12978,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"region": schema.StringAttribute{
 						Required:    true,
-						Description: `Region where the MSK cluster is located`,
+						Description: `AWS region where the MSK cluster is running`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Computed:    true,
@@ -12888,10 +13012,10 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Default:  float64default.StaticFloat64(30000),
 						MarkdownDescription: `Timeout used to detect client failures when using Kafka's group-management facilities.` + "\n" +
-							`      If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
-							`      the broker will remove the client from the group and initiate a rebalance.` + "\n" +
-							`      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
-							`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.` + "\n" +
+							`    If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
+							`    the broker will remove the client from the group and initiate a rebalance.` + "\n" +
+							`    Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
+							`    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.` + "\n" +
 							`Default: 30000`,
 						Validators: []validator.Float64{
 							float64validator.Between(1000, 3600000),
@@ -12970,7 +13094,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed: true,
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
-								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
@@ -13207,7 +13332,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -13382,7 +13507,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"content_type": schema.StringAttribute{
-									Optional:    true,
+									Required:    true,
 									Description: `Office 365 Management Activity API Content Type`,
 								},
 								"description": schema.StringAttribute{
@@ -13390,17 +13515,18 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Description: `If interval type is minutes the value entered must evenly divisible by 60 or save will fail`,
 								},
 								"enabled": schema.BoolAttribute{
-									Optional: true,
+									Required: true,
 								},
 								"interval": schema.Float64Attribute{
-									Optional: true,
+									Required:    true,
+									Description: `Interval, in minutes, between polls`,
 									Validators: []validator.Float64{
 										float64validator.Between(1, 60),
 									},
 								},
 								"log_level": schema.StringAttribute{
-									Optional:    true,
-									Description: `Collector runtime Log Level. must be one of ["error", "warn", "info", "debug"]`,
+									Required:    true,
+									Description: `must be one of ["error", "warn", "info", "debug"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
 											"error",
@@ -13443,7 +13569,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(0),
 						Description: `Use this setting to account for ingestion lag. This is necessary because there can be a lag of 60 - 90 minutes (or longer) before Office 365 events are available for retrieval. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(7200),
+							float64validator.Between(0, 7200),
 						},
 					},
 					"job_timeout": schema.StringAttribute{
@@ -13561,7 +13687,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -13610,7 +13736,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(1000),
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20000),
+									float64validator.Between(0, 20000),
 								},
 							},
 							"limit": schema.Float64Attribute{
@@ -13619,7 +13745,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(5),
 								Description: `The maximum number of times to retry a failed HTTP request. Default: 5`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20),
+									float64validator.Between(0, 20),
 								},
 							},
 							"multiplier": schema.Float64Attribute{
@@ -13685,7 +13811,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(300),
 						Description: `HTTP request inactivity timeout, use 0 to disable. Default: 300`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(2400),
+							float64validator.Between(0, 2400),
 						},
 					},
 					"ttl": schema.StringAttribute{
@@ -14019,7 +14145,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -14076,7 +14202,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(1000),
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20000),
+									float64validator.Between(0, 20000),
 								},
 							},
 							"limit": schema.Float64Attribute{
@@ -14085,7 +14211,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(5),
 								Description: `The maximum number of times to retry a failed HTTP request. Default: 5`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20),
+									float64validator.Between(0, 20),
 								},
 							},
 							"multiplier": schema.Float64Attribute{
@@ -14155,7 +14281,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(300),
 						Description: `HTTP request inactivity timeout. Maximum is 2400 (40 minutes); enter 0 to wait indefinitely. Default: 300`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(2400),
+							float64validator.Between(0, 2400),
 						},
 					},
 					"ttl": schema.StringAttribute{
@@ -14304,7 +14430,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"interval": schema.Float64Attribute{
 									Optional: true,
 									Validators: []validator.Float64{
-										float64validator.AtMost(60),
+										float64validator.Between(0, 60),
 									},
 								},
 								"log_level": schema.StringAttribute{
@@ -14461,7 +14587,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -14506,7 +14632,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(1000),
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20000),
+									float64validator.Between(0, 20000),
 								},
 							},
 							"limit": schema.Float64Attribute{
@@ -14515,7 +14641,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(5),
 								Description: `The maximum number of times to retry a failed HTTP request. Default: 5`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20),
+									float64validator.Between(0, 20),
 								},
 							},
 							"multiplier": schema.Float64Attribute{
@@ -14581,7 +14707,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(300),
 						Description: `HTTP request inactivity timeout, use 0 to disable. Default: 300`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(2400),
+							float64validator.Between(0, 2400),
 						},
 					},
 					"ttl": schema.StringAttribute{
@@ -14731,7 +14857,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.StringAttribute{
 						CustomType:  jsontypes.NormalizedType{},
@@ -14803,12 +14929,18 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1000),
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_active_req": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -14946,7 +15078,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -14985,6 +15117,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"secret": schema.StringAttribute{
 						Optional:    true,
@@ -15005,6 +15140,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -15439,7 +15577,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -15788,6 +15926,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -15911,7 +16052,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -15947,6 +16088,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"secret": schema.StringAttribute{
 						Optional:    true,
@@ -15967,6 +16111,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -16198,7 +16345,10 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1000),
-						Description: `Maximum number of events to buffer when downstream is blocking. Default: 1000`,
+						Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -16281,7 +16431,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -16461,7 +16611,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(5),
 								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored. Default: 5`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 						},
@@ -16651,7 +16801,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -16786,7 +16936,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(600),
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(43200),
+							float64validator.Between(0, 43200),
 						},
 					},
 				},
@@ -16914,7 +17064,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(5),
 								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored. Default: 5`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 						},
@@ -17115,7 +17265,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -17262,7 +17412,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(600),
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(43200),
+							float64validator.Between(0, 43200),
 						},
 					},
 				},
@@ -17390,7 +17540,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(5),
 								Description: `The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored. Default: 5`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 						},
@@ -17580,7 +17730,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -17721,7 +17871,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(600),
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(43200),
+							float64validator.Between(0, 43200),
 						},
 					},
 				},
@@ -17844,6 +17994,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1000),
 						Description: `Maximum number of events to buffer when downstream is blocking. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -17928,7 +18081,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -18122,11 +18275,11 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								"token": schema.StringAttribute{
 									Required:    true,
-									Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
+									Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 								},
 							},
 						},
-						Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
+						Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 					},
 					"breaker_rulesets": schema.ListAttribute{
 						Optional:    true,
@@ -18212,6 +18365,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1000),
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_s2_sversion": schema.StringAttribute{
 						Computed:    true,
@@ -18303,7 +18459,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -18336,18 +18492,27 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(30),
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"stale_channel_flush_ms": schema.Float64Attribute{
 						Computed:    true,
@@ -18645,10 +18810,11 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     booldefault.StaticBool(false),
 						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
 					},
-					"enable_health_check": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"enable_health_check": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Default:     booldefault.StaticBool(false),
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -18702,6 +18868,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -18790,7 +18959,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -18817,6 +18986,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -18829,6 +19001,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"splunk_hec_acks": schema.BoolAttribute{
 						Computed:    true,
@@ -19098,7 +19273,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
-									Description: `JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
+									Description: `JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
 								},
 							},
 						},
@@ -19113,7 +19288,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								"value": schema.StringAttribute{
 									Required:    true,
-									Description: `JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
+									Description: `JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
 								},
 							},
 						},
@@ -19306,7 +19481,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -19340,7 +19515,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(0),
 						Description: `HTTP request inactivity timeout. Use 0 for no timeout. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(2400),
+							float64validator.Between(0, 2400),
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
@@ -19366,7 +19541,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(1000),
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20000),
+									float64validator.Between(0, 20000),
 								},
 							},
 							"limit": schema.Float64Attribute{
@@ -19375,7 +19550,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(5),
 								Description: `The maximum number of times to retry a failed HTTP request. Default: 5`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20),
+									float64validator.Between(0, 20),
 								},
 							},
 							"multiplier": schema.Float64Attribute{
@@ -19764,7 +19939,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -19853,7 +20028,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(600),
 						Description: `After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(43200),
+							float64validator.Between(0, 43200),
 						},
 					},
 				},
@@ -20008,12 +20183,18 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(1000),
 								Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(1000),
 								Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Optional: true,
@@ -20095,7 +20276,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Computed:    true,
 										Optional:    true,
 										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"smart",
@@ -20134,18 +20315,27 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(30),
 								Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"socket_idle_timeout": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"socket_max_lifespan": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
@@ -20358,12 +20548,18 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(1000),
 								Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(1000),
 								Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Optional: true,
@@ -20445,7 +20641,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Computed:    true,
 										Optional:    true,
 										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"smart",
@@ -20484,18 +20680,27 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     float64default.StaticFloat64(30),
 								Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"socket_idle_timeout": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"socket_max_lifespan": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
@@ -21114,7 +21319,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -21322,7 +21527,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Default: true`,
 									},
 								},
-								Description: `Creates events from list of logged-in users`,
+								Description: `Creates events for logged-in users`,
 							},
 							"metadata": schema.SingleNestedAttribute{
 								Optional: true,
@@ -21559,7 +21764,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -21719,7 +21924,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Enable if the connection is proxied by a device that supports proxy protocol v1 or v2. Default: false`,
+						Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2. Default: false`,
 					},
 					"environment": schema.StringAttribute{
 						Optional:    true,
@@ -21746,6 +21951,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1000),
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -21828,7 +22036,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -21881,18 +22089,27 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(30),
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"stale_channel_flush_ms": schema.Float64Attribute{
 						Computed:    true,
@@ -22132,6 +22349,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1000),
 						Description: `Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -22214,7 +22434,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -22247,18 +22467,27 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(30),
 						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_idle_timeout": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"socket_max_lifespan": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -22528,6 +22757,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -22618,7 +22850,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -22655,6 +22887,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -22672,6 +22907,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Optional:    true,
 									Default:     float64default.StaticFloat64(60),
 									Description: `Interval (in seconds) over which the endpoint should collect events before sending them to Stream. Default: 60`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 								"compress": schema.BoolAttribute{
 									Computed:    true,
@@ -22924,6 +23162,287 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
+					}...),
+				},
+			},
+			"input_win_event_logs": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"batch_size": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(500),
+						Description: `The maximum number of events to read in one polling interval. A batch size higher than 500 can cause delays when pulling from multiple event logs. (Applicable for pre-4.8.0 nodes that use Windows Tools). Default: 500`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
+					},
+					"connections": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"output": schema.StringAttribute{
+									Required: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Optional: true,
+								},
+							},
+						},
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+					},
+					"description": schema.StringAttribute{
+						Optional: true,
+					},
+					"disable_native_module": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Enable to use built-in tools (PowerShell for JSON, wevtutil for XML) to collect event logs instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-windows-event-logs/#advanced-settings). Default: false`,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"environment": schema.StringAttribute{
+						Optional:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"event_format": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`json`),
+						Description: `Format of individual events. Default: "json"; must be one of ["json", "xml"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"json",
+								"xml",
+							),
+						},
+					},
+					"id": schema.StringAttribute{
+						Optional:    true,
+						Description: `Unique ID for this input`,
+					},
+					"interval": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(10),
+						Description: `Time, in seconds, between checking for new entries (Applicable for pre-4.8.0 nodes that use Windows Tools). Default: 10`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
+					},
+					"log_names": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+							listvalidator.UniqueValues(),
+						},
+					},
+					"max_event_bytes": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(51200),
+						Description: `The maximum number of bytes in an event before it is flushed to the pipelines. Default: 51200`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 134217728),
+						},
+					},
+					"metadata": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required: true,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+								},
+							},
+						},
+						Description: `Fields to add to events from this input`,
+					},
+					"pipeline": schema.StringAttribute{
+						Optional:    true,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"pq": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"commit_frequency": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(42),
+								Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"compress": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`none`),
+								Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"none",
+										"gzip",
+									),
+								},
+							},
+							"max_buffer_size": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1000),
+								Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
+							},
+							"max_file_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`1 MB`),
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"max_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`5GB`),
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`always`),
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"smart",
+										"always",
+									),
+								},
+							},
+							"path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
+							},
+						},
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
+					},
+					"read_mode": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`oldest`),
+						Description: `Read all stored and future event logs, or only future events. Default: "oldest"; must be one of ["oldest", "newest"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"oldest",
+								"newest",
+							),
+						},
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}`,
+					},
+					"type": schema.StringAttribute{
+						Required:    true,
+						Description: `must be "win_event_logs"`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"win_event_logs",
+							),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_appscope"),
+						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collection"),
+						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
+						path.MatchRelative().AtParent().AtName("input_cribl"),
+						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
+						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
+						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
+						path.MatchRelative().AtParent().AtName("input_datagen"),
+						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_elastic"),
+						path.MatchRelative().AtParent().AtName("input_eventhub"),
+						path.MatchRelative().AtParent().AtName("input_exec"),
+						path.MatchRelative().AtParent().AtName("input_file"),
+						path.MatchRelative().AtParent().AtName("input_firehose"),
+						path.MatchRelative().AtParent().AtName("input_google_pubsub"),
+						path.MatchRelative().AtParent().AtName("input_grafana"),
+						path.MatchRelative().AtParent().AtName("input_http"),
+						path.MatchRelative().AtParent().AtName("input_http_raw"),
+						path.MatchRelative().AtParent().AtName("input_journal_files"),
+						path.MatchRelative().AtParent().AtName("input_kafka"),
+						path.MatchRelative().AtParent().AtName("input_kinesis"),
+						path.MatchRelative().AtParent().AtName("input_kube_events"),
+						path.MatchRelative().AtParent().AtName("input_kube_logs"),
+						path.MatchRelative().AtParent().AtName("input_kube_metrics"),
+						path.MatchRelative().AtParent().AtName("input_loki"),
+						path.MatchRelative().AtParent().AtName("input_metrics"),
+						path.MatchRelative().AtParent().AtName("input_model_driven_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_msk"),
+						path.MatchRelative().AtParent().AtName("input_netflow"),
+						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
+						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
+						path.MatchRelative().AtParent().AtName("input_office365_service"),
+						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
+						path.MatchRelative().AtParent().AtName("input_raw_udp"),
+						path.MatchRelative().AtParent().AtName("input_s3"),
+						path.MatchRelative().AtParent().AtName("input_s3_inventory"),
+						path.MatchRelative().AtParent().AtName("input_security_lake"),
+						path.MatchRelative().AtParent().AtName("input_snmp"),
+						path.MatchRelative().AtParent().AtName("input_splunk"),
+						path.MatchRelative().AtParent().AtName("input_splunk_hec"),
+						path.MatchRelative().AtParent().AtName("input_splunk_search"),
+						path.MatchRelative().AtParent().AtName("input_sqs"),
+						path.MatchRelative().AtParent().AtName("input_syslog"),
+						path.MatchRelative().AtParent().AtName("input_system_metrics"),
+						path.MatchRelative().AtParent().AtName("input_system_state"),
+						path.MatchRelative().AtParent().AtName("input_tcp"),
+						path.MatchRelative().AtParent().AtName("input_tcpjson"),
+						path.MatchRelative().AtParent().AtName("input_wef"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
@@ -23282,7 +23801,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -23409,287 +23928,6 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
-						path.MatchRelative().AtParent().AtName("input_wiz"),
-						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
-					}...),
-				},
-			},
-			"input_win_event_logs": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"batch_size": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     float64default.StaticFloat64(500),
-						Description: `The maximum number of events to read in one polling interval. A batch size higher than 500 can cause delays when pulling from multiple event logs. (Applicable for pre-4.8.0 nodes that use Windows Tools). Default: 500`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(1),
-						},
-					},
-					"connections": schema.ListNestedAttribute{
-						Optional: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"output": schema.StringAttribute{
-									Required: true,
-								},
-								"pipeline": schema.StringAttribute{
-									Optional: true,
-								},
-							},
-						},
-						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-					},
-					"description": schema.StringAttribute{
-						Optional: true,
-					},
-					"disable_native_module": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Enable to use built-in tools (PowerShell for JSON, wevtutil for XML) to collect event logs instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-windows-event-logs/#advanced-settings). Default: false`,
-					},
-					"disabled": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Default: false`,
-					},
-					"environment": schema.StringAttribute{
-						Optional:    true,
-						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-					},
-					"event_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`json`),
-						Description: `Format of individual events. Default: "json"; must be one of ["json", "xml"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"json",
-								"xml",
-							),
-						},
-					},
-					"id": schema.StringAttribute{
-						Optional:    true,
-						Description: `Unique ID for this input`,
-					},
-					"interval": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     float64default.StaticFloat64(10),
-						Description: `Time, in seconds, between checking for new entries (Applicable for pre-4.8.0 nodes that use Windows Tools). Default: 10`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(1),
-						},
-					},
-					"log_names": schema.ListAttribute{
-						Optional:    true,
-						ElementType: types.StringType,
-						Description: `Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.`,
-						Validators: []validator.List{
-							listvalidator.SizeAtLeast(1),
-							listvalidator.UniqueValues(),
-						},
-					},
-					"max_event_bytes": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     float64default.StaticFloat64(51200),
-						Description: `The maximum number of bytes in an event before it is flushed to the pipelines. Default: 51200`,
-						Validators: []validator.Float64{
-							float64validator.Between(1, 134217728),
-						},
-					},
-					"metadata": schema.ListNestedAttribute{
-						Optional: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"name": schema.StringAttribute{
-									Required: true,
-								},
-								"value": schema.StringAttribute{
-									Required:    true,
-									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-								},
-							},
-						},
-						Description: `Fields to add to events from this input`,
-					},
-					"pipeline": schema.StringAttribute{
-						Optional:    true,
-						Description: `Pipeline to process data from this Source before sending it through the Routes`,
-					},
-					"pq": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"commit_frequency": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(42),
-								Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(1),
-								},
-							},
-							"compress": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`none`),
-								Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"none",
-										"gzip",
-									),
-								},
-							},
-							"max_buffer_size": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1000),
-								Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(42),
-								},
-							},
-							"max_file_size": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`1 MB`),
-								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-								},
-							},
-							"max_size": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`5GB`),
-								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-								},
-							},
-							"mode": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"smart",
-										"always",
-									),
-								},
-							},
-							"path": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
-								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
-							},
-						},
-					},
-					"pq_enabled": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
-					},
-					"read_mode": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`oldest`),
-						Description: `Read all stored and future event logs, or only future events. Default: "oldest"; must be one of ["oldest", "newest"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"oldest",
-								"newest",
-							),
-						},
-					},
-					"send_to_routes": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(true),
-						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-					},
-					"streamtags": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
-					},
-					"type": schema.StringAttribute{
-						Required:    true,
-						Description: `must be "win_event_logs"`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"win_event_logs",
-							),
-						},
-					},
-				},
-				Validators: []validator.Object{
-					objectvalidator.ConflictsWith(path.Expressions{
-						path.MatchRelative().AtParent().AtName("input_appscope"),
-						path.MatchRelative().AtParent().AtName("input_azure_blob"),
-						path.MatchRelative().AtParent().AtName("input_collection"),
-						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
-						path.MatchRelative().AtParent().AtName("input_cribl"),
-						path.MatchRelative().AtParent().AtName("input_cribl_http"),
-						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
-						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
-						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
-						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
-						path.MatchRelative().AtParent().AtName("input_datagen"),
-						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
-						path.MatchRelative().AtParent().AtName("input_elastic"),
-						path.MatchRelative().AtParent().AtName("input_eventhub"),
-						path.MatchRelative().AtParent().AtName("input_exec"),
-						path.MatchRelative().AtParent().AtName("input_file"),
-						path.MatchRelative().AtParent().AtName("input_firehose"),
-						path.MatchRelative().AtParent().AtName("input_google_pubsub"),
-						path.MatchRelative().AtParent().AtName("input_grafana"),
-						path.MatchRelative().AtParent().AtName("input_http"),
-						path.MatchRelative().AtParent().AtName("input_http_raw"),
-						path.MatchRelative().AtParent().AtName("input_journal_files"),
-						path.MatchRelative().AtParent().AtName("input_kafka"),
-						path.MatchRelative().AtParent().AtName("input_kinesis"),
-						path.MatchRelative().AtParent().AtName("input_kube_events"),
-						path.MatchRelative().AtParent().AtName("input_kube_logs"),
-						path.MatchRelative().AtParent().AtName("input_kube_metrics"),
-						path.MatchRelative().AtParent().AtName("input_loki"),
-						path.MatchRelative().AtParent().AtName("input_metrics"),
-						path.MatchRelative().AtParent().AtName("input_model_driven_telemetry"),
-						path.MatchRelative().AtParent().AtName("input_msk"),
-						path.MatchRelative().AtParent().AtName("input_netflow"),
-						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
-						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
-						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
-						path.MatchRelative().AtParent().AtName("input_prometheus"),
-						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
-						path.MatchRelative().AtParent().AtName("input_raw_udp"),
-						path.MatchRelative().AtParent().AtName("input_s3"),
-						path.MatchRelative().AtParent().AtName("input_s3_inventory"),
-						path.MatchRelative().AtParent().AtName("input_security_lake"),
-						path.MatchRelative().AtParent().AtName("input_snmp"),
-						path.MatchRelative().AtParent().AtName("input_splunk"),
-						path.MatchRelative().AtParent().AtName("input_splunk_hec"),
-						path.MatchRelative().AtParent().AtName("input_splunk_search"),
-						path.MatchRelative().AtParent().AtName("input_sqs"),
-						path.MatchRelative().AtParent().AtName("input_syslog"),
-						path.MatchRelative().AtParent().AtName("input_system_metrics"),
-						path.MatchRelative().AtParent().AtName("input_system_state"),
-						path.MatchRelative().AtParent().AtName("input_tcp"),
-						path.MatchRelative().AtParent().AtName("input_tcpjson"),
-						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
@@ -23884,7 +24122,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -23912,7 +24150,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     float64default.StaticFloat64(300),
 						Description: `HTTP request inactivity timeout. Use 0 to disable. Default: 300`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(2400),
+							float64validator.Between(0, 2400),
 						},
 					},
 					"retry_rules": schema.SingleNestedAttribute{
@@ -23938,7 +24176,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(1000),
 								Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20000),
+									float64validator.Between(0, 20000),
 								},
 							},
 							"limit": schema.Float64Attribute{
@@ -23947,7 +24185,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Default:     float64default.StaticFloat64(5),
 								Description: `The maximum number of times to retry a failed HTTP request. Default: 5`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(20),
+									float64validator.Between(0, 20),
 								},
 							},
 							"multiplier": schema.Float64Attribute{
@@ -24269,6 +24507,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(256),
 						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_requests_per_socket": schema.Int64Attribute{
 						Computed:    true,
@@ -24357,7 +24598,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed:    true,
 								Optional:    true,
 								Default:     stringdefault.StaticString(`always`),
-								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"smart",
@@ -24384,6 +24625,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"send_to_routes": schema.BoolAttribute{
 						Computed:    true,
@@ -24396,6 +24640,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -25060,22 +25307,22 @@ func (r *PackSourceResource) ImportState(ctx context.Context, req resource.Impor
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "...", "id": "...", "pack": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "pack-input-hec", "pack": "observability-pack"}': `+err.Error())
 		return
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"pack-input-hec"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if len(data.Pack) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '"observability-pack"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pack"), data.Pack)...)

@@ -61,7 +61,7 @@ func (i *InputConfluentCloudConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputConfluentCloudMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputConfluentCloudMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputConfluentCloudMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputConfluentCloudCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputConfluentCloudPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputConfluentCloudMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`

@@ -3,6 +3,5 @@
 package types
 
 type ElementUnion struct {
-	Element         *Element         `queryParam:"inline" tfsdk:"element" tfPlanOnly:"true"`
-	ElementMarkdown *ElementMarkdown `queryParam:"inline" tfsdk:"element_markdown" tfPlanOnly:"true"`
+	Element *Element `queryParam:"inline" tfsdk:"element" tfPlanOnly:"true"`
 }

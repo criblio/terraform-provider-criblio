@@ -7,8 +7,7 @@ import (
 )
 
 type AppscopeConfigWithCustomLibscope struct {
-	Commanddir    types.String                 `tfsdk:"commanddir"`
-	Configevent   types.Bool                   `tfsdk:"configevent"`
-	Log           *AppscopeConfigWithCustomLog `tfsdk:"log"`
-	Summaryperiod types.Float64                `tfsdk:"summaryperiod"`
+	Commanddir  types.String                    `tfsdk:"commanddir"`
+	Config      *AppscopeConfigWithCustomConfig `tfsdk:"config"`
+	Configevent types.Bool                      `tfsdk:"configevent"`
 }

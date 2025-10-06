@@ -14,12 +14,12 @@ Subscription Resource
 
 ```terraform
 resource "criblio_subscription" "my_subscription" {
-  description = "...my_description..."
-  disabled    = true
-  filter      = "...my_filter..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
-  pipeline    = "...my_pipeline..."
+  description = "Words describe things"
+  disabled    = false
+  filter      = "truthy"
+  group_id    = "myExistingGroupId"
+  id          = "myUniqueSubscriptionId"
+  pipeline    = "myExistingPipelineId"
 }
 ```
 
@@ -29,7 +29,7 @@ resource "criblio_subscription" "my_subscription" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) pipeline to be used
+- `id` (String) new Id to be used for subscription to be created
 - `pipeline` (String) pipeline to be used. Requires replacement if changed.
 
 ### Optional
@@ -37,6 +37,21 @@ resource "criblio_subscription" "my_subscription" {
 - `description` (String) Project description. Requires replacement if changed.
 - `disabled` (Boolean) Project Id. Requires replacement if changed.
 - `filter` (String) filter. Requires replacement if changed.
+
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `description` (String)
+- `disabled` (Boolean)
+- `filter` (String)
+- `id` (String)
+- `pipeline` (String)
 
 ## Import
 
@@ -48,8 +63,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_subscription.my_criblio_subscription
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueSubscriptionId"
   })
 }
 ```
@@ -57,5 +72,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_subscription.my_criblio_subscription '{"group_id": "...", "id": "..."}'
+terraform import criblio_subscription.my_criblio_subscription '{"group_id": "myExistingGroupId", "id": "myUniqueSubscriptionId"}'
 ```

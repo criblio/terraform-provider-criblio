@@ -10,12 +10,13 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	speakeasy_boolvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/boolvalidators"
+	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
+	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -111,33 +112,64 @@ func (r *CriblLakeDatasetResource) Schema(ctx context.Context, req resource.Sche
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"created": schema.StringAttribute{
+							"earliest": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Creation timestamp`,
+								Description: `Not Null`,
 								Validators: []validator.String{
-									validators.IsRFC3339(),
+									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether acceleration is enabled for this dataset. Default: false`,
-							},
-							"modified": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Last modification timestamp`,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"tags": schema.ListAttribute{
+							"field_list": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Tags associated with the dataset`,
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
+							},
+							"latest_run_info": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"finished_at": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"latest_scanned_time": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"object_count": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+							},
+							"scan_mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be one of ["detailed", "quick"]`,
+								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.OneOf(
+										"detailed",
+										"quick",
+									),
+								},
 							},
 						},
 					},
@@ -393,12 +425,12 @@ func (r *CriblLakeDatasetResource) ImportState(ctx context.Context, req resource
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"id": "test_lake_dataset", "lake_id": "default"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"id": "web-logs", "lake_id": "default"}': `+err.Error())
 		return
 	}
 
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"test_lake_dataset"`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"web-logs"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)

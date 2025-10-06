@@ -61,7 +61,7 @@ func (i *InputGooglePubsubConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputGooglePubsubMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputGooglePubsubMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputGooglePubsubMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputGooglePubsubCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputGooglePubsubPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputGooglePubsubMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`

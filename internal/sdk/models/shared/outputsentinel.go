@@ -430,7 +430,7 @@ type OutputSentinel struct {
 	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
-	// Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields).
+	// Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field.
 	ExtraHTTPHeaders []OutputSentinelExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
 	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 	UseRoundRobinDNS *bool `default:"false" json:"useRoundRobinDns"`
@@ -465,7 +465,7 @@ type OutputSentinel struct {
 	// Whether to drop events when the source expression evaluates to null
 	CustomDropWhenNull *bool `default:"false" json:"customDropWhenNull"`
 	// Delimiter string to insert between individual events. Defaults to newline character.
-	CustomEventDelimiter *string `default:"\\n" json:"customEventDelimiter"`
+	CustomEventDelimiter *string `default:"\n" json:"customEventDelimiter"`
 	// Content type to use for request. Defaults to application/x-ndjson. Any content types set in Advanced Settings > Extra HTTP headers will override this entry.
 	CustomContentType *string `default:"application/x-ndjson" json:"customContentType"`
 	// Expression specifying how to format the payload for each batch. To reference the events to send, use the `${events}` variable. Example expression: `{ "items" : [${events}] }` would send the batch inside a JSON object.

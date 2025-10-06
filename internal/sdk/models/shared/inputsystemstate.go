@@ -61,7 +61,7 @@ func (i *InputSystemStateConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputSystemStateMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputSystemStateMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputSystemStateMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputSystemStateCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputSystemStatePq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputSystemStateMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
@@ -453,7 +453,7 @@ func (l *ListeningPorts) GetEnable() *bool {
 	return l.Enable
 }
 
-// LoggedInUsers - Creates events from list of logged-in users
+// LoggedInUsers - Creates events for logged-in users
 type LoggedInUsers struct {
 	Enable *bool `default:"true" json:"enable"`
 }
@@ -497,7 +497,7 @@ type Collectors struct {
 	Services *Services `json:"services,omitempty"`
 	// Creates events from list of listening ports
 	Ports *ListeningPorts `json:"ports,omitempty"`
-	// Creates events from list of logged-in users
+	// Creates events for logged-in users
 	LoginUsers *LoggedInUsers `json:"loginUsers,omitempty"`
 }
 

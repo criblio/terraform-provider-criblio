@@ -1,3841 +1,3958 @@
 resource "criblio_pack_destination" "my_packdestination" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
-  output_azure_blob = {
+    group_id = "Cribl"
+    id = "pack-out-s3"
+output_azure_blob = {
     add_id_to_stage_path = true
-    auth_type            = "manual"
-    automatic_schema     = true
-    azure_cloud          = "...my_azure_cloud..."
-    base_file_name       = "...my_base_file_name..."
+    auth_type = "manual"
+    automatic_schema = true
+    azure_cloud = "AzurePublicCloud"
+    base_file_name = "`CriblOut`"
     certificate = {
-      certificate_name = "...my_certificate_name..."
+            certificate_name = "azure-app-cert"
     }
-    client_id               = "...my_client_id..."
-    client_text_secret      = "...my_client_text_secret..."
-    compress                = "gzip"
-    compression_level       = "best_speed"
-    connection_string       = "...my_connection_string..."
-    container_name          = "...my_container_name..."
-    create_container        = true
-    deadletter_enabled      = true
-    deadletter_path         = "...my_deadletter_path..."
-    description             = "...my_description..."
-    dest_path               = "...my_dest_path..."
-    empty_dir_cleanup_sec   = 55323.17
-    enable_page_checksum    = false
-    enable_statistics       = false
-    enable_write_page_index = false
-    endpoint_suffix         = "...my_endpoint_suffix..."
-    environment             = "...my_environment..."
-    file_name_suffix        = "...my_file_name_suffix..."
-    format                  = "raw"
-    header_line             = "...my_header_line..."
-    id                      = "...my_id..."
+    client_id = "11111111-1111-1111-1111-111111111111"
+    client_text_secret = "azure-sp-client-secret"
+    compress = "gzip"
+    compression_level = "normal"
+    connection_string = "DefaultEndpointsProtocol=https;AccountName=criblstore;AccountKey=***REDACTED***;EndpointSuffix=core.windows.net"
+    container_name = "cribl-data"
+    create_container = true
+    deadletter_enabled = true
+    deadletter_path = "/var/lib/cribl/state/outputs/dead-letter"
+    description = "Write objects to Azure Blob Storage with date-based partitioning"
+    dest_path = "logs/ingest"
+    empty_dir_cleanup_sec = 600
+    enable_page_checksum = true
+    enable_statistics = true
+    enable_write_page_index = true
+    endpoint_suffix = "core.windows.net"
+    environment = "main"
+    file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+    format = "json"
+    header_line = "timestamp,host,message"
+    id = "azure-blob-out"
     key_value_metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
+    {
+                key = "team"
+            value = "platform"
+    }
     ]
-    max_concurrent_file_parts = 8.23
-    max_file_idle_time_sec    = 753.81
-    max_file_open_time_sec    = 1092.11
-    max_file_size_mb          = 408.27
-    max_open_files            = 26.97
-    max_retry_num             = 5.36
-    on_backpressure           = "block"
+    max_concurrent_file_parts = 4
+    max_file_idle_time_sec = 30
+    max_file_open_time_sec = 300
+    max_file_size_mb = 64
+    max_open_files = 200
+    max_retry_num = 20
+    on_backpressure = "block"
     on_disk_full_backpressure = "block"
-    parquet_data_page_version = "DATA_PAGE_V1"
-    parquet_page_size         = "...my_parquet_page_size..."
-    parquet_row_group_length  = 1327800.98
-    parquet_version           = "PARQUET_1_0"
-    partition_expr            = "...my_partition_expr..."
-    pipeline                  = "...my_pipeline..."
-    remove_empty_dirs         = true
-    should_log_invalid_rows   = false
-    stage_path                = "...my_stage_path..."
-    storage_account_name      = "...my_storage_account_name..."
-    storage_class             = "Archive"
+    parquet_data_page_version = "DATA_PAGE_V2"
+    parquet_page_size = "4MB"
+    parquet_row_group_length = 10000
+    parquet_version = "PARQUET_2_6"
+    partition_expr = "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d') + '/host=' + host"
+    pipeline = "default"
+    remove_empty_dirs = true
+    should_log_invalid_rows = true
+    stage_path = "/var/lib/cribl/state/outputs/staging"
+    storage_account_name = "criblstore"
+    storage_class = "Hot"
     streamtags = [
-      "..."
+    "azure",
+    "blob",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
-    tenant_id             = "...my_tenant_id..."
-    text_secret           = "...my_text_secret..."
-    type                  = "azure_blob"
-    write_high_water_mark = 1674.32
-  }
-  output_azure_data_explorer = {
+    tenant_id = "00000000-0000-0000-0000-000000000000"
+    text_secret = "azure-connstr-secret"
+    type = "azure_blob"
+    write_high_water_mark = 256
+}
+output_azure_data_explorer = {
     add_id_to_stage_path = true
     additional_properties = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
+    {
+                key = "format"
+            value = "json"
+    }
     ]
     certificate = {
-      certificate_name = "...my_certificate_name..."
+            certificate_name = "adx-app-cert"
     }
-    client_id          = "...my_client_id..."
-    client_secret      = "...my_client_secret..."
-    cluster_url        = "...my_cluster_url..."
-    compress           = "none"
-    concurrency        = 25.3
-    database           = "...my_database..."
+    client_id = "11111111-1111-1111-1111-111111111111"
+    client_secret = "***REDACTED***"
+    cluster_url = "https://mycluster.eastus.kusto.windows.net"
+    compress = "gzip"
+    concurrency = 8
+    database = "telemetry"
     deadletter_enabled = true
-    description        = "...my_description..."
-    environment        = "...my_environment..."
+    description = "Ingest data into Azure Data Explorer (Kusto)"
+    environment = "main"
     extent_tags = [
-      {
-        prefix = "dropBy"
-        value  = "...my_value..."
-      }
-    ]
-    file_name_suffix  = "...my_file_name_suffix..."
-    flush_immediately = true
-    flush_period_sec  = 5.98
-    format            = "json"
-    id                = "...my_id..."
-    ingest_if_not_exists = [
-      {
-        value = "...my_value..."
-      }
-    ]
-    ingest_mode               = "streaming"
-    ingest_url                = "...my_ingest_url..."
-    is_mapping_obj            = false
-    keep_alive                = true
-    mapping_ref               = "...my_mapping_ref..."
-    max_concurrent_file_parts = 7.76
-    max_file_idle_time_sec    = 636.51
-    max_file_open_time_sec    = 1785.56
-    max_file_size_mb          = 49.98
-    max_open_files            = 913.7
-    max_payload_events        = 4.65
-    max_payload_size_kb       = 1906.66
-    oauth_endpoint            = "https://login.microsoftonline.com"
-    oauth_type                = "certificate"
-    on_backpressure           = "queue"
-    on_disk_full_backpressure = "drop"
-    pipeline                  = "...my_pipeline..."
-    pq_compress               = "none"
-    pq_controls = {
-      # ...
+    {
+                prefix = "ingestBy"
+            value = "source:app1"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
-    remove_empty_dirs                 = true
-    report_level                      = "doNotReport"
-    report_method                     = "queueAndTable"
-    response_honor_retry_after_header = false
+    ]
+    file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+    flush_immediately = true
+    flush_period_sec = 1
+    format = "json"
+    id = "adx-out"
+    ingest_if_not_exists = [
+    {
+                value = "batchId:2025-10-02T00:00Z"
+    }
+    ]
+    ingest_mode = "batching"
+    ingest_url = "https://ingest-mycluster.eastus.kusto.windows.net"
+    is_mapping_obj = false
+    keep_alive = true
+    mapping_ref = "my_table_mapping"
+    max_concurrent_file_parts = 4
+    max_file_idle_time_sec = 30
+    max_file_open_time_sec = 300
+    max_file_size_mb = 64
+    max_open_files = 200
+    max_payload_events = 0
+    max_payload_size_kb = 4096
+    oauth_endpoint = "https://login.microsoftonline.com"
+    oauth_type = "clientSecret"
+    on_backpressure = "block"
+    on_disk_full_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    remove_empty_dirs = true
+    report_level = "failuresOnly"
+    report_method = "queue"
+    response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 11.6
-        http_status     = 251.57
-        initial_backoff = 223817.9
-        max_backoff     = 166141.84
-      }
+    {
+                backoff_rate = 2
+            http_status = 503
+            initial_backoff = 1000
+            max_backoff = 60000
+    }
     ]
     retain_blob_on_success = true
-    scope                  = "...my_scope..."
-    stage_path             = "...my_stage_path..."
+    scope = "https://kusto.kusto.windows.net/.default"
+    stage_path = "/var/lib/cribl/state/outputs/staging"
     streamtags = [
-      "..."
+    "azure",
+    "adx",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
-    table       = "...my_table..."
-    tenant_id   = "...my_tenant_id..."
-    text_secret = "...my_text_secret..."
+    table = "logs_raw"
+    tenant_id = "00000000-0000-0000-0000-000000000000"
+    text_secret = "adx-client-secret"
     timeout_retry_settings = {
-      backoff_rate    = 15.6
-      initial_backoff = 71830.59
-      max_backoff     = 118420.63
-      timeout_retry   = true
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec                = 1821283157205735.2
-    type                       = "azure_data_explorer"
-    use_round_robin_dns        = true
+    timeout_sec = 30
+    type = "azure_data_explorer"
+    use_round_robin_dns = true
     validate_database_settings = true
-  }
-  output_azure_eventhub = {
-    ack                    = 10
-    authentication_timeout = 430621.06
-    backoff_rate           = 5.96
+}
+output_azure_eventhub = {
+    ack = 1
+    authentication_timeout = 10000
+    backoff_rate = 2
     brokers = [
-      "..."
+    "myns.servicebus.windows.net:9093",
     ]
-    connection_timeout = 180818.45
-    description        = "...my_description..."
-    environment        = "...my_environment..."
-    flush_event_count  = 9013.17
-    flush_period_sec   = 9.34
-    format             = "raw"
-    id                 = "...my_id..."
-    initial_backoff    = 373583.55
-    max_back_off       = 55727.44
-    max_record_size_kb = 3.25
-    max_retries        = 55.57
-    on_backpressure    = "block"
-    pipeline           = "...my_pipeline..."
-    pq_compress        = "gzip"
+    connection_timeout = 10000
+    description = "Deliver events to Azure Event Hubs via Kafka protocol"
+    environment = "main"
+    flush_event_count = 1000
+    flush_period_sec = 1
+    format = "json"
+    id = "eventhub-out"
+    initial_backoff = 1000
+    max_back_off = 60000
+    max_record_size_kb = 768
+    max_retries = 5
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size           = "...my_pq_max_file_size..."
-    pq_max_size                = "...my_pq_max_size..."
-    pq_mode                    = "always"
-    pq_on_backpressure         = "block"
-    pq_path                    = "...my_pq_path..."
-    reauthentication_threshold = 230505.87
-    request_timeout            = 2476956.46
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reauthentication_threshold = 60000
+    request_timeout = 60000
     sasl = {
-      disabled  = false
-      mechanism = "plain"
+            disabled = false
+        mechanism = "plain"
     }
     streamtags = [
-      "..."
+    "azure",
+    "eventhub",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
     tls = {
-      disabled            = false
-      reject_unauthorized = false
+            disabled = false
+        reject_unauthorized = true
     }
-    topic = "...my_topic..."
-    type  = "azure_eventhub"
-  }
-  output_azure_logs = {
-    api_url     = "...my_api_url..."
-    auth_type   = "secret"
-    compress    = true
-    concurrency = 23.37
-    description = "...my_description..."
-    environment = "...my_environment..."
+    topic = "app-events"
+    type = "azure_eventhub"
+}
+output_azure_logs = {
+    api_url = ".ods.opinsights.azure.com"
+    auth_type = "manual"
+    compress = true
+    concurrency = 8
+    description = "Send logs to Azure Log Analytics workspace"
+    environment = "main"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode = "none"
-    flush_period_sec            = 2.44
-    id                          = "...my_id..."
-    keypair_secret              = "...my_keypair_secret..."
-    log_type                    = "...my_log_type..."
-    max_payload_events          = 0.59
-    max_payload_size_kb         = 4642.62
-    on_backpressure             = "queue"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "gzip"
-    pq_controls = {
-      # ...
+    {
+                name = "X-Request-ID"
+            value = "abc123"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = true
-    resource_id                       = "...my_resource_id..."
-    response_honor_retry_after_header = true
-    response_retry_settings = [
-      {
-        backoff_rate    = 18.09
-        http_status     = 234.32
-        initial_backoff = 334064.95
-        max_backoff     = 165677.12
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    timeout_retry_settings = {
-      backoff_rate    = 1.28
-      initial_backoff = 379283.94
-      max_backoff     = 135310.21
-      timeout_retry   = false
-    }
-    timeout_sec         = 4274665945637552
-    type                = "azure_logs"
-    use_round_robin_dns = true
-    workspace_id        = "...my_workspace_id..."
-    workspace_key       = "...my_workspace_key..."
-  }
-  output_click_house = {
-    async_inserts    = true
-    auth_header_expr = "...my_auth_header_expr..."
-    auth_type        = "none"
-    column_mappings = [
-      {
-        column_name             = "...my_column_name..."
-        column_type             = "...my_column_type..."
-        column_value_expression = "...my_column_value_expression..."
-      }
-    ]
-    compress                   = true
-    concurrency                = 9.96
-    credentials_secret         = "...my_credentials_secret..."
-    database                   = "...my_database..."
-    describe_table             = "...my_describe_table..."
-    description                = "...my_description..."
-    dump_format_errors_to_disk = false
-    environment                = "...my_environment..."
-    exclude_mapping_fields = [
-      "..."
-    ]
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
     ]
     failed_request_logging_mode = "payload"
-    flush_period_sec            = 5.87
-    format                      = "json-compact-each-row-with-names"
-    id                          = "...my_id..."
-    login_url                   = "...my_login_url..."
-    mapping_type                = "automatic"
-    max_payload_events          = 2.57
-    max_payload_size_kb         = 9715.84
-    oauth_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    oauth_params = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    on_backpressure = "queue"
-    password        = "...my_password..."
-    pipeline        = "...my_pipeline..."
-    pq_compress     = "none"
+    flush_period_sec = 1
+    id = "azure-logs-out"
+    keypair_secret = "azure-log-analytics-keys"
+    log_type = "Cribl"
+    max_payload_events = 0
+    max_payload_size_kb = 1024
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = true
-    response_honor_retry_after_header = false
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    resource_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg1/providers/Microsoft.Compute/virtualMachines/vm1"
+    response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 16.8
-        http_status     = 425.87
-        initial_backoff = 273904.6
-        max_backoff     = 85192.14
-      }
+    {
+                backoff_rate = 2
+            http_status = 503
+            initial_backoff = 1000
+            max_backoff = 60000
+    }
     ]
     safe_headers = [
-      "..."
+    "X-Request-ID",
     ]
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
-    sql_username      = "...my_sql_username..."
     streamtags = [
-      "..."
+    "azure",
+    "loganalytics",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
-    table_name  = "...my_table_name..."
-    text_secret = "...my_text_secret..."
     timeout_retry_settings = {
-      backoff_rate    = 11.96
-      initial_backoff = 42734.45
-      max_backoff     = 112843.03
-      timeout_retry   = false
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec = 3517606791143139
-    tls = {
-      ca_path          = "...my_ca_path..."
-      cert_path        = "...my_cert_path..."
-      certificate_name = "...my_certificate_name..."
-      disabled         = false
-      max_version      = "TLSv1.2"
-      min_version      = "TLSv1"
-      passphrase       = "...my_passphrase..."
-      priv_key_path    = "...my_priv_key_path..."
-      servername       = "...my_servername..."
+    timeout_sec = 30
+    type = "azure_logs"
+    use_round_robin_dns = true
+    workspace_id = "22222222-2222-2222-2222-222222222222"
+    workspace_key = "***REDACTED***"
+}
+output_click_house = {
+    async_inserts = true
+    auth_header_expr = "`Bearer ${token}`"
+    auth_type = "basic"
+    column_mappings = [
+    {
+                column_name = "timestamp"
+            column_type = "DateTime64(3)"
+            column_value_expression = "toDateTime64(ts, 3)"
     }
-    token                  = "...my_token..."
-    token_attribute_name   = "...my_token_attribute_name..."
-    token_timeout_secs     = 184047.77
-    type                   = "click_house"
-    url                    = "...my_url..."
-    use_round_robin_dns    = true
-    username               = "...my_username..."
-    wait_for_async_inserts = true
-  }
-  output_cloudwatch = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "manual"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    description               = "...my_description..."
-    duration_seconds          = 5242.24
-    enable_assume_role        = true
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    flush_period_sec          = 3.27
-    id                        = "...my_id..."
-    log_group_name            = "...my_log_group_name..."
-    log_stream_name           = "...my_log_stream_name..."
-    max_queue_size            = 1.07
-    max_record_size_kb        = 6210.86
-    on_backpressure           = "block"
-    pipeline                  = "...my_pipeline..."
-    pq_compress               = "gzip"
+    ]
+    compress = true
+    concurrency = 8
+    credentials_secret = "clickhouse_basic_auth"
+    database = "logs"
+    describe_table = "DESCRIBE TABLE app_events"
+    description = "Ingest logs to ClickHouse with async inserts and TLS"
+    dump_format_errors_to_disk = true
+    environment = "main"
+    exclude_mapping_fields = [
+    "_raw",
+    "ts",
+    ]
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    format = "json-each-row"
+    id = "clickhouse_ingest_prod"
+    login_url = "https://auth.example.com/oauth/token"
+    mapping_type = "automatic"
+    max_payload_events = 1000
+    max_payload_size_kb = 2048
+    oauth_headers = [
+    {
+                name = "Accept"
+            value = "application/json"
+    }
+    ]
+    oauth_params = [
+    {
+                name = "grant_type"
+            value = "client_credentials"
+    }
+    ]
+    on_backpressure = "block"
+    password = "s3cr3tPass!"
+    pipeline = "main"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size    = "...my_pq_max_file_size..."
-    pq_max_size         = "...my_pq_max_size..."
-    pq_mode             = "always"
-    pq_on_backpressure  = "block"
-    pq_path             = "...my_pq_path..."
-    region              = "...my_region..."
-    reject_unauthorized = false
-    reuse_connections   = true
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "content-type",
+    "x-request-id",
+    ]
+    secret = "s3cr3tClientSecret"
+    secret_param_name = "client_secret"
+    sql_username = "clickuser"
     streamtags = [
-      "..."
+    "prod",
+    "clickhouse",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    table_name = "app_events"
+    text_secret = "clickhouse_bearer_token"
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    tls = {
+            ca_path = "/etc/ssl/certs/ca-bundle.crt"
+        cert_path = "/opt/cribl/certs/client.crt"
+        certificate_name = "clickhouse-client"
+        disabled = false
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "s3cr3t"
+        priv_key_path = "/opt/cribl/certs/client.key"
+        servername = "clickhouse.example.com"
+    }
+    token = "chBearerToken_abc123xyz"
+    token_attribute_name = "access_token"
+    token_timeout_secs = 3600
+    type = "click_house"
+    url = "https://clickhouse.example.com:8443"
+    use_round_robin_dns = true
+    username = "clickuser"
+    wait_for_async_inserts = true
+}
+output_cloudwatch = {
+    assume_role_arn = "arn:aws:iam::123456789012:role/CloudWatchLogsWriter"
+    assume_role_external_id = "external-id-abc123"
+    aws_api_key = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret = "aws_cloudwatch_credentials"
+    aws_secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    description = "Send application logs to Amazon CloudWatch Logs"
+    duration_seconds = 3600
+    enable_assume_role = true
+    endpoint = "https://logs.us-east-1.amazonaws.com"
+    environment = "main"
+    flush_period_sec = 2
+    id = "cloudwatch_logs_prod"
+    log_group_name = "/aws/eks/cluster-1/app-logs"
+    log_stream_name = "app-logs"
+    max_queue_size = 10
+    max_record_size_kb = 1024
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    region = "us-east-1"
+    reject_unauthorized = true
+    reuse_connections = true
+    streamtags = [
+    "prod",
+    "cloudwatch",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
     ]
     type = "cloudwatch"
-  }
-  output_confluent_cloud = {
-    ack                    = 8
-    authentication_timeout = 1295471.86
-    backoff_rate           = 18.05
+}
+output_confluent_cloud = {
+    ack = 1
+    authentication_timeout = 10000
+    backoff_rate = 2
     brokers = [
-      "..."
+    "mycluster.us-central1.gcp.confluent.cloud:9092",
     ]
-    compression        = "none"
-    connection_timeout = 1112740.74
-    description        = "...my_description..."
-    environment        = "...my_environment..."
-    flush_event_count  = 5876.29
-    flush_period_sec   = 8.16
-    format             = "protobuf"
-    id                 = "...my_id..."
-    initial_backoff    = 106771.36
+    compression = "gzip"
+    connection_timeout = 10000
+    description = "Produce events to Confluent Cloud Kafka with Schema Registry"
+    environment = "main"
+    flush_event_count = 1000
+    flush_period_sec = 1
+    format = "json"
+    id = "ccloud-out"
+    initial_backoff = 1000
     kafka_schema_registry = {
-      auth = {
-        credentials_secret = "...my_credentials_secret..."
-        disabled           = false
-      }
-      connection_timeout      = 46613.5
-      default_key_schema_id   = 6.1
-      default_value_schema_id = 7.4
-      disabled                = true
-      max_retries             = 24.37
-      request_timeout         = 11546.95
-      schema_registry_url     = "...my_schema_registry_url..."
-      tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
-        disabled            = true
-        max_version         = "TLSv1.1"
-        min_version         = "TLSv1"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
-        reject_unauthorized = false
-        servername          = "...my_servername..."
-      }
+            auth = {
+                    credentials_secret = "ccloud-schema-registry-basic"
+            disabled = false
+        }
+        connection_timeout = 30000
+        default_key_schema_id = 1
+        default_value_schema_id = 100
+        disabled = false
+        max_retries = 3
+        request_timeout = 30000
+        schema_registry_url = "https://schema-registry.confluent.cloud"
+        tls = {
+                    ca_path = "/etc/ssl/certs/ca.pem"
+            cert_path = "/etc/ssl/certs/client.crt"
+            certificate_name = "ccloud-sr-cert"
+            disabled = false
+            max_version = "TLSv1.3"
+            min_version = "TLSv1.2"
+            passphrase = "***REDACTED***"
+            priv_key_path = "/etc/ssl/private/client.key"
+            reject_unauthorized = true
+            servername = "schema-registry.confluent.cloud"
+        }
     }
-    max_back_off       = 110622.93
-    max_record_size_kb = 9.39
-    max_retries        = 8.46
-    on_backpressure    = "drop"
-    pipeline           = "...my_pipeline..."
-    pq_compress        = "gzip"
+    max_back_off = 60000
+    max_record_size_kb = 768
+    max_retries = 5
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size           = "...my_pq_max_file_size..."
-    pq_max_size                = "...my_pq_max_size..."
-    pq_mode                    = "backpressure"
-    pq_on_backpressure         = "block"
-    pq_path                    = "...my_pq_path..."
-    protobuf_library_id        = "...my_protobuf_library_id..."
-    reauthentication_threshold = 1366964.01
-    request_timeout            = 1002698.61
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protobuf_library_id = "user-events-protos"
+    reauthentication_threshold = 60000
+    request_timeout = 60000
     sasl = {
-      disabled  = false
-      mechanism = "scram-sha-512"
+            disabled = false
+        mechanism = "plain"
     }
     streamtags = [
-      "..."
+    "confluent",
+    "kafka",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = false
-      max_version         = "TLSv1.1"
-      min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = true
-      servername          = "...my_servername..."
+            ca_path = "/etc/ssl/certs/ca.pem"
+        cert_path = "/etc/ssl/certs/client.crt"
+        certificate_name = "ccloud-client-cert"
+        disabled = false
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "***REDACTED***"
+        priv_key_path = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername = "mycluster.us-central1.gcp.confluent.cloud"
     }
-    topic = "...my_topic..."
-    type  = "confluent_cloud"
-  }
-  output_cribl_http = {
-    compression            = "gzip"
-    concurrency            = 30.41
-    description            = "...my_description..."
-    dns_resolve_period_sec = 44049.28
-    environment            = "...my_environment..."
+    topic = "app-events"
+    type = "confluent_cloud"
+}
+output_cribl_http = {
+    compression = "gzip"
+    concurrency = 8
+    description = "Send events to Cribl Worker HTTP endpoint with retries"
+    dns_resolve_period_sec = 300
+    environment = "main"
     exclude_fields = [
-      "..."
+    "__kube_*",
+    "__metadata",
     ]
     exclude_self = false
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode   = "none"
-    flush_period_sec              = 8.75
-    id                            = "...my_id..."
-    load_balance_stats_period_sec = 19.71
-    load_balanced                 = true
-    max_payload_events            = 6.38
-    max_payload_size_kb           = 1747.03
-    on_backpressure               = "drop"
-    pipeline                      = "...my_pipeline..."
-    pq_compress                   = "none"
-    pq_controls = {
-      # ...
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "error"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = true
-    response_honor_retry_after_header = false
-    response_retry_settings = [
-      {
-        backoff_rate    = 2.3
-        http_status     = 585.05
-        initial_backoff = 464186.35
-        max_backoff     = 76356.76
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    timeout_retry_settings = {
-      backoff_rate    = 9.19
-      initial_backoff = 292539.69
-      max_backoff     = 161617.7
-      timeout_retry   = true
-    }
-    timeout_sec = 8642518876171064
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = false
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = true
-      servername          = "...my_servername..."
-    }
-    token_ttl_minutes = 17.49
-    type              = "cribl_http"
-    url               = "...my_url..."
-    urls = [
-      {
-        url    = "...my_url..."
-        weight = 0.17
-      }
-    ]
-    use_round_robin_dns = true
-  }
-  output_cribl_lake = {
-    description = "Cribl Lake destination"
-    dest_path   = "test_lake_dataset"
-    id          = "test_lake_output"
-    type        = "cribl_lake"
-  }
-  output_cribl_tcp = {
-    compression            = "none"
-    connection_timeout     = 8
-    description            = "...my_description..."
-    dns_resolve_period_sec = 77972.9
-    environment            = "...my_environment..."
-    exclude_fields = [
-      "..."
-    ]
-    exclude_self = false
-    host         = "...my_host..."
-    hosts = [
-      {
-        host       = "...my_host..."
-        port       = 61317.22
-        servername = "...my_servername..."
-        tls        = "inherit"
-        weight     = 1.12
-      }
-    ]
-    id                            = "...my_id..."
-    load_balance_stats_period_sec = 10.34
-    load_balanced                 = false
-    log_failed_requests           = false
-    max_concurrent_senders        = 4.57
-    on_backpressure               = "queue"
-    pipeline                      = "...my_pipeline..."
-    port                          = 3105.16
-    pq_compress                   = "none"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size   = "...my_pq_max_file_size..."
-    pq_max_size        = "...my_pq_max_size..."
-    pq_mode            = "backpressure"
-    pq_on_backpressure = "drop"
-    pq_path            = "...my_pq_path..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = true
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = false
-      servername          = "...my_servername..."
-    }
-    token_ttl_minutes = 25.77
-    type              = "cribl_tcp"
-    write_timeout     = 0.12
-  }
-  output_crowdstrike_next_gen_siem = {
-    auth_type   = "manual"
-    compress    = true
-    concurrency = 1.21
-    description = "...my_description..."
-    environment = "...my_environment..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
     ]
     failed_request_logging_mode = "payloadAndHeaders"
-    flush_period_sec            = 5.55
-    format                      = "raw"
-    id                          = "...my_id..."
-    max_payload_events          = 3.06
-    max_payload_size_kb         = 24905.36
-    on_backpressure             = "drop"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "gzip"
+    flush_period_sec = 2
+    id = "cribl_http_prod"
+    load_balance_stats_period_sec = 300
+    load_balanced = true
+    max_payload_events = 1000
+    max_payload_size_kb = 2048
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
     response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 1.99
-        http_status     = 504.25
-        initial_backoff = 415593.64
-        max_backoff     = 69028.18
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "content-type",
+    "x-request-id",
     ]
     streamtags = [
-      "..."
+    "prod",
+    "cribl",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
-    text_secret = "...my_text_secret..."
     timeout_retry_settings = {
-      backoff_rate    = 9.38
-      initial_backoff = 492268.73
-      max_backoff     = 40070.73
-      timeout_retry   = true
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec         = 4075364216465747
-    token               = "...my_token..."
-    type                = "crowdstrike_next_gen_siem"
-    url                 = "...my_url..."
-    use_round_robin_dns = false
-  }
-  output_datadog = {
-    allow_api_key_from_events = false
-    api_key                   = "...my_api_key..."
-    auth_type                 = "secret"
-    batch_by_tags             = true
-    compress                  = true
-    concurrency               = 24.8
-    content_type              = "text"
-    custom_url                = "...my_custom_url..."
-    description               = "...my_description..."
-    environment               = "...my_environment..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    timeout_sec = 30
+    tls = {
+            ca_path = "/etc/ssl/certs/ca-bundle.crt"
+        cert_path = "/opt/cribl/certs/client.crt"
+        certificate_name = "cribl-client"
+        disabled = true
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "s3cr3t"
+        priv_key_path = "/opt/cribl/certs/client.key"
+        reject_unauthorized = true
+        servername = "collector.cribl.example.com"
+    }
+    token_ttl_minutes = 60
+    type = "cribl_http"
+    url = "https://edge.example.com:10200"
+    urls = [
+    {
+                url = "https://edge01.example.com:10200"
+            weight = 2
+    }
     ]
-    failed_request_logging_mode = "none"
-    flush_period_sec            = 7.78
-    host                        = "...my_host..."
-    id                          = "...my_id..."
-    max_payload_events          = 6.1
-    max_payload_size_kb         = 6408.66
-    message                     = "...my_message..."
-    on_backpressure             = "block"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "gzip"
-    pq_controls = {
-      # ...
+    use_round_robin_dns = true
+}
+output_cribl_lake = {
+    description = "Cribl Lake destination"
+    dest_path = "security_logs"
+    id = "lake_ingest_prod"
+    on_backpressure = "block"
+    type = "cribl_lake"
+}
+output_cribl_tcp = {
+    compression = "gzip"
+    connection_timeout = 10000
+    description = "Send events to Cribl Edge over TCP with TLS"
+    dns_resolve_period_sec = 300
+    environment = "main"
+    exclude_fields = [
+    "__kube_*",
+    "__metadata",
+    ]
+    exclude_self = false
+    host = "edge01.example.com"
+    hosts = [
+    {
+                host = "edge02.example.com"
+            port = 10300
+            servername = "edge02.example.com"
+            tls = "inherit"
+            weight = 2
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
+    ]
+    id = "cribl_tcp_prod"
+    load_balance_stats_period_sec = 300
+    load_balanced = true
+    log_failed_requests = true
+    max_concurrent_senders = 4
+    on_backpressure = "block"
+    pipeline = "main"
+    port = 10300
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    streamtags = [
+    "prod",
+    "cribl",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    throttle_rate_per_sec = "10 MB"
+    tls = {
+            ca_path = "/etc/ssl/certs/ca-bundle.crt"
+        cert_path = "/opt/cribl/certs/client.crt"
+        certificate_name = "cribl-client"
+        disabled = true
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "s3cr3t"
+        priv_key_path = "/opt/cribl/certs/client.key"
+        reject_unauthorized = true
+        servername = "tcp.cribl.example.com"
+    }
+    token_ttl_minutes = 60
+    type = "cribl_tcp"
+    write_timeout = 30000
+}
+output_crowdstrike_next_gen_siem = {
+    auth_type = "secret"
+    compress = true
+    concurrency = 8
+    description = "Send events to CrowdStrike Next-Gen SIEM with token auth"
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    format = "raw"
+    id = "cs_nextgen_siem_prod"
+    max_payload_events = 1000
+    max_payload_size_kb = 8192
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
     response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 16.24
-        http_status     = 143.86
-        initial_backoff = 570591.46
-        max_backoff     = 108293.13
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "content-type",
+    "x-request-id",
+    ]
+    streamtags = [
+    "prod",
+    "crowdstrike",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    text_secret = "crowdstrike_nextgen_token"
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    token = "csngs-0123456789abcdef0123456789abcdef"
+    type = "crowdstrike_next_gen_siem"
+    url = "https://ingest.us-1.crowdstrike.com/api/ingest/hec/abcd1234/v1/services/collector"
+    use_round_robin_dns = true
+}
+output_datadog = {
+    allow_api_key_from_events = false
+    api_key = "0123456789abcdef0123456789abcdef"
+    auth_type = "secret"
+    batch_by_tags = true
+    compress = true
+    concurrency = 8
+    content_type = "json"
+    custom_url = "https://http-intake.logs.datadoghq.com/api/v2/logs"
+    description = "Send logs to Datadog Logs API with token auth"
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    host = "web-01.example.com"
+    id = "datadog_logs_prod"
+    max_payload_events = 1000
+    max_payload_size_kb = 2048
+    message = "_raw"
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "content-type",
+    "x-request-id",
     ]
     send_counters_as_count = true
-    service                = "...my_service..."
-    severity               = "notice"
-    site                   = "eu"
-    source                 = "...my_source..."
+    service = "web-app"
+    severity = "info"
+    site = "us"
+    source = "nginx"
     streamtags = [
-      "..."
+    "prod",
+    "datadog",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
     tags = [
-      "..."
+    "env:prod",
+    "team:platform",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "datadog_api_key"
     timeout_retry_settings = {
-      backoff_rate    = 10.99
-      initial_backoff = 518300.67
-      max_backoff     = 158957.39
-      timeout_retry   = true
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec           = 5081753886598422
-    total_memory_limit_kb = 1.34
-    type                  = "datadog"
-    use_round_robin_dns   = false
-  }
-  output_dataset = {
-    api_key          = "...my_api_key..."
-    auth_type        = "manual"
-    compress         = false
-    concurrency      = 13.68
-    custom_url       = "...my_custom_url..."
-    default_severity = "warning"
-    description      = "...my_description..."
-    environment      = "...my_environment..."
+    timeout_sec = 30
+    total_memory_limit_kb = 51200
+    type = "datadog"
+    use_round_robin_dns = true
+}
+output_dataset = {
+    api_key = "ds-0123456789abcdef0123456789abcdef"
+    auth_type = "secret"
+    compress = true
+    concurrency = 8
+    custom_url = "https://api.dataset.com/v1/logs"
+    default_severity = "info"
+    description = "Send events to DataSet with API key authentication"
+    environment = "main"
     exclude_fields = [
-      "..."
+    "sev",
+    "_time",
     ]
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode = "payload"
-    flush_period_sec            = 9.72
-    id                          = "...my_id..."
-    max_payload_events          = 8.93
-    max_payload_size_kb         = 5484.69
-    message_field               = "...my_message_field..."
-    on_backpressure             = "block"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "none"
-    pq_controls = {
-      # ...
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "error"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    id = "dataset_logs_prod"
+    max_payload_events = 1000
+    max_payload_size_kb = 2048
+    message_field = "_raw"
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
     response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 5.29
-        http_status     = 396.18
-        initial_backoff = 237642.4
-        max_backoff     = 31652.38
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "content-type",
+    "x-request-id",
     ]
-    server_host_field = "...my_server_host_field..."
-    site              = "eu"
+    server_host_field = "host"
+    site = "us"
     streamtags = [
-      "..."
+    "prod",
+    "dataset",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "dataset_api_key"
     timeout_retry_settings = {
-      backoff_rate    = 12.05
-      initial_backoff = 227296.99
-      max_backoff     = 132128.05
-      timeout_retry   = false
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec           = 5175919553799471
-    timestamp_field       = "...my_timestamp_field..."
-    total_memory_limit_kb = 8.24
-    type                  = "dataset"
-    use_round_robin_dns   = false
-  }
-  output_default = {
-    default_id  = "...my_default_id..."
-    environment = "...my_environment..."
-    id          = "...my_id..."
-    pipeline    = "...my_pipeline..."
+    timeout_sec = 30
+    timestamp_field = "ts"
+    total_memory_limit_kb = 51200
+    type = "dataset"
+    use_round_robin_dns = true
+}
+output_default = {
+    default_id = "http-default"
+    environment = "main"
+    id = "default-output"
+    pipeline = "default"
     streamtags = [
-      "..."
+    "default",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
     type = "default"
-  }
-  output_devnull = {
-    environment = "...my_environment..."
-    id          = "...my_id..."
-    pipeline    = "...my_pipeline..."
+}
+output_devnull = {
+    environment = "main"
+    id = "devnull-out"
+    pipeline = "default"
     streamtags = [
-      "..."
+    "discard",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
     type = "devnull"
-  }
-  output_disk_spool = {
-    compress       = "none"
-    description    = "...my_description..."
-    environment    = "...my_environment..."
-    id             = "...my_id..."
-    max_data_size  = "...my_max_data_size..."
-    max_data_time  = "...my_max_data_time..."
-    partition_expr = "...my_partition_expr..."
-    pipeline       = "...my_pipeline..."
+}
+output_disk_spool = {
+    compress = "gzip"
+    description = "Local disk spool for short-term buffering and replay"
+    environment = "main"
+    id = "disk_spool_buffer"
+    max_data_size = "100GB"
+    max_data_time = "7d"
+    partition_expr = "C.Time.strftime(_time || Date.now()/1000, '%Y/%m/%d/%H')"
+    pipeline = "main"
     streamtags = [
-      "..."
+    "prod",
+    "spool",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
-    time_window = "...my_time_window..."
-    type        = "disk_spool"
-  }
-  output_dl_s3 = {
-    add_id_to_stage_path      = true
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    automatic_schema          = false
-    aws_api_key               = "...my_aws_api_key..."
+    time_window = "10m"
+    type = "disk_spool"
+}
+output_dl_s3 = {
+    add_id_to_stage_path = true
+    assume_role_arn = "arn:aws:iam::123456789012:role/S3Writer"
+    assume_role_external_id = "external-id-abc123"
+    automatic_schema = true
+    aws_api_key = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    base_file_name            = "...my_base_file_name..."
-    bucket                    = "...my_bucket..."
-    compress                  = "gzip"
-    compression_level         = "best_speed"
-    deadletter_enabled        = false
-    deadletter_path           = "...my_deadletter_path..."
-    description               = "...my_description..."
-    dest_path                 = "...my_dest_path..."
-    duration_seconds          = 15880.81
-    empty_dir_cleanup_sec     = 72778.15
-    enable_assume_role        = true
-    enable_page_checksum      = true
-    enable_statistics         = false
-    enable_write_page_index   = false
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    file_name_suffix          = "...my_file_name_suffix..."
-    format                    = "parquet"
-    header_line               = "...my_header_line..."
-    id                        = "...my_id..."
+    aws_secret = "aws_s3_credentials"
+    aws_secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    base_file_name = "app-logs"
+    bucket = "logs-archive-prod"
+    compress = "gzip"
+    compression_level = "normal"
+    deadletter_enabled = true
+    deadletter_path = "/opt/cribl/state/outputs/dead-letter"
+    description = "Archive logs to S3 in Parquet with field-based partitions"
+    dest_path = "year=%Y/month=%m/day=%d/app=orders"
+    duration_seconds = 3600
+    empty_dir_cleanup_sec = 600
+    enable_assume_role = true
+    enable_page_checksum = true
+    enable_statistics = true
+    enable_write_page_index = true
+    endpoint = "https://s3.us-east-1.amazonaws.com"
+    environment = "main"
+    file_name_suffix = ".parquet.gz"
+    format = "parquet"
+    header_line = "timestamp,host,level,message"
+    id = "dls3_archive_prod"
     key_value_metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
+    {
+                key = "OCSF Event Class"
+            value = "9001"
+    }
     ]
-    kms_key_id                        = "...my_kms_key_id..."
-    max_closing_files_to_backpressure = 4116.96
-    max_concurrent_file_parts         = 3.62
-    max_file_idle_time_sec            = 1646.63
-    max_file_open_time_sec            = 1294.93
-    max_file_size_mb                  = 291.56
-    max_open_files                    = 1527.44
-    max_retry_num                     = 6.4
-    object_acl                        = "public-read-write"
-    on_backpressure                   = "block"
-    on_disk_full_backpressure         = "block"
-    parquet_data_page_version         = "DATA_PAGE_V1"
-    parquet_page_size                 = "...my_parquet_page_size..."
-    parquet_row_group_length          = 36789571.94
-    parquet_version                   = "PARQUET_2_4"
+    kms_key_id = "arn:aws:kms:us-east-1:123456789012:key/abcd-1234-efgh-5678"
+    max_closing_files_to_backpressure = 500
+    max_concurrent_file_parts = 5
+    max_file_idle_time_sec = 120
+    max_file_open_time_sec = 600
+    max_file_size_mb = 256
+    max_open_files = 200
+    max_retry_num = 20
+    object_acl = "private"
+    on_disk_full_backpressure = "block"
+    parquet_data_page_version = "DATA_PAGE_V2"
+    parquet_page_size = "128MB"
+    parquet_row_group_length = 100000
+    parquet_version = "PARQUET_2_6"
     partitioning_fields = [
-      "..."
+    "app",
+    "env",
     ]
-    pipeline                = "...my_pipeline..."
-    region                  = "...my_region..."
-    reject_unauthorized     = true
-    remove_empty_dirs       = true
-    reuse_connections       = false
-    server_side_encryption  = "AES256"
+    pipeline = "main"
+    region = "us-east-1"
+    reject_unauthorized = true
+    remove_empty_dirs = true
+    reuse_connections = true
+    server_side_encryption = "aws:kms"
     should_log_invalid_rows = true
-    signature_version       = "v4"
-    stage_path              = "...my_stage_path..."
-    storage_class           = "DEEP_ARCHIVE"
+    signature_version = "v4"
+    stage_path = "/opt/cribl/state/outputs/staging"
+    storage_class = "INTELLIGENT_TIERING"
     streamtags = [
-      "..."
+    "prod",
+    "archive",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
-    type                  = "dl_s3"
-    verify_permissions    = false
-    write_high_water_mark = 1462.01
-  }
-  output_dynatrace_http = {
-    active_gate_domain = "...my_active_gate_domain..."
-    auth_type          = "token"
-    compress           = true
-    concurrency        = 20.98
-    description        = "...my_description..."
-    endpoint           = "cloud"
-    environment        = "...my_environment..."
-    environment_id     = "...my_environment_id..."
+    type = "dl_s3"
+    verify_permissions = true
+    write_high_water_mark = 256
+}
+output_dynatrace_http = {
+    active_gate_domain = "https://activegate.example.com:9999/e/abc12345/api/v2/logs/ingest"
+    auth_type = "token"
+    compress = true
+    concurrency = 8
+    description = "Send logs to Dynatrace Logs Ingest API"
+    endpoint = "cloud"
+    environment = "main"
+    environment_id = "abc12345"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    {
+                name = "Api-Token"
+            value = "dt0c01.XXXX.YYYYZZZZ"
+    }
     ]
     failed_request_logging_mode = "payloadAndHeaders"
-    flush_period_sec            = 8.42
-    format                      = "plaintext"
-    id                          = "...my_id..."
-    keep_alive                  = false
-    max_payload_events          = 5679.23
-    max_payload_size_kb         = 4322.11
-    method                      = "PUT"
-    on_backpressure             = "drop"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "none"
+    flush_period_sec = 2
+    format = "json_array"
+    id = "dynatrace_http_metrics"
+    keep_alive = true
+    max_payload_events = 10000
+    max_payload_size_kb = 4096
+    method = "POST"
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
-    response_honor_retry_after_header = false
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 4.8
-        http_status     = 159.39
-        initial_backoff = 148695.44
-        max_backoff     = 53270.51
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "content-type",
+    "api-token",
     ]
     streamtags = [
-      "..."
+    "prod",
+    "dynatrace",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
     telemetry_type = "logs"
-    text_secret    = "...my_text_secret..."
+    text_secret = "dynatrace_api_token"
     timeout_retry_settings = {
-      backoff_rate    = 12.37
-      initial_backoff = 165905.65
-      max_backoff     = 161909.34
-      timeout_retry   = false
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec           = 5587058779806179
-    token                 = "...my_token..."
-    total_memory_limit_kb = 5.36
-    type                  = "dynatrace_http"
-    url                   = "...my_url..."
-    use_round_robin_dns   = true
-  }
-  output_dynatrace_otlp = {
-    auth_token_name    = "...my_auth_token_name..."
-    compress           = "gzip"
-    concurrency        = 23.13
-    connection_timeout = 7.89
-    description        = "...my_description..."
-    endpoint           = "...my_endpoint..."
-    endpoint_type      = "saas"
-    environment        = "...my_environment..."
+    timeout_sec = 30
+    token = "dt0c01.XXXX.YYYYZZZZ"
+    total_memory_limit_kb = 51200
+    type = "dynatrace_http"
+    url = "https://abc.live.dynatrace.com/e/abc12345/api/v2/logs/ingest"
+    use_round_robin_dns = true
+}
+output_dynatrace_otlp = {
+    auth_token_name = "Authorization"
+    compress = "gzip"
+    concurrency = 5
+    connection_timeout = 10000
+    description = "Send OTLP logs and metrics to Dynatrace SaaS"
+    endpoint = "https://abc123.live.dynatrace.com/api/v2/otlp"
+    endpoint_type = "saas"
+    environment = "main"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    {
+                name = "Api-Token"
+            value = "dt0c01.XXXX.YYYYZZZZ"
+    }
     ]
-    failed_request_logging_mode    = "none"
-    flush_period_sec               = 1.29
-    http_compress                  = "gzip"
-    http_logs_endpoint_override    = "...my_http_logs_endpoint_override..."
-    http_metrics_endpoint_override = "...my_http_metrics_endpoint_override..."
-    http_traces_endpoint_override  = "...my_http_traces_endpoint_override..."
-    id                             = "...my_id..."
-    keep_alive                     = false
-    keep_alive_time                = 3.06
-    max_payload_size_kb            = 1992.01
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    http_compress = "gzip"
+    http_logs_endpoint_override = "https://abc123.live.dynatrace.com/api/v2/otlp/v1/logs"
+    http_metrics_endpoint_override = "https://abc123.live.dynatrace.com/api/v2/otlp/v1/metrics"
+    http_traces_endpoint_override = "https://abc123.live.dynatrace.com/api/v2/otlp/v1/traces"
+    id = "dynatrace_otlp_export"
+    keep_alive = true
+    keep_alive_time = 30
+    max_payload_size_kb = 2048
     metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
+    {
+                key = "x-tenant-id"
+            value = "acme-prod"
+    }
     ]
     on_backpressure = "block"
-    otlp_version    = "1.3.1"
-    pipeline        = "...my_pipeline..."
-    pq_compress     = "gzip"
+    otlp_version = "1.3.1"
+    pipeline = "main"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "error"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    protocol                          = "http"
-    reject_unauthorized               = false
-    response_honor_retry_after_header = false
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protocol = "http"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 15.6
-        http_status     = 541.15
-        initial_backoff = 33374.24
-        max_backoff     = 55428.96
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "content-type",
+    "api-token",
     ]
     streamtags = [
-      "..."
+    "prod",
+    "dynatrace",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
     timeout_retry_settings = {
-      backoff_rate    = 18.36
-      initial_backoff = 385892.16
-      max_backoff     = 50280.25
-      timeout_retry   = false
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec         = 4546289421435046
-    token_secret        = "...my_token_secret..."
-    type                = "dynatrace_otlp"
-    use_round_robin_dns = false
-  }
-  output_elastic = {
+    timeout_sec = 30
+    token_secret = "dynatrace_otlp_token"
+    type = "dynatrace_otlp"
+    use_round_robin_dns = true
+}
+output_elastic = {
     auth = {
-      auth_type = "secret"
-      disabled  = false
+            auth_type = "manualAPIKey"
+        disabled = false
     }
-    compress               = false
-    concurrency            = 28.73
-    description            = "...my_description..."
-    dns_resolve_period_sec = 31696.4
-    doc_type               = "...my_doc_type..."
-    elastic_pipeline       = "...my_elastic_pipeline..."
-    elastic_version        = "auto"
-    environment            = "...my_environment..."
-    exclude_self           = true
+    compress = true
+    concurrency = 8
+    description = "Send documents to Elasticsearch bulk API with retries and custom params"
+    dns_resolve_period_sec = 300
+    doc_type = "_doc"
+    elastic_pipeline = "ingest-grok-pipeline"
+    elastic_version = "7"
+    environment = "main"
+    exclude_self = false
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    {
+                name = "X-Request-ID"
+            value = "abc123"
+    }
     ]
     extra_params = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode   = "none"
-    flush_period_sec              = 3.65
-    id                            = "...my_id..."
-    include_doc_id                = false
-    index                         = "...my_index..."
-    load_balance_stats_period_sec = 12.6
-    load_balanced                 = true
-    max_payload_events            = 0.85
-    max_payload_size_kb           = 91141.32
-    on_backpressure               = "block"
-    pipeline                      = "...my_pipeline..."
-    pq_compress                   = "none"
-    pq_controls = {
-      # ...
+    {
+                name = "filter_path"
+            value = "errors,items.*.error,items.*._index,items.*.status"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
-    response_honor_retry_after_header = false
-    response_retry_settings = [
-      {
-        backoff_rate    = 17.49
-        http_status     = 371.74
-        initial_backoff = 164706.64
-        max_backoff     = 102099.58
-      }
-    ]
-    retry_partial_errors = false
-    safe_headers = [
-      "..."
-    ]
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    timeout_retry_settings = {
-      backoff_rate    = 9.56
-      initial_backoff = 522024.45
-      max_backoff     = 33017.16
-      timeout_retry   = false
-    }
-    timeout_sec = 739433064426379.6
-    type        = "elastic"
-    url         = "...my_url..."
-    urls = [
-      {
-        url    = "...my_url..."
-        weight = 3.56
-      }
-    ]
-    use_round_robin_dns = false
-    write_action        = "create"
-  }
-  output_elastic_cloud = {
-    auth = {
-      auth_type = "manualAPIKey"
-      disabled  = true
-    }
-    compress         = false
-    concurrency      = 27.58
-    description      = "...my_description..."
-    elastic_pipeline = "...my_elastic_pipeline..."
-    environment      = "...my_environment..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    extra_params = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
     ]
     failed_request_logging_mode = "payload"
-    flush_period_sec            = 8.32
-    id                          = "...my_id..."
-    include_doc_id              = true
-    index                       = "...my_index..."
-    max_payload_events          = 3.95
-    max_payload_size_kb         = 45448.07
-    on_backpressure             = "block"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "none"
+    flush_period_sec = 1
+    id = "elastic-out"
+    include_doc_id = true
+    index = "\"logs-%{C.Time.strftime(_time, \"%Y.%m.%d\")}\""
+    load_balance_stats_period_sec = 300
+    load_balanced = true
+    max_payload_events = 0
+    max_payload_size_kb = 4096
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
-    response_honor_retry_after_header = false
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 17.11
-        http_status     = 566.5
-        initial_backoff = 261851.45
-        max_backoff     = 86436.83
-      }
+    {
+                backoff_rate = 2
+            http_status = 503
+            initial_backoff = 1000
+            max_backoff = 60000
+    }
     ]
+    retry_partial_errors = true
     safe_headers = [
-      "..."
+    "X-Request-ID",
     ]
     streamtags = [
-      "..."
+    "elastic",
+    "es",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
     timeout_retry_settings = {
-      backoff_rate    = 19.27
-      initial_backoff = 487942.83
-      max_backoff     = 119811.72
-      timeout_retry   = true
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec = 1486952552692243.5
-    type        = "elastic_cloud"
-    url         = "...my_url..."
-  }
-  output_exabeam = {
-    add_id_to_stage_path      = true
-    aws_api_key               = "...my_aws_api_key..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    bucket                    = "...my_bucket..."
-    collector_instance_id     = "...my_collector_instance_id..."
-    deadletter_enabled        = true
-    deadletter_path           = "...my_deadletter_path..."
-    description               = "...my_description..."
-    empty_dir_cleanup_sec     = 59606.21
-    encoded_configuration     = "...my_encoded_configuration..."
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    id                        = "...my_id..."
-    max_file_idle_time_sec    = 812.6
-    max_file_open_time_sec    = 695.94
-    max_file_size_mb          = 720.01
-    max_open_files            = 1997.19
-    max_retry_num             = 4.9
-    object_acl                = "bucket-owner-read"
-    on_backpressure           = "block"
-    on_disk_full_backpressure = "drop"
-    pipeline                  = "...my_pipeline..."
-    region                    = "...my_region..."
-    reject_unauthorized       = false
-    remove_empty_dirs         = true
-    reuse_connections         = false
-    signature_version         = "v4"
-    site_id                   = "...my_site_id..."
-    site_name                 = "...my_site_name..."
-    stage_path                = "...my_stage_path..."
-    storage_class             = "STANDARD"
-    streamtags = [
-      "..."
+    timeout_sec = 30
+    type = "elastic"
+    url = "https://es.example.com:9200/_bulk"
+    urls = [
+    {
+                url = "https://es-node-1.example.com:9200/_bulk"
+            weight = 2
+    }
     ]
-    system_fields = [
-      "..."
-    ]
-    timezone_offset = "...my_timezone_offset..."
-    type            = "exabeam"
-  }
-  output_filesystem = {
-    add_id_to_stage_path    = false
-    automatic_schema        = true
-    base_file_name          = "...my_base_file_name..."
-    compress                = "gzip"
-    compression_level       = "best_speed"
-    deadletter_enabled      = true
-    deadletter_path         = "...my_deadletter_path..."
-    description             = "...my_description..."
-    dest_path               = "...my_dest_path..."
-    empty_dir_cleanup_sec   = 61451.75
-    enable_page_checksum    = false
-    enable_statistics       = false
-    enable_write_page_index = false
-    environment             = "...my_environment..."
-    file_name_suffix        = "...my_file_name_suffix..."
-    format                  = "parquet"
-    header_line             = "...my_header_line..."
-    id                      = "...my_id..."
-    key_value_metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
-    ]
-    max_file_idle_time_sec    = 1289.27
-    max_file_open_time_sec    = 304.92
-    max_file_size_mb          = 338.63
-    max_open_files            = 1766.53
-    max_retry_num             = 1.83
-    on_backpressure           = "block"
-    on_disk_full_backpressure = "block"
-    parquet_data_page_version = "DATA_PAGE_V1"
-    parquet_page_size         = "...my_parquet_page_size..."
-    parquet_row_group_length  = 24426080.91
-    parquet_version           = "PARQUET_2_4"
-    partition_expr            = "...my_partition_expr..."
-    pipeline                  = "...my_pipeline..."
-    remove_empty_dirs         = false
-    should_log_invalid_rows   = false
-    stage_path                = "...my_stage_path..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    type                  = "filesystem"
-    write_high_water_mark = 516.14
-  }
-  output_google_chronicle = {
-    api_key               = "...my_api_key..."
-    api_key_secret        = "...my_api_key_secret..."
-    api_version           = "v2"
-    authentication_method = "manual"
-    compress              = false
-    concurrency           = 12.09
-    custom_labels = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
-    ]
-    customer_id = "...my_customer_id..."
-    description = "...my_description..."
-    environment = "...my_environment..."
+    use_round_robin_dns = true
+    write_action = "create"
+}
+output_elastic_cloud = {
+    auth = {
+            auth_type = "manualAPIKey"
+        disabled = false
+    }
+    compress = true
+    concurrency = 8
+    description = "Send documents to Elastic Cloud with retries and pipeline support"
+    elastic_pipeline = "ingest-grok-pipeline"
+    environment = "main"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    {
+                name = "X-Request-ID"
+            value = "abc123"
+    }
+    ]
+    extra_params = [
+    {
+                name = "filter_path"
+            value = "errors,items.*.error,items.*._index,items.*.status"
+    }
+    ]
+    failed_request_logging_mode = "payload"
+    flush_period_sec = 1
+    id = "es-cloud-out"
+    include_doc_id = true
+    index = "\"logs-%{C.Time.strftime(_time, \"%Y.%m.%d\")}\""
+    max_payload_events = 0
+    max_payload_size_kb = 4096
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 503
+            initial_backoff = 1000
+            max_backoff = 60000
+    }
+    ]
+    safe_headers = [
+    "X-Request-ID",
+    ]
+    streamtags = [
+    "elastic",
+    "cloud",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    type = "elastic_cloud"
+    url = "my-deployment:ZXM0LmNsb3VkLmV... (truncated)"
+}
+output_exabeam = {
+    add_id_to_stage_path = true
+    aws_api_key = "***REDACTED***"
+    aws_secret_key = "***REDACTED***"
+    bucket = "exabeam-data"
+    collector_instance_id = "11112222-3333-4444-5555-666677778888"
+    deadletter_enabled = true
+    deadletter_path = "/var/lib/cribl/state/outputs/dead-letter"
+    description = "Deliver logs to Exabeam Collector via GCS staging"
+    empty_dir_cleanup_sec = 600
+    encoded_configuration = "***REDACTED***"
+    endpoint = "https://storage.googleapis.com"
+    environment = "main"
+    id = "exabeam-out"
+    max_file_idle_time_sec = 30
+    max_file_open_time_sec = 300
+    max_file_size_mb = 64
+    max_open_files = 200
+    max_retry_num = 20
+    object_acl = "private"
+    on_backpressure = "block"
+    on_disk_full_backpressure = "block"
+    pipeline = "default"
+    region = "us-central1"
+    reject_unauthorized = true
+    remove_empty_dirs = true
+    reuse_connections = true
+    signature_version = "v4"
+    site_id = "site-123"
+    site_name = "\"corp-east\""
+    stage_path = "/var/lib/cribl/state/outputs/staging"
+    storage_class = "NEARLINE"
+    streamtags = [
+    "exabeam",
+    "gcs",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    timezone_offset = "-07:00"
+    type = "exabeam"
+}
+output_filesystem = {
+    add_id_to_stage_path = true
+    automatic_schema = true
+    base_file_name = "`CriblOut`"
+    compress = "gzip"
+    compression_level = "normal"
+    deadletter_enabled = true
+    deadletter_path = "/var/lib/cribl/state/outputs/dead-letter"
+    description = "Write events to local filesystem with daily partitioning"
+    dest_path = "/var/log/cribl/out"
+    empty_dir_cleanup_sec = 600
+    enable_page_checksum = true
+    enable_statistics = true
+    enable_write_page_index = true
+    environment = "main"
+    file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+    format = "json"
+    header_line = "timestamp,host,message"
+    id = "filesystem-out"
+    key_value_metadata = [
+    {
+                key = "team"
+            value = "platform"
+    }
+    ]
+    max_file_idle_time_sec = 30
+    max_file_open_time_sec = 300
+    max_file_size_mb = 64
+    max_open_files = 200
+    max_retry_num = 20
+    on_backpressure = "block"
+    on_disk_full_backpressure = "block"
+    parquet_data_page_version = "DATA_PAGE_V2"
+    parquet_page_size = "4MB"
+    parquet_row_group_length = 10000
+    parquet_version = "PARQUET_2_6"
+    partition_expr = "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d') + '/host=' + host"
+    pipeline = "default"
+    remove_empty_dirs = true
+    should_log_invalid_rows = true
+    stage_path = "/var/log/cribl/stage"
+    streamtags = [
+    "filesystem",
+    "prod",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    type = "filesystem"
+    write_high_water_mark = 256
+}
+output_google_chronicle = {
+    api_key = "***REDACTED***"
+    api_key_secret = "chronicle-api-key"
+    api_version = "v1"
+    authentication_method = "serviceAccount"
+    compress = true
+    concurrency = 8
+    custom_labels = [
+    {
+                key = "...my_key..."
+            value = "...my_value..."
+    }
+    ]
+    customer_id = "123e4567-e89b-12d3-a456-426614174000"
+    description = "Send events to Google SecOps Chronicle"
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "abc123"
+    }
     ]
     extra_log_types = [
-      {
-        description = "...my_description..."
-        log_type    = "...my_log_type..."
-      }
+    {
+                description = "...my_description..."
+            log_type = "...my_log_type..."
+    }
     ]
     failed_request_logging_mode = "payload"
-    flush_period_sec            = 6.88
-    id                          = "...my_id..."
-    log_format_type             = "unstructured"
-    log_text_field              = "...my_log_text_field..."
-    log_type                    = "...my_log_type..."
-    max_payload_events          = 5.74
-    max_payload_size_kb         = 124.53
-    namespace                   = "...my_namespace..."
-    on_backpressure             = "block"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "none"
+    flush_period_sec = 1
+    id = "chronicle-out"
+    log_format_type = "unstructured"
+    log_text_field = "message"
+    log_type = "CUSTOM_WEBLOG"
+    max_payload_events = 0
+    max_payload_size_kb = 1024
+    namespace = "prod-us"
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
-    }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    region                            = "...my_region..."
-    reject_unauthorized               = true
-    response_honor_retry_after_header = true
-    response_retry_settings = [
-      {
-        backoff_rate    = 19.4
-        http_status     = 324.58
-        initial_backoff = 413439.35
-        max_backoff     = 68567.56
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    service_account_credentials        = "...my_service_account_credentials..."
-    service_account_credentials_secret = "...my_service_account_credentials_secret..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    timeout_retry_settings = {
-      backoff_rate    = 4.63
-      initial_backoff = 22588.87
-      max_backoff     = 61071.63
-      timeout_retry   = true
-    }
-    timeout_sec           = 4524053444580176
-    total_memory_limit_kb = 3.9
-    type                  = "google_chronicle"
-    use_round_robin_dns   = true
-  }
-  output_google_cloud_logging = {
-    cache_fill_bytes_expression = "...my_cache_fill_bytes_expression..."
-    cache_hit_expression        = "...my_cache_hit_expression..."
-    cache_lookup_expression     = "...my_cache_lookup_expression..."
-    cache_validated_expression  = "...my_cache_validated_expression..."
-    concurrency                 = 2.1
-    connection_timeout          = 1.99
-    description                 = "...my_description..."
-    environment                 = "...my_environment..."
-    file_expression             = "...my_file_expression..."
-    first_expression            = "...my_first_expression..."
-    flush_period_sec            = 6.41
-    function_expression         = "...my_function_expression..."
-    google_auth_method          = "secret"
-    id                          = "...my_id..."
-    id_expression               = "...my_id_expression..."
-    index_expression            = "...my_index_expression..."
-    insert_id_expression        = "...my_insert_id_expression..."
-    last_expression             = "...my_last_expression..."
-    latency_expression          = "...my_latency_expression..."
-    line_expression             = "...my_line_expression..."
-    log_labels = [
-      {
-        label            = "...my_label..."
-        value_expression = "...my_value_expression..."
-      }
-    ]
-    log_location_expression = "...my_log_location_expression..."
-    log_location_type       = "project"
-    log_name_expression     = "...my_log_name_expression..."
-    max_payload_events      = 1.5
-    max_payload_size_kb     = 8058.64
-    on_backpressure         = "drop"
-    payload_expression      = "...my_payload_expression..."
-    payload_format          = "text"
-    pipeline                = "...my_pipeline..."
-    pq_compress             = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size          = "...my_pq_max_file_size..."
-    pq_max_size               = "...my_pq_max_size..."
-    pq_mode                   = "error"
-    pq_on_backpressure        = "drop"
-    pq_path                   = "...my_pq_path..."
-    producer_expression       = "...my_producer_expression..."
-    protocol_expression       = "...my_protocol_expression..."
-    referer_expression        = "...my_referer_expression..."
-    remote_ip_expression      = "...my_remote_ip_expression..."
-    request_method_expression = "...my_request_method_expression..."
-    request_size_expression   = "...my_request_size_expression..."
-    request_url_expression    = "...my_request_url_expression..."
-    resource_type_expression  = "...my_resource_type_expression..."
-    resource_type_labels = [
-      {
-        label            = "...my_label..."
-        value_expression = "...my_value_expression..."
-      }
-    ]
-    response_size_expression    = "...my_response_size_expression..."
-    secret                      = "...my_secret..."
-    server_ip_expression        = "...my_server_ip_expression..."
-    service_account_credentials = "...my_service_account_credentials..."
-    severity_expression         = "...my_severity_expression..."
-    span_id_expression          = "...my_span_id_expression..."
-    status_expression           = "...my_status_expression..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    throttle_rate_req_per_sec = 920
-    timeout_sec               = 1797415024310893.5
-    total_memory_limit_kb     = 7.07
-    total_splits_expression   = "...my_total_splits_expression..."
-    trace_expression          = "...my_trace_expression..."
-    trace_sampled_expression  = "...my_trace_sampled_expression..."
-    type                      = "google_cloud_logging"
-    uid_expression            = "...my_uid_expression..."
-    user_agent_expression     = "...my_user_agent_expression..."
-  }
-  output_google_cloud_storage = {
-    add_id_to_stage_path      = true
-    automatic_schema          = true
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    base_file_name            = "...my_base_file_name..."
-    bucket                    = "...my_bucket..."
-    compress                  = "none"
-    compression_level         = "best_speed"
-    deadletter_enabled        = true
-    deadletter_path           = "...my_deadletter_path..."
-    description               = "...my_description..."
-    dest_path                 = "...my_dest_path..."
-    empty_dir_cleanup_sec     = 66967.85
-    enable_page_checksum      = true
-    enable_statistics         = true
-    enable_write_page_index   = true
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    file_name_suffix          = "...my_file_name_suffix..."
-    format                    = "raw"
-    header_line               = "...my_header_line..."
-    id                        = "...my_id..."
-    key_value_metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
-    ]
-    max_file_idle_time_sec    = 1524.23
-    max_file_open_time_sec    = 458.74
-    max_file_size_mb          = 296.35
-    max_open_files            = 987.61
-    max_retry_num             = 2.79
-    object_acl                = "public-read"
-    on_backpressure           = "block"
-    on_disk_full_backpressure = "drop"
-    parquet_data_page_version = "DATA_PAGE_V2"
-    parquet_page_size         = "...my_parquet_page_size..."
-    parquet_row_group_length  = 54910275.13
-    parquet_version           = "PARQUET_2_4"
-    partition_expr            = "...my_partition_expr..."
-    pipeline                  = "...my_pipeline..."
-    region                    = "...my_region..."
-    reject_unauthorized       = false
-    remove_empty_dirs         = true
-    reuse_connections         = true
-    should_log_invalid_rows   = false
-    signature_version         = "v2"
-    stage_path                = "...my_stage_path..."
-    storage_class             = "COLDLINE"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    type                  = "google_cloud_storage"
-    verify_permissions    = false
-    write_high_water_mark = 1733.06
-  }
-  output_google_pubsub = {
-    batch_size         = 7384.9
-    batch_timeout      = 11786.48
-    create_topic       = true
-    description        = "...my_description..."
-    environment        = "...my_environment..."
-    flush_period_sec   = "{ \"see\": \"documentation\" }"
-    google_auth_method = "secret"
-    id                 = "...my_id..."
-    max_in_progress    = 11.51
-    max_queue_size     = 9.76
-    max_record_size_kb = 85.85
-    on_backpressure    = "drop"
-    ordered_delivery   = false
-    pipeline           = "...my_pipeline..."
-    pq_compress        = "none"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size            = "...my_pq_max_file_size..."
-    pq_max_size                 = "...my_pq_max_size..."
-    pq_mode                     = "backpressure"
-    pq_on_backpressure          = "block"
-    pq_path                     = "...my_pq_path..."
-    region                      = "...my_region..."
-    secret                      = "...my_secret..."
-    service_account_credentials = "...my_service_account_credentials..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    topic_name = "...my_topic_name..."
-    type       = "google_pubsub"
-  }
-  output_grafana_cloud = {
-    output_grafana_cloud_grafana_cloud1 = {
-      compress    = false
-      concurrency = 26.26
-      description = "...my_description..."
-      environment = "...my_environment..."
-      extra_http_headers = [
-        {
-          name  = "...my_name..."
-          value = "...my_value..."
-        }
-      ]
-      failed_request_logging_mode = "payload"
-      flush_period_sec            = 9.23
-      id                          = "...my_id..."
-      labels = [
-        {
-          name  = "...my_name..."
-          value = "...my_value..."
-        }
-      ]
-      loki_auth = {
-        auth_type          = "basic"
-        credentials_secret = "...my_credentials_secret..."
-        password           = "...my_password..."
-        text_secret        = "...my_text_secret..."
-        token              = "...my_token..."
-        username           = "...my_username..."
-      }
-      loki_url            = "...my_loki_url..."
-      max_payload_events  = 0.89
-      max_payload_size_kb = 9058.73
-      message             = "...my_message..."
-      message_format      = "json"
-      metric_rename_expr  = "...my_metric_rename_expr..."
-      on_backpressure     = "block"
-      pipeline            = "...my_pipeline..."
-      pq_compress         = "gzip"
-      pq_controls = {
         # ...
-      }
-      pq_max_file_size   = "...my_pq_max_file_size..."
-      pq_max_size        = "...my_pq_max_size..."
-      pq_mode            = "backpressure"
-      pq_on_backpressure = "block"
-      pq_path            = "...my_pq_path..."
-      prometheus_auth = {
-        auth_type          = "credentialsSecret"
-        credentials_secret = "...my_credentials_secret..."
-        password           = "...my_password..."
-        text_secret        = "...my_text_secret..."
-        token              = "...my_token..."
-        username           = "...my_username..."
-      }
-      prometheus_url                    = "...my_prometheus_url..."
-      reject_unauthorized               = true
-      response_honor_retry_after_header = true
-      response_retry_settings = [
-        {
-          backoff_rate    = 19.41
-          http_status     = 287.25
-          initial_backoff = 173045.8
-          max_backoff     = 114128.22
-        }
-      ]
-      safe_headers = [
-        "..."
-      ]
-      streamtags = [
-        "..."
-      ]
-      system_fields = [
-        "..."
-      ]
-      timeout_retry_settings = {
-        backoff_rate    = 19.16
-        initial_backoff = 524925.01
-        max_backoff     = 165357.85
-        timeout_retry   = false
-      }
-      timeout_sec         = 8410084066962944
-      type                = "grafana_cloud"
-      use_round_robin_dns = true
     }
-  }
-  output_graphite = {
-    connection_timeout     = 7.68
-    description            = "...my_description..."
-    dns_resolve_period_sec = 73838.71
-    environment            = "...my_environment..."
-    flush_period_sec       = 0
-    host                   = "...my_host..."
-    id                     = "...my_id..."
-    mtu                    = 20549.24
-    on_backpressure        = "drop"
-    pipeline               = "...my_pipeline..."
-    port                   = 26769.32
-    pq_compress            = "none"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size   = "...my_pq_max_file_size..."
-    pq_max_size        = "...my_pq_max_size..."
-    pq_mode            = "error"
-    pq_on_backpressure = "drop"
-    pq_path            = "...my_pq_path..."
-    protocol           = "tcp"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
-    type                  = "graphite"
-    write_timeout         = 0.71
-  }
-  output_honeycomb = {
-    auth_type   = "manual"
-    compress    = false
-    concurrency = 7.42
-    dataset     = "...my_dataset..."
-    description = "...my_description..."
-    environment = "...my_environment..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode = "none"
-    flush_period_sec            = 4.27
-    id                          = "...my_id..."
-    max_payload_events          = 5.54
-    max_payload_size_kb         = 4480.71
-    on_backpressure             = "queue"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    region = "us"
+    reject_unauthorized = true
     response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 17.81
-        http_status     = 574.66
-        initial_backoff = 172747.51
-        max_backoff     = 166242.49
-      }
+    {
+                backoff_rate = 2
+            http_status = 503
+            initial_backoff = 30000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "X-Request-ID",
     ]
+    service_account_credentials = "***REDACTED***"
+    service_account_credentials_secret = "chronicle-sa-credentials"
     streamtags = [
-      "..."
+    "google",
+    "chronicle",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
-    team        = "...my_team..."
-    text_secret = "...my_text_secret..."
     timeout_retry_settings = {
-      backoff_rate    = 11.71
-      initial_backoff = 183167.48
-      max_backoff     = 17062.56
-      timeout_retry   = false
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec         = 4127916144665701
-    type                = "honeycomb"
+    timeout_sec = 90
+    total_memory_limit_kb = 5120
+    type = "google_chronicle"
     use_round_robin_dns = true
-  }
-  output_humio_hec = {
-    auth_type   = "manual"
-    compress    = true
-    concurrency = 27.97
-    description = "...my_description..."
-    environment = "...my_environment..."
+}
+output_google_cloud_logging = {
+    cache_fill_bytes_expression = "String(_raw.cache_fill_bytes)"
+    cache_hit_expression = "Boolean(_raw.cache_hit)"
+    cache_lookup_expression = "Boolean(_raw.cache_lookup)"
+    cache_validated_expression = "Boolean(_raw.cache_validated)"
+    concurrency = 8
+    connection_timeout = 10000
+    description = "Send logs to Google Cloud Logging with custom resource labels"
+    environment = "main"
+    file_expression = "String(_raw.file)"
+    first_expression = "Boolean(_raw.operation_first)"
+    flush_period_sec = 1
+    function_expression = "String(_raw.function)"
+    google_auth_method = "secret"
+    id = "gcl-out"
+    id_expression = "String(_raw.operation_id)"
+    index_expression = "Number(_raw.split_index)"
+    insert_id_expression = "Crypto.uuid()"
+    last_expression = "Boolean(_raw.operation_last)"
+    latency_expression = "(_raw.latency_ms/1000).toFixed(3) + \"s\""
+    line_expression = "String(_raw.line)"
+    log_labels = [
+    {
+                label = "environment"
+            value_expression = "\"prod\""
+    }
+    ]
+    log_location_expression = "\"projects/my-project\""
+    log_location_type = "project"
+    log_name_expression = "\"cribl_logs\""
+    max_payload_events = 0
+    max_payload_size_kb = 4096
+    on_backpressure = "block"
+    payload_expression = "{ message: _raw.message, severity: _raw.severity || \"DEFAULT\" }"
+    payload_format = "json"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    producer_expression = "String(_raw.operation_producer)"
+    protocol_expression = "String(_raw.protocol)"
+    referer_expression = "String(_raw.referer)"
+    remote_ip_expression = "String(_raw.client_ip)"
+    request_method_expression = "\"POST\""
+    request_size_expression = "String(length(_raw.request_body))"
+    request_url_expression = "\"https://example.com/api\""
+    resource_type_expression = "\"gce_instance\""
+    resource_type_labels = [
+    {
+                label = "instance_id"
+            value_expression = "String(_raw.instance_id)"
+    }
+    ]
+    response_size_expression = "String(length(_raw.response_body))"
+    secret = "gcl-service-account"
+    server_ip_expression = "String(_raw.server_ip)"
+    service_account_credentials = "***REDACTED***"
+    severity_expression = "\"INFO\""
+    span_id_expression = "String(_raw.span_id)"
+    status_expression = "Number(_raw.status)"
+    streamtags = [
+    "gcp",
+    "logging",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    throttle_rate_req_per_sec = 500
+    timeout_sec = 30
+    total_memory_limit_kb = 20480
+    total_splits_expression = "Number(_raw.split_total)"
+    trace_expression = "String(_raw.trace)"
+    trace_sampled_expression = "Boolean(_raw.trace_sampled)"
+    type = "google_cloud_logging"
+    uid_expression = "String(_raw.split_uid)"
+    user_agent_expression = "String(_raw.user_agent)"
+}
+output_google_cloud_storage = {
+    add_id_to_stage_path = true
+    automatic_schema = true
+    aws_api_key = "***REDACTED***"
+    aws_authentication_method = "manual"
+    aws_secret = "gcs-hmac-credentials"
+    aws_secret_key = "***REDACTED***"
+    base_file_name = "`CriblOut`"
+    bucket = "cribl-data-bucket"
+    compress = "gzip"
+    compression_level = "normal"
+    deadletter_enabled = true
+    deadletter_path = "/var/lib/cribl/state/outputs/dead-letter"
+    description = "Write objects to Google Cloud Storage with date-based partitioning"
+    dest_path = "logs/ingest"
+    empty_dir_cleanup_sec = 600
+    enable_page_checksum = true
+    enable_statistics = true
+    enable_write_page_index = true
+    endpoint = "https://storage.googleapis.com"
+    environment = "main"
+    file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+    format = "json"
+    header_line = "timestamp,host,message"
+    id = "gcs-out"
+    key_value_metadata = [
+    {
+                key = "team"
+            value = "platform"
+    }
+    ]
+    max_file_idle_time_sec = 30
+    max_file_open_time_sec = 300
+    max_file_size_mb = 64
+    max_open_files = 200
+    max_retry_num = 20
+    object_acl = "private"
+    on_backpressure = "block"
+    on_disk_full_backpressure = "block"
+    parquet_data_page_version = "DATA_PAGE_V2"
+    parquet_page_size = "4MB"
+    parquet_row_group_length = 10000
+    parquet_version = "PARQUET_2_6"
+    partition_expr = "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d') + '/host=' + host"
+    pipeline = "default"
+    region = "us-central1"
+    reject_unauthorized = true
+    remove_empty_dirs = true
+    reuse_connections = true
+    should_log_invalid_rows = true
+    signature_version = "v4"
+    stage_path = "/var/lib/cribl/state/outputs/staging"
+    storage_class = "NEARLINE"
+    streamtags = [
+    "gcp",
+    "gcs",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    type = "google_cloud_storage"
+    verify_permissions = true
+    write_high_water_mark = 256
+}
+output_google_pubsub = {
+    batch_size = 1000
+    batch_timeout = 200
+    create_topic = true
+    description = "Publish events to Google Pub/Sub with ordered delivery"
+    environment = "main"
+    flush_period_sec = {"type":"number","default":1}
+    google_auth_method = "secret"
+    id = "gpubsub-out"
+    max_in_progress = 20
+    max_queue_size = 500
+    max_record_size_kb = 256
+    on_backpressure = "block"
+    ordered_delivery = true
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    region = "us-central1"
+    secret = "gcp-pubsub-sa"
+    service_account_credentials = "***REDACTED***"
+    streamtags = [
+    "gcp",
+    "pubsub",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    topic_name = "app-events"
+    type = "google_pubsub"
+}
+output_grafana_cloud = {
+output_grafana_cloud_grafana_cloud1 = {
+    compress = true
+    concurrency = 2
+    description = "Send logs and metrics to Grafana Cloud Loki and Prometheus"
+    environment = "main"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 10
+    id = "grafana_cloud_logs_prod"
+    labels = [
+    {
+                name = "host"
+            value = "web-01"
+    }
+    ]
+    loki_auth = {
+            auth_type = "basic"
+        credentials_secret = "grafana_loki_credentials"
+        password = "glc_efgh5678"
+        text_secret = "grafana_loki_token"
+        token = "12345:glc_efgh5678"
+        username = 12345
+    }
+    loki_url = "https://logs-prod-us-central1.grafana.net"
+    max_payload_events = 1000
+    max_payload_size_kb = 2048
+    message = "_raw"
+    message_format = "protobuf"
+    metric_rename_expr = "name.replace(/[^a-zA-Z0-9_]/g, '_')"
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    prometheus_auth = {
+            auth_type = "basic"
+        credentials_secret = "grafana_prom_credentials"
+        password = "glc_abcd1234"
+        text_secret = "grafana_prom_token"
+        token = "12345:glc_abcd1234"
+        username = 12345
+    }
+    prometheus_url = "https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "content-type",
+    "x-request-id",
+    ]
+    streamtags = [
+    "prod",
+    "grafana",
+    ]
+    system_fields = [
+    "cribl_host",
+    "cribl_wp",
+    ]
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    type = "grafana_cloud"
+    use_round_robin_dns = true
+}
+}
+output_graphite = {
+    connection_timeout = 10000
+    description = "Send metrics to Graphite in plaintext protocol"
+    dns_resolve_period_sec = 300
+    environment = "main"
+    flush_period_sec = 1
+    host = "graphite.example.com"
+    id = "graphite_metrics_prod"
+    mtu = 1400
+    on_backpressure = "block"
+    pipeline = "metrics"
+    port = 2003
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protocol = "tcp"
+    streamtags = [
+    "prod",
+    "graphite",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    throttle_rate_per_sec = "10 MB"
+    type = "graphite"
+    write_timeout = 30000
+}
+output_honeycomb = {
+    auth_type = "manual"
+    compress = true
+    concurrency = 8
+    dataset = "observability"
+    description = "Send events to Honeycomb dataset"
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "abc123"
+    }
     ]
     failed_request_logging_mode = "payload"
-    flush_period_sec            = 7.69
-    format                      = "JSON"
-    id                          = "...my_id..."
-    max_payload_events          = 6.83
-    max_payload_size_kb         = 32653.9
-    on_backpressure             = "queue"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "gzip"
+    flush_period_sec = 1
+    id = "honeycomb-out"
+    max_payload_events = 0
+    max_payload_size_kb = 4096
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = true
-    response_honor_retry_after_header = false
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 4.36
-        http_status     = 134.47
-        initial_backoff = 526947.65
-        max_backoff     = 112451.32
-      }
+    {
+                backoff_rate = 2
+            http_status = 503
+            initial_backoff = 1000
+            max_backoff = 60000
+    }
     ]
     safe_headers = [
-      "..."
+    "X-Request-ID",
     ]
     streamtags = [
-      "..."
+    "honeycomb",
+    "prod",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
-    text_secret = "...my_text_secret..."
+    team = "***REDACTED***"
+    text_secret = "honeycomb-api-key"
     timeout_retry_settings = {
-      backoff_rate    = 19.48
-      initial_backoff = 366619.61
-      max_backoff     = 145965.16
-      timeout_retry   = false
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec         = 8089370599158853
-    token               = "...my_token..."
-    type                = "humio_hec"
-    url                 = "...my_url..."
-    use_round_robin_dns = false
-  }
-  output_influxdb = {
-    auth_header_expr         = "...my_auth_header_expr..."
-    auth_type                = "credentialsSecret"
-    bucket                   = "...my_bucket..."
-    compress                 = false
-    concurrency              = 7.17
-    credentials_secret       = "...my_credentials_secret..."
-    database                 = "...my_database..."
-    description              = "...my_description..."
-    dynamic_value_field_name = false
-    environment              = "...my_environment..."
+    timeout_sec = 30
+    type = "honeycomb"
+    use_round_robin_dns = true
+}
+output_humio_hec = {
+    auth_type = "secret"
+    compress = true
+    concurrency = 8
+    description = "Send logs to CrowdStrike Falcon LogScale via HEC endpoint"
+    environment = "main"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
     ]
-    failed_request_logging_mode = "none"
-    flush_period_sec            = 4.51
-    id                          = "...my_id..."
-    login_url                   = "...my_login_url..."
-    max_payload_events          = 5.21
-    max_payload_size_kb         = 43679.21
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    format = "JSON"
+    id = "humio_hec_prod"
+    max_payload_events = 1000
+    max_payload_size_kb = 8192
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "content-type",
+    "x-request-id",
+    ]
+    streamtags = [
+    "prod",
+    "humio",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    text_secret = "humio_hec_token"
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    token = "humio-0123456789abcdef0123456789abcdef"
+    type = "humio_hec"
+    url = "https://cloud.us.humio.com/api/v1/ingest/hec"
+    use_round_robin_dns = true
+}
+output_influxdb = {
+    auth_header_expr = "`Bearer ${token}`"
+    auth_type = "token"
+    bucket = "metrics_prod"
+    compress = true
+    concurrency = 8
+    credentials_secret = "influxdb_basic_auth"
+    database = "telegraf"
+    description = "Send metrics to InfluxDB with v2 API and token auth"
+    dynamic_value_field_name = true
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    id = "influxdb_metrics_prod"
+    login_url = "https://influxdb.example.com/oauth/token"
+    max_payload_events = 5000
+    max_payload_size_kb = 8192
     oauth_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    {
+                name = "Accept"
+            value = "application/json"
+    }
     ]
     oauth_params = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    {
+                name = "grant_type"
+            value = "client_credentials"
+    }
     ]
     on_backpressure = "block"
-    org             = "...my_org..."
-    password        = "...my_password..."
-    pipeline        = "...my_pipeline..."
-    pq_compress     = "none"
+    org = "acme-observability"
+    password = "s3cr3tPass!"
+    pipeline = "metrics"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
-    response_honor_retry_after_header = false
-    response_retry_settings = [
-      {
-        backoff_rate    = 13.22
-        http_status     = 311.91
-        initial_backoff = 490886.9
-        max_backoff     = 124349.45
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    text_secret = "...my_text_secret..."
-    timeout_retry_settings = {
-      backoff_rate    = 1.3
-      initial_backoff = 389060.46
-      max_backoff     = 111384.89
-      timeout_retry   = false
-    }
-    timeout_sec          = 8604065791755370
-    timestamp_precision  = "s"
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 243059.19
-    type                 = "influxdb"
-    url                  = "...my_url..."
-    use_round_robin_dns  = true
-    use_v2_api           = false
-    username             = "...my_username..."
-    value_field_name     = "...my_value_field_name..."
-  }
-  output_kafka = {
-    ack                    = 0
-    authentication_timeout = 2381120.18
-    backoff_rate           = 9.13
-    brokers = [
-      "..."
-    ]
-    compression        = "snappy"
-    connection_timeout = 2861276.42
-    description        = "...my_description..."
-    environment        = "...my_environment..."
-    flush_event_count  = 4347.43
-    flush_period_sec   = 1
-    format             = "json"
-    id                 = "...my_id..."
-    initial_backoff    = 285287.53
-    kafka_schema_registry = {
-      auth = {
-        credentials_secret = "...my_credentials_secret..."
-        disabled           = false
-      }
-      connection_timeout      = 29427.03
-      default_key_schema_id   = 4.17
-      default_value_schema_id = 7.43
-      disabled                = false
-      max_retries             = 52.95
-      request_timeout         = 46927.92
-      schema_registry_url     = "...my_schema_registry_url..."
-      tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
-        disabled            = true
-        max_version         = "TLSv1.3"
-        min_version         = "TLSv1.1"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
-        reject_unauthorized = true
-        servername          = "...my_servername..."
-      }
-    }
-    max_back_off       = 103584.41
-    max_record_size_kb = 3.9
-    max_retries        = 83.18
-    on_backpressure    = "queue"
-    pipeline           = "...my_pipeline..."
-    pq_compress        = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size           = "...my_pq_max_file_size..."
-    pq_max_size                = "...my_pq_max_size..."
-    pq_mode                    = "always"
-    pq_on_backpressure         = "block"
-    pq_path                    = "...my_pq_path..."
-    protobuf_library_id        = "...my_protobuf_library_id..."
-    reauthentication_threshold = 1112954.59
-    request_timeout            = 3471769.08
-    sasl = {
-      disabled  = true
-      mechanism = "kerberos"
-    }
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = false
-      max_version         = "TLSv1"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = true
-      servername          = "...my_servername..."
-    }
-    topic = "...my_topic..."
-    type  = "kafka"
-  }
-  output_kinesis = {
-    as_ndjson                 = true
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    compression               = "gzip"
-    concurrency               = 20.46
-    description               = "...my_description..."
-    duration_seconds          = 30789.14
-    enable_assume_role        = true
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    flush_period_sec          = 3.75
-    id                        = "...my_id..."
-    max_record_size_kb        = 4137.92
-    on_backpressure           = "queue"
-    pipeline                  = "...my_pipeline..."
-    pq_compress               = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size    = "...my_pq_max_file_size..."
-    pq_max_size         = "...my_pq_max_size..."
-    pq_mode             = "always"
-    pq_on_backpressure  = "block"
-    pq_path             = "...my_pq_path..."
-    region              = "...my_region..."
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
     reject_unauthorized = true
-    reuse_connections   = true
-    signature_version   = "v4"
-    stream_name         = "...my_stream_name..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    type            = "kinesis"
-    use_list_shards = true
-  }
-  output_loki = {
-    auth_type          = "credentialsSecret"
-    compress           = true
-    concurrency        = 25.43
-    credentials_secret = "...my_credentials_secret..."
-    description        = "...my_description..."
-    environment        = "...my_environment..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode = "payload"
-    flush_period_sec            = 3.83
-    id                          = "...my_id..."
-    labels = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    max_payload_events  = 1.25
-    max_payload_size_kb = 4621.51
-    message             = "...my_message..."
-    message_format      = "json"
-    on_backpressure     = "queue"
-    password            = "...my_password..."
-    pipeline            = "...my_pipeline..."
-    pq_compress         = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = true
     response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 19.98
-        http_status     = 298
-        initial_backoff = 591584.04
-        max_backoff     = 61340.13
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "content-type",
+    "x-request-id",
     ]
+    secret = "s3cr3tClientSecret"
+    secret_param_name = "client_secret"
     streamtags = [
-      "..."
+    "prod",
+    "influxdb",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "influxdb_token"
     timeout_retry_settings = {
-      backoff_rate    = 2.98
-      initial_backoff = 98153.12
-      max_backoff     = 50787.77
-      timeout_retry   = false
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec           = 8372597717400780
-    token                 = "...my_token..."
-    total_memory_limit_kb = 4
-    type                  = "loki"
-    url                   = "...my_url..."
-    use_round_robin_dns   = true
-    username              = "...my_username..."
-  }
-  output_minio = {
-    add_id_to_stage_path      = true
-    automatic_schema          = true
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "manual"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    base_file_name            = "...my_base_file_name..."
-    bucket                    = "...my_bucket..."
-    compress                  = "gzip"
-    compression_level         = "best_speed"
-    deadletter_enabled        = true
-    deadletter_path           = "...my_deadletter_path..."
-    description               = "...my_description..."
-    dest_path                 = "...my_dest_path..."
-    empty_dir_cleanup_sec     = 31515.8
-    enable_page_checksum      = true
-    enable_statistics         = true
-    enable_write_page_index   = true
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    file_name_suffix          = "...my_file_name_suffix..."
-    format                    = "parquet"
-    header_line               = "...my_header_line..."
-    id                        = "...my_id..."
-    key_value_metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
-    ]
-    max_concurrent_file_parts = 1.52
-    max_file_idle_time_sec    = 81367.85
-    max_file_open_time_sec    = 64617.65
-    max_file_size_mb          = 709.95
-    max_open_files            = 386.65
-    max_retry_num             = 1.47
-    object_acl                = "public-read-write"
-    on_backpressure           = "drop"
-    on_disk_full_backpressure = "block"
-    parquet_data_page_version = "DATA_PAGE_V1"
-    parquet_page_size         = "...my_parquet_page_size..."
-    parquet_row_group_length  = 172832.5
-    parquet_version           = "PARQUET_2_4"
-    partition_expr            = "...my_partition_expr..."
-    pipeline                  = "...my_pipeline..."
-    region                    = "...my_region..."
-    reject_unauthorized       = true
-    remove_empty_dirs         = true
-    reuse_connections         = true
-    server_side_encryption    = "AES256"
-    should_log_invalid_rows   = false
-    signature_version         = "v2"
-    stage_path                = "...my_stage_path..."
-    storage_class             = "STANDARD"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    type                  = "minio"
-    verify_permissions    = false
-    write_high_water_mark = 41.09
-  }
-  output_msk = {
-    ack                       = 1
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    authentication_timeout    = 1641453.71
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "manual"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    backoff_rate              = 8.43
+    timeout_sec = 30
+    timestamp_precision = "ms"
+    token = "influxV2Token_abc123xyz"
+    token_attribute_name = "access_token"
+    token_timeout_secs = 3600
+    type = "influxdb"
+    url = "https://influxdb.example.com:8086/write"
+    use_round_robin_dns = true
+    use_v2_api = true
+    username = "influx_writer"
+    value_field_name = "value"
+}
+output_kafka = {
+    ack = 1
+    authentication_timeout = 10000
+    backoff_rate = 2
     brokers = [
-      "..."
+    "kafka-1.example.com:9092",
+    "kafka-2.example.com:9092",
     ]
-    compression        = "lz4"
-    connection_timeout = 1910015.54
-    description        = "...my_description..."
-    duration_seconds   = 27775.99
-    enable_assume_role = false
-    endpoint           = "...my_endpoint..."
-    environment        = "...my_environment..."
-    flush_event_count  = 2774.07
-    flush_period_sec   = 1.62
-    format             = "json"
-    id                 = "...my_id..."
-    initial_backoff    = 241253.05
+    compression = "gzip"
+    connection_timeout = 10000
+    description = "Produce events to Kafka with retries and TLS"
+    environment = "main"
+    flush_event_count = 1000
+    flush_period_sec = 1
+    format = "json"
+    id = "kafka-out"
+    initial_backoff = 1000
     kafka_schema_registry = {
-      auth = {
-        credentials_secret = "...my_credentials_secret..."
-        disabled           = false
-      }
-      connection_timeout      = 3992.84
-      default_key_schema_id   = 3.98
-      default_value_schema_id = 8.19
-      disabled                = true
-      max_retries             = 73.69
-      request_timeout         = 23465.67
-      schema_registry_url     = "...my_schema_registry_url..."
-      tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
-        disabled            = true
-        max_version         = "TLSv1.2"
-        min_version         = "TLSv1.1"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
-        reject_unauthorized = false
-        servername          = "...my_servername..."
-      }
+            auth = {
+                    credentials_secret = "schema-registry-basic-auth"
+            disabled = false
+        }
+        connection_timeout = 30000
+        default_key_schema_id = 1
+        default_value_schema_id = 2
+        disabled = true
+        max_retries = 3
+        request_timeout = 30000
+        schema_registry_url = "https://schema-registry.example.com:8081"
+        tls = {
+                    ca_path = "/etc/ssl/certs/ca.pem"
+            cert_path = "/etc/ssl/certs/client.crt"
+            certificate_name = "kafka-client-cert"
+            disabled = false
+            max_version = "TLSv1.3"
+            min_version = "TLSv1.2"
+            passphrase = "***REDACTED***"
+            priv_key_path = "/etc/ssl/private/client.key"
+            reject_unauthorized = true
+            servername = "schema-registry.example.com"
+        }
     }
-    max_back_off       = 108629.7
-    max_record_size_kb = 8.67
-    max_retries        = 8.4
-    on_backpressure    = "drop"
-    pipeline           = "...my_pipeline..."
-    pq_compress        = "none"
+    max_back_off = 60000
+    max_record_size_kb = 768
+    max_retries = 5
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size           = "...my_pq_max_file_size..."
-    pq_max_size                = "...my_pq_max_size..."
-    pq_mode                    = "always"
-    pq_on_backpressure         = "drop"
-    pq_path                    = "...my_pq_path..."
-    protobuf_library_id        = "...my_protobuf_library_id..."
-    reauthentication_threshold = 1077176.04
-    region                     = "...my_region..."
-    reject_unauthorized        = true
-    request_timeout            = 1715384.27
-    reuse_connections          = false
-    signature_version          = "v4"
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protobuf_library_id = "user-events-protos"
+    reauthentication_threshold = 60000
+    request_timeout = 60000
+    sasl = {
+            disabled = false
+        mechanism = "scram-sha-512"
+    }
     streamtags = [
-      "..."
+    "kafka",
+    "prod",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
     tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = false
-      max_version         = "TLSv1.3"
-      min_version         = "TLSv1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = true
-      servername          = "...my_servername..."
+            ca_path = "/etc/ssl/certs/ca.pem"
+        cert_path = "/etc/ssl/certs/client.crt"
+        certificate_name = "kafka-client-cert"
+        disabled = false
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "***REDACTED***"
+        priv_key_path = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername = "kafka-broker.example.com"
     }
-    topic = "...my_topic..."
-    type  = "msk"
-  }
-  output_netflow = {
-    description            = "...my_description..."
-    dns_resolve_period_sec = 78639.6
-    environment            = "...my_environment..."
-    hosts = [
-      {
-        host = "...my_host..."
-        port = 30084.75
-      }
-    ]
-    id       = "...my_id..."
-    pipeline = "...my_pipeline..."
+    topic = "app-events"
+    type = "kafka"
+}
+output_kinesis = {
+    as_ndjson = true
+    assume_role_arn = "arn:aws:iam::123456789012:role/cribl-kinesis-writer"
+    assume_role_external_id = "cribl-external-123"
+    aws_api_key = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret = "aws-credentials-secret"
+    aws_secret_key = "***REDACTED***"
+    compression = "gzip"
+    concurrency = 8
+    description = "Deliver events to AWS Kinesis Data Streams"
+    duration_seconds = 3600
+    enable_assume_role = true
+    endpoint = "https://kinesis.us-east-1.amazonaws.com"
+    environment = "main"
+    flush_period_sec = 1
+    id = "kinesis-out"
+    max_record_size_kb = 1024
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    region = "us-east-1"
+    reject_unauthorized = true
+    reuse_connections = true
+    signature_version = "v4"
+    stream_name = "app-events-stream"
     streamtags = [
-      "..."
+    "aws",
+    "kinesis",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    ]
+    type = "kinesis"
+    use_list_shards = true
+}
+output_loki = {
+    auth_type = "token"
+    compress = true
+    concurrency = 2
+    credentials_secret = "grafana_loki_credentials"
+    description = "Send logs to Loki with labels and batching"
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 10
+    id = "loki_logs_prod"
+    labels = [
+    {
+                name = "host"
+            value = "web-01"
+    }
+    ]
+    max_payload_events = 1000
+    max_payload_size_kb = 2048
+    message = "_raw"
+    message_format = "protobuf"
+    on_backpressure = "block"
+    password = "glc_abcd1234"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "content-type",
+    "x-request-id",
+    ]
+    streamtags = [
+    "prod",
+    "loki",
+    ]
+    system_fields = [
+    "cribl_host",
+    "cribl_wp",
+    ]
+    text_secret = "grafana_loki_token"
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    token = "12345:glc_abcd1234"
+    total_memory_limit_kb = 51200
+    type = "loki"
+    url = "https://loki.example.com/loki/api/v1/push"
+    use_round_robin_dns = true
+    username = 12345
+}
+output_minio = {
+    add_id_to_stage_path = true
+    automatic_schema = true
+    aws_api_key = "minio_access_key"
+    aws_authentication_method = "manual"
+    aws_secret = "minio_credentials"
+    aws_secret_key = "minio_secret_key_123"
+    base_file_name = "app-logs"
+    bucket = "logs-prod"
+    compress = "gzip"
+    compression_level = "normal"
+    deadletter_enabled = true
+    deadletter_path = "/opt/cribl/state/outputs/dead-letter"
+    description = "Archive logs to MinIO in Parquet with date-based partitioning"
+    dest_path = "year=%Y/month=%m/day=%d/app=orders"
+    empty_dir_cleanup_sec = 600
+    enable_page_checksum = true
+    enable_statistics = true
+    enable_write_page_index = true
+    endpoint = "http://minio.example.com:9000"
+    environment = "main"
+    file_name_suffix = ".json.gz"
+    format = "json"
+    header_line = "timestamp,host,level,message"
+    id = "minio_archive_prod"
+    key_value_metadata = [
+    {
+                key = "OCSF Event Class"
+            value = "9001"
+    }
+    ]
+    max_concurrent_file_parts = 5
+    max_file_idle_time_sec = 120
+    max_file_open_time_sec = 600
+    max_file_size_mb = 128
+    max_open_files = 200
+    max_retry_num = 20
+    object_acl = "private"
+    on_backpressure = "block"
+    on_disk_full_backpressure = "block"
+    parquet_data_page_version = "DATA_PAGE_V2"
+    parquet_page_size = "128MB"
+    parquet_row_group_length = 100000
+    parquet_version = "PARQUET_2_6"
+    partition_expr = "C.Time.strftime(_time || Date.now()/1000, '%Y/%m/%d/%H')"
+    pipeline = "main"
+    region = "us-east-1"
+    reject_unauthorized = true
+    remove_empty_dirs = true
+    reuse_connections = true
+    server_side_encryption = "AES256"
+    should_log_invalid_rows = true
+    signature_version = "v4"
+    stage_path = "/opt/cribl/state/outputs/staging"
+    storage_class = "STANDARD"
+    streamtags = [
+    "prod",
+    "minio",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    type = "minio"
+    verify_permissions = true
+    write_high_water_mark = 256
+}
+output_msk = {
+    ack = 1
+    assume_role_arn = "arn:aws:iam::123456789012:role/cribl-msk-access"
+    assume_role_external_id = "cribl-external-123"
+    authentication_timeout = 10000
+    aws_api_key = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret = "aws-credentials-secret"
+    aws_secret_key = "***REDACTED***"
+    backoff_rate = 2
+    brokers = [
+    "b-1.mskcluster.abcde.c2.kafka.us-east-1.amazonaws.com:9092",
+    "b-2.mskcluster.abcde.c2.kafka.us-east-1.amazonaws.com:9092",
+    ]
+    compression = "gzip"
+    connection_timeout = 10000
+    description = "Produce events to Amazon MSK with retries and TLS"
+    duration_seconds = 3600
+    enable_assume_role = true
+    endpoint = "https://kafka.us-east-1.amazonaws.com"
+    environment = "main"
+    flush_event_count = 1000
+    flush_period_sec = 1
+    format = "json"
+    id = "msk-out"
+    initial_backoff = 1000
+    kafka_schema_registry = {
+            auth = {
+                    credentials_secret = "msk-schema-registry-basic"
+            disabled = false
+        }
+        connection_timeout = 30000
+        default_key_schema_id = 1
+        default_value_schema_id = 100
+        disabled = true
+        max_retries = 3
+        request_timeout = 30000
+        schema_registry_url = "https://schema-registry.example.com:8081"
+        tls = {
+                    ca_path = "/etc/ssl/certs/ca.pem"
+            cert_path = "/etc/ssl/certs/client.crt"
+            certificate_name = "msk-client-cert"
+            disabled = false
+            max_version = "TLSv1.3"
+            min_version = "TLSv1.2"
+            passphrase = "***REDACTED***"
+            priv_key_path = "/etc/ssl/private/client.key"
+            reject_unauthorized = true
+            servername = "schema-registry.example.com"
+        }
+    }
+    max_back_off = 60000
+    max_record_size_kb = 768
+    max_retries = 5
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protobuf_library_id = "user-events-protos"
+    reauthentication_threshold = 60000
+    region = "us-east-1"
+    reject_unauthorized = true
+    request_timeout = 60000
+    reuse_connections = true
+    signature_version = "v4"
+    streamtags = [
+    "aws",
+    "msk",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    tls = {
+            ca_path = "/etc/ssl/certs/ca.pem"
+        cert_path = "/etc/ssl/certs/client.crt"
+        certificate_name = "msk-client-cert"
+        disabled = false
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "***REDACTED***"
+        priv_key_path = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername = "b-1.mskcluster.abcde.c2.kafka.us-east-1.amazonaws.com"
+    }
+    topic = "app-events"
+    type = "msk"
+}
+output_netflow = {
+    description = "Forward NetFlow v5/v9/IPFIX to downstream collectors"
+    dns_resolve_period_sec = 300
+    environment = "main"
+    hosts = [
+    {
+                host = "netflow-collector.example.com"
+            port = 2055
+    }
+    ]
+    id = "netflow_export_prod"
+    pipeline = "main"
+    streamtags = [
+    "prod",
+    "netflow",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
     ]
     type = "netflow"
-  }
-  output_newrelic = {
-    api_key     = "...my_api_key..."
-    auth_type   = "secret"
-    compress    = false
-    concurrency = 22.63
-    custom_url  = "...my_custom_url..."
-    description = "...my_description..."
-    environment = "...my_environment..."
+}
+output_newrelic = {
+    api_key = "NRAK-0123456789abcdef0123456789abcdef"
+    auth_type = "manual"
+    compress = true
+    concurrency = 8
+    custom_url = "https://log-api.newrelic.com/log/v1"
+    description = "Send logs to New Relic Logs with custom endpoint"
+    environment = "main"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode = "payload"
-    flush_period_sec            = 4.8
-    id                          = "...my_id..."
-    log_type                    = "...my_log_type..."
-    max_payload_events          = 1.3
-    max_payload_size_kb         = 136.53
-    message_field               = "...my_message_field..."
-    metadata = [
-      {
-        name  = "service"
-        value = "...my_value..."
-      }
-    ]
-    on_backpressure = "queue"
-    pipeline        = "...my_pipeline..."
-    pq_compress     = "gzip"
-    pq_controls = {
-      # ...
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    region                            = "Custom"
-    reject_unauthorized               = true
-    response_honor_retry_after_header = true
-    response_retry_settings = [
-      {
-        backoff_rate    = 15.56
-        http_status     = 176.07
-        initial_backoff = 399609.04
-        max_backoff     = 150336.97
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    text_secret = "...my_text_secret..."
-    timeout_retry_settings = {
-      backoff_rate    = 1.72
-      initial_backoff = 577081.54
-      max_backoff     = 148450.61
-      timeout_retry   = true
-    }
-    timeout_sec           = 1657548890213634.5
-    total_memory_limit_kb = 9.39
-    type                  = "newrelic"
-    use_round_robin_dns   = true
-  }
-  output_newrelic_events = {
-    account_id  = "...my_account_id..."
-    api_key     = "...my_api_key..."
-    auth_type   = "manual"
-    compress    = false
-    concurrency = 2.8
-    custom_url  = "...my_custom_url..."
-    description = "...my_description..."
-    environment = "...my_environment..."
-    event_type  = "...my_event_type..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
     ]
     failed_request_logging_mode = "payloadAndHeaders"
-    flush_period_sec            = 0.63
-    id                          = "...my_id..."
-    max_payload_events          = 8.64
-    max_payload_size_kb         = 661.76
-    on_backpressure             = "drop"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "gzip"
-    pq_controls = {
-      # ...
+    flush_period_sec = 2
+    id = "newrelic_logs_prod"
+    log_type = "access_log"
+    max_payload_events = 500
+    max_payload_size_kb = 512
+    message_field = "_raw"
+    metadata = [
+    {
+                name = "service"
+            value = "`\"orders-service\"`"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    region                            = "EU"
-    reject_unauthorized               = true
+    ]
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    region = "US"
+    reject_unauthorized = true
     response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 18.84
-        http_status     = 198.38
-        initial_backoff = 536242.99
-        max_backoff     = 34212.25
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "content-type",
+    "x-request-id",
     ]
     streamtags = [
-      "..."
+    "prod",
+    "newrelic",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "newrelic_api_key"
     timeout_retry_settings = {
-      backoff_rate    = 19.98
-      initial_backoff = 99705.33
-      max_backoff     = 142578.05
-      timeout_retry   = false
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec         = 1878342669385474.5
-    type                = "newrelic_events"
+    timeout_sec = 30
+    total_memory_limit_kb = 51200
+    type = "newrelic"
     use_round_robin_dns = true
-  }
-  output_open_telemetry = {
-    auth_header_expr   = "...my_auth_header_expr..."
-    auth_type          = "token"
-    compress           = "gzip"
-    concurrency        = 13.54
-    connection_timeout = 0.01
-    credentials_secret = "...my_credentials_secret..."
-    description        = "...my_description..."
-    endpoint           = "...my_endpoint..."
-    environment        = "...my_environment..."
+}
+output_newrelic_events = {
+    account_id = "12345678"
+    api_key = "NRAK-0123456789abcdef0123456789abcdef"
+    auth_type = "secret"
+    compress = true
+    concurrency = 8
+    custom_url = "https://insights-collector.newrelic.com/v1/accounts/12345678/events"
+    description = "Send custom events to New Relic Events API"
+    environment = "main"
+    event_type = "CriblCustomEvent"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode    = "payload"
-    flush_period_sec               = 5.39
-    http_compress                  = "none"
-    http_logs_endpoint_override    = "...my_http_logs_endpoint_override..."
-    http_metrics_endpoint_override = "...my_http_metrics_endpoint_override..."
-    http_traces_endpoint_override  = "...my_http_traces_endpoint_override..."
-    id                             = "...my_id..."
-    keep_alive                     = true
-    keep_alive_time                = 6.7
-    login_url                      = "...my_login_url..."
-    max_payload_size_kb            = 3116.32
-    metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
-    ]
-    oauth_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    oauth_params = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    on_backpressure = "block"
-    otlp_version    = "0.10.0"
-    password        = "...my_password..."
-    pipeline        = "...my_pipeline..."
-    pq_compress     = "none"
-    pq_controls = {
-      # ...
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    protocol                          = "grpc"
-    reject_unauthorized               = false
-    response_honor_retry_after_header = true
-    response_retry_settings = [
-      {
-        backoff_rate    = 13.74
-        http_status     = 303.68
-        initial_backoff = 349366.54
-        max_backoff     = 40192.64
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    text_secret = "...my_text_secret..."
-    timeout_retry_settings = {
-      backoff_rate    = 15.63
-      initial_backoff = 108886.99
-      max_backoff     = 108211.16
-      timeout_retry   = false
-    }
-    timeout_sec = 2211979713149453.5
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = true
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = true
-    }
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 221017.3
-    type                 = "open_telemetry"
-    use_round_robin_dns  = true
-    username             = "...my_username..."
-  }
-  output_prometheus = {
-    auth_header_expr   = "...my_auth_header_expr..."
-    auth_type          = "none"
-    concurrency        = 3.59
-    credentials_secret = "...my_credentials_secret..."
-    description        = "...my_description..."
-    environment        = "...my_environment..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
     ]
     failed_request_logging_mode = "payloadAndHeaders"
-    flush_period_sec            = 9.03
-    id                          = "...my_id..."
-    login_url                   = "...my_login_url..."
-    max_payload_events          = 4.61
-    max_payload_size_kb         = 9392.5
-    metric_rename_expr          = "...my_metric_rename_expr..."
-    metrics_flush_period_sec    = 9.03
-    oauth_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    oauth_params = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    on_backpressure = "drop"
-    password        = "...my_password..."
-    pipeline        = "...my_pipeline..."
-    pq_compress     = "none"
+    flush_period_sec = 2
+    id = "newrelic_events_prod"
+    max_payload_events = 500
+    max_payload_size_kb = 512
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    region = "US"
+    reject_unauthorized = true
     response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 5.46
-        http_status     = 151.65
-        initial_backoff = 411730.38
-        max_backoff     = 135846.3
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "content-type",
+    "x-request-id",
     ]
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
-    send_metadata     = true
     streamtags = [
-      "..."
+    "prod",
+    "newrelic",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
-    text_secret = "...my_text_secret..."
+    text_secret = "newrelic_api_key"
     timeout_retry_settings = {
-      backoff_rate    = 9.91
-      initial_backoff = 299842.71
-      max_backoff     = 141362.36
-      timeout_retry   = true
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec          = 761512813550484.8
-    token                = "...my_token..."
-    token_attribute_name = "...my_token_attribute_name..."
-    token_timeout_secs   = 12652.55
-    type                 = "prometheus"
-    url                  = "...my_url..."
-    use_round_robin_dns  = true
-    username             = "...my_username..."
-  }
-  output_ring = {
-    compress        = "gzip"
-    description     = "...my_description..."
-    dest_path       = "...my_dest_path..."
-    environment     = "...my_environment..."
-    format          = "raw"
-    id              = "...my_id..."
-    max_data_size   = "...my_max_data_size..."
-    max_data_time   = "...my_max_data_time..."
+    timeout_sec = 30
+    type = "newrelic_events"
+    use_round_robin_dns = true
+}
+output_open_telemetry = {
+    auth_header_expr = "`Bearer ${token}`"
+    auth_type = "token"
+    compress = "gzip"
+    concurrency = 5
+    connection_timeout = 10000
+    credentials_secret = "otel_basic_auth"
+    description = "Export telemetry to OTel Collector with OAuth and keepalive"
+    endpoint = "https://otel-collector.example.com:4317"
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    http_compress = "gzip"
+    http_logs_endpoint_override = "https://otel-collector.example.com/v1/logs"
+    http_metrics_endpoint_override = "https://otel-collector.example.com/v1/metrics"
+    http_traces_endpoint_override = "https://otel-collector.example.com/v1/traces"
+    id = "otel_export_prod"
+    keep_alive = true
+    keep_alive_time = 30
+    login_url = "https://auth.example.com/oauth/token"
+    max_payload_size_kb = 2048
+    metadata = [
+    {
+                key = "x-tenant-id"
+            value = "acme-prod"
+    }
+    ]
+    oauth_headers = [
+    {
+                name = "Accept"
+            value = "application/json"
+    }
+    ]
+    oauth_params = [
+    {
+                name = "grant_type"
+            value = "client_credentials"
+    }
+    ]
     on_backpressure = "block"
-    partition_expr  = "...my_partition_expr..."
-    pipeline        = "...my_pipeline..."
+    otlp_version = "1.3.1"
+    password = "s3cr3tPass!"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protocol = "grpc"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "content-type",
+    "x-request-id",
+    ]
+    secret = "s3cr3tClientSecret"
+    secret_param_name = "client_secret"
     streamtags = [
-      "..."
+    "prod",
+    "otel",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    text_secret = "otel_bearer_token"
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    tls = {
+            ca_path = "/etc/ssl/certs/ca-bundle.crt"
+        cert_path = "/opt/cribl/certs/client.crt"
+        certificate_name = "otel-client"
+        disabled = true
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "s3cr3t"
+        priv_key_path = "/opt/cribl/certs/client.key"
+        reject_unauthorized = true
+    }
+    token = "otelBearerToken_abc123xyz"
+    token_attribute_name = "access_token"
+    token_timeout_secs = 3600
+    type = "open_telemetry"
+    use_round_robin_dns = true
+    username = "otel_user"
+}
+output_prometheus = {
+    auth_header_expr = "`Bearer ${token}`"
+    auth_type = "basic"
+    concurrency = 8
+    credentials_secret = "prometheus_basic_auth"
+    description = "Send metrics to Prometheus remote_write with basic auth"
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    id = "prometheus_metrics_prod"
+    login_url = "https://auth.example.com/oauth/token"
+    max_payload_events = 1000
+    max_payload_size_kb = 2048
+    metric_rename_expr = "name.replace(/[^a-zA-Z0-9_]/g, '_')"
+    metrics_flush_period_sec = 60
+    oauth_headers = [
+    {
+                name = "Accept"
+            value = "application/json"
+    }
+    ]
+    oauth_params = [
+    {
+                name = "grant_type"
+            value = "client_credentials"
+    }
+    ]
+    on_backpressure = "block"
+    password = "mimir_api_key_abcd1234"
+    pipeline = "metrics"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "content-type",
+    "x-request-id",
+    ]
+    secret = "s3cr3tClientSecret"
+    secret_param_name = "client_secret"
+    send_metadata = true
+    streamtags = [
+    "prod",
+    "prometheus",
+    ]
+    system_fields = [
+    "cribl_host",
+    "cribl_wp",
+    ]
+    text_secret = "prometheus_bearer_token"
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    token = "promBearerToken_abc123xyz"
+    token_attribute_name = "access_token"
+    token_timeout_secs = 3600
+    type = "prometheus"
+    url = "https://prometheus.example.com/api/v1/write"
+    use_round_robin_dns = true
+    username = "prometheus"
+}
+output_ring = {
+    compress = "gzip"
+    description = "Local ring buffer for short-term retention and replay"
+    dest_path = "/opt/cribl/state/ring_buffer_prod"
+    environment = "main"
+    format = "json"
+    id = "ring_buffer_prod"
+    max_data_size = "100GB"
+    max_data_time = "7d"
+    on_backpressure = "block"
+    partition_expr = "C.Time.strftime(_time || Date.now()/1000, '%Y/%m/%d/%H')"
+    pipeline = "main"
+    streamtags = [
+    "prod",
+    "ring",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
     ]
     type = "ring"
-  }
-  output_router = {
-    description = "...my_description..."
-    environment = "...my_environment..."
-    id          = "...my_id..."
-    pipeline    = "...my_pipeline..."
+}
+output_router = {
+    description = "Route events to outputs based on filter rules"
+    environment = "main"
+    id = "router_main"
+    pipeline = "main"
     rules = [
-      {
-        description = "...my_description..."
-        filter      = "...my_filter..."
-        final       = false
-        output      = "...my_output..."
-      }
+    {
+                description = "Route application errors to Splunk"
+            filter = "`_source == \"app\" && level == \"error\"`"
+            final = true
+            output = "OutputSplunk"
+    }
     ]
     streamtags = [
-      "..."
+    "prod",
+    "routing",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
     type = "router"
-  }
-  output_s3 = {
-    add_id_to_stage_path      = false
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    automatic_schema          = true
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "secret"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    base_file_name            = "...my_base_file_name..."
-    bucket                    = "...my_bucket..."
-    compress                  = "none"
-    compression_level         = "normal"
-    deadletter_enabled        = false
-    deadletter_path           = "...my_deadletter_path..."
-    description               = "...my_description..."
-    dest_path                 = "...my_dest_path..."
-    duration_seconds          = 13198.59
-    empty_dir_cleanup_sec     = 31139.56
-    enable_assume_role        = false
-    enable_page_checksum      = false
-    enable_statistics         = true
-    enable_write_page_index   = true
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    file_name_suffix          = "...my_file_name_suffix..."
-    format                    = "raw"
-    header_line               = "...my_header_line..."
-    id                        = "...my_id..."
-    key_value_metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
-    ]
-    kms_key_id                        = "...my_kms_key_id..."
-    max_closing_files_to_backpressure = 870.15
-    max_concurrent_file_parts         = 8.41
-    max_file_idle_time_sec            = 45984.26
-    max_file_open_time_sec            = 78997.61
-    max_file_size_mb                  = 263.34
-    max_open_files                    = 375.01
-    max_retry_num                     = 8.66
-    object_acl                        = "public-read-write"
-    on_backpressure                   = "block"
-    on_disk_full_backpressure         = "drop"
-    parquet_data_page_version         = "DATA_PAGE_V2"
-    parquet_page_size                 = "...my_parquet_page_size..."
-    parquet_row_group_length          = 19610353.91
-    parquet_version                   = "PARQUET_2_4"
-    partition_expr                    = "...my_partition_expr..."
-    pipeline                          = "...my_pipeline..."
-    region                            = "...my_region..."
-    reject_unauthorized               = false
-    remove_empty_dirs                 = false
-    reuse_connections                 = true
-    server_side_encryption            = "aws:kms"
-    should_log_invalid_rows           = true
-    signature_version                 = "v2"
-    stage_path                        = "...my_stage_path..."
-    storage_class                     = "INTELLIGENT_TIERING"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    type                  = "s3"
-    verify_permissions    = true
-    write_high_water_mark = 2514.55
-  }
-  output_security_lake = {
-    account_id                = "...my_account_id..."
-    add_id_to_stage_path      = true
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    automatic_schema          = false
-    aws_api_key               = "...my_aws_api_key..."
+}
+output_s3 = {
+    add_id_to_stage_path = true
+    assume_role_arn = "arn:aws:iam::123456789012:role/cribl-s3-writer"
+    assume_role_external_id = "cribl-external-123"
+    automatic_schema = true
+    aws_api_key = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    base_file_name            = "...my_base_file_name..."
-    bucket                    = "...my_bucket..."
-    custom_source             = "...my_custom_source..."
-    deadletter_enabled        = false
-    deadletter_path           = "...my_deadletter_path..."
-    description               = "...my_description..."
-    duration_seconds          = 36203.93
-    empty_dir_cleanup_sec     = 13098.54
-    enable_assume_role        = false
-    enable_page_checksum      = false
-    enable_statistics         = true
-    enable_write_page_index   = true
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    header_line               = "...my_header_line..."
-    id                        = "...my_id..."
+    aws_secret = "aws-credentials-secret"
+    aws_secret_key = "***REDACTED***"
+    base_file_name = "`CriblOut`"
+    bucket = "cribl-data-bucket"
+    compress = "gzip"
+    compression_level = "normal"
+    deadletter_enabled = true
+    deadletter_path = "/var/lib/cribl/state/outputs/dead-letter"
+    description = "Write objects to S3 with date-based partitioning"
+    dest_path = "logs/ingest"
+    duration_seconds = 3600
+    empty_dir_cleanup_sec = 600
+    enable_assume_role = true
+    enable_page_checksum = true
+    enable_statistics = true
+    enable_write_page_index = true
+    endpoint = "https://s3.us-east-1.amazonaws.com"
+    environment = "main"
+    file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+    format = "json"
+    header_line = "timestamp,host,message"
+    id = "s3-out"
     key_value_metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
+    {
+                key = "team"
+            value = "platform"
+    }
     ]
-    kms_key_id                        = "...my_kms_key_id..."
-    max_closing_files_to_backpressure = 148.09
-    max_concurrent_file_parts         = 3.88
-    max_file_idle_time_sec            = 63772.78
-    max_file_open_time_sec            = 49744.3
-    max_file_size_mb                  = 1021.37
-    max_open_files                    = 558.11
-    max_retry_num                     = 10.23
-    object_acl                        = "bucket-owner-full-control"
-    on_backpressure                   = "drop"
-    on_disk_full_backpressure         = "drop"
-    parquet_data_page_version         = "DATA_PAGE_V2"
-    parquet_page_size                 = "...my_parquet_page_size..."
-    parquet_row_group_length          = 2808783.07
-    parquet_schema                    = "...my_parquet_schema..."
-    parquet_version                   = "PARQUET_2_4"
-    pipeline                          = "...my_pipeline..."
-    region                            = "...my_region..."
-    reject_unauthorized               = true
-    remove_empty_dirs                 = true
-    reuse_connections                 = false
-    server_side_encryption            = "aws:kms"
-    should_log_invalid_rows           = false
-    signature_version                 = "v2"
-    stage_path                        = "...my_stage_path..."
-    storage_class                     = "ONEZONE_IA"
+    kms_key_id = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-5678-90ab-cdef-EXAMPLEKEY"
+    max_closing_files_to_backpressure = 500
+    max_concurrent_file_parts = 4
+    max_file_idle_time_sec = 30
+    max_file_open_time_sec = 300
+    max_file_size_mb = 64
+    max_open_files = 200
+    max_retry_num = 20
+    object_acl = "private"
+    on_backpressure = "block"
+    on_disk_full_backpressure = "block"
+    parquet_data_page_version = "DATA_PAGE_V2"
+    parquet_page_size = "4MB"
+    parquet_row_group_length = 10000
+    parquet_version = "PARQUET_2_6"
+    partition_expr = "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d') + '/host=' + host"
+    pipeline = "default"
+    region = "us-east-1"
+    reject_unauthorized = true
+    remove_empty_dirs = true
+    reuse_connections = true
+    server_side_encryption = "AES256"
+    should_log_invalid_rows = true
+    signature_version = "v4"
+    stage_path = "/var/lib/cribl/state/outputs/staging"
+    storage_class = "STANDARD_IA"
     streamtags = [
-      "..."
+    "s3",
+    "prod",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
-    type                  = "security_lake"
-    verify_permissions    = true
-    write_high_water_mark = 962.61
-  }
-  output_sentinel = {
-    advanced_content_type      = "...my_advanced_content_type..."
-    auth_type                  = "oauth"
-    client_id                  = "...my_client_id..."
-    compress                   = true
-    concurrency                = 27.32
-    custom_content_type        = "...my_custom_content_type..."
-    custom_drop_when_null      = false
-    custom_event_delimiter     = "...my_custom_event_delimiter..."
-    custom_payload_expression  = "...my_custom_payload_expression..."
-    custom_source_expression   = "...my_custom_source_expression..."
-    dce_endpoint               = "...my_dce_endpoint..."
-    dcr_id                     = "...my_dcr_id..."
-    description                = "...my_description..."
+    type = "s3"
+    verify_permissions = true
+    write_high_water_mark = 256
+}
+output_security_lake = {
+    account_id = "123456789012"
+    add_id_to_stage_path = true
+    assume_role_arn = "arn:aws:iam::123456789012:role/SecurityLakeIngestRole"
+    assume_role_external_id = "external-id-abc123"
+    automatic_schema = true
+    aws_api_key = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret = "aws_security_lake_credentials"
+    aws_secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    base_file_name = "app-logs"
+    bucket = "security-lake-us-east-1-123456789012"
+    custom_source = "cribl_custom_source"
+    deadletter_enabled = true
+    deadletter_path = "/opt/cribl/state/outputs/dead-letter"
+    description = "Deliver OCSF-compliant logs to Amazon Security Lake"
+    duration_seconds = 3600
+    empty_dir_cleanup_sec = 600
+    enable_assume_role = true
+    enable_page_checksum = true
+    enable_statistics = true
+    enable_write_page_index = true
+    endpoint = "https://security-lake.us-east-1.amazonaws.com"
+    environment = "main"
+    header_line = "timestamp,host,level,message"
+    id = "security_lake_export_prod"
+    key_value_metadata = [
+    {
+                key = "OCSF Event Class"
+            value = "9001"
+    }
+    ]
+    kms_key_id = "arn:aws:kms:us-east-1:123456789012:key/abcd-1234-efgh-5678"
+    max_closing_files_to_backpressure = 500
+    max_concurrent_file_parts = 5
+    max_file_idle_time_sec = 120
+    max_file_open_time_sec = 600
+    max_file_size_mb = 256
+    max_open_files = 200
+    max_retry_num = 20
+    object_acl = "private"
+    on_backpressure = "block"
+    on_disk_full_backpressure = "block"
+    parquet_data_page_version = "DATA_PAGE_V2"
+    parquet_page_size = "128MB"
+    parquet_row_group_length = 100000
+    parquet_schema = "ocsf_1_1_0"
+    parquet_version = "PARQUET_2_6"
+    pipeline = "main"
+    region = "us-east-1"
+    reject_unauthorized = true
+    remove_empty_dirs = true
+    reuse_connections = true
+    server_side_encryption = "aws:kms"
+    should_log_invalid_rows = true
+    signature_version = "v4"
+    stage_path = "/opt/cribl/state/outputs/staging"
+    storage_class = "INTELLIGENT_TIERING"
+    streamtags = [
+    "prod",
+    "securitylake",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    type = "security_lake"
+    verify_permissions = true
+    write_high_water_mark = 256
+}
+output_sentinel = {
+    advanced_content_type = "application/json"
+    auth_type = "oauth"
+    client_id = "11111111-2222-3333-4444-555555555555"
+    compress = true
+    concurrency = 8
+    custom_content_type = "application/x-ndjson"
+    custom_drop_when_null = false
+    custom_event_delimiter = "\n"
+    custom_payload_expression = "`{ \"items\": [${events}] }`"
+    custom_source_expression = "raw=${_raw}"
+    dce_endpoint = "https://mydce-abc123.eastus.ingest.monitor.azure.com"
+    dcr_id = "12345678-90ab-cdef-1234-567890abcdef"
+    description = "Send events to Microsoft Sentinel (DCR/DCE)"
     endpoint_url_configuration = "url"
-    environment                = "...my_environment..."
+    environment = "main"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode = "payloadAndHeaders"
-    flush_period_sec            = 3.93
-    format                      = "custom"
-    format_event_code           = "...my_format_event_code..."
-    format_payload_code         = "...my_format_payload_code..."
-    id                          = "...my_id..."
-    keep_alive                  = false
-    login_url                   = "...my_login_url..."
-    max_payload_events          = 6.43
-    max_payload_size_kb         = 208.05
-    on_backpressure             = "drop"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "none"
-    pq_controls = {
-      # ...
+    {
+                name = "Content-Type"
+            value = "application/json"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
-    response_honor_retry_after_header = false
+    ]
+    failed_request_logging_mode = "payload"
+    flush_period_sec = 1
+    format = "ndjson"
+    format_event_code = "if (__e.level === 'error') { __e.__eventOut = JSON.stringify(__e); }"
+    format_payload_code = "__e.__payloadOut = JSON.stringify({ records: __e.payload });"
+    id = "sentinel-out"
+    keep_alive = true
+    login_url = "https://login.microsoftonline.com/<tenant>/oauth2/v2.0/token"
+    max_payload_events = 500
+    max_payload_size_kb = 1000
+    on_backpressure = "queue"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 3.78
-        http_status     = 192.68
-        initial_backoff = 569875.31
-        max_backoff     = 63873.49
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "X-Request-ID",
     ]
-    scope       = "...my_scope..."
-    secret      = "...my_secret..."
-    stream_name = "...my_stream_name..."
+    scope = "https://monitor.azure.com/.default"
+    secret = "***REDACTED***"
+    stream_name = "Custom-MyTable_CL"
     streamtags = [
-      "..."
+    "azure",
+    "sentinel",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
     timeout_retry_settings = {
-      backoff_rate    = 6.35
-      initial_backoff = 55942.62
-      max_backoff     = 151713.58
-      timeout_retry   = false
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec           = 2862438398607763
-    total_memory_limit_kb = 2.59
-    type                  = "sentinel"
-    url                   = "...my_url..."
-    use_round_robin_dns   = true
-  }
-  output_service_now = {
-    auth_token_name    = "...my_auth_token_name..."
-    compress           = "deflate"
-    concurrency        = 5.68
-    connection_timeout = 1.35
-    description        = "...my_description..."
-    endpoint           = "...my_endpoint..."
-    environment        = "...my_environment..."
+    timeout_sec = 30
+    total_memory_limit_kb = 20480
+    type = "sentinel"
+    url = "https://example.dce.ingest.monitor.azure.com"
+    use_round_robin_dns = true
+}
+output_service_now = {
+    auth_token_name = "lightstep-access-token"
+    compress = "gzip"
+    concurrency = 5
+    connection_timeout = 10000
+    description = "Export telemetry to ServiceNow (Lightstep) OTLP ingest"
+    endpoint = "ingest.lightstep.com:443"
+    environment = "main"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
     ]
-    failed_request_logging_mode    = "payload"
-    flush_period_sec               = 2.66
-    http_compress                  = "none"
-    http_logs_endpoint_override    = "...my_http_logs_endpoint_override..."
-    http_metrics_endpoint_override = "...my_http_metrics_endpoint_override..."
-    http_traces_endpoint_override  = "...my_http_traces_endpoint_override..."
-    id                             = "...my_id..."
-    keep_alive                     = true
-    keep_alive_time                = 9.46
-    max_payload_size_kb            = 4911.02
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    http_compress = "gzip"
+    http_logs_endpoint_override = "https://ingest.lightstep.com/v1/logs"
+    http_metrics_endpoint_override = "https://ingest.lightstep.com/v1/metrics"
+    http_traces_endpoint_override = "https://ingest.lightstep.com/v1/traces"
+    id = "servicenow_otel_export"
+    keep_alive = true
+    keep_alive_time = 30
+    max_payload_size_kb = 2048
     metadata = [
-      {
-        key   = "...my_key..."
-        value = "...my_value..."
-      }
-    ]
-    on_backpressure = "drop"
-    otlp_version    = "1.3.1"
-    pipeline        = "...my_pipeline..."
-    pq_compress     = "gzip"
-    pq_controls = {
-      # ...
+    {
+                key = "x-tenant-id"
+            value = "acme-prod"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "always"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    protocol                          = "grpc"
-    reject_unauthorized               = true
-    response_honor_retry_after_header = false
-    response_retry_settings = [
-      {
-        backoff_rate    = 7.43
-        http_status     = 563.66
-        initial_backoff = 173187.28
-        max_backoff     = 122270.81
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    timeout_retry_settings = {
-      backoff_rate    = 9.8
-      initial_backoff = 4393.61
-      max_backoff     = 35648.14
-      timeout_retry   = false
-    }
-    timeout_sec = 1088602906594137.6
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = false
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = true
-    }
-    token_secret        = "...my_token_secret..."
-    type                = "service_now"
-    use_round_robin_dns = true
-  }
-  output_signalfx = {
-    auth_type   = "manual"
-    compress    = false
-    concurrency = 5.75
-    description = "...my_description..."
-    environment = "...my_environment..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode = "payloadAndHeaders"
-    flush_period_sec            = 1.66
-    id                          = "...my_id..."
-    max_payload_events          = 9.4
-    max_payload_size_kb         = 9392.42
-    on_backpressure             = "queue"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    realm                             = "...my_realm..."
-    reject_unauthorized               = false
-    response_honor_retry_after_header = true
-    response_retry_settings = [
-      {
-        backoff_rate    = 13.57
-        http_status     = 586.58
-        initial_backoff = 232593.45
-        max_backoff     = 15175.48
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    text_secret = "...my_text_secret..."
-    timeout_retry_settings = {
-      backoff_rate    = 10.19
-      initial_backoff = 469024.48
-      max_backoff     = 176316.39
-      timeout_retry   = false
-    }
-    timeout_sec         = 3866173051202189.5
-    token               = "...my_token..."
-    type                = "signalfx"
-    use_round_robin_dns = false
-  }
-  output_snmp = {
-    description            = "...my_description..."
-    dns_resolve_period_sec = 54402.89
-    environment            = "...my_environment..."
-    hosts = [
-      {
-        host = "...my_host..."
-        port = 18749.9
-      }
-    ]
-    id       = "...my_id..."
-    pipeline = "...my_pipeline..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    type = "snmp"
-  }
-  output_sns = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    description               = "...my_description..."
-    duration_seconds          = 32972.43
-    enable_assume_role        = false
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    id                        = "...my_id..."
-    max_retries               = 5.95
-    message_group_id          = "...my_message_group_id..."
-    on_backpressure           = "drop"
-    pipeline                  = "...my_pipeline..."
-    pq_compress               = "none"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size    = "...my_pq_max_file_size..."
-    pq_max_size         = "...my_pq_max_size..."
-    pq_mode             = "always"
-    pq_on_backpressure  = "block"
-    pq_path             = "...my_pq_path..."
-    region              = "...my_region..."
-    reject_unauthorized = true
-    reuse_connections   = true
-    signature_version   = "v4"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    topic_arn = "...my_topic_arn..."
-    type      = "sns"
-  }
-  output_splunk = {
-    auth_token               = "...my_auth_token..."
-    auth_type                = "manual"
-    compress                 = "auto"
-    connection_timeout       = 3.78
-    description              = "...my_description..."
-    enable_ack               = false
-    enable_multi_metrics     = true
-    environment              = "...my_environment..."
-    host                     = "...my_host..."
-    id                       = "...my_id..."
-    log_failed_requests      = false
-    max_failed_health_checks = 6.17
-    max_s2_sversion          = "v3"
-    nested_fields            = "json"
-    on_backpressure          = "queue"
-    pipeline                 = "...my_pipeline..."
-    port                     = 15386.29
-    pq_compress              = "none"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size   = "...my_pq_max_file_size..."
-    pq_max_size        = "...my_pq_max_size..."
-    pq_mode            = "error"
-    pq_on_backpressure = "drop"
-    pq_path            = "...my_pq_path..."
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    text_secret           = "...my_text_secret..."
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = true
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1.2"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = true
-      servername          = "...my_servername..."
-    }
-    type          = "splunk"
-    write_timeout = 8.31
-  }
-  output_splunk_hec = {
-    auth_type              = "secret"
-    compress               = true
-    concurrency            = 24.97
-    description            = "...my_description..."
-    dns_resolve_period_sec = 47008.18
-    enable_multi_metrics   = false
-    environment            = "...my_environment..."
-    exclude_self           = false
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode   = "none"
-    flush_period_sec              = 1.13
-    id                            = "...my_id..."
-    load_balance_stats_period_sec = 17.43
-    load_balanced                 = false
-    max_payload_events            = 4.8
-    max_payload_size_kb           = 911757.13
-    next_queue                    = "...my_next_queue..."
-    on_backpressure               = "block"
-    pipeline                      = "...my_pipeline..."
-    pq_compress                   = "none"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = true
-    response_honor_retry_after_header = true
-    response_retry_settings = [
-      {
-        backoff_rate    = 5.37
-        http_status     = 544.87
-        initial_backoff = 152474.46
-        max_backoff     = 37480.26
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    tcp_routing = "...my_tcp_routing..."
-    text_secret = "...my_text_secret..."
-    timeout_retry_settings = {
-      backoff_rate    = 12.64
-      initial_backoff = 425987.93
-      max_backoff     = 119739.45
-      timeout_retry   = false
-    }
-    timeout_sec = 8923863287730264
-    token       = "...my_token..."
-    type        = "splunk_hec"
-    url         = "...my_url..."
-    urls = [
-      {
-        url    = "...my_url..."
-        weight = 4.18
-      }
-    ]
-    use_round_robin_dns = true
-  }
-  output_splunk_lb = {
-    auth_token             = "...my_auth_token..."
-    auth_type              = "secret"
-    compress               = "auto"
-    connection_timeout     = 9.43
-    description            = "...my_description..."
-    dns_resolve_period_sec = 54004.74
-    enable_ack             = false
-    enable_multi_metrics   = false
-    environment            = "...my_environment..."
-    exclude_self           = true
-    hosts = [
-      {
-        host       = "...my_host..."
-        port       = 45464.92
-        servername = "...my_servername..."
-        tls        = "off"
-        weight     = 4.85
-      }
-    ]
-    id                = "...my_id..."
-    indexer_discovery = true
-    indexer_discovery_configs = {
-      auth_token = "...my_auth_token..."
-      auth_tokens = [
-        {
-          auth_type = "secret"
-        }
-      ]
-      auth_type            = "secret"
-      master_uri           = "...my_master_uri..."
-      refresh_interval_sec = 8238.57
-      reject_unauthorized  = false
-      site                 = "...my_site..."
-      text_secret          = "...my_text_secret..."
-    }
-    load_balance_stats_period_sec = 19.58
-    log_failed_requests           = false
-    max_concurrent_senders        = 0.18
-    max_failed_health_checks      = 0.42
-    max_s2_sversion               = "v4"
-    nested_fields                 = "json"
-    on_backpressure               = "block"
-    pipeline                      = "...my_pipeline..."
-    pq_compress                   = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size                = "...my_pq_max_file_size..."
-    pq_max_size                     = "...my_pq_max_size..."
-    pq_mode                         = "backpressure"
-    pq_on_backpressure              = "drop"
-    pq_path                         = "...my_pq_path..."
-    sender_unhealthy_time_allowance = 7268.46
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    text_secret           = "...my_text_secret..."
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = true
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = true
-      servername          = "...my_servername..."
-    }
-    type          = "splunk_lb"
-    write_timeout = 9.39
-  }
-  output_sqs = {
-    assume_role_arn           = "...my_assume_role_arn..."
-    assume_role_external_id   = "...my_assume_role_external_id..."
-    aws_account_id            = "...my_aws_account_id..."
-    aws_api_key               = "...my_aws_api_key..."
-    aws_authentication_method = "auto"
-    aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "...my_aws_secret_key..."
-    create_queue              = false
-    description               = "...my_description..."
-    duration_seconds          = 18284.05
-    enable_assume_role        = false
-    endpoint                  = "...my_endpoint..."
-    environment               = "...my_environment..."
-    flush_period_sec          = 6.7
-    id                        = "...my_id..."
-    max_in_progress           = 61.82
-    max_queue_size            = 6.35
-    max_record_size_kb        = 228.5
-    message_group_id          = "...my_message_group_id..."
-    on_backpressure           = "drop"
-    pipeline                  = "...my_pipeline..."
-    pq_compress               = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size    = "...my_pq_max_file_size..."
-    pq_max_size         = "...my_pq_max_size..."
-    pq_mode             = "always"
-    pq_on_backpressure  = "block"
-    pq_path             = "...my_pq_path..."
-    queue_name          = "...my_queue_name..."
-    queue_type          = "standard"
-    region              = "...my_region..."
-    reject_unauthorized = true
-    reuse_connections   = false
-    signature_version   = "v4"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    type = "sqs"
-  }
-  output_statsd = {
-    connection_timeout     = 1.29
-    description            = "...my_description..."
-    dns_resolve_period_sec = 74600.55
-    environment            = "...my_environment..."
-    flush_period_sec       = 9.96
-    host                   = "...my_host..."
-    id                     = "...my_id..."
-    mtu                    = 44909.26
-    on_backpressure        = "block"
-    pipeline               = "...my_pipeline..."
-    port                   = 31524.34
-    pq_compress            = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size   = "...my_pq_max_file_size..."
-    pq_max_size        = "...my_pq_max_size..."
-    pq_mode            = "always"
-    pq_on_backpressure = "block"
-    pq_path            = "...my_pq_path..."
-    protocol           = "tcp"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
-    type                  = "statsd"
-    write_timeout         = 0.33
-  }
-  output_statsd_ext = {
-    connection_timeout     = 5.54
-    description            = "...my_description..."
-    dns_resolve_period_sec = 80279.36
-    environment            = "...my_environment..."
-    flush_period_sec       = 4.45
-    host                   = "...my_host..."
-    id                     = "...my_id..."
-    mtu                    = 34944.89
-    on_backpressure        = "drop"
-    pipeline               = "...my_pipeline..."
-    port                   = 4559.78
-    pq_compress            = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size   = "...my_pq_max_file_size..."
-    pq_max_size        = "...my_pq_max_size..."
-    pq_mode            = "backpressure"
-    pq_on_backpressure = "block"
-    pq_path            = "...my_pq_path..."
-    protocol           = "udp"
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
-    type                  = "statsd_ext"
-    write_timeout         = 0.09
-  }
-  output_sumo_logic = {
-    compress        = true
-    concurrency     = 8.16
-    custom_category = "...my_custom_category..."
-    custom_source   = "...my_custom_source..."
-    description     = "...my_description..."
-    environment     = "...my_environment..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode = "payload"
-    flush_period_sec            = 1.17
-    format                      = "json"
-    id                          = "...my_id..."
-    max_payload_events          = 7.5
-    max_payload_size_kb         = 951.56
-    on_backpressure             = "queue"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "error"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = true
-    response_honor_retry_after_header = false
-    response_retry_settings = [
-      {
-        backoff_rate    = 10.83
-        http_status     = 216.15
-        initial_backoff = 258770.1
-        max_backoff     = 77265.54
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    timeout_retry_settings = {
-      backoff_rate    = 15.65
-      initial_backoff = 147734.27
-      max_backoff     = 18045.77
-      timeout_retry   = true
-    }
-    timeout_sec           = 5935725774249079
-    total_memory_limit_kb = 9.17
-    type                  = "sumo_logic"
-    url                   = "...my_url..."
-    use_round_robin_dns   = true
-  }
-  output_syslog = {
-    app_name            = "...my_app_name..."
-    connection_timeout  = 8.39
-    description         = "...my_description..."
-    environment         = "...my_environment..."
-    facility            = 8
-    host                = "...my_host..."
-    id                  = "...my_id..."
-    load_balanced       = false
-    log_failed_requests = false
-    max_record_size     = 28086.84
-    message_format      = "rfc3164"
-    octet_count_framing = false
-    on_backpressure     = "queue"
-    pipeline            = "...my_pipeline..."
-    port                = 23921.26
-    pq_compress         = "none"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size   = "...my_pq_max_file_size..."
-    pq_max_size        = "...my_pq_max_size..."
-    pq_mode            = "backpressure"
-    pq_on_backpressure = "block"
-    pq_path            = "...my_pq_path..."
-    protocol           = "udp"
-    severity           = 2
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
-    timestamp_format      = "iso8601"
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = false
-      max_version         = "TLSv1.2"
-      min_version         = "TLSv1.3"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = false
-      servername          = "...my_servername..."
-    }
-    type                       = "syslog"
-    udp_dns_resolve_period_sec = 66604.26
-    write_timeout              = 2.78
-  }
-  output_tcpjson = {
-    auth_token             = "...my_auth_token..."
-    auth_type              = "manual"
-    compression            = "none"
-    connection_timeout     = 6.56
-    description            = "...my_description..."
-    dns_resolve_period_sec = 36485.94
-    environment            = "...my_environment..."
-    exclude_self           = false
-    host                   = "...my_host..."
-    hosts = [
-      {
-        host       = "...my_host..."
-        port       = 8100.96
-        servername = "...my_servername..."
-        tls        = "off"
-        weight     = 7.27
-      }
-    ]
-    id                            = "...my_id..."
-    load_balance_stats_period_sec = 18.26
-    load_balanced                 = true
-    log_failed_requests           = false
-    max_concurrent_senders        = 9.76
-    on_backpressure               = "drop"
-    pipeline                      = "...my_pipeline..."
-    port                          = 26330.99
-    pq_compress                   = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size   = "...my_pq_max_file_size..."
-    pq_max_size        = "...my_pq_max_size..."
-    pq_mode            = "always"
-    pq_on_backpressure = "drop"
-    pq_path            = "...my_pq_path..."
-    send_header        = false
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    text_secret           = "...my_text_secret..."
-    throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
-    tls = {
-      ca_path             = "...my_ca_path..."
-      cert_path           = "...my_cert_path..."
-      certificate_name    = "...my_certificate_name..."
-      disabled            = true
-      max_version         = "TLSv1.3"
-      min_version         = "TLSv1.1"
-      passphrase          = "...my_passphrase..."
-      priv_key_path       = "...my_priv_key_path..."
-      reject_unauthorized = false
-      servername          = "...my_servername..."
-    }
-    token_ttl_minutes = 55.58
-    type              = "tcpjson"
-    write_timeout     = 5.56
-  }
-  output_wavefront = {
-    auth_type   = "manual"
-    compress    = false
-    concurrency = 3.65
-    description = "...my_description..."
-    domain      = "...my_domain..."
-    environment = "...my_environment..."
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode = "payload"
-    flush_period_sec            = 5.92
-    id                          = "...my_id..."
-    max_payload_events          = 7.94
-    max_payload_size_kb         = 2402.33
-    on_backpressure             = "queue"
-    pipeline                    = "...my_pipeline..."
-    pq_compress                 = "gzip"
-    pq_controls = {
-      # ...
-    }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "backpressure"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = true
-    response_honor_retry_after_header = true
-    response_retry_settings = [
-      {
-        backoff_rate    = 2.05
-        http_status     = 208.29
-        initial_backoff = 376170.95
-        max_backoff     = 109756.54
-      }
-    ]
-    safe_headers = [
-      "..."
-    ]
-    streamtags = [
-      "..."
-    ]
-    system_fields = [
-      "..."
-    ]
-    text_secret = "...my_text_secret..."
-    timeout_retry_settings = {
-      backoff_rate    = 10.97
-      initial_backoff = 439304.18
-      max_backoff     = 136073.95
-      timeout_retry   = false
-    }
-    timeout_sec         = 1604764437605072.8
-    token               = "...my_token..."
-    type                = "wavefront"
-    use_round_robin_dns = false
-  }
-  output_webhook = {
-    advanced_content_type     = "...my_advanced_content_type..."
-    auth_header_expr          = "...my_auth_header_expr..."
-    auth_type                 = "textSecret"
-    compress                  = true
-    concurrency               = 30.31
-    credentials_secret        = "...my_credentials_secret..."
-    custom_content_type       = "...my_custom_content_type..."
-    custom_drop_when_null     = true
-    custom_event_delimiter    = "...my_custom_event_delimiter..."
-    custom_payload_expression = "...my_custom_payload_expression..."
-    custom_source_expression  = "...my_custom_source_expression..."
-    description               = "...my_description..."
-    dns_resolve_period_sec    = 36601.64
-    environment               = "...my_environment..."
-    exclude_self              = true
-    extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode   = "none"
-    flush_period_sec              = 5.05
-    format                        = "json_array"
-    format_event_code             = "...my_format_event_code..."
-    format_payload_code           = "...my_format_payload_code..."
-    id                            = "...my_id..."
-    keep_alive                    = true
-    load_balance_stats_period_sec = 12.05
-    load_balanced                 = true
-    login_url                     = "...my_login_url..."
-    max_payload_events            = 4.79
-    max_payload_size_kb           = 261448.74
-    method                        = "PUT"
-    oauth_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    oauth_params = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
     ]
     on_backpressure = "block"
-    password        = "...my_password..."
-    pipeline        = "...my_pipeline..."
-    pq_compress     = "gzip"
+    otlp_version = "1.3.1"
+    pipeline = "main"
+    pq_compress = "gzip"
     pq_controls = {
-      # ...
+        # ...
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "error"
-    pq_on_backpressure                = "block"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = true
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protocol = "grpc"
+    reject_unauthorized = true
     response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 2.17
-        http_status     = 298.8
-        initial_backoff = 330493.67
-        max_backoff     = 125603.09
-      }
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
     ]
     safe_headers = [
-      "..."
+    "content-type",
+    "x-request-id",
     ]
-    secret            = "...my_secret..."
-    secret_param_name = "...my_secret_param_name..."
     streamtags = [
-      "..."
+    "prod",
+    "servicenow",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
+    "cribl_breaker",
     ]
-    text_secret = "...my_text_secret..."
     timeout_retry_settings = {
-      backoff_rate    = 18.85
-      initial_backoff = 131843.06
-      max_backoff     = 67206.95
-      timeout_retry   = true
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec = 8339898100238354
+    timeout_sec = 30
     tls = {
-      ca_path          = "...my_ca_path..."
-      cert_path        = "...my_cert_path..."
-      certificate_name = "...my_certificate_name..."
-      disabled         = false
-      max_version      = "TLSv1.2"
-      min_version      = "TLSv1.2"
-      passphrase       = "...my_passphrase..."
-      priv_key_path    = "...my_priv_key_path..."
-      servername       = "...my_servername..."
+            ca_path = "/etc/ssl/certs/ca-bundle.crt"
+        cert_path = "/opt/cribl/certs/client.crt"
+        certificate_name = "otel-client"
+        disabled = true
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "s3cr3t"
+        priv_key_path = "/opt/cribl/certs/client.key"
+        reject_unauthorized = true
     }
-    token                 = "...my_token..."
-    token_attribute_name  = "...my_token_attribute_name..."
-    token_timeout_secs    = 148758.23
-    total_memory_limit_kb = 4.78
-    type                  = "webhook"
-    url                   = "...my_url..."
-    urls = [
-      {
-        url    = "...my_url..."
-        weight = 4.83
-      }
-    ]
-    use_round_robin_dns = false
-    username            = "...my_username..."
-  }
-  output_xsiam = {
-    auth_type              = "token"
-    concurrency            = 1.29
-    description            = "...my_description..."
-    dns_resolve_period_sec = 71005.67
-    environment            = "...my_environment..."
-    exclude_self           = true
+    token_secret = "servicenow_access_token"
+    type = "service_now"
+    use_round_robin_dns = true
+}
+output_signalfx = {
+    auth_type = "manual"
+    compress = true
+    concurrency = 8
+    description = "Send metrics to Splunk Observability (SignalFx)"
+    environment = "main"
     extra_http_headers = [
-      {
-        name  = "...my_name..."
-        value = "...my_value..."
-      }
-    ]
-    failed_request_logging_mode   = "payload"
-    flush_period_sec              = 7.7
-    id                            = "...my_id..."
-    load_balance_stats_period_sec = 14.39
-    load_balanced                 = false
-    max_payload_events            = 7.22
-    max_payload_size_kb           = 385.16
-    on_backpressure               = "queue"
-    pipeline                      = "...my_pipeline..."
-    pq_compress                   = "none"
-    pq_controls = {
-      # ...
+    {
+                name = "X-Request-ID"
+            value = "abc123"
     }
-    pq_max_file_size                  = "...my_pq_max_file_size..."
-    pq_max_size                       = "...my_pq_max_size..."
-    pq_mode                           = "error"
-    pq_on_backpressure                = "drop"
-    pq_path                           = "...my_pq_path..."
-    reject_unauthorized               = false
-    response_honor_retry_after_header = false
+    ]
+    failed_request_logging_mode = "payload"
+    flush_period_sec = 1
+    id = "signalfx-out"
+    max_payload_events = 0
+    max_payload_size_kb = 4096
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    realm = "us1"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
     response_retry_settings = [
-      {
-        backoff_rate    = 14.67
-        http_status     = 166.25
-        initial_backoff = 490950.74
-        max_backoff     = 114257.9
-      }
+    {
+                backoff_rate = 2
+            http_status = 503
+            initial_backoff = 1000
+            max_backoff = 60000
+    }
     ]
     safe_headers = [
-      "..."
+    "X-Request-ID",
     ]
     streamtags = [
-      "..."
+    "signalfx",
+    "metrics",
     ]
     system_fields = [
-      "..."
+    "cribl_pipe",
     ]
-    text_secret               = "...my_text_secret..."
-    throttle_rate_req_per_sec = 1802
+    text_secret = "signalfx-api-token"
     timeout_retry_settings = {
-      backoff_rate    = 8.8
-      initial_backoff = 487877.87
-      max_backoff     = 150636.26
-      timeout_retry   = true
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
     }
-    timeout_sec           = 7356276809707653
-    token                 = "...my_token..."
-    total_memory_limit_kb = 9.15
-    type                  = "xsiam"
-    url                   = "...my_url..."
+    timeout_sec = 30
+    token = "***REDACTED***"
+    type = "signalfx"
+    use_round_robin_dns = true
+}
+output_snmp = {
+    description = "Forward SNMP traps to network monitoring systems"
+    dns_resolve_period_sec = 300
+    environment = "main"
+    hosts = [
+    {
+                host = "snmp01.example.com"
+            port = 162
+    }
+    ]
+    id = "snmp_trap_forwarder"
+    pipeline = "main"
+    streamtags = [
+    "prod",
+    "snmp",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    type = "snmp"
+}
+output_sns = {
+    assume_role_arn = "arn:aws:iam::123456789012:role/SNSPublisher"
+    assume_role_external_id = "external-id-abc123"
+    aws_api_key = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret = "aws_sns_credentials"
+    aws_secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    description = "Publish alerts to Amazon SNS FIFO topic"
+    duration_seconds = 3600
+    enable_assume_role = true
+    endpoint = "https://sns.us-east-1.amazonaws.com"
+    environment = "main"
+    id = "sns_alerts_prod"
+    max_retries = 5
+    message_group_id = "`alerts-${C.vars.service}`"
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    region = "us-east-1"
+    reject_unauthorized = true
+    reuse_connections = true
+    signature_version = "v4"
+    streamtags = [
+    "prod",
+    "alerts",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    topic_arn = "arn:aws:sns:us-east-1:123456789012:alerts-topic"
+    type = "sns"
+}
+output_splunk = {
+    auth_token = "***REDACTED***"
+    auth_type = "manual"
+    compress = "auto"
+    connection_timeout = 10000
+    description = "Send events to Splunk indexers over S2S"
+    enable_ack = true
+    enable_multi_metrics = false
+    environment = "main"
+    host = "splunk-indexer.example.com"
+    id = "splunk-main"
+    log_failed_requests = false
+    max_failed_health_checks = 1
+    max_s2_sversion = "v3"
+    nested_fields = "none"
+    on_backpressure = "block"
+    pipeline = "default"
+    port = 9997
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    streamtags = [
+    "splunk",
+    "prod",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    text_secret = "splunk-indexer-token"
+    throttle_rate_per_sec = "50 MB"
+    tls = {
+            ca_path = "/etc/ssl/certs/ca.pem"
+        cert_path = "/etc/ssl/certs/client.crt"
+        certificate_name = "splunk-client-cert"
+        disabled = false
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "***REDACTED***"
+        priv_key_path = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername = "splunk-indexer.example.com"
+    }
+    type = "splunk"
+    write_timeout = 60000
+}
+output_splunk_hec = {
+    auth_type = "manual"
+    compress = true
+    concurrency = 8
+    description = "Send events to Splunk HEC"
+    dns_resolve_period_sec = 300
+    enable_multi_metrics = false
+    environment = "main"
+    exclude_self = false
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "abc123"
+    }
+    ]
+    failed_request_logging_mode = "payload"
+    flush_period_sec = 1
+    id = "splunk-hec-main"
+    load_balance_stats_period_sec = 300
+    load_balanced = true
+    max_payload_events = 0
+    max_payload_size_kb = 4096
+    next_queue = "indexQueue"
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 503
+            initial_backoff = 1000
+            max_backoff = 60000
+    }
+    ]
+    safe_headers = [
+    "X-Request-ID",
+    ]
+    streamtags = [
+    "splunk",
+    "hec",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    tcp_routing = "default_route"
+    text_secret = "splunk-hec-token"
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    token = "***REDACTED***"
+    type = "splunk_hec"
+    url = "http://splunk-hec.example.com:8088/services/collector/event"
     urls = [
-      {
-        url    = "{ \"see\": \"documentation\" }"
-        weight = 8.62
-      }
+    {
+                url = "http://splunk-hec-2.example.com:8088/services/collector/event"
+            weight = 2
+    }
     ]
     use_round_robin_dns = true
-  }
-  pack = "...my_pack..."
+}
+output_splunk_lb = {
+    auth_token = "***REDACTED***"
+    auth_type = "manual"
+    compress = "auto"
+    connection_timeout = 10000
+    description = "Load-balance events across Splunk indexers"
+    dns_resolve_period_sec = 300
+    enable_ack = true
+    enable_multi_metrics = false
+    environment = "main"
+    exclude_self = false
+    hosts = [
+    {
+                host = "idx1.example.com"
+            port = 9997
+            servername = "idx1.example.com"
+            tls = "inherit"
+            weight = 2
+    }
+    ]
+    id = "splunk-lb-main"
+    indexer_discovery = true
+    indexer_discovery_configs = {
+            auth_token = "***REDACTED***"
+        auth_tokens = [
+        {
+                        auth_type = "secret"
+        }
+        ]
+        auth_type = "manual"
+        master_uri = "https://cm.example.com:8089"
+        refresh_interval_sec = 300
+        reject_unauthorized = true
+        site = "site1"
+        text_secret = "cluster-manager-token"
+    }
+    load_balance_stats_period_sec = 300
+    log_failed_requests = false
+    max_concurrent_senders = 8
+    max_failed_health_checks = 1
+    max_s2_sversion = "v3"
+    nested_fields = "none"
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    sender_unhealthy_time_allowance = 500
+    streamtags = [
+    "splunk",
+    "prod",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    text_secret = "splunk-indexer-token"
+    throttle_rate_per_sec = "50 MB"
+    tls = {
+            ca_path = "/etc/ssl/certs/ca.pem"
+        cert_path = "/etc/ssl/certs/client.crt"
+        certificate_name = "splunk-client-cert"
+        disabled = false
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "***REDACTED***"
+        priv_key_path = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername = "splunk-lb.example.com"
+    }
+    type = "splunk_lb"
+    write_timeout = 60000
+}
+output_sqs = {
+    assume_role_arn = "arn:aws:iam::123456789012:role/SQSPublisher"
+    assume_role_external_id = "external-id-abc123"
+    aws_account_id = "123456789012"
+    aws_api_key = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret = "aws_sqs_credentials"
+    aws_secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    create_queue = true
+    description = "Send events to Amazon SQS FIFO queue with batching"
+    duration_seconds = 3600
+    enable_assume_role = true
+    endpoint = "https://sqs.us-east-1.amazonaws.com"
+    environment = "main"
+    flush_period_sec = 2
+    id = "sqs_events_prod"
+    max_in_progress = 20
+    max_queue_size = 200
+    max_record_size_kb = 256
+    message_group_id = "logs"
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    queue_name = "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue.fifo"
+    queue_type = "fifo"
+    region = "us-east-1"
+    reject_unauthorized = true
+    reuse_connections = true
+    signature_version = "v4"
+    streamtags = [
+    "prod",
+    "sqs",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    type = "sqs"
+}
+output_statsd = {
+    connection_timeout = 10000
+    description = "Send StatsD metrics to central aggregator"
+    dns_resolve_period_sec = 300
+    environment = "main"
+    flush_period_sec = 1
+    host = "statsd.example.com"
+    id = "statsd_metrics_prod"
+    mtu = 1400
+    on_backpressure = "block"
+    pipeline = "metrics"
+    port = 8125
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protocol = "udp"
+    streamtags = [
+    "prod",
+    "statsd",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    throttle_rate_per_sec = "10 MB"
+    type = "statsd"
+    write_timeout = 30000
+}
+output_statsd_ext = {
+    connection_timeout = 10000
+    description = "Send extended StatsD metrics to external aggregator"
+    dns_resolve_period_sec = 300
+    environment = "main"
+    flush_period_sec = 1
+    host = "statsd-ext.example.com"
+    id = "statsd_ext_metrics_prod"
+    mtu = 1400
+    on_backpressure = "block"
+    pipeline = "metrics"
+    port = 8125
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protocol = "udp"
+    streamtags = [
+    "prod",
+    "statsd",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    throttle_rate_per_sec = "10 MB"
+    type = "statsd_ext"
+    write_timeout = 30000
+}
+output_sumo_logic = {
+    compress = true
+    concurrency = 8
+    custom_category = "prod/app/logs"
+    custom_source = "cribl-stream"
+    description = "Send logs to Sumo Logic with retries and batching"
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    format = "json"
+    id = "sumologic_logs_prod"
+    max_payload_events = 500
+    max_payload_size_kb = 512
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "content-type",
+    "x-request-id",
+    ]
+    streamtags = [
+    "prod",
+    "sumologic",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    total_memory_limit_kb = 51200
+    type = "sumo_logic"
+    url = "https://endpoint1.collection.us2.sumologic.com/receiver/v1/http/ABCDEFG1234567890"
+    use_round_robin_dns = true
+}
+output_syslog = {
+    app_name = "Cribl"
+    connection_timeout = 10000
+    description = "Send syslog to upstream collector"
+    environment = "main"
+    facility = 1
+    host = "syslog.receiver.example.com"
+    id = "syslog-out"
+    load_balanced = true
+    log_failed_requests = false
+    max_record_size = 1200
+    message_format = "rfc3164"
+    octet_count_framing = true
+    on_backpressure = "block"
+    pipeline = "default"
+    port = 514
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    protocol = "tcp"
+    severity = 5
+    streamtags = [
+    "syslog",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    throttle_rate_per_sec = "0"
+    timestamp_format = "syslog"
+    tls = {
+            ca_path = "/etc/ssl/certs/ca-bundle.crt"
+        cert_path = "/etc/ssl/certs/client.crt"
+        certificate_name = "syslog-client-cert"
+        disabled = true
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "***REDACTED***"
+        priv_key_path = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername = "syslog.example.com"
+    }
+    type = "syslog"
+    udp_dns_resolve_period_sec = 300
+    write_timeout = 60000
+}
+output_tcpjson = {
+    auth_token = "***REDACTED***"
+    auth_type = "manual"
+    compression = "gzip"
+    connection_timeout = 10000
+    description = "Send JSON events over TCP to downstream services"
+    dns_resolve_period_sec = 300
+    environment = "main"
+    exclude_self = false
+    host = "tcp.receiver.example.com"
+    hosts = [
+    {
+                host = "tcp1.example.com"
+            port = 10300
+            servername = "tcp1.example.com"
+            tls = "inherit"
+            weight = 2
+    }
+    ]
+    id = "tcpjson-out"
+    load_balance_stats_period_sec = 300
+    load_balanced = true
+    log_failed_requests = false
+    max_concurrent_senders = 8
+    on_backpressure = "block"
+    pipeline = "default"
+    port = 10300
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    send_header = true
+    streamtags = [
+    "tcpjson",
+    "prod",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    text_secret = "tcpjson-auth-token"
+    throttle_rate_per_sec = "50 MB"
+    tls = {
+            ca_path = "/etc/ssl/certs/ca.pem"
+        cert_path = "/etc/ssl/certs/client.crt"
+        certificate_name = "tcpjson-client-cert"
+        disabled = false
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "***REDACTED***"
+        priv_key_path = "/etc/ssl/private/client.key"
+        reject_unauthorized = true
+        servername = "tcp.receiver.example.com"
+    }
+    token_ttl_minutes = 60
+    type = "tcpjson"
+    write_timeout = 60000
+}
+output_wavefront = {
+    auth_type = "manual"
+    compress = true
+    concurrency = 8
+    description = "Send metrics to WaveFront"
+    domain = "longboard"
+    environment = "main"
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "abc123"
+    }
+    ]
+    failed_request_logging_mode = "payload"
+    flush_period_sec = 1
+    id = "wavefront-out"
+    max_payload_events = 0
+    max_payload_size_kb = 4096
+    on_backpressure = "block"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 503
+            initial_backoff = 1000
+            max_backoff = 60000
+    }
+    ]
+    safe_headers = [
+    "X-Request-ID",
+    ]
+    streamtags = [
+    "wavefront",
+    "metrics",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    text_secret = "wavefront-api-token"
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    token = "***REDACTED***"
+    type = "wavefront"
+    use_round_robin_dns = true
+}
+output_webhook = {
+    advanced_content_type = "application/json"
+    auth_header_expr = "`Bearer ${token}`"
+    auth_type = "token"
+    compress = true
+    concurrency = 10
+    credentials_secret = "webhook-credentials"
+    custom_content_type = "application/x-ndjson"
+    custom_drop_when_null = false
+    custom_event_delimiter = "\n"
+    custom_payload_expression = "`{ \"items\": [${events}] }`"
+    custom_source_expression = "raw=${_raw}"
+    description = "Robust webhook delivery with backoff and retries"
+    dns_resolve_period_sec = 600
+    environment = "main"
+    exclude_self = true
+    extra_http_headers = [
+    {
+                name = "X-Custom-Header"
+            value = "demo"
+    }
+    ]
+    failed_request_logging_mode = "payload"
+    flush_period_sec = 1
+    format = "ndjson"
+    format_event_code = "if (__e.severity === 'error') { __e.__eventOut = JSON.stringify(__e); }"
+    format_payload_code = "__e.__payloadOut = JSON.stringify({ items: __e.payload });"
+    id = "webhook-out"
+    keep_alive = true
+    load_balance_stats_period_sec = 300
+    load_balanced = true
+    login_url = "https://auth.example.com/oauth/token"
+    max_payload_events = 1000
+    max_payload_size_kb = 8192
+    method = "POST"
+    oauth_headers = [
+    {
+                name = "Accept"
+            value = "application/json"
+    }
+    ]
+    oauth_params = [
+    {
+                name = "grant_type"
+            value = "client_credentials"
+    }
+    ]
+    on_backpressure = "queue"
+    password = "***REDACTED***"
+    pipeline = "default"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "X-Trace-Id",
+    ]
+    secret = "s3cr3t"
+    secret_param_name = "client_secret"
+    streamtags = [
+    "webhook",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    ]
+    text_secret = "webhook-token-secret"
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    tls = {
+            ca_path = "/etc/ssl/certs/ca-bundle.crt"
+        cert_path = "/etc/ssl/certs/client.crt"
+        certificate_name = "webhook-client-cert"
+        disabled = true
+        max_version = "TLSv1.3"
+        min_version = "TLSv1.2"
+        passphrase = "***REDACTED***"
+        priv_key_path = "/etc/ssl/private/client.key"
+        servername = "api.example.com"
+    }
+    token = "***REDACTED***"
+    token_attribute_name = "access_token"
+    token_timeout_secs = 3600
+    total_memory_limit_kb = 20480
+    type = "webhook"
+    url = "https://hooks.example.com/ingest"
+    urls = [
+    {
+                url = "https://hooks1.example.com/ingest"
+            weight = 2
+    }
+    ]
+    use_round_robin_dns = true
+    username = "api-user"
+}
+output_xsiam = {
+    auth_type = "secret"
+    concurrency = 8
+    description = "Send logs to Palo Alto Networks XSIAM with token auth"
+    dns_resolve_period_sec = 300
+    environment = "main"
+    exclude_self = false
+    extra_http_headers = [
+    {
+                name = "X-Request-ID"
+            value = "123e4567-e89b-12d3-a456-426614174000"
+    }
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec = 2
+    id = "xsiam_export_prod"
+    load_balance_stats_period_sec = 300
+    load_balanced = true
+    max_payload_events = 2000
+    max_payload_size_kb = 8192
+    on_backpressure = "block"
+    pipeline = "main"
+    pq_compress = "gzip"
+    pq_controls = {
+        # ...
+    }
+    pq_max_file_size = "100 MB"
+    pq_max_size = "10GB"
+    pq_mode = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path = "/opt/cribl/state/queues"
+    reject_unauthorized = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+    {
+                backoff_rate = 2
+            http_status = 429
+            initial_backoff = 1000
+            max_backoff = 30000
+    }
+    ]
+    safe_headers = [
+    "content-type",
+    "x-request-id",
+    ]
+    streamtags = [
+    "prod",
+    "xsiam",
+    ]
+    system_fields = [
+    "cribl_pipe",
+    "cribl_breaker",
+    ]
+    text_secret = "xsiam_token"
+    throttle_rate_req_per_sec = 500
+    timeout_retry_settings = {
+            backoff_rate = 2
+        initial_backoff = 1000
+        max_backoff = 30000
+        timeout_retry = true
+    }
+    timeout_sec = 30
+    token = "xsiam-0123456789abcdef0123456789abcdef"
+    total_memory_limit_kb = 51200
+    type = "xsiam"
+    url = "https://api-tenant.paloaltonetworks.com/logs/v1/event"
+    urls = [
+    {
+                url = "{ \"see\": \"documentation\" }"
+            weight = 8.62
+    }
+    ]
+    use_round_robin_dns = true
+}
+    pack = "observability-pack"
 }

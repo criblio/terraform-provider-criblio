@@ -231,33 +231,6 @@ func (e *OutputDlS3DataFormat) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputDlS3BackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputDlS3BackpressureBehavior string
-
-const (
-	OutputDlS3BackpressureBehaviorBlock OutputDlS3BackpressureBehavior = "block"
-	OutputDlS3BackpressureBehaviorDrop  OutputDlS3BackpressureBehavior = "drop"
-)
-
-func (e OutputDlS3BackpressureBehavior) ToPointer() *OutputDlS3BackpressureBehavior {
-	return &e
-}
-func (e *OutputDlS3BackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputDlS3BackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDlS3BackpressureBehavior: %v", v)
-	}
-}
-
 // OutputDlS3DiskSpaceProtection - How to handle events when disk space is below the global 'Min free disk space' limit
 type OutputDlS3DiskSpaceProtection string
 
@@ -494,8 +467,6 @@ type OutputDlS3 struct {
 	HeaderLine *string `default:"" json:"headerLine"`
 	// Buffer size used to write to a file
 	WriteHighWaterMark *float64 `default:"64" json:"writeHighWaterMark"`
-	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputDlS3BackpressureBehavior `default:"block" json:"onBackpressure"`
 	// If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 	DeadletterEnabled *bool `default:"false" json:"deadletterEnabled"`
 	// How to handle events when disk space is below the global 'Min free disk space' limit
@@ -789,13 +760,6 @@ func (o *OutputDlS3) GetWriteHighWaterMark() *float64 {
 		return nil
 	}
 	return o.WriteHighWaterMark
-}
-
-func (o *OutputDlS3) GetOnBackpressure() *OutputDlS3BackpressureBehavior {
-	if o == nil {
-		return nil
-	}
-	return o.OnBackpressure
 }
 
 func (o *OutputDlS3) GetDeadletterEnabled() *bool {

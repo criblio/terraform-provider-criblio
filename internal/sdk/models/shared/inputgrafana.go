@@ -62,7 +62,7 @@ func (i *InputGrafanaConnection2) GetOutput() string {
 	return i.Output
 }
 
-// InputGrafanaMode2 - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputGrafanaMode2 - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputGrafanaMode2 string
 
 const (
@@ -117,7 +117,7 @@ func (e *InputGrafanaCompression2) UnmarshalJSON(data []byte) error {
 }
 
 type InputGrafanaPq2 struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputGrafanaMode2 `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
@@ -1208,7 +1208,7 @@ func (i *InputGrafanaConnection1) GetOutput() string {
 	return i.Output
 }
 
-// InputGrafanaMode1 - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputGrafanaMode1 - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputGrafanaMode1 string
 
 const (
@@ -1263,7 +1263,7 @@ func (e *InputGrafanaCompression1) UnmarshalJSON(data []byte) error {
 }
 
 type InputGrafanaPq1 struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputGrafanaMode1 `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`

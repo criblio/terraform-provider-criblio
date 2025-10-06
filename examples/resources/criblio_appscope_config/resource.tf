@@ -1,253 +1,271 @@
 resource "criblio_appscope_config" "my_appscopeconfig" {
   config = {
     cribl = {
-      authtoken = "...my_authtoken..."
+      authtoken = "myAuthToken123"
       enable    = true
       transport = {
         buffer = "line"
-        host   = "...my_host..."
-        path   = "...my_path..."
-        port   = 1.73
+        host   = "localhost"
+        path   = "/var/run/appscope.sock"
+        port   = 8080
         tls = {
-          cacertpath     = "...my_cacertpath..."
-          enable         = false
-          validateserver = true
+          cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
+          enable         = true
+          validateserver = false
         }
-        type = "...my_type..."
+        type = "tcp"
       }
-      use_scope_source_transport = true
+      use_scope_source_transport = false
     }
     custom = [
       {
-        ancestor = "...my_ancestor..."
-        arg      = "...my_arg..."
+        ancestor = "parentProcess"
+        arg      = "--debug"
         config = {
           cribl = {
-            authtoken = "...my_authtoken..."
-            enable    = false
+            authtoken = "myAuthToken123"
+            enable    = true
             transport = {
-              buffer = "full"
-              host   = "...my_host..."
-              path   = "...my_path..."
-              port   = 9.85
+              buffer = "line"
+              host   = "localhost"
+              path   = "/var/run/appscope.sock"
+              port   = 8080
               tls = {
-                cacertpath     = "...my_cacertpath..."
-                enable         = false
+                cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
+                enable         = true
                 validateserver = false
               }
-              type = "...my_type..."
+              type = "tcp"
             }
-            use_scope_source_transport = true
+            use_scope_source_transport = false
           }
           event = {
             enable = true
             format = {
-              enhancefs      = true
-              maxeventpersec = 5.37
+              enhancefs      = false
+              maxeventpersec = 100
             }
             transport = {
               buffer = "line"
-              host   = "...my_host..."
-              path   = "...my_path..."
-              port   = 4.5
+              host   = "localhost"
+              path   = "/var/run/appscope.sock"
+              port   = 8080
               tls = {
-                cacertpath     = "...my_cacertpath..."
+                cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
                 enable         = true
-                validateserver = true
+                validateserver = false
               }
-              type = "...my_type..."
+              type = "tcp"
             }
             type = "ndjson"
             watch = [
               {
-                allowbinary = true
+                allowbinary = false
                 enabled     = true
-                field       = "...my_field..."
+                field       = "http.method"
                 headers = [
-                  "..."
+                  "Content-Type"
                 ]
-                name  = "...my_name..."
-                type  = "...my_type..."
-                value = "...my_value..."
+                name  = "RequestEvents"
+                type  = "match"
+                value = "GET"
               }
             ]
           }
           libscope = {
-            commanddir  = "...my_commanddir..."
-            configevent = false
-            log = {
-              level = "info"
+            config = {
+              enable = true
+              format = {
+                level   = "info"
+                maxline = 1024
+              }
+              log = {
+                level = "debug"
+                transport = {
+                  buffer = "line"
+                  host   = "localhost"
+                  path   = "/var/run/appscope.sock"
+                  port   = 8080
+                  tls = {
+                    cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
+                    enable         = true
+                    validateserver = false
+                  }
+                  type = "tcp"
+                }
+              }
               transport = {
                 buffer = "line"
-                host   = "...my_host..."
-                path   = "...my_path..."
-                port   = 2.31
+                host   = "localhost"
+                path   = "/var/run/appscope.sock"
+                port   = 8080
                 tls = {
-                  cacertpath     = "...my_cacertpath..."
-                  enable         = false
+                  cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
+                  enable         = true
                   validateserver = false
                 }
-                type = "...my_type..."
+                type = "tcp"
               }
             }
-            summaryperiod = 9.88
           }
           metric = {
-            enable = true
-            format = {
-              statsdmaxlen = 8.61
-              statsdprefix = "...my_statsdprefix..."
-              type         = "...my_type..."
-              verbosity    = 4.06
-            }
+            enable       = true
+            format       = "statsd"
+            statsdmaxlen = 512
             transport = {
               buffer = "line"
-              host   = "...my_host..."
-              path   = "...my_path..."
-              port   = 3.15
+              host   = "localhost"
+              path   = "/var/run/appscope.sock"
+              port   = 8080
               tls = {
-                cacertpath     = "...my_cacertpath..."
-                enable         = false
-                validateserver = true
+                cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
+                enable         = true
+                validateserver = false
               }
-              type = "...my_type..."
+              type = "tcp"
             }
-            watch = [
-              {
-                # ...
-              }
-            ]
           }
           payload = {
-            dir    = "...my_dir..."
+            dir    = "/var/log/appscope/payloads"
             enable = false
           }
           protocol = [
             {
               binary  = false
-              detect  = false
-              len     = 1.8
-              name    = "...my_name..."
+              detect  = true
+              len     = 128
+              name    = "http"
               payload = true
-              regex   = "...my_regex..."
+              regex   = ".*"
             }
           ]
           tags = [
             {
-              key   = "...my_key..."
-              value = "...my_value..."
+              key   = "env"
+              value = "prod"
             }
           ]
         }
-        env      = "...my_env..."
-        hostname = "...my_hostname..."
-        procname = "...my_procname..."
-        username = "...my_username..."
+        env      = "production"
+        hostname = "host123.example.com"
+        procname = "myprocess"
+        username = "appuser"
       }
     ]
     event = {
-      enable = false
+      enable = true
       format = {
-        enhancefs      = true
-        maxeventpersec = 3.37
+        enhancefs      = false
+        maxeventpersec = 100
       }
       transport = {
         buffer = "line"
-        host   = "...my_host..."
-        path   = "...my_path..."
-        port   = 6.04
+        host   = "localhost"
+        path   = "/var/run/appscope.sock"
+        port   = 8080
         tls = {
-          cacertpath     = "...my_cacertpath..."
+          cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
           enable         = true
-          validateserver = true
+          validateserver = false
         }
-        type = "...my_type..."
+        type = "tcp"
       }
       type = "ndjson"
       watch = [
         {
-          allowbinary = true
+          allowbinary = false
           enabled     = true
-          field       = "...my_field..."
+          field       = "http.method"
           headers = [
-            "..."
+            "Content-Type"
           ]
-          name  = "...my_name..."
-          type  = "...my_type..."
-          value = "...my_value..."
+          name  = "RequestEvents"
+          type  = "match"
+          value = "GET"
         }
       ]
     }
     libscope = {
-      commanddir  = "...my_commanddir..."
-      configevent = true
-      log = {
-        level = "none"
+      commanddir = "path/to/dir"
+      config = {
+        enable = true
+        format = {
+          level   = "info"
+          maxline = 1024
+        }
+        log = {
+          level = "debug"
+          transport = {
+            buffer = "line"
+            host   = "localhost"
+            path   = "/var/run/appscope.sock"
+            port   = 8080
+            tls = {
+              cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
+              enable         = true
+              validateserver = false
+            }
+            type = "tcp"
+          }
+        }
         transport = {
           buffer = "line"
-          host   = "...my_host..."
-          path   = "...my_path..."
-          port   = 9.86
+          host   = "localhost"
+          path   = "/var/run/appscope.sock"
+          port   = 8080
           tls = {
-            cacertpath     = "...my_cacertpath..."
+            cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
             enable         = true
-            validateserver = true
+            validateserver = false
           }
-          type = "...my_type..."
+          type = "tcp"
         }
       }
-      summaryperiod = 9.16
+      configevent = true
     }
     metric = {
-      enable = false
-      format = {
-        statsdmaxlen = 5.96
-        statsdprefix = "...my_statsdprefix..."
-        type         = "...my_type..."
-        verbosity    = 1.33
-      }
+      enable       = true
+      format       = "statsd"
+      statsdmaxlen = 512
+      statsdprefix = "myPrefix-"
       transport = {
-        buffer = "full"
-        host   = "...my_host..."
-        path   = "...my_path..."
-        port   = 5.7
+        buffer = "line"
+        host   = "localhost"
+        path   = "/var/run/appscope.sock"
+        port   = 8080
         tls = {
-          cacertpath     = "...my_cacertpath..."
+          cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
           enable         = true
-          validateserver = true
+          validateserver = false
         }
-        type = "...my_type..."
+        type = "tcp"
       }
-      watch = [
-        {
-          # ...
-        }
-      ]
+      verbosity = 0
     }
     payload = {
-      dir    = "...my_dir..."
-      enable = true
+      dir    = "/var/log/appscope/payloads"
+      enable = false
     }
     protocol = [
       {
-        binary  = true
+        binary  = false
         detect  = true
-        len     = 9.26
-        name    = "...my_name..."
+        len     = 128
+        name    = "http"
         payload = true
-        regex   = "...my_regex..."
+        regex   = ".*"
       }
     ]
     tags = [
       {
-        key   = "...my_key..."
-        value = "...my_value..."
+        key   = "env"
+        value = "prod"
       }
     ]
   }
-  description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
+  description = "Custom Appscope configuration for nginx"
+  group_id    = "Cribl"
+  id          = "appscopeConfig1"
   lib         = "cribl"
-  tags        = "...my_tags..."
+  tags        = "scope,nginx"
 }

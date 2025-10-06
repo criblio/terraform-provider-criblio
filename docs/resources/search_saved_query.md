@@ -22,13 +22,13 @@ resource "criblio_search_saved_query" "my_searchsavedquery" {
   name        = "test_saved"
   query       = "dataset=\"cribl_edge_appscope_metrics\" | limit 1000"
   schedule = {
-    cron_schedule = "...my_cron_schedule..."
+    cron_schedule = "0 * * * *"
     enabled       = true
-    keep_last_n   = 7.78
+    keep_last_n   = 5
     notifications = {
       disabled = false
     }
-    tz = "...my_tz..."
+    tz = "UTC"
   }
 }
 ```
@@ -50,6 +50,10 @@ resource "criblio_search_saved_query" "my_searchsavedquery" {
 - `latest` (String) Latest time for the search range
 - `schedule` (Attributes) (see [below for nested schema](#nestedatt--schedule))
 
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
 <a id="nestedatt--schedule"></a>
 ### Nested Schema for `schedule`
 
@@ -68,6 +72,40 @@ Optional:
 
 - `disabled` (Boolean) Not Null
 
+
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `description` (String) Description of the saved query
+- `earliest` (String) Earliest time for the search range
+- `id` (String) Unique identifier for the saved query
+- `is_private` (Boolean) Whether the saved query is private
+- `latest` (String) Latest time for the search range
+- `name` (String) Name of the saved query
+- `query` (String) The search query string
+- `schedule` (Attributes) (see [below for nested schema](#nestedatt--items--schedule))
+
+<a id="nestedatt--items--schedule"></a>
+### Nested Schema for `items.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String)
+- `enabled` (Boolean)
+- `keep_last_n` (Number)
+- `notifications` (Attributes) (see [below for nested schema](#nestedatt--items--schedule--notifications))
+- `tz` (String)
+
+<a id="nestedatt--items--schedule--notifications"></a>
+### Nested Schema for `items.schedule.notifications`
+
+Read-Only:
+
+- `disabled` (Boolean)
+
 ## Import
 
 Import is supported using the following syntax:
@@ -77,12 +115,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_search_saved_query.my_criblio_search_saved_query
-  id = "..."
+  id = "sq-errors"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_search_saved_query.my_criblio_search_saved_query "..."
+terraform import criblio_search_saved_query.my_criblio_search_saved_query "sq-errors"
 ```

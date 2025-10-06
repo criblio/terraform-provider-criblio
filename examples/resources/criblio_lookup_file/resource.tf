@@ -1,8 +1,8 @@
 resource "criblio_lookup_file" "my_lookupfile" {
-  content     = "...my_content..."
-  description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
-  mode        = "disk"
-  tags        = "...my_tags..."
+  content     = "US,United States\nCA,Canada"
+  description = "Country code to name lookup"
+  group_id    = "Cribl"
+  id          = "countries.csv"
+  mode        = "memory"
+  tags        = "geo,reference"
 }

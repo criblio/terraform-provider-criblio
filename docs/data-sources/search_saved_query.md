@@ -14,7 +14,7 @@ SearchSavedQuery DataSource
 
 ```terraform
 data "criblio_search_saved_query" "my_searchsavedquery" {
-  id = "test_saved"
+  id = "sq-errors"
 }
 ```
 
@@ -27,27 +27,35 @@ data "criblio_search_saved_query" "my_searchsavedquery" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `description` (String) Description of the saved query
 - `earliest` (String) Earliest time for the search range
+- `id` (String) Unique identifier for the saved query
 - `is_private` (Boolean) Whether the saved query is private
 - `latest` (String) Latest time for the search range
 - `name` (String) Name of the saved query
 - `query` (String) The search query string
-- `schedule` (Attributes) (see [below for nested schema](#nestedatt--schedule))
+- `schedule` (Attributes) (see [below for nested schema](#nestedatt--items--schedule))
 
-<a id="nestedatt--schedule"></a>
-### Nested Schema for `schedule`
+<a id="nestedatt--items--schedule"></a>
+### Nested Schema for `items.schedule`
 
 Read-Only:
 
 - `cron_schedule` (String)
 - `enabled` (Boolean)
 - `keep_last_n` (Number)
-- `notifications` (Attributes) (see [below for nested schema](#nestedatt--schedule--notifications))
+- `notifications` (Attributes) (see [below for nested schema](#nestedatt--items--schedule--notifications))
 - `tz` (String)
 
-<a id="nestedatt--schedule--notifications"></a>
-### Nested Schema for `schedule.notifications`
+<a id="nestedatt--items--schedule--notifications"></a>
+### Nested Schema for `items.schedule.notifications`
 
 Read-Only:
 

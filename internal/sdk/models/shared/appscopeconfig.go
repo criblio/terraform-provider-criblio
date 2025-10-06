@@ -84,7 +84,7 @@ func (e *AppscopeConfigType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type AppscopeConfigWatchNdjson struct {
+type AppscopeConfigWatch struct {
 	Allowbinary *bool    `json:"allowbinary,omitempty"`
 	Enabled     *bool    `json:"enabled,omitempty"`
 	Field       *string  `json:"field,omitempty"`
@@ -94,49 +94,49 @@ type AppscopeConfigWatchNdjson struct {
 	Value       *string  `json:"value,omitempty"`
 }
 
-func (a *AppscopeConfigWatchNdjson) GetAllowbinary() *bool {
+func (a *AppscopeConfigWatch) GetAllowbinary() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.Allowbinary
 }
 
-func (a *AppscopeConfigWatchNdjson) GetEnabled() *bool {
+func (a *AppscopeConfigWatch) GetEnabled() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.Enabled
 }
 
-func (a *AppscopeConfigWatchNdjson) GetField() *string {
+func (a *AppscopeConfigWatch) GetField() *string {
 	if a == nil {
 		return nil
 	}
 	return a.Field
 }
 
-func (a *AppscopeConfigWatchNdjson) GetHeaders() []string {
+func (a *AppscopeConfigWatch) GetHeaders() []string {
 	if a == nil {
 		return nil
 	}
 	return a.Headers
 }
 
-func (a *AppscopeConfigWatchNdjson) GetName() *string {
+func (a *AppscopeConfigWatch) GetName() *string {
 	if a == nil {
 		return nil
 	}
 	return a.Name
 }
 
-func (a *AppscopeConfigWatchNdjson) GetType() string {
+func (a *AppscopeConfigWatch) GetType() string {
 	if a == nil {
 		return ""
 	}
 	return a.Type
 }
 
-func (a *AppscopeConfigWatchNdjson) GetValue() *string {
+func (a *AppscopeConfigWatch) GetValue() *string {
 	if a == nil {
 		return nil
 	}
@@ -144,89 +144,131 @@ func (a *AppscopeConfigWatchNdjson) GetValue() *string {
 }
 
 type AppscopeConfigEvent struct {
-	Enable    bool                        `json:"enable"`
-	Format    AppscopeConfigFormatNdjson  `json:"format"`
-	Transport AppscopeTransport           `json:"transport"`
-	Type      AppscopeConfigType          `json:"type"`
-	Watch     []AppscopeConfigWatchNdjson `json:"watch"`
+	Enable    *bool                       `json:"enable,omitempty"`
+	Format    *AppscopeConfigFormatNdjson `json:"format,omitempty"`
+	Transport *AppscopeTransport          `json:"transport,omitempty"`
+	Type      *AppscopeConfigType         `json:"type,omitempty"`
+	Watch     []AppscopeConfigWatch       `json:"watch,omitempty"`
 }
 
-func (a *AppscopeConfigEvent) GetEnable() bool {
+func (a *AppscopeConfigEvent) GetEnable() *bool {
 	if a == nil {
-		return false
+		return nil
 	}
 	return a.Enable
 }
 
-func (a *AppscopeConfigEvent) GetFormat() AppscopeConfigFormatNdjson {
+func (a *AppscopeConfigEvent) GetFormat() *AppscopeConfigFormatNdjson {
 	if a == nil {
-		return AppscopeConfigFormatNdjson{}
+		return nil
 	}
 	return a.Format
 }
 
-func (a *AppscopeConfigEvent) GetTransport() AppscopeTransport {
+func (a *AppscopeConfigEvent) GetTransport() *AppscopeTransport {
 	if a == nil {
-		return AppscopeTransport{}
+		return nil
 	}
 	return a.Transport
 }
 
-func (a *AppscopeConfigEvent) GetType() AppscopeConfigType {
+func (a *AppscopeConfigEvent) GetType() *AppscopeConfigType {
 	if a == nil {
-		return AppscopeConfigType("")
+		return nil
 	}
 	return a.Type
 }
 
-func (a *AppscopeConfigEvent) GetWatch() []AppscopeConfigWatchNdjson {
+func (a *AppscopeConfigEvent) GetWatch() []AppscopeConfigWatch {
 	if a == nil {
-		return []AppscopeConfigWatchNdjson{}
+		return nil
 	}
 	return a.Watch
 }
 
-type AppscopeConfigLevel string
+type AppscopeConfigFormatLevel string
 
 const (
-	AppscopeConfigLevelError   AppscopeConfigLevel = "error"
-	AppscopeConfigLevelDebug   AppscopeConfigLevel = "debug"
-	AppscopeConfigLevelInfo    AppscopeConfigLevel = "info"
-	AppscopeConfigLevelWarning AppscopeConfigLevel = "warning"
-	AppscopeConfigLevelNone    AppscopeConfigLevel = "none"
+	AppscopeConfigFormatLevelInfo  AppscopeConfigFormatLevel = "info"
+	AppscopeConfigFormatLevelDebug AppscopeConfigFormatLevel = "debug"
+	AppscopeConfigFormatLevelTrace AppscopeConfigFormatLevel = "trace"
 )
 
-func (e AppscopeConfigLevel) ToPointer() *AppscopeConfigLevel {
+func (e AppscopeConfigFormatLevel) ToPointer() *AppscopeConfigFormatLevel {
 	return &e
 }
-func (e *AppscopeConfigLevel) UnmarshalJSON(data []byte) error {
+func (e *AppscopeConfigFormatLevel) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
-	case "error":
+	case "info":
 		fallthrough
 	case "debug":
 		fallthrough
-	case "info":
-		fallthrough
-	case "warning":
-		fallthrough
-	case "none":
-		*e = AppscopeConfigLevel(v)
+	case "trace":
+		*e = AppscopeConfigFormatLevel(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for AppscopeConfigLevel: %v", v)
+		return fmt.Errorf("invalid value for AppscopeConfigFormatLevel: %v", v)
+	}
+}
+
+type AppscopeConfigConfigFormat struct {
+	Level   *AppscopeConfigFormatLevel `json:"level,omitempty"`
+	Maxline *float64                   `json:"maxline,omitempty"`
+}
+
+func (a *AppscopeConfigConfigFormat) GetLevel() *AppscopeConfigFormatLevel {
+	if a == nil {
+		return nil
+	}
+	return a.Level
+}
+
+func (a *AppscopeConfigConfigFormat) GetMaxline() *float64 {
+	if a == nil {
+		return nil
+	}
+	return a.Maxline
+}
+
+type AppscopeConfigLogLevel string
+
+const (
+	AppscopeConfigLogLevelInfo  AppscopeConfigLogLevel = "info"
+	AppscopeConfigLogLevelDebug AppscopeConfigLogLevel = "debug"
+	AppscopeConfigLogLevelTrace AppscopeConfigLogLevel = "trace"
+)
+
+func (e AppscopeConfigLogLevel) ToPointer() *AppscopeConfigLogLevel {
+	return &e
+}
+func (e *AppscopeConfigLogLevel) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "info":
+		fallthrough
+	case "debug":
+		fallthrough
+	case "trace":
+		*e = AppscopeConfigLogLevel(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AppscopeConfigLogLevel: %v", v)
 	}
 }
 
 type AppscopeConfigLog struct {
-	Level     *AppscopeConfigLevel `json:"level,omitempty"`
-	Transport *AppscopeTransport   `json:"transport,omitempty"`
+	Level     *AppscopeConfigLogLevel `json:"level,omitempty"`
+	Transport *AppscopeTransport      `json:"transport,omitempty"`
 }
 
-func (a *AppscopeConfigLog) GetLevel() *AppscopeConfigLevel {
+func (a *AppscopeConfigLog) GetLevel() *AppscopeConfigLogLevel {
 	if a == nil {
 		return nil
 	}
@@ -240,129 +282,128 @@ func (a *AppscopeConfigLog) GetTransport() *AppscopeTransport {
 	return a.Transport
 }
 
-type AppscopeConfigLibscope struct {
-	Commanddir    *string            `json:"commanddir,omitempty"`
-	Configevent   *bool              `json:"configevent,omitempty"`
-	Log           *AppscopeConfigLog `json:"log,omitempty"`
-	Summaryperiod *float64           `json:"summaryperiod,omitempty"`
+type AppscopeConfigConfig struct {
+	Enable    *bool                       `json:"enable,omitempty"`
+	Format    *AppscopeConfigConfigFormat `json:"format,omitempty"`
+	Transport *AppscopeTransport          `json:"transport,omitempty"`
+	Log       *AppscopeConfigLog          `json:"log,omitempty"`
 }
 
-func (a *AppscopeConfigLibscope) GetCommanddir() *string {
+func (a *AppscopeConfigConfig) GetEnable() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.Commanddir
+	return a.Enable
 }
 
-func (a *AppscopeConfigLibscope) GetConfigevent() *bool {
+func (a *AppscopeConfigConfig) GetFormat() *AppscopeConfigConfigFormat {
 	if a == nil {
 		return nil
 	}
-	return a.Configevent
+	return a.Format
 }
 
-func (a *AppscopeConfigLibscope) GetLog() *AppscopeConfigLog {
+func (a *AppscopeConfigConfig) GetTransport() *AppscopeTransport {
+	if a == nil {
+		return nil
+	}
+	return a.Transport
+}
+
+func (a *AppscopeConfigConfig) GetLog() *AppscopeConfigLog {
 	if a == nil {
 		return nil
 	}
 	return a.Log
 }
 
-func (a *AppscopeConfigLibscope) GetSummaryperiod() *float64 {
+type AppscopeConfigLibscope struct {
+	Config *AppscopeConfigConfig `json:"config,omitempty"`
+}
+
+func (a *AppscopeConfigLibscope) GetConfig() *AppscopeConfigConfig {
 	if a == nil {
 		return nil
 	}
-	return a.Summaryperiod
+	return a.Config
 }
 
-type AppscopeConfigMetricFormat struct {
-	Statsdmaxlen *float64 `json:"statsdmaxlen,omitempty"`
-	Statsdprefix *string  `json:"statsdprefix,omitempty"`
-	Type         *string  `json:"type,omitempty"`
-	Verbosity    *float64 `json:"verbosity,omitempty"`
+type AppscopeConfigMetricFormat string
+
+const (
+	AppscopeConfigMetricFormatStatsd AppscopeConfigMetricFormat = "statsd"
+	AppscopeConfigMetricFormatNdjson AppscopeConfigMetricFormat = "ndjson"
+)
+
+func (e AppscopeConfigMetricFormat) ToPointer() *AppscopeConfigMetricFormat {
+	return &e
+}
+func (e *AppscopeConfigMetricFormat) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "statsd":
+		fallthrough
+	case "ndjson":
+		*e = AppscopeConfigMetricFormat(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AppscopeConfigMetricFormat: %v", v)
+	}
 }
 
-func (a *AppscopeConfigMetricFormat) GetStatsdmaxlen() *float64 {
+type AppscopeConfigMetric struct {
+	Enable       *bool                       `json:"enable,omitempty"`
+	Format       *AppscopeConfigMetricFormat `json:"format,omitempty"`
+	Statsdmaxlen *float64                    `json:"statsdmaxlen,omitempty"`
+	Transport    *AppscopeTransport          `json:"transport,omitempty"`
+}
+
+func (a *AppscopeConfigMetric) GetEnable() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.Enable
+}
+
+func (a *AppscopeConfigMetric) GetFormat() *AppscopeConfigMetricFormat {
+	if a == nil {
+		return nil
+	}
+	return a.Format
+}
+
+func (a *AppscopeConfigMetric) GetStatsdmaxlen() *float64 {
 	if a == nil {
 		return nil
 	}
 	return a.Statsdmaxlen
 }
 
-func (a *AppscopeConfigMetricFormat) GetStatsdprefix() *string {
+func (a *AppscopeConfigMetric) GetTransport() *AppscopeTransport {
 	if a == nil {
 		return nil
-	}
-	return a.Statsdprefix
-}
-
-func (a *AppscopeConfigMetricFormat) GetType() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Type
-}
-
-func (a *AppscopeConfigMetricFormat) GetVerbosity() *float64 {
-	if a == nil {
-		return nil
-	}
-	return a.Verbosity
-}
-
-type AppscopeConfigMetricWatch struct {
-}
-
-type AppscopeConfigMetric struct {
-	Enable    bool                        `json:"enable"`
-	Format    AppscopeConfigMetricFormat  `json:"format"`
-	Transport AppscopeTransport           `json:"transport"`
-	Watch     []AppscopeConfigMetricWatch `json:"watch"`
-}
-
-func (a *AppscopeConfigMetric) GetEnable() bool {
-	if a == nil {
-		return false
-	}
-	return a.Enable
-}
-
-func (a *AppscopeConfigMetric) GetFormat() AppscopeConfigMetricFormat {
-	if a == nil {
-		return AppscopeConfigMetricFormat{}
-	}
-	return a.Format
-}
-
-func (a *AppscopeConfigMetric) GetTransport() AppscopeTransport {
-	if a == nil {
-		return AppscopeTransport{}
 	}
 	return a.Transport
 }
 
-func (a *AppscopeConfigMetric) GetWatch() []AppscopeConfigMetricWatch {
-	if a == nil {
-		return []AppscopeConfigMetricWatch{}
-	}
-	return a.Watch
-}
-
 type AppscopeConfigPayload struct {
-	Dir    string `json:"dir"`
-	Enable bool   `json:"enable"`
+	Dir    *string `json:"dir,omitempty"`
+	Enable *bool   `json:"enable,omitempty"`
 }
 
-func (a *AppscopeConfigPayload) GetDir() string {
+func (a *AppscopeConfigPayload) GetDir() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.Dir
 }
 
-func (a *AppscopeConfigPayload) GetEnable() bool {
+func (a *AppscopeConfigPayload) GetEnable() *bool {
 	if a == nil {
-		return false
+		return nil
 	}
 	return a.Enable
 }

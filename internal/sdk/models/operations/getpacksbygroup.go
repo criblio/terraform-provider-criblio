@@ -9,10 +9,9 @@ import (
 
 type GetPacksByGroupRequest struct {
 	// Comma separated list of entities, "outputs", "inputs"
-	With *string `queryParam:"style=form,explode=true,name=with"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
-	GroupID  string `pathParam:"style=simple,explode=false,name=groupId"`
-	Disabled *bool  `queryParam:"style=form,explode=true,name=disabled"`
+	With     *string `queryParam:"style=form,explode=true,name=with"`
+	GroupID  string  `pathParam:"style=simple,explode=false,name=groupId"`
+	Disabled *bool   `queryParam:"style=form,explode=true,name=disabled"`
 }
 
 func (g *GetPacksByGroupRequest) GetWith() *string {

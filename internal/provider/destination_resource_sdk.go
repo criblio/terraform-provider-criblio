@@ -17851,12 +17851,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			writeHighWaterMark5 = nil
 		}
-		onBackpressure51 := new(shared.OutputDlS3BackpressureBehavior)
-		if !r.OutputDlS3.OnBackpressure.IsUnknown() && !r.OutputDlS3.OnBackpressure.IsNull() {
-			*onBackpressure51 = shared.OutputDlS3BackpressureBehavior(r.OutputDlS3.OnBackpressure.ValueString())
-		} else {
-			onBackpressure51 = nil
-		}
 		deadletterEnabled7 := new(bool)
 		if !r.OutputDlS3.DeadletterEnabled.IsUnknown() && !r.OutputDlS3.DeadletterEnabled.IsNull() {
 			*deadletterEnabled7 = r.OutputDlS3.DeadletterEnabled.ValueBool()
@@ -18055,7 +18049,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			MaxOpenFiles:                  maxOpenFiles7,
 			HeaderLine:                    headerLine5,
 			WriteHighWaterMark:            writeHighWaterMark5,
-			OnBackpressure:                onBackpressure51,
 			DeadletterEnabled:             deadletterEnabled7,
 			OnDiskFullBackpressure:        onDiskFullBackpressure7,
 			MaxFileOpenTimeSec:            maxFileOpenTimeSec7,
@@ -18258,11 +18251,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			writeHighWaterMark6 = nil
 		}
-		onBackpressure52 := new(shared.OutputSecurityLakeBackpressureBehavior)
+		onBackpressure51 := new(shared.OutputSecurityLakeBackpressureBehavior)
 		if !r.OutputSecurityLake.OnBackpressure.IsUnknown() && !r.OutputSecurityLake.OnBackpressure.IsNull() {
-			*onBackpressure52 = shared.OutputSecurityLakeBackpressureBehavior(r.OutputSecurityLake.OnBackpressure.ValueString())
+			*onBackpressure51 = shared.OutputSecurityLakeBackpressureBehavior(r.OutputSecurityLake.OnBackpressure.ValueString())
 		} else {
-			onBackpressure52 = nil
+			onBackpressure51 = nil
 		}
 		deadletterEnabled8 := new(bool)
 		if !r.OutputSecurityLake.DeadletterEnabled.IsUnknown() && !r.OutputSecurityLake.DeadletterEnabled.IsNull() {
@@ -18455,7 +18448,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			MaxOpenFiles:                  maxOpenFiles8,
 			HeaderLine:                    headerLine6,
 			WriteHighWaterMark:            writeHighWaterMark6,
-			OnBackpressure:                onBackpressure52,
+			OnBackpressure:                onBackpressure51,
 			DeadletterEnabled:             deadletterEnabled8,
 			OnDiskFullBackpressure:        onDiskFullBackpressure8,
 			MaxFileOpenTimeSec:            maxFileOpenTimeSec8,
@@ -18501,6 +18494,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			destPath7 = nil
 		}
+		onBackpressure52 := new(shared.OutputCriblLakeBackpressureBehavior)
+		if !r.OutputCriblLake.OnBackpressure.IsUnknown() && !r.OutputCriblLake.OnBackpressure.IsNull() {
+			*onBackpressure52 = shared.OutputCriblLakeBackpressureBehavior(r.OutputCriblLake.OnBackpressure.ValueString())
+		} else {
+			onBackpressure52 = nil
+		}
 		description57 := new(string)
 		if !r.OutputCriblLake.Description.IsUnknown() && !r.OutputCriblLake.Description.IsNull() {
 			*description57 = r.OutputCriblLake.Description.ValueString()
@@ -18508,10 +18507,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			description57 = nil
 		}
 		outputCriblLake = &shared.OutputCriblLake{
-			ID:          id57,
-			Type:        typeVar57,
-			DestPath:    destPath7,
-			Description: description57,
+			ID:             id57,
+			Type:           typeVar57,
+			DestPath:       destPath7,
+			OnBackpressure: onBackpressure52,
+			Description:    description57,
 		}
 	}
 	if outputCriblLake != nil {

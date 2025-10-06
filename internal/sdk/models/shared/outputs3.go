@@ -237,6 +237,7 @@ type OutputS3BackpressureBehavior string
 const (
 	OutputS3BackpressureBehaviorBlock OutputS3BackpressureBehavior = "block"
 	OutputS3BackpressureBehaviorDrop  OutputS3BackpressureBehavior = "drop"
+	OutputS3BackpressureBehaviorQueue OutputS3BackpressureBehavior = "queue"
 )
 
 func (e OutputS3BackpressureBehavior) ToPointer() *OutputS3BackpressureBehavior {
@@ -251,6 +252,8 @@ func (e *OutputS3BackpressureBehavior) UnmarshalJSON(data []byte) error {
 	case "block":
 		fallthrough
 	case "drop":
+		fallthrough
+	case "queue":
 		*e = OutputS3BackpressureBehavior(v)
 		return nil
 	default:

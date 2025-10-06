@@ -1,18 +1,18 @@
 resource "criblio_pipeline" "my_pipeline" {
   conf = {
-    async_func_timeout = 9527
-    description        = "...my_description..."
+    async_func_timeout = 5000
+    description        = "Main pipeline for app logs"
     functions = [
       {
         conf = {
           key = jsonencode("value")
         }
-        description = "...my_description..."
-        disabled    = true
-        filter      = "...my_filter..."
-        final       = true
-        group_id    = "...my_group_id..."
-        id          = "...my_id..."
+        description = "Parse and enrich fields"
+        disabled    = false
+        filter      = "_source == \"app\""
+        final       = false
+        group_id    = "default"
+        id          = "eval"
       }
     ]
     groups = {
@@ -22,11 +22,12 @@ resource "criblio_pipeline" "my_pipeline" {
         name        = "...my_name..."
       }
     }
-    output = "...my_output..."
+    output = "OutputSplunk"
     streamtags = [
-      "..."
+      "prod",
+      "app",
     ]
   }
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "Cribl"
+  id       = "main"
 }

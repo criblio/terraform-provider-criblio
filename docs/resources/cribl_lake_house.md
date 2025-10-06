@@ -14,10 +14,10 @@ CriblLakeHouse Resource
 
 ```terraform
 resource "criblio_cribl_lake_house" "my_cribllakehouse" {
-  description = "...my_description..."
-  id          = "...my_id..."
-  status      = "...my_status..."
-  tier_size   = "3xlarge"
+  description = "My Lakehouse description"
+  id          = "MyLakehouseId"
+  status      = "operational"
+  tier_size   = "small"
 }
 ```
 
@@ -34,6 +34,20 @@ resource "criblio_cribl_lake_house" "my_cribllakehouse" {
 - `status` (String) Status of the lakehouse
 - `tier_size` (String) Size of the lakehouse tier. Default: "small"; must be one of ["small", "medium", "large", "xlarge", "2xlarge", "3xlarge", "6xlarge"]
 
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `description` (String) Description of the lakehouse
+- `id` (String) Unique identifier for the lakehouse
+- `status` (String) Status of the lakehouse
+- `tier_size` (String) Size of the lakehouse tier. Default: "small"; must be one of ["small", "medium", "large", "xlarge", "2xlarge", "3xlarge", "6xlarge"]
+
 ## Import
 
 Import is supported using the following syntax:
@@ -43,12 +57,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_cribl_lake_house.my_criblio_cribl_lake_house
-  id = "..."
+  id = "lakehouse-01"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_cribl_lake_house.my_criblio_cribl_lake_house "..."
+terraform import criblio_cribl_lake_house.my_criblio_cribl_lake_house "lakehouse-01"
 ```

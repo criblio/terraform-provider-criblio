@@ -15,79 +15,82 @@ Collector Resource
 ```terraform
 resource "criblio_collector" "my_collector" {
   group_id = "default"
-  id       = "...my_id..."
+  id       = "collector-2"
   input_collector_azure_blob = {
     collector = {
       conf = {
-        auth_type         = "clientCert"
-        connection_string = "...my_connection_string..."
-        container_name    = "...my_container_name..."
+        auth_type         = "manual"
+        connection_string = "DefaultEndpointsProtocol=https;AccountName=mystorageaccount;AccountKey=abc123;EndpointSuffix=core.windows.net"
+        container_name    = "my-container"
         extractors = [
           {
             # ...
           }
         ]
-        max_batch_size       = 7
-        path                 = "...my_path..."
-        recurse              = false
-        storage_account_name = "...my_storage_account_name..."
+        max_batch_size       = 500
+        path                 = "container/logs/2025/10/"
+        recurse              = true
+        storage_account_name = "mystorageaccount"
       }
       type = "azureblob"
     }
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
+    ignore_group_jobs_limit = false
     input = {
       breaker_rulesets = [
-        "..."
+        "rule1",
+        "rule2",
       ]
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "sourceType"
+          value = "`value_expression`"
         }
       ]
-      output   = "...my_output..."
-      pipeline = "...my_pipeline..."
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
       preprocess = {
         args = [
-          "..."
+          "--flag",
+          "value",
         ]
-        command  = "...my_command..."
-        disabled = false
+        command  = "cat"
+        disabled = true
       }
       send_to_routes         = true
-      stale_channel_flush_ms = 15172601.08
-      throttle_rate_per_sec  = "...my_throttle_rate_per_sec..."
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
       type                   = "collection"
     }
     remove_fields = [
-      "..."
+      "field1",
+      "field2",
     ]
     resume_on_boot = true
     saved_state = {
       # ...
     }
     schedule = {
-      cron_schedule       = "...my_cron_schedule..."
+      cron_schedule       = "0 * * * *"
       enabled             = true
-      max_concurrent_runs = 3.7
+      max_concurrent_runs = 2
       resume_missed       = true
       run = {
-        earliest                 = 4.68
-        expression               = "...my_expression..."
-        job_timeout              = "...my_job_timeout..."
-        latest                   = 6.6
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
         log_level                = "debug"
-        max_task_reschedule      = 5.24
-        max_task_size            = "...my_max_task_size..."
-        min_task_size            = "...my_min_task_size..."
-        mode                     = "run"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
+        mode                     = "list"
         reschedule_dropped_tasks = true
         state_tracking = {
-          enabled                 = false
-          state_merge_expression  = "...my_state_merge_expression..."
-          state_update_expression = "...my_state_update_expression..."
+          enabled                 = true
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
         }
         time_range_type = "relative"
         time_warning = {
@@ -97,149 +100,157 @@ resource "criblio_collector" "my_collector" {
       skippable = false
     }
     streamtags = [
-      "..."
+      "tag1",
+      "tag2",
     ]
-    ttl             = "...my_ttl..."
-    worker_affinity = true
+    ttl             = "2h"
+    worker_affinity = false
   }
   input_collector_cribl_lake = {
     collector = {
       conf = {
-        dataset = "...my_dataset..."
+        dataset = "my-dataset"
       }
       type = "cribllake"
     }
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
     ignore_group_jobs_limit = false
     input = {
       breaker_rulesets = [
-        "..."
+        "rule1",
+        "rule2",
       ]
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "sourceType"
+          value = "`value_expression`"
         }
       ]
-      output   = "...my_output..."
-      pipeline = "...my_pipeline..."
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
       preprocess = {
         args = [
-          "..."
+          "--flag",
+          "value",
         ]
-        command  = "...my_command..."
+        command  = "cat"
         disabled = true
       }
       send_to_routes         = true
-      stale_channel_flush_ms = 35996665.2
-      throttle_rate_per_sec  = "...my_throttle_rate_per_sec..."
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
       type                   = "collection"
     }
     remove_fields = [
-      "..."
+      "field1",
+      "field2",
     ]
-    resume_on_boot = false
+    resume_on_boot = true
     saved_state = {
       # ...
     }
     schedule = {
-      cron_schedule       = "...my_cron_schedule..."
-      enabled             = false
-      max_concurrent_runs = 10.17
-      resume_missed       = false
+      cron_schedule       = "0 * * * *"
+      enabled             = true
+      max_concurrent_runs = 2
+      resume_missed       = true
       run = {
-        earliest                 = 3.52
-        expression               = "...my_expression..."
-        job_timeout              = "...my_job_timeout..."
-        latest                   = 3.89
-        log_level                = "warn"
-        max_task_reschedule      = 8.06
-        max_task_size            = "...my_max_task_size..."
-        min_task_size            = "...my_min_task_size..."
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
+        log_level                = "debug"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
         mode                     = "list"
         reschedule_dropped_tasks = true
         state_tracking = {
-          enabled                 = false
-          state_merge_expression  = "...my_state_merge_expression..."
-          state_update_expression = "...my_state_update_expression..."
+          enabled                 = true
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
         }
         time_range_type = "relative"
         time_warning = {
           # ...
         }
       }
-      skippable = true
+      skippable = false
     }
     streamtags = [
-      "..."
+      "tag1",
+      "tag2",
     ]
-    ttl             = "...my_ttl..."
+    ttl             = "2h"
     worker_affinity = false
   }
   input_collector_database = {
     collector = {
       conf = {
-        connection_id            = "...my_connection_id..."
-        query                    = "...my_query..."
-        query_validation_enabled = false
+        connection_id            = "myDatabaseConnection"
+        query                    = "SELECT * FROM logs WHERE severity = 'ERROR'"
+        query_validation_enabled = true
       }
       type = "database"
     }
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
     ignore_group_jobs_limit = false
     input = {
       breaker_rulesets = [
-        "..."
+        "rule1",
+        "rule2",
       ]
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "sourceType"
+          value = "`value_expression`"
         }
       ]
-      output   = "...my_output..."
-      pipeline = "...my_pipeline..."
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
       preprocess = {
         args = [
-          "..."
+          "--flag",
+          "value",
         ]
-        command  = "...my_command..."
-        disabled = false
+        command  = "cat"
+        disabled = true
       }
-      send_to_routes         = false
-      stale_channel_flush_ms = 13453157.01
-      throttle_rate_per_sec  = "...my_throttle_rate_per_sec..."
+      send_to_routes         = true
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
       type                   = "collection"
     }
     remove_fields = [
-      "..."
+      "field1",
+      "field2",
     ]
-    resume_on_boot = false
+    resume_on_boot = true
     saved_state = {
       # ...
     }
     schedule = {
-      cron_schedule       = "...my_cron_schedule..."
-      enabled             = false
-      max_concurrent_runs = 7.04
-      resume_missed       = false
+      cron_schedule       = "0 * * * *"
+      enabled             = true
+      max_concurrent_runs = 2
+      resume_missed       = true
       run = {
-        earliest                 = 6.12
-        expression               = "...my_expression..."
-        job_timeout              = "...my_job_timeout..."
-        latest                   = 4.5
-        log_level                = "info"
-        max_task_reschedule      = 6.3
-        max_task_size            = "...my_max_task_size..."
-        min_task_size            = "...my_min_task_size..."
-        mode                     = "preview"
-        reschedule_dropped_tasks = false
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
+        log_level                = "debug"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
+        mode                     = "list"
+        reschedule_dropped_tasks = true
         state_tracking = {
           enabled                 = true
-          state_merge_expression  = "...my_state_merge_expression..."
-          state_update_expression = "...my_state_update_expression..."
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
         }
         time_range_type = "relative"
         time_warning = {
@@ -249,166 +260,88 @@ resource "criblio_collector" "my_collector" {
       skippable = false
     }
     streamtags = [
-      "..."
+      "tag1",
+      "tag2",
     ]
-    ttl             = "...my_ttl..."
-    worker_affinity = true
+    ttl             = "2h"
+    worker_affinity = false
   }
   input_collector_gcs = {
     collector = {
       conf = {
-        auth_type = "clientSecret"
-        bucket    = "...my_bucket..."
+        auth_type = "manual"
+        bucket    = "my-gcs-bucket"
         extractors = [
           {
             # ...
           }
         ]
-        max_batch_size              = 5
-        path                        = "...my_path..."
-        recurse                     = false
-        service_account_credentials = "...my_service_account_credentials..."
+        max_batch_size              = 200
+        path                        = "logs/2025/10/"
+        recurse                     = true
+        service_account_credentials = "-----BEGIN PRIVATE KEY-----\nMIIEv...example...IDAQAB\n-----END PRIVATE KEY-----\n"
       }
       type = "gcs"
     }
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
     ignore_group_jobs_limit = false
     input = {
       breaker_rulesets = [
-        "..."
+        "rule1",
+        "rule2",
       ]
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "sourceType"
+          value = "`value_expression`"
         }
       ]
-      output   = "...my_output..."
-      pipeline = "...my_pipeline..."
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
       preprocess = {
         args = [
-          "..."
+          "--flag",
+          "value",
         ]
-        command  = "...my_command..."
-        disabled = false
+        command  = "cat"
+        disabled = true
       }
-      send_to_routes         = false
-      stale_channel_flush_ms = 32381408.37
-      throttle_rate_per_sec  = "...my_throttle_rate_per_sec..."
+      send_to_routes         = true
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
       type                   = "collection"
     }
     remove_fields = [
-      "..."
+      "field1",
+      "field2",
     ]
     resume_on_boot = true
     saved_state = {
       # ...
     }
     schedule = {
-      cron_schedule       = "...my_cron_schedule..."
-      enabled             = false
-      max_concurrent_runs = 9.94
+      cron_schedule       = "0 * * * *"
+      enabled             = true
+      max_concurrent_runs = 2
       resume_missed       = true
       run = {
-        earliest                 = 8.47
-        expression               = "...my_expression..."
-        job_timeout              = "...my_job_timeout..."
-        latest                   = 1.77
-        log_level                = "warn"
-        max_task_reschedule      = 10.09
-        max_task_size            = "...my_max_task_size..."
-        min_task_size            = "...my_min_task_size..."
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
+        log_level                = "debug"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
         mode                     = "list"
         reschedule_dropped_tasks = true
         state_tracking = {
-          enabled                 = false
-          state_merge_expression  = "...my_state_merge_expression..."
-          state_update_expression = "...my_state_update_expression..."
+          enabled                 = true
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
         }
         time_range_type = "relative"
-        time_warning = {
-          # ...
-        }
-      }
-      skippable = true
-    }
-    streamtags = [
-      "..."
-    ]
-    ttl             = "...my_ttl..."
-    worker_affinity = true
-  }
-  input_collector_health_check = {
-    collector = {
-      conf = {
-        authentication      = "tokenSecret"
-        collect_method      = "other"
-        collect_url         = "...my_collect_url..."
-        credentials_secret  = "...my_credentials_secret..."
-        password            = "...my_password..."
-        reject_unauthorized = true
-        timeout             = 926
-        username            = "...my_username..."
-      }
-      type = "healthcheck"
-    }
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = false
-    input = {
-      breaker_rulesets = [
-        "..."
-      ]
-      metadata = [
-        {
-          name  = "...my_name..."
-          value = "...my_value..."
-        }
-      ]
-      output   = "...my_output..."
-      pipeline = "...my_pipeline..."
-      preprocess = {
-        args = [
-          "..."
-        ]
-        command  = "...my_command..."
-        disabled = false
-      }
-      send_to_routes         = true
-      stale_channel_flush_ms = 30099853.21
-      throttle_rate_per_sec  = "...my_throttle_rate_per_sec..."
-      type                   = "collection"
-    }
-    remove_fields = [
-      "..."
-    ]
-    resume_on_boot = true
-    saved_state = {
-      # ...
-    }
-    schedule = {
-      cron_schedule       = "...my_cron_schedule..."
-      enabled             = true
-      max_concurrent_runs = 3.54
-      resume_missed       = true
-      run = {
-        earliest                 = 1.52
-        expression               = "...my_expression..."
-        job_timeout              = "...my_job_timeout..."
-        latest                   = 1.43
-        log_level                = "silly"
-        max_task_reschedule      = 1.88
-        max_task_size            = "...my_max_task_size..."
-        min_task_size            = "...my_min_task_size..."
-        mode                     = "preview"
-        reschedule_dropped_tasks = true
-        state_tracking = {
-          enabled                 = false
-          state_merge_expression  = "...my_state_merge_expression..."
-          state_update_expression = "...my_state_update_expression..."
-        }
-        time_range_type = "absolute"
         time_warning = {
           # ...
         }
@@ -416,56 +349,143 @@ resource "criblio_collector" "my_collector" {
       skippable = false
     }
     streamtags = [
-      "..."
+      "tag1",
+      "tag2",
     ]
-    ttl             = "...my_ttl..."
-    worker_affinity = true
+    ttl             = "2h"
+    worker_affinity = false
+  }
+  input_collector_health_check = {
+    collector = {
+      conf = {
+        authentication      = "none"
+        collect_method      = "get"
+        collect_url         = "https://api.example.com/health"
+        credentials_secret  = "healthCredSecret"
+        password            = "healthPassword"
+        reject_unauthorized = true
+        timeout             = 10
+        username            = "healthUser"
+      }
+      type = "healthcheck"
+    }
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
+    ignore_group_jobs_limit = false
+    input = {
+      breaker_rulesets = [
+        "rule1",
+        "rule2",
+      ]
+      metadata = [
+        {
+          name  = "sourceType"
+          value = "`value_expression`"
+        }
+      ]
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
+      preprocess = {
+        args = [
+          "--flag",
+          "value",
+        ]
+        command  = "cat"
+        disabled = true
+      }
+      send_to_routes         = true
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
+      type                   = "collection"
+    }
+    remove_fields = [
+      "field1",
+      "field2",
+    ]
+    resume_on_boot = true
+    saved_state = {
+      # ...
+    }
+    schedule = {
+      cron_schedule       = "0 * * * *"
+      enabled             = true
+      max_concurrent_runs = 2
+      resume_missed       = true
+      run = {
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
+        log_level                = "debug"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
+        mode                     = "list"
+        reschedule_dropped_tasks = true
+        state_tracking = {
+          enabled                 = true
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
+        }
+        time_range_type = "relative"
+        time_warning = {
+          # ...
+        }
+      }
+      skippable = false
+    }
+    streamtags = [
+      "tag1",
+      "tag2",
+    ]
+    ttl             = "2h"
+    worker_affinity = false
   }
   input_collector_rest = {
     collector = {
       conf = {
-        auth_header_expr = "...my_auth_header_expr..."
-        auth_header_key  = "...my_auth_header_key..."
+        auth_header_expr = "Bearer ${token}"
+        auth_header_key  = "Authorization"
         auth_request_headers = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "Content-Type"
+            value = "application/json"
           }
         ]
         auth_request_params = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "param1"
+            value = "value1"
           }
         ]
-        authentication           = "google_oauth"
+        authentication           = "basic"
         capture_headers          = true
-        client_secret_param_name = "...my_client_secret_param_name..."
+        client_secret_param_name = "client_secret"
         collect_method           = "get"
         collect_request_headers = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "Accept"
+            value = "application/json"
           }
         ]
         collect_request_params = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "limit"
+            value = "100"
           }
         ]
-        collect_url         = "...my_collect_url..."
-        credentials_secret  = "...my_credentials_secret..."
-        decode_url          = false
+        collect_url         = "https://api.example.com/data"
+        credentials_secret  = "restCredentialsSecret"
+        decode_url          = true
         disable_time_filter = false
         discovery = {
-          discover_body       = "...my_discover_body..."
-          discover_data_field = "...my_discover_data_field..."
+          discover_body       = "{\"discover\":true}"
+          discover_data_field = "results"
           discover_method     = "get"
           discover_request_headers = [
             {
-              name  = "...my_name..."
-              value = "...my_value..."
+              name  = "Authorization"
+              value = "Bearer token"
             }
           ]
           discover_request_params = [
@@ -474,138 +494,144 @@ resource "criblio_collector" "my_collector" {
             }
           ]
           discover_type        = "http"
-          discover_url         = "...my_discover_url..."
+          discover_url         = "https://api.example.com/discover"
           enable_discover_code = true
-          format_result_code   = "...my_format_result_code..."
+          format_result_code   = "200"
           item_list = [
-            "..."
+            "item1",
+            "item2",
           ]
           pagination = {
             attribute = [
-              "..."
+              "records",
             ]
-            last_page_expr     = "...my_last_page_expr..."
-            limit              = 2
-            limit_field        = "...my_limit_field..."
-            max_pages          = 2
-            offset             = 5
-            offset_field       = "...my_offset_field..."
-            page_field         = "...my_page_field..."
-            size               = 0
-            size_field         = "...my_size_field..."
-            total_record_field = "...my_total_record_field..."
-            type               = "page"
-            zero_indexed       = false
+            last_page_expr     = "$.data.isLastPage"
+            limit              = 100
+            limit_field        = "limit"
+            max_pages          = 10
+            offset             = 0
+            offset_field       = "offset"
+            page_field         = "page"
+            size               = 50
+            size_field         = "pageSize"
+            total_record_field = "totalRecords"
+            type               = "offset"
+            zero_indexed       = true
           }
         }
-        login_body = "...my_login_body..."
-        login_url  = "...my_login_url..."
+        login_body = "{\"username\":\"user\",\"password\":\"pass\"}"
+        login_url  = "https://api.example.com/login"
         pagination = {
           attribute = [
-            "..."
+            "records",
           ]
-          last_page_expr     = "...my_last_page_expr..."
-          limit              = 9
-          limit_field        = "...my_limit_field..."
-          max_pages          = 4
-          offset             = 7
-          offset_field       = "...my_offset_field..."
-          page_field         = "...my_page_field..."
-          size               = 8
-          size_field         = "...my_size_field..."
-          total_record_field = "...my_total_record_field..."
-          type               = "none"
-          zero_indexed       = false
+          last_page_expr     = "$.data.isLastPage"
+          limit              = 100
+          limit_field        = "limit"
+          max_pages          = 10
+          offset             = 0
+          offset_field       = "offset"
+          page_field         = "page"
+          size               = 50
+          size_field         = "pageSize"
+          total_record_field = "totalRecords"
+          type               = "offset"
+          zero_indexed       = true
         }
-        password            = "...my_password..."
+        password            = "restPassword"
         reject_unauthorized = true
         retry_rules = {
           codes = [
-            6
+            429,
+            500,
           ]
-          enable_header         = false
-          interval              = 5
-          limit                 = 9
-          max_interval_ms       = 8
-          multiplier            = 8.98
+          enable_header         = true
+          interval              = 500
+          limit                 = 3
+          max_interval_ms       = 10000
+          multiplier            = 1.5
           retry_connect_reset   = false
           retry_connect_timeout = true
-          retry_header_name     = "...my_retry_header_name..."
+          retry_header_name     = "Retry-After"
           type                  = "backoff"
         }
         safe_headers = [
-          "..."
+          "Content-Type",
+          "Authorization",
         ]
         scheduling = {
           state_tracking = {
             # ...
           }
         }
-        timeout              = 1766
-        token                = "...my_token..."
-        token_resp_attribute = "...my_token_resp_attribute..."
-        token_secret         = "...my_token_secret..."
-        use_round_robin_dns  = true
-        username             = "...my_username..."
+        timeout              = 30
+        token                = "restBearerToken"
+        token_resp_attribute = "access_token"
+        token_secret         = "restBearerTokenSecret"
+        use_round_robin_dns  = false
+        username             = "restUser"
       }
       type = "rest"
     }
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
+    ignore_group_jobs_limit = false
     input = {
       breaker_rulesets = [
-        "..."
+        "rule1",
+        "rule2",
       ]
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "sourceType"
+          value = "`value_expression`"
         }
       ]
-      output   = "...my_output..."
-      pipeline = "...my_pipeline..."
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
       preprocess = {
         args = [
-          "..."
+          "--flag",
+          "value",
         ]
-        command  = "...my_command..."
+        command  = "cat"
         disabled = true
       }
       send_to_routes         = true
-      stale_channel_flush_ms = 26906061.17
-      throttle_rate_per_sec  = "...my_throttle_rate_per_sec..."
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
       type                   = "collection"
     }
     remove_fields = [
-      "..."
+      "field1",
+      "field2",
     ]
-    resume_on_boot = false
+    resume_on_boot = true
     saved_state = {
       # ...
     }
     schedule = {
-      cron_schedule       = "...my_cron_schedule..."
-      enabled             = false
-      max_concurrent_runs = 7.88
+      cron_schedule       = "0 * * * *"
+      enabled             = true
+      max_concurrent_runs = 2
       resume_missed       = true
       run = {
-        earliest                 = 7.89
-        expression               = "...my_expression..."
-        job_timeout              = "...my_job_timeout..."
-        latest                   = 8.93
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
         log_level                = "debug"
-        max_task_reschedule      = 4.17
-        max_task_size            = "...my_max_task_size..."
-        min_task_size            = "...my_min_task_size..."
-        mode                     = "preview"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
+        mode                     = "list"
         reschedule_dropped_tasks = true
         state_tracking = {
-          enabled                 = false
-          state_merge_expression  = "...my_state_merge_expression..."
-          state_update_expression = "...my_state_update_expression..."
+          enabled                 = true
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
         }
-        time_range_type = "absolute"
+        time_range_type = "relative"
         time_warning = {
           # ...
         }
@@ -613,178 +639,91 @@ resource "criblio_collector" "my_collector" {
       skippable = false
     }
     streamtags = [
-      "..."
+      "tag1",
+      "tag2",
     ]
-    ttl             = "...my_ttl..."
+    ttl             = "2h"
     worker_affinity = false
   }
   input_collector_s3 = {
     collector = {
       conf = {
-        aws_api_key               = "...my_aws_api_key..."
+        aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
         aws_authentication_method = "auto"
-        aws_secret                = "...my_aws_secret..."
-        aws_secret_key            = "...my_aws_secret_key..."
-        bucket                    = "...my_bucket..."
+        aws_secret                = "awsSecretPairId"
+        aws_secret_key            = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+        bucket                    = "my-s3-bucket"
         extractors = [
           {
             # ...
           }
         ]
-        max_batch_size = 6
-        path           = "...my_path..."
-        recurse        = false
-        region         = "...my_region..."
+        max_batch_size = 100
+        path           = "logs/2025/10/"
+        recurse        = true
+        region         = "us-east-1"
       }
       type = "s3"
     }
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
-    ignore_group_jobs_limit = true
-    input = {
-      breaker_rulesets = [
-        "..."
-      ]
-      metadata = [
-        {
-          name  = "...my_name..."
-          value = "...my_value..."
-        }
-      ]
-      output   = "...my_output..."
-      pipeline = "...my_pipeline..."
-      preprocess = {
-        args = [
-          "..."
-        ]
-        command  = "...my_command..."
-        disabled = true
-      }
-      send_to_routes         = false
-      stale_channel_flush_ms = 8564102.73
-      throttle_rate_per_sec  = "...my_throttle_rate_per_sec..."
-      type                   = "collection"
-    }
-    remove_fields = [
-      "..."
-    ]
-    resume_on_boot = true
-    saved_state = {
-      # ...
-    }
-    schedule = {
-      cron_schedule       = "...my_cron_schedule..."
-      enabled             = false
-      max_concurrent_runs = 10.2
-      resume_missed       = false
-      run = {
-        earliest                 = 7.6
-        expression               = "...my_expression..."
-        job_timeout              = "...my_job_timeout..."
-        latest                   = 9.2
-        log_level                = "info"
-        max_task_reschedule      = 7.38
-        max_task_size            = "...my_max_task_size..."
-        min_task_size            = "...my_min_task_size..."
-        mode                     = "preview"
-        reschedule_dropped_tasks = false
-        state_tracking = {
-          enabled                 = true
-          state_merge_expression  = "...my_state_merge_expression..."
-          state_update_expression = "...my_state_update_expression..."
-        }
-        time_range_type = "absolute"
-        time_warning = {
-          # ...
-        }
-      }
-      skippable = true
-    }
-    streamtags = [
-      "..."
-    ]
-    ttl             = "...my_ttl..."
-    worker_affinity = true
-  }
-  input_collector_splunk = {
-    collector = {
-      conf = {
-        authentication       = "basic"
-        credentials_secret   = "...my_credentials_secret..."
-        disable_time_filter  = false
-        earliest             = "...my_earliest..."
-        endpoint             = "...my_endpoint..."
-        handle_escaped_chars = false
-        latest               = "...my_latest..."
-        output_mode          = "csv"
-        password             = "...my_password..."
-        reject_unauthorized  = false
-        search               = "...my_search..."
-        search_head          = "...my_search_head..."
-        timeout              = 297
-        token                = "...my_token..."
-        token_secret         = "...my_token_secret..."
-        use_round_robin_dns  = true
-        username             = "...my_username..."
-      }
-      type = "splunk"
-    }
-    environment             = "...my_environment..."
-    id                      = "...my_id..."
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
     ignore_group_jobs_limit = false
     input = {
       breaker_rulesets = [
-        "..."
+        "rule1",
+        "rule2",
       ]
       metadata = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "sourceType"
+          value = "`value_expression`"
         }
       ]
-      output   = "...my_output..."
-      pipeline = "...my_pipeline..."
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
       preprocess = {
         args = [
-          "..."
+          "--flag",
+          "value",
         ]
-        command  = "...my_command..."
+        command  = "cat"
         disabled = true
       }
-      send_to_routes         = false
-      stale_channel_flush_ms = 531943.62
-      throttle_rate_per_sec  = "...my_throttle_rate_per_sec..."
+      send_to_routes         = true
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
       type                   = "collection"
     }
     remove_fields = [
-      "..."
+      "field1",
+      "field2",
     ]
     resume_on_boot = true
     saved_state = {
       # ...
     }
     schedule = {
-      cron_schedule       = "...my_cron_schedule..."
-      enabled             = false
-      max_concurrent_runs = 6.42
+      cron_schedule       = "0 * * * *"
+      enabled             = true
+      max_concurrent_runs = 2
       resume_missed       = true
       run = {
-        earliest                 = 7.9
-        expression               = "...my_expression..."
-        job_timeout              = "...my_job_timeout..."
-        latest                   = 3.67
-        log_level                = "error"
-        max_task_reschedule      = 6.56
-        max_task_size            = "...my_max_task_size..."
-        min_task_size            = "...my_min_task_size..."
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
+        log_level                = "debug"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
         mode                     = "list"
         reschedule_dropped_tasks = true
         state_tracking = {
-          enabled                 = false
-          state_merge_expression  = "...my_state_merge_expression..."
-          state_update_expression = "...my_state_update_expression..."
+          enabled                 = true
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
         }
-        time_range_type = "absolute"
+        time_range_type = "relative"
         time_warning = {
           # ...
         }
@@ -792,9 +731,105 @@ resource "criblio_collector" "my_collector" {
       skippable = false
     }
     streamtags = [
-      "..."
+      "tag1",
+      "tag2",
     ]
-    ttl             = "...my_ttl..."
+    ttl             = "2h"
+    worker_affinity = false
+  }
+  input_collector_splunk = {
+    collector = {
+      conf = {
+        authentication       = "token"
+        credentials_secret   = "splunkCredentialsSecret"
+        disable_time_filter  = false
+        earliest             = "-24h"
+        endpoint             = "/services/search/jobs"
+        handle_escaped_chars = true
+        latest               = "now"
+        output_mode          = "json"
+        password             = "splunkPassword"
+        reject_unauthorized  = true
+        search               = "index=main sourcetype=syslog | stats count"
+        search_head          = "https://splunk.example.com"
+        timeout              = 60
+        token                = "splunkBearerToken"
+        token_secret         = "splunkBearerTokenSecret"
+        use_round_robin_dns  = false
+        username             = "splunkUser"
+      }
+      type = "splunk"
+    }
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
+    ignore_group_jobs_limit = false
+    input = {
+      breaker_rulesets = [
+        "rule1",
+        "rule2",
+      ]
+      metadata = [
+        {
+          name  = "sourceType"
+          value = "`value_expression`"
+        }
+      ]
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
+      preprocess = {
+        args = [
+          "--flag",
+          "value",
+        ]
+        command  = "cat"
+        disabled = true
+      }
+      send_to_routes         = true
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
+      type                   = "collection"
+    }
+    remove_fields = [
+      "field1",
+      "field2",
+    ]
+    resume_on_boot = true
+    saved_state = {
+      # ...
+    }
+    schedule = {
+      cron_schedule       = "0 * * * *"
+      enabled             = true
+      max_concurrent_runs = 2
+      resume_missed       = true
+      run = {
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
+        log_level                = "debug"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
+        mode                     = "list"
+        reschedule_dropped_tasks = true
+        state_tracking = {
+          enabled                 = true
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
+        }
+        time_range_type = "relative"
+        time_warning = {
+          # ...
+        }
+      }
+      skippable = false
+    }
+    streamtags = [
+      "tag1",
+      "tag2",
+    ]
+    ttl             = "2h"
     worker_affinity = false
   }
 }
@@ -2072,8 +2107,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_collector.my_criblio_collector
   id = jsonencode({
-    group_id = "default"
-    id = "..."
+    group_id = "myExistingGroupId"
+    id = "myExistingJobId"
   })
 }
 ```
@@ -2081,5 +2116,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_collector.my_criblio_collector '{"group_id": "default", "id": "..."}'
+terraform import criblio_collector.my_criblio_collector '{"group_id": "myExistingGroupId", "id": "myExistingJobId"}'
 ```

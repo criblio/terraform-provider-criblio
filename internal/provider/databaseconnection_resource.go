@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -33,18 +34,19 @@ type DatabaseConnectionResource struct {
 
 // DatabaseConnectionResourceModel describes the resource data model.
 type DatabaseConnectionResourceModel struct {
-	AuthType          types.String  `tfsdk:"auth_type"`
-	ConfigObj         types.String  `tfsdk:"config_obj"`
-	ConnectionString  types.String  `tfsdk:"connection_string"`
-	ConnectionTimeout types.Float64 `tfsdk:"connection_timeout"`
-	DatabaseType      types.String  `tfsdk:"database_type"`
-	Description       types.String  `tfsdk:"description"`
-	GroupID           types.String  `tfsdk:"group_id"`
-	ID                types.String  `tfsdk:"id"`
-	Password          types.String  `tfsdk:"password"`
-	RequestTimeout    types.Float64 `tfsdk:"request_timeout"`
-	Tags              types.String  `tfsdk:"tags"`
-	User              types.String  `tfsdk:"user"`
+	AuthType          types.String                       `tfsdk:"auth_type"`
+	ConfigObj         types.String                       `tfsdk:"config_obj"`
+	ConnectionString  types.String                       `tfsdk:"connection_string"`
+	ConnectionTimeout types.Float64                      `tfsdk:"connection_timeout"`
+	DatabaseType      types.String                       `tfsdk:"database_type"`
+	Description       types.String                       `tfsdk:"description"`
+	GroupID           types.String                       `tfsdk:"group_id"`
+	ID                types.String                       `tfsdk:"id"`
+	Items             []tfTypes.DatabaseConnectionConfig `tfsdk:"items"`
+	Password          types.String                       `tfsdk:"password"`
+	RequestTimeout    types.Float64                      `tfsdk:"request_timeout"`
+	Tags              types.String                       `tfsdk:"tags"`
+	User              types.String                       `tfsdk:"user"`
 }
 
 func (r *DatabaseConnectionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -92,6 +94,55 @@ func (r *DatabaseConnectionResource) Schema(ctx context.Context, req resource.Sc
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to PATCH`,
+			},
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"auth_type": schema.StringAttribute{
+							Computed: true,
+						},
+						"config_obj": schema.StringAttribute{
+							Computed: true,
+						},
+						"connection_string": schema.StringAttribute{
+							Computed: true,
+						},
+						"connection_timeout": schema.Float64Attribute{
+							Computed: true,
+						},
+						"database_type": schema.StringAttribute{
+							Computed:    true,
+							Description: `must be one of ["mysql", "oracle", "postgres", "sqlserver"]`,
+							Validators: []validator.String{
+								stringvalidator.OneOf(
+									"mysql",
+									"oracle",
+									"postgres",
+									"sqlserver",
+								),
+							},
+						},
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+						"password": schema.StringAttribute{
+							Computed: true,
+						},
+						"request_timeout": schema.Float64Attribute{
+							Computed: true,
+						},
+						"tags": schema.StringAttribute{
+							Computed: true,
+						},
+						"user": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
 			},
 			"password": schema.StringAttribute{
 				Computed: true,
@@ -188,6 +239,43 @@ func (r *DatabaseConnectionResource) Create(ctx context.Context, req resource.Cr
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1, request1Diags := data.ToOperationsGetDatabaseConnectionConfigByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.DatabaseConnections.GetDatabaseConnectionConfigByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatabaseConnectionConfigByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -237,11 +325,11 @@ func (r *DatabaseConnectionResource) Read(ctx context.Context, req resource.Read
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDatabaseConnectionConfig(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatabaseConnectionConfigByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -292,6 +380,43 @@ func (r *DatabaseConnectionResource) Update(ctx context.Context, req resource.Up
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedDatabaseConnectionConfig(ctx, &res.Object.Items[0])...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetDatabaseConnectionConfigByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.DatabaseConnections.GetDatabaseConnectionConfigByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatabaseConnectionConfigByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -359,17 +484,17 @@ func (r *DatabaseConnectionResource) ImportState(ctx context.Context, req resour
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "...", "id": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "conn-clickhouse"}': `+err.Error())
 		return
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"conn-clickhouse"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)

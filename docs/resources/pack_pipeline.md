@@ -15,19 +15,19 @@ PackPipeline Resource
 ```terraform
 resource "criblio_pack_pipeline" "my_packpipeline" {
   conf = {
-    async_func_timeout = 9066
-    description        = "...my_description..."
+    async_func_timeout = 5000
+    description        = "Main pipeline for app logs"
     functions = [
       {
         conf = {
           key = jsonencode("value")
         }
-        description = "...my_description..."
+        description = "Parse and enrich fields"
         disabled    = false
-        filter      = "...my_filter..."
-        final       = true
-        group_id    = "...my_group_id..."
-        id          = "...my_id..."
+        filter      = "_source == \"app\""
+        final       = false
+        group_id    = "default"
+        id          = "eval"
       }
     ]
     groups = {
@@ -37,14 +37,15 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
         name        = "...my_name..."
       }
     }
-    output = "...my_output..."
+    output = "OutputSplunk"
     streamtags = [
-      "..."
+      "prod",
+      "app",
     ]
   }
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
-  pack     = "...my_pack..."
+  group_id = "myExistingGroupId"
+  id       = "main"
+  pack     = "myExistingPackId"
 }
 ```
 
@@ -161,9 +162,9 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_pipeline.my_criblio_pack_pipeline
   id = jsonencode({
-    group_id = "..."
-    id = "..."
-    pack = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniquePipelineIdToCRUD"
+    pack = "myExistingPackId"
   })
 }
 ```
@@ -171,5 +172,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_pipeline.my_criblio_pack_pipeline '{"group_id": "...", "id": "...", "pack": "..."}'
+terraform import criblio_pack_pipeline.my_criblio_pack_pipeline '{"group_id": "myExistingGroupId", "id": "myUniquePipelineIdToCRUD", "pack": "myExistingPackId"}'
 ```

@@ -2,13 +2,13 @@ resource "criblio_project" "my_project" {
   consumers = {
     # ...
   }
-  description = "...my_description..."
+  description = "Default project configuration"
   destinations = [
-    "..."
+    "Output:main",
   ]
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "Cribl"
+  id       = "project-default"
   subscriptions = [
-    "..."
+    "sub-default",
   ]
 }

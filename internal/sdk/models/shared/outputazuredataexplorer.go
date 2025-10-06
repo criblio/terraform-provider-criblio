@@ -720,6 +720,7 @@ type OutputAzureDataExplorer struct {
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+	//
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.
 	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`

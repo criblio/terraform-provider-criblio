@@ -843,6 +843,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -976,8 +979,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Computed: true,
 						Optional: true,
 						Default:  booldefault.StaticBool(true),
-						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
-							`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).` + "\n" +
+							`` + "\n" +
+							`        Enabled by default. When this setting is also present in TLS Settings (Client Side),` + "\n" +
 							`        that value will take precedence.` + "\n" +
 							`Default: true`,
 					},
@@ -1045,7 +1049,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -1123,7 +1127,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -1359,7 +1363,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
@@ -1693,6 +1697,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -1829,7 +1836,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -1882,7 +1889,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -1928,11 +1935,11 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 					"workspace_id": schema.StringAttribute{
 						Optional:    true,
-						Description: `Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.`,
+						Description: `Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.`,
 					},
 					"workspace_key": schema.StringAttribute{
 						Optional:    true,
-						Description: `Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.`,
+						Description: `Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.`,
 					},
 				},
 				Validators: []validator.Object{
@@ -2172,6 +2179,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -2302,8 +2312,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Computed: true,
 						Optional: true,
 						Default:  booldefault.StaticBool(true),
-						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
-							`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).` + "\n" +
+							`` + "\n" +
+							`        Enabled by default. When this setting is also present in TLS Settings (Client Side),` + "\n" +
 							`        that value will take precedence.` + "\n" +
 							`Default: true`,
 					},
@@ -2339,7 +2350,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -2415,7 +2426,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -3059,7 +3070,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1),
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry. Default: 1`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 							"request_timeout": schema.Float64Attribute{
@@ -3170,7 +3181,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
@@ -3495,7 +3506,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -3570,6 +3581,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -3702,7 +3716,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -3755,7 +3769,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -3892,6 +3906,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -3986,6 +4003,18 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"id": schema.StringAttribute{
 						Required:    true,
 						Description: `Unique ID for this output`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`block`),
+						Description: `How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"block",
+								"drop",
+							),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -4094,7 +4123,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -4154,6 +4183,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -4192,6 +4224,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -4554,6 +4589,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -4686,7 +4724,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -4743,7 +4781,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -4980,6 +5018,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -5116,7 +5157,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -5227,7 +5268,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -5259,6 +5300,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -5452,6 +5496,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -5588,7 +5635,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -5662,7 +5709,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -5698,6 +5745,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -6423,18 +6473,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							),
 						},
 					},
-					"on_backpressure": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`block`),
-						Description: `How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"block",
-								"drop",
-							),
-						},
-					},
 					"on_disk_full_backpressure": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -6789,7 +6827,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(50000),
+							float64validator.Between(0, 50000),
 						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
@@ -6936,7 +6974,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -7005,7 +7043,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -7041,6 +7079,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -7436,7 +7477,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -7489,7 +7530,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -7657,7 +7698,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"doc_type": schema.StringAttribute{
@@ -7771,6 +7812,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -7903,7 +7947,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -7962,7 +8006,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -8015,6 +8059,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -8228,6 +8275,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -8360,7 +8410,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -8413,7 +8463,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -9355,6 +9405,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -9495,7 +9548,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -9556,7 +9609,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -9588,6 +9641,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -9813,6 +9869,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Max number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -10027,6 +10086,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"total_splits_expression": schema.StringAttribute{
 						Optional:    true,
@@ -11008,6 +11070,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"max_payload_size_kb": schema.Float64Attribute{
 								Computed:    true,
@@ -11209,7 +11274,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 											Default:     float64default.StaticFloat64(1000),
 											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 											Validators: []validator.Float64{
-												float64validator.AtMost(600000),
+												float64validator.Between(0, 600000),
 											},
 										},
 										"max_backoff": schema.Float64Attribute{
@@ -11262,7 +11327,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 										Default:     float64default.StaticFloat64(1000),
 										Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 										Validators: []validator.Float64{
-											float64validator.AtMost(600000),
+											float64validator.Between(0, 600000),
 										},
 									},
 									"max_backoff": schema.Float64Attribute{
@@ -11444,6 +11509,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order. Default: 0`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(0),
+								},
 							},
 							"max_payload_size_kb": schema.Float64Attribute{
 								Computed:    true,
@@ -11645,7 +11713,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 											Default:     float64default.StaticFloat64(1000),
 											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 											Validators: []validator.Float64{
-												float64validator.AtMost(600000),
+												float64validator.Between(0, 600000),
 											},
 										},
 										"max_backoff": schema.Float64Attribute{
@@ -11698,7 +11766,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 										Default:     float64default.StaticFloat64(1000),
 										Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 										Validators: []validator.Float64{
-											float64validator.AtMost(600000),
+											float64validator.Between(0, 600000),
 										},
 									},
 									"max_backoff": schema.Float64Attribute{
@@ -11835,7 +11903,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -12152,6 +12220,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -12284,7 +12355,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -12345,7 +12416,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -12548,6 +12619,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -12680,7 +12754,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -12737,7 +12811,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -12976,6 +13050,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -13147,7 +13224,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -13212,7 +13289,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -13534,7 +13611,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1),
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry. Default: 1`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 							"request_timeout": schema.Float64Attribute{
@@ -13645,7 +13722,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
@@ -13846,7 +13923,8 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Computed: true,
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
-								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
@@ -14351,6 +14429,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Defaults to 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -14503,7 +14584,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -14560,7 +14641,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -14596,6 +14677,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -15386,7 +15470,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1),
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry. Default: 1`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(100),
+									float64validator.Between(0, 100),
 								},
 							},
 							"request_timeout": schema.Float64Attribute{
@@ -15497,7 +15581,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(100),
+							float64validator.Between(0, 100),
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
@@ -15697,7 +15781,8 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Computed: true,
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
-								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
@@ -15798,7 +15883,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every datagram sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -16019,6 +16104,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -16197,7 +16285,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -16254,7 +16342,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -16286,6 +16374,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -16465,6 +16556,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -16610,7 +16704,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -16667,7 +16761,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -17100,8 +17194,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Computed: true,
 						Optional: true,
 						Default:  booldefault.StaticBool(true),
-						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
-							`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).` + "\n" +
+							`` + "\n" +
+							`        Enabled by default. When this setting is also present in TLS Settings (Client Side),` + "\n" +
 							`        that value will take precedence.` + "\n" +
 							`Default: true`,
 					},
@@ -17137,7 +17232,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -17202,7 +17297,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -17288,7 +17383,8 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Computed: true,
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
-								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
@@ -17491,6 +17587,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -17670,7 +17769,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -17741,7 +17840,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -18473,11 +18572,12 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Computed:    true,
 						Optional:    true,
 						Default:     stringdefault.StaticString(`block`),
-						Description: `How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop"]`,
+						Description: `How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop", "queue"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"block",
 								"drop",
+								"queue",
 							),
 						},
 					},
@@ -19259,8 +19359,8 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"custom_event_delimiter": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Default:     stringdefault.StaticString(`\n`),
-						Description: `Delimiter string to insert between individual events. Defaults to newline character. Default: "\\n"`,
+						Default:     stringdefault.StaticString(``),
+						Description: `Delimiter string to insert between individual events. Defaults to newline character. Default: "\n"`,
 					},
 					"custom_payload_expression": schema.StringAttribute{
 						Computed:    true,
@@ -19316,7 +19416,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 							},
 						},
-						Description: `Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields).`,
+						Description: `Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field.`,
 					},
 					"failed_request_logging_mode": schema.StringAttribute{
 						Computed:    true,
@@ -19379,6 +19479,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -19511,7 +19614,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -19578,7 +19681,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -19610,6 +19713,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -19994,7 +20100,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -20047,7 +20153,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -20133,7 +20239,8 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Computed: true,
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
-								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
@@ -20305,6 +20412,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -20443,7 +20553,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -20500,7 +20610,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -20626,7 +20736,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -21103,6 +21213,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1),
 						Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur. Default: 1`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_s2_sversion": schema.StringAttribute{
 						Computed:    true,
@@ -21427,7 +21540,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"enable_multi_metrics": schema.BoolAttribute{
@@ -21503,6 +21616,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -21641,7 +21757,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -21704,7 +21820,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -21773,6 +21889,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -21903,7 +22022,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"enable_ack": schema.BoolAttribute{
@@ -21966,6 +22085,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -22083,12 +22205,18 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_failed_health_checks": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1),
 						Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur. Default: 1`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_s2_sversion": schema.StringAttribute{
 						Computed:    true,
@@ -22198,7 +22326,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(100),
 						Description: `How long (in milliseconds) each LB endpoint can report blocked before the Destination reports unhealthy, blocking the sender. (Grace period for fluctuations.) Use 0 to disable; max 1 minute. Default: 100`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(60000),
+							float64validator.Between(0, 60000),
 						},
 					},
 					"streamtags": schema.ListAttribute{
@@ -22283,7 +22411,8 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Computed: true,
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
-								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
@@ -22720,7 +22849,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -22972,7 +23101,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -23228,11 +23357,11 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 					"custom_category": schema.StringAttribute{
 						Optional:    true,
-						Description: `Override the source category configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceCategory field.`,
+						Description: `Override the source category configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceCategory field.`,
 					},
 					"custom_source": schema.StringAttribute{
 						Optional:    true,
-						Description: `Override the source name configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceName field.`,
+						Description: `Override the source name configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceName field.`,
 					},
 					"description": schema.StringAttribute{
 						Optional: true,
@@ -23295,6 +23424,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -23427,7 +23559,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -23480,7 +23612,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -23512,6 +23644,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -23933,7 +24068,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every message sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"write_timeout": schema.Float64Attribute{
@@ -24058,7 +24193,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -24111,6 +24246,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -24149,6 +24287,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -24511,6 +24652,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -24643,7 +24787,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -24700,7 +24844,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -24881,8 +25025,8 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"custom_event_delimiter": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Default:     stringdefault.StaticString(`\n`),
-						Description: `Delimiter string to insert between individual events. Defaults to newline character. Default: "\\n"`,
+						Default:     stringdefault.StaticString(``),
+						Description: `Delimiter string to insert between individual events. Defaults to newline character. Default: "\n"`,
 					},
 					"custom_payload_expression": schema.StringAttribute{
 						Computed:    true,
@@ -24905,7 +25049,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -25010,6 +25154,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -25190,7 +25337,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -25255,7 +25402,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -25363,6 +25510,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -25394,6 +25544,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -25511,7 +25664,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.AtMost(86400),
+							float64validator.Between(0, 86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -25581,6 +25734,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -25713,7 +25869,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.AtMost(600000),
+										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -25779,7 +25935,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtMost(600000),
+									float64validator.Between(0, 600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -25815,6 +25971,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -25846,6 +26005,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
+									Validators: []validator.Float64{
+										float64validator.AtLeast(0),
+									},
 								},
 							},
 						},
@@ -26177,17 +26339,17 @@ func (r *DestinationResource) ImportState(ctx context.Context, req resource.Impo
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "...", "id": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "out-s3-main"}': `+err.Error())
 		return
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"out-s3-main"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)

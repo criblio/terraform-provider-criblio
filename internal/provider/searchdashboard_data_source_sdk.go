@@ -4,10 +4,8 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -17,8 +15,8 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 
 	r.CacheTTLSeconds = types.Float64PointerValue(resp.CacheTTLSeconds)
 	r.Category = types.StringPointerValue(resp.Category)
-	r.Created = types.Float64Value(resp.Created)
-	r.CreatedBy = types.StringValue(resp.CreatedBy)
+	r.Created = types.Float64PointerValue(resp.Created)
+	r.CreatedBy = types.StringPointerValue(resp.CreatedBy)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.DisplayCreatedBy = types.StringPointerValue(resp.DisplayCreatedBy)
 	r.DisplayModifiedBy = types.StringPointerValue(resp.DisplayModifiedBy)
@@ -29,115 +27,117 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 
 		if elementsItem.Element != nil {
 			elements.Element = &tfTypes.Element{}
+			elements.Element.ColorPalette = types.StringValue(elementsItem.Element.ColorPalette)
 			elements.Element.Description = types.StringPointerValue(elementsItem.Element.Description)
 			elements.Element.Empty = types.BoolPointerValue(elementsItem.Element.Empty)
+			elements.Element.H = types.Float64PointerValue(elementsItem.Element.H)
 			elements.Element.HidePanel = types.BoolPointerValue(elementsItem.Element.HidePanel)
 			elements.Element.HorizontalChart = types.BoolPointerValue(elementsItem.Element.HorizontalChart)
-			elements.Element.ID = types.StringValue(elementsItem.Element.ID)
-			elements.Element.Index = types.Float64PointerValue(elementsItem.Element.Index)
-			elements.Element.InputID = types.StringPointerValue(elementsItem.Element.InputID)
-			elements.Element.Layout.H = types.Float64Value(elementsItem.Element.Layout.H)
-			elements.Element.Layout.W = types.Float64Value(elementsItem.Element.Layout.W)
-			elements.Element.Layout.X = types.Float64Value(elementsItem.Element.Layout.X)
-			elements.Element.Layout.Y = types.Float64Value(elementsItem.Element.Layout.Y)
-			if elementsItem.Element.Search.SearchQuerySaved != nil {
-				elements.Element.Search.SearchQuerySaved = &tfTypes.SearchQuerySaved{}
-				elements.Element.Search.SearchQuerySaved.Query = types.StringPointerValue(elementsItem.Element.Search.SearchQuerySaved.Query)
-				elements.Element.Search.SearchQuerySaved.QueryID = types.StringValue(elementsItem.Element.Search.SearchQuerySaved.QueryID)
-				if elementsItem.Element.Search.SearchQuerySaved.RunMode != nil {
-					elements.Element.Search.SearchQuerySaved.RunMode = types.StringValue(string(*elementsItem.Element.Search.SearchQuerySaved.RunMode))
-				} else {
-					elements.Element.Search.SearchQuerySaved.RunMode = types.StringNull()
-				}
-				elements.Element.Search.SearchQuerySaved.Type = types.StringValue(string(elementsItem.Element.Search.SearchQuerySaved.Type))
+			elements.Element.ID = types.StringPointerValue(elementsItem.Element.ID)
+			if elementsItem.Element.Layout == nil {
+				elements.Element.Layout = nil
+			} else {
+				elements.Element.Layout = &tfTypes.DashboardLayout{}
+				elements.Element.Layout.H = types.Float64Value(elementsItem.Element.Layout.H)
+				elements.Element.Layout.W = types.Float64Value(elementsItem.Element.Layout.W)
+				elements.Element.Layout.X = types.Float64Value(elementsItem.Element.Layout.X)
+				elements.Element.Layout.Y = types.Float64Value(elementsItem.Element.Layout.Y)
 			}
-			if elementsItem.Element.Search.SearchQueryInline != nil {
-				elements.Element.Search.SearchQueryInline = &tfTypes.SearchQueryInline{}
-				if elementsItem.Element.Search.SearchQueryInline.Earliest != nil {
-					elements.Element.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
-					if elementsItem.Element.Search.SearchQueryInline.Earliest.Str != nil {
-						elements.Element.Search.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Earliest.Str)
+			if elementsItem.Element.Query != nil {
+				elements.Element.Query = &tfTypes.SearchQuery{}
+				if elementsItem.Element.Query.SearchQuerySaved != nil {
+					elements.Element.Query.SearchQuerySaved = &tfTypes.SearchQuerySaved{}
+					elements.Element.Query.SearchQuerySaved.Query = types.StringPointerValue(elementsItem.Element.Query.SearchQuerySaved.Query)
+					elements.Element.Query.SearchQuerySaved.QueryID = types.StringValue(elementsItem.Element.Query.SearchQuerySaved.QueryID)
+					if elementsItem.Element.Query.SearchQuerySaved.RunMode != nil {
+						elements.Element.Query.SearchQuerySaved.RunMode = types.StringValue(string(*elementsItem.Element.Query.SearchQuerySaved.RunMode))
+					} else {
+						elements.Element.Query.SearchQuerySaved.RunMode = types.StringNull()
 					}
-					if elementsItem.Element.Search.SearchQueryInline.Earliest.Number != nil {
-						elements.Element.Search.SearchQueryInline.Earliest.Number = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.Earliest.Number)
-					}
+					elements.Element.Query.SearchQuerySaved.Type = types.StringValue(string(elementsItem.Element.Query.SearchQuerySaved.Type))
 				}
-				if elementsItem.Element.Search.SearchQueryInline.Latest != nil {
-					elements.Element.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
-					if elementsItem.Element.Search.SearchQueryInline.Latest.Str != nil {
-						elements.Element.Search.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Latest.Str)
+				if elementsItem.Element.Query.SearchQueryInline != nil {
+					elements.Element.Query.SearchQueryInline = &tfTypes.SearchQueryInline{}
+					if elementsItem.Element.Query.SearchQueryInline.Earliest != nil {
+						elements.Element.Query.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
+						if elementsItem.Element.Query.SearchQueryInline.Earliest.Str != nil {
+							elements.Element.Query.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Earliest.Str)
+						}
+						if elementsItem.Element.Query.SearchQueryInline.Earliest.Number != nil {
+							elements.Element.Query.SearchQueryInline.Earliest.Number = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.Earliest.Number)
+						}
 					}
-					if elementsItem.Element.Search.SearchQueryInline.Latest.Number != nil {
-						elements.Element.Search.SearchQueryInline.Latest.Number = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.Latest.Number)
+					if elementsItem.Element.Query.SearchQueryInline.Latest != nil {
+						elements.Element.Query.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
+						if elementsItem.Element.Query.SearchQueryInline.Latest.Str != nil {
+							elements.Element.Query.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Latest.Str)
+						}
+						if elementsItem.Element.Query.SearchQueryInline.Latest.Number != nil {
+							elements.Element.Query.SearchQueryInline.Latest.Number = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.Latest.Number)
+						}
 					}
+					elements.Element.Query.SearchQueryInline.ParentSearchID = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.ParentSearchID)
+					elements.Element.Query.SearchQueryInline.Query = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Query)
+					elements.Element.Query.SearchQueryInline.SampleRate = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.SampleRate)
+					elements.Element.Query.SearchQueryInline.Timezone = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Timezone)
+					elements.Element.Query.SearchQueryInline.Type = types.StringValue(string(elementsItem.Element.Query.SearchQueryInline.Type))
 				}
-				elements.Element.Search.SearchQueryInline.ParentSearchID = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.ParentSearchID)
-				elements.Element.Search.SearchQueryInline.Query = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Query)
-				elements.Element.Search.SearchQueryInline.SampleRate = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.SampleRate)
-				elements.Element.Search.SearchQueryInline.Timezone = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Timezone)
-				elements.Element.Search.SearchQueryInline.Type = types.StringValue(string(elementsItem.Element.Search.SearchQueryInline.Type))
-			}
-			if elementsItem.Element.Search.SearchQueryValues != nil {
-				elements.Element.Search.SearchQueryValues = &tfTypes.SearchQueryValues{}
-				elements.Element.Search.SearchQueryValues.Type = types.StringValue(string(elementsItem.Element.Search.SearchQueryValues.Type))
-				elements.Element.Search.SearchQueryValues.Values = make([]types.String, 0, len(elementsItem.Element.Search.SearchQueryValues.Values))
-				for _, v := range elementsItem.Element.Search.SearchQueryValues.Values {
-					elements.Element.Search.SearchQueryValues.Values = append(elements.Element.Search.SearchQueryValues.Values, types.StringValue(v))
+				if elementsItem.Element.Query.SearchQueryValues != nil {
+					elements.Element.Query.SearchQueryValues = &tfTypes.SearchQueryValues{}
+					elements.Element.Query.SearchQueryValues.Type = types.StringValue(string(elementsItem.Element.Query.SearchQueryValues.Type))
+					elements.Element.Query.SearchQueryValues.Values = make([]types.String, 0, len(elementsItem.Element.Query.SearchQueryValues.Values))
+					for _, v := range elementsItem.Element.Query.SearchQueryValues.Values {
+						elements.Element.Query.SearchQueryValues.Values = append(elements.Element.Query.SearchQueryValues.Values, types.StringValue(v))
+					}
 				}
 			}
 			elements.Element.Title = types.StringPointerValue(elementsItem.Element.Title)
 			elements.Element.Type = types.StringValue(string(elementsItem.Element.Type))
-			if len(elementsItem.Element.Value) > 0 {
-				elements.Element.Value = make(map[string]jsontypes.Normalized, len(elementsItem.Element.Value))
-				for key, value := range elementsItem.Element.Value {
-					result, _ := json.Marshal(value)
-					elements.Element.Value[key] = jsontypes.NewNormalizedValue(string(result))
-				}
-			}
-			if elementsItem.Element.Variant != nil {
-				elements.Element.Variant = types.StringValue(string(*elementsItem.Element.Variant))
+			elements.Element.Variant = types.StringPointerValue(elementsItem.Element.Variant)
+			elements.Element.W = types.Float64PointerValue(elementsItem.Element.W)
+			elements.Element.X = types.Float64PointerValue(elementsItem.Element.X)
+			if elementsItem.Element.XAxis == nil {
+				elements.Element.XAxis = nil
 			} else {
-				elements.Element.Variant = types.StringNull()
+				elements.Element.XAxis = &tfTypes.XAxis{}
+				elements.Element.XAxis.DataField = types.StringPointerValue(elementsItem.Element.XAxis.DataField)
+				elements.Element.XAxis.Inverse = types.BoolPointerValue(elementsItem.Element.XAxis.Inverse)
+				elements.Element.XAxis.LabelInterval = types.StringPointerValue(elementsItem.Element.XAxis.LabelInterval)
+				elements.Element.XAxis.LabelOrientation = types.Float64PointerValue(elementsItem.Element.XAxis.LabelOrientation)
+				elements.Element.XAxis.Name = types.StringPointerValue(elementsItem.Element.XAxis.Name)
+				elements.Element.XAxis.Offset = types.Float64PointerValue(elementsItem.Element.XAxis.Offset)
+				elements.Element.XAxis.Position = types.StringPointerValue(elementsItem.Element.XAxis.Position)
+				elements.Element.XAxis.Type = types.StringPointerValue(elementsItem.Element.XAxis.Type)
 			}
-		}
-		if elementsItem.ElementMarkdown != nil {
-			elements.ElementMarkdown = &tfTypes.ElementMarkdown{}
-			elements.ElementMarkdown.Description = types.StringPointerValue(elementsItem.ElementMarkdown.Description)
-			elements.ElementMarkdown.Empty = types.BoolPointerValue(elementsItem.ElementMarkdown.Empty)
-			elements.ElementMarkdown.HidePanel = types.BoolPointerValue(elementsItem.ElementMarkdown.HidePanel)
-			elements.ElementMarkdown.ID = types.StringValue(elementsItem.ElementMarkdown.ID)
-			elements.ElementMarkdown.Index = types.Float64PointerValue(elementsItem.ElementMarkdown.Index)
-			elements.ElementMarkdown.Layout.H = types.Float64Value(elementsItem.ElementMarkdown.Layout.H)
-			elements.ElementMarkdown.Layout.W = types.Float64Value(elementsItem.ElementMarkdown.Layout.W)
-			elements.ElementMarkdown.Layout.X = types.Float64Value(elementsItem.ElementMarkdown.Layout.X)
-			elements.ElementMarkdown.Layout.Y = types.Float64Value(elementsItem.ElementMarkdown.Layout.Y)
-			elements.ElementMarkdown.Title = types.StringPointerValue(elementsItem.ElementMarkdown.Title)
-			elements.ElementMarkdown.Type = types.StringValue(string(elementsItem.ElementMarkdown.Type))
-			elements.ElementMarkdown.Value = types.StringPointerValue(elementsItem.ElementMarkdown.Value)
-			elements.ElementMarkdown.Variant = types.StringValue(string(elementsItem.ElementMarkdown.Variant))
+			elements.Element.Y = types.Float64PointerValue(elementsItem.Element.Y)
+			if elementsItem.Element.YAxis == nil {
+				elements.Element.YAxis = nil
+			} else {
+				elements.Element.YAxis = &tfTypes.YAxis{}
+				elements.Element.YAxis.DataField = make([]types.String, 0, len(elementsItem.Element.YAxis.DataField))
+				for _, v := range elementsItem.Element.YAxis.DataField {
+					elements.Element.YAxis.DataField = append(elements.Element.YAxis.DataField, types.StringValue(v))
+				}
+				elements.Element.YAxis.Interval = types.Float64PointerValue(elementsItem.Element.YAxis.Interval)
+				elements.Element.YAxis.Max = types.Float64PointerValue(elementsItem.Element.YAxis.Max)
+				elements.Element.YAxis.Min = types.Float64PointerValue(elementsItem.Element.YAxis.Min)
+				elements.Element.YAxis.Position = types.StringPointerValue(elementsItem.Element.YAxis.Position)
+				elements.Element.YAxis.Scale = types.StringPointerValue(elementsItem.Element.YAxis.Scale)
+				elements.Element.YAxis.SplitLine = types.BoolPointerValue(elementsItem.Element.YAxis.SplitLine)
+				elements.Element.YAxis.Type = types.StringPointerValue(elementsItem.Element.YAxis.Type)
+			}
 		}
 
 		r.Elements = append(r.Elements, elements)
 	}
-	r.ID = types.StringValue(resp.ID)
-	r.Modified = types.Float64Value(resp.Modified)
+	r.ID = types.StringPointerValue(resp.ID)
+	r.Modified = types.Float64PointerValue(resp.Modified)
 	r.ModifiedBy = types.StringPointerValue(resp.ModifiedBy)
-	r.Name = types.StringValue(resp.Name)
-	r.PackID = types.StringPointerValue(resp.PackID)
-	r.RefreshRate = types.Float64PointerValue(resp.RefreshRate)
-	r.ResolvedDatasetIds = make([]types.String, 0, len(resp.ResolvedDatasetIds))
-	for _, v := range resp.ResolvedDatasetIds {
-		r.ResolvedDatasetIds = append(r.ResolvedDatasetIds, types.StringValue(v))
-	}
-	if resp.Schedule == nil {
-		r.Schedule = nil
-	} else {
-		r.Schedule = &tfTypes.SavedQuerySchedule{}
-		r.Schedule.CronSchedule = types.StringValue(resp.Schedule.CronSchedule)
-		r.Schedule.Enabled = types.BoolValue(resp.Schedule.Enabled)
-		r.Schedule.KeepLastN = types.Float64Value(resp.Schedule.KeepLastN)
-		r.Schedule.Notifications.Disabled = types.BoolValue(resp.Schedule.Notifications.Disabled)
-		r.Schedule.Tz = types.StringValue(resp.Schedule.Tz)
+	r.Name = types.StringPointerValue(resp.Name)
+	r.Owner = types.StringPointerValue(resp.Owner)
+	r.Tags = make([]types.String, 0, len(resp.Tags))
+	for _, v := range resp.Tags {
+		r.Tags = append(r.Tags, types.StringValue(v))
 	}
 
 	return diags

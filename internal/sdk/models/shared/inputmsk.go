@@ -61,7 +61,7 @@ func (i *InputMskConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputMskMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputMskMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputMskMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputMskCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputMskPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputMskMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
@@ -190,6 +190,35 @@ func (i *InputMskPq) GetCompress() *InputMskCompression {
 		return nil
 	}
 	return i.Compress
+}
+
+type AWSAuthenticationMethod string
+
+const (
+	AWSAuthenticationMethodInstanceRole AWSAuthenticationMethod = "instanceRole"
+	AWSAuthenticationMethodAccessKeys   AWSAuthenticationMethod = "accessKeys"
+	AWSAuthenticationMethodProfile      AWSAuthenticationMethod = "profile"
+)
+
+func (e AWSAuthenticationMethod) ToPointer() *AWSAuthenticationMethod {
+	return &e
+}
+func (e *AWSAuthenticationMethod) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "instanceRole":
+		fallthrough
+	case "accessKeys":
+		fallthrough
+	case "profile":
+		*e = AWSAuthenticationMethod(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AWSAuthenticationMethod: %v", v)
+	}
 }
 
 type InputMskMetadatum struct {
@@ -496,36 +525,6 @@ func (i *InputMskKafkaSchemaRegistryAuthentication) GetTLS() *InputMskKafkaSchem
 	return i.TLS
 }
 
-// InputMskAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
-type InputMskAuthenticationMethod string
-
-const (
-	InputMskAuthenticationMethodAuto   InputMskAuthenticationMethod = "auto"
-	InputMskAuthenticationMethodManual InputMskAuthenticationMethod = "manual"
-	InputMskAuthenticationMethodSecret InputMskAuthenticationMethod = "secret"
-)
-
-func (e InputMskAuthenticationMethod) ToPointer() *InputMskAuthenticationMethod {
-	return &e
-}
-func (e *InputMskAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = InputMskAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputMskAuthenticationMethod: %v", v)
-	}
-}
-
 // InputMskSignatureVersion - Signature version to use for signing MSK cluster requests
 type InputMskSignatureVersion string
 
@@ -620,6 +619,7 @@ func (e *InputMskMaximumTLSVersion) UnmarshalJSON(data []byte) error {
 type InputMskTLSSettingsClientSide struct {
 	Disabled *bool `default:"false" json:"disabled"`
 	// Reject certificates that are not authorized by a CA in the CA certificate path, or by another
+	//
 	//                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
 	// Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
@@ -745,19 +745,25 @@ type InputMsk struct {
 	GroupID *string `default:"Cribl" json:"groupId"`
 	// Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
 	FromBeginning *bool `default:"true" json:"fromBeginning"`
-	//       Timeout used to detect client failures when using Kafka's group-management facilities.
-	//       If the client sends no heartbeats to the broker before the timeout expires,
-	//       the broker will remove the client from the group and initiate a rebalance.
-	//       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
-	//       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
+	// AWS region where the MSK cluster is running
+	Region                  string                  `json:"region"`
+	AwsAuthenticationMethod AWSAuthenticationMethod `json:"awsAuthenticationMethod"`
+	//
+	//     Timeout used to detect client failures when using Kafka's group-management facilities.
+	//     If the client sends no heartbeats to the broker before the timeout expires,
+	//     the broker will remove the client from the group and initiate a rebalance.
+	//     Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
+	//     See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 	SessionTimeout *float64 `default:"30000" json:"sessionTimeout"`
-	//       Maximum allowed time for each worker to join the group after a rebalance begins.
-	//       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-	//       See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
+	//
+	//     Maximum allowed time for each worker to join the group after a rebalance begins.
+	//     If the timeout is exceeded, the coordinator broker will remove the worker from the group.
+	//     See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 	RebalanceTimeout *float64 `default:"60000" json:"rebalanceTimeout"`
-	//       Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
-	//       Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
-	//       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
+	//
+	//     Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
+	//     Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+	//     See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 	HeartbeatInterval *float64 `default:"3000" json:"heartbeatInterval"`
 	// Fields to add to events from this input
 	Metadata            []InputMskMetadatum                        `json:"metadata,omitempty"`
@@ -778,11 +784,7 @@ type InputMsk struct {
 	AuthenticationTimeout *float64 `default:"10000" json:"authenticationTimeout"`
 	// Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 	ReauthenticationThreshold *float64 `default:"10000" json:"reauthenticationThreshold"`
-	// AWS authentication method. Choose Auto to use IAM roles.
-	AwsAuthenticationMethod *InputMskAuthenticationMethod `default:"auto" json:"awsAuthenticationMethod"`
-	AwsSecretKey            *string                       `json:"awsSecretKey,omitempty"`
-	// Region where the MSK cluster is located
-	Region string `json:"region"`
+	AwsSecretKey              *string  `json:"awsSecretKey,omitempty"`
 	// MSK cluster service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to MSK cluster-compatible endpoint.
 	Endpoint *string `json:"endpoint,omitempty"`
 	// Signature version to use for signing MSK cluster requests
@@ -821,7 +823,7 @@ func (i InputMsk) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputMsk) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"brokers", "region"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"brokers", "region", "awsAuthenticationMethod"}); err != nil {
 		return err
 	}
 	return nil
@@ -925,6 +927,20 @@ func (i *InputMsk) GetFromBeginning() *bool {
 	return i.FromBeginning
 }
 
+func (i *InputMsk) GetRegion() string {
+	if i == nil {
+		return ""
+	}
+	return i.Region
+}
+
+func (i *InputMsk) GetAwsAuthenticationMethod() AWSAuthenticationMethod {
+	if i == nil {
+		return AWSAuthenticationMethod("")
+	}
+	return i.AwsAuthenticationMethod
+}
+
 func (i *InputMsk) GetSessionTimeout() *float64 {
 	if i == nil {
 		return nil
@@ -1016,25 +1032,11 @@ func (i *InputMsk) GetReauthenticationThreshold() *float64 {
 	return i.ReauthenticationThreshold
 }
 
-func (i *InputMsk) GetAwsAuthenticationMethod() *InputMskAuthenticationMethod {
-	if i == nil {
-		return nil
-	}
-	return i.AwsAuthenticationMethod
-}
-
 func (i *InputMsk) GetAwsSecretKey() *string {
 	if i == nil {
 		return nil
 	}
 	return i.AwsSecretKey
-}
-
-func (i *InputMsk) GetRegion() string {
-	if i == nil {
-		return ""
-	}
-	return i.Region
 }
 
 func (i *InputMsk) GetEndpoint() *string {

@@ -987,6 +987,10 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			fromBeginning1 = nil
 		}
+		var region string
+		region = r.InputMsk.Region.ValueString()
+
+		awsAuthenticationMethod := shared.AWSAuthenticationMethod(r.InputMsk.AwsAuthenticationMethod.ValueString())
 		sessionTimeout1 := new(float64)
 		if !r.InputMsk.SessionTimeout.IsUnknown() && !r.InputMsk.SessionTimeout.IsNull() {
 			*sessionTimeout1 = r.InputMsk.SessionTimeout.ValueFloat64()
@@ -1202,21 +1206,12 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			reauthenticationThreshold1 = nil
 		}
-		awsAuthenticationMethod := new(shared.InputMskAuthenticationMethod)
-		if !r.InputMsk.AwsAuthenticationMethod.IsUnknown() && !r.InputMsk.AwsAuthenticationMethod.IsNull() {
-			*awsAuthenticationMethod = shared.InputMskAuthenticationMethod(r.InputMsk.AwsAuthenticationMethod.ValueString())
-		} else {
-			awsAuthenticationMethod = nil
-		}
 		awsSecretKey := new(string)
 		if !r.InputMsk.AwsSecretKey.IsUnknown() && !r.InputMsk.AwsSecretKey.IsNull() {
 			*awsSecretKey = r.InputMsk.AwsSecretKey.ValueString()
 		} else {
 			awsSecretKey = nil
 		}
-		var region string
-		region = r.InputMsk.Region.ValueString()
-
 		endpoint := new(string)
 		if !r.InputMsk.Endpoint.IsUnknown() && !r.InputMsk.Endpoint.IsNull() {
 			*endpoint = r.InputMsk.Endpoint.ValueString()
@@ -1403,6 +1398,8 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Topics:                    topics1,
 			GroupID:                   groupId1,
 			FromBeginning:             fromBeginning1,
+			Region:                    region,
+			AwsAuthenticationMethod:   awsAuthenticationMethod,
 			SessionTimeout:            sessionTimeout1,
 			RebalanceTimeout:          rebalanceTimeout1,
 			HeartbeatInterval:         heartbeatInterval1,
@@ -1416,9 +1413,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			BackoffRate:               backoffRate1,
 			AuthenticationTimeout:     authenticationTimeout1,
 			ReauthenticationThreshold: reauthenticationThreshold1,
-			AwsAuthenticationMethod:   awsAuthenticationMethod,
 			AwsSecretKey:              awsSecretKey,
-			Region:                    region,
 			Endpoint:                  endpoint,
 			SignatureVersion:          signatureVersion,
 			ReuseConnections:          reuseConnections,
@@ -2975,9 +2970,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			keepAliveTimeout1 = nil
 		}
-		var enableHealthCheck1 interface{}
+		enableHealthCheck1 := new(bool)
 		if !r.InputSplunkHec.EnableHealthCheck.IsUnknown() && !r.InputSplunkHec.EnableHealthCheck.IsNull() {
-			_ = json.Unmarshal([]byte(r.InputSplunkHec.EnableHealthCheck.ValueString()), &enableHealthCheck1)
+			*enableHealthCheck1 = r.InputSplunkHec.EnableHealthCheck.ValueBool()
+		} else {
+			enableHealthCheck1 = nil
 		}
 		ipAllowlistRegex1 := new(string)
 		if !r.InputSplunkHec.IPAllowlistRegex.IsUnknown() && !r.InputSplunkHec.IPAllowlistRegex.IsNull() {
@@ -7443,36 +7440,22 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		contentConfig := make([]shared.InputOffice365MgmtContentConfig, 0, len(r.InputOffice365Mgmt.ContentConfig))
 		for _, contentConfigItem := range r.InputOffice365Mgmt.ContentConfig {
-			contentType := new(string)
-			if !contentConfigItem.ContentType.IsUnknown() && !contentConfigItem.ContentType.IsNull() {
-				*contentType = contentConfigItem.ContentType.ValueString()
-			} else {
-				contentType = nil
-			}
+			var contentType string
+			contentType = contentConfigItem.ContentType.ValueString()
+
 			description19 := new(string)
 			if !contentConfigItem.Description.IsUnknown() && !contentConfigItem.Description.IsNull() {
 				*description19 = contentConfigItem.Description.ValueString()
 			} else {
 				description19 = nil
 			}
-			interval3 := new(float64)
-			if !contentConfigItem.Interval.IsUnknown() && !contentConfigItem.Interval.IsNull() {
-				*interval3 = contentConfigItem.Interval.ValueFloat64()
-			} else {
-				interval3 = nil
-			}
-			logLevel2 := new(shared.InputOffice365MgmtLogLevel)
-			if !contentConfigItem.LogLevel.IsUnknown() && !contentConfigItem.LogLevel.IsNull() {
-				*logLevel2 = shared.InputOffice365MgmtLogLevel(contentConfigItem.LogLevel.ValueString())
-			} else {
-				logLevel2 = nil
-			}
-			enabled2 := new(bool)
-			if !contentConfigItem.Enabled.IsUnknown() && !contentConfigItem.Enabled.IsNull() {
-				*enabled2 = contentConfigItem.Enabled.ValueBool()
-			} else {
-				enabled2 = nil
-			}
+			var interval3 float64
+			interval3 = contentConfigItem.Interval.ValueFloat64()
+
+			logLevel2 := shared.InputOffice365MgmtLogLevel(contentConfigItem.LogLevel.ValueString())
+			var enabled2 bool
+			enabled2 = contentConfigItem.Enabled.ValueBool()
+
 			contentConfig = append(contentConfig, shared.InputOffice365MgmtContentConfig{
 				ContentType: contentType,
 				Description: description19,

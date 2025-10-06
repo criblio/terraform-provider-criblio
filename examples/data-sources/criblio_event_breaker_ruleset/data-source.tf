@@ -1,4 +1,4 @@
 data "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "Cribl"
+  id       = "breaker-syslog"
 }

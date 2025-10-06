@@ -280,66 +280,6 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"apihttp_provider": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"authentication_method": schema.StringAttribute{
-						Computed:    true,
-						Description: `The authentication method for API calls`,
-					},
-					"available_endpoints": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"data_field": schema.StringAttribute{
-									Computed:    true,
-									Description: `Within the response JSON, name of the field or array element to pull results from`,
-								},
-								"headers": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Header name`,
-											},
-											"value": schema.StringAttribute{
-												Computed:    true,
-												Description: `Header value`,
-											},
-										},
-									},
-									Description: `Optional headers for the endpoint`,
-								},
-								"method": schema.StringAttribute{
-									Computed:    true,
-									Description: `Method for the endpoint`,
-								},
-								"name": schema.StringAttribute{
-									Computed: true,
-								},
-								"url": schema.StringAttribute{
-									Computed:    true,
-									Description: `The URL for this endpoint`,
-								},
-							},
-						},
-						Description: `A list of the available endpoints for this provider`,
-					},
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Description: `Description of the provider`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the provider`,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Description: `Type of the provider`,
-					},
-				},
-			},
 			"api_ms_graph_provider": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
@@ -522,6 +462,66 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
+			"apihttp_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"authentication_method": schema.StringAttribute{
+						Computed:    true,
+						Description: `The authentication method for API calls`,
+					},
+					"available_endpoints": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"data_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Within the response JSON, name of the field or array element to pull results from`,
+								},
+								"headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Header name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `Header value`,
+											},
+										},
+									},
+									Description: `Optional headers for the endpoint`,
+								},
+								"method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Method for the endpoint`,
+								},
+								"name": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The URL for this endpoint`,
+								},
+							},
+						},
+						Description: `A list of the available endpoints for this provider`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
 			"aws_security_lake_provider": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
@@ -548,11 +548,11 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 					"client_id": schema.StringAttribute{
 						Computed:    true,
-						Description: `The service principal's client ID`,
+						Description: `Azure AD application client ID`,
 					},
 					"client_secret": schema.StringAttribute{
 						Computed:    true,
-						Description: `The service principal's client secret`,
+						Description: `Azure AD application client secret`,
 					},
 					"connection_string": schema.StringAttribute{
 						Computed:    true,
@@ -575,12 +575,10 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"blob_sas_url": schema.StringAttribute{
-									Computed:    true,
-									Description: `Container-specific Blob SAS URL`,
+									Computed: true,
 								},
 								"container_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Name of the Azure Blob Storage container`,
+									Computed: true,
 								},
 							},
 						},
@@ -592,7 +590,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 					"tenant_id": schema.StringAttribute{
 						Computed:    true,
-						Description: `The service principal's tenant ID`,
+						Description: `Azure AD tenant ID`,
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -814,7 +812,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 					"reuse_connections": schema.BoolAttribute{
 						Computed:    true,
-						Description: `Whether to reuse connections`,
+						Description: `Reuse existing S3 connections`,
 					},
 					"session_token": schema.StringAttribute{
 						Computed:    true,

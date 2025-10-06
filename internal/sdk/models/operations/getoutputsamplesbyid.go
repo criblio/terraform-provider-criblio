@@ -28,12 +28,12 @@ func (g *GetOutputSamplesByIDRequest) GetGroupID() string {
 	return g.GroupID
 }
 
-// GetOutputSamplesByIDResponseBody - a list of OutputSamplesResponse objects
+// GetOutputSamplesByIDResponseBody - a list of any objects
 type GetOutputSamplesByIDResponseBody struct {
-	Items []shared.OutputSamplesResponse `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (g *GetOutputSamplesByIDResponseBody) GetItems() []shared.OutputSamplesResponse {
+func (g *GetOutputSamplesByIDResponseBody) GetItems() []map[string]any {
 	if g == nil {
 		return nil
 	}
@@ -47,7 +47,7 @@ type GetOutputSamplesByIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of OutputSamplesResponse objects
+	// a list of any objects
 	Object *GetOutputSamplesByIDResponseBody
 	// Unexpected error
 	Error *shared.Error

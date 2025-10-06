@@ -14,8 +14,8 @@ Subscription DataSource
 
 ```terraform
 data "criblio_subscription" "my_subscription" {
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "myExistingGroupId"
+  id       = "myUniqueSubscriptionId"
 }
 ```
 
@@ -29,7 +29,15 @@ data "criblio_subscription" "my_subscription" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `description` (String)
 - `disabled` (Boolean)
 - `filter` (String)
+- `id` (String)
 - `pipeline` (String)

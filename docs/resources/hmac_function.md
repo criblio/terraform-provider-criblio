@@ -14,16 +14,18 @@ HmacFunction Resource
 
 ```terraform
 resource "criblio_hmac_function" "my_hmacfunction" {
-  description       = "...my_description..."
-  group_id          = "...my_group_id..."
-  header_expression = "...my_header_expression..."
-  header_name       = "...my_header_name..."
-  id                = "...my_id..."
+  description       = "Compute HMAC-SHA256 over method:path:timestamp"
+  group_id          = "Cribl"
+  header_expression = "hmac('sha256', secret, parts.join(':'))"
+  header_name       = "X-Signature"
+  id                = "hmac-default"
   lib               = "cribl"
   string_builders = [
-    "..."
+    "request.method",
+    "request.path",
+    "request.headers['x-timestamp']",
   ]
-  string_delim = "...my_string_delim..."
+  string_delim = ":"
 }
 ```
 
@@ -54,8 +56,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_hmac_function.my_criblio_hmac_function
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "Cribl"
+    id = "hmac-sha256"
   })
 }
 ```
@@ -63,5 +65,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_hmac_function.my_criblio_hmac_function '{"group_id": "...", "id": "..."}'
+terraform import criblio_hmac_function.my_criblio_hmac_function '{"group_id": "Cribl", "id": "hmac-sha256"}'
 ```

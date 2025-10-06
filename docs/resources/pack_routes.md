@@ -20,7 +20,7 @@ resource "criblio_pack_routes" "my_packroutes" {
       comment               = "...my_comment..."
     }
   ]
-  group_id = "...my_group_id..."
+  group_id = "Cribl"
   groups = {
     key = {
       description = "...my_description..."
@@ -28,20 +28,20 @@ resource "criblio_pack_routes" "my_packroutes" {
       name        = "...my_name..."
     }
   }
-  id   = "...my_id..."
-  pack = "...my_pack..."
+  id   = "default"
+  pack = "observability-pack"
   routes = [
     {
       additional_properties    = "{ \"see\": \"documentation\" }"
-      description              = "...my_description..."
-      disabled                 = true
-      enable_output_expression = true
-      filter                   = "...my_filter..."
-      final                    = false
-      name                     = "...my_name..."
+      description              = "Route application errors to Splunk output"
+      disabled                 = false
+      enable_output_expression = false
+      filter                   = "level == 'error'"
+      final                    = true
+      name                     = "Errors to Splunk"
       output                   = "{ \"see\": \"documentation\" }"
       output_expression        = "{ \"see\": \"documentation\" }"
-      pipeline                 = "...my_pipeline..."
+      pipeline                 = "main"
     }
   ]
 }
@@ -164,8 +164,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_routes.my_criblio_pack_routes
   id = jsonencode({
-    group_id = "..."
-    pack = "..."
+    group_id = "Cribl"
+    pack = "observability-pack"
   })
 }
 ```
@@ -173,5 +173,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_routes.my_criblio_pack_routes '{"group_id": "...", "pack": "..."}'
+terraform import criblio_pack_routes.my_criblio_pack_routes '{"group_id": "Cribl", "pack": "observability-pack"}'
 ```

@@ -221,12 +221,8 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Not Null`,
-													Validators: []validator.Bool{
-														speakeasy_boolvalidators.NotNull(),
-													},
+													Computed: true,
+													Optional: true,
 												},
 												"format": schema.SingleNestedAttribute{
 													Computed: true,
@@ -248,10 +244,6 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 																speakeasy_float64validators.NotNull(),
 															},
 														},
-													},
-													Description: `Not Null`,
-													Validators: []validator.Object{
-														speakeasy_objectvalidators.NotNull(),
 													},
 												},
 												"transport": schema.SingleNestedAttribute{
@@ -304,17 +296,12 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 															Optional: true,
 														},
 													},
-													Description: `Not Null`,
-													Validators: []validator.Object{
-														speakeasy_objectvalidators.NotNull(),
-													},
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
 													Optional:    true,
-													Description: `Not Null; must be "ndjson"`,
+													Description: `must be "ndjson"`,
 													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
 														stringvalidator.OneOf("ndjson"),
 													},
 												},
@@ -361,10 +348,6 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 															},
 														},
 													},
-													Description: `Not Null`,
-													Validators: []validator.List{
-														speakeasy_listvalidators.NotNull(),
-													},
 												},
 											},
 										},
@@ -372,30 +355,103 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 											Computed: true,
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
-												"commanddir": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-												},
-												"configevent": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-												},
-												"log": schema.SingleNestedAttribute{
+												"config": schema.SingleNestedAttribute{
 													Computed: true,
 													Optional: true,
 													Attributes: map[string]schema.Attribute{
-														"level": schema.StringAttribute{
-															Computed:    true,
-															Optional:    true,
-															Description: `must be one of ["error", "debug", "info", "warning", "none"]`,
-															Validators: []validator.String{
-																stringvalidator.OneOf(
-																	"error",
-																	"debug",
-																	"info",
-																	"warning",
-																	"none",
-																),
+														"enable": schema.BoolAttribute{
+															Computed: true,
+															Optional: true,
+														},
+														"format": schema.SingleNestedAttribute{
+															Computed: true,
+															Optional: true,
+															Attributes: map[string]schema.Attribute{
+																"level": schema.StringAttribute{
+																	Computed:    true,
+																	Optional:    true,
+																	Description: `must be one of ["info", "debug", "trace"]`,
+																	Validators: []validator.String{
+																		stringvalidator.OneOf(
+																			"info",
+																			"debug",
+																			"trace",
+																		),
+																	},
+																},
+																"maxline": schema.Float64Attribute{
+																	Computed: true,
+																	Optional: true,
+																},
+															},
+														},
+														"log": schema.SingleNestedAttribute{
+															Computed: true,
+															Optional: true,
+															Attributes: map[string]schema.Attribute{
+																"level": schema.StringAttribute{
+																	Computed:    true,
+																	Optional:    true,
+																	Description: `must be one of ["info", "debug", "trace"]`,
+																	Validators: []validator.String{
+																		stringvalidator.OneOf(
+																			"info",
+																			"debug",
+																			"trace",
+																		),
+																	},
+																},
+																"transport": schema.SingleNestedAttribute{
+																	Computed: true,
+																	Optional: true,
+																	Attributes: map[string]schema.Attribute{
+																		"buffer": schema.StringAttribute{
+																			Computed:    true,
+																			Optional:    true,
+																			Description: `must be one of ["line", "full"]`,
+																			Validators: []validator.String{
+																				stringvalidator.OneOf(
+																					"line",
+																					"full",
+																				),
+																			},
+																		},
+																		"host": schema.StringAttribute{
+																			Computed: true,
+																			Optional: true,
+																		},
+																		"path": schema.StringAttribute{
+																			Computed: true,
+																			Optional: true,
+																		},
+																		"port": schema.Float64Attribute{
+																			Computed: true,
+																			Optional: true,
+																		},
+																		"tls": schema.SingleNestedAttribute{
+																			Computed: true,
+																			Optional: true,
+																			Attributes: map[string]schema.Attribute{
+																				"cacertpath": schema.StringAttribute{
+																					Computed: true,
+																					Optional: true,
+																				},
+																				"enable": schema.BoolAttribute{
+																					Computed: true,
+																					Optional: true,
+																				},
+																				"validateserver": schema.BoolAttribute{
+																					Computed: true,
+																					Optional: true,
+																				},
+																			},
+																		},
+																		"type": schema.StringAttribute{
+																			Computed: true,
+																			Optional: true,
+																		},
+																	},
+																},
 															},
 														},
 														"transport": schema.SingleNestedAttribute{
@@ -451,10 +507,6 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 														},
 													},
 												},
-												"summaryperiod": schema.Float64Attribute{
-													Computed: true,
-													Optional: true,
-												},
 											},
 										},
 										"metric": schema.SingleNestedAttribute{
@@ -462,38 +514,23 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"enable": schema.BoolAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Not Null`,
-													Validators: []validator.Bool{
-														speakeasy_boolvalidators.NotNull(),
-													},
-												},
-												"format": schema.SingleNestedAttribute{
 													Computed: true,
 													Optional: true,
-													Attributes: map[string]schema.Attribute{
-														"statsdmaxlen": schema.Float64Attribute{
-															Computed: true,
-															Optional: true,
-														},
-														"statsdprefix": schema.StringAttribute{
-															Computed: true,
-															Optional: true,
-														},
-														"type": schema.StringAttribute{
-															Computed: true,
-															Optional: true,
-														},
-														"verbosity": schema.Float64Attribute{
-															Computed: true,
-															Optional: true,
-														},
+												},
+												"format": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `must be one of ["statsd", "ndjson"]`,
+													Validators: []validator.String{
+														stringvalidator.OneOf(
+															"statsd",
+															"ndjson",
+														),
 													},
-													Description: `Not Null`,
-													Validators: []validator.Object{
-														speakeasy_objectvalidators.NotNull(),
-													},
+												},
+												"statsdmaxlen": schema.Float64Attribute{
+													Computed: true,
+													Optional: true,
 												},
 												"transport": schema.SingleNestedAttribute{
 													Computed: true,
@@ -545,24 +582,6 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 															Optional: true,
 														},
 													},
-													Description: `Not Null`,
-													Validators: []validator.Object{
-														speakeasy_objectvalidators.NotNull(),
-													},
-												},
-												"watch": schema.ListNestedAttribute{
-													Computed: true,
-													Optional: true,
-													NestedObject: schema.NestedAttributeObject{
-														Validators: []validator.Object{
-															speakeasy_objectvalidators.NotNull(),
-														},
-														Attributes: map[string]schema.Attribute{},
-													},
-													Description: `Not Null`,
-													Validators: []validator.List{
-														speakeasy_listvalidators.NotNull(),
-													},
 												},
 											},
 										},
@@ -571,20 +590,12 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"dir": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Computed: true,
+													Optional: true,
 												},
 												"enable": schema.BoolAttribute{
-													Computed:    true,
-													Optional:    true,
-													Description: `Not Null`,
-													Validators: []validator.Bool{
-														speakeasy_boolvalidators.NotNull(),
-													},
+													Computed: true,
+													Optional: true,
 												},
 											},
 										},
@@ -859,26 +870,105 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 								Computed: true,
 								Optional: true,
 							},
-							"configevent": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"log": schema.SingleNestedAttribute{
+							"config": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
-									"level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `must be one of ["error", "debug", "info", "warning", "none"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"error",
-												"debug",
-												"info",
-												"warning",
-												"none",
-											),
+									"enable": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"format": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"level": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Description: `must be one of ["info", "debug", "trace", "warning", "error"]`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"info",
+														"debug",
+														"trace",
+														"warning",
+														"error",
+													),
+												},
+											},
+											"maxline": schema.Float64Attribute{
+												Computed: true,
+												Optional: true,
+											},
+										},
+									},
+									"log": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"level": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Description: `must be one of ["info", "debug", "trace"]`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"info",
+														"debug",
+														"trace",
+													),
+												},
+											},
+											"transport": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												Attributes: map[string]schema.Attribute{
+													"buffer": schema.StringAttribute{
+														Computed:    true,
+														Optional:    true,
+														Description: `must be one of ["line", "full"]`,
+														Validators: []validator.String{
+															stringvalidator.OneOf(
+																"line",
+																"full",
+															),
+														},
+													},
+													"host": schema.StringAttribute{
+														Computed: true,
+														Optional: true,
+													},
+													"path": schema.StringAttribute{
+														Computed: true,
+														Optional: true,
+													},
+													"port": schema.Float64Attribute{
+														Computed: true,
+														Optional: true,
+													},
+													"tls": schema.SingleNestedAttribute{
+														Computed: true,
+														Optional: true,
+														Attributes: map[string]schema.Attribute{
+															"cacertpath": schema.StringAttribute{
+																Computed: true,
+																Optional: true,
+															},
+															"enable": schema.BoolAttribute{
+																Computed: true,
+																Optional: true,
+															},
+															"validateserver": schema.BoolAttribute{
+																Computed: true,
+																Optional: true,
+															},
+														},
+													},
+													"type": schema.StringAttribute{
+														Computed: true,
+														Optional: true,
+													},
+												},
+											},
 										},
 									},
 									"transport": schema.SingleNestedAttribute{
@@ -934,7 +1024,7 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 									},
 								},
 							},
-							"summaryperiod": schema.Float64Attribute{
+							"configevent": schema.BoolAttribute{
 								Computed: true,
 								Optional: true,
 							},
@@ -945,38 +1035,27 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Bool{
-									speakeasy_boolvalidators.NotNull(),
-								},
-							},
-							"format": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"statsdmaxlen": schema.Float64Attribute{
-										Computed: true,
-										Optional: true,
-									},
-									"statsdprefix": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-									},
-									"type": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-									},
-									"verbosity": schema.Float64Attribute{
-										Computed: true,
-										Optional: true,
-									},
+							},
+							"format": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `must be one of ["statsd", "ndjson"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"statsd",
+										"ndjson",
+									),
 								},
-								Description: `Not Null`,
-								Validators: []validator.Object{
-									speakeasy_objectvalidators.NotNull(),
-								},
+							},
+							"statsdmaxlen": schema.Float64Attribute{
+								Computed: true,
+								Optional: true,
+							},
+							"statsdprefix": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
 							},
 							"transport": schema.SingleNestedAttribute{
 								Computed: true,
@@ -1028,24 +1107,10 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 										Optional: true,
 									},
 								},
-								Description: `Not Null`,
-								Validators: []validator.Object{
-									speakeasy_objectvalidators.NotNull(),
-								},
 							},
-							"watch": schema.ListNestedAttribute{
+							"verbosity": schema.Float64Attribute{
 								Computed: true,
 								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
-									Attributes: map[string]schema.Attribute{},
-								},
-								Description: `Not Null`,
-								Validators: []validator.List{
-									speakeasy_listvalidators.NotNull(),
-								},
 							},
 						},
 					},
@@ -1160,7 +1225,8 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"description": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -1168,10 +1234,11 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to PATCH`,
+				Description: `Unique ID for this Appscope config`,
 			},
 			"lib": schema.StringAttribute{
-				Required:    true,
+				Computed:    true,
+				Optional:    true,
 				Description: `must be one of ["cribl", "cribl-custom", "custom"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -1435,17 +1502,17 @@ func (r *AppscopeConfigResource) ImportState(ctx context.Context, req resource.I
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "...", "id": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "scope-default"}': `+err.Error())
 		return
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"scope-default"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)

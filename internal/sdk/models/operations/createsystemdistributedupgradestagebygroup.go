@@ -8,7 +8,7 @@ import (
 )
 
 type CreateSystemDistributedUpgradeStageByGroupRequest struct {
-	// Group to upgrade
+	// id of the group
 	Group string `pathParam:"style=simple,explode=false,name=group"`
 	// body number percentage of nodes on the worker group to upgrade
 	UpgradePercentage *string `queryParam:"style=form,explode=true,name=upgradePercentage"`

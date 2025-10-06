@@ -1,36 +1,36 @@
 resource "criblio_pack_breakers" "my_packbreakers" {
-  description    = "...my_description..."
-  group_id       = "...my_group_id..."
-  id             = "...my_id..."
+  description    = "Break HTTP access logs into events"
+  group_id       = "myExistingGroupId"
+  id             = "access-logs-v1"
   lib            = "custom"
-  min_raw_length = 94618.96
-  pack           = "...my_pack..."
+  min_raw_length = 512
+  pack           = "myExistingPackId"
   rules = [
     {
-      condition           = "...my_condition..."
-      disabled            = true
-      event_breaker_regex = "...my_event_breaker_regex..."
+      condition           = "/GET|POST|PUT|DELETE/.test(_raw)"
+      disabled            = false
+      event_breaker_regex = "/\\n(?=\\S)/"
       fields = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "source"
+          value = "\"nginx_access\""
         }
       ]
-      max_event_bytes     = 101343288.08
-      name                = "...my_name..."
-      parser_enabled      = true
+      max_event_bytes     = 65536
+      name                = "nginx-access"
+      parser_enabled      = false
       should_use_data_raw = false
       timestamp = {
-        format = "...my_format..."
-        length = 9.13
-        type   = "current"
+        format = "%d/%b/%Y:%H:%M:%S %z"
+        length = 150
+        type   = "format"
       }
-      timestamp_anchor_regex = "...my_timestamp_anchor_regex..."
-      timestamp_earliest     = "...my_timestamp_earliest..."
-      timestamp_latest       = "...my_timestamp_latest..."
-      timestamp_timezone     = "...my_timestamp_timezone..."
-      type                   = "aws_vpcflow"
+      timestamp_anchor_regex = "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/"
+      timestamp_earliest     = "-90days"
+      timestamp_latest       = "+1day"
+      timestamp_timezone     = "UTC"
+      type                   = "regex"
     }
   ]
-  tags = "...my_tags..."
+  tags = "nginx,access,prod"
 }

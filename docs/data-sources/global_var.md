@@ -15,7 +15,7 @@ GlobalVar DataSource
 ```terraform
 data "criblio_global_var" "my_globalvar" {
   group_id = "default"
-  id       = "test_var"
+  id       = "ENV"
 }
 ```
 
@@ -29,7 +29,15 @@ data "criblio_global_var" "my_globalvar" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `description` (String) Brief description of this variable. Optional.
+- `id` (String) Global variable name.
 - `lib` (String)
 - `tags` (String) One or more tags related to this variable. Optional.
 - `type` (String) Type of variable

@@ -2,7 +2,7 @@
 
 package shared
 
-type Config struct {
+type HBCriblInfoConfig struct {
 	FeaturesRev     *string  `json:"featuresRev,omitempty"`
 	HbPeriodSeconds *float64 `json:"hbPeriodSeconds,omitempty"`
 	LogStreamEnv    *string  `json:"logStreamEnv,omitempty"`
@@ -10,60 +10,60 @@ type Config struct {
 	Version         *string  `json:"version,omitempty"`
 }
 
-func (c *Config) GetFeaturesRev() *string {
-	if c == nil {
+func (h *HBCriblInfoConfig) GetFeaturesRev() *string {
+	if h == nil {
 		return nil
 	}
-	return c.FeaturesRev
+	return h.FeaturesRev
 }
 
-func (c *Config) GetHbPeriodSeconds() *float64 {
-	if c == nil {
+func (h *HBCriblInfoConfig) GetHbPeriodSeconds() *float64 {
+	if h == nil {
 		return nil
 	}
-	return c.HbPeriodSeconds
+	return h.HbPeriodSeconds
 }
 
-func (c *Config) GetLogStreamEnv() *string {
-	if c == nil {
+func (h *HBCriblInfoConfig) GetLogStreamEnv() *string {
+	if h == nil {
 		return nil
 	}
-	return c.LogStreamEnv
+	return h.LogStreamEnv
 }
 
-func (c *Config) GetPolicyRev() *string {
-	if c == nil {
+func (h *HBCriblInfoConfig) GetPolicyRev() *string {
+	if h == nil {
 		return nil
 	}
-	return c.PolicyRev
+	return h.PolicyRev
 }
 
-func (c *Config) GetVersion() *string {
-	if c == nil {
+func (h *HBCriblInfoConfig) GetVersion() *string {
+	if h == nil {
 		return nil
 	}
-	return c.Version
+	return h.Version
 }
 
 type HBCriblInfo struct {
-	Config         Config          `json:"config"`
-	DeploymentID   *string         `json:"deploymentId,omitempty"`
-	DistMode       AppMode         `json:"distMode"`
-	EdgeNodes      *float64        `json:"edgeNodes,omitempty"`
-	Group          string          `json:"group"`
-	GUID           string          `json:"guid"`
-	InstallType    *string         `json:"installType,omitempty"`
-	LookupVersions *LookupVersions `json:"lookupVersions,omitempty"`
-	Master         *HBLeaderInfo   `json:"master,omitempty"`
-	Pid            *float64        `json:"pid,omitempty"`
-	StartTime      float64         `json:"startTime"`
-	Tags           []string        `json:"tags"`
-	Version        *string         `json:"version,omitempty"`
+	Config         HBCriblInfoConfig `json:"config"`
+	DeploymentID   *string           `json:"deploymentId,omitempty"`
+	DistMode       AppMode           `json:"distMode"`
+	EdgeNodes      *float64          `json:"edgeNodes,omitempty"`
+	Group          string            `json:"group"`
+	GUID           string            `json:"guid"`
+	InstallType    *string           `json:"installType,omitempty"`
+	LookupVersions *LookupVersions   `json:"lookupVersions,omitempty"`
+	Master         *HBLeaderInfo     `json:"master,omitempty"`
+	Pid            *float64          `json:"pid,omitempty"`
+	StartTime      float64           `json:"startTime"`
+	Tags           []string          `json:"tags"`
+	Version        *string           `json:"version,omitempty"`
 }
 
-func (h *HBCriblInfo) GetConfig() Config {
+func (h *HBCriblInfo) GetConfig() HBCriblInfoConfig {
 	if h == nil {
-		return Config{}
+		return HBCriblInfoConfig{}
 	}
 	return h.Config
 }

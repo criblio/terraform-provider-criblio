@@ -1,1 +1,1 @@
-terraform import criblio_hmac_function.my_criblio_hmac_function '{"group_id": "...", "id": "..."}'
+terraform import criblio_hmac_function.my_criblio_hmac_function '{"group_id": "Cribl", "id": "hmac-sha256"}'

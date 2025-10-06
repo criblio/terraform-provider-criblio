@@ -14,7 +14,7 @@ SearchDatasetProvider DataSource
 
 ```terraform
 data "criblio_search_dataset_provider" "my_searchdatasetprovider" {
-  id = "...my_id..."
+  id = "provider-s3-main"
 }
 ```
 
@@ -312,15 +312,15 @@ Read-Only:
 Read-Only:
 
 - `authentication_method` (String) Azure Storage authentication method
-- `client_id` (String) The service principal's client ID
-- `client_secret` (String) The service principal's client secret
+- `client_id` (String) Azure AD application client ID
+- `client_secret` (String) Azure AD application client secret
 - `connection_string` (String) Storage account connection string
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `location` (String) Primary region in which the storage account is located
 - `sas_configs` (Attributes List) A list of container-specific SAS configurations (see [below for nested schema](#nestedatt--azure_blob_provider--sas_configs))
 - `storage_account_name` (String) The name of your Azure storage account
-- `tenant_id` (String) The service principal's tenant ID
+- `tenant_id` (String) Azure AD tenant ID
 - `type` (String) Type of the provider
 
 <a id="nestedatt--azure_blob_provider--sas_configs"></a>
@@ -328,8 +328,8 @@ Read-Only:
 
 Read-Only:
 
-- `blob_sas_url` (String) Container-specific Blob SAS URL
-- `container_name` (String) Name of the Azure Blob Storage container
+- `blob_sas_url` (String)
+- `container_name` (String)
 
 
 
@@ -423,7 +423,7 @@ Read-Only:
 - `id` (String) Unique identifier for the provider
 - `region` (String) AWS region
 - `reject_unauthorized` (Boolean) Whether to reject unauthorized requests
-- `reuse_connections` (Boolean) Whether to reuse connections
+- `reuse_connections` (Boolean) Reuse existing S3 connections
 - `session_token` (String) AWS session token
 - `signature_version` (String) AWS signature version
 - `type` (String) Type of the provider

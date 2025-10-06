@@ -14,12 +14,12 @@ ParserLibEntry Resource
 
 ```terraform
 resource "criblio_parser_lib_entry" "my_parserlibentry" {
-  description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
-  lib         = "...my_lib..."
-  tags        = "...my_tags..."
-  type        = "delim"
+  description = "Parser for CSV log format"
+  group_id    = "Cribl"
+  id          = "parser1"
+  lib         = "custom"
+  tags        = "csv,logs"
+  type        = "csv"
 }
 ```
 
@@ -47,12 +47,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_parser_lib_entry.my_criblio_parser_lib_entry
-  id = "..."
+  id = "Cribl"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_parser_lib_entry.my_criblio_parser_lib_entry "..."
+terraform import criblio_parser_lib_entry.my_criblio_parser_lib_entry "Cribl"
 ```

@@ -96,24 +96,20 @@ type SavedJobExecutorRunSettings struct {
 	LogLevel *SavedJobExecutorLogLevel `default:"info" json:"logLevel"`
 	// Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 	JobTimeout *string `default:"0" json:"jobTimeout"`
-	// Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+	// Job run mode.
 	Mode          *string `default:"list" json:"mode"`
 	TimeRangeType *string `default:"relative" json:"timeRangeType"`
 	// Earliest time to collect data for the selected timezone
 	Earliest *float64 `json:"earliest,omitempty"`
 	// Latest time to collect data for the selected timezone
 	Latest            *float64                     `json:"latest,omitempty"`
-	TimestampTimezone any                          `json:"timestampTimezone,omitempty"`
+	TimestampTimezone *string                      `json:"timestampTimezone,omitempty"`
 	TimeWarning       *SavedJobExecutorTimeWarning `json:"timeWarning,omitempty"`
 	// A filter for tokens in the provided collect path and/or the events being collected
 	Expression *string `default:"true" json:"expression"`
-	// Limits the bundle size for small tasks. For example,
-	//
-	//         if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+	// Limits the bundle size for small tasks.
 	MinTaskSize *string `default:"1MB" json:"minTaskSize"`
-	// Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB,
-	//
-	//         you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+	// Limits the bundle size for files above the lower task bundle size.
 	MaxTaskSize *string `default:"10MB" json:"maxTaskSize"`
 }
 
@@ -184,7 +180,7 @@ func (s *SavedJobExecutorRunSettings) GetLatest() *float64 {
 	return s.Latest
 }
 
-func (s *SavedJobExecutorRunSettings) GetTimestampTimezone() any {
+func (s *SavedJobExecutorRunSettings) GetTimestampTimezone() *string {
 	if s == nil {
 		return nil
 	}
@@ -229,7 +225,7 @@ type SavedJobExecutorSchedule struct {
 	MaxConcurrentRuns *float64 `default:"1" json:"maxConcurrentRuns"`
 	// Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
 	Skippable    *bool                        `default:"true" json:"skippable"`
-	ResumeMissed any                          `json:"resumeMissed,omitempty"`
+	ResumeMissed *bool                        `json:"resumeMissed,omitempty"`
 	Run          *SavedJobExecutorRunSettings `json:"run,omitempty"`
 }
 
@@ -272,7 +268,7 @@ func (s *SavedJobExecutorSchedule) GetSkippable() *bool {
 	return s.Skippable
 }
 
-func (s *SavedJobExecutorSchedule) GetResumeMissed() any {
+func (s *SavedJobExecutorSchedule) GetResumeMissed() *bool {
 	if s == nil {
 		return nil
 	}

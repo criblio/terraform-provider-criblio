@@ -17,14 +17,14 @@ resource "criblio_project" "my_project" {
   consumers = {
     # ...
   }
-  description = "...my_description..."
+  description = "Default project configuration"
   destinations = [
-    "..."
+    "Output:main",
   ]
-  group_id = "...my_group_id..."
-  id       = "...my_id..."
+  group_id = "Cribl"
+  id       = "project-default"
   subscriptions = [
-    "..."
+    "sub-default",
   ]
 }
 ```
@@ -57,8 +57,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_project.my_criblio_project
   id = jsonencode({
-    group_id = "..."
-    id = "..."
+    group_id = "Cribl"
+    id = "project-abc123"
   })
 }
 ```
@@ -66,5 +66,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_project.my_criblio_project '{"group_id": "...", "id": "..."}'
+terraform import criblio_project.my_criblio_project '{"group_id": "Cribl", "id": "project-abc123"}'
 ```

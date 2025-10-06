@@ -14,13 +14,13 @@ PackLookups Resource
 
 ```terraform
 resource "criblio_pack_lookups" "my_packlookups" {
-  content     = "...my_content..."
-  description = "...my_description..."
-  group_id    = "...my_group_id..."
-  id          = "...my_id..."
+  content     = "US,United States\nCA,Canada"
+  description = "Country code to name lookup"
+  group_id    = "myExistingGroupId"
+  id          = "countries.csv"
   mode        = "memory"
-  pack        = "...my_pack..."
-  tags        = "...my_tags..."
+  pack        = "myExistingPackId"
+  tags        = "geo,reference"
 }
 ```
 
@@ -100,9 +100,9 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_pack_lookups.my_criblio_pack_lookups
   id = jsonencode({
-    group_id = "..."
-    id = "..."
-    pack = "..."
+    group_id = "myExistingGroupId"
+    id = "myUniqueLookupIdToCRUD"
+    pack = "myExistingPackId"
   })
 }
 ```
@@ -110,5 +110,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_pack_lookups.my_criblio_pack_lookups '{"group_id": "...", "id": "...", "pack": "..."}'
+terraform import criblio_pack_lookups.my_criblio_pack_lookups '{"group_id": "myExistingGroupId", "id": "myUniqueLookupIdToCRUD", "pack": "myExistingPackId"}'
 ```

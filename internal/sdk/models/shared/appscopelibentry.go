@@ -3,25 +3,12 @@
 package shared
 
 type AppscopeLibEntry struct {
-	Config      AppscopeConfigWithCustom `json:"config"`
-	Description string                   `json:"description"`
+	// Unique ID for this Appscope config
 	ID          string                   `json:"id"`
-	Lib         CriblLib                 `json:"lib"`
+	Description *string                  `json:"description,omitempty"`
 	Tags        *string                  `json:"tags,omitempty"`
-}
-
-func (a *AppscopeLibEntry) GetConfig() AppscopeConfigWithCustom {
-	if a == nil {
-		return AppscopeConfigWithCustom{}
-	}
-	return a.Config
-}
-
-func (a *AppscopeLibEntry) GetDescription() string {
-	if a == nil {
-		return ""
-	}
-	return a.Description
+	Config      AppscopeConfigWithCustom `json:"config"`
+	Lib         *CriblLib                `json:"lib,omitempty"`
 }
 
 func (a *AppscopeLibEntry) GetID() string {
@@ -31,11 +18,11 @@ func (a *AppscopeLibEntry) GetID() string {
 	return a.ID
 }
 
-func (a *AppscopeLibEntry) GetLib() CriblLib {
+func (a *AppscopeLibEntry) GetDescription() *string {
 	if a == nil {
-		return CriblLib("")
+		return nil
 	}
-	return a.Lib
+	return a.Description
 }
 
 func (a *AppscopeLibEntry) GetTags() *string {
@@ -43,4 +30,18 @@ func (a *AppscopeLibEntry) GetTags() *string {
 		return nil
 	}
 	return a.Tags
+}
+
+func (a *AppscopeLibEntry) GetConfig() AppscopeConfigWithCustom {
+	if a == nil {
+		return AppscopeConfigWithCustom{}
+	}
+	return a.Config
+}
+
+func (a *AppscopeLibEntry) GetLib() *CriblLib {
+	if a == nil {
+		return nil
+	}
+	return a.Lib
 }

@@ -61,7 +61,7 @@ func (i *InputOffice365MgmtConnection) GetOutput() string {
 	return i.Output
 }
 
-// InputOffice365MgmtMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+// InputOffice365MgmtMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type InputOffice365MgmtMode string
 
 const (
@@ -116,7 +116,7 @@ func (e *InputOffice365MgmtCompression) UnmarshalJSON(data []byte) error {
 }
 
 type InputOffice365MgmtPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 	Mode *InputOffice365MgmtMode `default:"always" json:"mode"`
 	// The maximum number of events to hold in memory before writing the events to disk
 	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
@@ -256,7 +256,6 @@ func (i *InputOffice365MgmtMetadatum) GetValue() string {
 	return i.Value
 }
 
-// InputOffice365MgmtLogLevel - Collector runtime Log Level
 type InputOffice365MgmtLogLevel string
 
 const (
@@ -291,13 +290,13 @@ func (e *InputOffice365MgmtLogLevel) UnmarshalJSON(data []byte) error {
 
 type InputOffice365MgmtContentConfig struct {
 	// Office 365 Management Activity API Content Type
-	ContentType *string `json:"contentType,omitempty"`
+	ContentType string `json:"contentType"`
 	// If interval type is minutes the value entered must evenly divisible by 60 or save will fail
-	Description *string  `json:"description,omitempty"`
-	Interval    *float64 `json:"interval,omitempty"`
-	// Collector runtime Log Level
-	LogLevel *InputOffice365MgmtLogLevel `json:"logLevel,omitempty"`
-	Enabled  *bool                       `json:"enabled,omitempty"`
+	Description *string `json:"description,omitempty"`
+	// Interval, in minutes, between polls
+	Interval float64                    `json:"interval"`
+	LogLevel InputOffice365MgmtLogLevel `json:"logLevel"`
+	Enabled  bool                       `json:"enabled"`
 }
 
 func (i InputOffice365MgmtContentConfig) MarshalJSON() ([]byte, error) {
@@ -305,15 +304,15 @@ func (i InputOffice365MgmtContentConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365MgmtContentConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"contentType", "interval", "logLevel", "enabled"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputOffice365MgmtContentConfig) GetContentType() *string {
+func (i *InputOffice365MgmtContentConfig) GetContentType() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.ContentType
 }
@@ -325,23 +324,23 @@ func (i *InputOffice365MgmtContentConfig) GetDescription() *string {
 	return i.Description
 }
 
-func (i *InputOffice365MgmtContentConfig) GetInterval() *float64 {
+func (i *InputOffice365MgmtContentConfig) GetInterval() float64 {
 	if i == nil {
-		return nil
+		return 0.0
 	}
 	return i.Interval
 }
 
-func (i *InputOffice365MgmtContentConfig) GetLogLevel() *InputOffice365MgmtLogLevel {
+func (i *InputOffice365MgmtContentConfig) GetLogLevel() InputOffice365MgmtLogLevel {
 	if i == nil {
-		return nil
+		return InputOffice365MgmtLogLevel("")
 	}
 	return i.LogLevel
 }
 
-func (i *InputOffice365MgmtContentConfig) GetEnabled() *bool {
+func (i *InputOffice365MgmtContentConfig) GetEnabled() bool {
 	if i == nil {
-		return nil
+		return false
 	}
 	return i.Enabled
 }

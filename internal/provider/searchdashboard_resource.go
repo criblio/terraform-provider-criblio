@@ -7,15 +7,11 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
-	speakeasy_boolvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/boolvalidators"
 	speakeasy_float64validators "github.com/criblio/terraform-provider-criblio/internal/validators/float64validators"
 	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -42,22 +38,20 @@ type SearchDashboardResource struct {
 
 // SearchDashboardResourceModel describes the resource data model.
 type SearchDashboardResourceModel struct {
-	CacheTTLSeconds    types.Float64               `tfsdk:"cache_ttl_seconds"`
-	Category           types.String                `tfsdk:"category"`
-	Created            types.Float64               `tfsdk:"created"`
-	CreatedBy          types.String                `tfsdk:"created_by"`
-	Description        types.String                `tfsdk:"description"`
-	DisplayCreatedBy   types.String                `tfsdk:"display_created_by"`
-	DisplayModifiedBy  types.String                `tfsdk:"display_modified_by"`
-	Elements           []tfTypes.ElementUnion      `tfsdk:"elements"`
-	ID                 types.String                `tfsdk:"id"`
-	Modified           types.Float64               `tfsdk:"modified"`
-	ModifiedBy         types.String                `tfsdk:"modified_by"`
-	Name               types.String                `tfsdk:"name"`
-	PackID             types.String                `tfsdk:"pack_id"`
-	RefreshRate        types.Float64               `tfsdk:"refresh_rate"`
-	ResolvedDatasetIds []types.String              `tfsdk:"resolved_dataset_ids"`
-	Schedule           *tfTypes.SavedQuerySchedule `tfsdk:"schedule"`
+	CacheTTLSeconds   types.Float64          `tfsdk:"cache_ttl_seconds"`
+	Category          types.String           `tfsdk:"category"`
+	Created           types.Float64          `tfsdk:"created"`
+	CreatedBy         types.String           `tfsdk:"created_by"`
+	Description       types.String           `tfsdk:"description"`
+	DisplayCreatedBy  types.String           `tfsdk:"display_created_by"`
+	DisplayModifiedBy types.String           `tfsdk:"display_modified_by"`
+	Elements          []tfTypes.ElementUnion `tfsdk:"elements"`
+	ID                types.String           `tfsdk:"id"`
+	Modified          types.Float64          `tfsdk:"modified"`
+	ModifiedBy        types.String           `tfsdk:"modified_by"`
+	Name              types.String           `tfsdk:"name"`
+	Owner             types.String           `tfsdk:"owner"`
+	Tags              []types.String         `tfsdk:"tags"`
 }
 
 func (r *SearchDashboardResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -77,10 +71,12 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 				Optional: true,
 			},
 			"created": schema.Float64Attribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 			},
 			"created_by": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
@@ -95,7 +91,8 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 				Optional: true,
 			},
 			"elements": schema.ListNestedAttribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -105,11 +102,23 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
+								"color_palette": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
 								"description": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
 								},
 								"empty": schema.BoolAttribute{
+									Computed: true,
+									Optional: true,
+								},
+								"h": schema.Float64Attribute{
 									Computed: true,
 									Optional: true,
 								},
@@ -122,18 +131,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									Optional: true,
 								},
 								"id": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
-								},
-								"index": schema.Float64Attribute{
-									Computed: true,
-									Optional: true,
-								},
-								"input_id": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
 								},
@@ -174,12 +171,8 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 											},
 										},
 									},
-									Description: `Not Null`,
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 								},
-								"search": schema.SingleNestedAttribute{
+								"query": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
@@ -343,10 +336,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 											},
 										},
 									},
-									Description: `Not Null`,
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
 								},
 								"title": schema.StringAttribute{
 									Computed: true,
@@ -378,223 +367,129 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 										),
 									},
 								},
-								"value": schema.MapAttribute{
-									Computed:    true,
-									Optional:    true,
-									ElementType: jsontypes.NormalizedType{},
-									Validators: []validator.Map{
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-									},
-								},
 								"variant": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `must be one of ["visualization", "input", "markdown"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"visualization",
-											"input",
-											"markdown",
-										),
-									},
-								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("element_markdown"),
-								}...),
-							},
-						},
-						"element_markdown": schema.SingleNestedAttribute{
-							Computed: true,
-							Optional: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
 								},
-								"empty": schema.BoolAttribute{
+								"w": schema.Float64Attribute{
 									Computed: true,
 									Optional: true,
 								},
-								"hide_panel": schema.BoolAttribute{
+								"x": schema.Float64Attribute{
 									Computed: true,
 									Optional: true,
 								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
-								},
-								"index": schema.Float64Attribute{
-									Computed: true,
-									Optional: true,
-								},
-								"layout": schema.SingleNestedAttribute{
+								"x_axis": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
-										"h": schema.Float64Attribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.Float64{
-												speakeasy_float64validators.NotNull(),
-											},
+										"data_field": schema.StringAttribute{
+											Computed: true,
+											Optional: true,
 										},
-										"w": schema.Float64Attribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.Float64{
-												speakeasy_float64validators.NotNull(),
-											},
+										"inverse": schema.BoolAttribute{
+											Computed: true,
+											Optional: true,
 										},
-										"x": schema.Float64Attribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.Float64{
-												speakeasy_float64validators.NotNull(),
-											},
+										"label_interval": schema.StringAttribute{
+											Computed: true,
+											Optional: true,
 										},
-										"y": schema.Float64Attribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.Float64{
-												speakeasy_float64validators.NotNull(),
-											},
+										"label_orientation": schema.Float64Attribute{
+											Computed: true,
+											Optional: true,
 										},
-									},
-									Description: `Not Null`,
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
+										"name": schema.StringAttribute{
+											Computed: true,
+											Optional: true,
+										},
+										"offset": schema.Float64Attribute{
+											Computed: true,
+											Optional: true,
+										},
+										"position": schema.StringAttribute{
+											Computed: true,
+											Optional: true,
+										},
+										"type": schema.StringAttribute{
+											Computed: true,
+											Optional: true,
+										},
 									},
 								},
-								"title": schema.StringAttribute{
+								"y": schema.Float64Attribute{
 									Computed: true,
 									Optional: true,
 								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null; must be "markdown.default"`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-										stringvalidator.OneOf(
-											"markdown.default",
-										),
-									},
-								},
-								"value": schema.StringAttribute{
+								"y_axis": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
-								},
-								"variant": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null; must be "markdown"`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-										stringvalidator.OneOf("markdown"),
+									Attributes: map[string]schema.Attribute{
+										"data_field": schema.ListAttribute{
+											Computed:    true,
+											Optional:    true,
+											ElementType: types.StringType,
+										},
+										"interval": schema.Float64Attribute{
+											Computed: true,
+											Optional: true,
+										},
+										"max": schema.Float64Attribute{
+											Computed: true,
+											Optional: true,
+										},
+										"min": schema.Float64Attribute{
+											Computed: true,
+											Optional: true,
+										},
+										"position": schema.StringAttribute{
+											Computed: true,
+											Optional: true,
+										},
+										"scale": schema.StringAttribute{
+											Computed: true,
+											Optional: true,
+										},
+										"split_line": schema.BoolAttribute{
+											Computed: true,
+											Optional: true,
+										},
+										"type": schema.StringAttribute{
+											Computed: true,
+											Optional: true,
+										},
 									},
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("element"),
-								}...),
 							},
 						},
 					},
 				},
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
+				Computed:    true,
+				Optional:    true,
 				Description: `Unique ID to PATCH`,
 			},
 			"modified": schema.Float64Attribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 			},
 			"modified_by": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
-			},
-			"pack_id": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
 			},
-			"refresh_rate": schema.Float64Attribute{
+			"owner": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
 			},
-			"resolved_dataset_ids": schema.ListAttribute{
+			"tags": schema.ListAttribute{
 				Computed:    true,
 				Optional:    true,
 				ElementType: types.StringType,
-			},
-			"schedule": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"cron_schedule": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-					"enabled": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null`,
-						Validators: []validator.Bool{
-							speakeasy_boolvalidators.NotNull(),
-						},
-					},
-					"keep_last_n": schema.Float64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null`,
-						Validators: []validator.Float64{
-							speakeasy_float64validators.NotNull(),
-						},
-					},
-					"notifications": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"disabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Bool{
-									speakeasy_boolvalidators.NotNull(),
-								},
-							},
-						},
-						Description: `Not Null`,
-						Validators: []validator.Object{
-							speakeasy_objectvalidators.NotNull(),
-						},
-					},
-					"tz": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-				},
 			},
 		},
 	}
