@@ -203,7 +203,7 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
     description                 = "my generic provider description"
     endpoint                    = "https://storage.googleapis.com"
     id                          = "myUniqueGenericProviderId"
-    service_account_credentials = "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-gcp-project\",\n  \"private_key_id\": \"abcd1234efgh5678ijkl90\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9...==\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"my-service-account@my-gcp-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789012345678901\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\",\n  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/my-service-account%40my-gcp-project.iam.gserviceaccount.com\"\n}\n"
+    service_account_credentials = "{ \\n\n  \"type\": \"service_account\", \\n\n  \"project_id\": \"my-gcp-project\", \\n\n  \"private_key_id\": \"abcd1234efgh5678ijkl90\", \\n\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9...==\\n-----END PRIVATE KEY-----\\n\", \\n\n  \"client_email\": \"my-service-account@my-gcp-project.iam.gserviceaccount.com\", \\n\n  \"client_id\": \"123456789012345678901\", \\n\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\", \\n\n  \"token_uri\": \"https://oauth2.googleapis.com/token\", \\n\n  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\", \\n\n  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/my-service-account%40my-gcp-project.iam.gserviceaccount.com\" \\n\n} \\n\n"
     type                        = "generic"
   }
   meta_provider = {
@@ -566,8 +566,8 @@ Optional:
 
 Optional:
 
-- `blob_sas_url` (String) Not Null
-- `container_name` (String) Not Null
+- `blob_sas_url` (String) Container-specific Blob SAS URL. Not Null
+- `container_name` (String) Name of the Azure Blob Storage container. Not Null
 
 
 

@@ -575,10 +575,12 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"blob_sas_url": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Container-specific Blob SAS URL`,
 								},
 								"container_name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Name of the Azure Blob Storage container`,
 								},
 							},
 						},

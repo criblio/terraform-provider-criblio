@@ -1324,7 +1324,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"blob_sas_url": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Not Null`,
+									Description: `Container-specific Blob SAS URL. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
@@ -1332,7 +1332,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"container_name": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Not Null`,
+									Description: `Name of the Azure Blob Storage container. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},

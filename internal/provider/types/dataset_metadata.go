@@ -7,9 +7,8 @@ import (
 )
 
 type DatasetMetadata struct {
-	Earliest           types.String            `tfsdk:"earliest"`
-	EnableAcceleration types.Bool              `tfsdk:"enable_acceleration"`
-	FieldList          []types.String          `tfsdk:"field_list"`
-	LatestRunInfo      *DatasetMetadataRunInfo `tfsdk:"latest_run_info"`
-	ScanMode           types.String            `tfsdk:"scan_mode"`
+	Created            types.String   `tfsdk:"created"`
+	EnableAcceleration types.Bool     `tfsdk:"enable_acceleration"`
+	Modified           types.String   `tfsdk:"modified"`
+	Tags               []types.String `tfsdk:"tags"`
 }

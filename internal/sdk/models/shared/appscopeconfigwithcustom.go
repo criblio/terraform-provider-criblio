@@ -186,20 +186,20 @@ func (a *AppscopeConfigWithCustomEvent) GetWatch() []AppscopeConfigWithCustomWat
 	return a.Watch
 }
 
-type AppscopeConfigWithCustomFormatLevel string
+type FormatLevel string
 
 const (
-	AppscopeConfigWithCustomFormatLevelInfo    AppscopeConfigWithCustomFormatLevel = "info"
-	AppscopeConfigWithCustomFormatLevelDebug   AppscopeConfigWithCustomFormatLevel = "debug"
-	AppscopeConfigWithCustomFormatLevelTrace   AppscopeConfigWithCustomFormatLevel = "trace"
-	AppscopeConfigWithCustomFormatLevelWarning AppscopeConfigWithCustomFormatLevel = "warning"
-	AppscopeConfigWithCustomFormatLevelError   AppscopeConfigWithCustomFormatLevel = "error"
+	FormatLevelInfo    FormatLevel = "info"
+	FormatLevelDebug   FormatLevel = "debug"
+	FormatLevelTrace   FormatLevel = "trace"
+	FormatLevelWarning FormatLevel = "warning"
+	FormatLevelError   FormatLevel = "error"
 )
 
-func (e AppscopeConfigWithCustomFormatLevel) ToPointer() *AppscopeConfigWithCustomFormatLevel {
+func (e FormatLevel) ToPointer() *FormatLevel {
 	return &e
 }
-func (e *AppscopeConfigWithCustomFormatLevel) UnmarshalJSON(data []byte) error {
+func (e *FormatLevel) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -214,30 +214,30 @@ func (e *AppscopeConfigWithCustomFormatLevel) UnmarshalJSON(data []byte) error {
 	case "warning":
 		fallthrough
 	case "error":
-		*e = AppscopeConfigWithCustomFormatLevel(v)
+		*e = FormatLevel(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for AppscopeConfigWithCustomFormatLevel: %v", v)
+		return fmt.Errorf("invalid value for FormatLevel: %v", v)
 	}
 }
 
-type AppscopeConfigWithCustomConfigFormat struct {
-	Level   *AppscopeConfigWithCustomFormatLevel `json:"level,omitempty"`
-	Maxline *float64                             `json:"maxline,omitempty"`
+type ConfigFormat struct {
+	Level   *FormatLevel `json:"level,omitempty"`
+	Maxline *float64     `json:"maxline,omitempty"`
 }
 
-func (a *AppscopeConfigWithCustomConfigFormat) GetLevel() *AppscopeConfigWithCustomFormatLevel {
-	if a == nil {
+func (c *ConfigFormat) GetLevel() *FormatLevel {
+	if c == nil {
 		return nil
 	}
-	return a.Level
+	return c.Level
 }
 
-func (a *AppscopeConfigWithCustomConfigFormat) GetMaxline() *float64 {
-	if a == nil {
+func (c *ConfigFormat) GetMaxline() *float64 {
+	if c == nil {
 		return nil
 	}
-	return a.Maxline
+	return c.Maxline
 }
 
 type AppscopeConfigWithCustomLogLevel string
@@ -289,10 +289,10 @@ func (a *AppscopeConfigWithCustomLog) GetTransport() *AppscopeTransport {
 }
 
 type AppscopeConfigWithCustomConfig struct {
-	Enable    *bool                                 `json:"enable,omitempty"`
-	Format    *AppscopeConfigWithCustomConfigFormat `json:"format,omitempty"`
-	Transport *AppscopeTransport                    `json:"transport,omitempty"`
-	Log       *AppscopeConfigWithCustomLog          `json:"log,omitempty"`
+	Enable    *bool                        `json:"enable,omitempty"`
+	Format    *ConfigFormat                `json:"format,omitempty"`
+	Transport *AppscopeTransport           `json:"transport,omitempty"`
+	Log       *AppscopeConfigWithCustomLog `json:"log,omitempty"`
 }
 
 func (a *AppscopeConfigWithCustomConfig) GetEnable() *bool {
@@ -302,7 +302,7 @@ func (a *AppscopeConfigWithCustomConfig) GetEnable() *bool {
 	return a.Enable
 }
 
-func (a *AppscopeConfigWithCustomConfig) GetFormat() *AppscopeConfigWithCustomConfigFormat {
+func (a *AppscopeConfigWithCustomConfig) GetFormat() *ConfigFormat {
 	if a == nil {
 		return nil
 	}

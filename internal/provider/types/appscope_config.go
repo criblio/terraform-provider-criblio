@@ -6,8 +6,6 @@ type AppscopeConfig struct {
 	Cribl    *AppscopeConfigCribl     `tfsdk:"cribl"`
 	Event    *AppscopeConfigEvent     `tfsdk:"event"`
 	Libscope *AppscopeConfigLibscope  `tfsdk:"libscope"`
-	Metric   *AppscopeConfigMetric    `tfsdk:"metric"`
-	Payload  *AppscopeConfigPayload   `tfsdk:"payload"`
 	Protocol []AppscopeConfigProtocol `tfsdk:"protocol"`
 	Tags     []AppscopeConfigTag      `tfsdk:"tags"`
 }

@@ -99,8 +99,10 @@ func (e *AzureBlobProviderAuthenticationMethod) UnmarshalJSON(data []byte) error
 }
 
 type SasConfig struct {
+	// Name of the Azure Blob Storage container
 	ContainerName string `json:"containerName"`
-	BlobSasURL    string `json:"blobSasUrl"`
+	// Container-specific Blob SAS URL
+	BlobSasURL string `json:"blobSasUrl"`
 }
 
 func (s SasConfig) MarshalJSON() ([]byte, error) {
@@ -143,14 +145,14 @@ type AzureBlobProvider struct {
 	ConnectionString *string `json:"connectionString,omitempty"`
 	// A list of container-specific SAS configurations
 	SasConfigs []SasConfig `json:"sasConfigs,omitempty"`
-	// Azure AD application client ID
-	ClientID *string `json:"clientId,omitempty"`
-	// Azure AD tenant ID
-	TenantID *string `json:"tenantId,omitempty"`
-	// Azure AD application client secret
-	ClientSecret *string `json:"clientSecret,omitempty"`
 	// The name of your Azure storage account
 	StorageAccountName *string `json:"storageAccountName,omitempty"`
+	// Azure AD tenant ID
+	TenantID *string `json:"tenantId,omitempty"`
+	// Azure AD application client ID
+	ClientID *string `json:"clientId,omitempty"`
+	// Azure AD application client secret
+	ClientSecret *string `json:"clientSecret,omitempty"`
 }
 
 func (a AzureBlobProvider) MarshalJSON() ([]byte, error) {
@@ -213,11 +215,11 @@ func (a *AzureBlobProvider) GetSasConfigs() []SasConfig {
 	return a.SasConfigs
 }
 
-func (a *AzureBlobProvider) GetClientID() *string {
+func (a *AzureBlobProvider) GetStorageAccountName() *string {
 	if a == nil {
 		return nil
 	}
-	return a.ClientID
+	return a.StorageAccountName
 }
 
 func (a *AzureBlobProvider) GetTenantID() *string {
@@ -227,18 +229,18 @@ func (a *AzureBlobProvider) GetTenantID() *string {
 	return a.TenantID
 }
 
+func (a *AzureBlobProvider) GetClientID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ClientID
+}
+
 func (a *AzureBlobProvider) GetClientSecret() *string {
 	if a == nil {
 		return nil
 	}
 	return a.ClientSecret
-}
-
-func (a *AzureBlobProvider) GetStorageAccountName() *string {
-	if a == nil {
-		return nil
-	}
-	return a.StorageAccountName
 }
 
 type EdgeProvider struct {

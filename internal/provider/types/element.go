@@ -7,21 +7,21 @@ import (
 )
 
 type Element struct {
-	ColorPalette    types.String     `tfsdk:"color_palette"`
-	Description     types.String     `tfsdk:"description"`
-	Empty           types.Bool       `tfsdk:"empty"`
-	H               types.Float64    `tfsdk:"h"`
-	HidePanel       types.Bool       `tfsdk:"hide_panel"`
-	HorizontalChart types.Bool       `tfsdk:"horizontal_chart"`
-	ID              types.String     `tfsdk:"id"`
-	Layout          *DashboardLayout `tfsdk:"layout"`
-	Query           *SearchQuery     `tfsdk:"query"`
-	Title           types.String     `tfsdk:"title"`
-	Type            types.String     `tfsdk:"type"`
-	Variant         types.String     `tfsdk:"variant"`
-	W               types.Float64    `tfsdk:"w"`
-	X               types.Float64    `tfsdk:"x"`
-	XAxis           *XAxis           `tfsdk:"x_axis"`
-	Y               types.Float64    `tfsdk:"y"`
-	YAxis           *YAxis           `tfsdk:"y_axis"`
+	ColorPalette    types.String    `tfsdk:"color_palette"`
+	Description     types.String    `tfsdk:"description"`
+	Empty           types.Bool      `tfsdk:"empty"`
+	H               types.Float64   `tfsdk:"h"`
+	HidePanel       types.Bool      `tfsdk:"hide_panel"`
+	HorizontalChart types.Bool      `tfsdk:"horizontal_chart"`
+	ID              types.String    `tfsdk:"id"`
+	Layout          DashboardLayout `tfsdk:"layout"`
+	Query           *SearchQuery    `tfsdk:"query"`
+	Title           types.String    `tfsdk:"title"`
+	Type            types.String    `tfsdk:"type"`
+	Variant         types.String    `tfsdk:"variant"`
+	W               types.Float64   `tfsdk:"w"`
+	X               types.Float64   `tfsdk:"x"`
+	XAxis           *XAxis          `tfsdk:"x_axis"`
+	Y               types.Float64   `tfsdk:"y"`
+	YAxis           *YAxis          `tfsdk:"y_axis"`
 }

@@ -7,19 +7,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     regions = [
@@ -35,19 +29,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     id          = "myGenericDatasetId"
     location    = "eastus2"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id              = "myProviderId"
     table                    = "logs"
@@ -63,19 +51,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     subscription_ids = [
@@ -89,19 +71,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     id          = "myGenericDatasetId"
     index       = "metrics-*"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id     = "myProviderId"
     timestamp_field = "@timestamp"
@@ -117,19 +93,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -142,19 +112,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -167,19 +131,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -192,19 +150,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -214,19 +166,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     id          = "myGenericDatasetId"
     index       = "logs-*"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id     = "myProviderId"
     timestamp_field = "@timestamp"
@@ -240,19 +186,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -266,19 +206,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -291,19 +225,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -313,19 +241,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter      = "path.includes('CloudTrail')"
     id          = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path        = "AWS/CloudTrail/v1/region=us-east-1/accountId=123456789012/eventDay=20251001/"
     provider_id = "myProviderId"
@@ -350,19 +272,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter = "path.endsWith('.json')"
     id     = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path                   = "logs/2025/10/01/"
     provider_id            = "myProviderId"
@@ -378,19 +294,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     description = "This is a generic dataset"
     id          = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id     = "myProviderId"
     table           = "logs"
@@ -408,19 +318,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter = "filename.endsWith('.log')"
     id     = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path        = "/var/log/cribl"
     provider_id = "myProviderId"
@@ -435,19 +339,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path        = "/data/edge"
     provider_id = "myProviderId"
@@ -466,19 +364,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter = "path.endsWith('.json')"
     id     = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id            = "myProviderId"
     region                 = "us-central1"
@@ -497,19 +389,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     description = "This is a generic dataset"
     id          = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -519,19 +405,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     desired_num_data_points = 500
     id                      = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     metric_name_pattern = "http_requests_total"
     provider_id         = "myProviderId"
@@ -554,19 +434,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter = "...my_filter..."
     id     = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path                   = "...my_path..."
     provider_id            = "myProviderId"
@@ -582,19 +456,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     description = "This is a generic dataset"
     id          = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id     = "myProviderId"
     role            = "SYSADMIN"

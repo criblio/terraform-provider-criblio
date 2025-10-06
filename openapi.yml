@@ -3336,6 +3336,32 @@ components:
           type: string
           description: Human-readable description of the provider
           example: "Provider for ingesting data from S3"
+    DatasetMetadata:
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          description: Creation timestamp
+          example: "2025-10-06T12:00:00Z"
+        modified:
+          type: string
+          format: date-time
+          description: Last modification timestamp
+          example: "2025-10-06T12:34:56Z"
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags associated with the dataset
+          example:
+            - "prod"
+            - "pii"
+        enableAcceleration:
+          type: boolean
+          description: "Whether acceleration is enabled for this dataset"
+          default: false
+          example: true
     # HTTP API Dataset Schemas
     ApiHttpDataset:
       allOf:
@@ -4375,30 +4401,32 @@ components:
                     type: string
                     title: "Container name"
                     example: "my-container"
+                    description: "Name of the Azure Blob Storage container"
                   blobSasUrl:
                     type: string
                     title: "Blob SAS URL"
                     example: "https://myaccount.blob.core.windows.net/my-container?sp=rl&st=2025-09-30T00:00:00Z&se=2025-10-01T00:00:00Z&spr=https&sv=2021-08-06&sr=c&sig=mysignature"
-            clientId:
-              type: string
-              title: "Client ID"
-              description: "Azure AD application client ID"
-              example: "00000000-0000-0000-0000-000000000000"
-            tenantId:
-              type: string
-              title: "Tenant ID"
-              description: "Azure AD tenant ID"
-              example: "11111111-1111-1111-1111-111111111111"
-            clientSecret:
-              type: string
-              title: "Client Secret"
-              description: "Azure AD application client secret"
-              example: "superSecretClientKey"
+                    description: "Container-specific Blob SAS URL"
             storageAccountName:
               type: string
               title: "Storage account name"
               description: "The name of your Azure storage account" 
               example: "myAccountName"
+            tenantId:
+              type: string
+              title: "Tenant ID"
+              description: "Azure AD tenant ID"
+              example: "11111111-1111-1111-1111-111111111111"
+            clientId:
+              type: string
+              title: "Client ID"
+              description: "Azure AD application client ID"
+              example: "00000000-0000-0000-0000-000000000000"
+            clientSecret:
+              type: string
+              title: "Client Secret"
+              description: "Azure AD application client secret"
+              example: "superSecretClientKey"
     GcsDataset:
       allOf:
         - $ref: '#/components/schemas/Dataset'
@@ -4493,18 +4521,18 @@ components:
               description: "Contents of Google Cloud service account credentials (JSON keys) file"
               minLength: 1
               example: |
-                {
-                  "type": "service_account",
-                  "project_id": "my-gcp-project",
-                  "private_key_id": "abcd1234efgh5678ijkl90",
-                  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9...==\n-----END PRIVATE KEY-----\n",
-                  "client_email": "my-service-account@my-gcp-project.iam.gserviceaccount.com",
-                  "client_id": "123456789012345678901",
-                  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                  "token_uri": "https://oauth2.googleapis.com/token",
-                  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/my-service-account%40my-gcp-project.iam.gserviceaccount.com"
-                }
+                { \n
+                  "type": "service_account", \n
+                  "project_id": "my-gcp-project", \n
+                  "private_key_id": "abcd1234efgh5678ijkl90", \n
+                  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9...==\n-----END PRIVATE KEY-----\n", \n
+                  "client_email": "my-service-account@my-gcp-project.iam.gserviceaccount.com", \n
+                  "client_id": "123456789012345678901", \n
+                  "auth_uri": "https://accounts.google.com/o/oauth2/auth", \n
+                  "token_uri": "https://oauth2.googleapis.com/token", \n
+                  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", \n
+                  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/my-service-account%40my-gcp-project.iam.gserviceaccount.com" \n
+                } \n
             endpoint:
               type: string
               title: "Endpoint"
@@ -5364,10 +5392,45 @@ components:
                   value: "GET"
                   enabled: true
                   allowbinary: false
+          required:
+            - enable
+            - format
+            - transport
+            - type
+            - watch
         libscope:
           type: object
           properties:
-            config:
+            commanddir:
+              type: string
+              example: "/opt/appscope"
+            configevent:
+              type: boolean
+              example: false
+            log:
+              type: object
+              properties:
+                level:
+                  type: string
+                  enum:
+                    - error
+                    - debug
+                    - info
+                    - warning
+                    - none
+                  example: "info"
+                transport:
+                  $ref: "#/components/schemas/AppscopeTransport"
+              example:
+                level: "info"
+                transport:
+                  type: "tcp"
+                  host: "127.0.0.1"
+                  port: 9090
+            summaryperiod:
+              type: number
+              example: 60
+            metric:
               type: object
               properties:
                 enable:
@@ -5376,48 +5439,49 @@ components:
                 format:
                   type: object
                   properties:
-                    level:
-                      type: string
-                      enum: [info, debug, trace]
-                      example: "info"
-                    maxline:
+                    statsdmaxlen:
                       type: number
-                      example: 1024
+                      example: 512
+                    statsdprefix:
+                      type: string
+                      example: "app."
+                    type:
+                      type: string
+                      example: "statsd"
+                    verbosity:
+                      type: number
+                      example: 1
+                  example:
+                    type: "statsd"
+                    statsdprefix: "app."
+                    statsdmaxlen: 512
+                    verbosity: 1
                 transport:
                   $ref: "#/components/schemas/AppscopeTransport"
-                log:
-                  type: object
-                  properties:
-                    level:
-                      type: string
-                      enum: [info, debug, trace]
-                      example: "debug"
-                    transport:
-                      $ref: "#/components/schemas/AppscopeTransport"
-        metric:
-          type: object
-          properties:
-            enable:
-              type: boolean
-              example: true
-            format:
-              type: string
-              enum: [statsd, ndjson]
-              example: "statsd"
-            statsdmaxlen:
-              type: number
-              example: 512
-            transport:
-              $ref: "#/components/schemas/AppscopeTransport"
-        payload:
-          type: object
-          properties:
-            dir:
-              type: string
-              example: "/var/log/appscope/payloads"
-            enable:
-              type: boolean
-              example: false
+                watch:
+                  type: array
+                  items:
+                    type: object
+                  example:
+                    - type: "file"
+                      pattern: "/var/log/*.log"
+              required:
+                - enable
+                - format
+                - transport
+                - watch
+            payload:
+              type: object
+              properties:
+                dir:
+                  type: string
+                  example: "/var/log/appscope/payloads"
+                enable:
+                  type: boolean
+                  example: false
+              required:
+                - dir
+                - enable
         protocol:
           type: array
           items:
@@ -6365,8 +6429,11 @@ components:
                         type: string
                         example: "value"
                 required:
+                  - id
+                  - layout
                   - colorPalette
                   - type
+                  - variant
         id:
           type: string
           example: "dashboard123"
@@ -6379,6 +6446,18 @@ components:
         name:
           type: string
           example: "System Metrics Dashboard"
+        packId:
+          type: string
+          example: "New Pack Id"
+        refreshRate:
+          type: number
+          example: 60
+        resolvedDatasetIds:
+          type: array
+          items:
+            type: string
+            example: "int"
+          example: ["string", "int"]
         owner:
           type: string
           example: "teamA"
@@ -6388,7 +6467,15 @@ components:
             type: string
             example: "monitoring"
           example: ["monitoring", "system", "cpu"]
-
+        schedule:
+          $ref: "#/components/schemas/SavedQuerySchedule"
+      required:
+        - created
+        - createdBy
+        - elements
+        - id
+        - modified
+        - name
     SearchMacro:
       type: object
       properties:

@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type AppscopeConfigConfigFormat struct {
+type ConfigFormat struct {
 	Level   types.String  `tfsdk:"level"`
 	Maxline types.Float64 `tfsdk:"maxline"`
 }

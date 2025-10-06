@@ -89,35 +89,22 @@ func (r *CriblLakeDatasetDataSource) Schema(ctx context.Context, req datasource.
 					"metadata": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"earliest": schema.StringAttribute{
-								Computed: true,
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
 							},
 							"enable_acceleration": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
 							},
-							"field_list": schema.ListAttribute{
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-							},
-							"latest_run_info": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"earliest_scanned_time": schema.Float64Attribute{
-										Computed: true,
-									},
-									"finished_at": schema.Float64Attribute{
-										Computed: true,
-									},
-									"latest_scanned_time": schema.Float64Attribute{
-										Computed: true,
-									},
-									"object_count": schema.Float64Attribute{
-										Computed: true,
-									},
-								},
-							},
-							"scan_mode": schema.StringAttribute{
-								Computed: true,
+								Description: `Tags associated with the dataset`,
 							},
 						},
 					},

@@ -10,13 +10,12 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	speakeasy_boolvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/boolvalidators"
-	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
-	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
+	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -112,64 +111,33 @@ func (r *CriblLakeDatasetResource) Schema(ctx context.Context, req resource.Sche
 						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"earliest": schema.StringAttribute{
+							"created": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Not Null`,
+								Description: `Creation timestamp`,
 								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
+									validators.IsRFC3339(),
 								},
 							},
 							"enable_acceleration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Bool{
-									speakeasy_boolvalidators.NotNull(),
+								Default:     booldefault.StaticBool(false),
+								Description: `Whether acceleration is enabled for this dataset. Default: false`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Last modification timestamp`,
+								Validators: []validator.String{
+									validators.IsRFC3339(),
 								},
 							},
-							"field_list": schema.ListAttribute{
+							"tags": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Not Null`,
-								Validators: []validator.List{
-									speakeasy_listvalidators.NotNull(),
-								},
-							},
-							"latest_run_info": schema.SingleNestedAttribute{
-								Computed: true,
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"earliest_scanned_time": schema.Float64Attribute{
-										Computed: true,
-										Optional: true,
-									},
-									"finished_at": schema.Float64Attribute{
-										Computed: true,
-										Optional: true,
-									},
-									"latest_scanned_time": schema.Float64Attribute{
-										Computed: true,
-										Optional: true,
-									},
-									"object_count": schema.Float64Attribute{
-										Computed: true,
-										Optional: true,
-									},
-								},
-							},
-							"scan_mode": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Description: `Not Null; must be one of ["detailed", "quick"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"detailed",
-										"quick",
-									),
-								},
+								Description: `Tags associated with the dataset`,
 							},
 						},
 					},

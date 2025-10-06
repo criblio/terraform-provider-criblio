@@ -169,17 +169,17 @@ type Element struct {
 	Empty           *bool                `json:"empty,omitempty"`
 	HidePanel       *bool                `json:"hidePanel,omitempty"`
 	HorizontalChart *bool                `json:"horizontalChart,omitempty"`
-	ID              *string              `json:"id,omitempty"`
+	ID              string               `json:"id"`
 	Query           *SearchQuery         `json:"query,omitempty"`
 	Title           *string              `json:"title,omitempty"`
 	Type            DashboardElementType `json:"type"`
-	Variant         *string              `json:"variant,omitempty"`
+	Variant         string               `json:"variant"`
 	W               *float64             `json:"w,omitempty"`
 	H               *float64             `json:"h,omitempty"`
 	X               *float64             `json:"x,omitempty"`
 	Y               *float64             `json:"y,omitempty"`
 	ColorPalette    string               `json:"colorPalette"`
-	Layout          *DashboardLayout     `json:"layout,omitempty"`
+	Layout          DashboardLayout      `json:"layout"`
 	XAxis           *XAxis               `json:"xAxis,omitempty"`
 	YAxis           *YAxis               `json:"yAxis,omitempty"`
 }
@@ -189,7 +189,7 @@ func (e Element) MarshalJSON() ([]byte, error) {
 }
 
 func (e *Element) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"type", "colorPalette"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"id", "type", "variant", "colorPalette", "layout"}); err != nil {
 		return err
 	}
 	return nil
@@ -223,9 +223,9 @@ func (e *Element) GetHorizontalChart() *bool {
 	return e.HorizontalChart
 }
 
-func (e *Element) GetID() *string {
+func (e *Element) GetID() string {
 	if e == nil {
-		return nil
+		return ""
 	}
 	return e.ID
 }
@@ -251,9 +251,9 @@ func (e *Element) GetType() DashboardElementType {
 	return e.Type
 }
 
-func (e *Element) GetVariant() *string {
+func (e *Element) GetVariant() string {
 	if e == nil {
-		return nil
+		return ""
 	}
 	return e.Variant
 }
@@ -293,9 +293,9 @@ func (e *Element) GetColorPalette() string {
 	return e.ColorPalette
 }
 
-func (e *Element) GetLayout() *DashboardLayout {
+func (e *Element) GetLayout() DashboardLayout {
 	if e == nil {
-		return nil
+		return DashboardLayout{}
 	}
 	return e.Layout
 }
@@ -356,20 +356,24 @@ func (u ElementUnion) MarshalJSON() ([]byte, error) {
 }
 
 type SearchDashboard struct {
-	CacheTTLSeconds   *float64       `json:"cacheTTLSeconds,omitempty"`
-	Category          *string        `json:"category,omitempty"`
-	Created           *float64       `json:"created,omitempty"`
-	CreatedBy         *string        `json:"createdBy,omitempty"`
-	Description       *string        `json:"description,omitempty"`
-	DisplayCreatedBy  *string        `json:"displayCreatedBy,omitempty"`
-	DisplayModifiedBy *string        `json:"displayModifiedBy,omitempty"`
-	Elements          []ElementUnion `json:"elements,omitempty"`
-	ID                *string        `json:"id,omitempty"`
-	Modified          *float64       `json:"modified,omitempty"`
-	ModifiedBy        *string        `json:"modifiedBy,omitempty"`
-	Name              *string        `json:"name,omitempty"`
-	Owner             *string        `json:"owner,omitempty"`
-	Tags              []string       `json:"tags,omitempty"`
+	CacheTTLSeconds    *float64            `json:"cacheTTLSeconds,omitempty"`
+	Category           *string             `json:"category,omitempty"`
+	Created            float64             `json:"created"`
+	CreatedBy          string              `json:"createdBy"`
+	Description        *string             `json:"description,omitempty"`
+	DisplayCreatedBy   *string             `json:"displayCreatedBy,omitempty"`
+	DisplayModifiedBy  *string             `json:"displayModifiedBy,omitempty"`
+	Elements           []ElementUnion      `json:"elements"`
+	ID                 string              `json:"id"`
+	Modified           float64             `json:"modified"`
+	ModifiedBy         *string             `json:"modifiedBy,omitempty"`
+	Name               string              `json:"name"`
+	PackID             *string             `json:"packId,omitempty"`
+	RefreshRate        *float64            `json:"refreshRate,omitempty"`
+	ResolvedDatasetIds []string            `json:"resolvedDatasetIds,omitempty"`
+	Owner              *string             `json:"owner,omitempty"`
+	Tags               []string            `json:"tags,omitempty"`
+	Schedule           *SavedQuerySchedule `json:"schedule,omitempty"`
 }
 
 func (s *SearchDashboard) GetCacheTTLSeconds() *float64 {
@@ -386,16 +390,16 @@ func (s *SearchDashboard) GetCategory() *string {
 	return s.Category
 }
 
-func (s *SearchDashboard) GetCreated() *float64 {
+func (s *SearchDashboard) GetCreated() float64 {
 	if s == nil {
-		return nil
+		return 0.0
 	}
 	return s.Created
 }
 
-func (s *SearchDashboard) GetCreatedBy() *string {
+func (s *SearchDashboard) GetCreatedBy() string {
 	if s == nil {
-		return nil
+		return ""
 	}
 	return s.CreatedBy
 }
@@ -423,21 +427,21 @@ func (s *SearchDashboard) GetDisplayModifiedBy() *string {
 
 func (s *SearchDashboard) GetElements() []ElementUnion {
 	if s == nil {
-		return nil
+		return []ElementUnion{}
 	}
 	return s.Elements
 }
 
-func (s *SearchDashboard) GetID() *string {
+func (s *SearchDashboard) GetID() string {
 	if s == nil {
-		return nil
+		return ""
 	}
 	return s.ID
 }
 
-func (s *SearchDashboard) GetModified() *float64 {
+func (s *SearchDashboard) GetModified() float64 {
 	if s == nil {
-		return nil
+		return 0.0
 	}
 	return s.Modified
 }
@@ -449,11 +453,32 @@ func (s *SearchDashboard) GetModifiedBy() *string {
 	return s.ModifiedBy
 }
 
-func (s *SearchDashboard) GetName() *string {
+func (s *SearchDashboard) GetName() string {
+	if s == nil {
+		return ""
+	}
+	return s.Name
+}
+
+func (s *SearchDashboard) GetPackID() *string {
 	if s == nil {
 		return nil
 	}
-	return s.Name
+	return s.PackID
+}
+
+func (s *SearchDashboard) GetRefreshRate() *float64 {
+	if s == nil {
+		return nil
+	}
+	return s.RefreshRate
+}
+
+func (s *SearchDashboard) GetResolvedDatasetIds() []string {
+	if s == nil {
+		return nil
+	}
+	return s.ResolvedDatasetIds
 }
 
 func (s *SearchDashboard) GetOwner() *string {
@@ -468,4 +493,11 @@ func (s *SearchDashboard) GetTags() []string {
 		return nil
 	}
 	return s.Tags
+}
+
+func (s *SearchDashboard) GetSchedule() *SavedQuerySchedule {
+	if s == nil {
+		return nil
+	}
+	return s.Schedule
 }

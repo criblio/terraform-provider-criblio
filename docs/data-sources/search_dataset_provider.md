@@ -328,8 +328,8 @@ Read-Only:
 
 Read-Only:
 
-- `blob_sas_url` (String)
-- `container_name` (String)
+- `blob_sas_url` (String) Container-specific Blob SAS URL
+- `container_name` (String) Name of the Azure Blob Storage container
 
 
 

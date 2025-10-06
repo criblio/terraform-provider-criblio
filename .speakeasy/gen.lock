@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 8da0d92cf90a3504427a1eb8bee04fdf
+  docChecksum: db3f50f2c8acc0452c08fe651696c6e2
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.635.1
   generationVersion: 2.722.2
@@ -405,21 +405,19 @@ generatedFiles:
   - internal/provider/types/apihttp_dataset.go
   - internal/provider/types/apihttp_provider.go
   - internal/provider/types/appscope_config.go
-  - internal/provider/types/appscope_config_config.go
-  - internal/provider/types/appscope_config_config_format.go
   - internal/provider/types/appscope_config_cribl.go
   - internal/provider/types/appscope_config_event.go
   - internal/provider/types/appscope_config_format_ndjson.go
   - internal/provider/types/appscope_config_libscope.go
   - internal/provider/types/appscope_config_log.go
   - internal/provider/types/appscope_config_metric.go
+  - internal/provider/types/appscope_config_metric_format.go
   - internal/provider/types/appscope_config_payload.go
   - internal/provider/types/appscope_config_protocol.go
   - internal/provider/types/appscope_config_tag.go
-  - internal/provider/types/appscope_config_watch.go
+  - internal/provider/types/appscope_config_watch_ndjson.go
   - internal/provider/types/appscope_config_with_custom.go
   - internal/provider/types/appscope_config_with_custom_config.go
-  - internal/provider/types/appscope_config_with_custom_config_format.go
   - internal/provider/types/appscope_config_with_custom_cribl.go
   - internal/provider/types/appscope_config_with_custom_event.go
   - internal/provider/types/appscope_config_with_custom_format_ndjson.go
@@ -431,6 +429,7 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_tag.go
   - internal/provider/types/appscope_config_with_custom_watch.go
   - internal/provider/types/appscope_custom.go
+  - internal/provider/types/appscope_lib_entry.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/auth_request_header.go
@@ -457,6 +456,7 @@ generatedFiles:
   - internal/provider/types/commit.go
   - internal/provider/types/condition_specific_configs.go
   - internal/provider/types/config_bundles.go
+  - internal/provider/types/config_format.go
   - internal/provider/types/config_group.go
   - internal/provider/types/config_group_cloud.go
   - internal/provider/types/config_group_git.go
@@ -470,7 +470,6 @@ generatedFiles:
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/database_connection_config.go
   - internal/provider/types/dataset_metadata.go
-  - internal/provider/types/dataset_metadata_run_info.go
   - internal/provider/types/discover_request_header.go
   - internal/provider/types/discover_request_param.go
   - internal/provider/types/discovery_configuration.go
@@ -494,10 +493,12 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
+  - internal/provider/types/generic_dataset.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
   - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
+  - internal/provider/types/grok_file.go
   - internal/provider/types/group.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
@@ -962,7 +963,6 @@ generatedFiles:
   - internal/provider/types/interfaces.go
   - internal/provider/types/internal_scheduling.go
   - internal/provider/types/lake_dataset_search_config.go
-  - internal/provider/types/lakehouse.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
@@ -976,6 +976,7 @@ generatedFiles:
   - internal/provider/types/master_schema_tls.go
   - internal/provider/types/meta_dataset.go
   - internal/provider/types/meta_provider.go
+  - internal/provider/types/metric_watch.go
   - internal/provider/types/ms_graph_account_config.go
   - internal/provider/types/mtls_settings.go
   - internal/provider/types/notifications.go
@@ -1283,10 +1284,10 @@ generatedFiles:
   - internal/provider/types/s3_provider.go
   - internal/provider/types/sample.go
   - internal/provider/types/sas_config.go
-  - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
   - internal/provider/types/schema_lib_entry.go
+  - internal/provider/types/search_dashboard.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1962,7 +1963,6 @@ generatedFiles:
   - internal/sdk/models/shared/databaseconnectiontype.go
   - internal/sdk/models/shared/datasample.go
   - internal/sdk/models/shared/datasetmetadata.go
-  - internal/sdk/models/shared/datasetmetadataruninfo.go
   - internal/sdk/models/shared/datasetorigin.go
   - internal/sdk/models/shared/datasetprovidertype.go
   - internal/sdk/models/shared/datatypeoverrides.go
@@ -4073,10 +4073,10 @@ examples:
         path:
           lakeId: "default"
       requestBody:
-        application/json: {"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}}}
+        application/json: {"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}}}
       responses:
         "200":
-          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}}}]}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"enableAcceleration": true}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getCriblLakeDatasetByLakeId:
@@ -4086,7 +4086,7 @@ examples:
           lakeId: "default"
       responses:
         "200":
-          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}}}]}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"enableAcceleration": true}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteCriblLakeDatasetByLakeIdAndId:
@@ -4097,7 +4097,7 @@ examples:
           id: "web-logs"
       responses:
         "200":
-          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}}}]}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"enableAcceleration": true}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getCriblLakeDatasetByLakeIdAndId:
@@ -4108,7 +4108,7 @@ examples:
           id: "web-logs"
       responses:
         "200":
-          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}}}]}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"enableAcceleration": true}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateCriblLakeDatasetByLakeIdAndId:
@@ -4118,10 +4118,10 @@ examples:
           lakeId: "default"
           id: "myLakeDatasetToCRUD"
       requestBody:
-        application/json: {"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}}}
+        application/json: {"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}}}
       responses:
         "200":
-          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}}}]}
+          application/json: {"items": [{"acceleratedFields": ["fields", "to", "accelerate"], "bucketName": "my-Lake-bucket-name", "description": "My description for this beautiful lake dataset", "format": "json", "id": "myLakeDatasetId", "retentionPeriodInDays": 30, "searchConfig": {"datatypes": ["json", "parquet"], "metadata": {"enableAcceleration": true}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listDashboardCategory:
@@ -4332,7 +4332,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}, "enabledEndpoints": ["login", "admin"]}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "enabledEndpoints": ["login", "admin"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDataset:
@@ -4344,7 +4344,7 @@ examples:
         application/json: {"id": "<id>", "provider": "<value>", "type": "<value>", "enabledEndpoints": []}
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}, "cluster": "myadxcluster", "location": "eastus2", "database": "logsdb", "table": "logs", "timestampField": "event_time", "timestampFieldContents": "kusto_datetime"}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "cluster": "myadxcluster", "location": "eastus2", "database": "logsdb", "table": "logs", "timestampField": "event_time", "timestampFieldContents": "kusto_datetime"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetById:
@@ -4355,7 +4355,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}, "index": "metrics-*", "timestampField": "@timestamp"}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "index": "metrics-*", "timestampField": "@timestamp"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateDatasetById:
@@ -4368,7 +4368,7 @@ examples:
         application/json: {"id": "<id>", "provider": "<value>", "type": "<value>", "table": "<value>"}
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}, "bucket": "<value>", "filter": "true"}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "bucket": "<value>", "filter": "true"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteDatasetById:
@@ -4379,7 +4379,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"earliest": "2025-09-30T13:41:44Z", "enableAcceleration": true, "fieldList": ["field1", "field2"], "latestRunInfo": {"earliestScannedTime": 1759324416, "finishedAt": 1759325416, "latestScannedTime": 1759326416, "objectCount": 5000}, "scanMode": "detailed"}, "enabledEndpoints": ["users", "meetings", "recordings"]}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "enabledEndpoints": ["users", "meetings", "recordings"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetAclById:
@@ -4822,7 +4822,7 @@ examples:
   createSearchDashboard:
     speakeasy-default-create-search-dashboard:
       requestBody:
-        application/json: {"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}, {"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "owner": "teamA", "tags": ["monitoring", "system", "cpu"]}
+        application/json: {"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}, {"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "packId": "New Pack Id", "refreshRate": 60, "resolvedDatasetIds": ["string", "int"], "owner": "teamA", "tags": ["monitoring", "system", "cpu"], "schedule": {"cronSchedule": "0 * * * *", "enabled": true, "keepLastN": 5, "notifications": {"disabled": false, "items": [{"id": "notif1", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "group": "myNotificationGroup"}]}, "resumeMissed": true, "resumeOnBoot": false, "tz": "UTC"}}
       responses:
         "200":
           application/json: {"items": [{"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "owner": "teamA", "tags": ["monitoring", "system", "cpu"]}]}
@@ -4844,7 +4844,7 @@ examples:
         path:
           id: "dash-overview"
       requestBody:
-        application/json: {"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}, {"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "owner": "teamA", "tags": ["monitoring", "system", "cpu"]}
+        application/json: {"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}, {"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "packId": "New Pack Id", "refreshRate": 60, "resolvedDatasetIds": ["string", "int"], "owner": "teamA", "tags": ["monitoring", "system", "cpu"], "schedule": {"cronSchedule": "0 * * * *", "enabled": true, "keepLastN": 5, "notifications": {"disabled": false, "items": [{"id": "notif1", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "group": "myNotificationGroup"}]}, "resumeMissed": true, "resumeOnBoot": false, "tz": "UTC"}}
       responses:
         "200":
           application/json: {"items": [{"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "CPU usage chart", "empty": false, "hidePanel": false, "horizontalChart": true, "id": "element1", "query": {"type": "values", "values": ["val1", "val2"]}, "title": "CPU Usage", "type": "chart.line", "variant": "default", "w": 6, "h": 4, "x": 0, "y": 0, "colorPalette": "blue", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "xAxis": {"dataField": "time", "inverse": false, "labelInterval": "1m", "labelOrientation": 0, "name": "Time", "offset": 0, "position": "bottom", "type": "time"}, "yAxis": {"dataField": ["cpu"], "interval": 10, "max": 100, "min": 0, "position": "left", "scale": "linear", "splitLine": true, "type": "value"}}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "owner": "teamA", "tags": ["monitoring", "system", "cpu"]}]}

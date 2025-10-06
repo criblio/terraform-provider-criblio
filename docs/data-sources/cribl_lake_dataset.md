@@ -49,18 +49,7 @@ Read-Only:
 
 Read-Only:
 
-- `earliest` (String)
-- `enable_acceleration` (Boolean)
-- `field_list` (List of String)
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--search_config--metadata--latest_run_info))
-- `scan_mode` (String)
-
-<a id="nestedatt--search_config--metadata--latest_run_info"></a>
-### Nested Schema for `search_config.metadata.latest_run_info`
-
-Read-Only:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset

@@ -31,19 +31,13 @@ resource "criblio_cribl_lake_dataset" "my_cribllakedataset" {
       "parquet",
     ]
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
   }
 }
@@ -79,21 +73,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--search_config--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--search_config--metadata--latest_run_info"></a>
-### Nested Schema for `search_config.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 ## Import
 

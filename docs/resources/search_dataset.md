@@ -22,19 +22,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     regions = [
@@ -50,19 +44,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     id          = "myGenericDatasetId"
     location    = "eastus2"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id              = "myProviderId"
     table                    = "logs"
@@ -78,19 +66,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     subscription_ids = [
@@ -104,19 +86,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     id          = "myGenericDatasetId"
     index       = "metrics-*"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id     = "myProviderId"
     timestamp_field = "@timestamp"
@@ -132,19 +108,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -157,19 +127,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -182,19 +146,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -207,19 +165,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -229,19 +181,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     id          = "myGenericDatasetId"
     index       = "logs-*"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id     = "myProviderId"
     timestamp_field = "@timestamp"
@@ -255,19 +201,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -281,19 +221,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -306,19 +240,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -328,19 +256,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter      = "path.includes('CloudTrail')"
     id          = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path        = "AWS/CloudTrail/v1/region=us-east-1/accountId=123456789012/eventDay=20251001/"
     provider_id = "myProviderId"
@@ -365,19 +287,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter = "path.endsWith('.json')"
     id     = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path                   = "logs/2025/10/01/"
     provider_id            = "myProviderId"
@@ -393,19 +309,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     description = "This is a generic dataset"
     id          = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id     = "myProviderId"
     table           = "logs"
@@ -423,19 +333,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter = "filename.endsWith('.log')"
     id     = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path        = "/var/log/cribl"
     provider_id = "myProviderId"
@@ -450,19 +354,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     ]
     id = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path        = "/data/edge"
     provider_id = "myProviderId"
@@ -481,19 +379,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter = "path.endsWith('.json')"
     id     = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id            = "myProviderId"
     region                 = "us-central1"
@@ -512,19 +404,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     description = "This is a generic dataset"
     id          = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id = "myProviderId"
     type        = "cribl_lake"
@@ -534,19 +420,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     desired_num_data_points = 500
     id                      = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     metric_name_pattern = "http_requests_total"
     provider_id         = "myProviderId"
@@ -569,19 +449,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     filter = "...my_filter..."
     id     = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     path                   = "...my_path..."
     provider_id            = "myProviderId"
@@ -597,19 +471,13 @@ resource "criblio_search_dataset" "my_searchdataset" {
     description = "This is a generic dataset"
     id          = "myGenericDatasetId"
     metadata = {
-      earliest            = "2025-09-30T13:41:44Z"
+      created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
-      field_list = [
-        "field1",
-        "field2",
+      modified            = "2025-10-06T12:34:56Z"
+      tags = [
+        "prod",
+        "pii",
       ]
-      latest_run_info = {
-        earliest_scanned_time = 1759324416
-        finished_at           = 1759325416
-        latest_scanned_time   = 1759326416
-        object_count          = 5000
-      }
-      scan_mode = "detailed"
     }
     provider_id     = "myProviderId"
     role            = "SYSADMIN"
@@ -654,6 +522,7 @@ resource "criblio_search_dataset" "my_searchdataset" {
 
 - `description` (String) Description of the dataset
 - `id` (String) Unique identifier for the dataset
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
 - `provider_id` (String) Dataset provider ID
 - `type` (String) Dataset provider type, set automatically from the dataset provider
 
@@ -675,22 +544,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_aws_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_aws_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_aws_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -716,22 +573,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_azure_data_explorer_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_azure_data_explorer_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_azure_data_explorer_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -753,22 +598,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_azure_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_azure_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_azure_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -790,22 +623,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_elastic_search_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_elastic_search_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_elastic_search_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -835,22 +656,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_gcp_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_gcp_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_gcp_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -871,22 +680,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_google_workspace_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_google_workspace_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_google_workspace_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -907,22 +704,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_ms_graph_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_ms_graph_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_ms_graph_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -943,22 +728,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_okta_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_okta_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_okta_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -980,22 +753,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_open_search_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_open_search_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_open_search_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1016,22 +777,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_tailscale_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_tailscale_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_tailscale_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1052,22 +801,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--api_zoom_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--api_zoom_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `api_zoom_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1088,22 +825,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--apihttp_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--apihttp_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `apihttp_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1126,22 +851,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--aws_security_lake_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--aws_security_lake_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `aws_security_lake_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 <a id="nestedatt--aws_security_lake_dataset--selected_buckets"></a>
@@ -1186,22 +899,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--azure_blob_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--azure_blob_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `azure_blob_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1224,22 +925,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--click_house_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--click_house_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `click_house_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1271,22 +960,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--cribl_leader_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `cribl_leader_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1309,22 +986,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--edge_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--edge_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `edge_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1360,22 +1025,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--gcs_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--gcs_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `gcs_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1396,22 +1049,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--meta_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--meta_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `meta_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1434,22 +1075,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--prometheus_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--prometheus_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `prometheus_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1489,22 +1118,10 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--s3_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
-
-<a id="nestedatt--s3_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `s3_dataset.metadata.latest_run_info`
-
-Optional:
-
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
-
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 
 
@@ -1530,21 +1147,666 @@ Optional:
 
 Optional:
 
-- `earliest` (String) Not Null
-- `enable_acceleration` (Boolean) Not Null
-- `field_list` (List of String) Not Null
-- `latest_run_info` (Attributes) (see [below for nested schema](#nestedatt--snowflake_dataset--metadata--latest_run_info))
-- `scan_mode` (String) Not Null; must be one of ["detailed", "quick"]
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
-<a id="nestedatt--snowflake_dataset--metadata--latest_run_info"></a>
-### Nested Schema for `snowflake_dataset.metadata.latest_run_info`
 
-Optional:
 
-- `earliest_scanned_time` (Number)
-- `finished_at` (Number)
-- `latest_scanned_time` (Number)
-- `object_count` (Number)
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `api_aws_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_aws_dataset))
+- `api_azure_data_explorer_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_azure_data_explorer_dataset))
+- `api_azure_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_azure_dataset))
+- `api_elastic_search_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_elastic_search_dataset))
+- `api_gcp_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_gcp_dataset))
+- `api_google_workspace_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_google_workspace_dataset))
+- `api_ms_graph_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_ms_graph_dataset))
+- `api_okta_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_okta_dataset))
+- `api_open_search_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_open_search_dataset))
+- `api_tailscale_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_tailscale_dataset))
+- `api_zoom_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--api_zoom_dataset))
+- `apihttp_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--apihttp_dataset))
+- `aws_security_lake_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--aws_security_lake_dataset))
+- `azure_blob_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--azure_blob_dataset))
+- `click_house_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--click_house_dataset))
+- `cribl_leader_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--cribl_leader_dataset))
+- `edge_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--edge_dataset))
+- `gcs_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--gcs_dataset))
+- `meta_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--meta_dataset))
+- `prometheus_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--prometheus_dataset))
+- `s3_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--s3_dataset))
+- `snowflake_dataset` (Attributes) (see [below for nested schema](#nestedatt--items--snowflake_dataset))
+
+<a id="nestedatt--items--api_aws_dataset"></a>
+### Nested Schema for `items.api_aws_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `enabled_endpoints` (List of String) A list of the endpoints that are enabled in this dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_aws_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `regions` (List of String) A list of the AWS regions to query for this endpoint
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_aws_dataset--metadata"></a>
+### Nested Schema for `items.api_aws_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_azure_data_explorer_dataset"></a>
+### Nested Schema for `items.api_azure_data_explorer_dataset`
+
+Read-Only:
+
+- `cluster` (String) Azure Data Explorer cluster name
+- `database` (String) Azure Data Explorer database name
+- `description` (String) Description of the dataset
+- `id` (String) Unique identifier for the dataset
+- `location` (String) Location (region) of the Azure Data Explorer cluster
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_azure_data_explorer_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `table` (String) Name of the table to query. May be a simple name (Example: logs) or a Kusto query
+- `timestamp_field` (String) Optional name of the field holding the timestamp of the event
+- `timestamp_field_contents` (String) Type of the data stored in the timestamp field. Default: "kusto_datetime"
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_azure_data_explorer_dataset--metadata"></a>
+### Nested Schema for `items.api_azure_data_explorer_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_azure_dataset"></a>
+### Nested Schema for `items.api_azure_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `enabled_endpoints` (List of String) A list of the endpoints that are enabled in this dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_azure_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `subscription_ids` (List of String) A list of the subscription ids within the tenant to query with this dataset
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_azure_dataset--metadata"></a>
+### Nested Schema for `items.api_azure_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_elastic_search_dataset"></a>
+### Nested Schema for `items.api_elastic_search_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `id` (String) Unique identifier for the dataset
+- `index` (String) Name of the Elasticsearch index to search
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_elastic_search_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `timestamp_field` (String) Name of the field holding the timestamp of the event
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_elastic_search_dataset--metadata"></a>
+### Nested Schema for `items.api_elastic_search_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_gcp_dataset"></a>
+### Nested Schema for `items.api_gcp_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `endpoint_configs` (Attributes List) A list of the endpoint configurations that are enabled in this dataset (see [below for nested schema](#nestedatt--items--api_gcp_dataset--endpoint_configs))
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_gcp_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_gcp_dataset--endpoint_configs"></a>
+### Nested Schema for `items.api_gcp_dataset.endpoint_configs`
+
+Read-Only:
+
+- `endpoint_name` (String) GCP endpoint
+- `region` (String) GCP region (required for some endpoints)
+
+
+<a id="nestedatt--items--api_gcp_dataset--metadata"></a>
+### Nested Schema for `items.api_gcp_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_google_workspace_dataset"></a>
+### Nested Schema for `items.api_google_workspace_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `enabled_endpoints` (List of String) A list of the endpoints that are enabled in this dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_google_workspace_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_google_workspace_dataset--metadata"></a>
+### Nested Schema for `items.api_google_workspace_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_ms_graph_dataset"></a>
+### Nested Schema for `items.api_ms_graph_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `enabled_endpoints` (List of String) A list of the endpoints that are enabled in this dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_ms_graph_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_ms_graph_dataset--metadata"></a>
+### Nested Schema for `items.api_ms_graph_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_okta_dataset"></a>
+### Nested Schema for `items.api_okta_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `enabled_endpoints` (List of String) A list of the endpoints that are enabled in this dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_okta_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_okta_dataset--metadata"></a>
+### Nested Schema for `items.api_okta_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_open_search_dataset"></a>
+### Nested Schema for `items.api_open_search_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `id` (String) Unique identifier for the dataset
+- `index` (String) Name of the OpenSearch index to search
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_open_search_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `timestamp_field` (String) Name of the field holding the timestamp of the event. Default: "@timestamp"
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_open_search_dataset--metadata"></a>
+### Nested Schema for `items.api_open_search_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_tailscale_dataset"></a>
+### Nested Schema for `items.api_tailscale_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `enabled_endpoints` (List of String) A list of the endpoints that are enabled in this dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_tailscale_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_tailscale_dataset--metadata"></a>
+### Nested Schema for `items.api_tailscale_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--api_zoom_dataset"></a>
+### Nested Schema for `items.api_zoom_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `enabled_endpoints` (List of String) A list of the endpoints that are enabled in this dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--api_zoom_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--api_zoom_dataset--metadata"></a>
+### Nested Schema for `items.api_zoom_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--apihttp_dataset"></a>
+### Nested Schema for `items.apihttp_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `enabled_endpoints` (List of String) A list of the endpoints that are enabled in this dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--apihttp_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--apihttp_dataset--metadata"></a>
+### Nested Schema for `items.apihttp_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--aws_security_lake_dataset"></a>
+### Nested Schema for `items.aws_security_lake_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--aws_security_lake_dataset--metadata))
+- `path` (String) The templated path under which to look for data, in each folder. Default: "${vendor}/${sourceLocation}/${pathVersion}/region=${region}/accountId=${accountId}/eventDay=${_time:%Y%m%d}/"
+- `provider_id` (String) Dataset provider ID
+- `selected_buckets` (Attributes List) A list of the buckets that should be searched by this dataset (see [below for nested schema](#nestedatt--items--aws_security_lake_dataset--selected_buckets))
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--aws_security_lake_dataset--metadata"></a>
+### Nested Schema for `items.aws_security_lake_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+<a id="nestedatt--items--aws_security_lake_dataset--selected_buckets"></a>
+### Nested Schema for `items.aws_security_lake_dataset.selected_buckets`
+
+Read-Only:
+
+- `name` (String) S3 bucket name
+- `region` (String) AWS region where the bucket is located
+
+
+
+<a id="nestedatt--items--azure_blob_dataset"></a>
+### Nested Schema for `items.azure_blob_dataset`
+
+Read-Only:
+
+- `container_name` (String) Azure Blob Storage container name
+- `description` (String) Description of the dataset
+- `extra_paths` (Attributes List) Additional container paths that are included in this dataset (see [below for nested schema](#nestedatt--items--azure_blob_dataset--extra_paths))
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--azure_blob_dataset--metadata))
+- `path` (String) The templated path under which to look for data
+- `provider_id` (String) Dataset provider ID
+- `skip_event_time_filter` (Boolean) Whether to skip event time filtering
+- `storage_classes` (List of String) Storage classes to include in the search
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--azure_blob_dataset--extra_paths"></a>
+### Nested Schema for `items.azure_blob_dataset.extra_paths`
+
+Read-Only:
+
+- `container_name` (String) Name of the additional container
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `path` (String) Path inside the additional container
+
+
+<a id="nestedatt--items--azure_blob_dataset--metadata"></a>
+### Nested Schema for `items.azure_blob_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--click_house_dataset"></a>
+### Nested Schema for `items.click_house_dataset`
+
+Read-Only:
+
+- `database` (String)
+- `description` (String) Description of the dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--click_house_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `table` (String) May be a simple name (Example: logs) or a SQL query (Example: select * from logs). Results will be limited to 100K for tables without sorting keys and queries.
+- `timestamp_field` (String) Optional name of the column holding the timestamp of the event to query
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--click_house_dataset--metadata"></a>
+### Nested Schema for `items.click_house_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--cribl_leader_dataset"></a>
+### Nested Schema for `items.cribl_leader_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `extra_paths` (Attributes List) Additional paths that are included in this dataset (see [below for nested schema](#nestedatt--items--cribl_leader_dataset--extra_paths))
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--cribl_leader_dataset--metadata))
+- `path` (String) The directory from which to collect data
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--cribl_leader_dataset--extra_paths"></a>
+### Nested Schema for `items.cribl_leader_dataset.extra_paths`
+
+Read-Only:
+
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `path` (String) The directory from which to collect data
+
+
+<a id="nestedatt--items--cribl_leader_dataset--metadata"></a>
+### Nested Schema for `items.cribl_leader_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--edge_dataset"></a>
+### Nested Schema for `items.edge_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `fleets` (List of String) Fleets to query. '*' for all
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--edge_dataset--metadata))
+- `path` (String) The directory where data will be collected. Environment variables and templating are supported.
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--edge_dataset--metadata"></a>
+### Nested Schema for `items.edge_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--gcs_dataset"></a>
+### Nested Schema for `items.gcs_dataset`
+
+Read-Only:
+
+- `bucket` (String) Google Cloud Storage bucket path. Templating is supported.
+- `description` (String) Description of the dataset
+- `extra_paths` (Attributes List) Additional bucket paths that are included in this dataset (see [below for nested schema](#nestedatt--items--gcs_dataset--extra_paths))
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--gcs_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `region` (String) Where the bucket is located
+- `skip_event_time_filter` (Boolean) Whether to skip event time filtering
+- `storage_classes` (List of String) Storage classes to include in the search
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--gcs_dataset--extra_paths"></a>
+### Nested Schema for `items.gcs_dataset.extra_paths`
+
+Read-Only:
+
+- `bucket` (String) Google Cloud Storage bucket path
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `region` (String) Where the extra bucket is located
+
+
+<a id="nestedatt--items--gcs_dataset--metadata"></a>
+### Nested Schema for `items.gcs_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--meta_dataset"></a>
+### Nested Schema for `items.meta_dataset`
+
+Read-Only:
+
+- `datasets` (List of String) IDs of the datasets that are searched by default
+- `description` (String) Description of the dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--meta_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--meta_dataset--metadata"></a>
+### Nested Schema for `items.meta_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--prometheus_dataset"></a>
+### Nested Schema for `items.prometheus_dataset`
+
+Read-Only:
+
+- `description` (String) Description of the dataset
+- `desired_num_data_points` (Number) Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a 'step' predicate. Default: 250
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--prometheus_dataset--metadata))
+- `metric_name_pattern` (String) Optional regular expression used to filter metric names. When defined, only metrics whose name matches this pattern will be searched.
+- `provider_id` (String) Dataset provider ID
+- `step_mode` (String) How to calculate the "step," or time range increment per data point, for the Prometheus query request. Default: "exact"; must be one of ["exact", "nearest_unit"]
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--prometheus_dataset--metadata"></a>
+### Nested Schema for `items.prometheus_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--s3_dataset"></a>
+### Nested Schema for `items.s3_dataset`
+
+Read-Only:
+
+- `auto_detect_region` (Boolean) Whether to automatically detect the region
+- `bucket` (String) S3 bucket name
+- `description` (String) Description of the dataset
+- `extra_paths` (Attributes List) Additional bucket paths that are included in this dataset (see [below for nested schema](#nestedatt--items--s3_dataset--extra_paths))
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--s3_dataset--metadata))
+- `path` (String) The templated path under which to look for data
+- `provider_id` (String) Dataset provider ID
+- `region` (String) AWS region where the bucket is located
+- `skip_event_time_filter` (Boolean) Whether to skip event time filtering
+- `storage_classes` (List of String) Storage classes to include in the search
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--items--s3_dataset--extra_paths"></a>
+### Nested Schema for `items.s3_dataset.extra_paths`
+
+Read-Only:
+
+- `auto_detect_region` (Boolean) Whether to automatically detect the region
+- `bucket` (String) S3 bucket name
+- `filter` (String) A JavaScript filter expression to be evaluated against the provided path. Default: "true"
+- `path` (String) The templated path under which to look for data
+- `region` (String) AWS region where the bucket is located
+
+
+<a id="nestedatt--items--s3_dataset--metadata"></a>
+### Nested Schema for `items.s3_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--items--snowflake_dataset"></a>
+### Nested Schema for `items.snowflake_dataset`
+
+Read-Only:
+
+- `database` (String)
+- `description` (String) Description of the dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--snowflake_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `role` (String) Optional Snowflake role to use when executing the statement
+- `schema` (String) The schema in the database that contains the table(s) to query
+- `table` (String) May be a simple name (Example: logs) or a SQL query (Example: select * from logs)
+- `timestamp_field` (String) Optional name of the column holding the timestamp of the event to query
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+- `warehouse` (String) If not set, uses DEFAULT_WAREHOUSE
+
+<a id="nestedatt--items--snowflake_dataset--metadata"></a>
+### Nested Schema for `items.snowflake_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
 
 ## Import
 

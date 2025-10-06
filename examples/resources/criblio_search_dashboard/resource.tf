@@ -61,11 +61,26 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
       }
     }
   ]
-  id          = "dashboard123"
-  modified    = 1696170000
-  modified_by = "user456"
-  name        = "System Metrics Dashboard"
-  owner       = "teamA"
+  id           = "dashboard123"
+  modified     = 1696170000
+  modified_by  = "user456"
+  name         = "System Metrics Dashboard"
+  owner        = "teamA"
+  pack_id      = "New Pack Id"
+  refresh_rate = 60
+  resolved_dataset_ids = [
+    "string",
+    "int",
+  ]
+  schedule = {
+    cron_schedule = "0 * * * *"
+    enabled       = true
+    keep_last_n   = 5
+    notifications = {
+      disabled = false
+    }
+    tz = "UTC"
+  }
   tags = [
     "monitoring",
     "system",

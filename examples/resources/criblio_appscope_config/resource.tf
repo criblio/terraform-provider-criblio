@@ -73,27 +73,10 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
             ]
           }
           libscope = {
-            config = {
-              enable = true
-              format = {
-                level   = "info"
-                maxline = 1024
-              }
-              log = {
-                level = "debug"
-                transport = {
-                  buffer = "line"
-                  host   = "localhost"
-                  path   = "/var/run/appscope.sock"
-                  port   = 8080
-                  tls = {
-                    cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
-                    enable         = true
-                    validateserver = false
-                  }
-                  type = "tcp"
-                }
-              }
+            commanddir  = "/opt/appscope"
+            configevent = false
+            log = {
+              level = "info"
               transport = {
                 buffer = "line"
                 host   = "localhost"
@@ -107,27 +90,37 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
                 type = "tcp"
               }
             }
-          }
-          metric = {
-            enable       = true
-            format       = "statsd"
-            statsdmaxlen = 512
-            transport = {
-              buffer = "line"
-              host   = "localhost"
-              path   = "/var/run/appscope.sock"
-              port   = 8080
-              tls = {
-                cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
-                enable         = true
-                validateserver = false
+            metric = {
+              enable = true
+              format = {
+                statsdmaxlen = 512
+                statsdprefix = "app."
+                type         = "statsd"
+                verbosity    = 1
               }
-              type = "tcp"
+              transport = {
+                buffer = "line"
+                host   = "localhost"
+                path   = "/var/run/appscope.sock"
+                port   = 8080
+                tls = {
+                  cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
+                  enable         = true
+                  validateserver = false
+                }
+                type = "tcp"
+              }
+              watch = [
+                {
+                  # ...
+                }
+              ]
             }
-          }
-          payload = {
-            dir    = "/var/log/appscope/payloads"
-            enable = false
+            payload = {
+              dir    = "/var/log/appscope/payloads"
+              enable = false
+            }
+            summaryperiod = 60
           }
           protocol = [
             {

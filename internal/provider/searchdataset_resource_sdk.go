@@ -4,12 +4,23 @@ package provider
 
 import (
 	"context"
+	"github.com/criblio/terraform-provider-criblio/internal/provider/typeconvert"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"time"
 )
+
+func (r *SearchDatasetResourceModel) RefreshFromOperationsGetDatasetByIDResponseBody(ctx context.Context, resp *operations.GetDatasetByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
 
 func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context.Context, resp *shared.GenericDataset) diag.Diagnostics {
 	var diags diag.Diagnostics
@@ -28,22 +39,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIAwsDataset.Metadata = nil
 		} else {
 			r.APIAwsDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIAwsDataset.Metadata.Earliest = types.StringValue(resp.APIAwsDataset.Metadata.Earliest)
-			r.APIAwsDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIAwsDataset.Metadata.EnableAcceleration)
-			r.APIAwsDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIAwsDataset.Metadata.FieldList))
-			for _, v := range resp.APIAwsDataset.Metadata.FieldList {
-				r.APIAwsDataset.Metadata.FieldList = append(r.APIAwsDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIAwsDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAwsDataset.Metadata.Created))
+			r.APIAwsDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIAwsDataset.Metadata.EnableAcceleration)
+			r.APIAwsDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAwsDataset.Metadata.Modified))
+			r.APIAwsDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIAwsDataset.Metadata.Tags))
+			for _, v := range resp.APIAwsDataset.Metadata.Tags {
+				r.APIAwsDataset.Metadata.Tags = append(r.APIAwsDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIAwsDataset.Metadata.LatestRunInfo == nil {
-				r.APIAwsDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIAwsDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIAwsDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIAwsDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIAwsDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIAwsDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIAwsDataset.Metadata.ScanMode = types.StringValue(string(resp.APIAwsDataset.Metadata.ScanMode))
 		}
 		r.APIAwsDataset.ProviderID = types.StringValue(resp.APIAwsDataset.ProviderID)
 		r.ProviderID = r.APIAwsDataset.ProviderID
@@ -67,22 +69,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIAzureDataExplorerDataset.Metadata = nil
 		} else {
 			r.APIAzureDataExplorerDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIAzureDataExplorerDataset.Metadata.Earliest = types.StringValue(resp.APIAzureDataExplorerDataset.Metadata.Earliest)
-			r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIAzureDataExplorerDataset.Metadata.EnableAcceleration)
-			r.APIAzureDataExplorerDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIAzureDataExplorerDataset.Metadata.FieldList))
-			for _, v := range resp.APIAzureDataExplorerDataset.Metadata.FieldList {
-				r.APIAzureDataExplorerDataset.Metadata.FieldList = append(r.APIAzureDataExplorerDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIAzureDataExplorerDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAzureDataExplorerDataset.Metadata.Created))
+			r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIAzureDataExplorerDataset.Metadata.EnableAcceleration)
+			r.APIAzureDataExplorerDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAzureDataExplorerDataset.Metadata.Modified))
+			r.APIAzureDataExplorerDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIAzureDataExplorerDataset.Metadata.Tags))
+			for _, v := range resp.APIAzureDataExplorerDataset.Metadata.Tags {
+				r.APIAzureDataExplorerDataset.Metadata.Tags = append(r.APIAzureDataExplorerDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo == nil {
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIAzureDataExplorerDataset.Metadata.ScanMode = types.StringValue(string(resp.APIAzureDataExplorerDataset.Metadata.ScanMode))
 		}
 		r.APIAzureDataExplorerDataset.ProviderID = types.StringValue(resp.APIAzureDataExplorerDataset.ProviderID)
 		r.ProviderID = r.APIAzureDataExplorerDataset.ProviderID
@@ -106,22 +99,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIAzureDataset.Metadata = nil
 		} else {
 			r.APIAzureDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIAzureDataset.Metadata.Earliest = types.StringValue(resp.APIAzureDataset.Metadata.Earliest)
-			r.APIAzureDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIAzureDataset.Metadata.EnableAcceleration)
-			r.APIAzureDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIAzureDataset.Metadata.FieldList))
-			for _, v := range resp.APIAzureDataset.Metadata.FieldList {
-				r.APIAzureDataset.Metadata.FieldList = append(r.APIAzureDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIAzureDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAzureDataset.Metadata.Created))
+			r.APIAzureDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIAzureDataset.Metadata.EnableAcceleration)
+			r.APIAzureDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIAzureDataset.Metadata.Modified))
+			r.APIAzureDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIAzureDataset.Metadata.Tags))
+			for _, v := range resp.APIAzureDataset.Metadata.Tags {
+				r.APIAzureDataset.Metadata.Tags = append(r.APIAzureDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIAzureDataset.Metadata.LatestRunInfo == nil {
-				r.APIAzureDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIAzureDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIAzureDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIAzureDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIAzureDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIAzureDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIAzureDataset.Metadata.ScanMode = types.StringValue(string(resp.APIAzureDataset.Metadata.ScanMode))
 		}
 		r.APIAzureDataset.ProviderID = types.StringValue(resp.APIAzureDataset.ProviderID)
 		r.ProviderID = r.APIAzureDataset.ProviderID
@@ -143,22 +127,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIElasticSearchDataset.Metadata = nil
 		} else {
 			r.APIElasticSearchDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIElasticSearchDataset.Metadata.Earliest = types.StringValue(resp.APIElasticSearchDataset.Metadata.Earliest)
-			r.APIElasticSearchDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIElasticSearchDataset.Metadata.EnableAcceleration)
-			r.APIElasticSearchDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIElasticSearchDataset.Metadata.FieldList))
-			for _, v := range resp.APIElasticSearchDataset.Metadata.FieldList {
-				r.APIElasticSearchDataset.Metadata.FieldList = append(r.APIElasticSearchDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIElasticSearchDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIElasticSearchDataset.Metadata.Created))
+			r.APIElasticSearchDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIElasticSearchDataset.Metadata.EnableAcceleration)
+			r.APIElasticSearchDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIElasticSearchDataset.Metadata.Modified))
+			r.APIElasticSearchDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIElasticSearchDataset.Metadata.Tags))
+			for _, v := range resp.APIElasticSearchDataset.Metadata.Tags {
+				r.APIElasticSearchDataset.Metadata.Tags = append(r.APIElasticSearchDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIElasticSearchDataset.Metadata.LatestRunInfo == nil {
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIElasticSearchDataset.Metadata.ScanMode = types.StringValue(string(resp.APIElasticSearchDataset.Metadata.ScanMode))
 		}
 		r.APIElasticSearchDataset.ProviderID = types.StringValue(resp.APIElasticSearchDataset.ProviderID)
 		r.ProviderID = r.APIElasticSearchDataset.ProviderID
@@ -186,22 +161,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIGcpDataset.Metadata = nil
 		} else {
 			r.APIGcpDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIGcpDataset.Metadata.Earliest = types.StringValue(resp.APIGcpDataset.Metadata.Earliest)
-			r.APIGcpDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIGcpDataset.Metadata.EnableAcceleration)
-			r.APIGcpDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIGcpDataset.Metadata.FieldList))
-			for _, v := range resp.APIGcpDataset.Metadata.FieldList {
-				r.APIGcpDataset.Metadata.FieldList = append(r.APIGcpDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIGcpDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIGcpDataset.Metadata.Created))
+			r.APIGcpDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIGcpDataset.Metadata.EnableAcceleration)
+			r.APIGcpDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIGcpDataset.Metadata.Modified))
+			r.APIGcpDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIGcpDataset.Metadata.Tags))
+			for _, v := range resp.APIGcpDataset.Metadata.Tags {
+				r.APIGcpDataset.Metadata.Tags = append(r.APIGcpDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIGcpDataset.Metadata.LatestRunInfo == nil {
-				r.APIGcpDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIGcpDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIGcpDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIGcpDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIGcpDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIGcpDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIGcpDataset.Metadata.ScanMode = types.StringValue(string(resp.APIGcpDataset.Metadata.ScanMode))
 		}
 		r.APIGcpDataset.ProviderID = types.StringValue(resp.APIGcpDataset.ProviderID)
 		r.ProviderID = r.APIGcpDataset.ProviderID
@@ -222,22 +188,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIGoogleWorkspaceDataset.Metadata = nil
 		} else {
 			r.APIGoogleWorkspaceDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIGoogleWorkspaceDataset.Metadata.Earliest = types.StringValue(resp.APIGoogleWorkspaceDataset.Metadata.Earliest)
-			r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration)
-			r.APIGoogleWorkspaceDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIGoogleWorkspaceDataset.Metadata.FieldList))
-			for _, v := range resp.APIGoogleWorkspaceDataset.Metadata.FieldList {
-				r.APIGoogleWorkspaceDataset.Metadata.FieldList = append(r.APIGoogleWorkspaceDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIGoogleWorkspaceDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIGoogleWorkspaceDataset.Metadata.Created))
+			r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration)
+			r.APIGoogleWorkspaceDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIGoogleWorkspaceDataset.Metadata.Modified))
+			r.APIGoogleWorkspaceDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIGoogleWorkspaceDataset.Metadata.Tags))
+			for _, v := range resp.APIGoogleWorkspaceDataset.Metadata.Tags {
+				r.APIGoogleWorkspaceDataset.Metadata.Tags = append(r.APIGoogleWorkspaceDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo == nil {
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIGoogleWorkspaceDataset.Metadata.ScanMode = types.StringValue(string(resp.APIGoogleWorkspaceDataset.Metadata.ScanMode))
 		}
 		r.APIGoogleWorkspaceDataset.ProviderID = types.StringValue(resp.APIGoogleWorkspaceDataset.ProviderID)
 		r.ProviderID = r.APIGoogleWorkspaceDataset.ProviderID
@@ -258,22 +215,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIHTTPDataset.Metadata = nil
 		} else {
 			r.APIHTTPDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIHTTPDataset.Metadata.Earliest = types.StringValue(resp.APIHTTPDataset.Metadata.Earliest)
-			r.APIHTTPDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIHTTPDataset.Metadata.EnableAcceleration)
-			r.APIHTTPDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIHTTPDataset.Metadata.FieldList))
-			for _, v := range resp.APIHTTPDataset.Metadata.FieldList {
-				r.APIHTTPDataset.Metadata.FieldList = append(r.APIHTTPDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIHTTPDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIHTTPDataset.Metadata.Created))
+			r.APIHTTPDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIHTTPDataset.Metadata.EnableAcceleration)
+			r.APIHTTPDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIHTTPDataset.Metadata.Modified))
+			r.APIHTTPDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIHTTPDataset.Metadata.Tags))
+			for _, v := range resp.APIHTTPDataset.Metadata.Tags {
+				r.APIHTTPDataset.Metadata.Tags = append(r.APIHTTPDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIHTTPDataset.Metadata.LatestRunInfo == nil {
-				r.APIHTTPDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIHTTPDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIHTTPDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIHTTPDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIHTTPDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIHTTPDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIHTTPDataset.Metadata.ScanMode = types.StringValue(string(resp.APIHTTPDataset.Metadata.ScanMode))
 		}
 		r.APIHTTPDataset.ProviderID = types.StringValue(resp.APIHTTPDataset.ProviderID)
 		r.ProviderID = r.APIHTTPDataset.ProviderID
@@ -294,22 +242,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIMsGraphDataset.Metadata = nil
 		} else {
 			r.APIMsGraphDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIMsGraphDataset.Metadata.Earliest = types.StringValue(resp.APIMsGraphDataset.Metadata.Earliest)
-			r.APIMsGraphDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIMsGraphDataset.Metadata.EnableAcceleration)
-			r.APIMsGraphDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIMsGraphDataset.Metadata.FieldList))
-			for _, v := range resp.APIMsGraphDataset.Metadata.FieldList {
-				r.APIMsGraphDataset.Metadata.FieldList = append(r.APIMsGraphDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIMsGraphDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIMsGraphDataset.Metadata.Created))
+			r.APIMsGraphDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIMsGraphDataset.Metadata.EnableAcceleration)
+			r.APIMsGraphDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIMsGraphDataset.Metadata.Modified))
+			r.APIMsGraphDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIMsGraphDataset.Metadata.Tags))
+			for _, v := range resp.APIMsGraphDataset.Metadata.Tags {
+				r.APIMsGraphDataset.Metadata.Tags = append(r.APIMsGraphDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIMsGraphDataset.Metadata.LatestRunInfo == nil {
-				r.APIMsGraphDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIMsGraphDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIMsGraphDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIMsGraphDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIMsGraphDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIMsGraphDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIMsGraphDataset.Metadata.ScanMode = types.StringValue(string(resp.APIMsGraphDataset.Metadata.ScanMode))
 		}
 		r.APIMsGraphDataset.ProviderID = types.StringValue(resp.APIMsGraphDataset.ProviderID)
 		r.ProviderID = r.APIMsGraphDataset.ProviderID
@@ -330,22 +269,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIOktaDataset.Metadata = nil
 		} else {
 			r.APIOktaDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIOktaDataset.Metadata.Earliest = types.StringValue(resp.APIOktaDataset.Metadata.Earliest)
-			r.APIOktaDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIOktaDataset.Metadata.EnableAcceleration)
-			r.APIOktaDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIOktaDataset.Metadata.FieldList))
-			for _, v := range resp.APIOktaDataset.Metadata.FieldList {
-				r.APIOktaDataset.Metadata.FieldList = append(r.APIOktaDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIOktaDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIOktaDataset.Metadata.Created))
+			r.APIOktaDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIOktaDataset.Metadata.EnableAcceleration)
+			r.APIOktaDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIOktaDataset.Metadata.Modified))
+			r.APIOktaDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIOktaDataset.Metadata.Tags))
+			for _, v := range resp.APIOktaDataset.Metadata.Tags {
+				r.APIOktaDataset.Metadata.Tags = append(r.APIOktaDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIOktaDataset.Metadata.LatestRunInfo == nil {
-				r.APIOktaDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIOktaDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIOktaDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIOktaDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIOktaDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIOktaDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIOktaDataset.Metadata.ScanMode = types.StringValue(string(resp.APIOktaDataset.Metadata.ScanMode))
 		}
 		r.APIOktaDataset.ProviderID = types.StringValue(resp.APIOktaDataset.ProviderID)
 		r.ProviderID = r.APIOktaDataset.ProviderID
@@ -363,22 +293,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIOpenSearchDataset.Metadata = nil
 		} else {
 			r.APIOpenSearchDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIOpenSearchDataset.Metadata.Earliest = types.StringValue(resp.APIOpenSearchDataset.Metadata.Earliest)
-			r.APIOpenSearchDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIOpenSearchDataset.Metadata.EnableAcceleration)
-			r.APIOpenSearchDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIOpenSearchDataset.Metadata.FieldList))
-			for _, v := range resp.APIOpenSearchDataset.Metadata.FieldList {
-				r.APIOpenSearchDataset.Metadata.FieldList = append(r.APIOpenSearchDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIOpenSearchDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIOpenSearchDataset.Metadata.Created))
+			r.APIOpenSearchDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIOpenSearchDataset.Metadata.EnableAcceleration)
+			r.APIOpenSearchDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIOpenSearchDataset.Metadata.Modified))
+			r.APIOpenSearchDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIOpenSearchDataset.Metadata.Tags))
+			for _, v := range resp.APIOpenSearchDataset.Metadata.Tags {
+				r.APIOpenSearchDataset.Metadata.Tags = append(r.APIOpenSearchDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIOpenSearchDataset.Metadata.LatestRunInfo == nil {
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIOpenSearchDataset.Metadata.ScanMode = types.StringValue(string(resp.APIOpenSearchDataset.Metadata.ScanMode))
 		}
 		r.APIOpenSearchDataset.ProviderID = types.StringValue(resp.APIOpenSearchDataset.ProviderID)
 		r.ProviderID = r.APIOpenSearchDataset.ProviderID
@@ -400,22 +321,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APITailscaleDataset.Metadata = nil
 		} else {
 			r.APITailscaleDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APITailscaleDataset.Metadata.Earliest = types.StringValue(resp.APITailscaleDataset.Metadata.Earliest)
-			r.APITailscaleDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APITailscaleDataset.Metadata.EnableAcceleration)
-			r.APITailscaleDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APITailscaleDataset.Metadata.FieldList))
-			for _, v := range resp.APITailscaleDataset.Metadata.FieldList {
-				r.APITailscaleDataset.Metadata.FieldList = append(r.APITailscaleDataset.Metadata.FieldList, types.StringValue(v))
+			r.APITailscaleDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APITailscaleDataset.Metadata.Created))
+			r.APITailscaleDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APITailscaleDataset.Metadata.EnableAcceleration)
+			r.APITailscaleDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APITailscaleDataset.Metadata.Modified))
+			r.APITailscaleDataset.Metadata.Tags = make([]types.String, 0, len(resp.APITailscaleDataset.Metadata.Tags))
+			for _, v := range resp.APITailscaleDataset.Metadata.Tags {
+				r.APITailscaleDataset.Metadata.Tags = append(r.APITailscaleDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APITailscaleDataset.Metadata.LatestRunInfo == nil {
-				r.APITailscaleDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APITailscaleDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APITailscaleDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APITailscaleDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APITailscaleDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APITailscaleDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APITailscaleDataset.Metadata.ScanMode = types.StringValue(string(resp.APITailscaleDataset.Metadata.ScanMode))
 		}
 		r.APITailscaleDataset.ProviderID = types.StringValue(resp.APITailscaleDataset.ProviderID)
 		r.ProviderID = r.APITailscaleDataset.ProviderID
@@ -436,22 +348,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.APIZoomDataset.Metadata = nil
 		} else {
 			r.APIZoomDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIZoomDataset.Metadata.Earliest = types.StringValue(resp.APIZoomDataset.Metadata.Earliest)
-			r.APIZoomDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIZoomDataset.Metadata.EnableAcceleration)
-			r.APIZoomDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIZoomDataset.Metadata.FieldList))
-			for _, v := range resp.APIZoomDataset.Metadata.FieldList {
-				r.APIZoomDataset.Metadata.FieldList = append(r.APIZoomDataset.Metadata.FieldList, types.StringValue(v))
+			r.APIZoomDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIZoomDataset.Metadata.Created))
+			r.APIZoomDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.APIZoomDataset.Metadata.EnableAcceleration)
+			r.APIZoomDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.APIZoomDataset.Metadata.Modified))
+			r.APIZoomDataset.Metadata.Tags = make([]types.String, 0, len(resp.APIZoomDataset.Metadata.Tags))
+			for _, v := range resp.APIZoomDataset.Metadata.Tags {
+				r.APIZoomDataset.Metadata.Tags = append(r.APIZoomDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.APIZoomDataset.Metadata.LatestRunInfo == nil {
-				r.APIZoomDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIZoomDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIZoomDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIZoomDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIZoomDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIZoomDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIZoomDataset.Metadata.ScanMode = types.StringValue(string(resp.APIZoomDataset.Metadata.ScanMode))
 		}
 		r.APIZoomDataset.ProviderID = types.StringValue(resp.APIZoomDataset.ProviderID)
 		r.ProviderID = r.APIZoomDataset.ProviderID
@@ -469,22 +372,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.AwsSecurityLakeDataset.Metadata = nil
 		} else {
 			r.AwsSecurityLakeDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.AwsSecurityLakeDataset.Metadata.Earliest = types.StringValue(resp.AwsSecurityLakeDataset.Metadata.Earliest)
-			r.AwsSecurityLakeDataset.Metadata.EnableAcceleration = types.BoolValue(resp.AwsSecurityLakeDataset.Metadata.EnableAcceleration)
-			r.AwsSecurityLakeDataset.Metadata.FieldList = make([]types.String, 0, len(resp.AwsSecurityLakeDataset.Metadata.FieldList))
-			for _, v := range resp.AwsSecurityLakeDataset.Metadata.FieldList {
-				r.AwsSecurityLakeDataset.Metadata.FieldList = append(r.AwsSecurityLakeDataset.Metadata.FieldList, types.StringValue(v))
+			r.AwsSecurityLakeDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.AwsSecurityLakeDataset.Metadata.Created))
+			r.AwsSecurityLakeDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.AwsSecurityLakeDataset.Metadata.EnableAcceleration)
+			r.AwsSecurityLakeDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.AwsSecurityLakeDataset.Metadata.Modified))
+			r.AwsSecurityLakeDataset.Metadata.Tags = make([]types.String, 0, len(resp.AwsSecurityLakeDataset.Metadata.Tags))
+			for _, v := range resp.AwsSecurityLakeDataset.Metadata.Tags {
+				r.AwsSecurityLakeDataset.Metadata.Tags = append(r.AwsSecurityLakeDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo == nil {
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.AwsSecurityLakeDataset.Metadata.ScanMode = types.StringValue(string(resp.AwsSecurityLakeDataset.Metadata.ScanMode))
 		}
 		r.AwsSecurityLakeDataset.Path = types.StringPointerValue(resp.AwsSecurityLakeDataset.Path)
 		r.AwsSecurityLakeDataset.ProviderID = types.StringValue(resp.AwsSecurityLakeDataset.ProviderID)
@@ -525,22 +419,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.AzureBlobDataset.Metadata = nil
 		} else {
 			r.AzureBlobDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.AzureBlobDataset.Metadata.Earliest = types.StringValue(resp.AzureBlobDataset.Metadata.Earliest)
-			r.AzureBlobDataset.Metadata.EnableAcceleration = types.BoolValue(resp.AzureBlobDataset.Metadata.EnableAcceleration)
-			r.AzureBlobDataset.Metadata.FieldList = make([]types.String, 0, len(resp.AzureBlobDataset.Metadata.FieldList))
-			for _, v := range resp.AzureBlobDataset.Metadata.FieldList {
-				r.AzureBlobDataset.Metadata.FieldList = append(r.AzureBlobDataset.Metadata.FieldList, types.StringValue(v))
+			r.AzureBlobDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.AzureBlobDataset.Metadata.Created))
+			r.AzureBlobDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.AzureBlobDataset.Metadata.EnableAcceleration)
+			r.AzureBlobDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.AzureBlobDataset.Metadata.Modified))
+			r.AzureBlobDataset.Metadata.Tags = make([]types.String, 0, len(resp.AzureBlobDataset.Metadata.Tags))
+			for _, v := range resp.AzureBlobDataset.Metadata.Tags {
+				r.AzureBlobDataset.Metadata.Tags = append(r.AzureBlobDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.AzureBlobDataset.Metadata.LatestRunInfo == nil {
-				r.AzureBlobDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.AzureBlobDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.AzureBlobDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.AzureBlobDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.AzureBlobDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.AzureBlobDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.AzureBlobDataset.Metadata.ScanMode = types.StringValue(string(resp.AzureBlobDataset.Metadata.ScanMode))
 		}
 		r.AzureBlobDataset.Path = types.StringPointerValue(resp.AzureBlobDataset.Path)
 		r.AzureBlobDataset.ProviderID = types.StringValue(resp.AzureBlobDataset.ProviderID)
@@ -564,22 +449,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.ClickHouseDataset.Metadata = nil
 		} else {
 			r.ClickHouseDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.ClickHouseDataset.Metadata.Earliest = types.StringValue(resp.ClickHouseDataset.Metadata.Earliest)
-			r.ClickHouseDataset.Metadata.EnableAcceleration = types.BoolValue(resp.ClickHouseDataset.Metadata.EnableAcceleration)
-			r.ClickHouseDataset.Metadata.FieldList = make([]types.String, 0, len(resp.ClickHouseDataset.Metadata.FieldList))
-			for _, v := range resp.ClickHouseDataset.Metadata.FieldList {
-				r.ClickHouseDataset.Metadata.FieldList = append(r.ClickHouseDataset.Metadata.FieldList, types.StringValue(v))
+			r.ClickHouseDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ClickHouseDataset.Metadata.Created))
+			r.ClickHouseDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.ClickHouseDataset.Metadata.EnableAcceleration)
+			r.ClickHouseDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ClickHouseDataset.Metadata.Modified))
+			r.ClickHouseDataset.Metadata.Tags = make([]types.String, 0, len(resp.ClickHouseDataset.Metadata.Tags))
+			for _, v := range resp.ClickHouseDataset.Metadata.Tags {
+				r.ClickHouseDataset.Metadata.Tags = append(r.ClickHouseDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.ClickHouseDataset.Metadata.LatestRunInfo == nil {
-				r.ClickHouseDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.ClickHouseDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.ClickHouseDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.ClickHouseDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.ClickHouseDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.ClickHouseDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.ClickHouseDataset.Metadata.ScanMode = types.StringValue(string(resp.ClickHouseDataset.Metadata.ScanMode))
 		}
 		r.ClickHouseDataset.ProviderID = types.StringValue(resp.ClickHouseDataset.ProviderID)
 		r.ProviderID = r.ClickHouseDataset.ProviderID
@@ -609,22 +485,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.CriblLeaderDataset.Metadata = nil
 		} else {
 			r.CriblLeaderDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.CriblLeaderDataset.Metadata.Earliest = types.StringValue(resp.CriblLeaderDataset.Metadata.Earliest)
-			r.CriblLeaderDataset.Metadata.EnableAcceleration = types.BoolValue(resp.CriblLeaderDataset.Metadata.EnableAcceleration)
-			r.CriblLeaderDataset.Metadata.FieldList = make([]types.String, 0, len(resp.CriblLeaderDataset.Metadata.FieldList))
-			for _, v := range resp.CriblLeaderDataset.Metadata.FieldList {
-				r.CriblLeaderDataset.Metadata.FieldList = append(r.CriblLeaderDataset.Metadata.FieldList, types.StringValue(v))
+			r.CriblLeaderDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CriblLeaderDataset.Metadata.Created))
+			r.CriblLeaderDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.CriblLeaderDataset.Metadata.EnableAcceleration)
+			r.CriblLeaderDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CriblLeaderDataset.Metadata.Modified))
+			r.CriblLeaderDataset.Metadata.Tags = make([]types.String, 0, len(resp.CriblLeaderDataset.Metadata.Tags))
+			for _, v := range resp.CriblLeaderDataset.Metadata.Tags {
+				r.CriblLeaderDataset.Metadata.Tags = append(r.CriblLeaderDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.CriblLeaderDataset.Metadata.LatestRunInfo == nil {
-				r.CriblLeaderDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.CriblLeaderDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.CriblLeaderDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.CriblLeaderDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.CriblLeaderDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.CriblLeaderDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.CriblLeaderDataset.Metadata.ScanMode = types.StringValue(string(resp.CriblLeaderDataset.Metadata.ScanMode))
 		}
 		r.CriblLeaderDataset.Path = types.StringValue(resp.CriblLeaderDataset.Path)
 		r.CriblLeaderDataset.ProviderID = types.StringValue(resp.CriblLeaderDataset.ProviderID)
@@ -647,22 +514,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.EdgeDataset.Metadata = nil
 		} else {
 			r.EdgeDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.EdgeDataset.Metadata.Earliest = types.StringValue(resp.EdgeDataset.Metadata.Earliest)
-			r.EdgeDataset.Metadata.EnableAcceleration = types.BoolValue(resp.EdgeDataset.Metadata.EnableAcceleration)
-			r.EdgeDataset.Metadata.FieldList = make([]types.String, 0, len(resp.EdgeDataset.Metadata.FieldList))
-			for _, v := range resp.EdgeDataset.Metadata.FieldList {
-				r.EdgeDataset.Metadata.FieldList = append(r.EdgeDataset.Metadata.FieldList, types.StringValue(v))
+			r.EdgeDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EdgeDataset.Metadata.Created))
+			r.EdgeDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.EdgeDataset.Metadata.EnableAcceleration)
+			r.EdgeDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EdgeDataset.Metadata.Modified))
+			r.EdgeDataset.Metadata.Tags = make([]types.String, 0, len(resp.EdgeDataset.Metadata.Tags))
+			for _, v := range resp.EdgeDataset.Metadata.Tags {
+				r.EdgeDataset.Metadata.Tags = append(r.EdgeDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.EdgeDataset.Metadata.LatestRunInfo == nil {
-				r.EdgeDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.EdgeDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.EdgeDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.EdgeDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.EdgeDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.EdgeDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.EdgeDataset.Metadata.ScanMode = types.StringValue(string(resp.EdgeDataset.Metadata.ScanMode))
 		}
 		r.EdgeDataset.Path = types.StringValue(resp.EdgeDataset.Path)
 		r.EdgeDataset.ProviderID = types.StringValue(resp.EdgeDataset.ProviderID)
@@ -693,22 +551,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.GcsDataset.Metadata = nil
 		} else {
 			r.GcsDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.GcsDataset.Metadata.Earliest = types.StringValue(resp.GcsDataset.Metadata.Earliest)
-			r.GcsDataset.Metadata.EnableAcceleration = types.BoolValue(resp.GcsDataset.Metadata.EnableAcceleration)
-			r.GcsDataset.Metadata.FieldList = make([]types.String, 0, len(resp.GcsDataset.Metadata.FieldList))
-			for _, v := range resp.GcsDataset.Metadata.FieldList {
-				r.GcsDataset.Metadata.FieldList = append(r.GcsDataset.Metadata.FieldList, types.StringValue(v))
+			r.GcsDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.GcsDataset.Metadata.Created))
+			r.GcsDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.GcsDataset.Metadata.EnableAcceleration)
+			r.GcsDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.GcsDataset.Metadata.Modified))
+			r.GcsDataset.Metadata.Tags = make([]types.String, 0, len(resp.GcsDataset.Metadata.Tags))
+			for _, v := range resp.GcsDataset.Metadata.Tags {
+				r.GcsDataset.Metadata.Tags = append(r.GcsDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.GcsDataset.Metadata.LatestRunInfo == nil {
-				r.GcsDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.GcsDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.GcsDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.GcsDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.GcsDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.GcsDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.GcsDataset.Metadata.ScanMode = types.StringValue(string(resp.GcsDataset.Metadata.ScanMode))
 		}
 		r.GcsDataset.ProviderID = types.StringValue(resp.GcsDataset.ProviderID)
 		r.ProviderID = r.GcsDataset.ProviderID
@@ -735,22 +584,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.MetaDataset.Metadata = nil
 		} else {
 			r.MetaDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.MetaDataset.Metadata.Earliest = types.StringValue(resp.MetaDataset.Metadata.Earliest)
-			r.MetaDataset.Metadata.EnableAcceleration = types.BoolValue(resp.MetaDataset.Metadata.EnableAcceleration)
-			r.MetaDataset.Metadata.FieldList = make([]types.String, 0, len(resp.MetaDataset.Metadata.FieldList))
-			for _, v := range resp.MetaDataset.Metadata.FieldList {
-				r.MetaDataset.Metadata.FieldList = append(r.MetaDataset.Metadata.FieldList, types.StringValue(v))
+			r.MetaDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.MetaDataset.Metadata.Created))
+			r.MetaDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.MetaDataset.Metadata.EnableAcceleration)
+			r.MetaDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.MetaDataset.Metadata.Modified))
+			r.MetaDataset.Metadata.Tags = make([]types.String, 0, len(resp.MetaDataset.Metadata.Tags))
+			for _, v := range resp.MetaDataset.Metadata.Tags {
+				r.MetaDataset.Metadata.Tags = append(r.MetaDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.MetaDataset.Metadata.LatestRunInfo == nil {
-				r.MetaDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.MetaDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.MetaDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.MetaDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.MetaDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.MetaDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.MetaDataset.Metadata.ScanMode = types.StringValue(string(resp.MetaDataset.Metadata.ScanMode))
 		}
 		r.MetaDataset.ProviderID = types.StringValue(resp.MetaDataset.ProviderID)
 		r.ProviderID = r.MetaDataset.ProviderID
@@ -768,22 +608,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.PrometheusDataset.Metadata = nil
 		} else {
 			r.PrometheusDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.PrometheusDataset.Metadata.Earliest = types.StringValue(resp.PrometheusDataset.Metadata.Earliest)
-			r.PrometheusDataset.Metadata.EnableAcceleration = types.BoolValue(resp.PrometheusDataset.Metadata.EnableAcceleration)
-			r.PrometheusDataset.Metadata.FieldList = make([]types.String, 0, len(resp.PrometheusDataset.Metadata.FieldList))
-			for _, v := range resp.PrometheusDataset.Metadata.FieldList {
-				r.PrometheusDataset.Metadata.FieldList = append(r.PrometheusDataset.Metadata.FieldList, types.StringValue(v))
+			r.PrometheusDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.PrometheusDataset.Metadata.Created))
+			r.PrometheusDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.PrometheusDataset.Metadata.EnableAcceleration)
+			r.PrometheusDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.PrometheusDataset.Metadata.Modified))
+			r.PrometheusDataset.Metadata.Tags = make([]types.String, 0, len(resp.PrometheusDataset.Metadata.Tags))
+			for _, v := range resp.PrometheusDataset.Metadata.Tags {
+				r.PrometheusDataset.Metadata.Tags = append(r.PrometheusDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.PrometheusDataset.Metadata.LatestRunInfo == nil {
-				r.PrometheusDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.PrometheusDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.PrometheusDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.PrometheusDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.PrometheusDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.PrometheusDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.PrometheusDataset.Metadata.ScanMode = types.StringValue(string(resp.PrometheusDataset.Metadata.ScanMode))
 		}
 		r.PrometheusDataset.MetricNamePattern = types.StringPointerValue(resp.PrometheusDataset.MetricNamePattern)
 		r.PrometheusDataset.ProviderID = types.StringValue(resp.PrometheusDataset.ProviderID)
@@ -822,22 +653,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.S3Dataset.Metadata = nil
 		} else {
 			r.S3Dataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.S3Dataset.Metadata.Earliest = types.StringValue(resp.S3Dataset.Metadata.Earliest)
-			r.S3Dataset.Metadata.EnableAcceleration = types.BoolValue(resp.S3Dataset.Metadata.EnableAcceleration)
-			r.S3Dataset.Metadata.FieldList = make([]types.String, 0, len(resp.S3Dataset.Metadata.FieldList))
-			for _, v := range resp.S3Dataset.Metadata.FieldList {
-				r.S3Dataset.Metadata.FieldList = append(r.S3Dataset.Metadata.FieldList, types.StringValue(v))
+			r.S3Dataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.S3Dataset.Metadata.Created))
+			r.S3Dataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.S3Dataset.Metadata.EnableAcceleration)
+			r.S3Dataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.S3Dataset.Metadata.Modified))
+			r.S3Dataset.Metadata.Tags = make([]types.String, 0, len(resp.S3Dataset.Metadata.Tags))
+			for _, v := range resp.S3Dataset.Metadata.Tags {
+				r.S3Dataset.Metadata.Tags = append(r.S3Dataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.S3Dataset.Metadata.LatestRunInfo == nil {
-				r.S3Dataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.S3Dataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.S3Dataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.S3Dataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.FinishedAt)
-				r.S3Dataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.S3Dataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.S3Dataset.Metadata.ScanMode = types.StringValue(string(resp.S3Dataset.Metadata.ScanMode))
 		}
 		r.S3Dataset.Path = types.StringPointerValue(resp.S3Dataset.Path)
 		r.S3Dataset.ProviderID = types.StringValue(resp.S3Dataset.ProviderID)
@@ -862,22 +684,13 @@ func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context
 			r.SnowflakeDataset.Metadata = nil
 		} else {
 			r.SnowflakeDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.SnowflakeDataset.Metadata.Earliest = types.StringValue(resp.SnowflakeDataset.Metadata.Earliest)
-			r.SnowflakeDataset.Metadata.EnableAcceleration = types.BoolValue(resp.SnowflakeDataset.Metadata.EnableAcceleration)
-			r.SnowflakeDataset.Metadata.FieldList = make([]types.String, 0, len(resp.SnowflakeDataset.Metadata.FieldList))
-			for _, v := range resp.SnowflakeDataset.Metadata.FieldList {
-				r.SnowflakeDataset.Metadata.FieldList = append(r.SnowflakeDataset.Metadata.FieldList, types.StringValue(v))
+			r.SnowflakeDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.SnowflakeDataset.Metadata.Created))
+			r.SnowflakeDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.SnowflakeDataset.Metadata.EnableAcceleration)
+			r.SnowflakeDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.SnowflakeDataset.Metadata.Modified))
+			r.SnowflakeDataset.Metadata.Tags = make([]types.String, 0, len(resp.SnowflakeDataset.Metadata.Tags))
+			for _, v := range resp.SnowflakeDataset.Metadata.Tags {
+				r.SnowflakeDataset.Metadata.Tags = append(r.SnowflakeDataset.Metadata.Tags, types.StringValue(v))
 			}
-			if resp.SnowflakeDataset.Metadata.LatestRunInfo == nil {
-				r.SnowflakeDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.SnowflakeDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.SnowflakeDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.SnowflakeDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.SnowflakeDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.SnowflakeDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.SnowflakeDataset.Metadata.ScanMode = types.StringValue(string(resp.SnowflakeDataset.Metadata.ScanMode))
 		}
 		r.SnowflakeDataset.ProviderID = types.StringValue(resp.SnowflakeDataset.ProviderID)
 		r.ProviderID = r.SnowflakeDataset.ProviderID
@@ -963,56 +776,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata *shared.DatasetMetadata
 		if r.APIHTTPDataset.Metadata != nil {
-			var earliest string
-			earliest = r.APIHTTPDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration bool
-			enableAcceleration = r.APIHTTPDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList := make([]string, 0, len(r.APIHTTPDataset.Metadata.FieldList))
-			for _, fieldListItem := range r.APIHTTPDataset.Metadata.FieldList {
-				fieldList = append(fieldList, fieldListItem.ValueString())
+			created := new(time.Time)
+			if !r.APIHTTPDataset.Metadata.Created.IsUnknown() && !r.APIHTTPDataset.Metadata.Created.IsNull() {
+				*created, _ = time.Parse(time.RFC3339Nano, r.APIHTTPDataset.Metadata.Created.ValueString())
+			} else {
+				created = nil
 			}
-			var latestRunInfo *shared.DatasetMetadataRunInfo
-			if r.APIHTTPDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime := new(float64)
-				if !r.APIHTTPDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIHTTPDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime = r.APIHTTPDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime = nil
-				}
-				finishedAt := new(float64)
-				if !r.APIHTTPDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIHTTPDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt = r.APIHTTPDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt = nil
-				}
-				latestScannedTime := new(float64)
-				if !r.APIHTTPDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIHTTPDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime = r.APIHTTPDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime = nil
-				}
-				objectCount := new(float64)
-				if !r.APIHTTPDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIHTTPDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount = r.APIHTTPDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount = nil
-				}
-				latestRunInfo = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime,
-					FinishedAt:          finishedAt,
-					LatestScannedTime:   latestScannedTime,
-					ObjectCount:         objectCount,
-				}
+			modified := new(time.Time)
+			if !r.APIHTTPDataset.Metadata.Modified.IsUnknown() && !r.APIHTTPDataset.Metadata.Modified.IsNull() {
+				*modified, _ = time.Parse(time.RFC3339Nano, r.APIHTTPDataset.Metadata.Modified.ValueString())
+			} else {
+				modified = nil
 			}
-			scanMode := shared.ScanMode(r.APIHTTPDataset.Metadata.ScanMode.ValueString())
+			tags := make([]string, 0, len(r.APIHTTPDataset.Metadata.Tags))
+			for _, tagsItem := range r.APIHTTPDataset.Metadata.Tags {
+				tags = append(tags, tagsItem.ValueString())
+			}
+			enableAcceleration := new(bool)
+			if !r.APIHTTPDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIHTTPDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration = r.APIHTTPDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration = nil
+			}
 			metadata = &shared.DatasetMetadata{
-				Earliest:           earliest,
+				Created:            created,
+				Modified:           modified,
+				Tags:               tags,
 				EnableAcceleration: enableAcceleration,
-				FieldList:          fieldList,
-				LatestRunInfo:      latestRunInfo,
-				ScanMode:           scanMode,
 			}
 		}
 		enabledEndpoints := make([]string, 0, len(r.APIHTTPDataset.EnabledEndpoints))
@@ -1052,56 +842,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata1 *shared.DatasetMetadata
 		if r.APIAwsDataset.Metadata != nil {
-			var earliest1 string
-			earliest1 = r.APIAwsDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration1 bool
-			enableAcceleration1 = r.APIAwsDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList1 := make([]string, 0, len(r.APIAwsDataset.Metadata.FieldList))
-			for _, fieldListItem1 := range r.APIAwsDataset.Metadata.FieldList {
-				fieldList1 = append(fieldList1, fieldListItem1.ValueString())
+			created1 := new(time.Time)
+			if !r.APIAwsDataset.Metadata.Created.IsUnknown() && !r.APIAwsDataset.Metadata.Created.IsNull() {
+				*created1, _ = time.Parse(time.RFC3339Nano, r.APIAwsDataset.Metadata.Created.ValueString())
+			} else {
+				created1 = nil
 			}
-			var latestRunInfo1 *shared.DatasetMetadataRunInfo
-			if r.APIAwsDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime1 := new(float64)
-				if !r.APIAwsDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIAwsDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime1 = r.APIAwsDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime1 = nil
-				}
-				finishedAt1 := new(float64)
-				if !r.APIAwsDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIAwsDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt1 = r.APIAwsDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt1 = nil
-				}
-				latestScannedTime1 := new(float64)
-				if !r.APIAwsDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIAwsDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime1 = r.APIAwsDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime1 = nil
-				}
-				objectCount1 := new(float64)
-				if !r.APIAwsDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIAwsDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount1 = r.APIAwsDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount1 = nil
-				}
-				latestRunInfo1 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime1,
-					FinishedAt:          finishedAt1,
-					LatestScannedTime:   latestScannedTime1,
-					ObjectCount:         objectCount1,
-				}
+			modified1 := new(time.Time)
+			if !r.APIAwsDataset.Metadata.Modified.IsUnknown() && !r.APIAwsDataset.Metadata.Modified.IsNull() {
+				*modified1, _ = time.Parse(time.RFC3339Nano, r.APIAwsDataset.Metadata.Modified.ValueString())
+			} else {
+				modified1 = nil
 			}
-			scanMode1 := shared.ScanMode(r.APIAwsDataset.Metadata.ScanMode.ValueString())
+			tags1 := make([]string, 0, len(r.APIAwsDataset.Metadata.Tags))
+			for _, tagsItem1 := range r.APIAwsDataset.Metadata.Tags {
+				tags1 = append(tags1, tagsItem1.ValueString())
+			}
+			enableAcceleration1 := new(bool)
+			if !r.APIAwsDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIAwsDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration1 = r.APIAwsDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration1 = nil
+			}
 			metadata1 = &shared.DatasetMetadata{
-				Earliest:           earliest1,
+				Created:            created1,
+				Modified:           modified1,
+				Tags:               tags1,
 				EnableAcceleration: enableAcceleration1,
-				FieldList:          fieldList1,
-				LatestRunInfo:      latestRunInfo1,
-				ScanMode:           scanMode1,
 			}
 		}
 		enabledEndpoints1 := make([]string, 0, len(r.APIAwsDataset.EnabledEndpoints))
@@ -1146,56 +913,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata2 *shared.DatasetMetadata
 		if r.APIAzureDataset.Metadata != nil {
-			var earliest2 string
-			earliest2 = r.APIAzureDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration2 bool
-			enableAcceleration2 = r.APIAzureDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList2 := make([]string, 0, len(r.APIAzureDataset.Metadata.FieldList))
-			for _, fieldListItem2 := range r.APIAzureDataset.Metadata.FieldList {
-				fieldList2 = append(fieldList2, fieldListItem2.ValueString())
+			created2 := new(time.Time)
+			if !r.APIAzureDataset.Metadata.Created.IsUnknown() && !r.APIAzureDataset.Metadata.Created.IsNull() {
+				*created2, _ = time.Parse(time.RFC3339Nano, r.APIAzureDataset.Metadata.Created.ValueString())
+			} else {
+				created2 = nil
 			}
-			var latestRunInfo2 *shared.DatasetMetadataRunInfo
-			if r.APIAzureDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime2 := new(float64)
-				if !r.APIAzureDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIAzureDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime2 = r.APIAzureDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime2 = nil
-				}
-				finishedAt2 := new(float64)
-				if !r.APIAzureDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIAzureDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt2 = r.APIAzureDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt2 = nil
-				}
-				latestScannedTime2 := new(float64)
-				if !r.APIAzureDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIAzureDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime2 = r.APIAzureDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime2 = nil
-				}
-				objectCount2 := new(float64)
-				if !r.APIAzureDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIAzureDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount2 = r.APIAzureDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount2 = nil
-				}
-				latestRunInfo2 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime2,
-					FinishedAt:          finishedAt2,
-					LatestScannedTime:   latestScannedTime2,
-					ObjectCount:         objectCount2,
-				}
+			modified2 := new(time.Time)
+			if !r.APIAzureDataset.Metadata.Modified.IsUnknown() && !r.APIAzureDataset.Metadata.Modified.IsNull() {
+				*modified2, _ = time.Parse(time.RFC3339Nano, r.APIAzureDataset.Metadata.Modified.ValueString())
+			} else {
+				modified2 = nil
 			}
-			scanMode2 := shared.ScanMode(r.APIAzureDataset.Metadata.ScanMode.ValueString())
+			tags2 := make([]string, 0, len(r.APIAzureDataset.Metadata.Tags))
+			for _, tagsItem2 := range r.APIAzureDataset.Metadata.Tags {
+				tags2 = append(tags2, tagsItem2.ValueString())
+			}
+			enableAcceleration2 := new(bool)
+			if !r.APIAzureDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIAzureDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration2 = r.APIAzureDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration2 = nil
+			}
 			metadata2 = &shared.DatasetMetadata{
-				Earliest:           earliest2,
+				Created:            created2,
+				Modified:           modified2,
+				Tags:               tags2,
 				EnableAcceleration: enableAcceleration2,
-				FieldList:          fieldList2,
-				LatestRunInfo:      latestRunInfo2,
-				ScanMode:           scanMode2,
 			}
 		}
 		enabledEndpoints2 := make([]string, 0, len(r.APIAzureDataset.EnabledEndpoints))
@@ -1240,56 +984,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata3 *shared.DatasetMetadata
 		if r.APIGcpDataset.Metadata != nil {
-			var earliest3 string
-			earliest3 = r.APIGcpDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration3 bool
-			enableAcceleration3 = r.APIGcpDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList3 := make([]string, 0, len(r.APIGcpDataset.Metadata.FieldList))
-			for _, fieldListItem3 := range r.APIGcpDataset.Metadata.FieldList {
-				fieldList3 = append(fieldList3, fieldListItem3.ValueString())
+			created3 := new(time.Time)
+			if !r.APIGcpDataset.Metadata.Created.IsUnknown() && !r.APIGcpDataset.Metadata.Created.IsNull() {
+				*created3, _ = time.Parse(time.RFC3339Nano, r.APIGcpDataset.Metadata.Created.ValueString())
+			} else {
+				created3 = nil
 			}
-			var latestRunInfo3 *shared.DatasetMetadataRunInfo
-			if r.APIGcpDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime3 := new(float64)
-				if !r.APIGcpDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIGcpDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime3 = r.APIGcpDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime3 = nil
-				}
-				finishedAt3 := new(float64)
-				if !r.APIGcpDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIGcpDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt3 = r.APIGcpDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt3 = nil
-				}
-				latestScannedTime3 := new(float64)
-				if !r.APIGcpDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIGcpDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime3 = r.APIGcpDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime3 = nil
-				}
-				objectCount3 := new(float64)
-				if !r.APIGcpDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIGcpDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount3 = r.APIGcpDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount3 = nil
-				}
-				latestRunInfo3 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime3,
-					FinishedAt:          finishedAt3,
-					LatestScannedTime:   latestScannedTime3,
-					ObjectCount:         objectCount3,
-				}
+			modified3 := new(time.Time)
+			if !r.APIGcpDataset.Metadata.Modified.IsUnknown() && !r.APIGcpDataset.Metadata.Modified.IsNull() {
+				*modified3, _ = time.Parse(time.RFC3339Nano, r.APIGcpDataset.Metadata.Modified.ValueString())
+			} else {
+				modified3 = nil
 			}
-			scanMode3 := shared.ScanMode(r.APIGcpDataset.Metadata.ScanMode.ValueString())
+			tags3 := make([]string, 0, len(r.APIGcpDataset.Metadata.Tags))
+			for _, tagsItem3 := range r.APIGcpDataset.Metadata.Tags {
+				tags3 = append(tags3, tagsItem3.ValueString())
+			}
+			enableAcceleration3 := new(bool)
+			if !r.APIGcpDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIGcpDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration3 = r.APIGcpDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration3 = nil
+			}
 			metadata3 = &shared.DatasetMetadata{
-				Earliest:           earliest3,
+				Created:            created3,
+				Modified:           modified3,
+				Tags:               tags3,
 				EnableAcceleration: enableAcceleration3,
-				FieldList:          fieldList3,
-				LatestRunInfo:      latestRunInfo3,
-				ScanMode:           scanMode3,
 			}
 		}
 		endpointConfigs := make([]shared.GcpEndpointConfig, 0, len(r.APIGcpDataset.EndpointConfigs))
@@ -1341,56 +1062,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata4 *shared.DatasetMetadata
 		if r.APIGoogleWorkspaceDataset.Metadata != nil {
-			var earliest4 string
-			earliest4 = r.APIGoogleWorkspaceDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration4 bool
-			enableAcceleration4 = r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList4 := make([]string, 0, len(r.APIGoogleWorkspaceDataset.Metadata.FieldList))
-			for _, fieldListItem4 := range r.APIGoogleWorkspaceDataset.Metadata.FieldList {
-				fieldList4 = append(fieldList4, fieldListItem4.ValueString())
+			created4 := new(time.Time)
+			if !r.APIGoogleWorkspaceDataset.Metadata.Created.IsUnknown() && !r.APIGoogleWorkspaceDataset.Metadata.Created.IsNull() {
+				*created4, _ = time.Parse(time.RFC3339Nano, r.APIGoogleWorkspaceDataset.Metadata.Created.ValueString())
+			} else {
+				created4 = nil
 			}
-			var latestRunInfo4 *shared.DatasetMetadataRunInfo
-			if r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime4 := new(float64)
-				if !r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime4 = r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime4 = nil
-				}
-				finishedAt4 := new(float64)
-				if !r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt4 = r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt4 = nil
-				}
-				latestScannedTime4 := new(float64)
-				if !r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime4 = r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime4 = nil
-				}
-				objectCount4 := new(float64)
-				if !r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount4 = r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount4 = nil
-				}
-				latestRunInfo4 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime4,
-					FinishedAt:          finishedAt4,
-					LatestScannedTime:   latestScannedTime4,
-					ObjectCount:         objectCount4,
-				}
+			modified4 := new(time.Time)
+			if !r.APIGoogleWorkspaceDataset.Metadata.Modified.IsUnknown() && !r.APIGoogleWorkspaceDataset.Metadata.Modified.IsNull() {
+				*modified4, _ = time.Parse(time.RFC3339Nano, r.APIGoogleWorkspaceDataset.Metadata.Modified.ValueString())
+			} else {
+				modified4 = nil
 			}
-			scanMode4 := shared.ScanMode(r.APIGoogleWorkspaceDataset.Metadata.ScanMode.ValueString())
+			tags4 := make([]string, 0, len(r.APIGoogleWorkspaceDataset.Metadata.Tags))
+			for _, tagsItem4 := range r.APIGoogleWorkspaceDataset.Metadata.Tags {
+				tags4 = append(tags4, tagsItem4.ValueString())
+			}
+			enableAcceleration4 := new(bool)
+			if !r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration4 = r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration4 = nil
+			}
 			metadata4 = &shared.DatasetMetadata{
-				Earliest:           earliest4,
+				Created:            created4,
+				Modified:           modified4,
+				Tags:               tags4,
 				EnableAcceleration: enableAcceleration4,
-				FieldList:          fieldList4,
-				LatestRunInfo:      latestRunInfo4,
-				ScanMode:           scanMode4,
 			}
 		}
 		enabledEndpoints3 := make([]string, 0, len(r.APIGoogleWorkspaceDataset.EnabledEndpoints))
@@ -1430,56 +1128,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata5 *shared.DatasetMetadata
 		if r.APIMsGraphDataset.Metadata != nil {
-			var earliest5 string
-			earliest5 = r.APIMsGraphDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration5 bool
-			enableAcceleration5 = r.APIMsGraphDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList5 := make([]string, 0, len(r.APIMsGraphDataset.Metadata.FieldList))
-			for _, fieldListItem5 := range r.APIMsGraphDataset.Metadata.FieldList {
-				fieldList5 = append(fieldList5, fieldListItem5.ValueString())
+			created5 := new(time.Time)
+			if !r.APIMsGraphDataset.Metadata.Created.IsUnknown() && !r.APIMsGraphDataset.Metadata.Created.IsNull() {
+				*created5, _ = time.Parse(time.RFC3339Nano, r.APIMsGraphDataset.Metadata.Created.ValueString())
+			} else {
+				created5 = nil
 			}
-			var latestRunInfo5 *shared.DatasetMetadataRunInfo
-			if r.APIMsGraphDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime5 := new(float64)
-				if !r.APIMsGraphDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIMsGraphDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime5 = r.APIMsGraphDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime5 = nil
-				}
-				finishedAt5 := new(float64)
-				if !r.APIMsGraphDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIMsGraphDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt5 = r.APIMsGraphDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt5 = nil
-				}
-				latestScannedTime5 := new(float64)
-				if !r.APIMsGraphDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIMsGraphDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime5 = r.APIMsGraphDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime5 = nil
-				}
-				objectCount5 := new(float64)
-				if !r.APIMsGraphDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIMsGraphDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount5 = r.APIMsGraphDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount5 = nil
-				}
-				latestRunInfo5 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime5,
-					FinishedAt:          finishedAt5,
-					LatestScannedTime:   latestScannedTime5,
-					ObjectCount:         objectCount5,
-				}
+			modified5 := new(time.Time)
+			if !r.APIMsGraphDataset.Metadata.Modified.IsUnknown() && !r.APIMsGraphDataset.Metadata.Modified.IsNull() {
+				*modified5, _ = time.Parse(time.RFC3339Nano, r.APIMsGraphDataset.Metadata.Modified.ValueString())
+			} else {
+				modified5 = nil
 			}
-			scanMode5 := shared.ScanMode(r.APIMsGraphDataset.Metadata.ScanMode.ValueString())
+			tags5 := make([]string, 0, len(r.APIMsGraphDataset.Metadata.Tags))
+			for _, tagsItem5 := range r.APIMsGraphDataset.Metadata.Tags {
+				tags5 = append(tags5, tagsItem5.ValueString())
+			}
+			enableAcceleration5 := new(bool)
+			if !r.APIMsGraphDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIMsGraphDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration5 = r.APIMsGraphDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration5 = nil
+			}
 			metadata5 = &shared.DatasetMetadata{
-				Earliest:           earliest5,
+				Created:            created5,
+				Modified:           modified5,
+				Tags:               tags5,
 				EnableAcceleration: enableAcceleration5,
-				FieldList:          fieldList5,
-				LatestRunInfo:      latestRunInfo5,
-				ScanMode:           scanMode5,
 			}
 		}
 		enabledEndpoints4 := make([]string, 0, len(r.APIMsGraphDataset.EnabledEndpoints))
@@ -1519,56 +1194,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata6 *shared.DatasetMetadata
 		if r.APIOktaDataset.Metadata != nil {
-			var earliest6 string
-			earliest6 = r.APIOktaDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration6 bool
-			enableAcceleration6 = r.APIOktaDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList6 := make([]string, 0, len(r.APIOktaDataset.Metadata.FieldList))
-			for _, fieldListItem6 := range r.APIOktaDataset.Metadata.FieldList {
-				fieldList6 = append(fieldList6, fieldListItem6.ValueString())
+			created6 := new(time.Time)
+			if !r.APIOktaDataset.Metadata.Created.IsUnknown() && !r.APIOktaDataset.Metadata.Created.IsNull() {
+				*created6, _ = time.Parse(time.RFC3339Nano, r.APIOktaDataset.Metadata.Created.ValueString())
+			} else {
+				created6 = nil
 			}
-			var latestRunInfo6 *shared.DatasetMetadataRunInfo
-			if r.APIOktaDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime6 := new(float64)
-				if !r.APIOktaDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIOktaDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime6 = r.APIOktaDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime6 = nil
-				}
-				finishedAt6 := new(float64)
-				if !r.APIOktaDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIOktaDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt6 = r.APIOktaDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt6 = nil
-				}
-				latestScannedTime6 := new(float64)
-				if !r.APIOktaDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIOktaDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime6 = r.APIOktaDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime6 = nil
-				}
-				objectCount6 := new(float64)
-				if !r.APIOktaDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIOktaDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount6 = r.APIOktaDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount6 = nil
-				}
-				latestRunInfo6 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime6,
-					FinishedAt:          finishedAt6,
-					LatestScannedTime:   latestScannedTime6,
-					ObjectCount:         objectCount6,
-				}
+			modified6 := new(time.Time)
+			if !r.APIOktaDataset.Metadata.Modified.IsUnknown() && !r.APIOktaDataset.Metadata.Modified.IsNull() {
+				*modified6, _ = time.Parse(time.RFC3339Nano, r.APIOktaDataset.Metadata.Modified.ValueString())
+			} else {
+				modified6 = nil
 			}
-			scanMode6 := shared.ScanMode(r.APIOktaDataset.Metadata.ScanMode.ValueString())
+			tags6 := make([]string, 0, len(r.APIOktaDataset.Metadata.Tags))
+			for _, tagsItem6 := range r.APIOktaDataset.Metadata.Tags {
+				tags6 = append(tags6, tagsItem6.ValueString())
+			}
+			enableAcceleration6 := new(bool)
+			if !r.APIOktaDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIOktaDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration6 = r.APIOktaDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration6 = nil
+			}
 			metadata6 = &shared.DatasetMetadata{
-				Earliest:           earliest6,
+				Created:            created6,
+				Modified:           modified6,
+				Tags:               tags6,
 				EnableAcceleration: enableAcceleration6,
-				FieldList:          fieldList6,
-				LatestRunInfo:      latestRunInfo6,
-				ScanMode:           scanMode6,
 			}
 		}
 		enabledEndpoints5 := make([]string, 0, len(r.APIOktaDataset.EnabledEndpoints))
@@ -1608,56 +1260,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata7 *shared.DatasetMetadata
 		if r.APITailscaleDataset.Metadata != nil {
-			var earliest7 string
-			earliest7 = r.APITailscaleDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration7 bool
-			enableAcceleration7 = r.APITailscaleDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList7 := make([]string, 0, len(r.APITailscaleDataset.Metadata.FieldList))
-			for _, fieldListItem7 := range r.APITailscaleDataset.Metadata.FieldList {
-				fieldList7 = append(fieldList7, fieldListItem7.ValueString())
+			created7 := new(time.Time)
+			if !r.APITailscaleDataset.Metadata.Created.IsUnknown() && !r.APITailscaleDataset.Metadata.Created.IsNull() {
+				*created7, _ = time.Parse(time.RFC3339Nano, r.APITailscaleDataset.Metadata.Created.ValueString())
+			} else {
+				created7 = nil
 			}
-			var latestRunInfo7 *shared.DatasetMetadataRunInfo
-			if r.APITailscaleDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime7 := new(float64)
-				if !r.APITailscaleDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APITailscaleDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime7 = r.APITailscaleDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime7 = nil
-				}
-				finishedAt7 := new(float64)
-				if !r.APITailscaleDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APITailscaleDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt7 = r.APITailscaleDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt7 = nil
-				}
-				latestScannedTime7 := new(float64)
-				if !r.APITailscaleDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APITailscaleDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime7 = r.APITailscaleDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime7 = nil
-				}
-				objectCount7 := new(float64)
-				if !r.APITailscaleDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APITailscaleDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount7 = r.APITailscaleDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount7 = nil
-				}
-				latestRunInfo7 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime7,
-					FinishedAt:          finishedAt7,
-					LatestScannedTime:   latestScannedTime7,
-					ObjectCount:         objectCount7,
-				}
+			modified7 := new(time.Time)
+			if !r.APITailscaleDataset.Metadata.Modified.IsUnknown() && !r.APITailscaleDataset.Metadata.Modified.IsNull() {
+				*modified7, _ = time.Parse(time.RFC3339Nano, r.APITailscaleDataset.Metadata.Modified.ValueString())
+			} else {
+				modified7 = nil
 			}
-			scanMode7 := shared.ScanMode(r.APITailscaleDataset.Metadata.ScanMode.ValueString())
+			tags7 := make([]string, 0, len(r.APITailscaleDataset.Metadata.Tags))
+			for _, tagsItem7 := range r.APITailscaleDataset.Metadata.Tags {
+				tags7 = append(tags7, tagsItem7.ValueString())
+			}
+			enableAcceleration7 := new(bool)
+			if !r.APITailscaleDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APITailscaleDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration7 = r.APITailscaleDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration7 = nil
+			}
 			metadata7 = &shared.DatasetMetadata{
-				Earliest:           earliest7,
+				Created:            created7,
+				Modified:           modified7,
+				Tags:               tags7,
 				EnableAcceleration: enableAcceleration7,
-				FieldList:          fieldList7,
-				LatestRunInfo:      latestRunInfo7,
-				ScanMode:           scanMode7,
 			}
 		}
 		enabledEndpoints6 := make([]string, 0, len(r.APITailscaleDataset.EnabledEndpoints))
@@ -1697,56 +1326,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata8 *shared.DatasetMetadata
 		if r.APIZoomDataset.Metadata != nil {
-			var earliest8 string
-			earliest8 = r.APIZoomDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration8 bool
-			enableAcceleration8 = r.APIZoomDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList8 := make([]string, 0, len(r.APIZoomDataset.Metadata.FieldList))
-			for _, fieldListItem8 := range r.APIZoomDataset.Metadata.FieldList {
-				fieldList8 = append(fieldList8, fieldListItem8.ValueString())
+			created8 := new(time.Time)
+			if !r.APIZoomDataset.Metadata.Created.IsUnknown() && !r.APIZoomDataset.Metadata.Created.IsNull() {
+				*created8, _ = time.Parse(time.RFC3339Nano, r.APIZoomDataset.Metadata.Created.ValueString())
+			} else {
+				created8 = nil
 			}
-			var latestRunInfo8 *shared.DatasetMetadataRunInfo
-			if r.APIZoomDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime8 := new(float64)
-				if !r.APIZoomDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIZoomDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime8 = r.APIZoomDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime8 = nil
-				}
-				finishedAt8 := new(float64)
-				if !r.APIZoomDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIZoomDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt8 = r.APIZoomDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt8 = nil
-				}
-				latestScannedTime8 := new(float64)
-				if !r.APIZoomDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIZoomDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime8 = r.APIZoomDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime8 = nil
-				}
-				objectCount8 := new(float64)
-				if !r.APIZoomDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIZoomDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount8 = r.APIZoomDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount8 = nil
-				}
-				latestRunInfo8 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime8,
-					FinishedAt:          finishedAt8,
-					LatestScannedTime:   latestScannedTime8,
-					ObjectCount:         objectCount8,
-				}
+			modified8 := new(time.Time)
+			if !r.APIZoomDataset.Metadata.Modified.IsUnknown() && !r.APIZoomDataset.Metadata.Modified.IsNull() {
+				*modified8, _ = time.Parse(time.RFC3339Nano, r.APIZoomDataset.Metadata.Modified.ValueString())
+			} else {
+				modified8 = nil
 			}
-			scanMode8 := shared.ScanMode(r.APIZoomDataset.Metadata.ScanMode.ValueString())
+			tags8 := make([]string, 0, len(r.APIZoomDataset.Metadata.Tags))
+			for _, tagsItem8 := range r.APIZoomDataset.Metadata.Tags {
+				tags8 = append(tags8, tagsItem8.ValueString())
+			}
+			enableAcceleration8 := new(bool)
+			if !r.APIZoomDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIZoomDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration8 = r.APIZoomDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration8 = nil
+			}
 			metadata8 = &shared.DatasetMetadata{
-				Earliest:           earliest8,
+				Created:            created8,
+				Modified:           modified8,
+				Tags:               tags8,
 				EnableAcceleration: enableAcceleration8,
-				FieldList:          fieldList8,
-				LatestRunInfo:      latestRunInfo8,
-				ScanMode:           scanMode8,
 			}
 		}
 		enabledEndpoints7 := make([]string, 0, len(r.APIZoomDataset.EnabledEndpoints))
@@ -1786,56 +1392,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata9 *shared.DatasetMetadata
 		if r.APIAzureDataExplorerDataset.Metadata != nil {
-			var earliest9 string
-			earliest9 = r.APIAzureDataExplorerDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration9 bool
-			enableAcceleration9 = r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList9 := make([]string, 0, len(r.APIAzureDataExplorerDataset.Metadata.FieldList))
-			for _, fieldListItem9 := range r.APIAzureDataExplorerDataset.Metadata.FieldList {
-				fieldList9 = append(fieldList9, fieldListItem9.ValueString())
+			created9 := new(time.Time)
+			if !r.APIAzureDataExplorerDataset.Metadata.Created.IsUnknown() && !r.APIAzureDataExplorerDataset.Metadata.Created.IsNull() {
+				*created9, _ = time.Parse(time.RFC3339Nano, r.APIAzureDataExplorerDataset.Metadata.Created.ValueString())
+			} else {
+				created9 = nil
 			}
-			var latestRunInfo9 *shared.DatasetMetadataRunInfo
-			if r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime9 := new(float64)
-				if !r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime9 = r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime9 = nil
-				}
-				finishedAt9 := new(float64)
-				if !r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt9 = r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt9 = nil
-				}
-				latestScannedTime9 := new(float64)
-				if !r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime9 = r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime9 = nil
-				}
-				objectCount9 := new(float64)
-				if !r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount9 = r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount9 = nil
-				}
-				latestRunInfo9 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime9,
-					FinishedAt:          finishedAt9,
-					LatestScannedTime:   latestScannedTime9,
-					ObjectCount:         objectCount9,
-				}
+			modified9 := new(time.Time)
+			if !r.APIAzureDataExplorerDataset.Metadata.Modified.IsUnknown() && !r.APIAzureDataExplorerDataset.Metadata.Modified.IsNull() {
+				*modified9, _ = time.Parse(time.RFC3339Nano, r.APIAzureDataExplorerDataset.Metadata.Modified.ValueString())
+			} else {
+				modified9 = nil
 			}
-			scanMode9 := shared.ScanMode(r.APIAzureDataExplorerDataset.Metadata.ScanMode.ValueString())
+			tags9 := make([]string, 0, len(r.APIAzureDataExplorerDataset.Metadata.Tags))
+			for _, tagsItem9 := range r.APIAzureDataExplorerDataset.Metadata.Tags {
+				tags9 = append(tags9, tagsItem9.ValueString())
+			}
+			enableAcceleration9 := new(bool)
+			if !r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration9 = r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration9 = nil
+			}
 			metadata9 = &shared.DatasetMetadata{
-				Earliest:           earliest9,
+				Created:            created9,
+				Modified:           modified9,
+				Tags:               tags9,
 				EnableAcceleration: enableAcceleration9,
-				FieldList:          fieldList9,
-				LatestRunInfo:      latestRunInfo9,
-				ScanMode:           scanMode9,
 			}
 		}
 		var cluster string
@@ -1900,56 +1483,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata10 *shared.DatasetMetadata
 		if r.SnowflakeDataset.Metadata != nil {
-			var earliest10 string
-			earliest10 = r.SnowflakeDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration10 bool
-			enableAcceleration10 = r.SnowflakeDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList10 := make([]string, 0, len(r.SnowflakeDataset.Metadata.FieldList))
-			for _, fieldListItem10 := range r.SnowflakeDataset.Metadata.FieldList {
-				fieldList10 = append(fieldList10, fieldListItem10.ValueString())
+			created10 := new(time.Time)
+			if !r.SnowflakeDataset.Metadata.Created.IsUnknown() && !r.SnowflakeDataset.Metadata.Created.IsNull() {
+				*created10, _ = time.Parse(time.RFC3339Nano, r.SnowflakeDataset.Metadata.Created.ValueString())
+			} else {
+				created10 = nil
 			}
-			var latestRunInfo10 *shared.DatasetMetadataRunInfo
-			if r.SnowflakeDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime10 := new(float64)
-				if !r.SnowflakeDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.SnowflakeDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime10 = r.SnowflakeDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime10 = nil
-				}
-				finishedAt10 := new(float64)
-				if !r.SnowflakeDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.SnowflakeDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt10 = r.SnowflakeDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt10 = nil
-				}
-				latestScannedTime10 := new(float64)
-				if !r.SnowflakeDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.SnowflakeDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime10 = r.SnowflakeDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime10 = nil
-				}
-				objectCount10 := new(float64)
-				if !r.SnowflakeDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.SnowflakeDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount10 = r.SnowflakeDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount10 = nil
-				}
-				latestRunInfo10 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime10,
-					FinishedAt:          finishedAt10,
-					LatestScannedTime:   latestScannedTime10,
-					ObjectCount:         objectCount10,
-				}
+			modified10 := new(time.Time)
+			if !r.SnowflakeDataset.Metadata.Modified.IsUnknown() && !r.SnowflakeDataset.Metadata.Modified.IsNull() {
+				*modified10, _ = time.Parse(time.RFC3339Nano, r.SnowflakeDataset.Metadata.Modified.ValueString())
+			} else {
+				modified10 = nil
 			}
-			scanMode10 := shared.ScanMode(r.SnowflakeDataset.Metadata.ScanMode.ValueString())
+			tags10 := make([]string, 0, len(r.SnowflakeDataset.Metadata.Tags))
+			for _, tagsItem10 := range r.SnowflakeDataset.Metadata.Tags {
+				tags10 = append(tags10, tagsItem10.ValueString())
+			}
+			enableAcceleration10 := new(bool)
+			if !r.SnowflakeDataset.Metadata.EnableAcceleration.IsUnknown() && !r.SnowflakeDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration10 = r.SnowflakeDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration10 = nil
+			}
 			metadata10 = &shared.DatasetMetadata{
-				Earliest:           earliest10,
+				Created:            created10,
+				Modified:           modified10,
+				Tags:               tags10,
 				EnableAcceleration: enableAcceleration10,
-				FieldList:          fieldList10,
-				LatestRunInfo:      latestRunInfo10,
-				ScanMode:           scanMode10,
 			}
 		}
 		warehouse := new(string)
@@ -2023,56 +1583,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata11 *shared.DatasetMetadata
 		if r.ClickHouseDataset.Metadata != nil {
-			var earliest11 string
-			earliest11 = r.ClickHouseDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration11 bool
-			enableAcceleration11 = r.ClickHouseDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList11 := make([]string, 0, len(r.ClickHouseDataset.Metadata.FieldList))
-			for _, fieldListItem11 := range r.ClickHouseDataset.Metadata.FieldList {
-				fieldList11 = append(fieldList11, fieldListItem11.ValueString())
+			created11 := new(time.Time)
+			if !r.ClickHouseDataset.Metadata.Created.IsUnknown() && !r.ClickHouseDataset.Metadata.Created.IsNull() {
+				*created11, _ = time.Parse(time.RFC3339Nano, r.ClickHouseDataset.Metadata.Created.ValueString())
+			} else {
+				created11 = nil
 			}
-			var latestRunInfo11 *shared.DatasetMetadataRunInfo
-			if r.ClickHouseDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime11 := new(float64)
-				if !r.ClickHouseDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.ClickHouseDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime11 = r.ClickHouseDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime11 = nil
-				}
-				finishedAt11 := new(float64)
-				if !r.ClickHouseDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.ClickHouseDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt11 = r.ClickHouseDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt11 = nil
-				}
-				latestScannedTime11 := new(float64)
-				if !r.ClickHouseDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.ClickHouseDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime11 = r.ClickHouseDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime11 = nil
-				}
-				objectCount11 := new(float64)
-				if !r.ClickHouseDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.ClickHouseDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount11 = r.ClickHouseDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount11 = nil
-				}
-				latestRunInfo11 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime11,
-					FinishedAt:          finishedAt11,
-					LatestScannedTime:   latestScannedTime11,
-					ObjectCount:         objectCount11,
-				}
+			modified11 := new(time.Time)
+			if !r.ClickHouseDataset.Metadata.Modified.IsUnknown() && !r.ClickHouseDataset.Metadata.Modified.IsNull() {
+				*modified11, _ = time.Parse(time.RFC3339Nano, r.ClickHouseDataset.Metadata.Modified.ValueString())
+			} else {
+				modified11 = nil
 			}
-			scanMode11 := shared.ScanMode(r.ClickHouseDataset.Metadata.ScanMode.ValueString())
+			tags11 := make([]string, 0, len(r.ClickHouseDataset.Metadata.Tags))
+			for _, tagsItem11 := range r.ClickHouseDataset.Metadata.Tags {
+				tags11 = append(tags11, tagsItem11.ValueString())
+			}
+			enableAcceleration11 := new(bool)
+			if !r.ClickHouseDataset.Metadata.EnableAcceleration.IsUnknown() && !r.ClickHouseDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration11 = r.ClickHouseDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration11 = nil
+			}
 			metadata11 = &shared.DatasetMetadata{
-				Earliest:           earliest11,
+				Created:            created11,
+				Modified:           modified11,
+				Tags:               tags11,
 				EnableAcceleration: enableAcceleration11,
-				FieldList:          fieldList11,
-				LatestRunInfo:      latestRunInfo11,
-				ScanMode:           scanMode11,
 			}
 		}
 		database2 := new(string)
@@ -2125,56 +1662,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata12 *shared.DatasetMetadata
 		if r.PrometheusDataset.Metadata != nil {
-			var earliest12 string
-			earliest12 = r.PrometheusDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration12 bool
-			enableAcceleration12 = r.PrometheusDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList12 := make([]string, 0, len(r.PrometheusDataset.Metadata.FieldList))
-			for _, fieldListItem12 := range r.PrometheusDataset.Metadata.FieldList {
-				fieldList12 = append(fieldList12, fieldListItem12.ValueString())
+			created12 := new(time.Time)
+			if !r.PrometheusDataset.Metadata.Created.IsUnknown() && !r.PrometheusDataset.Metadata.Created.IsNull() {
+				*created12, _ = time.Parse(time.RFC3339Nano, r.PrometheusDataset.Metadata.Created.ValueString())
+			} else {
+				created12 = nil
 			}
-			var latestRunInfo12 *shared.DatasetMetadataRunInfo
-			if r.PrometheusDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime12 := new(float64)
-				if !r.PrometheusDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.PrometheusDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime12 = r.PrometheusDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime12 = nil
-				}
-				finishedAt12 := new(float64)
-				if !r.PrometheusDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.PrometheusDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt12 = r.PrometheusDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt12 = nil
-				}
-				latestScannedTime12 := new(float64)
-				if !r.PrometheusDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.PrometheusDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime12 = r.PrometheusDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime12 = nil
-				}
-				objectCount12 := new(float64)
-				if !r.PrometheusDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.PrometheusDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount12 = r.PrometheusDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount12 = nil
-				}
-				latestRunInfo12 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime12,
-					FinishedAt:          finishedAt12,
-					LatestScannedTime:   latestScannedTime12,
-					ObjectCount:         objectCount12,
-				}
+			modified12 := new(time.Time)
+			if !r.PrometheusDataset.Metadata.Modified.IsUnknown() && !r.PrometheusDataset.Metadata.Modified.IsNull() {
+				*modified12, _ = time.Parse(time.RFC3339Nano, r.PrometheusDataset.Metadata.Modified.ValueString())
+			} else {
+				modified12 = nil
 			}
-			scanMode12 := shared.ScanMode(r.PrometheusDataset.Metadata.ScanMode.ValueString())
+			tags12 := make([]string, 0, len(r.PrometheusDataset.Metadata.Tags))
+			for _, tagsItem12 := range r.PrometheusDataset.Metadata.Tags {
+				tags12 = append(tags12, tagsItem12.ValueString())
+			}
+			enableAcceleration12 := new(bool)
+			if !r.PrometheusDataset.Metadata.EnableAcceleration.IsUnknown() && !r.PrometheusDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration12 = r.PrometheusDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration12 = nil
+			}
 			metadata12 = &shared.DatasetMetadata{
-				Earliest:           earliest12,
+				Created:            created12,
+				Modified:           modified12,
+				Tags:               tags12,
 				EnableAcceleration: enableAcceleration12,
-				FieldList:          fieldList12,
-				LatestRunInfo:      latestRunInfo12,
-				ScanMode:           scanMode12,
 			}
 		}
 		desiredNumDataPoints := new(float64)
@@ -2230,56 +1744,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata13 *shared.DatasetMetadata
 		if r.APIOpenSearchDataset.Metadata != nil {
-			var earliest13 string
-			earliest13 = r.APIOpenSearchDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration13 bool
-			enableAcceleration13 = r.APIOpenSearchDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList13 := make([]string, 0, len(r.APIOpenSearchDataset.Metadata.FieldList))
-			for _, fieldListItem13 := range r.APIOpenSearchDataset.Metadata.FieldList {
-				fieldList13 = append(fieldList13, fieldListItem13.ValueString())
+			created13 := new(time.Time)
+			if !r.APIOpenSearchDataset.Metadata.Created.IsUnknown() && !r.APIOpenSearchDataset.Metadata.Created.IsNull() {
+				*created13, _ = time.Parse(time.RFC3339Nano, r.APIOpenSearchDataset.Metadata.Created.ValueString())
+			} else {
+				created13 = nil
 			}
-			var latestRunInfo13 *shared.DatasetMetadataRunInfo
-			if r.APIOpenSearchDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime13 := new(float64)
-				if !r.APIOpenSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIOpenSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime13 = r.APIOpenSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime13 = nil
-				}
-				finishedAt13 := new(float64)
-				if !r.APIOpenSearchDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIOpenSearchDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt13 = r.APIOpenSearchDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt13 = nil
-				}
-				latestScannedTime13 := new(float64)
-				if !r.APIOpenSearchDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIOpenSearchDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime13 = r.APIOpenSearchDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime13 = nil
-				}
-				objectCount13 := new(float64)
-				if !r.APIOpenSearchDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIOpenSearchDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount13 = r.APIOpenSearchDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount13 = nil
-				}
-				latestRunInfo13 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime13,
-					FinishedAt:          finishedAt13,
-					LatestScannedTime:   latestScannedTime13,
-					ObjectCount:         objectCount13,
-				}
+			modified13 := new(time.Time)
+			if !r.APIOpenSearchDataset.Metadata.Modified.IsUnknown() && !r.APIOpenSearchDataset.Metadata.Modified.IsNull() {
+				*modified13, _ = time.Parse(time.RFC3339Nano, r.APIOpenSearchDataset.Metadata.Modified.ValueString())
+			} else {
+				modified13 = nil
 			}
-			scanMode13 := shared.ScanMode(r.APIOpenSearchDataset.Metadata.ScanMode.ValueString())
+			tags13 := make([]string, 0, len(r.APIOpenSearchDataset.Metadata.Tags))
+			for _, tagsItem13 := range r.APIOpenSearchDataset.Metadata.Tags {
+				tags13 = append(tags13, tagsItem13.ValueString())
+			}
+			enableAcceleration13 := new(bool)
+			if !r.APIOpenSearchDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIOpenSearchDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration13 = r.APIOpenSearchDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration13 = nil
+			}
 			metadata13 = &shared.DatasetMetadata{
-				Earliest:           earliest13,
+				Created:            created13,
+				Modified:           modified13,
+				Tags:               tags13,
 				EnableAcceleration: enableAcceleration13,
-				FieldList:          fieldList13,
-				LatestRunInfo:      latestRunInfo13,
-				ScanMode:           scanMode13,
 			}
 		}
 		var index string
@@ -2325,56 +1816,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata14 *shared.DatasetMetadata
 		if r.APIElasticSearchDataset.Metadata != nil {
-			var earliest14 string
-			earliest14 = r.APIElasticSearchDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration14 bool
-			enableAcceleration14 = r.APIElasticSearchDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList14 := make([]string, 0, len(r.APIElasticSearchDataset.Metadata.FieldList))
-			for _, fieldListItem14 := range r.APIElasticSearchDataset.Metadata.FieldList {
-				fieldList14 = append(fieldList14, fieldListItem14.ValueString())
+			created14 := new(time.Time)
+			if !r.APIElasticSearchDataset.Metadata.Created.IsUnknown() && !r.APIElasticSearchDataset.Metadata.Created.IsNull() {
+				*created14, _ = time.Parse(time.RFC3339Nano, r.APIElasticSearchDataset.Metadata.Created.ValueString())
+			} else {
+				created14 = nil
 			}
-			var latestRunInfo14 *shared.DatasetMetadataRunInfo
-			if r.APIElasticSearchDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime14 := new(float64)
-				if !r.APIElasticSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.APIElasticSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime14 = r.APIElasticSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime14 = nil
-				}
-				finishedAt14 := new(float64)
-				if !r.APIElasticSearchDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.APIElasticSearchDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt14 = r.APIElasticSearchDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt14 = nil
-				}
-				latestScannedTime14 := new(float64)
-				if !r.APIElasticSearchDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.APIElasticSearchDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime14 = r.APIElasticSearchDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime14 = nil
-				}
-				objectCount14 := new(float64)
-				if !r.APIElasticSearchDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.APIElasticSearchDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount14 = r.APIElasticSearchDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount14 = nil
-				}
-				latestRunInfo14 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime14,
-					FinishedAt:          finishedAt14,
-					LatestScannedTime:   latestScannedTime14,
-					ObjectCount:         objectCount14,
-				}
+			modified14 := new(time.Time)
+			if !r.APIElasticSearchDataset.Metadata.Modified.IsUnknown() && !r.APIElasticSearchDataset.Metadata.Modified.IsNull() {
+				*modified14, _ = time.Parse(time.RFC3339Nano, r.APIElasticSearchDataset.Metadata.Modified.ValueString())
+			} else {
+				modified14 = nil
 			}
-			scanMode14 := shared.ScanMode(r.APIElasticSearchDataset.Metadata.ScanMode.ValueString())
+			tags14 := make([]string, 0, len(r.APIElasticSearchDataset.Metadata.Tags))
+			for _, tagsItem14 := range r.APIElasticSearchDataset.Metadata.Tags {
+				tags14 = append(tags14, tagsItem14.ValueString())
+			}
+			enableAcceleration14 := new(bool)
+			if !r.APIElasticSearchDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIElasticSearchDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration14 = r.APIElasticSearchDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration14 = nil
+			}
 			metadata14 = &shared.DatasetMetadata{
-				Earliest:           earliest14,
+				Created:            created14,
+				Modified:           modified14,
+				Tags:               tags14,
 				EnableAcceleration: enableAcceleration14,
-				FieldList:          fieldList14,
-				LatestRunInfo:      latestRunInfo14,
-				ScanMode:           scanMode14,
 			}
 		}
 		var index1 string
@@ -2417,56 +1885,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata15 *shared.DatasetMetadata
 		if r.S3Dataset.Metadata != nil {
-			var earliest15 string
-			earliest15 = r.S3Dataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration15 bool
-			enableAcceleration15 = r.S3Dataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList15 := make([]string, 0, len(r.S3Dataset.Metadata.FieldList))
-			for _, fieldListItem15 := range r.S3Dataset.Metadata.FieldList {
-				fieldList15 = append(fieldList15, fieldListItem15.ValueString())
+			created15 := new(time.Time)
+			if !r.S3Dataset.Metadata.Created.IsUnknown() && !r.S3Dataset.Metadata.Created.IsNull() {
+				*created15, _ = time.Parse(time.RFC3339Nano, r.S3Dataset.Metadata.Created.ValueString())
+			} else {
+				created15 = nil
 			}
-			var latestRunInfo15 *shared.DatasetMetadataRunInfo
-			if r.S3Dataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime15 := new(float64)
-				if !r.S3Dataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.S3Dataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime15 = r.S3Dataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime15 = nil
-				}
-				finishedAt15 := new(float64)
-				if !r.S3Dataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.S3Dataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt15 = r.S3Dataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt15 = nil
-				}
-				latestScannedTime15 := new(float64)
-				if !r.S3Dataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.S3Dataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime15 = r.S3Dataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime15 = nil
-				}
-				objectCount15 := new(float64)
-				if !r.S3Dataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.S3Dataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount15 = r.S3Dataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount15 = nil
-				}
-				latestRunInfo15 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime15,
-					FinishedAt:          finishedAt15,
-					LatestScannedTime:   latestScannedTime15,
-					ObjectCount:         objectCount15,
-				}
+			modified15 := new(time.Time)
+			if !r.S3Dataset.Metadata.Modified.IsUnknown() && !r.S3Dataset.Metadata.Modified.IsNull() {
+				*modified15, _ = time.Parse(time.RFC3339Nano, r.S3Dataset.Metadata.Modified.ValueString())
+			} else {
+				modified15 = nil
 			}
-			scanMode15 := shared.ScanMode(r.S3Dataset.Metadata.ScanMode.ValueString())
+			tags15 := make([]string, 0, len(r.S3Dataset.Metadata.Tags))
+			for _, tagsItem15 := range r.S3Dataset.Metadata.Tags {
+				tags15 = append(tags15, tagsItem15.ValueString())
+			}
+			enableAcceleration15 := new(bool)
+			if !r.S3Dataset.Metadata.EnableAcceleration.IsUnknown() && !r.S3Dataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration15 = r.S3Dataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration15 = nil
+			}
 			metadata15 = &shared.DatasetMetadata{
-				Earliest:           earliest15,
+				Created:            created15,
+				Modified:           modified15,
+				Tags:               tags15,
 				EnableAcceleration: enableAcceleration15,
-				FieldList:          fieldList15,
-				LatestRunInfo:      latestRunInfo15,
-				ScanMode:           scanMode15,
 			}
 		}
 		var bucket string
@@ -2583,56 +2028,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata16 *shared.DatasetMetadata
 		if r.CriblLeaderDataset.Metadata != nil {
-			var earliest16 string
-			earliest16 = r.CriblLeaderDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration16 bool
-			enableAcceleration16 = r.CriblLeaderDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList16 := make([]string, 0, len(r.CriblLeaderDataset.Metadata.FieldList))
-			for _, fieldListItem16 := range r.CriblLeaderDataset.Metadata.FieldList {
-				fieldList16 = append(fieldList16, fieldListItem16.ValueString())
+			created16 := new(time.Time)
+			if !r.CriblLeaderDataset.Metadata.Created.IsUnknown() && !r.CriblLeaderDataset.Metadata.Created.IsNull() {
+				*created16, _ = time.Parse(time.RFC3339Nano, r.CriblLeaderDataset.Metadata.Created.ValueString())
+			} else {
+				created16 = nil
 			}
-			var latestRunInfo16 *shared.DatasetMetadataRunInfo
-			if r.CriblLeaderDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime16 := new(float64)
-				if !r.CriblLeaderDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.CriblLeaderDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime16 = r.CriblLeaderDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime16 = nil
-				}
-				finishedAt16 := new(float64)
-				if !r.CriblLeaderDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.CriblLeaderDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt16 = r.CriblLeaderDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt16 = nil
-				}
-				latestScannedTime16 := new(float64)
-				if !r.CriblLeaderDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.CriblLeaderDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime16 = r.CriblLeaderDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime16 = nil
-				}
-				objectCount16 := new(float64)
-				if !r.CriblLeaderDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.CriblLeaderDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount16 = r.CriblLeaderDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount16 = nil
-				}
-				latestRunInfo16 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime16,
-					FinishedAt:          finishedAt16,
-					LatestScannedTime:   latestScannedTime16,
-					ObjectCount:         objectCount16,
-				}
+			modified16 := new(time.Time)
+			if !r.CriblLeaderDataset.Metadata.Modified.IsUnknown() && !r.CriblLeaderDataset.Metadata.Modified.IsNull() {
+				*modified16, _ = time.Parse(time.RFC3339Nano, r.CriblLeaderDataset.Metadata.Modified.ValueString())
+			} else {
+				modified16 = nil
 			}
-			scanMode16 := shared.ScanMode(r.CriblLeaderDataset.Metadata.ScanMode.ValueString())
+			tags16 := make([]string, 0, len(r.CriblLeaderDataset.Metadata.Tags))
+			for _, tagsItem16 := range r.CriblLeaderDataset.Metadata.Tags {
+				tags16 = append(tags16, tagsItem16.ValueString())
+			}
+			enableAcceleration16 := new(bool)
+			if !r.CriblLeaderDataset.Metadata.EnableAcceleration.IsUnknown() && !r.CriblLeaderDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration16 = r.CriblLeaderDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration16 = nil
+			}
 			metadata16 = &shared.DatasetMetadata{
-				Earliest:           earliest16,
+				Created:            created16,
+				Modified:           modified16,
+				Tags:               tags16,
 				EnableAcceleration: enableAcceleration16,
-				FieldList:          fieldList16,
-				LatestRunInfo:      latestRunInfo16,
-				ScanMode:           scanMode16,
 			}
 		}
 		var path2 string
@@ -2695,56 +2117,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata17 *shared.DatasetMetadata
 		if r.MetaDataset.Metadata != nil {
-			var earliest17 string
-			earliest17 = r.MetaDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration17 bool
-			enableAcceleration17 = r.MetaDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList17 := make([]string, 0, len(r.MetaDataset.Metadata.FieldList))
-			for _, fieldListItem17 := range r.MetaDataset.Metadata.FieldList {
-				fieldList17 = append(fieldList17, fieldListItem17.ValueString())
+			created17 := new(time.Time)
+			if !r.MetaDataset.Metadata.Created.IsUnknown() && !r.MetaDataset.Metadata.Created.IsNull() {
+				*created17, _ = time.Parse(time.RFC3339Nano, r.MetaDataset.Metadata.Created.ValueString())
+			} else {
+				created17 = nil
 			}
-			var latestRunInfo17 *shared.DatasetMetadataRunInfo
-			if r.MetaDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime17 := new(float64)
-				if !r.MetaDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.MetaDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime17 = r.MetaDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime17 = nil
-				}
-				finishedAt17 := new(float64)
-				if !r.MetaDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.MetaDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt17 = r.MetaDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt17 = nil
-				}
-				latestScannedTime17 := new(float64)
-				if !r.MetaDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.MetaDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime17 = r.MetaDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime17 = nil
-				}
-				objectCount17 := new(float64)
-				if !r.MetaDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.MetaDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount17 = r.MetaDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount17 = nil
-				}
-				latestRunInfo17 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime17,
-					FinishedAt:          finishedAt17,
-					LatestScannedTime:   latestScannedTime17,
-					ObjectCount:         objectCount17,
-				}
+			modified17 := new(time.Time)
+			if !r.MetaDataset.Metadata.Modified.IsUnknown() && !r.MetaDataset.Metadata.Modified.IsNull() {
+				*modified17, _ = time.Parse(time.RFC3339Nano, r.MetaDataset.Metadata.Modified.ValueString())
+			} else {
+				modified17 = nil
 			}
-			scanMode17 := shared.ScanMode(r.MetaDataset.Metadata.ScanMode.ValueString())
+			tags17 := make([]string, 0, len(r.MetaDataset.Metadata.Tags))
+			for _, tagsItem17 := range r.MetaDataset.Metadata.Tags {
+				tags17 = append(tags17, tagsItem17.ValueString())
+			}
+			enableAcceleration17 := new(bool)
+			if !r.MetaDataset.Metadata.EnableAcceleration.IsUnknown() && !r.MetaDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration17 = r.MetaDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration17 = nil
+			}
 			metadata17 = &shared.DatasetMetadata{
-				Earliest:           earliest17,
+				Created:            created17,
+				Modified:           modified17,
+				Tags:               tags17,
 				EnableAcceleration: enableAcceleration17,
-				FieldList:          fieldList17,
-				LatestRunInfo:      latestRunInfo17,
-				ScanMode:           scanMode17,
 			}
 		}
 		datasets := make([]string, 0, len(r.MetaDataset.Datasets))
@@ -2784,56 +2183,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata18 *shared.DatasetMetadata
 		if r.EdgeDataset.Metadata != nil {
-			var earliest18 string
-			earliest18 = r.EdgeDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration18 bool
-			enableAcceleration18 = r.EdgeDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList18 := make([]string, 0, len(r.EdgeDataset.Metadata.FieldList))
-			for _, fieldListItem18 := range r.EdgeDataset.Metadata.FieldList {
-				fieldList18 = append(fieldList18, fieldListItem18.ValueString())
+			created18 := new(time.Time)
+			if !r.EdgeDataset.Metadata.Created.IsUnknown() && !r.EdgeDataset.Metadata.Created.IsNull() {
+				*created18, _ = time.Parse(time.RFC3339Nano, r.EdgeDataset.Metadata.Created.ValueString())
+			} else {
+				created18 = nil
 			}
-			var latestRunInfo18 *shared.DatasetMetadataRunInfo
-			if r.EdgeDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime18 := new(float64)
-				if !r.EdgeDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.EdgeDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime18 = r.EdgeDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime18 = nil
-				}
-				finishedAt18 := new(float64)
-				if !r.EdgeDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.EdgeDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt18 = r.EdgeDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt18 = nil
-				}
-				latestScannedTime18 := new(float64)
-				if !r.EdgeDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.EdgeDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime18 = r.EdgeDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime18 = nil
-				}
-				objectCount18 := new(float64)
-				if !r.EdgeDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.EdgeDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount18 = r.EdgeDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount18 = nil
-				}
-				latestRunInfo18 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime18,
-					FinishedAt:          finishedAt18,
-					LatestScannedTime:   latestScannedTime18,
-					ObjectCount:         objectCount18,
-				}
+			modified18 := new(time.Time)
+			if !r.EdgeDataset.Metadata.Modified.IsUnknown() && !r.EdgeDataset.Metadata.Modified.IsNull() {
+				*modified18, _ = time.Parse(time.RFC3339Nano, r.EdgeDataset.Metadata.Modified.ValueString())
+			} else {
+				modified18 = nil
 			}
-			scanMode18 := shared.ScanMode(r.EdgeDataset.Metadata.ScanMode.ValueString())
+			tags18 := make([]string, 0, len(r.EdgeDataset.Metadata.Tags))
+			for _, tagsItem18 := range r.EdgeDataset.Metadata.Tags {
+				tags18 = append(tags18, tagsItem18.ValueString())
+			}
+			enableAcceleration18 := new(bool)
+			if !r.EdgeDataset.Metadata.EnableAcceleration.IsUnknown() && !r.EdgeDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration18 = r.EdgeDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration18 = nil
+			}
 			metadata18 = &shared.DatasetMetadata{
-				Earliest:           earliest18,
+				Created:            created18,
+				Modified:           modified18,
+				Tags:               tags18,
 				EnableAcceleration: enableAcceleration18,
-				FieldList:          fieldList18,
-				LatestRunInfo:      latestRunInfo18,
-				ScanMode:           scanMode18,
 			}
 		}
 		fleets := make([]string, 0, len(r.EdgeDataset.Fleets))
@@ -2884,56 +2260,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata19 *shared.DatasetMetadata
 		if r.AzureBlobDataset.Metadata != nil {
-			var earliest19 string
-			earliest19 = r.AzureBlobDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration19 bool
-			enableAcceleration19 = r.AzureBlobDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList19 := make([]string, 0, len(r.AzureBlobDataset.Metadata.FieldList))
-			for _, fieldListItem19 := range r.AzureBlobDataset.Metadata.FieldList {
-				fieldList19 = append(fieldList19, fieldListItem19.ValueString())
+			created19 := new(time.Time)
+			if !r.AzureBlobDataset.Metadata.Created.IsUnknown() && !r.AzureBlobDataset.Metadata.Created.IsNull() {
+				*created19, _ = time.Parse(time.RFC3339Nano, r.AzureBlobDataset.Metadata.Created.ValueString())
+			} else {
+				created19 = nil
 			}
-			var latestRunInfo19 *shared.DatasetMetadataRunInfo
-			if r.AzureBlobDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime19 := new(float64)
-				if !r.AzureBlobDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.AzureBlobDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime19 = r.AzureBlobDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime19 = nil
-				}
-				finishedAt19 := new(float64)
-				if !r.AzureBlobDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.AzureBlobDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt19 = r.AzureBlobDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt19 = nil
-				}
-				latestScannedTime19 := new(float64)
-				if !r.AzureBlobDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.AzureBlobDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime19 = r.AzureBlobDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime19 = nil
-				}
-				objectCount19 := new(float64)
-				if !r.AzureBlobDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.AzureBlobDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount19 = r.AzureBlobDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount19 = nil
-				}
-				latestRunInfo19 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime19,
-					FinishedAt:          finishedAt19,
-					LatestScannedTime:   latestScannedTime19,
-					ObjectCount:         objectCount19,
-				}
+			modified19 := new(time.Time)
+			if !r.AzureBlobDataset.Metadata.Modified.IsUnknown() && !r.AzureBlobDataset.Metadata.Modified.IsNull() {
+				*modified19, _ = time.Parse(time.RFC3339Nano, r.AzureBlobDataset.Metadata.Modified.ValueString())
+			} else {
+				modified19 = nil
 			}
-			scanMode19 := shared.ScanMode(r.AzureBlobDataset.Metadata.ScanMode.ValueString())
+			tags19 := make([]string, 0, len(r.AzureBlobDataset.Metadata.Tags))
+			for _, tagsItem19 := range r.AzureBlobDataset.Metadata.Tags {
+				tags19 = append(tags19, tagsItem19.ValueString())
+			}
+			enableAcceleration19 := new(bool)
+			if !r.AzureBlobDataset.Metadata.EnableAcceleration.IsUnknown() && !r.AzureBlobDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration19 = r.AzureBlobDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration19 = nil
+			}
 			metadata19 = &shared.DatasetMetadata{
-				Earliest:           earliest19,
+				Created:            created19,
+				Modified:           modified19,
+				Tags:               tags19,
 				EnableAcceleration: enableAcceleration19,
-				FieldList:          fieldList19,
-				LatestRunInfo:      latestRunInfo19,
-				ScanMode:           scanMode19,
 			}
 		}
 		var containerName string
@@ -3022,56 +2375,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata20 *shared.DatasetMetadata
 		if r.GcsDataset.Metadata != nil {
-			var earliest20 string
-			earliest20 = r.GcsDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration20 bool
-			enableAcceleration20 = r.GcsDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList20 := make([]string, 0, len(r.GcsDataset.Metadata.FieldList))
-			for _, fieldListItem20 := range r.GcsDataset.Metadata.FieldList {
-				fieldList20 = append(fieldList20, fieldListItem20.ValueString())
+			created20 := new(time.Time)
+			if !r.GcsDataset.Metadata.Created.IsUnknown() && !r.GcsDataset.Metadata.Created.IsNull() {
+				*created20, _ = time.Parse(time.RFC3339Nano, r.GcsDataset.Metadata.Created.ValueString())
+			} else {
+				created20 = nil
 			}
-			var latestRunInfo20 *shared.DatasetMetadataRunInfo
-			if r.GcsDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime20 := new(float64)
-				if !r.GcsDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.GcsDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime20 = r.GcsDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime20 = nil
-				}
-				finishedAt20 := new(float64)
-				if !r.GcsDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.GcsDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt20 = r.GcsDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt20 = nil
-				}
-				latestScannedTime20 := new(float64)
-				if !r.GcsDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.GcsDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime20 = r.GcsDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime20 = nil
-				}
-				objectCount20 := new(float64)
-				if !r.GcsDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.GcsDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount20 = r.GcsDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount20 = nil
-				}
-				latestRunInfo20 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime20,
-					FinishedAt:          finishedAt20,
-					LatestScannedTime:   latestScannedTime20,
-					ObjectCount:         objectCount20,
-				}
+			modified20 := new(time.Time)
+			if !r.GcsDataset.Metadata.Modified.IsUnknown() && !r.GcsDataset.Metadata.Modified.IsNull() {
+				*modified20, _ = time.Parse(time.RFC3339Nano, r.GcsDataset.Metadata.Modified.ValueString())
+			} else {
+				modified20 = nil
 			}
-			scanMode20 := shared.ScanMode(r.GcsDataset.Metadata.ScanMode.ValueString())
+			tags20 := make([]string, 0, len(r.GcsDataset.Metadata.Tags))
+			for _, tagsItem20 := range r.GcsDataset.Metadata.Tags {
+				tags20 = append(tags20, tagsItem20.ValueString())
+			}
+			enableAcceleration20 := new(bool)
+			if !r.GcsDataset.Metadata.EnableAcceleration.IsUnknown() && !r.GcsDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration20 = r.GcsDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration20 = nil
+			}
 			metadata20 = &shared.DatasetMetadata{
-				Earliest:           earliest20,
+				Created:            created20,
+				Modified:           modified20,
+				Tags:               tags20,
 				EnableAcceleration: enableAcceleration20,
-				FieldList:          fieldList20,
-				LatestRunInfo:      latestRunInfo20,
-				ScanMode:           scanMode20,
 			}
 		}
 		var bucket2 string
@@ -3160,56 +2490,33 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 
 		var metadata21 *shared.DatasetMetadata
 		if r.AwsSecurityLakeDataset.Metadata != nil {
-			var earliest21 string
-			earliest21 = r.AwsSecurityLakeDataset.Metadata.Earliest.ValueString()
-
-			var enableAcceleration21 bool
-			enableAcceleration21 = r.AwsSecurityLakeDataset.Metadata.EnableAcceleration.ValueBool()
-
-			fieldList21 := make([]string, 0, len(r.AwsSecurityLakeDataset.Metadata.FieldList))
-			for _, fieldListItem21 := range r.AwsSecurityLakeDataset.Metadata.FieldList {
-				fieldList21 = append(fieldList21, fieldListItem21.ValueString())
+			created21 := new(time.Time)
+			if !r.AwsSecurityLakeDataset.Metadata.Created.IsUnknown() && !r.AwsSecurityLakeDataset.Metadata.Created.IsNull() {
+				*created21, _ = time.Parse(time.RFC3339Nano, r.AwsSecurityLakeDataset.Metadata.Created.ValueString())
+			} else {
+				created21 = nil
 			}
-			var latestRunInfo21 *shared.DatasetMetadataRunInfo
-			if r.AwsSecurityLakeDataset.Metadata.LatestRunInfo != nil {
-				earliestScannedTime21 := new(float64)
-				if !r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsUnknown() && !r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.EarliestScannedTime.IsNull() {
-					*earliestScannedTime21 = r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.EarliestScannedTime.ValueFloat64()
-				} else {
-					earliestScannedTime21 = nil
-				}
-				finishedAt21 := new(float64)
-				if !r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.FinishedAt.IsUnknown() && !r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.FinishedAt.IsNull() {
-					*finishedAt21 = r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.FinishedAt.ValueFloat64()
-				} else {
-					finishedAt21 = nil
-				}
-				latestScannedTime21 := new(float64)
-				if !r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.LatestScannedTime.IsUnknown() && !r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.LatestScannedTime.IsNull() {
-					*latestScannedTime21 = r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.LatestScannedTime.ValueFloat64()
-				} else {
-					latestScannedTime21 = nil
-				}
-				objectCount21 := new(float64)
-				if !r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.ObjectCount.IsUnknown() && !r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.ObjectCount.IsNull() {
-					*objectCount21 = r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.ObjectCount.ValueFloat64()
-				} else {
-					objectCount21 = nil
-				}
-				latestRunInfo21 = &shared.DatasetMetadataRunInfo{
-					EarliestScannedTime: earliestScannedTime21,
-					FinishedAt:          finishedAt21,
-					LatestScannedTime:   latestScannedTime21,
-					ObjectCount:         objectCount21,
-				}
+			modified21 := new(time.Time)
+			if !r.AwsSecurityLakeDataset.Metadata.Modified.IsUnknown() && !r.AwsSecurityLakeDataset.Metadata.Modified.IsNull() {
+				*modified21, _ = time.Parse(time.RFC3339Nano, r.AwsSecurityLakeDataset.Metadata.Modified.ValueString())
+			} else {
+				modified21 = nil
 			}
-			scanMode21 := shared.ScanMode(r.AwsSecurityLakeDataset.Metadata.ScanMode.ValueString())
+			tags21 := make([]string, 0, len(r.AwsSecurityLakeDataset.Metadata.Tags))
+			for _, tagsItem21 := range r.AwsSecurityLakeDataset.Metadata.Tags {
+				tags21 = append(tags21, tagsItem21.ValueString())
+			}
+			enableAcceleration21 := new(bool)
+			if !r.AwsSecurityLakeDataset.Metadata.EnableAcceleration.IsUnknown() && !r.AwsSecurityLakeDataset.Metadata.EnableAcceleration.IsNull() {
+				*enableAcceleration21 = r.AwsSecurityLakeDataset.Metadata.EnableAcceleration.ValueBool()
+			} else {
+				enableAcceleration21 = nil
+			}
 			metadata21 = &shared.DatasetMetadata{
-				Earliest:           earliest21,
+				Created:            created21,
+				Modified:           modified21,
+				Tags:               tags21,
 				EnableAcceleration: enableAcceleration21,
-				FieldList:          fieldList21,
-				LatestRunInfo:      latestRunInfo21,
-				ScanMode:           scanMode21,
 			}
 		}
 		path7 := new(string)

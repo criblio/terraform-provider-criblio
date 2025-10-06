@@ -29,20 +29,7 @@ type SearchDashboardDataSource struct {
 
 // SearchDashboardDataSourceModel describes the data model.
 type SearchDashboardDataSourceModel struct {
-	CacheTTLSeconds   types.Float64          `tfsdk:"cache_ttl_seconds"`
-	Category          types.String           `tfsdk:"category"`
-	Created           types.Float64          `tfsdk:"created"`
-	CreatedBy         types.String           `tfsdk:"created_by"`
-	Description       types.String           `tfsdk:"description"`
-	DisplayCreatedBy  types.String           `tfsdk:"display_created_by"`
-	DisplayModifiedBy types.String           `tfsdk:"display_modified_by"`
-	Elements          []tfTypes.ElementUnion `tfsdk:"elements"`
-	ID                types.String           `tfsdk:"id"`
-	Modified          types.Float64          `tfsdk:"modified"`
-	ModifiedBy        types.String           `tfsdk:"modified_by"`
-	Name              types.String           `tfsdk:"name"`
-	Owner             types.String           `tfsdk:"owner"`
-	Tags              []types.String         `tfsdk:"tags"`
+	Items []tfTypes.SearchDashboard `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -56,248 +43,290 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 		MarkdownDescription: "SearchDashboard DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"cache_ttl_seconds": schema.Float64Attribute{
-				Computed: true,
-			},
-			"category": schema.StringAttribute{
-				Computed: true,
-			},
-			"created": schema.Float64Attribute{
-				Computed: true,
-			},
-			"created_by": schema.StringAttribute{
-				Computed: true,
-			},
-			"description": schema.StringAttribute{
-				Computed: true,
-			},
-			"display_created_by": schema.StringAttribute{
-				Computed: true,
-			},
-			"display_modified_by": schema.StringAttribute{
-				Computed: true,
-			},
-			"elements": schema.ListNestedAttribute{
+			"items": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"element": schema.SingleNestedAttribute{
+						"cache_ttl_seconds": schema.Float64Attribute{
 							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"color_palette": schema.StringAttribute{
-									Computed: true,
-								},
-								"description": schema.StringAttribute{
-									Computed: true,
-								},
-								"empty": schema.BoolAttribute{
-									Computed: true,
-								},
-								"h": schema.Float64Attribute{
-									Computed: true,
-								},
-								"hide_panel": schema.BoolAttribute{
-									Computed: true,
-								},
-								"horizontal_chart": schema.BoolAttribute{
-									Computed: true,
-								},
-								"id": schema.StringAttribute{
-									Computed: true,
-								},
-								"layout": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"h": schema.Float64Attribute{
-											Computed: true,
-										},
-										"w": schema.Float64Attribute{
-											Computed: true,
-										},
-										"x": schema.Float64Attribute{
-											Computed: true,
-										},
-										"y": schema.Float64Attribute{
-											Computed: true,
-										},
-									},
-								},
-								"query": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"search_query_inline": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"earliest": schema.SingleNestedAttribute{
-													Computed: true,
-													Attributes: map[string]schema.Attribute{
-														"number": schema.Float64Attribute{
-															Computed: true,
+						},
+						"category": schema.StringAttribute{
+							Computed: true,
+						},
+						"created": schema.Float64Attribute{
+							Computed: true,
+						},
+						"created_by": schema.StringAttribute{
+							Computed: true,
+						},
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"display_created_by": schema.StringAttribute{
+							Computed: true,
+						},
+						"display_modified_by": schema.StringAttribute{
+							Computed: true,
+						},
+						"elements": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"element": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"color_palette": schema.StringAttribute{
+												Computed: true,
+											},
+											"description": schema.StringAttribute{
+												Computed: true,
+											},
+											"empty": schema.BoolAttribute{
+												Computed: true,
+											},
+											"h": schema.Float64Attribute{
+												Computed: true,
+											},
+											"hide_panel": schema.BoolAttribute{
+												Computed: true,
+											},
+											"horizontal_chart": schema.BoolAttribute{
+												Computed: true,
+											},
+											"id": schema.StringAttribute{
+												Computed: true,
+											},
+											"layout": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"h": schema.Float64Attribute{
+														Computed: true,
+													},
+													"w": schema.Float64Attribute{
+														Computed: true,
+													},
+													"x": schema.Float64Attribute{
+														Computed: true,
+													},
+													"y": schema.Float64Attribute{
+														Computed: true,
+													},
+												},
+											},
+											"query": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"search_query_inline": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"earliest": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"number": schema.Float64Attribute{
+																		Computed: true,
+																	},
+																	"str": schema.StringAttribute{
+																		Computed: true,
+																	},
+																},
+															},
+															"latest": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"number": schema.Float64Attribute{
+																		Computed: true,
+																	},
+																	"str": schema.StringAttribute{
+																		Computed: true,
+																	},
+																},
+															},
+															"parent_search_id": schema.StringAttribute{
+																Computed: true,
+															},
+															"query": schema.StringAttribute{
+																Computed: true,
+															},
+															"sample_rate": schema.Float64Attribute{
+																Computed: true,
+															},
+															"timezone": schema.StringAttribute{
+																Computed: true,
+															},
+															"type": schema.StringAttribute{
+																Computed: true,
+															},
 														},
-														"str": schema.StringAttribute{
-															Computed: true,
+													},
+													"search_query_saved": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"query": schema.StringAttribute{
+																Computed: true,
+															},
+															"query_id": schema.StringAttribute{
+																Computed: true,
+															},
+															"run_mode": schema.StringAttribute{
+																Computed: true,
+															},
+															"type": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+													"search_query_values": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"type": schema.StringAttribute{
+																Computed: true,
+															},
+															"values": schema.ListAttribute{
+																Computed:    true,
+																ElementType: types.StringType,
+															},
 														},
 													},
 												},
-												"latest": schema.SingleNestedAttribute{
-													Computed: true,
-													Attributes: map[string]schema.Attribute{
-														"number": schema.Float64Attribute{
-															Computed: true,
-														},
-														"str": schema.StringAttribute{
-															Computed: true,
-														},
+											},
+											"title": schema.StringAttribute{
+												Computed: true,
+											},
+											"type": schema.StringAttribute{
+												Computed: true,
+											},
+											"variant": schema.StringAttribute{
+												Computed: true,
+											},
+											"w": schema.Float64Attribute{
+												Computed: true,
+											},
+											"x": schema.Float64Attribute{
+												Computed: true,
+											},
+											"x_axis": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"data_field": schema.StringAttribute{
+														Computed: true,
+													},
+													"inverse": schema.BoolAttribute{
+														Computed: true,
+													},
+													"label_interval": schema.StringAttribute{
+														Computed: true,
+													},
+													"label_orientation": schema.Float64Attribute{
+														Computed: true,
+													},
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"offset": schema.Float64Attribute{
+														Computed: true,
+													},
+													"position": schema.StringAttribute{
+														Computed: true,
+													},
+													"type": schema.StringAttribute{
+														Computed: true,
 													},
 												},
-												"parent_search_id": schema.StringAttribute{
-													Computed: true,
-												},
-												"query": schema.StringAttribute{
-													Computed: true,
-												},
-												"sample_rate": schema.Float64Attribute{
-													Computed: true,
-												},
-												"timezone": schema.StringAttribute{
-													Computed: true,
-												},
-												"type": schema.StringAttribute{
-													Computed: true,
+											},
+											"y": schema.Float64Attribute{
+												Computed: true,
+											},
+											"y_axis": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"data_field": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"interval": schema.Float64Attribute{
+														Computed: true,
+													},
+													"max": schema.Float64Attribute{
+														Computed: true,
+													},
+													"min": schema.Float64Attribute{
+														Computed: true,
+													},
+													"position": schema.StringAttribute{
+														Computed: true,
+													},
+													"scale": schema.StringAttribute{
+														Computed: true,
+													},
+													"split_line": schema.BoolAttribute{
+														Computed: true,
+													},
+													"type": schema.StringAttribute{
+														Computed: true,
+													},
 												},
 											},
-										},
-										"search_query_saved": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"query": schema.StringAttribute{
-													Computed: true,
-												},
-												"query_id": schema.StringAttribute{
-													Computed: true,
-												},
-												"run_mode": schema.StringAttribute{
-													Computed: true,
-												},
-												"type": schema.StringAttribute{
-													Computed: true,
-												},
-											},
-										},
-										"search_query_values": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"type": schema.StringAttribute{
-													Computed: true,
-												},
-												"values": schema.ListAttribute{
-													Computed:    true,
-													ElementType: types.StringType,
-												},
-											},
-										},
-									},
-								},
-								"title": schema.StringAttribute{
-									Computed: true,
-								},
-								"type": schema.StringAttribute{
-									Computed: true,
-								},
-								"variant": schema.StringAttribute{
-									Computed: true,
-								},
-								"w": schema.Float64Attribute{
-									Computed: true,
-								},
-								"x": schema.Float64Attribute{
-									Computed: true,
-								},
-								"x_axis": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"data_field": schema.StringAttribute{
-											Computed: true,
-										},
-										"inverse": schema.BoolAttribute{
-											Computed: true,
-										},
-										"label_interval": schema.StringAttribute{
-											Computed: true,
-										},
-										"label_orientation": schema.Float64Attribute{
-											Computed: true,
-										},
-										"name": schema.StringAttribute{
-											Computed: true,
-										},
-										"offset": schema.Float64Attribute{
-											Computed: true,
-										},
-										"position": schema.StringAttribute{
-											Computed: true,
-										},
-										"type": schema.StringAttribute{
-											Computed: true,
-										},
-									},
-								},
-								"y": schema.Float64Attribute{
-									Computed: true,
-								},
-								"y_axis": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"data_field": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-										},
-										"interval": schema.Float64Attribute{
-											Computed: true,
-										},
-										"max": schema.Float64Attribute{
-											Computed: true,
-										},
-										"min": schema.Float64Attribute{
-											Computed: true,
-										},
-										"position": schema.StringAttribute{
-											Computed: true,
-										},
-										"scale": schema.StringAttribute{
-											Computed: true,
-										},
-										"split_line": schema.BoolAttribute{
-											Computed: true,
-										},
-										"type": schema.StringAttribute{
-											Computed: true,
 										},
 									},
 								},
 							},
 						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+						"modified": schema.Float64Attribute{
+							Computed: true,
+						},
+						"modified_by": schema.StringAttribute{
+							Computed: true,
+						},
+						"name": schema.StringAttribute{
+							Computed: true,
+						},
+						"owner": schema.StringAttribute{
+							Computed: true,
+						},
+						"pack_id": schema.StringAttribute{
+							Computed: true,
+						},
+						"refresh_rate": schema.Float64Attribute{
+							Computed: true,
+						},
+						"resolved_dataset_ids": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+						},
+						"schedule": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"cron_schedule": schema.StringAttribute{
+									Computed: true,
+								},
+								"enabled": schema.BoolAttribute{
+									Computed: true,
+								},
+								"keep_last_n": schema.Float64Attribute{
+									Computed: true,
+								},
+								"notifications": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"tz": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"tags": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+						},
 					},
 				},
-			},
-			"id": schema.StringAttribute{
-				Computed: true,
-			},
-			"modified": schema.Float64Attribute{
-				Computed: true,
-			},
-			"modified_by": schema.StringAttribute{
-				Computed: true,
-			},
-			"name": schema.StringAttribute{
-				Computed: true,
-			},
-			"owner": schema.StringAttribute{
-				Computed: true,
-			},
-			"tags": schema.ListAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
 			},
 		},
 	}
@@ -357,11 +386,11 @@ func (r *SearchDashboardDataSource) Read(ctx context.Context, req datasource.Rea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSearchDashboard(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchDashboardResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

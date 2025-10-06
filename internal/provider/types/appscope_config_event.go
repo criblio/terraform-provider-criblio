@@ -8,8 +8,8 @@ import (
 
 type AppscopeConfigEvent struct {
 	Enable    types.Bool                  `tfsdk:"enable"`
-	Format    *AppscopeConfigFormatNdjson `tfsdk:"format"`
-	Transport *AppscopeTransport          `tfsdk:"transport"`
+	Format    AppscopeConfigFormatNdjson  `tfsdk:"format"`
+	Transport AppscopeTransport           `tfsdk:"transport"`
 	Type      types.String                `tfsdk:"type"`
-	Watch     []AppscopeConfigWatch       `tfsdk:"watch"`
+	Watch     []AppscopeConfigWatchNdjson `tfsdk:"watch"`
 }

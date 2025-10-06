@@ -11,13 +11,167 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *SearchDashboardResourceModel) RefreshFromOperationsListSearchDashboardResponseBody(ctx context.Context, resp *operations.ListSearchDashboardResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.SearchDashboard{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.SearchDashboard
+
+			items.CacheTTLSeconds = types.Float64PointerValue(itemsItem.CacheTTLSeconds)
+			items.Category = types.StringPointerValue(itemsItem.Category)
+			items.Created = types.Float64Value(itemsItem.Created)
+			items.CreatedBy = types.StringValue(itemsItem.CreatedBy)
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.DisplayCreatedBy = types.StringPointerValue(itemsItem.DisplayCreatedBy)
+			items.DisplayModifiedBy = types.StringPointerValue(itemsItem.DisplayModifiedBy)
+			items.Elements = []tfTypes.ElementUnion{}
+
+			for _, elementsItem := range itemsItem.Elements {
+				var elements tfTypes.ElementUnion
+
+				if elementsItem.Element != nil {
+					elements.Element = &tfTypes.Element{}
+					elements.Element.Description = types.StringPointerValue(elementsItem.Element.Description)
+					elements.Element.Empty = types.BoolPointerValue(elementsItem.Element.Empty)
+					elements.Element.HidePanel = types.BoolPointerValue(elementsItem.Element.HidePanel)
+					elements.Element.HorizontalChart = types.BoolPointerValue(elementsItem.Element.HorizontalChart)
+					elements.Element.ID = types.StringValue(elementsItem.Element.ID)
+					if elementsItem.Element.Query != nil {
+						elements.Element.Query = &tfTypes.SearchQuery{}
+						if elementsItem.Element.Query.SearchQuerySaved != nil {
+							elements.Element.Query.SearchQuerySaved = &tfTypes.SearchQuerySaved{}
+							elements.Element.Query.SearchQuerySaved.Query = types.StringPointerValue(elementsItem.Element.Query.SearchQuerySaved.Query)
+							elements.Element.Query.SearchQuerySaved.QueryID = types.StringValue(elementsItem.Element.Query.SearchQuerySaved.QueryID)
+							if elementsItem.Element.Query.SearchQuerySaved.RunMode != nil {
+								elements.Element.Query.SearchQuerySaved.RunMode = types.StringValue(string(*elementsItem.Element.Query.SearchQuerySaved.RunMode))
+							} else {
+								elements.Element.Query.SearchQuerySaved.RunMode = types.StringNull()
+							}
+							elements.Element.Query.SearchQuerySaved.Type = types.StringValue(string(elementsItem.Element.Query.SearchQuerySaved.Type))
+						}
+						if elementsItem.Element.Query.SearchQueryInline != nil {
+							elements.Element.Query.SearchQueryInline = &tfTypes.SearchQueryInline{}
+							if elementsItem.Element.Query.SearchQueryInline.Earliest != nil {
+								elements.Element.Query.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
+								if elementsItem.Element.Query.SearchQueryInline.Earliest.Str != nil {
+									elements.Element.Query.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Earliest.Str)
+								}
+								if elementsItem.Element.Query.SearchQueryInline.Earliest.Number != nil {
+									elements.Element.Query.SearchQueryInline.Earliest.Number = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.Earliest.Number)
+								}
+							}
+							if elementsItem.Element.Query.SearchQueryInline.Latest != nil {
+								elements.Element.Query.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
+								if elementsItem.Element.Query.SearchQueryInline.Latest.Str != nil {
+									elements.Element.Query.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Latest.Str)
+								}
+								if elementsItem.Element.Query.SearchQueryInline.Latest.Number != nil {
+									elements.Element.Query.SearchQueryInline.Latest.Number = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.Latest.Number)
+								}
+							}
+							elements.Element.Query.SearchQueryInline.ParentSearchID = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.ParentSearchID)
+							elements.Element.Query.SearchQueryInline.Query = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Query)
+							elements.Element.Query.SearchQueryInline.SampleRate = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.SampleRate)
+							elements.Element.Query.SearchQueryInline.Timezone = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Timezone)
+							elements.Element.Query.SearchQueryInline.Type = types.StringValue(string(elementsItem.Element.Query.SearchQueryInline.Type))
+						}
+						if elementsItem.Element.Query.SearchQueryValues != nil {
+							elements.Element.Query.SearchQueryValues = &tfTypes.SearchQueryValues{}
+							elements.Element.Query.SearchQueryValues.Type = types.StringValue(string(elementsItem.Element.Query.SearchQueryValues.Type))
+							elements.Element.Query.SearchQueryValues.Values = make([]types.String, 0, len(elementsItem.Element.Query.SearchQueryValues.Values))
+							for _, v := range elementsItem.Element.Query.SearchQueryValues.Values {
+								elements.Element.Query.SearchQueryValues.Values = append(elements.Element.Query.SearchQueryValues.Values, types.StringValue(v))
+							}
+						}
+					}
+					elements.Element.Title = types.StringPointerValue(elementsItem.Element.Title)
+					elements.Element.Type = types.StringValue(string(elementsItem.Element.Type))
+					elements.Element.Variant = types.StringValue(elementsItem.Element.Variant)
+					elements.Element.W = types.Float64PointerValue(elementsItem.Element.W)
+					elements.Element.H = types.Float64PointerValue(elementsItem.Element.H)
+					elements.Element.X = types.Float64PointerValue(elementsItem.Element.X)
+					elements.Element.Y = types.Float64PointerValue(elementsItem.Element.Y)
+					elements.Element.ColorPalette = types.StringValue(elementsItem.Element.ColorPalette)
+					elements.Element.Layout.H = types.Float64Value(elementsItem.Element.Layout.H)
+					elements.Element.Layout.W = types.Float64Value(elementsItem.Element.Layout.W)
+					elements.Element.Layout.X = types.Float64Value(elementsItem.Element.Layout.X)
+					elements.Element.Layout.Y = types.Float64Value(elementsItem.Element.Layout.Y)
+					if elementsItem.Element.XAxis == nil {
+						elements.Element.XAxis = nil
+					} else {
+						elements.Element.XAxis = &tfTypes.XAxis{}
+						elements.Element.XAxis.DataField = types.StringPointerValue(elementsItem.Element.XAxis.DataField)
+						elements.Element.XAxis.Inverse = types.BoolPointerValue(elementsItem.Element.XAxis.Inverse)
+						elements.Element.XAxis.LabelInterval = types.StringPointerValue(elementsItem.Element.XAxis.LabelInterval)
+						elements.Element.XAxis.LabelOrientation = types.Float64PointerValue(elementsItem.Element.XAxis.LabelOrientation)
+						elements.Element.XAxis.Name = types.StringPointerValue(elementsItem.Element.XAxis.Name)
+						elements.Element.XAxis.Offset = types.Float64PointerValue(elementsItem.Element.XAxis.Offset)
+						elements.Element.XAxis.Position = types.StringPointerValue(elementsItem.Element.XAxis.Position)
+						elements.Element.XAxis.Type = types.StringPointerValue(elementsItem.Element.XAxis.Type)
+					}
+					if elementsItem.Element.YAxis == nil {
+						elements.Element.YAxis = nil
+					} else {
+						elements.Element.YAxis = &tfTypes.YAxis{}
+						elements.Element.YAxis.DataField = make([]types.String, 0, len(elementsItem.Element.YAxis.DataField))
+						for _, v := range elementsItem.Element.YAxis.DataField {
+							elements.Element.YAxis.DataField = append(elements.Element.YAxis.DataField, types.StringValue(v))
+						}
+						elements.Element.YAxis.Interval = types.Float64PointerValue(elementsItem.Element.YAxis.Interval)
+						elements.Element.YAxis.Max = types.Float64PointerValue(elementsItem.Element.YAxis.Max)
+						elements.Element.YAxis.Min = types.Float64PointerValue(elementsItem.Element.YAxis.Min)
+						elements.Element.YAxis.Position = types.StringPointerValue(elementsItem.Element.YAxis.Position)
+						elements.Element.YAxis.Scale = types.StringPointerValue(elementsItem.Element.YAxis.Scale)
+						elements.Element.YAxis.SplitLine = types.BoolPointerValue(elementsItem.Element.YAxis.SplitLine)
+						elements.Element.YAxis.Type = types.StringPointerValue(elementsItem.Element.YAxis.Type)
+					}
+				}
+
+				items.Elements = append(items.Elements, elements)
+			}
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Modified = types.Float64Value(itemsItem.Modified)
+			items.ModifiedBy = types.StringPointerValue(itemsItem.ModifiedBy)
+			items.Name = types.StringValue(itemsItem.Name)
+			items.PackID = types.StringPointerValue(itemsItem.PackID)
+			items.RefreshRate = types.Float64PointerValue(itemsItem.RefreshRate)
+			items.ResolvedDatasetIds = make([]types.String, 0, len(itemsItem.ResolvedDatasetIds))
+			for _, v := range itemsItem.ResolvedDatasetIds {
+				items.ResolvedDatasetIds = append(items.ResolvedDatasetIds, types.StringValue(v))
+			}
+			items.Owner = types.StringPointerValue(itemsItem.Owner)
+			items.Tags = make([]types.String, 0, len(itemsItem.Tags))
+			for _, v := range itemsItem.Tags {
+				items.Tags = append(items.Tags, types.StringValue(v))
+			}
+			if itemsItem.Schedule == nil {
+				items.Schedule = nil
+			} else {
+				items.Schedule = &tfTypes.SavedQuerySchedule{}
+				items.Schedule.CronSchedule = types.StringValue(itemsItem.Schedule.CronSchedule)
+				items.Schedule.Enabled = types.BoolValue(itemsItem.Schedule.Enabled)
+				items.Schedule.KeepLastN = types.Float64Value(itemsItem.Schedule.KeepLastN)
+				items.Schedule.Notifications.Disabled = types.BoolValue(itemsItem.Schedule.Notifications.Disabled)
+				items.Schedule.Tz = types.StringValue(itemsItem.Schedule.Tz)
+			}
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx context.Context, resp *shared.SearchDashboard) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	r.CacheTTLSeconds = types.Float64PointerValue(resp.CacheTTLSeconds)
 	r.Category = types.StringPointerValue(resp.Category)
-	r.Created = types.Float64PointerValue(resp.Created)
-	r.CreatedBy = types.StringPointerValue(resp.CreatedBy)
+	r.Created = types.Float64Value(resp.Created)
+	r.CreatedBy = types.StringValue(resp.CreatedBy)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.DisplayCreatedBy = types.StringPointerValue(resp.DisplayCreatedBy)
 	r.DisplayModifiedBy = types.StringPointerValue(resp.DisplayModifiedBy)
@@ -34,16 +188,11 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 			elements.Element.H = types.Float64PointerValue(elementsItem.Element.H)
 			elements.Element.HidePanel = types.BoolPointerValue(elementsItem.Element.HidePanel)
 			elements.Element.HorizontalChart = types.BoolPointerValue(elementsItem.Element.HorizontalChart)
-			elements.Element.ID = types.StringPointerValue(elementsItem.Element.ID)
-			if elementsItem.Element.Layout == nil {
-				elements.Element.Layout = nil
-			} else {
-				elements.Element.Layout = &tfTypes.DashboardLayout{}
-				elements.Element.Layout.H = types.Float64Value(elementsItem.Element.Layout.H)
-				elements.Element.Layout.W = types.Float64Value(elementsItem.Element.Layout.W)
-				elements.Element.Layout.X = types.Float64Value(elementsItem.Element.Layout.X)
-				elements.Element.Layout.Y = types.Float64Value(elementsItem.Element.Layout.Y)
-			}
+			elements.Element.ID = types.StringValue(elementsItem.Element.ID)
+			elements.Element.Layout.H = types.Float64Value(elementsItem.Element.Layout.H)
+			elements.Element.Layout.W = types.Float64Value(elementsItem.Element.Layout.W)
+			elements.Element.Layout.X = types.Float64Value(elementsItem.Element.Layout.X)
+			elements.Element.Layout.Y = types.Float64Value(elementsItem.Element.Layout.Y)
 			if elementsItem.Element.Query != nil {
 				elements.Element.Query = &tfTypes.SearchQuery{}
 				if elementsItem.Element.Query.SearchQuerySaved != nil {
@@ -94,7 +243,7 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 			}
 			elements.Element.Title = types.StringPointerValue(elementsItem.Element.Title)
 			elements.Element.Type = types.StringValue(string(elementsItem.Element.Type))
-			elements.Element.Variant = types.StringPointerValue(elementsItem.Element.Variant)
+			elements.Element.Variant = types.StringValue(elementsItem.Element.Variant)
 			elements.Element.W = types.Float64PointerValue(elementsItem.Element.W)
 			elements.Element.X = types.Float64PointerValue(elementsItem.Element.X)
 			if elementsItem.Element.XAxis == nil {
@@ -131,11 +280,27 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 
 		r.Elements = append(r.Elements, elements)
 	}
-	r.ID = types.StringPointerValue(resp.ID)
-	r.Modified = types.Float64PointerValue(resp.Modified)
+	r.ID = types.StringValue(resp.ID)
+	r.Modified = types.Float64Value(resp.Modified)
 	r.ModifiedBy = types.StringPointerValue(resp.ModifiedBy)
-	r.Name = types.StringPointerValue(resp.Name)
+	r.Name = types.StringValue(resp.Name)
 	r.Owner = types.StringPointerValue(resp.Owner)
+	r.PackID = types.StringPointerValue(resp.PackID)
+	r.RefreshRate = types.Float64PointerValue(resp.RefreshRate)
+	r.ResolvedDatasetIds = make([]types.String, 0, len(resp.ResolvedDatasetIds))
+	for _, v := range resp.ResolvedDatasetIds {
+		r.ResolvedDatasetIds = append(r.ResolvedDatasetIds, types.StringValue(v))
+	}
+	if resp.Schedule == nil {
+		r.Schedule = nil
+	} else {
+		r.Schedule = &tfTypes.SavedQuerySchedule{}
+		r.Schedule.CronSchedule = types.StringValue(resp.Schedule.CronSchedule)
+		r.Schedule.Enabled = types.BoolValue(resp.Schedule.Enabled)
+		r.Schedule.KeepLastN = types.Float64Value(resp.Schedule.KeepLastN)
+		r.Schedule.Notifications.Disabled = types.BoolValue(resp.Schedule.Notifications.Disabled)
+		r.Schedule.Tz = types.StringValue(resp.Schedule.Tz)
+	}
 	r.Tags = make([]types.String, 0, len(resp.Tags))
 	for _, v := range resp.Tags {
 		r.Tags = append(r.Tags, types.StringValue(v))
@@ -193,18 +358,12 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 	} else {
 		category = nil
 	}
-	created := new(float64)
-	if !r.Created.IsUnknown() && !r.Created.IsNull() {
-		*created = r.Created.ValueFloat64()
-	} else {
-		created = nil
-	}
-	createdBy := new(string)
-	if !r.CreatedBy.IsUnknown() && !r.CreatedBy.IsNull() {
-		*createdBy = r.CreatedBy.ValueString()
-	} else {
-		createdBy = nil
-	}
+	var created float64
+	created = r.Created.ValueFloat64()
+
+	var createdBy string
+	createdBy = r.CreatedBy.ValueString()
+
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
@@ -250,12 +409,9 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			} else {
 				horizontalChart = nil
 			}
-			id := new(string)
-			if !elementsItem.Element.ID.IsUnknown() && !elementsItem.Element.ID.IsNull() {
-				*id = elementsItem.Element.ID.ValueString()
-			} else {
-				id = nil
-			}
+			var id string
+			id = elementsItem.Element.ID.ValueString()
+
 			var query *shared.SearchQuery
 			if elementsItem.Element.Query != nil {
 				var searchQuerySaved *shared.SearchQuerySaved
@@ -405,12 +561,9 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				title = nil
 			}
 			typeVar3 := shared.DashboardElementType(elementsItem.Element.Type.ValueString())
-			variant := new(string)
-			if !elementsItem.Element.Variant.IsUnknown() && !elementsItem.Element.Variant.IsNull() {
-				*variant = elementsItem.Element.Variant.ValueString()
-			} else {
-				variant = nil
-			}
+			var variant string
+			variant = elementsItem.Element.Variant.ValueString()
+
 			w := new(float64)
 			if !elementsItem.Element.W.IsUnknown() && !elementsItem.Element.W.IsNull() {
 				*w = elementsItem.Element.W.ValueFloat64()
@@ -438,26 +591,23 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			var colorPalette string
 			colorPalette = elementsItem.Element.ColorPalette.ValueString()
 
-			var layout *shared.DashboardLayout
-			if elementsItem.Element.Layout != nil {
-				var h1 float64
-				h1 = elementsItem.Element.Layout.H.ValueFloat64()
+			var h1 float64
+			h1 = elementsItem.Element.Layout.H.ValueFloat64()
 
-				var w1 float64
-				w1 = elementsItem.Element.Layout.W.ValueFloat64()
+			var w1 float64
+			w1 = elementsItem.Element.Layout.W.ValueFloat64()
 
-				var x1 float64
-				x1 = elementsItem.Element.Layout.X.ValueFloat64()
+			var x1 float64
+			x1 = elementsItem.Element.Layout.X.ValueFloat64()
 
-				var y1 float64
-				y1 = elementsItem.Element.Layout.Y.ValueFloat64()
+			var y1 float64
+			y1 = elementsItem.Element.Layout.Y.ValueFloat64()
 
-				layout = &shared.DashboardLayout{
-					H: h1,
-					W: w1,
-					X: x1,
-					Y: y1,
-				}
+			layout := shared.DashboardLayout{
+				H: h1,
+				W: w1,
+				X: x1,
+				Y: y1,
 			}
 			var xAxis *shared.XAxis
 			if elementsItem.Element.XAxis != nil {
@@ -603,29 +753,36 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			})
 		}
 	}
-	id1 := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id1 = r.ID.ValueString()
-	} else {
-		id1 = nil
-	}
-	modified := new(float64)
-	if !r.Modified.IsUnknown() && !r.Modified.IsNull() {
-		*modified = r.Modified.ValueFloat64()
-	} else {
-		modified = nil
-	}
+	var id1 string
+	id1 = r.ID.ValueString()
+
+	var modified float64
+	modified = r.Modified.ValueFloat64()
+
 	modifiedBy := new(string)
 	if !r.ModifiedBy.IsUnknown() && !r.ModifiedBy.IsNull() {
 		*modifiedBy = r.ModifiedBy.ValueString()
 	} else {
 		modifiedBy = nil
 	}
-	name1 := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name1 = r.Name.ValueString()
+	var name1 string
+	name1 = r.Name.ValueString()
+
+	packID := new(string)
+	if !r.PackID.IsUnknown() && !r.PackID.IsNull() {
+		*packID = r.PackID.ValueString()
 	} else {
-		name1 = nil
+		packID = nil
+	}
+	refreshRate := new(float64)
+	if !r.RefreshRate.IsUnknown() && !r.RefreshRate.IsNull() {
+		*refreshRate = r.RefreshRate.ValueFloat64()
+	} else {
+		refreshRate = nil
+	}
+	resolvedDatasetIds := make([]string, 0, len(r.ResolvedDatasetIds))
+	for _, resolvedDatasetIdsItem := range r.ResolvedDatasetIds {
+		resolvedDatasetIds = append(resolvedDatasetIds, resolvedDatasetIdsItem.ValueString())
 	}
 	owner := new(string)
 	if !r.Owner.IsUnknown() && !r.Owner.IsNull() {
@@ -637,21 +794,53 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 	for _, tagsItem := range r.Tags {
 		tags = append(tags, tagsItem.ValueString())
 	}
+	var schedule *shared.SavedQuerySchedule
+	if r.Schedule != nil {
+		var cronSchedule string
+		cronSchedule = r.Schedule.CronSchedule.ValueString()
+
+		var enabled bool
+		enabled = r.Schedule.Enabled.ValueBool()
+
+		var keepLastN float64
+		keepLastN = r.Schedule.KeepLastN.ValueFloat64()
+
+		var disabled bool
+		disabled = r.Schedule.Notifications.Disabled.ValueBool()
+
+		notifications := shared.Notifications{
+			Disabled: disabled,
+		}
+		var tz string
+		tz = r.Schedule.Tz.ValueString()
+
+		schedule = &shared.SavedQuerySchedule{
+			CronSchedule:  cronSchedule,
+			Enabled:       enabled,
+			KeepLastN:     keepLastN,
+			Notifications: notifications,
+			Tz:            tz,
+		}
+	}
 	out := shared.SearchDashboard{
-		CacheTTLSeconds:   cacheTTLSeconds,
-		Category:          category,
-		Created:           created,
-		CreatedBy:         createdBy,
-		Description:       description,
-		DisplayCreatedBy:  displayCreatedBy,
-		DisplayModifiedBy: displayModifiedBy,
-		Elements:          elements,
-		ID:                id1,
-		Modified:          modified,
-		ModifiedBy:        modifiedBy,
-		Name:              name1,
-		Owner:             owner,
-		Tags:              tags,
+		CacheTTLSeconds:    cacheTTLSeconds,
+		Category:           category,
+		Created:            created,
+		CreatedBy:          createdBy,
+		Description:        description,
+		DisplayCreatedBy:   displayCreatedBy,
+		DisplayModifiedBy:  displayModifiedBy,
+		Elements:           elements,
+		ID:                 id1,
+		Modified:           modified,
+		ModifiedBy:         modifiedBy,
+		Name:               name1,
+		PackID:             packID,
+		RefreshRate:        refreshRate,
+		ResolvedDatasetIds: resolvedDatasetIds,
+		Owner:              owner,
+		Tags:               tags,
+		Schedule:           schedule,
 	}
 
 	return &out, diags

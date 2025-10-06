@@ -7,8 +7,8 @@ import (
 )
 
 type AppscopeConfigWithCustomConfig struct {
-	Enable    types.Bool                            `tfsdk:"enable"`
-	Format    *AppscopeConfigWithCustomConfigFormat `tfsdk:"format"`
-	Log       *AppscopeConfigWithCustomLog          `tfsdk:"log"`
-	Transport *AppscopeTransport                    `tfsdk:"transport"`
+	Enable    types.Bool                   `tfsdk:"enable"`
+	Format    *ConfigFormat                `tfsdk:"format"`
+	Log       *AppscopeConfigWithCustomLog `tfsdk:"log"`
+	Transport *AppscopeTransport           `tfsdk:"transport"`
 }

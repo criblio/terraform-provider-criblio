@@ -4,890 +4,614 @@ package provider
 
 import (
 	"context"
+	"github.com/criblio/terraform-provider-criblio/internal/provider/typeconvert"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx context.Context, resp *shared.GenericDataset) diag.Diagnostics {
+func (r *SearchDatasetDataSourceModel) RefreshFromOperationsGetDatasetByIDResponseBody(ctx context.Context, resp *operations.GetDatasetByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp.APIAwsDataset != nil {
-		r.APIAwsDataset = &tfTypes.APIAwsDataset{}
-		r.APIAwsDataset.Description = types.StringPointerValue(resp.APIAwsDataset.Description)
-		r.Description = r.APIAwsDataset.Description
-		r.APIAwsDataset.EnabledEndpoints = make([]types.String, 0, len(resp.APIAwsDataset.EnabledEndpoints))
-		for _, v := range resp.APIAwsDataset.EnabledEndpoints {
-			r.APIAwsDataset.EnabledEndpoints = append(r.APIAwsDataset.EnabledEndpoints, types.StringValue(v))
-		}
-		r.APIAwsDataset.ID = types.StringValue(resp.APIAwsDataset.ID)
-		r.ID = r.APIAwsDataset.ID
-		if resp.APIAwsDataset.Metadata == nil {
-			r.APIAwsDataset.Metadata = nil
-		} else {
-			r.APIAwsDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIAwsDataset.Metadata.Earliest = types.StringValue(resp.APIAwsDataset.Metadata.Earliest)
-			r.APIAwsDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIAwsDataset.Metadata.EnableAcceleration)
-			r.APIAwsDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIAwsDataset.Metadata.FieldList))
-			for _, v := range resp.APIAwsDataset.Metadata.FieldList {
-				r.APIAwsDataset.Metadata.FieldList = append(r.APIAwsDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIAwsDataset.Metadata.LatestRunInfo == nil {
-				r.APIAwsDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIAwsDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIAwsDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIAwsDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIAwsDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIAwsDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIAwsDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIAwsDataset.Metadata.ScanMode = types.StringValue(string(resp.APIAwsDataset.Metadata.ScanMode))
-		}
-		r.APIAwsDataset.ProviderID = types.StringValue(resp.APIAwsDataset.ProviderID)
-		r.ProviderID = r.APIAwsDataset.ProviderID
-		r.APIAwsDataset.Regions = make([]types.String, 0, len(resp.APIAwsDataset.Regions))
-		for _, v := range resp.APIAwsDataset.Regions {
-			r.APIAwsDataset.Regions = append(r.APIAwsDataset.Regions, types.StringValue(v))
-		}
-		r.APIAwsDataset.Type = types.StringValue(resp.APIAwsDataset.Type)
-		r.Type = r.APIAwsDataset.Type
-	}
-	if resp.APIAzureDataExplorerDataset != nil {
-		r.APIAzureDataExplorerDataset = &tfTypes.APIAzureDataExplorerDataset{}
-		r.APIAzureDataExplorerDataset.Cluster = types.StringValue(resp.APIAzureDataExplorerDataset.Cluster)
-		r.APIAzureDataExplorerDataset.Database = types.StringValue(resp.APIAzureDataExplorerDataset.Database)
-		r.APIAzureDataExplorerDataset.Description = types.StringPointerValue(resp.APIAzureDataExplorerDataset.Description)
-		r.Description = r.APIAzureDataExplorerDataset.Description
-		r.APIAzureDataExplorerDataset.ID = types.StringValue(resp.APIAzureDataExplorerDataset.ID)
-		r.ID = r.APIAzureDataExplorerDataset.ID
-		r.APIAzureDataExplorerDataset.Location = types.StringValue(resp.APIAzureDataExplorerDataset.Location)
-		if resp.APIAzureDataExplorerDataset.Metadata == nil {
-			r.APIAzureDataExplorerDataset.Metadata = nil
-		} else {
-			r.APIAzureDataExplorerDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIAzureDataExplorerDataset.Metadata.Earliest = types.StringValue(resp.APIAzureDataExplorerDataset.Metadata.Earliest)
-			r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIAzureDataExplorerDataset.Metadata.EnableAcceleration)
-			r.APIAzureDataExplorerDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIAzureDataExplorerDataset.Metadata.FieldList))
-			for _, v := range resp.APIAzureDataExplorerDataset.Metadata.FieldList {
-				r.APIAzureDataExplorerDataset.Metadata.FieldList = append(r.APIAzureDataExplorerDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo == nil {
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIAzureDataExplorerDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIAzureDataExplorerDataset.Metadata.ScanMode = types.StringValue(string(resp.APIAzureDataExplorerDataset.Metadata.ScanMode))
-		}
-		r.APIAzureDataExplorerDataset.ProviderID = types.StringValue(resp.APIAzureDataExplorerDataset.ProviderID)
-		r.ProviderID = r.APIAzureDataExplorerDataset.ProviderID
-		r.APIAzureDataExplorerDataset.Table = types.StringValue(resp.APIAzureDataExplorerDataset.Table)
-		r.APIAzureDataExplorerDataset.TimestampField = types.StringPointerValue(resp.APIAzureDataExplorerDataset.TimestampField)
-		r.APIAzureDataExplorerDataset.TimestampFieldContents = types.StringPointerValue(resp.APIAzureDataExplorerDataset.TimestampFieldContents)
-		r.APIAzureDataExplorerDataset.Type = types.StringValue(resp.APIAzureDataExplorerDataset.Type)
-		r.Type = r.APIAzureDataExplorerDataset.Type
-	}
-	if resp.APIAzureDataset != nil {
-		r.APIAzureDataset = &tfTypes.APIAzureDataset{}
-		r.APIAzureDataset.Description = types.StringPointerValue(resp.APIAzureDataset.Description)
-		r.Description = r.APIAzureDataset.Description
-		r.APIAzureDataset.EnabledEndpoints = make([]types.String, 0, len(resp.APIAzureDataset.EnabledEndpoints))
-		for _, v := range resp.APIAzureDataset.EnabledEndpoints {
-			r.APIAzureDataset.EnabledEndpoints = append(r.APIAzureDataset.EnabledEndpoints, types.StringValue(v))
-		}
-		r.APIAzureDataset.ID = types.StringValue(resp.APIAzureDataset.ID)
-		r.ID = r.APIAzureDataset.ID
-		if resp.APIAzureDataset.Metadata == nil {
-			r.APIAzureDataset.Metadata = nil
-		} else {
-			r.APIAzureDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIAzureDataset.Metadata.Earliest = types.StringValue(resp.APIAzureDataset.Metadata.Earliest)
-			r.APIAzureDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIAzureDataset.Metadata.EnableAcceleration)
-			r.APIAzureDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIAzureDataset.Metadata.FieldList))
-			for _, v := range resp.APIAzureDataset.Metadata.FieldList {
-				r.APIAzureDataset.Metadata.FieldList = append(r.APIAzureDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIAzureDataset.Metadata.LatestRunInfo == nil {
-				r.APIAzureDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIAzureDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIAzureDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIAzureDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIAzureDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIAzureDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIAzureDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIAzureDataset.Metadata.ScanMode = types.StringValue(string(resp.APIAzureDataset.Metadata.ScanMode))
-		}
-		r.APIAzureDataset.ProviderID = types.StringValue(resp.APIAzureDataset.ProviderID)
-		r.ProviderID = r.APIAzureDataset.ProviderID
-		r.APIAzureDataset.SubscriptionIds = make([]types.String, 0, len(resp.APIAzureDataset.SubscriptionIds))
-		for _, v := range resp.APIAzureDataset.SubscriptionIds {
-			r.APIAzureDataset.SubscriptionIds = append(r.APIAzureDataset.SubscriptionIds, types.StringValue(v))
-		}
-		r.APIAzureDataset.Type = types.StringValue(resp.APIAzureDataset.Type)
-		r.Type = r.APIAzureDataset.Type
-	}
-	if resp.APIElasticSearchDataset != nil {
-		r.APIElasticSearchDataset = &tfTypes.APIElasticSearchDataset{}
-		r.APIElasticSearchDataset.Description = types.StringPointerValue(resp.APIElasticSearchDataset.Description)
-		r.Description = r.APIElasticSearchDataset.Description
-		r.APIElasticSearchDataset.ID = types.StringValue(resp.APIElasticSearchDataset.ID)
-		r.ID = r.APIElasticSearchDataset.ID
-		r.APIElasticSearchDataset.Index = types.StringValue(resp.APIElasticSearchDataset.Index)
-		if resp.APIElasticSearchDataset.Metadata == nil {
-			r.APIElasticSearchDataset.Metadata = nil
-		} else {
-			r.APIElasticSearchDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIElasticSearchDataset.Metadata.Earliest = types.StringValue(resp.APIElasticSearchDataset.Metadata.Earliest)
-			r.APIElasticSearchDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIElasticSearchDataset.Metadata.EnableAcceleration)
-			r.APIElasticSearchDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIElasticSearchDataset.Metadata.FieldList))
-			for _, v := range resp.APIElasticSearchDataset.Metadata.FieldList {
-				r.APIElasticSearchDataset.Metadata.FieldList = append(r.APIElasticSearchDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIElasticSearchDataset.Metadata.LatestRunInfo == nil {
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIElasticSearchDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIElasticSearchDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIElasticSearchDataset.Metadata.ScanMode = types.StringValue(string(resp.APIElasticSearchDataset.Metadata.ScanMode))
-		}
-		r.APIElasticSearchDataset.ProviderID = types.StringValue(resp.APIElasticSearchDataset.ProviderID)
-		r.ProviderID = r.APIElasticSearchDataset.ProviderID
-		r.APIElasticSearchDataset.TimestampField = types.StringValue(resp.APIElasticSearchDataset.TimestampField)
-		r.APIElasticSearchDataset.Type = types.StringValue(resp.APIElasticSearchDataset.Type)
-		r.Type = r.APIElasticSearchDataset.Type
-	}
-	if resp.APIGcpDataset != nil {
-		r.APIGcpDataset = &tfTypes.APIGcpDataset{}
-		r.APIGcpDataset.Description = types.StringPointerValue(resp.APIGcpDataset.Description)
-		r.Description = r.APIGcpDataset.Description
-		r.APIGcpDataset.EndpointConfigs = []tfTypes.GcpEndpointConfig{}
+	if resp != nil {
+		r.Items = []tfTypes.GenericDataset{}
 
-		for _, endpointConfigsItem := range resp.APIGcpDataset.EndpointConfigs {
-			var endpointConfigs tfTypes.GcpEndpointConfig
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.GenericDataset
 
-			endpointConfigs.EndpointName = types.StringValue(endpointConfigsItem.EndpointName)
-			endpointConfigs.Region = types.StringPointerValue(endpointConfigsItem.Region)
+			if itemsItem.APIAwsDataset != nil {
+				items.APIAwsDataset = &tfTypes.APIAwsDataset{}
+				items.APIAwsDataset.Description = types.StringPointerValue(itemsItem.APIAwsDataset.Description)
+				items.APIAwsDataset.EnabledEndpoints = make([]types.String, 0, len(itemsItem.APIAwsDataset.EnabledEndpoints))
+				for _, v := range itemsItem.APIAwsDataset.EnabledEndpoints {
+					items.APIAwsDataset.EnabledEndpoints = append(items.APIAwsDataset.EnabledEndpoints, types.StringValue(v))
+				}
+				items.APIAwsDataset.ID = types.StringValue(itemsItem.APIAwsDataset.ID)
+				if itemsItem.APIAwsDataset.Metadata == nil {
+					items.APIAwsDataset.Metadata = nil
+				} else {
+					items.APIAwsDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIAwsDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIAwsDataset.Metadata.Created))
+					items.APIAwsDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIAwsDataset.Metadata.EnableAcceleration)
+					items.APIAwsDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIAwsDataset.Metadata.Modified))
+					items.APIAwsDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIAwsDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIAwsDataset.Metadata.Tags {
+						items.APIAwsDataset.Metadata.Tags = append(items.APIAwsDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIAwsDataset.ProviderID = types.StringValue(itemsItem.APIAwsDataset.ProviderID)
+				items.APIAwsDataset.Regions = make([]types.String, 0, len(itemsItem.APIAwsDataset.Regions))
+				for _, v := range itemsItem.APIAwsDataset.Regions {
+					items.APIAwsDataset.Regions = append(items.APIAwsDataset.Regions, types.StringValue(v))
+				}
+				items.APIAwsDataset.Type = types.StringValue(itemsItem.APIAwsDataset.Type)
+			}
+			if itemsItem.APIAzureDataExplorerDataset != nil {
+				items.APIAzureDataExplorerDataset = &tfTypes.APIAzureDataExplorerDataset{}
+				items.APIAzureDataExplorerDataset.Cluster = types.StringValue(itemsItem.APIAzureDataExplorerDataset.Cluster)
+				items.APIAzureDataExplorerDataset.Database = types.StringValue(itemsItem.APIAzureDataExplorerDataset.Database)
+				items.APIAzureDataExplorerDataset.Description = types.StringPointerValue(itemsItem.APIAzureDataExplorerDataset.Description)
+				items.APIAzureDataExplorerDataset.ID = types.StringValue(itemsItem.APIAzureDataExplorerDataset.ID)
+				items.APIAzureDataExplorerDataset.Location = types.StringValue(itemsItem.APIAzureDataExplorerDataset.Location)
+				if itemsItem.APIAzureDataExplorerDataset.Metadata == nil {
+					items.APIAzureDataExplorerDataset.Metadata = nil
+				} else {
+					items.APIAzureDataExplorerDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIAzureDataExplorerDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIAzureDataExplorerDataset.Metadata.Created))
+					items.APIAzureDataExplorerDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIAzureDataExplorerDataset.Metadata.EnableAcceleration)
+					items.APIAzureDataExplorerDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIAzureDataExplorerDataset.Metadata.Modified))
+					items.APIAzureDataExplorerDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIAzureDataExplorerDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIAzureDataExplorerDataset.Metadata.Tags {
+						items.APIAzureDataExplorerDataset.Metadata.Tags = append(items.APIAzureDataExplorerDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIAzureDataExplorerDataset.ProviderID = types.StringValue(itemsItem.APIAzureDataExplorerDataset.ProviderID)
+				items.APIAzureDataExplorerDataset.Table = types.StringValue(itemsItem.APIAzureDataExplorerDataset.Table)
+				items.APIAzureDataExplorerDataset.TimestampField = types.StringPointerValue(itemsItem.APIAzureDataExplorerDataset.TimestampField)
+				items.APIAzureDataExplorerDataset.TimestampFieldContents = types.StringPointerValue(itemsItem.APIAzureDataExplorerDataset.TimestampFieldContents)
+				items.APIAzureDataExplorerDataset.Type = types.StringValue(itemsItem.APIAzureDataExplorerDataset.Type)
+			}
+			if itemsItem.APIAzureDataset != nil {
+				items.APIAzureDataset = &tfTypes.APIAzureDataset{}
+				items.APIAzureDataset.Description = types.StringPointerValue(itemsItem.APIAzureDataset.Description)
+				items.APIAzureDataset.EnabledEndpoints = make([]types.String, 0, len(itemsItem.APIAzureDataset.EnabledEndpoints))
+				for _, v := range itemsItem.APIAzureDataset.EnabledEndpoints {
+					items.APIAzureDataset.EnabledEndpoints = append(items.APIAzureDataset.EnabledEndpoints, types.StringValue(v))
+				}
+				items.APIAzureDataset.ID = types.StringValue(itemsItem.APIAzureDataset.ID)
+				if itemsItem.APIAzureDataset.Metadata == nil {
+					items.APIAzureDataset.Metadata = nil
+				} else {
+					items.APIAzureDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIAzureDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIAzureDataset.Metadata.Created))
+					items.APIAzureDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIAzureDataset.Metadata.EnableAcceleration)
+					items.APIAzureDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIAzureDataset.Metadata.Modified))
+					items.APIAzureDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIAzureDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIAzureDataset.Metadata.Tags {
+						items.APIAzureDataset.Metadata.Tags = append(items.APIAzureDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIAzureDataset.ProviderID = types.StringValue(itemsItem.APIAzureDataset.ProviderID)
+				items.APIAzureDataset.SubscriptionIds = make([]types.String, 0, len(itemsItem.APIAzureDataset.SubscriptionIds))
+				for _, v := range itemsItem.APIAzureDataset.SubscriptionIds {
+					items.APIAzureDataset.SubscriptionIds = append(items.APIAzureDataset.SubscriptionIds, types.StringValue(v))
+				}
+				items.APIAzureDataset.Type = types.StringValue(itemsItem.APIAzureDataset.Type)
+			}
+			if itemsItem.APIElasticSearchDataset != nil {
+				items.APIElasticSearchDataset = &tfTypes.APIElasticSearchDataset{}
+				items.APIElasticSearchDataset.Description = types.StringPointerValue(itemsItem.APIElasticSearchDataset.Description)
+				items.APIElasticSearchDataset.ID = types.StringValue(itemsItem.APIElasticSearchDataset.ID)
+				items.APIElasticSearchDataset.Index = types.StringValue(itemsItem.APIElasticSearchDataset.Index)
+				if itemsItem.APIElasticSearchDataset.Metadata == nil {
+					items.APIElasticSearchDataset.Metadata = nil
+				} else {
+					items.APIElasticSearchDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIElasticSearchDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIElasticSearchDataset.Metadata.Created))
+					items.APIElasticSearchDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIElasticSearchDataset.Metadata.EnableAcceleration)
+					items.APIElasticSearchDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIElasticSearchDataset.Metadata.Modified))
+					items.APIElasticSearchDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIElasticSearchDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIElasticSearchDataset.Metadata.Tags {
+						items.APIElasticSearchDataset.Metadata.Tags = append(items.APIElasticSearchDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIElasticSearchDataset.ProviderID = types.StringValue(itemsItem.APIElasticSearchDataset.ProviderID)
+				items.APIElasticSearchDataset.TimestampField = types.StringValue(itemsItem.APIElasticSearchDataset.TimestampField)
+				items.APIElasticSearchDataset.Type = types.StringValue(itemsItem.APIElasticSearchDataset.Type)
+			}
+			if itemsItem.APIGcpDataset != nil {
+				items.APIGcpDataset = &tfTypes.APIGcpDataset{}
+				items.APIGcpDataset.Description = types.StringPointerValue(itemsItem.APIGcpDataset.Description)
+				items.APIGcpDataset.EndpointConfigs = []tfTypes.GcpEndpointConfig{}
 
-			r.APIGcpDataset.EndpointConfigs = append(r.APIGcpDataset.EndpointConfigs, endpointConfigs)
-		}
-		r.APIGcpDataset.ID = types.StringValue(resp.APIGcpDataset.ID)
-		r.ID = r.APIGcpDataset.ID
-		if resp.APIGcpDataset.Metadata == nil {
-			r.APIGcpDataset.Metadata = nil
-		} else {
-			r.APIGcpDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIGcpDataset.Metadata.Earliest = types.StringValue(resp.APIGcpDataset.Metadata.Earliest)
-			r.APIGcpDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIGcpDataset.Metadata.EnableAcceleration)
-			r.APIGcpDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIGcpDataset.Metadata.FieldList))
-			for _, v := range resp.APIGcpDataset.Metadata.FieldList {
-				r.APIGcpDataset.Metadata.FieldList = append(r.APIGcpDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIGcpDataset.Metadata.LatestRunInfo == nil {
-				r.APIGcpDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIGcpDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIGcpDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIGcpDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIGcpDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIGcpDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIGcpDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIGcpDataset.Metadata.ScanMode = types.StringValue(string(resp.APIGcpDataset.Metadata.ScanMode))
-		}
-		r.APIGcpDataset.ProviderID = types.StringValue(resp.APIGcpDataset.ProviderID)
-		r.ProviderID = r.APIGcpDataset.ProviderID
-		r.APIGcpDataset.Type = types.StringValue(resp.APIGcpDataset.Type)
-		r.Type = r.APIGcpDataset.Type
-	}
-	if resp.APIGoogleWorkspaceDataset != nil {
-		r.APIGoogleWorkspaceDataset = &tfTypes.APIGoogleWorkspaceDataset{}
-		r.APIGoogleWorkspaceDataset.Description = types.StringPointerValue(resp.APIGoogleWorkspaceDataset.Description)
-		r.Description = r.APIGoogleWorkspaceDataset.Description
-		r.APIGoogleWorkspaceDataset.EnabledEndpoints = make([]types.String, 0, len(resp.APIGoogleWorkspaceDataset.EnabledEndpoints))
-		for _, v := range resp.APIGoogleWorkspaceDataset.EnabledEndpoints {
-			r.APIGoogleWorkspaceDataset.EnabledEndpoints = append(r.APIGoogleWorkspaceDataset.EnabledEndpoints, types.StringValue(v))
-		}
-		r.APIGoogleWorkspaceDataset.ID = types.StringValue(resp.APIGoogleWorkspaceDataset.ID)
-		r.ID = r.APIGoogleWorkspaceDataset.ID
-		if resp.APIGoogleWorkspaceDataset.Metadata == nil {
-			r.APIGoogleWorkspaceDataset.Metadata = nil
-		} else {
-			r.APIGoogleWorkspaceDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIGoogleWorkspaceDataset.Metadata.Earliest = types.StringValue(resp.APIGoogleWorkspaceDataset.Metadata.Earliest)
-			r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration)
-			r.APIGoogleWorkspaceDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIGoogleWorkspaceDataset.Metadata.FieldList))
-			for _, v := range resp.APIGoogleWorkspaceDataset.Metadata.FieldList {
-				r.APIGoogleWorkspaceDataset.Metadata.FieldList = append(r.APIGoogleWorkspaceDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo == nil {
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIGoogleWorkspaceDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIGoogleWorkspaceDataset.Metadata.ScanMode = types.StringValue(string(resp.APIGoogleWorkspaceDataset.Metadata.ScanMode))
-		}
-		r.APIGoogleWorkspaceDataset.ProviderID = types.StringValue(resp.APIGoogleWorkspaceDataset.ProviderID)
-		r.ProviderID = r.APIGoogleWorkspaceDataset.ProviderID
-		r.APIGoogleWorkspaceDataset.Type = types.StringValue(resp.APIGoogleWorkspaceDataset.Type)
-		r.Type = r.APIGoogleWorkspaceDataset.Type
-	}
-	if resp.APIHTTPDataset != nil {
-		r.APIHTTPDataset = &tfTypes.APIHTTPDataset{}
-		r.APIHTTPDataset.Description = types.StringPointerValue(resp.APIHTTPDataset.Description)
-		r.Description = r.APIHTTPDataset.Description
-		r.APIHTTPDataset.EnabledEndpoints = make([]types.String, 0, len(resp.APIHTTPDataset.EnabledEndpoints))
-		for _, v := range resp.APIHTTPDataset.EnabledEndpoints {
-			r.APIHTTPDataset.EnabledEndpoints = append(r.APIHTTPDataset.EnabledEndpoints, types.StringValue(v))
-		}
-		r.APIHTTPDataset.ID = types.StringValue(resp.APIHTTPDataset.ID)
-		r.ID = r.APIHTTPDataset.ID
-		if resp.APIHTTPDataset.Metadata == nil {
-			r.APIHTTPDataset.Metadata = nil
-		} else {
-			r.APIHTTPDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIHTTPDataset.Metadata.Earliest = types.StringValue(resp.APIHTTPDataset.Metadata.Earliest)
-			r.APIHTTPDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIHTTPDataset.Metadata.EnableAcceleration)
-			r.APIHTTPDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIHTTPDataset.Metadata.FieldList))
-			for _, v := range resp.APIHTTPDataset.Metadata.FieldList {
-				r.APIHTTPDataset.Metadata.FieldList = append(r.APIHTTPDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIHTTPDataset.Metadata.LatestRunInfo == nil {
-				r.APIHTTPDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIHTTPDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIHTTPDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIHTTPDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIHTTPDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIHTTPDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIHTTPDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIHTTPDataset.Metadata.ScanMode = types.StringValue(string(resp.APIHTTPDataset.Metadata.ScanMode))
-		}
-		r.APIHTTPDataset.ProviderID = types.StringValue(resp.APIHTTPDataset.ProviderID)
-		r.ProviderID = r.APIHTTPDataset.ProviderID
-		r.APIHTTPDataset.Type = types.StringValue(resp.APIHTTPDataset.Type)
-		r.Type = r.APIHTTPDataset.Type
-	}
-	if resp.APIMsGraphDataset != nil {
-		r.APIMsGraphDataset = &tfTypes.APIMsGraphDataset{}
-		r.APIMsGraphDataset.Description = types.StringPointerValue(resp.APIMsGraphDataset.Description)
-		r.Description = r.APIMsGraphDataset.Description
-		r.APIMsGraphDataset.EnabledEndpoints = make([]types.String, 0, len(resp.APIMsGraphDataset.EnabledEndpoints))
-		for _, v := range resp.APIMsGraphDataset.EnabledEndpoints {
-			r.APIMsGraphDataset.EnabledEndpoints = append(r.APIMsGraphDataset.EnabledEndpoints, types.StringValue(v))
-		}
-		r.APIMsGraphDataset.ID = types.StringValue(resp.APIMsGraphDataset.ID)
-		r.ID = r.APIMsGraphDataset.ID
-		if resp.APIMsGraphDataset.Metadata == nil {
-			r.APIMsGraphDataset.Metadata = nil
-		} else {
-			r.APIMsGraphDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIMsGraphDataset.Metadata.Earliest = types.StringValue(resp.APIMsGraphDataset.Metadata.Earliest)
-			r.APIMsGraphDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIMsGraphDataset.Metadata.EnableAcceleration)
-			r.APIMsGraphDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIMsGraphDataset.Metadata.FieldList))
-			for _, v := range resp.APIMsGraphDataset.Metadata.FieldList {
-				r.APIMsGraphDataset.Metadata.FieldList = append(r.APIMsGraphDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIMsGraphDataset.Metadata.LatestRunInfo == nil {
-				r.APIMsGraphDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIMsGraphDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIMsGraphDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIMsGraphDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIMsGraphDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIMsGraphDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIMsGraphDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIMsGraphDataset.Metadata.ScanMode = types.StringValue(string(resp.APIMsGraphDataset.Metadata.ScanMode))
-		}
-		r.APIMsGraphDataset.ProviderID = types.StringValue(resp.APIMsGraphDataset.ProviderID)
-		r.ProviderID = r.APIMsGraphDataset.ProviderID
-		r.APIMsGraphDataset.Type = types.StringValue(resp.APIMsGraphDataset.Type)
-		r.Type = r.APIMsGraphDataset.Type
-	}
-	if resp.APIOktaDataset != nil {
-		r.APIOktaDataset = &tfTypes.APIOktaDataset{}
-		r.APIOktaDataset.Description = types.StringPointerValue(resp.APIOktaDataset.Description)
-		r.Description = r.APIOktaDataset.Description
-		r.APIOktaDataset.EnabledEndpoints = make([]types.String, 0, len(resp.APIOktaDataset.EnabledEndpoints))
-		for _, v := range resp.APIOktaDataset.EnabledEndpoints {
-			r.APIOktaDataset.EnabledEndpoints = append(r.APIOktaDataset.EnabledEndpoints, types.StringValue(v))
-		}
-		r.APIOktaDataset.ID = types.StringValue(resp.APIOktaDataset.ID)
-		r.ID = r.APIOktaDataset.ID
-		if resp.APIOktaDataset.Metadata == nil {
-			r.APIOktaDataset.Metadata = nil
-		} else {
-			r.APIOktaDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIOktaDataset.Metadata.Earliest = types.StringValue(resp.APIOktaDataset.Metadata.Earliest)
-			r.APIOktaDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIOktaDataset.Metadata.EnableAcceleration)
-			r.APIOktaDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIOktaDataset.Metadata.FieldList))
-			for _, v := range resp.APIOktaDataset.Metadata.FieldList {
-				r.APIOktaDataset.Metadata.FieldList = append(r.APIOktaDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIOktaDataset.Metadata.LatestRunInfo == nil {
-				r.APIOktaDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIOktaDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIOktaDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIOktaDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIOktaDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIOktaDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIOktaDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIOktaDataset.Metadata.ScanMode = types.StringValue(string(resp.APIOktaDataset.Metadata.ScanMode))
-		}
-		r.APIOktaDataset.ProviderID = types.StringValue(resp.APIOktaDataset.ProviderID)
-		r.ProviderID = r.APIOktaDataset.ProviderID
-		r.APIOktaDataset.Type = types.StringValue(resp.APIOktaDataset.Type)
-		r.Type = r.APIOktaDataset.Type
-	}
-	if resp.APIOpenSearchDataset != nil {
-		r.APIOpenSearchDataset = &tfTypes.APIOpenSearchDataset{}
-		r.APIOpenSearchDataset.Description = types.StringPointerValue(resp.APIOpenSearchDataset.Description)
-		r.Description = r.APIOpenSearchDataset.Description
-		r.APIOpenSearchDataset.ID = types.StringValue(resp.APIOpenSearchDataset.ID)
-		r.ID = r.APIOpenSearchDataset.ID
-		r.APIOpenSearchDataset.Index = types.StringValue(resp.APIOpenSearchDataset.Index)
-		if resp.APIOpenSearchDataset.Metadata == nil {
-			r.APIOpenSearchDataset.Metadata = nil
-		} else {
-			r.APIOpenSearchDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIOpenSearchDataset.Metadata.Earliest = types.StringValue(resp.APIOpenSearchDataset.Metadata.Earliest)
-			r.APIOpenSearchDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIOpenSearchDataset.Metadata.EnableAcceleration)
-			r.APIOpenSearchDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIOpenSearchDataset.Metadata.FieldList))
-			for _, v := range resp.APIOpenSearchDataset.Metadata.FieldList {
-				r.APIOpenSearchDataset.Metadata.FieldList = append(r.APIOpenSearchDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIOpenSearchDataset.Metadata.LatestRunInfo == nil {
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIOpenSearchDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIOpenSearchDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIOpenSearchDataset.Metadata.ScanMode = types.StringValue(string(resp.APIOpenSearchDataset.Metadata.ScanMode))
-		}
-		r.APIOpenSearchDataset.ProviderID = types.StringValue(resp.APIOpenSearchDataset.ProviderID)
-		r.ProviderID = r.APIOpenSearchDataset.ProviderID
-		r.APIOpenSearchDataset.TimestampField = types.StringPointerValue(resp.APIOpenSearchDataset.TimestampField)
-		r.APIOpenSearchDataset.Type = types.StringValue(resp.APIOpenSearchDataset.Type)
-		r.Type = r.APIOpenSearchDataset.Type
-	}
-	if resp.APITailscaleDataset != nil {
-		r.APITailscaleDataset = &tfTypes.APITailscaleDataset{}
-		r.APITailscaleDataset.Description = types.StringPointerValue(resp.APITailscaleDataset.Description)
-		r.Description = r.APITailscaleDataset.Description
-		r.APITailscaleDataset.EnabledEndpoints = make([]types.String, 0, len(resp.APITailscaleDataset.EnabledEndpoints))
-		for _, v := range resp.APITailscaleDataset.EnabledEndpoints {
-			r.APITailscaleDataset.EnabledEndpoints = append(r.APITailscaleDataset.EnabledEndpoints, types.StringValue(v))
-		}
-		r.APITailscaleDataset.ID = types.StringValue(resp.APITailscaleDataset.ID)
-		r.ID = r.APITailscaleDataset.ID
-		if resp.APITailscaleDataset.Metadata == nil {
-			r.APITailscaleDataset.Metadata = nil
-		} else {
-			r.APITailscaleDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APITailscaleDataset.Metadata.Earliest = types.StringValue(resp.APITailscaleDataset.Metadata.Earliest)
-			r.APITailscaleDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APITailscaleDataset.Metadata.EnableAcceleration)
-			r.APITailscaleDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APITailscaleDataset.Metadata.FieldList))
-			for _, v := range resp.APITailscaleDataset.Metadata.FieldList {
-				r.APITailscaleDataset.Metadata.FieldList = append(r.APITailscaleDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APITailscaleDataset.Metadata.LatestRunInfo == nil {
-				r.APITailscaleDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APITailscaleDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APITailscaleDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APITailscaleDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APITailscaleDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APITailscaleDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APITailscaleDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APITailscaleDataset.Metadata.ScanMode = types.StringValue(string(resp.APITailscaleDataset.Metadata.ScanMode))
-		}
-		r.APITailscaleDataset.ProviderID = types.StringValue(resp.APITailscaleDataset.ProviderID)
-		r.ProviderID = r.APITailscaleDataset.ProviderID
-		r.APITailscaleDataset.Type = types.StringValue(resp.APITailscaleDataset.Type)
-		r.Type = r.APITailscaleDataset.Type
-	}
-	if resp.APIZoomDataset != nil {
-		r.APIZoomDataset = &tfTypes.APIZoomDataset{}
-		r.APIZoomDataset.Description = types.StringPointerValue(resp.APIZoomDataset.Description)
-		r.Description = r.APIZoomDataset.Description
-		r.APIZoomDataset.EnabledEndpoints = make([]types.String, 0, len(resp.APIZoomDataset.EnabledEndpoints))
-		for _, v := range resp.APIZoomDataset.EnabledEndpoints {
-			r.APIZoomDataset.EnabledEndpoints = append(r.APIZoomDataset.EnabledEndpoints, types.StringValue(v))
-		}
-		r.APIZoomDataset.ID = types.StringValue(resp.APIZoomDataset.ID)
-		r.ID = r.APIZoomDataset.ID
-		if resp.APIZoomDataset.Metadata == nil {
-			r.APIZoomDataset.Metadata = nil
-		} else {
-			r.APIZoomDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.APIZoomDataset.Metadata.Earliest = types.StringValue(resp.APIZoomDataset.Metadata.Earliest)
-			r.APIZoomDataset.Metadata.EnableAcceleration = types.BoolValue(resp.APIZoomDataset.Metadata.EnableAcceleration)
-			r.APIZoomDataset.Metadata.FieldList = make([]types.String, 0, len(resp.APIZoomDataset.Metadata.FieldList))
-			for _, v := range resp.APIZoomDataset.Metadata.FieldList {
-				r.APIZoomDataset.Metadata.FieldList = append(r.APIZoomDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.APIZoomDataset.Metadata.LatestRunInfo == nil {
-				r.APIZoomDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.APIZoomDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.APIZoomDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.APIZoomDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.APIZoomDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.APIZoomDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.APIZoomDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.APIZoomDataset.Metadata.ScanMode = types.StringValue(string(resp.APIZoomDataset.Metadata.ScanMode))
-		}
-		r.APIZoomDataset.ProviderID = types.StringValue(resp.APIZoomDataset.ProviderID)
-		r.ProviderID = r.APIZoomDataset.ProviderID
-		r.APIZoomDataset.Type = types.StringValue(resp.APIZoomDataset.Type)
-		r.Type = r.APIZoomDataset.Type
-	}
-	if resp.AwsSecurityLakeDataset != nil {
-		r.AwsSecurityLakeDataset = &tfTypes.AwsSecurityLakeDataset{}
-		r.AwsSecurityLakeDataset.Description = types.StringPointerValue(resp.AwsSecurityLakeDataset.Description)
-		r.Description = r.AwsSecurityLakeDataset.Description
-		r.AwsSecurityLakeDataset.Filter = types.StringPointerValue(resp.AwsSecurityLakeDataset.Filter)
-		r.AwsSecurityLakeDataset.ID = types.StringValue(resp.AwsSecurityLakeDataset.ID)
-		r.ID = r.AwsSecurityLakeDataset.ID
-		if resp.AwsSecurityLakeDataset.Metadata == nil {
-			r.AwsSecurityLakeDataset.Metadata = nil
-		} else {
-			r.AwsSecurityLakeDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.AwsSecurityLakeDataset.Metadata.Earliest = types.StringValue(resp.AwsSecurityLakeDataset.Metadata.Earliest)
-			r.AwsSecurityLakeDataset.Metadata.EnableAcceleration = types.BoolValue(resp.AwsSecurityLakeDataset.Metadata.EnableAcceleration)
-			r.AwsSecurityLakeDataset.Metadata.FieldList = make([]types.String, 0, len(resp.AwsSecurityLakeDataset.Metadata.FieldList))
-			for _, v := range resp.AwsSecurityLakeDataset.Metadata.FieldList {
-				r.AwsSecurityLakeDataset.Metadata.FieldList = append(r.AwsSecurityLakeDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo == nil {
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.AwsSecurityLakeDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.AwsSecurityLakeDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.AwsSecurityLakeDataset.Metadata.ScanMode = types.StringValue(string(resp.AwsSecurityLakeDataset.Metadata.ScanMode))
-		}
-		r.AwsSecurityLakeDataset.Path = types.StringPointerValue(resp.AwsSecurityLakeDataset.Path)
-		r.AwsSecurityLakeDataset.ProviderID = types.StringValue(resp.AwsSecurityLakeDataset.ProviderID)
-		r.ProviderID = r.AwsSecurityLakeDataset.ProviderID
-		r.AwsSecurityLakeDataset.SelectedBuckets = []tfTypes.S3Bucket{}
+				for _, endpointConfigsItem := range itemsItem.APIGcpDataset.EndpointConfigs {
+					var endpointConfigs tfTypes.GcpEndpointConfig
 
-		for _, selectedBucketsItem := range resp.AwsSecurityLakeDataset.SelectedBuckets {
-			var selectedBuckets tfTypes.S3Bucket
+					endpointConfigs.EndpointName = types.StringValue(endpointConfigsItem.EndpointName)
+					endpointConfigs.Region = types.StringPointerValue(endpointConfigsItem.Region)
 
-			selectedBuckets.Name = types.StringPointerValue(selectedBucketsItem.Name)
-			selectedBuckets.Region = types.StringPointerValue(selectedBucketsItem.Region)
+					items.APIGcpDataset.EndpointConfigs = append(items.APIGcpDataset.EndpointConfigs, endpointConfigs)
+				}
+				items.APIGcpDataset.ID = types.StringValue(itemsItem.APIGcpDataset.ID)
+				if itemsItem.APIGcpDataset.Metadata == nil {
+					items.APIGcpDataset.Metadata = nil
+				} else {
+					items.APIGcpDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIGcpDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIGcpDataset.Metadata.Created))
+					items.APIGcpDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIGcpDataset.Metadata.EnableAcceleration)
+					items.APIGcpDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIGcpDataset.Metadata.Modified))
+					items.APIGcpDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIGcpDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIGcpDataset.Metadata.Tags {
+						items.APIGcpDataset.Metadata.Tags = append(items.APIGcpDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIGcpDataset.ProviderID = types.StringValue(itemsItem.APIGcpDataset.ProviderID)
+				items.APIGcpDataset.Type = types.StringValue(itemsItem.APIGcpDataset.Type)
+			}
+			if itemsItem.APIGoogleWorkspaceDataset != nil {
+				items.APIGoogleWorkspaceDataset = &tfTypes.APIGoogleWorkspaceDataset{}
+				items.APIGoogleWorkspaceDataset.Description = types.StringPointerValue(itemsItem.APIGoogleWorkspaceDataset.Description)
+				items.APIGoogleWorkspaceDataset.EnabledEndpoints = make([]types.String, 0, len(itemsItem.APIGoogleWorkspaceDataset.EnabledEndpoints))
+				for _, v := range itemsItem.APIGoogleWorkspaceDataset.EnabledEndpoints {
+					items.APIGoogleWorkspaceDataset.EnabledEndpoints = append(items.APIGoogleWorkspaceDataset.EnabledEndpoints, types.StringValue(v))
+				}
+				items.APIGoogleWorkspaceDataset.ID = types.StringValue(itemsItem.APIGoogleWorkspaceDataset.ID)
+				if itemsItem.APIGoogleWorkspaceDataset.Metadata == nil {
+					items.APIGoogleWorkspaceDataset.Metadata = nil
+				} else {
+					items.APIGoogleWorkspaceDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIGoogleWorkspaceDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIGoogleWorkspaceDataset.Metadata.Created))
+					items.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration)
+					items.APIGoogleWorkspaceDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIGoogleWorkspaceDataset.Metadata.Modified))
+					items.APIGoogleWorkspaceDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIGoogleWorkspaceDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIGoogleWorkspaceDataset.Metadata.Tags {
+						items.APIGoogleWorkspaceDataset.Metadata.Tags = append(items.APIGoogleWorkspaceDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIGoogleWorkspaceDataset.ProviderID = types.StringValue(itemsItem.APIGoogleWorkspaceDataset.ProviderID)
+				items.APIGoogleWorkspaceDataset.Type = types.StringValue(itemsItem.APIGoogleWorkspaceDataset.Type)
+			}
+			if itemsItem.APIHTTPDataset != nil {
+				items.APIHTTPDataset = &tfTypes.APIHTTPDataset{}
+				items.APIHTTPDataset.Description = types.StringPointerValue(itemsItem.APIHTTPDataset.Description)
+				items.APIHTTPDataset.EnabledEndpoints = make([]types.String, 0, len(itemsItem.APIHTTPDataset.EnabledEndpoints))
+				for _, v := range itemsItem.APIHTTPDataset.EnabledEndpoints {
+					items.APIHTTPDataset.EnabledEndpoints = append(items.APIHTTPDataset.EnabledEndpoints, types.StringValue(v))
+				}
+				items.APIHTTPDataset.ID = types.StringValue(itemsItem.APIHTTPDataset.ID)
+				if itemsItem.APIHTTPDataset.Metadata == nil {
+					items.APIHTTPDataset.Metadata = nil
+				} else {
+					items.APIHTTPDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIHTTPDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIHTTPDataset.Metadata.Created))
+					items.APIHTTPDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIHTTPDataset.Metadata.EnableAcceleration)
+					items.APIHTTPDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIHTTPDataset.Metadata.Modified))
+					items.APIHTTPDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIHTTPDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIHTTPDataset.Metadata.Tags {
+						items.APIHTTPDataset.Metadata.Tags = append(items.APIHTTPDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIHTTPDataset.ProviderID = types.StringValue(itemsItem.APIHTTPDataset.ProviderID)
+				items.APIHTTPDataset.Type = types.StringValue(itemsItem.APIHTTPDataset.Type)
+			}
+			if itemsItem.APIMsGraphDataset != nil {
+				items.APIMsGraphDataset = &tfTypes.APIMsGraphDataset{}
+				items.APIMsGraphDataset.Description = types.StringPointerValue(itemsItem.APIMsGraphDataset.Description)
+				items.APIMsGraphDataset.EnabledEndpoints = make([]types.String, 0, len(itemsItem.APIMsGraphDataset.EnabledEndpoints))
+				for _, v := range itemsItem.APIMsGraphDataset.EnabledEndpoints {
+					items.APIMsGraphDataset.EnabledEndpoints = append(items.APIMsGraphDataset.EnabledEndpoints, types.StringValue(v))
+				}
+				items.APIMsGraphDataset.ID = types.StringValue(itemsItem.APIMsGraphDataset.ID)
+				if itemsItem.APIMsGraphDataset.Metadata == nil {
+					items.APIMsGraphDataset.Metadata = nil
+				} else {
+					items.APIMsGraphDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIMsGraphDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIMsGraphDataset.Metadata.Created))
+					items.APIMsGraphDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIMsGraphDataset.Metadata.EnableAcceleration)
+					items.APIMsGraphDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIMsGraphDataset.Metadata.Modified))
+					items.APIMsGraphDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIMsGraphDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIMsGraphDataset.Metadata.Tags {
+						items.APIMsGraphDataset.Metadata.Tags = append(items.APIMsGraphDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIMsGraphDataset.ProviderID = types.StringValue(itemsItem.APIMsGraphDataset.ProviderID)
+				items.APIMsGraphDataset.Type = types.StringValue(itemsItem.APIMsGraphDataset.Type)
+			}
+			if itemsItem.APIOktaDataset != nil {
+				items.APIOktaDataset = &tfTypes.APIOktaDataset{}
+				items.APIOktaDataset.Description = types.StringPointerValue(itemsItem.APIOktaDataset.Description)
+				items.APIOktaDataset.EnabledEndpoints = make([]types.String, 0, len(itemsItem.APIOktaDataset.EnabledEndpoints))
+				for _, v := range itemsItem.APIOktaDataset.EnabledEndpoints {
+					items.APIOktaDataset.EnabledEndpoints = append(items.APIOktaDataset.EnabledEndpoints, types.StringValue(v))
+				}
+				items.APIOktaDataset.ID = types.StringValue(itemsItem.APIOktaDataset.ID)
+				if itemsItem.APIOktaDataset.Metadata == nil {
+					items.APIOktaDataset.Metadata = nil
+				} else {
+					items.APIOktaDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIOktaDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIOktaDataset.Metadata.Created))
+					items.APIOktaDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIOktaDataset.Metadata.EnableAcceleration)
+					items.APIOktaDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIOktaDataset.Metadata.Modified))
+					items.APIOktaDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIOktaDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIOktaDataset.Metadata.Tags {
+						items.APIOktaDataset.Metadata.Tags = append(items.APIOktaDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIOktaDataset.ProviderID = types.StringValue(itemsItem.APIOktaDataset.ProviderID)
+				items.APIOktaDataset.Type = types.StringValue(itemsItem.APIOktaDataset.Type)
+			}
+			if itemsItem.APIOpenSearchDataset != nil {
+				items.APIOpenSearchDataset = &tfTypes.APIOpenSearchDataset{}
+				items.APIOpenSearchDataset.Description = types.StringPointerValue(itemsItem.APIOpenSearchDataset.Description)
+				items.APIOpenSearchDataset.ID = types.StringValue(itemsItem.APIOpenSearchDataset.ID)
+				items.APIOpenSearchDataset.Index = types.StringValue(itemsItem.APIOpenSearchDataset.Index)
+				if itemsItem.APIOpenSearchDataset.Metadata == nil {
+					items.APIOpenSearchDataset.Metadata = nil
+				} else {
+					items.APIOpenSearchDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIOpenSearchDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIOpenSearchDataset.Metadata.Created))
+					items.APIOpenSearchDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIOpenSearchDataset.Metadata.EnableAcceleration)
+					items.APIOpenSearchDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIOpenSearchDataset.Metadata.Modified))
+					items.APIOpenSearchDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIOpenSearchDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIOpenSearchDataset.Metadata.Tags {
+						items.APIOpenSearchDataset.Metadata.Tags = append(items.APIOpenSearchDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIOpenSearchDataset.ProviderID = types.StringValue(itemsItem.APIOpenSearchDataset.ProviderID)
+				items.APIOpenSearchDataset.TimestampField = types.StringPointerValue(itemsItem.APIOpenSearchDataset.TimestampField)
+				items.APIOpenSearchDataset.Type = types.StringValue(itemsItem.APIOpenSearchDataset.Type)
+			}
+			if itemsItem.APITailscaleDataset != nil {
+				items.APITailscaleDataset = &tfTypes.APITailscaleDataset{}
+				items.APITailscaleDataset.Description = types.StringPointerValue(itemsItem.APITailscaleDataset.Description)
+				items.APITailscaleDataset.EnabledEndpoints = make([]types.String, 0, len(itemsItem.APITailscaleDataset.EnabledEndpoints))
+				for _, v := range itemsItem.APITailscaleDataset.EnabledEndpoints {
+					items.APITailscaleDataset.EnabledEndpoints = append(items.APITailscaleDataset.EnabledEndpoints, types.StringValue(v))
+				}
+				items.APITailscaleDataset.ID = types.StringValue(itemsItem.APITailscaleDataset.ID)
+				if itemsItem.APITailscaleDataset.Metadata == nil {
+					items.APITailscaleDataset.Metadata = nil
+				} else {
+					items.APITailscaleDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APITailscaleDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APITailscaleDataset.Metadata.Created))
+					items.APITailscaleDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APITailscaleDataset.Metadata.EnableAcceleration)
+					items.APITailscaleDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APITailscaleDataset.Metadata.Modified))
+					items.APITailscaleDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APITailscaleDataset.Metadata.Tags))
+					for _, v := range itemsItem.APITailscaleDataset.Metadata.Tags {
+						items.APITailscaleDataset.Metadata.Tags = append(items.APITailscaleDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APITailscaleDataset.ProviderID = types.StringValue(itemsItem.APITailscaleDataset.ProviderID)
+				items.APITailscaleDataset.Type = types.StringValue(itemsItem.APITailscaleDataset.Type)
+			}
+			if itemsItem.APIZoomDataset != nil {
+				items.APIZoomDataset = &tfTypes.APIZoomDataset{}
+				items.APIZoomDataset.Description = types.StringPointerValue(itemsItem.APIZoomDataset.Description)
+				items.APIZoomDataset.EnabledEndpoints = make([]types.String, 0, len(itemsItem.APIZoomDataset.EnabledEndpoints))
+				for _, v := range itemsItem.APIZoomDataset.EnabledEndpoints {
+					items.APIZoomDataset.EnabledEndpoints = append(items.APIZoomDataset.EnabledEndpoints, types.StringValue(v))
+				}
+				items.APIZoomDataset.ID = types.StringValue(itemsItem.APIZoomDataset.ID)
+				if itemsItem.APIZoomDataset.Metadata == nil {
+					items.APIZoomDataset.Metadata = nil
+				} else {
+					items.APIZoomDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.APIZoomDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIZoomDataset.Metadata.Created))
+					items.APIZoomDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.APIZoomDataset.Metadata.EnableAcceleration)
+					items.APIZoomDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.APIZoomDataset.Metadata.Modified))
+					items.APIZoomDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.APIZoomDataset.Metadata.Tags))
+					for _, v := range itemsItem.APIZoomDataset.Metadata.Tags {
+						items.APIZoomDataset.Metadata.Tags = append(items.APIZoomDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.APIZoomDataset.ProviderID = types.StringValue(itemsItem.APIZoomDataset.ProviderID)
+				items.APIZoomDataset.Type = types.StringValue(itemsItem.APIZoomDataset.Type)
+			}
+			if itemsItem.AwsSecurityLakeDataset != nil {
+				items.AwsSecurityLakeDataset = &tfTypes.AwsSecurityLakeDataset{}
+				items.AwsSecurityLakeDataset.Description = types.StringPointerValue(itemsItem.AwsSecurityLakeDataset.Description)
+				items.AwsSecurityLakeDataset.Filter = types.StringPointerValue(itemsItem.AwsSecurityLakeDataset.Filter)
+				items.AwsSecurityLakeDataset.ID = types.StringValue(itemsItem.AwsSecurityLakeDataset.ID)
+				if itemsItem.AwsSecurityLakeDataset.Metadata == nil {
+					items.AwsSecurityLakeDataset.Metadata = nil
+				} else {
+					items.AwsSecurityLakeDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.AwsSecurityLakeDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.AwsSecurityLakeDataset.Metadata.Created))
+					items.AwsSecurityLakeDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.AwsSecurityLakeDataset.Metadata.EnableAcceleration)
+					items.AwsSecurityLakeDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.AwsSecurityLakeDataset.Metadata.Modified))
+					items.AwsSecurityLakeDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.AwsSecurityLakeDataset.Metadata.Tags))
+					for _, v := range itemsItem.AwsSecurityLakeDataset.Metadata.Tags {
+						items.AwsSecurityLakeDataset.Metadata.Tags = append(items.AwsSecurityLakeDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.AwsSecurityLakeDataset.Path = types.StringPointerValue(itemsItem.AwsSecurityLakeDataset.Path)
+				items.AwsSecurityLakeDataset.ProviderID = types.StringValue(itemsItem.AwsSecurityLakeDataset.ProviderID)
+				items.AwsSecurityLakeDataset.SelectedBuckets = []tfTypes.S3Bucket{}
 
-			r.AwsSecurityLakeDataset.SelectedBuckets = append(r.AwsSecurityLakeDataset.SelectedBuckets, selectedBuckets)
-		}
-		r.AwsSecurityLakeDataset.Type = types.StringValue(resp.AwsSecurityLakeDataset.Type)
-		r.Type = r.AwsSecurityLakeDataset.Type
-	}
-	if resp.AzureBlobDataset != nil {
-		r.AzureBlobDataset = &tfTypes.AzureBlobDataset{}
-		r.AzureBlobDataset.ContainerName = types.StringValue(resp.AzureBlobDataset.ContainerName)
-		r.AzureBlobDataset.Description = types.StringPointerValue(resp.AzureBlobDataset.Description)
-		r.Description = r.AzureBlobDataset.Description
-		r.AzureBlobDataset.ExtraPaths = []tfTypes.AzureBlobDatasetExtraPath{}
+				for _, selectedBucketsItem := range itemsItem.AwsSecurityLakeDataset.SelectedBuckets {
+					var selectedBuckets tfTypes.S3Bucket
 
-		for _, extraPathsItem := range resp.AzureBlobDataset.ExtraPaths {
-			var extraPaths tfTypes.AzureBlobDatasetExtraPath
+					selectedBuckets.Name = types.StringPointerValue(selectedBucketsItem.Name)
+					selectedBuckets.Region = types.StringPointerValue(selectedBucketsItem.Region)
 
-			extraPaths.ContainerName = types.StringValue(extraPathsItem.ContainerName)
-			extraPaths.Filter = types.StringPointerValue(extraPathsItem.Filter)
-			extraPaths.Path = types.StringPointerValue(extraPathsItem.Path)
+					items.AwsSecurityLakeDataset.SelectedBuckets = append(items.AwsSecurityLakeDataset.SelectedBuckets, selectedBuckets)
+				}
+				items.AwsSecurityLakeDataset.Type = types.StringValue(itemsItem.AwsSecurityLakeDataset.Type)
+			}
+			if itemsItem.AzureBlobDataset != nil {
+				items.AzureBlobDataset = &tfTypes.AzureBlobDataset{}
+				items.AzureBlobDataset.ContainerName = types.StringValue(itemsItem.AzureBlobDataset.ContainerName)
+				items.AzureBlobDataset.Description = types.StringPointerValue(itemsItem.AzureBlobDataset.Description)
+				items.AzureBlobDataset.ExtraPaths = []tfTypes.AzureBlobDatasetExtraPath{}
 
-			r.AzureBlobDataset.ExtraPaths = append(r.AzureBlobDataset.ExtraPaths, extraPaths)
-		}
-		r.AzureBlobDataset.Filter = types.StringPointerValue(resp.AzureBlobDataset.Filter)
-		r.AzureBlobDataset.ID = types.StringValue(resp.AzureBlobDataset.ID)
-		r.ID = r.AzureBlobDataset.ID
-		if resp.AzureBlobDataset.Metadata == nil {
-			r.AzureBlobDataset.Metadata = nil
-		} else {
-			r.AzureBlobDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.AzureBlobDataset.Metadata.Earliest = types.StringValue(resp.AzureBlobDataset.Metadata.Earliest)
-			r.AzureBlobDataset.Metadata.EnableAcceleration = types.BoolValue(resp.AzureBlobDataset.Metadata.EnableAcceleration)
-			r.AzureBlobDataset.Metadata.FieldList = make([]types.String, 0, len(resp.AzureBlobDataset.Metadata.FieldList))
-			for _, v := range resp.AzureBlobDataset.Metadata.FieldList {
-				r.AzureBlobDataset.Metadata.FieldList = append(r.AzureBlobDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.AzureBlobDataset.Metadata.LatestRunInfo == nil {
-				r.AzureBlobDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.AzureBlobDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.AzureBlobDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.AzureBlobDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.AzureBlobDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.AzureBlobDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.AzureBlobDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.AzureBlobDataset.Metadata.ScanMode = types.StringValue(string(resp.AzureBlobDataset.Metadata.ScanMode))
-		}
-		r.AzureBlobDataset.Path = types.StringPointerValue(resp.AzureBlobDataset.Path)
-		r.AzureBlobDataset.ProviderID = types.StringValue(resp.AzureBlobDataset.ProviderID)
-		r.ProviderID = r.AzureBlobDataset.ProviderID
-		r.AzureBlobDataset.SkipEventTimeFilter = types.BoolPointerValue(resp.AzureBlobDataset.SkipEventTimeFilter)
-		r.AzureBlobDataset.StorageClasses = make([]types.String, 0, len(resp.AzureBlobDataset.StorageClasses))
-		for _, v := range resp.AzureBlobDataset.StorageClasses {
-			r.AzureBlobDataset.StorageClasses = append(r.AzureBlobDataset.StorageClasses, types.StringValue(v))
-		}
-		r.AzureBlobDataset.Type = types.StringValue(resp.AzureBlobDataset.Type)
-		r.Type = r.AzureBlobDataset.Type
-	}
-	if resp.ClickHouseDataset != nil {
-		r.ClickHouseDataset = &tfTypes.ClickHouseDataset{}
-		r.ClickHouseDataset.Database = types.StringPointerValue(resp.ClickHouseDataset.Database)
-		r.ClickHouseDataset.Description = types.StringPointerValue(resp.ClickHouseDataset.Description)
-		r.Description = r.ClickHouseDataset.Description
-		r.ClickHouseDataset.ID = types.StringValue(resp.ClickHouseDataset.ID)
-		r.ID = r.ClickHouseDataset.ID
-		if resp.ClickHouseDataset.Metadata == nil {
-			r.ClickHouseDataset.Metadata = nil
-		} else {
-			r.ClickHouseDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.ClickHouseDataset.Metadata.Earliest = types.StringValue(resp.ClickHouseDataset.Metadata.Earliest)
-			r.ClickHouseDataset.Metadata.EnableAcceleration = types.BoolValue(resp.ClickHouseDataset.Metadata.EnableAcceleration)
-			r.ClickHouseDataset.Metadata.FieldList = make([]types.String, 0, len(resp.ClickHouseDataset.Metadata.FieldList))
-			for _, v := range resp.ClickHouseDataset.Metadata.FieldList {
-				r.ClickHouseDataset.Metadata.FieldList = append(r.ClickHouseDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.ClickHouseDataset.Metadata.LatestRunInfo == nil {
-				r.ClickHouseDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.ClickHouseDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.ClickHouseDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.ClickHouseDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.ClickHouseDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.ClickHouseDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.ClickHouseDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.ClickHouseDataset.Metadata.ScanMode = types.StringValue(string(resp.ClickHouseDataset.Metadata.ScanMode))
-		}
-		r.ClickHouseDataset.ProviderID = types.StringValue(resp.ClickHouseDataset.ProviderID)
-		r.ProviderID = r.ClickHouseDataset.ProviderID
-		r.ClickHouseDataset.Table = types.StringValue(resp.ClickHouseDataset.Table)
-		r.ClickHouseDataset.TimestampField = types.StringPointerValue(resp.ClickHouseDataset.TimestampField)
-		r.ClickHouseDataset.Type = types.StringValue(resp.ClickHouseDataset.Type)
-		r.Type = r.ClickHouseDataset.Type
-	}
-	if resp.CriblLeaderDataset != nil {
-		r.CriblLeaderDataset = &tfTypes.CriblLeaderDataset{}
-		r.CriblLeaderDataset.Description = types.StringPointerValue(resp.CriblLeaderDataset.Description)
-		r.Description = r.CriblLeaderDataset.Description
-		r.CriblLeaderDataset.ExtraPaths = []tfTypes.CriblLeaderDatasetExtraPath{}
+				for _, extraPathsItem := range itemsItem.AzureBlobDataset.ExtraPaths {
+					var extraPaths tfTypes.AzureBlobDatasetExtraPath
 
-		for _, extraPathsItem1 := range resp.CriblLeaderDataset.ExtraPaths {
-			var extraPaths1 tfTypes.CriblLeaderDatasetExtraPath
+					extraPaths.ContainerName = types.StringValue(extraPathsItem.ContainerName)
+					extraPaths.Filter = types.StringPointerValue(extraPathsItem.Filter)
+					extraPaths.Path = types.StringPointerValue(extraPathsItem.Path)
 
-			extraPaths1.Filter = types.StringPointerValue(extraPathsItem1.Filter)
-			extraPaths1.Path = types.StringValue(extraPathsItem1.Path)
+					items.AzureBlobDataset.ExtraPaths = append(items.AzureBlobDataset.ExtraPaths, extraPaths)
+				}
+				items.AzureBlobDataset.Filter = types.StringPointerValue(itemsItem.AzureBlobDataset.Filter)
+				items.AzureBlobDataset.ID = types.StringValue(itemsItem.AzureBlobDataset.ID)
+				if itemsItem.AzureBlobDataset.Metadata == nil {
+					items.AzureBlobDataset.Metadata = nil
+				} else {
+					items.AzureBlobDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.AzureBlobDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.AzureBlobDataset.Metadata.Created))
+					items.AzureBlobDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.AzureBlobDataset.Metadata.EnableAcceleration)
+					items.AzureBlobDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.AzureBlobDataset.Metadata.Modified))
+					items.AzureBlobDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.AzureBlobDataset.Metadata.Tags))
+					for _, v := range itemsItem.AzureBlobDataset.Metadata.Tags {
+						items.AzureBlobDataset.Metadata.Tags = append(items.AzureBlobDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.AzureBlobDataset.Path = types.StringPointerValue(itemsItem.AzureBlobDataset.Path)
+				items.AzureBlobDataset.ProviderID = types.StringValue(itemsItem.AzureBlobDataset.ProviderID)
+				items.AzureBlobDataset.SkipEventTimeFilter = types.BoolPointerValue(itemsItem.AzureBlobDataset.SkipEventTimeFilter)
+				items.AzureBlobDataset.StorageClasses = make([]types.String, 0, len(itemsItem.AzureBlobDataset.StorageClasses))
+				for _, v := range itemsItem.AzureBlobDataset.StorageClasses {
+					items.AzureBlobDataset.StorageClasses = append(items.AzureBlobDataset.StorageClasses, types.StringValue(v))
+				}
+				items.AzureBlobDataset.Type = types.StringValue(itemsItem.AzureBlobDataset.Type)
+			}
+			if itemsItem.ClickHouseDataset != nil {
+				items.ClickHouseDataset = &tfTypes.ClickHouseDataset{}
+				items.ClickHouseDataset.Database = types.StringPointerValue(itemsItem.ClickHouseDataset.Database)
+				items.ClickHouseDataset.Description = types.StringPointerValue(itemsItem.ClickHouseDataset.Description)
+				items.ClickHouseDataset.ID = types.StringValue(itemsItem.ClickHouseDataset.ID)
+				if itemsItem.ClickHouseDataset.Metadata == nil {
+					items.ClickHouseDataset.Metadata = nil
+				} else {
+					items.ClickHouseDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.ClickHouseDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.ClickHouseDataset.Metadata.Created))
+					items.ClickHouseDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.ClickHouseDataset.Metadata.EnableAcceleration)
+					items.ClickHouseDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.ClickHouseDataset.Metadata.Modified))
+					items.ClickHouseDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.ClickHouseDataset.Metadata.Tags))
+					for _, v := range itemsItem.ClickHouseDataset.Metadata.Tags {
+						items.ClickHouseDataset.Metadata.Tags = append(items.ClickHouseDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.ClickHouseDataset.ProviderID = types.StringValue(itemsItem.ClickHouseDataset.ProviderID)
+				items.ClickHouseDataset.Table = types.StringValue(itemsItem.ClickHouseDataset.Table)
+				items.ClickHouseDataset.TimestampField = types.StringPointerValue(itemsItem.ClickHouseDataset.TimestampField)
+				items.ClickHouseDataset.Type = types.StringValue(itemsItem.ClickHouseDataset.Type)
+			}
+			if itemsItem.CriblLeaderDataset != nil {
+				items.CriblLeaderDataset = &tfTypes.CriblLeaderDataset{}
+				items.CriblLeaderDataset.Description = types.StringPointerValue(itemsItem.CriblLeaderDataset.Description)
+				items.CriblLeaderDataset.ExtraPaths = []tfTypes.CriblLeaderDatasetExtraPath{}
 
-			r.CriblLeaderDataset.ExtraPaths = append(r.CriblLeaderDataset.ExtraPaths, extraPaths1)
-		}
-		r.CriblLeaderDataset.Filter = types.StringPointerValue(resp.CriblLeaderDataset.Filter)
-		r.CriblLeaderDataset.ID = types.StringValue(resp.CriblLeaderDataset.ID)
-		r.ID = r.CriblLeaderDataset.ID
-		if resp.CriblLeaderDataset.Metadata == nil {
-			r.CriblLeaderDataset.Metadata = nil
-		} else {
-			r.CriblLeaderDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.CriblLeaderDataset.Metadata.Earliest = types.StringValue(resp.CriblLeaderDataset.Metadata.Earliest)
-			r.CriblLeaderDataset.Metadata.EnableAcceleration = types.BoolValue(resp.CriblLeaderDataset.Metadata.EnableAcceleration)
-			r.CriblLeaderDataset.Metadata.FieldList = make([]types.String, 0, len(resp.CriblLeaderDataset.Metadata.FieldList))
-			for _, v := range resp.CriblLeaderDataset.Metadata.FieldList {
-				r.CriblLeaderDataset.Metadata.FieldList = append(r.CriblLeaderDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.CriblLeaderDataset.Metadata.LatestRunInfo == nil {
-				r.CriblLeaderDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.CriblLeaderDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.CriblLeaderDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.CriblLeaderDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.CriblLeaderDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.CriblLeaderDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.CriblLeaderDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.CriblLeaderDataset.Metadata.ScanMode = types.StringValue(string(resp.CriblLeaderDataset.Metadata.ScanMode))
-		}
-		r.CriblLeaderDataset.Path = types.StringValue(resp.CriblLeaderDataset.Path)
-		r.CriblLeaderDataset.ProviderID = types.StringValue(resp.CriblLeaderDataset.ProviderID)
-		r.ProviderID = r.CriblLeaderDataset.ProviderID
-		r.CriblLeaderDataset.Type = types.StringValue(resp.CriblLeaderDataset.Type)
-		r.Type = r.CriblLeaderDataset.Type
-	}
-	if resp.EdgeDataset != nil {
-		r.EdgeDataset = &tfTypes.EdgeDataset{}
-		r.EdgeDataset.Description = types.StringPointerValue(resp.EdgeDataset.Description)
-		r.Description = r.EdgeDataset.Description
-		r.EdgeDataset.Filter = types.StringPointerValue(resp.EdgeDataset.Filter)
-		r.EdgeDataset.Fleets = make([]types.String, 0, len(resp.EdgeDataset.Fleets))
-		for _, v := range resp.EdgeDataset.Fleets {
-			r.EdgeDataset.Fleets = append(r.EdgeDataset.Fleets, types.StringValue(v))
-		}
-		r.EdgeDataset.ID = types.StringValue(resp.EdgeDataset.ID)
-		r.ID = r.EdgeDataset.ID
-		if resp.EdgeDataset.Metadata == nil {
-			r.EdgeDataset.Metadata = nil
-		} else {
-			r.EdgeDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.EdgeDataset.Metadata.Earliest = types.StringValue(resp.EdgeDataset.Metadata.Earliest)
-			r.EdgeDataset.Metadata.EnableAcceleration = types.BoolValue(resp.EdgeDataset.Metadata.EnableAcceleration)
-			r.EdgeDataset.Metadata.FieldList = make([]types.String, 0, len(resp.EdgeDataset.Metadata.FieldList))
-			for _, v := range resp.EdgeDataset.Metadata.FieldList {
-				r.EdgeDataset.Metadata.FieldList = append(r.EdgeDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.EdgeDataset.Metadata.LatestRunInfo == nil {
-				r.EdgeDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.EdgeDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.EdgeDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.EdgeDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.EdgeDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.EdgeDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.EdgeDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.EdgeDataset.Metadata.ScanMode = types.StringValue(string(resp.EdgeDataset.Metadata.ScanMode))
-		}
-		r.EdgeDataset.Path = types.StringValue(resp.EdgeDataset.Path)
-		r.EdgeDataset.ProviderID = types.StringValue(resp.EdgeDataset.ProviderID)
-		r.ProviderID = r.EdgeDataset.ProviderID
-		r.EdgeDataset.Type = types.StringValue(resp.EdgeDataset.Type)
-		r.Type = r.EdgeDataset.Type
-	}
-	if resp.GcsDataset != nil {
-		r.GcsDataset = &tfTypes.GcsDataset{}
-		r.GcsDataset.Bucket = types.StringValue(resp.GcsDataset.Bucket)
-		r.GcsDataset.Description = types.StringPointerValue(resp.GcsDataset.Description)
-		r.Description = r.GcsDataset.Description
-		r.GcsDataset.ExtraPaths = []tfTypes.GcsDatasetExtraPath{}
+				for _, extraPathsItem1 := range itemsItem.CriblLeaderDataset.ExtraPaths {
+					var extraPaths1 tfTypes.CriblLeaderDatasetExtraPath
 
-		for _, extraPathsItem2 := range resp.GcsDataset.ExtraPaths {
-			var extraPaths2 tfTypes.GcsDatasetExtraPath
+					extraPaths1.Filter = types.StringPointerValue(extraPathsItem1.Filter)
+					extraPaths1.Path = types.StringValue(extraPathsItem1.Path)
 
-			extraPaths2.Bucket = types.StringValue(extraPathsItem2.Bucket)
-			extraPaths2.Filter = types.StringPointerValue(extraPathsItem2.Filter)
-			extraPaths2.Region = types.StringPointerValue(extraPathsItem2.Region)
+					items.CriblLeaderDataset.ExtraPaths = append(items.CriblLeaderDataset.ExtraPaths, extraPaths1)
+				}
+				items.CriblLeaderDataset.Filter = types.StringPointerValue(itemsItem.CriblLeaderDataset.Filter)
+				items.CriblLeaderDataset.ID = types.StringValue(itemsItem.CriblLeaderDataset.ID)
+				if itemsItem.CriblLeaderDataset.Metadata == nil {
+					items.CriblLeaderDataset.Metadata = nil
+				} else {
+					items.CriblLeaderDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.CriblLeaderDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.CriblLeaderDataset.Metadata.Created))
+					items.CriblLeaderDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.CriblLeaderDataset.Metadata.EnableAcceleration)
+					items.CriblLeaderDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.CriblLeaderDataset.Metadata.Modified))
+					items.CriblLeaderDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.CriblLeaderDataset.Metadata.Tags))
+					for _, v := range itemsItem.CriblLeaderDataset.Metadata.Tags {
+						items.CriblLeaderDataset.Metadata.Tags = append(items.CriblLeaderDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.CriblLeaderDataset.Path = types.StringValue(itemsItem.CriblLeaderDataset.Path)
+				items.CriblLeaderDataset.ProviderID = types.StringValue(itemsItem.CriblLeaderDataset.ProviderID)
+				items.CriblLeaderDataset.Type = types.StringValue(itemsItem.CriblLeaderDataset.Type)
+			}
+			if itemsItem.EdgeDataset != nil {
+				items.EdgeDataset = &tfTypes.EdgeDataset{}
+				items.EdgeDataset.Description = types.StringPointerValue(itemsItem.EdgeDataset.Description)
+				items.EdgeDataset.Filter = types.StringPointerValue(itemsItem.EdgeDataset.Filter)
+				items.EdgeDataset.Fleets = make([]types.String, 0, len(itemsItem.EdgeDataset.Fleets))
+				for _, v := range itemsItem.EdgeDataset.Fleets {
+					items.EdgeDataset.Fleets = append(items.EdgeDataset.Fleets, types.StringValue(v))
+				}
+				items.EdgeDataset.ID = types.StringValue(itemsItem.EdgeDataset.ID)
+				if itemsItem.EdgeDataset.Metadata == nil {
+					items.EdgeDataset.Metadata = nil
+				} else {
+					items.EdgeDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.EdgeDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.EdgeDataset.Metadata.Created))
+					items.EdgeDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.EdgeDataset.Metadata.EnableAcceleration)
+					items.EdgeDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.EdgeDataset.Metadata.Modified))
+					items.EdgeDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.EdgeDataset.Metadata.Tags))
+					for _, v := range itemsItem.EdgeDataset.Metadata.Tags {
+						items.EdgeDataset.Metadata.Tags = append(items.EdgeDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.EdgeDataset.Path = types.StringValue(itemsItem.EdgeDataset.Path)
+				items.EdgeDataset.ProviderID = types.StringValue(itemsItem.EdgeDataset.ProviderID)
+				items.EdgeDataset.Type = types.StringValue(itemsItem.EdgeDataset.Type)
+			}
+			if itemsItem.GcsDataset != nil {
+				items.GcsDataset = &tfTypes.GcsDataset{}
+				items.GcsDataset.Bucket = types.StringValue(itemsItem.GcsDataset.Bucket)
+				items.GcsDataset.Description = types.StringPointerValue(itemsItem.GcsDataset.Description)
+				items.GcsDataset.ExtraPaths = []tfTypes.GcsDatasetExtraPath{}
 
-			r.GcsDataset.ExtraPaths = append(r.GcsDataset.ExtraPaths, extraPaths2)
-		}
-		r.GcsDataset.Filter = types.StringPointerValue(resp.GcsDataset.Filter)
-		r.GcsDataset.ID = types.StringValue(resp.GcsDataset.ID)
-		r.ID = r.GcsDataset.ID
-		if resp.GcsDataset.Metadata == nil {
-			r.GcsDataset.Metadata = nil
-		} else {
-			r.GcsDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.GcsDataset.Metadata.Earliest = types.StringValue(resp.GcsDataset.Metadata.Earliest)
-			r.GcsDataset.Metadata.EnableAcceleration = types.BoolValue(resp.GcsDataset.Metadata.EnableAcceleration)
-			r.GcsDataset.Metadata.FieldList = make([]types.String, 0, len(resp.GcsDataset.Metadata.FieldList))
-			for _, v := range resp.GcsDataset.Metadata.FieldList {
-				r.GcsDataset.Metadata.FieldList = append(r.GcsDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.GcsDataset.Metadata.LatestRunInfo == nil {
-				r.GcsDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.GcsDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.GcsDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.GcsDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.GcsDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.GcsDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.GcsDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.GcsDataset.Metadata.ScanMode = types.StringValue(string(resp.GcsDataset.Metadata.ScanMode))
-		}
-		r.GcsDataset.ProviderID = types.StringValue(resp.GcsDataset.ProviderID)
-		r.ProviderID = r.GcsDataset.ProviderID
-		r.GcsDataset.Region = types.StringPointerValue(resp.GcsDataset.Region)
-		r.GcsDataset.SkipEventTimeFilter = types.BoolPointerValue(resp.GcsDataset.SkipEventTimeFilter)
-		r.GcsDataset.StorageClasses = make([]types.String, 0, len(resp.GcsDataset.StorageClasses))
-		for _, v := range resp.GcsDataset.StorageClasses {
-			r.GcsDataset.StorageClasses = append(r.GcsDataset.StorageClasses, types.StringValue(v))
-		}
-		r.GcsDataset.Type = types.StringValue(resp.GcsDataset.Type)
-		r.Type = r.GcsDataset.Type
-	}
-	if resp.MetaDataset != nil {
-		r.MetaDataset = &tfTypes.MetaDataset{}
-		r.MetaDataset.Datasets = make([]types.String, 0, len(resp.MetaDataset.Datasets))
-		for _, v := range resp.MetaDataset.Datasets {
-			r.MetaDataset.Datasets = append(r.MetaDataset.Datasets, types.StringValue(v))
-		}
-		r.MetaDataset.Description = types.StringPointerValue(resp.MetaDataset.Description)
-		r.Description = r.MetaDataset.Description
-		r.MetaDataset.ID = types.StringValue(resp.MetaDataset.ID)
-		r.ID = r.MetaDataset.ID
-		if resp.MetaDataset.Metadata == nil {
-			r.MetaDataset.Metadata = nil
-		} else {
-			r.MetaDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.MetaDataset.Metadata.Earliest = types.StringValue(resp.MetaDataset.Metadata.Earliest)
-			r.MetaDataset.Metadata.EnableAcceleration = types.BoolValue(resp.MetaDataset.Metadata.EnableAcceleration)
-			r.MetaDataset.Metadata.FieldList = make([]types.String, 0, len(resp.MetaDataset.Metadata.FieldList))
-			for _, v := range resp.MetaDataset.Metadata.FieldList {
-				r.MetaDataset.Metadata.FieldList = append(r.MetaDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.MetaDataset.Metadata.LatestRunInfo == nil {
-				r.MetaDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.MetaDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.MetaDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.MetaDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.MetaDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.MetaDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.MetaDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.MetaDataset.Metadata.ScanMode = types.StringValue(string(resp.MetaDataset.Metadata.ScanMode))
-		}
-		r.MetaDataset.ProviderID = types.StringValue(resp.MetaDataset.ProviderID)
-		r.ProviderID = r.MetaDataset.ProviderID
-		r.MetaDataset.Type = types.StringValue(resp.MetaDataset.Type)
-		r.Type = r.MetaDataset.Type
-	}
-	if resp.PrometheusDataset != nil {
-		r.PrometheusDataset = &tfTypes.PrometheusDataset{}
-		r.PrometheusDataset.Description = types.StringPointerValue(resp.PrometheusDataset.Description)
-		r.Description = r.PrometheusDataset.Description
-		r.PrometheusDataset.DesiredNumDataPoints = types.Float64PointerValue(resp.PrometheusDataset.DesiredNumDataPoints)
-		r.PrometheusDataset.ID = types.StringValue(resp.PrometheusDataset.ID)
-		r.ID = r.PrometheusDataset.ID
-		if resp.PrometheusDataset.Metadata == nil {
-			r.PrometheusDataset.Metadata = nil
-		} else {
-			r.PrometheusDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.PrometheusDataset.Metadata.Earliest = types.StringValue(resp.PrometheusDataset.Metadata.Earliest)
-			r.PrometheusDataset.Metadata.EnableAcceleration = types.BoolValue(resp.PrometheusDataset.Metadata.EnableAcceleration)
-			r.PrometheusDataset.Metadata.FieldList = make([]types.String, 0, len(resp.PrometheusDataset.Metadata.FieldList))
-			for _, v := range resp.PrometheusDataset.Metadata.FieldList {
-				r.PrometheusDataset.Metadata.FieldList = append(r.PrometheusDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.PrometheusDataset.Metadata.LatestRunInfo == nil {
-				r.PrometheusDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.PrometheusDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.PrometheusDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.PrometheusDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.PrometheusDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.PrometheusDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.PrometheusDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.PrometheusDataset.Metadata.ScanMode = types.StringValue(string(resp.PrometheusDataset.Metadata.ScanMode))
-		}
-		r.PrometheusDataset.MetricNamePattern = types.StringPointerValue(resp.PrometheusDataset.MetricNamePattern)
-		r.PrometheusDataset.ProviderID = types.StringValue(resp.PrometheusDataset.ProviderID)
-		r.ProviderID = r.PrometheusDataset.ProviderID
-		if resp.PrometheusDataset.StepMode != nil {
-			r.PrometheusDataset.StepMode = types.StringValue(string(*resp.PrometheusDataset.StepMode))
-		} else {
-			r.PrometheusDataset.StepMode = types.StringNull()
-		}
-		r.PrometheusDataset.Type = types.StringValue(resp.PrometheusDataset.Type)
-		r.Type = r.PrometheusDataset.Type
-	}
-	if resp.S3Dataset != nil {
-		r.S3Dataset = &tfTypes.S3Dataset{}
-		r.S3Dataset.AutoDetectRegion = types.BoolPointerValue(resp.S3Dataset.AutoDetectRegion)
-		r.S3Dataset.Bucket = types.StringValue(resp.S3Dataset.Bucket)
-		r.S3Dataset.Description = types.StringPointerValue(resp.S3Dataset.Description)
-		r.Description = r.S3Dataset.Description
-		r.S3Dataset.ExtraPaths = []tfTypes.S3DatasetExtraPath{}
+				for _, extraPathsItem2 := range itemsItem.GcsDataset.ExtraPaths {
+					var extraPaths2 tfTypes.GcsDatasetExtraPath
 
-		for _, extraPathsItem3 := range resp.S3Dataset.ExtraPaths {
-			var extraPaths3 tfTypes.S3DatasetExtraPath
+					extraPaths2.Bucket = types.StringValue(extraPathsItem2.Bucket)
+					extraPaths2.Filter = types.StringPointerValue(extraPathsItem2.Filter)
+					extraPaths2.Region = types.StringPointerValue(extraPathsItem2.Region)
 
-			extraPaths3.AutoDetectRegion = types.BoolPointerValue(extraPathsItem3.AutoDetectRegion)
-			extraPaths3.Bucket = types.StringValue(extraPathsItem3.Bucket)
-			extraPaths3.Filter = types.StringPointerValue(extraPathsItem3.Filter)
-			extraPaths3.Path = types.StringPointerValue(extraPathsItem3.Path)
-			extraPaths3.Region = types.StringPointerValue(extraPathsItem3.Region)
+					items.GcsDataset.ExtraPaths = append(items.GcsDataset.ExtraPaths, extraPaths2)
+				}
+				items.GcsDataset.Filter = types.StringPointerValue(itemsItem.GcsDataset.Filter)
+				items.GcsDataset.ID = types.StringValue(itemsItem.GcsDataset.ID)
+				if itemsItem.GcsDataset.Metadata == nil {
+					items.GcsDataset.Metadata = nil
+				} else {
+					items.GcsDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.GcsDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.GcsDataset.Metadata.Created))
+					items.GcsDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.GcsDataset.Metadata.EnableAcceleration)
+					items.GcsDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.GcsDataset.Metadata.Modified))
+					items.GcsDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.GcsDataset.Metadata.Tags))
+					for _, v := range itemsItem.GcsDataset.Metadata.Tags {
+						items.GcsDataset.Metadata.Tags = append(items.GcsDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.GcsDataset.ProviderID = types.StringValue(itemsItem.GcsDataset.ProviderID)
+				items.GcsDataset.Region = types.StringPointerValue(itemsItem.GcsDataset.Region)
+				items.GcsDataset.SkipEventTimeFilter = types.BoolPointerValue(itemsItem.GcsDataset.SkipEventTimeFilter)
+				items.GcsDataset.StorageClasses = make([]types.String, 0, len(itemsItem.GcsDataset.StorageClasses))
+				for _, v := range itemsItem.GcsDataset.StorageClasses {
+					items.GcsDataset.StorageClasses = append(items.GcsDataset.StorageClasses, types.StringValue(v))
+				}
+				items.GcsDataset.Type = types.StringValue(itemsItem.GcsDataset.Type)
+			}
+			if itemsItem.MetaDataset != nil {
+				items.MetaDataset = &tfTypes.MetaDataset{}
+				items.MetaDataset.Datasets = make([]types.String, 0, len(itemsItem.MetaDataset.Datasets))
+				for _, v := range itemsItem.MetaDataset.Datasets {
+					items.MetaDataset.Datasets = append(items.MetaDataset.Datasets, types.StringValue(v))
+				}
+				items.MetaDataset.Description = types.StringPointerValue(itemsItem.MetaDataset.Description)
+				items.MetaDataset.ID = types.StringValue(itemsItem.MetaDataset.ID)
+				if itemsItem.MetaDataset.Metadata == nil {
+					items.MetaDataset.Metadata = nil
+				} else {
+					items.MetaDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.MetaDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.MetaDataset.Metadata.Created))
+					items.MetaDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.MetaDataset.Metadata.EnableAcceleration)
+					items.MetaDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.MetaDataset.Metadata.Modified))
+					items.MetaDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.MetaDataset.Metadata.Tags))
+					for _, v := range itemsItem.MetaDataset.Metadata.Tags {
+						items.MetaDataset.Metadata.Tags = append(items.MetaDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.MetaDataset.ProviderID = types.StringValue(itemsItem.MetaDataset.ProviderID)
+				items.MetaDataset.Type = types.StringValue(itemsItem.MetaDataset.Type)
+			}
+			if itemsItem.PrometheusDataset != nil {
+				items.PrometheusDataset = &tfTypes.PrometheusDataset{}
+				items.PrometheusDataset.Description = types.StringPointerValue(itemsItem.PrometheusDataset.Description)
+				items.PrometheusDataset.DesiredNumDataPoints = types.Float64PointerValue(itemsItem.PrometheusDataset.DesiredNumDataPoints)
+				items.PrometheusDataset.ID = types.StringValue(itemsItem.PrometheusDataset.ID)
+				if itemsItem.PrometheusDataset.Metadata == nil {
+					items.PrometheusDataset.Metadata = nil
+				} else {
+					items.PrometheusDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.PrometheusDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.PrometheusDataset.Metadata.Created))
+					items.PrometheusDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.PrometheusDataset.Metadata.EnableAcceleration)
+					items.PrometheusDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.PrometheusDataset.Metadata.Modified))
+					items.PrometheusDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.PrometheusDataset.Metadata.Tags))
+					for _, v := range itemsItem.PrometheusDataset.Metadata.Tags {
+						items.PrometheusDataset.Metadata.Tags = append(items.PrometheusDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.PrometheusDataset.MetricNamePattern = types.StringPointerValue(itemsItem.PrometheusDataset.MetricNamePattern)
+				items.PrometheusDataset.ProviderID = types.StringValue(itemsItem.PrometheusDataset.ProviderID)
+				if itemsItem.PrometheusDataset.StepMode != nil {
+					items.PrometheusDataset.StepMode = types.StringValue(string(*itemsItem.PrometheusDataset.StepMode))
+				} else {
+					items.PrometheusDataset.StepMode = types.StringNull()
+				}
+				items.PrometheusDataset.Type = types.StringValue(itemsItem.PrometheusDataset.Type)
+			}
+			if itemsItem.S3Dataset != nil {
+				items.S3Dataset = &tfTypes.S3Dataset{}
+				items.S3Dataset.AutoDetectRegion = types.BoolPointerValue(itemsItem.S3Dataset.AutoDetectRegion)
+				items.S3Dataset.Bucket = types.StringValue(itemsItem.S3Dataset.Bucket)
+				items.S3Dataset.Description = types.StringPointerValue(itemsItem.S3Dataset.Description)
+				items.S3Dataset.ExtraPaths = []tfTypes.S3DatasetExtraPath{}
 
-			r.S3Dataset.ExtraPaths = append(r.S3Dataset.ExtraPaths, extraPaths3)
-		}
-		r.S3Dataset.Filter = types.StringPointerValue(resp.S3Dataset.Filter)
-		r.S3Dataset.ID = types.StringValue(resp.S3Dataset.ID)
-		r.ID = r.S3Dataset.ID
-		if resp.S3Dataset.Metadata == nil {
-			r.S3Dataset.Metadata = nil
-		} else {
-			r.S3Dataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.S3Dataset.Metadata.Earliest = types.StringValue(resp.S3Dataset.Metadata.Earliest)
-			r.S3Dataset.Metadata.EnableAcceleration = types.BoolValue(resp.S3Dataset.Metadata.EnableAcceleration)
-			r.S3Dataset.Metadata.FieldList = make([]types.String, 0, len(resp.S3Dataset.Metadata.FieldList))
-			for _, v := range resp.S3Dataset.Metadata.FieldList {
-				r.S3Dataset.Metadata.FieldList = append(r.S3Dataset.Metadata.FieldList, types.StringValue(v))
+				for _, extraPathsItem3 := range itemsItem.S3Dataset.ExtraPaths {
+					var extraPaths3 tfTypes.S3DatasetExtraPath
+
+					extraPaths3.AutoDetectRegion = types.BoolPointerValue(extraPathsItem3.AutoDetectRegion)
+					extraPaths3.Bucket = types.StringValue(extraPathsItem3.Bucket)
+					extraPaths3.Filter = types.StringPointerValue(extraPathsItem3.Filter)
+					extraPaths3.Path = types.StringPointerValue(extraPathsItem3.Path)
+					extraPaths3.Region = types.StringPointerValue(extraPathsItem3.Region)
+
+					items.S3Dataset.ExtraPaths = append(items.S3Dataset.ExtraPaths, extraPaths3)
+				}
+				items.S3Dataset.Filter = types.StringPointerValue(itemsItem.S3Dataset.Filter)
+				items.S3Dataset.ID = types.StringValue(itemsItem.S3Dataset.ID)
+				if itemsItem.S3Dataset.Metadata == nil {
+					items.S3Dataset.Metadata = nil
+				} else {
+					items.S3Dataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.S3Dataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.S3Dataset.Metadata.Created))
+					items.S3Dataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.S3Dataset.Metadata.EnableAcceleration)
+					items.S3Dataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.S3Dataset.Metadata.Modified))
+					items.S3Dataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.S3Dataset.Metadata.Tags))
+					for _, v := range itemsItem.S3Dataset.Metadata.Tags {
+						items.S3Dataset.Metadata.Tags = append(items.S3Dataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.S3Dataset.Path = types.StringPointerValue(itemsItem.S3Dataset.Path)
+				items.S3Dataset.ProviderID = types.StringValue(itemsItem.S3Dataset.ProviderID)
+				items.S3Dataset.Region = types.StringPointerValue(itemsItem.S3Dataset.Region)
+				items.S3Dataset.SkipEventTimeFilter = types.BoolPointerValue(itemsItem.S3Dataset.SkipEventTimeFilter)
+				items.S3Dataset.StorageClasses = make([]types.String, 0, len(itemsItem.S3Dataset.StorageClasses))
+				for _, v := range itemsItem.S3Dataset.StorageClasses {
+					items.S3Dataset.StorageClasses = append(items.S3Dataset.StorageClasses, types.StringValue(v))
+				}
+				items.S3Dataset.Type = types.StringValue(itemsItem.S3Dataset.Type)
 			}
-			if resp.S3Dataset.Metadata.LatestRunInfo == nil {
-				r.S3Dataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.S3Dataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.S3Dataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.S3Dataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.FinishedAt)
-				r.S3Dataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.S3Dataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.S3Dataset.Metadata.LatestRunInfo.ObjectCount)
+			if itemsItem.SnowflakeDataset != nil {
+				items.SnowflakeDataset = &tfTypes.SnowflakeDataset{}
+				items.SnowflakeDataset.Database = types.StringPointerValue(itemsItem.SnowflakeDataset.Database)
+				items.SnowflakeDataset.Description = types.StringPointerValue(itemsItem.SnowflakeDataset.Description)
+				items.SnowflakeDataset.ID = types.StringValue(itemsItem.SnowflakeDataset.ID)
+				if itemsItem.SnowflakeDataset.Metadata == nil {
+					items.SnowflakeDataset.Metadata = nil
+				} else {
+					items.SnowflakeDataset.Metadata = &tfTypes.DatasetMetadata{}
+					items.SnowflakeDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.SnowflakeDataset.Metadata.Created))
+					items.SnowflakeDataset.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.SnowflakeDataset.Metadata.EnableAcceleration)
+					items.SnowflakeDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.SnowflakeDataset.Metadata.Modified))
+					items.SnowflakeDataset.Metadata.Tags = make([]types.String, 0, len(itemsItem.SnowflakeDataset.Metadata.Tags))
+					for _, v := range itemsItem.SnowflakeDataset.Metadata.Tags {
+						items.SnowflakeDataset.Metadata.Tags = append(items.SnowflakeDataset.Metadata.Tags, types.StringValue(v))
+					}
+				}
+				items.SnowflakeDataset.ProviderID = types.StringValue(itemsItem.SnowflakeDataset.ProviderID)
+				items.SnowflakeDataset.Role = types.StringPointerValue(itemsItem.SnowflakeDataset.Role)
+				items.SnowflakeDataset.Schema = types.StringPointerValue(itemsItem.SnowflakeDataset.Schema)
+				items.SnowflakeDataset.Table = types.StringValue(itemsItem.SnowflakeDataset.Table)
+				items.SnowflakeDataset.TimestampField = types.StringPointerValue(itemsItem.SnowflakeDataset.TimestampField)
+				items.SnowflakeDataset.Type = types.StringValue(itemsItem.SnowflakeDataset.Type)
+				items.SnowflakeDataset.Warehouse = types.StringPointerValue(itemsItem.SnowflakeDataset.Warehouse)
 			}
-			r.S3Dataset.Metadata.ScanMode = types.StringValue(string(resp.S3Dataset.Metadata.ScanMode))
+
+			r.Items = append(r.Items, items)
 		}
-		r.S3Dataset.Path = types.StringPointerValue(resp.S3Dataset.Path)
-		r.S3Dataset.ProviderID = types.StringValue(resp.S3Dataset.ProviderID)
-		r.ProviderID = r.S3Dataset.ProviderID
-		r.S3Dataset.Region = types.StringPointerValue(resp.S3Dataset.Region)
-		r.S3Dataset.SkipEventTimeFilter = types.BoolPointerValue(resp.S3Dataset.SkipEventTimeFilter)
-		r.S3Dataset.StorageClasses = make([]types.String, 0, len(resp.S3Dataset.StorageClasses))
-		for _, v := range resp.S3Dataset.StorageClasses {
-			r.S3Dataset.StorageClasses = append(r.S3Dataset.StorageClasses, types.StringValue(v))
-		}
-		r.S3Dataset.Type = types.StringValue(resp.S3Dataset.Type)
-		r.Type = r.S3Dataset.Type
-	}
-	if resp.SnowflakeDataset != nil {
-		r.SnowflakeDataset = &tfTypes.SnowflakeDataset{}
-		r.SnowflakeDataset.Database = types.StringPointerValue(resp.SnowflakeDataset.Database)
-		r.SnowflakeDataset.Description = types.StringPointerValue(resp.SnowflakeDataset.Description)
-		r.Description = r.SnowflakeDataset.Description
-		r.SnowflakeDataset.ID = types.StringValue(resp.SnowflakeDataset.ID)
-		r.ID = r.SnowflakeDataset.ID
-		if resp.SnowflakeDataset.Metadata == nil {
-			r.SnowflakeDataset.Metadata = nil
-		} else {
-			r.SnowflakeDataset.Metadata = &tfTypes.DatasetMetadata{}
-			r.SnowflakeDataset.Metadata.Earliest = types.StringValue(resp.SnowflakeDataset.Metadata.Earliest)
-			r.SnowflakeDataset.Metadata.EnableAcceleration = types.BoolValue(resp.SnowflakeDataset.Metadata.EnableAcceleration)
-			r.SnowflakeDataset.Metadata.FieldList = make([]types.String, 0, len(resp.SnowflakeDataset.Metadata.FieldList))
-			for _, v := range resp.SnowflakeDataset.Metadata.FieldList {
-				r.SnowflakeDataset.Metadata.FieldList = append(r.SnowflakeDataset.Metadata.FieldList, types.StringValue(v))
-			}
-			if resp.SnowflakeDataset.Metadata.LatestRunInfo == nil {
-				r.SnowflakeDataset.Metadata.LatestRunInfo = nil
-			} else {
-				r.SnowflakeDataset.Metadata.LatestRunInfo = &tfTypes.DatasetMetadataRunInfo{}
-				r.SnowflakeDataset.Metadata.LatestRunInfo.EarliestScannedTime = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.EarliestScannedTime)
-				r.SnowflakeDataset.Metadata.LatestRunInfo.FinishedAt = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.FinishedAt)
-				r.SnowflakeDataset.Metadata.LatestRunInfo.LatestScannedTime = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.LatestScannedTime)
-				r.SnowflakeDataset.Metadata.LatestRunInfo.ObjectCount = types.Float64PointerValue(resp.SnowflakeDataset.Metadata.LatestRunInfo.ObjectCount)
-			}
-			r.SnowflakeDataset.Metadata.ScanMode = types.StringValue(string(resp.SnowflakeDataset.Metadata.ScanMode))
-		}
-		r.SnowflakeDataset.ProviderID = types.StringValue(resp.SnowflakeDataset.ProviderID)
-		r.ProviderID = r.SnowflakeDataset.ProviderID
-		r.SnowflakeDataset.Role = types.StringPointerValue(resp.SnowflakeDataset.Role)
-		r.SnowflakeDataset.Schema = types.StringPointerValue(resp.SnowflakeDataset.Schema)
-		r.SnowflakeDataset.Table = types.StringValue(resp.SnowflakeDataset.Table)
-		r.SnowflakeDataset.TimestampField = types.StringPointerValue(resp.SnowflakeDataset.TimestampField)
-		r.SnowflakeDataset.Type = types.StringValue(resp.SnowflakeDataset.Type)
-		r.Type = r.SnowflakeDataset.Type
-		r.SnowflakeDataset.Warehouse = types.StringPointerValue(resp.SnowflakeDataset.Warehouse)
 	}
 
 	return diags
