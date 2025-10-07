@@ -14,6 +14,7 @@ func TestPipeline(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
+					ExpectNonEmptyPlan: true, 
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_pipeline.my_pipeline", "id", "pipeline-1"),

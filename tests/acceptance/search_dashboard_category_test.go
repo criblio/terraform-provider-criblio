@@ -15,7 +15,6 @@ func TestSearchDashboardCategory(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ConfigDirectory:    config.TestNameDirectory(),
-					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_search_dashboard_category.my_searchdashboardcategory", "id", "test_dashboard_category"),
 						resource.TestCheckResourceAttr("criblio_search_dashboard_category.my_searchdashboardcategory", "name", "test_dashboard_category"),

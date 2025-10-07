@@ -14,7 +14,6 @@ func TestSearchGrok(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ConfigDirectory:    config.TestNameDirectory(),
-					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_grok.my_search_grok", "id", "test_grok"),
 						resource.TestCheckResourceAttr("criblio_grok.my_search_grok", "group_id", "default_search"),
