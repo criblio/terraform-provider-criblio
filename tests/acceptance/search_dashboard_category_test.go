@@ -14,7 +14,7 @@ func TestSearchDashboardCategory(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_search_dashboard_category.my_searchdashboardcategory", "id", "test_dashboard_category"),
 						resource.TestCheckResourceAttr("criblio_search_dashboard_category.my_searchdashboardcategory", "name", "test_dashboard_category"),

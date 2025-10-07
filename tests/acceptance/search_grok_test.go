@@ -13,7 +13,7 @@ func TestSearchGrok(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_grok.my_search_grok", "id", "test_grok"),
 						resource.TestCheckResourceAttr("criblio_grok.my_search_grok", "group_id", "default_search"),

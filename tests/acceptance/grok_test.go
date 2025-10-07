@@ -14,7 +14,7 @@ func TestGrok(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_grok.my_grok", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_grok.my_grok", "id", "test_grok"),
