@@ -6,10 +6,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Subscription struct {
+type DashboardCategory struct {
 	Description types.String `tfsdk:"description"`
-	Disabled    types.Bool   `tfsdk:"disabled"`
-	Filter      types.String `tfsdk:"filter"`
 	ID          types.String `tfsdk:"id"`
-	Pipeline    types.String `tfsdk:"pipeline"`
+	IsPack      types.Bool   `tfsdk:"is_pack"`
+	Name        types.String `tfsdk:"name"`
 }

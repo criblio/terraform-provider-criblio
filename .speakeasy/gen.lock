@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 10f807b70d0dac74126408291c44ee63
+  docChecksum: 77384fa7cf9c6d2644a2a9febb6c13d5
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.635.2
+  speakeasyVersion: 1.635.3
   generationVersion: 2.722.5
   releaseVersion: 1.14.5
   configChecksum: 51eec6be593eed443749b86b63c6073e
@@ -431,7 +431,6 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_tag.go
   - internal/provider/types/appscope_config_with_custom_watch_ndjson.go
   - internal/provider/types/appscope_custom.go
-  - internal/provider/types/appscope_lib_entry.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/auth_request_header.go
@@ -468,8 +467,8 @@ generatedFiles:
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
+  - internal/provider/types/dashboard_category.go
   - internal/provider/types/dashboard_layout.go
-  - internal/provider/types/database_connection_config.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
   - internal/provider/types/discover_request_param.go
@@ -495,13 +494,12 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
-  - internal/provider/types/generic_dataset.go
-  - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
   - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/grok_file.go
   - internal/provider/types/group.go
+  - internal/provider/types/hmac_function.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
   - internal/provider/types/http_endpoint.go
@@ -1262,6 +1260,7 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
+  - internal/provider/types/parser_lib_entry.go
   - internal/provider/types/pipeline.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
@@ -1274,6 +1273,7 @@ generatedFiles:
   - internal/provider/types/prometheus_auth_oauth_param2.go
   - internal/provider/types/prometheus_dataset.go
   - internal/provider/types/prometheus_provider.go
+  - internal/provider/types/regex_lib_entry.go
   - internal/provider/types/resource_type_label.go
   - internal/provider/types/retry_rules_configuration.go
   - internal/provider/types/routes.go
@@ -1289,7 +1289,6 @@ generatedFiles:
   - internal/provider/types/sas_config.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
-  - internal/provider/types/search_macro.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1304,7 +1303,6 @@ generatedFiles:
   - internal/provider/types/snowflake_provider.go
   - internal/provider/types/sns_target.go
   - internal/provider/types/socks_proxy_opts.go
-  - internal/provider/types/subscription.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
   - internal/provider/types/tailscale_account_config.go
@@ -1312,7 +1310,6 @@ generatedFiles:
   - internal/provider/types/target_config.go
   - internal/provider/types/target_config_conf.go
   - internal/provider/types/tls_configuration.go
-  - internal/provider/types/usage_group.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/types/webhook_target.go

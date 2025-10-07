@@ -428,7 +428,7 @@ type OutputLoki struct {
 	Message *string `json:"message,omitempty"`
 	// Format to use when sending logs to Loki (Protobuf or JSON)
 	MessageFormat *OutputLokiMessageFormat `default:"protobuf" json:"messageFormat"`
-	// List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'
+	// List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}"
 	Labels   []OutputLokiLabel             `json:"labels,omitempty"`
 	AuthType *OutputLokiAuthenticationType `default:"none" json:"authType"`
 	// Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki to complain about entries being delivered out of order.

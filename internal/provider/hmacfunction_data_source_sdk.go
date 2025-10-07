@@ -4,25 +4,35 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *HmacFunctionDataSourceModel) RefreshFromSharedHmacFunction(ctx context.Context, resp *shared.HmacFunction) diag.Diagnostics {
+func (r *HmacFunctionDataSourceModel) RefreshFromOperationsGetHmacFunctionByIDResponseBody(ctx context.Context, resp *operations.GetHmacFunctionByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.Description = types.StringPointerValue(resp.Description)
-	r.HeaderExpression = types.StringValue(resp.HeaderExpression)
-	r.HeaderName = types.StringValue(resp.HeaderName)
-	r.ID = types.StringValue(resp.ID)
-	r.Lib = types.StringValue(string(resp.Lib))
-	r.StringBuilders = make([]types.String, 0, len(resp.StringBuilders))
-	for _, v := range resp.StringBuilders {
-		r.StringBuilders = append(r.StringBuilders, types.StringValue(v))
+	if resp != nil {
+		r.Items = []tfTypes.HmacFunction{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.HmacFunction
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.HeaderExpression = types.StringValue(itemsItem.HeaderExpression)
+			items.HeaderName = types.StringValue(itemsItem.HeaderName)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Lib = types.StringValue(string(itemsItem.Lib))
+			items.StringBuilders = make([]types.String, 0, len(itemsItem.StringBuilders))
+			for _, v := range itemsItem.StringBuilders {
+				items.StringBuilders = append(items.StringBuilders, types.StringValue(v))
+			}
+			items.StringDelim = types.StringPointerValue(itemsItem.StringDelim)
+
+			r.Items = append(r.Items, items)
+		}
 	}
-	r.StringDelim = types.StringPointerValue(resp.StringDelim)
 
 	return diags
 }

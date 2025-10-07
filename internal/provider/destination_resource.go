@@ -11004,7 +11004,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 										},
 									},
 								},
-								Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
+								Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}"`,
 							},
 							"loki_auth": schema.SingleNestedAttribute{
 								Optional: true,
@@ -11443,7 +11443,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 										},
 									},
 								},
-								Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
+								Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}"`,
 							},
 							"loki_auth": schema.SingleNestedAttribute{
 								Optional: true,
@@ -14410,7 +14410,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 							},
 						},
-						Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
+						Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}"`,
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Computed:    true,
