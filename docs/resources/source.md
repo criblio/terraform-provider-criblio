@@ -1250,7 +1250,7 @@ resource "criblio_source" "my_source" {
     description             = "HTTP listener for webhook events"
     disabled                = false
     elastic_api             = "/elastic"
-    enable_health_check     = "{ \"see\": \"documentation\" }"
+    enable_health_check     = true
     enable_proxy_header     = false
     environment             = "main"
     host                    = "0.0.0.0"
@@ -3027,7 +3027,7 @@ resource "criblio_source" "my_source" {
     disabled                = false
     drop_control_fields     = true
     emit_token_metrics      = true
-    enable_health_check     = true
+    enable_health_check     = "{ \"see\": \"documentation\" }"
     enable_proxy_header     = false
     environment             = "main"
     extract_metrics         = true
@@ -6244,7 +6244,7 @@ Optional:
 - `description` (String)
 - `disabled` (Boolean) Default: false
 - `elastic_api` (String) Absolute path on which to listen for the Elasticsearch API requests. Only _bulk (default /elastic/_bulk) is available. Use empty string to disable. Default: "/elastic"
-- `enable_health_check` (String) Parsed as JSON.
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"
@@ -8787,7 +8787,7 @@ Optional:
 - `disabled` (Boolean) Default: false
 - `drop_control_fields` (Boolean) Drop Splunk control fields such as `crcSalt` and `_savedPort`. If disabled, control fields are stored in the internal field `__ctrlFields`. Default: true
 - `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false
-- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false
+- `enable_health_check` (String) Parsed as JSON.
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_metrics` (Boolean) Extract and process Splunk-generated metrics as Cribl metrics. Default: false

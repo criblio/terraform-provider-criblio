@@ -618,10 +618,7 @@ components:
                 system is hitting concurrency limits
               default: true
               example: false
-            resumeMissed:
-              type: boolean
-              title: Resume missed
-              example: false
+            resumeMissed: {}
             run:
               type: object
               title: Run settings
@@ -684,9 +681,7 @@ components:
                   title: Latest
                   description: Latest time to collect data for the selected timezone
                   example: 10
-                timestampTimezone:
-                  type: string
-                  example: "UTC"
+                timestampTimezone: {}
                 timeWarning:
                   type: object
                   properties: {}
@@ -9720,7 +9715,12 @@ components:
           minimum: 1
           maximum: 600
           example: 30
-        enableHealthCheck: {}
+        enableHealthCheck:
+          type: boolean
+          title: Health check endpoint
+          description: Expose the /cribl_health endpoint, which returns 200 OK when this
+            Source is healthy
+          default: false
         ipAllowlistRegex:
           type: string
           title: IP allowlist regex
@@ -11167,13 +11167,7 @@ components:
           minimum: 1
           maximum: 600
           example: 30
-        enableHealthCheck:
-          type: boolean
-          title: Health check endpoint
-          description: Expose the /cribl_health endpoint, which returns 200 OK when this
-            Source is healthy
-          default: false
-          example: true
+        enableHealthCheck: {}
         ipAllowlistRegex:
           type: string
           title: IP allowlist regex

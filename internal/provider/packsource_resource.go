@@ -8507,10 +8507,11 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern "+regexp.MustCompile(`^/|^$`).String()),
 						},
 					},
-					"enable_health_check": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"enable_health_check": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Default:     booldefault.StaticBool(false),
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -18811,11 +18812,10 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Default:     booldefault.StaticBool(false),
 						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
 					},
-					"enable_health_check": schema.BoolAttribute{
-						Computed:    true,
+					"enable_health_check": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
 						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Parsed as JSON.`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,

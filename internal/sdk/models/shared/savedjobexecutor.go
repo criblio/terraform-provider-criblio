@@ -103,7 +103,7 @@ type SavedJobExecutorRunSettings struct {
 	Earliest *float64 `json:"earliest,omitempty"`
 	// Latest time to collect data for the selected timezone
 	Latest            *float64                     `json:"latest,omitempty"`
-	TimestampTimezone *string                      `json:"timestampTimezone,omitempty"`
+	TimestampTimezone any                          `json:"timestampTimezone,omitempty"`
 	TimeWarning       *SavedJobExecutorTimeWarning `json:"timeWarning,omitempty"`
 	// A filter for tokens in the provided collect path and/or the events being collected
 	Expression *string `default:"true" json:"expression"`
@@ -180,7 +180,7 @@ func (s *SavedJobExecutorRunSettings) GetLatest() *float64 {
 	return s.Latest
 }
 
-func (s *SavedJobExecutorRunSettings) GetTimestampTimezone() *string {
+func (s *SavedJobExecutorRunSettings) GetTimestampTimezone() any {
 	if s == nil {
 		return nil
 	}
@@ -225,7 +225,7 @@ type SavedJobExecutorSchedule struct {
 	MaxConcurrentRuns *float64 `default:"1" json:"maxConcurrentRuns"`
 	// Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
 	Skippable    *bool                        `default:"true" json:"skippable"`
-	ResumeMissed *bool                        `json:"resumeMissed,omitempty"`
+	ResumeMissed any                          `json:"resumeMissed,omitempty"`
 	Run          *SavedJobExecutorRunSettings `json:"run,omitempty"`
 }
 
@@ -268,7 +268,7 @@ func (s *SavedJobExecutorSchedule) GetSkippable() *bool {
 	return s.Skippable
 }
 
-func (s *SavedJobExecutorSchedule) GetResumeMissed() *bool {
+func (s *SavedJobExecutorSchedule) GetResumeMissed() any {
 	if s == nil {
 		return nil
 	}

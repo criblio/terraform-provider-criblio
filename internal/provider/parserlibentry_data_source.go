@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,8 +28,12 @@ type ParserLibEntryDataSource struct {
 
 // ParserLibEntryDataSourceModel describes the data model.
 type ParserLibEntryDataSourceModel struct {
-	GroupID types.String             `tfsdk:"group_id"`
-	Items   []tfTypes.ParserLibEntry `tfsdk:"items"`
+	Description types.String `tfsdk:"description"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Lib         types.String `tfsdk:"lib"`
+	Tags        types.String `tfsdk:"tags"`
+	Type        types.String `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -44,33 +47,26 @@ func (r *ParserLibEntryDataSource) Schema(ctx context.Context, req datasource.Sc
 		MarkdownDescription: "ParserLibEntry DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
-			"items": schema.ListNestedAttribute{
+			"id": schema.StringAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"lib": schema.StringAttribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed:    true,
-							Description: `Optionally, add tags that you can use for filtering`,
-						},
-						"type": schema.StringAttribute{
-							Computed:    true,
-							Description: `Parser or formatter type to use`,
-						},
-					},
-				},
+			},
+			"lib": schema.StringAttribute{
+				Computed: true,
+			},
+			"tags": schema.StringAttribute{
+				Computed:    true,
+				Description: `Optionally, add tags that you can use for filtering`,
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `Parser or formatter type to use`,
 			},
 		},
 	}
@@ -136,11 +132,11 @@ func (r *ParserLibEntryDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListParserResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedParserLibEntry(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

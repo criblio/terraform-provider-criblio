@@ -567,9 +567,8 @@ type InputSplunkHec struct {
 	// How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 	SocketTimeout *float64 `default:"0" json:"socketTimeout"`
 	// After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
-	KeepAliveTimeout *float64 `default:"5" json:"keepAliveTimeout"`
-	// Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-	EnableHealthCheck *bool `default:"false" json:"enableHealthCheck"`
+	KeepAliveTimeout  *float64 `default:"5" json:"keepAliveTimeout"`
+	EnableHealthCheck any      `json:"enableHealthCheck,omitempty"`
 	// Messages from matched IP addresses will be processed, unless also matched by the denylist
 	IPAllowlistRegex *string `default:"/.*/" json:"ipAllowlistRegex"`
 	// Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
@@ -766,7 +765,7 @@ func (i *InputSplunkHec) GetKeepAliveTimeout() *float64 {
 	return i.KeepAliveTimeout
 }
 
-func (i *InputSplunkHec) GetEnableHealthCheck() *bool {
+func (i *InputSplunkHec) GetEnableHealthCheck() any {
 	if i == nil {
 		return nil
 	}

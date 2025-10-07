@@ -3,7 +3,6 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -17,7 +16,7 @@ type InputHTTP struct {
 	Description           types.String                    `tfsdk:"description"`
 	Disabled              types.Bool                      `tfsdk:"disabled"`
 	ElasticAPI            types.String                    `tfsdk:"elastic_api"`
-	EnableHealthCheck     jsontypes.Normalized            `tfsdk:"enable_health_check"`
+	EnableHealthCheck     types.Bool                      `tfsdk:"enable_health_check"`
 	EnableProxyHeader     types.Bool                      `tfsdk:"enable_proxy_header"`
 	Environment           types.String                    `tfsdk:"environment"`
 	Host                  types.String                    `tfsdk:"host"`

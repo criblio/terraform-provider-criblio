@@ -1235,7 +1235,7 @@ resource "criblio_source" "my_source" {
     description             = "HTTP listener for webhook events"
     disabled                = false
     elastic_api             = "/elastic"
-    enable_health_check     = "{ \"see\": \"documentation\" }"
+    enable_health_check     = true
     enable_proxy_header     = false
     environment             = "main"
     host                    = "0.0.0.0"
@@ -3012,7 +3012,7 @@ resource "criblio_source" "my_source" {
     disabled                = false
     drop_control_fields     = true
     emit_token_metrics      = true
-    enable_health_check     = true
+    enable_health_check     = "{ \"see\": \"documentation\" }"
     enable_proxy_header     = false
     environment             = "main"
     extract_metrics         = true

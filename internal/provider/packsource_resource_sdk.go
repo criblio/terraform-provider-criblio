@@ -1894,9 +1894,11 @@ func (r *PackSourceResourceModel) ToSharedInput(ctx context.Context) (*shared.In
 		} else {
 			keepAliveTimeout = nil
 		}
-		var enableHealthCheck interface{}
+		enableHealthCheck := new(bool)
 		if !r.InputHTTP.EnableHealthCheck.IsUnknown() && !r.InputHTTP.EnableHealthCheck.IsNull() {
-			_ = json.Unmarshal([]byte(r.InputHTTP.EnableHealthCheck.ValueString()), &enableHealthCheck)
+			*enableHealthCheck = r.InputHTTP.EnableHealthCheck.ValueBool()
+		} else {
+			enableHealthCheck = nil
 		}
 		ipAllowlistRegex := new(string)
 		if !r.InputHTTP.IPAllowlistRegex.IsUnknown() && !r.InputHTTP.IPAllowlistRegex.IsNull() {
@@ -3167,11 +3169,9 @@ func (r *PackSourceResourceModel) ToSharedInput(ctx context.Context) (*shared.In
 		} else {
 			keepAliveTimeout1 = nil
 		}
-		enableHealthCheck1 := new(bool)
+		var enableHealthCheck1 interface{}
 		if !r.InputSplunkHec.EnableHealthCheck.IsUnknown() && !r.InputSplunkHec.EnableHealthCheck.IsNull() {
-			*enableHealthCheck1 = r.InputSplunkHec.EnableHealthCheck.ValueBool()
-		} else {
-			enableHealthCheck1 = nil
+			_ = json.Unmarshal([]byte(r.InputSplunkHec.EnableHealthCheck.ValueString()), &enableHealthCheck1)
 		}
 		ipAllowlistRegex1 := new(string)
 		if !r.InputSplunkHec.IPAllowlistRegex.IsUnknown() && !r.InputSplunkHec.IPAllowlistRegex.IsNull() {

@@ -3,6 +3,7 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -19,7 +20,7 @@ type InputSplunkHec struct {
 	Disabled                  types.Bool                           `tfsdk:"disabled"`
 	DropControlFields         types.Bool                           `tfsdk:"drop_control_fields"`
 	EmitTokenMetrics          types.Bool                           `tfsdk:"emit_token_metrics"`
-	EnableHealthCheck         types.Bool                           `tfsdk:"enable_health_check"`
+	EnableHealthCheck         jsontypes.Normalized                 `tfsdk:"enable_health_check"`
 	EnableProxyHeader         types.Bool                           `tfsdk:"enable_proxy_header"`
 	Environment               types.String                         `tfsdk:"environment"`
 	ExtractMetrics            types.Bool                           `tfsdk:"extract_metrics"`
