@@ -6787,7 +6787,7 @@ components:
         query:
           type: string
           description: The search query string
-          example: "dataset=\"cribl_edge_appscope_metrics\" | limit 1000"
+          example: 'dataset="cribl_edge_appscope_metrics" | limit 1000'
         earliest:
           type: string
           description: Earliest time for the search range
@@ -31643,7 +31643,7 @@ components:
             expression: `{ "items" : [${events}] }` would send the batch inside
             a JSON object.'
           default: "`${events}`"
-          example: "`{ \"items\": [${events}] }`"
+          example: '`{ "items": [${events}] }`'
         advancedContentType:
           type: string
           title: Content type
@@ -42203,10 +42203,10 @@ components:
                 title: Value
                 description: JavaScript expression to compute field's value, enclosed in quotes
                   or backticks. (Can evaluate to a constant.)
-                example: "`\"orders-service\"`"
+                example: '`"orders-service"`'
           example:
             - name: service
-              value: "`\"orders-service\"`"
+              value: '`"orders-service"`'
             - name: hostname
               value: "`__host`"
         concurrency:
@@ -44791,7 +44791,7 @@ components:
                 type: string
                 title: Filter Expression
                 description: JavaScript expression to select events to send to output
-                example: "`_source == \"app\" && level == \"error\"`"
+                example: '`_source == "app" && level == "error"`'
               output:
                 type: string
                 title: Output
@@ -46352,10 +46352,10 @@ components:
         labels:
           type: array
           title: Logs labels
-          description: "List of labels to send with logs. Labels define Loki streams, so
+          description: 'List of labels to send with logs. Labels define Loki streams, so
             use static labels to avoid proliferating label value combinations
-            and streams. Can be merged and/or overridden by the event's __labels
-            field. Example: '__labels: {host: \"cribl.io\", level: \"error\"}'"
+            and streams. Can be merged and/or overridden by the events __labels
+            field. Example: "__labels: {host: "cribl.io", level: "error"}"'
           minItems: 0
           items:
             type: object
@@ -46856,10 +46856,10 @@ components:
         labels:
           type: array
           title: Logs labels
-          description: "List of labels to send with logs. Labels define Loki streams, so
+          description: 'List of labels to send with logs. Labels define Loki streams, so
             use static labels to avoid proliferating label value combinations
-            and streams. Can be merged and/or overridden by the event's __labels
-            field. Example: '__labels: {host: \"cribl.io\", level: \"error\"}'"
+            and streams. Can be merged and/or overridden by the events __labels
+            field. Example: "__labels: {host: "cribl.io", level: "error"}"'
           minItems: 0
           items:
             type: object
@@ -54654,7 +54654,7 @@ components:
       properties:
         _raw:
           type: string
-          example: "2025-10-02T12:00:00Z host=web-01 level=info msg=\"service started\""
+          example: '2025-10-02T12:00:00Z host=web-01 level=info msg="service started"'
       required:
         - _raw
     OutputTestRequest:
@@ -54700,7 +54700,7 @@ components:
           description: Filter that selects data to be fed through this Function
           type: string
           default: "true"
-          example: "_source == \"app\""
+          example: '_source == "app"'
         id:
           title: ID
           description: Function ID
@@ -58879,7 +58879,7 @@ components:
             type: object
             additionalProperties: true
           example:
-            - _raw: "127.0.0.1 - - [03/Oct/2025:12:00:00 +0000] \"GET /health HTTP/1.1\" 200 2"
+            - _raw: '127.0.0.1 - - [03/Oct/2025:12:00:00 +0000] "GET /health HTTP/1.1" 200 2'
               host: "web-1"
         inputId:
           type: string
@@ -61125,7 +61125,7 @@ components:
                   $ref: "#/components/schemas/ParserMode"
                 pattern:
                   type: string
-                  example: "%{IP:client} - - \\[%{HTTPDATE:timestamp}\\] \"%{WORD:method} %{DATA:path} HTTP/%{NUMBER:version}\" %{NUMBER:status} %{NUMBER:bytes}"
+                  example: '%{IP:client} - - \\[%{HTTPDATE:timestamp}\\] "%{WORD:method} %{DATA:path} HTTP/%{NUMBER:version}" %{NUMBER:status} %{NUMBER:bytes}'
                 patternList:
                   type: array
                   items:
@@ -61372,7 +61372,7 @@ components:
           properties:
             rawData:
               type: string
-              example: "127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] \"GET /healthz HTTP/1.1\" 200 2"
+              example: '127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] "GET /healthz HTTP/1.1" 200 2'
             type:
               type: string
               enum:
@@ -61434,7 +61434,7 @@ components:
           $ref: "#/components/schemas/PreviewOptions"
         query:
           type: string
-          example: "source = \"web_access\" | stats count by status"
+          example: 'source = "web_access" | stats count by status'
       required:
         - events
         - query
@@ -62700,10 +62700,10 @@ paths:
               example:
                 count: 3
                 items:
-                  - _raw: "127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] \"GET /healthz HTTP/1.1\" 200 2"
+                  - _raw: '127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] "GET /healthz HTTP/1.1" 200 2'
                     timestamp: "2025-10-06T12:00:00Z"
                     source: "web_access"
-                  - _raw: "{\"level\":\"info\",\"msg\":\"service started\"}"
+                  - _raw: '{"level":"info","msg":"service started"}'
                     timestamp: "2025-10-06T12:00:01Z"
                     source: "app_log"
                   - _raw: "<34>1 2025-10-06T12:00:02Z host app - - - started"
@@ -62786,10 +62786,10 @@ paths:
               example:
                 count: 3
                 items:
-                  - _raw: "127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] \"GET /healthz HTTP/1.1\" 200 2"
+                  - _raw: '127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] "GET /healthz HTTP/1.1" 200 2'
                     timestamp: "2025-10-06T12:00:00Z"
                     destination: "Output:main"
-                  - _raw: "{\"level\":\"info\",\"msg\":\"service started\"}"
+                  - _raw: '{"level":"info","msg":"service started"}'
                     timestamp: "2025-10-06T12:00:01Z"
                     destination: "Output:main"
                   - _raw: "<34>1 2025-10-06T12:00:02Z host app - - - started"
@@ -67430,7 +67430,7 @@ paths:
               $ref: "#/components/schemas/RegexLibEntry"
             example:
               id: "apache"
-              pattern: "^%{IPORHOST:clientip} - - \\[%{HTTPDATE:timestamp}\\] \"%{WORD:method} %{DATA:path} HTTP/%{NUMBER:version}\" %{NUMBER:status} %{NUMBER:bytes}$"
+              pattern: '^%{IPORHOST:clientip} - - \\[%{HTTPDATE:timestamp}\\] "%{WORD:method} %{DATA:path} HTTP/%{NUMBER:version}" %{NUMBER:status} %{NUMBER:bytes}$'
       responses: *a72
   "/m/{groupId}/lib/regex/{id}":
     get:
@@ -67484,7 +67484,7 @@ paths:
             schema:
               $ref: "#/components/schemas/RegexLibEntry"
             example:
-              pattern: "^%{IPORHOST:clientip} .* \"%{WORD:method} %{DATA:path} HTTP/%{NUMBER:version}\" %{NUMBER:status} %{NUMBER:bytes}$"
+              pattern: '^%{IPORHOST:clientip} .* "%{WORD:method} %{DATA:path} HTTP/%{NUMBER:version}" %{NUMBER:status} %{NUMBER:bytes}$'
       responses: *a72
     delete:
       x-speakeasy-entity-operation: Regex#delete
@@ -67641,7 +67641,7 @@ paths:
               example:
                 count: 2
                 items:
-                  - _raw: "127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] \"GET / HTTP/1.1\" 200 1024"
+                  - _raw: '127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] "GET / HTTP/1.1" 200 1024'
                   - _raw: "<34>1 2025-10-06T12:00:00Z host app - - - started"
         "401":
           description: Unauthorized
@@ -72668,7 +72668,7 @@ paths:
             text/xml:
               schema:
                 type: string
-              example: "<EntityDescriptor entityID=\"https://stream.example.com/saml/metadata\" xmlns=\"urn:oasis:names:tc:SAML:2.0:metadata\"></EntityDescriptor>"
+              example: '<EntityDescriptor entityID="https://stream.example.com/saml/metadata" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"></EntityDescriptor>'
         "401":
           description: Unauthorized
   /auth/login:
@@ -73662,7 +73662,7 @@ paths:
           schema:
             type: string
           description: Sorting object (JSON stringified) expression evaluated against nodes
-          example: "{\"field\":\"status\",\"order\":\"asc\"}"
+          example: '{"field":"status","order":"asc"}'
         - name: sortExp
           in: query
           required: false
@@ -73690,7 +73690,7 @@ paths:
           schema:
             type: string
           description: Filter object (JSON stringified) to select nodes
-          example: "{\"role\":\"worker\"}"
+          example: '{"role":"worker"}'
   /master/workers/restart:
     patch:
       operationId: updateWorkersRestart
@@ -74186,7 +74186,7 @@ paths:
               schema:
                 type: string
                 format: binary
-              example: "{\"jobId\":\"job-123\",\"result\":\"ok\"}\n{\"jobId\":\"job-123\",\"result\":\"done\"}\n"
+              example: '{"jobId":"job-123","result":"ok"}\n{"jobId":"job-123","result":"done"}\n'
         "401":
           description: Unauthorized
         "500":
@@ -78986,7 +78986,7 @@ paths:
             application/json:
               schema:
                 type: string
-              example: "{\"processed\": 10234, \"matched\": 9876, \"durationMs\": 4521}"
+              example: '{"processed": 10234, "matched": 9876, "durationMs": 4521}'
         "401":
           description: Unauthorized
         "500":
@@ -79018,7 +79018,7 @@ paths:
             application/json:
               schema:
                 type: string
-              example: "{\"jobs\": [{\"id\":\"job-123\",\"processed\":10234,\"matched\":9876}]}"
+              example: '{"jobs": [{"id":"job-123","processed":10234,"matched":9876}]}'
         "401":
           description: Unauthorized
         "500":
@@ -79133,7 +79133,7 @@ paths:
             application/json:
               schema:
                 type: string
-              example: "{\"stageId\":\"stage-parse\",\"rows\":10,\"preview\":true}"
+              example: '{"stageId":"stage-parse","rows":10,"preview":true}'
         "401":
           description: Unauthorized
         "500":
