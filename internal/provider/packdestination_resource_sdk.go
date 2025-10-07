@@ -7453,9 +7453,11 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 		} else {
 			maxRecordSizeKb2 = nil
 		}
-		var flushPeriodSec12 interface{}
+		flushPeriodSec12 := new(float64)
 		if !r.OutputGooglePubsub.FlushPeriodSec.IsUnknown() && !r.OutputGooglePubsub.FlushPeriodSec.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputGooglePubsub.FlushPeriodSec.ValueString()), &flushPeriodSec12)
+			*flushPeriodSec12 = r.OutputGooglePubsub.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec12 = nil
 		}
 		maxInProgress := new(float64)
 		if !r.OutputGooglePubsub.MaxInProgress.IsUnknown() && !r.OutputGooglePubsub.MaxInProgress.IsNull() {

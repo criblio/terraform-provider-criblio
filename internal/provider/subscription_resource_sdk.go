@@ -4,16 +4,30 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SubscriptionResourceModel) RefreshFromOperationsUpdateSubscriptionByIDResponseBody(ctx context.Context, resp *operations.UpdateSubscriptionByIDResponseBody) diag.Diagnostics {
+func (r *SubscriptionResourceModel) RefreshFromOperationsGetSubscriptionByIDResponseBody(ctx context.Context, resp *operations.GetSubscriptionByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Items = []tfTypes.Subscription{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.Subscription
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
+			items.Filter = types.StringPointerValue(itemsItem.Filter)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Pipeline = types.StringValue(itemsItem.Pipeline)
+
+			r.Items = append(r.Items, items)
+		}
 	}
 
 	return diags

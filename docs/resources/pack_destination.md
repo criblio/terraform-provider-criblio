@@ -1658,7 +1658,7 @@ batch_timeout = 200
 create_topic = true
 description = "Publish events to Google Pub/Sub with ordered delivery"
 environment = "main"
-flush_period_sec = {"type":"number","default":1}
+flush_period_sec = 1
 google_auth_method = "secret"
 id = "gpubsub-out"
 max_in_progress = 20
@@ -4102,8 +4102,8 @@ Optional:
 - `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
 - `storage_account_name` (String) The name of your Azure storage account
 - `storage_class` (String) Default: "Inferred"; must be one of ["Inferred", "Hot", "Cool", "Cold", "Archive"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `tenant_id` (String) The service principal's tenant ID
 - `text_secret` (String) Select or create a stored text secret
 - `type` (String) must be "azure_blob"
@@ -4196,8 +4196,8 @@ Default: true
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_azure_data_explorer--response_retry_settings))
 - `retain_blob_on_success` (Boolean) Prevent blob deletion after ingestion is complete. Default: false
 - `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -4308,8 +4308,8 @@ Optional:
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request. Default: 60000
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--output_azure_eventhub--sasl))
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub--tls))
 - `type` (String) must be "azure_eventhub"
 
@@ -4375,9 +4375,9 @@ Default: true
 - `resource_id` (String) Optional Resource ID of the Azure resource to associate the data with. Can be overridden by the __resourceId event field. This ID populates the _ResourceId property, allowing the data to be included in resource-centric queries. If the ID is neither specified nor overridden, resource-centric queries will omit the data.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_azure_logs--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_logs--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations. Default: false
@@ -4448,7 +4448,7 @@ Optional:
 - `description` (String)
 - `dump_format_errors_to_disk` (Boolean) Log the most recent event that fails to match the table schema. Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_mapping_fields` (List of String) Fields to exclude from sending to ClickHouse
+- `exclude_mapping_fields` (List of String) Fields to exclude from sending to ClickHouse. Default: []
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_click_house--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. Default: "none"; must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit. Default: 1
@@ -4477,12 +4477,12 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_click_house--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `sql_username` (String) Username for certificate authentication
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -4621,8 +4621,8 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `type` (String) must be "cloudwatch"
 
 <a id="nestedatt--output_cloudwatch--pq_controls"></a>
@@ -4669,8 +4669,8 @@ Optional:
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request. Default: 60000
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--output_confluent_cloud--sasl))
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--tls))
 - `type` (String) must be "confluent_cloud"
 
@@ -4766,7 +4766,7 @@ Optional:
 - `description` (String)
 - `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_fields` (List of String) Fields to exclude from the event. By default, all internal fields except `__output` are sent. Example: `cribl_pipe`, `c*`. Wildcards supported.
+- `exclude_fields` (List of String) Fields to exclude from the event. By default, all internal fields except `__output` are sent. Example: `cribl_pipe`, `c*`. Wildcards supported. Default: ["__kube_*","__metadata","__winEvent"]
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames. Default: false
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_cribl_http--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. Default: "none"; must be one of ["payload", "payloadAndHeaders", "none"]
@@ -4790,9 +4790,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_cribl_http--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--tls))
@@ -4903,7 +4903,7 @@ Optional:
 - `description` (String)
 - `dns_resolve_period_sec` (Number) The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_fields` (List of String) Fields to exclude from the event. By default, all internal fields except `__output` are sent. Example: `cribl_pipe`, `c*`. Wildcards supported.
+- `exclude_fields` (List of String) Fields to exclude from the event. By default, all internal fields except `__output` are sent. Example: `cribl_pipe`, `c*`. Wildcards supported. Default: ["__kube_*","__metadata","__winEvent"]
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames. Default: false
 - `host` (String) The hostname of the receiver
 - `hosts` (Attributes List) Set of hosts to load-balance data to (see [below for nested schema](#nestedatt--output_cribl_tcp--hosts))
@@ -4921,8 +4921,8 @@ Optional:
 - `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem. Default: "error"; must be one of ["error", "backpressure", "always"]
 - `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_tcp--tls))
 - `token_ttl_minutes` (Number) The number of minutes before the internally generated authentication token expires, valid values between 1 and 60. Default: 60
@@ -5004,9 +5004,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -5098,15 +5098,15 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_datadog--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
 - `send_counters_as_count` (Boolean) If not enabled, Datadog will transform 'counter' metrics to 'gauge'. [Learn more about Datadog metrics types.](https://docs.datadoghq.com/metrics/types/?tab=count). Default: false
 - `service` (String) Name of the service to send with logs. When you send logs as JSON objects, the event's '__service' field (if set) will override this value.
 - `severity` (String) Default value for message severity. When you send logs as JSON objects, the event's '__severity' field (if set) will override this value. must be one of ["emergency", "alert", "critical", "error", "warning", "notice", "info", "debug"]
 - `site` (String) Datadog site to which events should be sent. Default: "us"; must be one of ["us", "us3", "us5", "eu", "fed1", "ap1", "custom"]
 - `source` (String) Name of the source to send with logs. When you send logs as JSON objects, the event's 'source' field (if set) will override this value.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `tags` (List of String) List of tags to send with logs, such as 'env:prod' and 'env_staging:east'
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
+- `tags` (List of String) List of tags to send with logs, such as 'env:prod' and 'env_staging:east'. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_datadog--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -5173,7 +5173,7 @@ Optional:
 - `default_severity` (String) Default value for event severity. If the `sev` or `__severity` fields are set on an event, the first one matching will override this value. Default: "info"; must be one of ["finest", "finer", "fine", "info", "warning", "error", "fatal"]
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `exclude_fields` (List of String) Fields to exclude from the event if the Message field is either unspecified or refers to an object. Ignored if the Message field is a string. If empty, we send all non-internal fields.
+- `exclude_fields` (List of String) Fields to exclude from the event if the Message field is either unspecified or refers to an object. Ignored if the Message field is a string. If empty, we send all non-internal fields. Default: ["sev","_time","ts","thread"]
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_dataset--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. Default: "none"; must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit. Default: 1
@@ -5195,11 +5195,11 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_dataset--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
 - `server_host_field` (String) Name of the event field that contains the `serverHost` identifier. If not specified, defaults to `cribl_<outputId>`.
 - `site` (String) DataSet site to which events should be sent. Default: "us"; must be one of ["us", "eu", "custom"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dataset--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -5262,8 +5262,8 @@ Optional:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 
 
 <a id="nestedatt--output_devnull"></a>
@@ -5278,8 +5278,8 @@ Optional:
 
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 
 
 <a id="nestedatt--output_disk_spool"></a>
@@ -5299,8 +5299,8 @@ Optional:
 - `max_data_time` (String) Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h. Default: "24h"
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized within the time-buckets. If blank, the event's __partition property is used and otherwise, events go directly into the time-bucket directory.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `time_window` (String) Time period for grouping spooled events. Default is 10m. Default: "10m"
 
 
@@ -5355,7 +5355,7 @@ Optional:
 - `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression. Default: "1MB"
 - `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows. Default: 10000
 - `parquet_version` (String) Determines which data types are supported and how they are represented. Default: "PARQUET_2_6"; must be one of ["PARQUET_1_0", "PARQUET_2_4", "PARQUET_2_6"]
-- `partitioning_fields` (List of String) List of fields to partition the path by, in addition to time, which is included automatically. The effective partition will be YYYY/MM/DD/HH/<list/of/fields>.
+- `partitioning_fields` (List of String) List of fields to partition the path by, in addition to time, which is included automatically. The effective partition will be YYYY/MM/DD/HH/<list/of/fields>. Default: []
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `region` (String) Region where the S3 bucket is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
@@ -5366,8 +5366,8 @@ Optional:
 - `signature_version` (String) Signature version to use for signing S3 requests. Default: "v4"; must be one of ["v2", "v4"]
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY", "STANDARD_IA", "ONEZONE_IA", "INTELLIGENT_TIERING", "GLACIER", "GLACIER_IR", "DEEP_ARCHIVE"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `type` (String) must be "dl_s3"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself. Default: true
 - `write_high_water_mark` (Number) Buffer size used to write to a file. Default: 64
@@ -5422,9 +5422,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_dynatrace_http--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `telemetry_type` (String) Default: "logs"; must be one of ["logs", "metrics"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_http--timeout_retry_settings))
@@ -5523,9 +5523,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `type` (String) must be "dynatrace_otlp"
@@ -5631,9 +5631,9 @@ Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_elastic--response_retry_settings))
 - `retry_partial_errors` (Boolean) Retry failed events when a bulk request to Elastic is successful, but the response body returns an error for one or more events in the batch. Default: false
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `url` (String) The Cloud ID or URL to an Elastic cluster to send events to. Example: http://elastic:9200/_bulk
@@ -5752,9 +5752,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_elastic_cloud--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_cloud--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `type` (String) must be "elastic_cloud"
@@ -5858,8 +5858,8 @@ Optional:
 - `site_name` (String) Constant or JavaScript expression to create an Exabeam site name. Values that aren't successfully evaluated will be treated as string constants.
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "NEARLINE", "COLDLINE", "ARCHIVE"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timezone_offset` (String)
 - `type` (String) must be "exabeam"
 
@@ -5908,8 +5908,8 @@ Optional:
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files. Default: true
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant, stable storage.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `write_high_water_mark` (Number) Buffer size used to write to a file. Default: 64
 
 <a id="nestedatt--output_filesystem--key_value_metadata"></a>
@@ -5971,11 +5971,11 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_google_chronicle--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 - `service_account_credentials_secret` (String) Select or create a stored text secret
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_chronicle--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 90
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
@@ -6105,8 +6105,8 @@ Optional:
 - `severity_expression` (String) JavaScript expression to compute the value of the severity field. Must evaluate to one of the severity values supported by Google Cloud Logging [here](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity) (case insensitive). Defaults to "DEFAULT".
 - `span_id_expression` (String) A JavaScript expression that evaluates to the ID of the cloud trace span associated with the current operation in which the log is being written as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.
 - `status_expression` (String) A JavaScript expression that evaluates to the HTTP request method as a number. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `throttle_rate_req_per_sec` (Number) Maximum number of requests to limit to per second.
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
@@ -6195,8 +6195,8 @@ Optional:
 - `signature_version` (String) Signature version to use for signing Google Cloud Storage requests. Default: "v4"; must be one of ["v2", "v4"]
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "NEARLINE", "COLDLINE", "ARCHIVE"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `type` (String) must be "google_cloud_storage"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself. Default: true
 - `write_high_water_mark` (Number) Buffer size used to write to a file. Default: 64
@@ -6229,7 +6229,7 @@ Optional:
 - `create_topic` (Boolean) If enabled, create topic if it does not exist. Default: false
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `flush_period_sec` (String) Maximum time to wait before sending a batch (when batch size limit is not reached). Parsed as JSON.
+- `flush_period_sec` (Number) Maximum time to wait before sending a batch (when batch size limit is not reached). Default: 1
 - `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials. Default: "manual"; must be one of ["auto", "manual", "secret"]
 - `id` (String) Unique ID for this output
 - `max_in_progress` (Number) The maximum number of in-progress API requests before backpressure is applied. Default: 10
@@ -6248,8 +6248,8 @@ Optional:
 - `region` (String) Region to publish messages to. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.
 - `secret` (String) Select or create a stored text secret
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 
 <a id="nestedatt--output_google_pubsub--pq_controls"></a>
 ### Nested Schema for `output_google_pubsub.pq_controls`
@@ -6306,9 +6306,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively. Default: ["cribl_host","cribl_wp"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations. Default: false
@@ -6435,9 +6435,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively. Default: ["cribl_host","cribl_wp"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations. Default: false
@@ -6550,8 +6550,8 @@ Optional:
 - `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
 - `protocol` (String) Protocol to use when communicating with the destination. Default: "udp"; must be one of ["udp", "tcp"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
 - `type` (String) must be "graphite"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead. Default: 60000
@@ -6597,9 +6597,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_honeycomb--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `team` (String) Team API key where the dataset belongs
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_honeycomb--timeout_retry_settings))
@@ -6680,9 +6680,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_humio_hec--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_humio_hec--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -6779,11 +6779,11 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_influxdb--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_influxdb--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -6895,8 +6895,8 @@ Optional:
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request. Default: 60000
 - `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--output_kafka--sasl))
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--tls))
 - `type` (String) must be "kafka"
 
@@ -7017,8 +7017,8 @@ Optional:
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
 - `signature_version` (String) Signature version to use for signing Kinesis stream requests. Default: "v4"; must be one of ["v2", "v4"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `type` (String) must be "kinesis"
 - `use_list_shards` (Boolean) Provides higher stream rate limits, improving delivery speed and reliability by minimizing throttling. See the [ListShards API](https://docs.aws.amazon.com/kinesis/latest/APIReference/API_ListShards.html) documentation for details. Default: false
 
@@ -7068,9 +7068,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_loki--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as labels to generated logs.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as labels to generated logs. Default: ["cribl_host","cribl_wp"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_loki--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -7190,8 +7190,8 @@ Optional:
 - `signature_version` (String) Signature version to use for signing MinIO requests. Default: "v4"; must be one of ["v2", "v4"]
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `type` (String) must be "minio"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself. Default: true
 - `write_high_water_mark` (Number) Buffer size used to write to a file. Default: 64
@@ -7260,8 +7260,8 @@ Optional:
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request. Default: 60000
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
 - `signature_version` (String) Signature version to use for signing MSK cluster requests. Default: "v4"; must be one of ["v2", "v4"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_msk--tls))
 - `type` (String) must be "msk"
 
@@ -7349,8 +7349,8 @@ Optional:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 
 <a id="nestedatt--output_netflow--hosts"></a>
 ### Nested Schema for `output_netflow.hosts`
@@ -7406,9 +7406,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_newrelic--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -7505,9 +7505,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_newrelic_events--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic_events--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -7608,11 +7608,11 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_open_telemetry--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_open_telemetry--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -7757,12 +7757,12 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_prometheus--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_metadata` (Boolean) Generate and send metadata (`type` and `metricFamilyName`) requests. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics. Default: ["cribl_host","cribl_wp"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_prometheus--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -7852,8 +7852,8 @@ Optional:
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop"]
 - `partition_expr` (String) JS expression to define how files are partitioned and organized. If left blank, Cribl Stream will fallback on event.__partition.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 
 
 <a id="nestedatt--output_router"></a>
@@ -7870,8 +7870,8 @@ Optional:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 
 <a id="nestedatt--output_router--rules"></a>
 ### Nested Schema for `output_router.rules`
@@ -7951,8 +7951,8 @@ Optional:
 - `signature_version` (String) Signature version to use for signing S3 requests. Default: "v4"; must be one of ["v2", "v4"]
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY", "STANDARD_IA", "ONEZONE_IA", "INTELLIGENT_TIERING", "GLACIER", "GLACIER_IR", "DEEP_ARCHIVE"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `type` (String) must be "s3"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself. Default: true
 - `write_high_water_mark` (Number) Buffer size used to write to a file. Default: 64
@@ -8030,8 +8030,8 @@ Optional:
 - `signature_version` (String) Signature version to use for signing Amazon Security Lake requests. Default: "v4"; must be one of ["v2", "v4"]
 - `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY", "STANDARD_IA", "ONEZONE_IA", "INTELLIGENT_TIERING", "GLACIER", "GLACIER_IR", "DEEP_ARCHIVE"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively. Default: ["cribl_pipe"]
 - `type` (String) must be "security_lake"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself. Default: true
 - `write_high_water_mark` (Number) Buffer size used to write to a file. Default: 64
@@ -8099,11 +8099,11 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_sentinel--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
 - `scope` (String) Scope to pass in the OAuth request. Default: "https://monitor.azure.com/.default"
 - `stream_name` (String) The name of the stream (Sentinel table) in which to store the events
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
@@ -8198,9 +8198,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_service_now--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--tls))
@@ -8316,9 +8316,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_signalfx--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_signalfx--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -8382,8 +8382,8 @@ Optional:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 
 <a id="nestedatt--output_snmp--hosts"></a>
 ### Nested Schema for `output_snmp.hosts`
@@ -8434,8 +8434,8 @@ Optional:
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
 - `signature_version` (String) Signature version to use for signing SNS requests. Default: "v4"; must be one of ["v2", "v4"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `type` (String) must be "sns"
 
 <a id="nestedatt--output_sns--pq_controls"></a>
@@ -8475,8 +8475,8 @@ Optional:
 - `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem. Default: "error"; must be one of ["error", "backpressure", "always"]
 - `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk--tls))
@@ -8548,9 +8548,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_splunk_hec--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `tcp_routing` (String) In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set. Default: "nowhere"
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_hec--timeout_retry_settings))
@@ -8650,8 +8650,8 @@ Optional:
 - `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
 - `sender_unhealthy_time_allowance` (Number) How long (in milliseconds) each LB endpoint can report blocked before the Destination reports unhealthy, blocking the sender. (Grace period for fluctuations.) Use 0 to disable; max 1 minute. Default: 100
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_lb--tls))
@@ -8765,8 +8765,8 @@ Optional:
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
 - `signature_version` (String) Signature version to use for signing SQS requests. Default: "v4"; must be one of ["v2", "v4"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `type` (String) must be "sqs"
 
 <a id="nestedatt--output_sqs--pq_controls"></a>
@@ -8801,8 +8801,8 @@ Optional:
 - `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
 - `protocol` (String) Protocol to use when communicating with the destination. Default: "udp"; must be one of ["udp", "tcp"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
 - `type` (String) must be "statsd"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead. Default: 60000
@@ -8839,8 +8839,8 @@ Optional:
 - `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
 - `protocol` (String) Protocol to use when communicating with the destination. Default: "udp"; must be one of ["udp", "tcp"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
 - `type` (String) must be "statsd_ext"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead. Default: 60000
@@ -8888,9 +8888,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_sumo_logic--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sumo_logic--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
@@ -8971,8 +8971,8 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
 - `protocol` (String) The network protocol to use for sending out syslog messages. Default: "tcp"; must be one of ["tcp", "udp"]
 - `severity` (Number) Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice. Default: 5; must be one of ["0", "1", "2", "3", "4", "5", "6", "7"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
 - `timestamp_format` (String) Timestamp format to use when serializing event's time field. Default: "syslog"; must be one of ["syslog", "iso8601"]
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_syslog--tls))
@@ -9038,8 +9038,8 @@ Optional:
 - `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
 - `send_header` (Boolean) Upon connection, send a header-like record containing the auth token and other metadata.This record will not contain an actual event – only subsequent records will. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_tcpjson--tls))
@@ -9121,9 +9121,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_wavefront--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_wavefront--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -9228,11 +9228,11 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_webhook--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_webhook--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
@@ -9372,9 +9372,9 @@ Optional:
 Default: true
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: false
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_xsiam--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
 - `text_secret` (String) Select or create a stored text secret
 - `throttle_rate_req_per_sec` (Number) Maximum number of requests to limit to per second. Default: 400
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam--timeout_retry_settings))

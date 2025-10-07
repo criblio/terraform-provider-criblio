@@ -55,7 +55,7 @@ resource "criblio_notification" "my_notification" {
 - `disabled` (Boolean) Whether the notification is disabled. Default: false
 - `group` (String) Group identifier for the notification. Default: "default_search"
 - `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--target_configs))
-- `targets` (List of String) Targets to send any notifications to
+- `targets` (List of String) Targets to send any notifications to. Default: []
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`

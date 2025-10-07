@@ -36,20 +36,6 @@ resource "criblio_grok" "my_grok" {
 
 - `tags` (String)
 
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `content` (String)
-- `id` (String)
-- `size` (Number)
-- `tags` (String)
-
 ## Import
 
 Import is supported using the following syntax:

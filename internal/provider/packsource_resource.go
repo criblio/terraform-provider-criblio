@@ -448,7 +448,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -868,7 +868,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tenant_id": schema.StringAttribute{
 						Optional:    true,
@@ -1135,7 +1135,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -1685,7 +1685,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -1759,7 +1759,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
+						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only. Default: []`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -1980,7 +1980,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -2292,7 +2292,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -2677,7 +2677,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -3024,7 +3024,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -3322,7 +3322,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -3744,7 +3744,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tag_after_processing": schema.StringAttribute{
 						Optional:    true,
@@ -4095,7 +4095,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -4403,7 +4403,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -4541,9 +4541,14 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 					},
 					"dimension_list": schema.ListAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+							types.StringValue("host"),
+							types.StringValue("source"),
+						})),
 						ElementType: types.StringType,
-						Description: `Other dimensions to include in events`,
+						Description: `Other dimensions to include in events. Default: ["host","source"]`,
 					},
 					"disabled": schema.BoolAttribute{
 						Computed:    true,
@@ -4622,7 +4627,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of DNS names to resolve`,
+						Description: `List of DNS names to resolve. Default: []`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -4867,7 +4872,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Optional:    true,
 									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 									ElementType: types.StringType,
-									Description: `Search Filter Values, if empty only "running" EC2 instances will be returned`,
+									Description: `Search Filter Values, if empty only "running" EC2 instances will be returned. Default: []`,
 								},
 							},
 						},
@@ -4893,7 +4898,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"targets": schema.ListNestedAttribute{
 						Optional: true,
@@ -5396,7 +5401,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -5883,7 +5888,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -5907,7 +5912,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.`,
+						Description: `The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic. Default: []`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -6177,7 +6182,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -6304,9 +6309,14 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"filenames": schema.ListAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+							types.StringValue("*/log/*"),
+							types.StringValue("*log"),
+						})),
 						ElementType: types.StringType,
-						Description: `The full path of discovered files are matched against this wildcard list`,
+						Description: `The full path of discovered files are matched against this wildcard list. Default: ["*/log/*","*log"]`,
 					},
 					"force_text": schema.BoolAttribute{
 						Computed:    true,
@@ -6487,7 +6497,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"suppress_missing_path_errors": schema.BoolAttribute{
 						Computed:    true,
@@ -6811,7 +6821,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -7165,7 +7175,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"subscription_name": schema.StringAttribute{
 						Required:    true,
@@ -7713,7 +7723,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}`,
+								Description: `Tags for filtering and grouping in @{product}. Default: []`,
 							},
 							"tls": schema.SingleNestedAttribute{
 								Optional: true,
@@ -8263,7 +8273,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}`,
+								Description: `Tags for filtering and grouping in @{product}. Default: []`,
 							},
 							"tls": schema.SingleNestedAttribute{
 								Optional: true,
@@ -8716,7 +8726,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -8872,14 +8882,18 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 					"allowed_methods": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("*")})),
 						ElementType: types.StringType,
-						Description: `List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.`,
+						Description: `List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all. Default: ["*"]`,
 					},
 					"allowed_paths": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("*")})),
 						ElementType: types.StringType,
-						Description: `List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all.`,
+						Description: `List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all. Default: ["*"]`,
 					},
 					"auth_tokens": schema.ListAttribute{
 						Optional:    true,
@@ -9153,7 +9167,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -9346,9 +9360,11 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 					"journals": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("system")})),
 						ElementType: types.StringType,
-						Description: `The full path of discovered journals are matched against this wildcard list.`,
+						Description: `The full path of discovered journals are matched against this wildcard list. Default: ["system"]`,
 					},
 					"max_age_dur": schema.StringAttribute{
 						Optional:    true,
@@ -9481,7 +9497,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -10020,7 +10036,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -10094,7 +10110,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
+						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only. Default: []`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -10470,7 +10486,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -10705,7 +10721,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -11012,7 +11028,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"timestamps": schema.BoolAttribute{
 						Computed:    true,
@@ -11311,7 +11327,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -11705,7 +11721,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -12040,7 +12056,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tcp_port": schema.Float64Attribute{
 						Optional:    true,
@@ -12378,7 +12394,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -13037,7 +13053,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -13112,7 +13128,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.`,
+						Description: `Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only. Default: []`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -13367,7 +13383,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"template_cache_minutes": schema.Float64Attribute{
 						Computed:    true,
@@ -13719,9 +13735,15 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								Default: listdefault.StaticValue(types.ListValueMust(types.Float64Type, []attr.Value{
+									types.Float64Value(429),
+									types.Float64Value(500),
+									types.Float64Value(503),
+								})),
 								ElementType: types.Float64Type,
-								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
+								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503. Default: [429,500,503]`,
 								Validators: []validator.List{
 									listvalidator.SizeAtLeast(1),
 								},
@@ -13797,7 +13819,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tenant_id": schema.StringAttribute{
 						Required:    true,
@@ -14185,9 +14207,15 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								Default: listdefault.StaticValue(types.ListValueMust(types.Float64Type, []attr.Value{
+									types.Float64Value(429),
+									types.Float64Value(500),
+									types.Float64Value(503),
+								})),
 								ElementType: types.Float64Type,
-								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
+								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503. Default: [429,500,503]`,
 								Validators: []validator.List{
 									listvalidator.SizeAtLeast(1),
 								},
@@ -14267,7 +14295,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tenant_id": schema.StringAttribute{
 						Optional:    true,
@@ -14615,9 +14643,15 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								Default: listdefault.StaticValue(types.ListValueMust(types.Float64Type, []attr.Value{
+									types.Float64Value(429),
+									types.Float64Value(500),
+									types.Float64Value(503),
+								})),
 								ElementType: types.Float64Type,
-								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
+								Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503. Default: [429,500,503]`,
 								Validators: []validator.List{
 									listvalidator.SizeAtLeast(1),
 								},
@@ -14693,7 +14727,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tenant_id": schema.StringAttribute{
 						Required:    true,
@@ -15151,7 +15185,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -15385,9 +15419,14 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 					},
 					"dimension_list": schema.ListAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+							types.StringValue("host"),
+							types.StringValue("source"),
+						})),
 						ElementType: types.StringType,
-						Description: `Other dimensions to include in events`,
+						Description: `Other dimensions to include in events. Default: ["host","source"]`,
 					},
 					"disabled": schema.BoolAttribute{
 						Computed:    true,
@@ -15511,7 +15550,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of DNS names to resolve`,
+						Description: `List of DNS names to resolve. Default: []`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -15673,7 +15712,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Optional:    true,
 									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 									ElementType: types.StringType,
-									Description: `Search Filter Values, if empty only "running" EC2 instances will be returned`,
+									Description: `Search Filter Values, if empty only "running" EC2 instances will be returned. Default: []`,
 								},
 							},
 						},
@@ -15699,14 +15738,14 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"target_list": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'.`,
+						Description: `List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'. Default: []`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 						},
@@ -16122,7 +16161,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -16472,7 +16511,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -16917,7 +16956,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tag_after_processing": schema.BoolAttribute{
 						Computed:    true,
@@ -17381,7 +17420,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tag_after_processing": schema.StringAttribute{
 						Optional:    true,
@@ -17846,7 +17885,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tag_after_processing": schema.StringAttribute{
 						Optional:    true,
@@ -18180,7 +18219,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -18530,7 +18569,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -19035,7 +19074,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -19212,9 +19251,11 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 					"breaker_rulesets": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("Splunk Search Ruleset")})),
 						ElementType: types.StringType,
-						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream. Default: ["Splunk Search Ruleset"]`,
 					},
 					"connections": schema.ListNestedAttribute{
 						Optional: true,
@@ -19523,9 +19564,14 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								Default: listdefault.StaticValue(types.ListValueMust(types.Float64Type, []attr.Value{
+									types.Float64Value(429),
+									types.Float64Value(503),
+								})),
 								ElementType: types.Float64Type,
-								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503. Default: [429,503]`,
 								Validators: []validator.List{
 									listvalidator.SizeAtLeast(1),
 								},
@@ -19628,7 +19674,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -20014,7 +20060,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -20177,7 +20223,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+								Description: `Wildcard list of fields to keep from source data; * = ALL (default). Default: []`,
 							},
 							"max_active_cxn": schema.Float64Attribute{
 								Computed:    true,
@@ -20343,7 +20389,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}`,
+								Description: `Tags for filtering and grouping in @{product}. Default: []`,
 							},
 							"strictly_infer_octet_counting": schema.BoolAttribute{
 								Computed:    true,
@@ -20542,7 +20588,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+								Description: `Wildcard list of fields to keep from source data; * = ALL (default). Default: []`,
 							},
 							"max_active_cxn": schema.Float64Attribute{
 								Computed:    true,
@@ -20708,7 +20754,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}`,
+								Description: `Tags for filtering and grouping in @{product}. Default: []`,
 							},
 							"strictly_infer_octet_counting": schema.BoolAttribute{
 								Computed:    true,
@@ -20924,9 +20970,14 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Generate full container metrics. Default: false`,
 							},
 							"docker_socket": schema.ListAttribute{
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+									types.StringValue("/var/run/docker.sock"),
+									types.StringValue("/run/docker.sock"),
+								})),
 								ElementType: types.StringType,
-								Description: `Full paths for Docker's UNIX-domain socket`,
+								Description: `Full paths for Docker's UNIX-domain socket. Default: ["/var/run/docker.sock","/run/docker.sock"]`,
 							},
 							"docker_timeout": schema.Float64Attribute{
 								Computed:    true,
@@ -21036,16 +21087,21 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Generate full disk metrics. Default: false`,
 											},
 											"devices": schema.ListAttribute{
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+													types.StringValue("!loop*"),
+													types.StringValue("*"),
+												})),
 												ElementType: types.StringType,
-												Description: `Block devices to include/exclude. Examples: sda*, !loop*. Wildcards and ! (not) operators are supported. All devices are included if this list is empty.`,
+												Description: `Block devices to include/exclude. Examples: sda*, !loop*. Wildcards and ! (not) operators are supported. All devices are included if this list is empty. Default: ["!loop*","*"]`,
 											},
 											"fstypes": schema.ListAttribute{
 												Computed:    true,
 												Optional:    true,
 												Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 												ElementType: types.StringType,
-												Description: `Filesystem types to include/exclude. Examples: ext4, !*tmpfs, !squashfs. Wildcards and ! (not) operators are supported. All types are included if this list is empty.`,
+												Description: `Filesystem types to include/exclude. Examples: ext4, !*tmpfs, !squashfs. Wildcards and ! (not) operators are supported. All types are included if this list is empty. Default: []`,
 											},
 											"mode": schema.StringAttribute{
 												Computed:    true,
@@ -21066,7 +21122,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional:    true,
 												Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 												ElementType: types.StringType,
-												Description: `Filesystem mountpoints to include/exclude. Examples: /, /home, !/proc*, !/tmp. Wildcards and ! (not) operators are supported. All mountpoints are included if this list is empty.`,
+												Description: `Filesystem mountpoints to include/exclude. Examples: /, /home, !/proc*, !/tmp. Wildcards and ! (not) operators are supported. All mountpoints are included if this list is empty. Default: []`,
 											},
 											"per_device": schema.BoolAttribute{
 												Computed:    true,
@@ -21111,9 +21167,14 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Generate full network metrics. Default: false`,
 											},
 											"devices": schema.ListAttribute{
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+													types.StringValue("!lo"),
+													types.StringValue("*"),
+												})),
 												ElementType: types.StringType,
-												Description: `Network interfaces to include/exclude. Examples: eth0, !lo. All interfaces are included if this list is empty.`,
+												Description: `Network interfaces to include/exclude. Examples: eth0, !lo. All interfaces are included if this list is empty. Default: ["!lo","*"]`,
 											},
 											"mode": schema.StringAttribute{
 												Computed:    true,
@@ -21378,7 +21439,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -21798,7 +21859,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -22126,7 +22187,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -22495,7 +22556,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -22897,7 +22958,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"subscriptions": schema.ListNestedAttribute{
 						Required: true,
@@ -22991,9 +23052,11 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Required: true,
 								},
 								"targets": schema.ListAttribute{
+									Computed:    true,
 									Optional:    true,
+									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("*")})),
 									ElementType: types.StringType,
-									Description: `The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com`,
+									Description: `The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com. Default: ["*"]`,
 								},
 								"version": schema.StringAttribute{
 									Optional:    true,
@@ -23239,9 +23302,15 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 					"log_names": schema.ListAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+							types.StringValue("Application"),
+							types.StringValue("Security"),
+							types.StringValue("System"),
+						})),
 						ElementType: types.StringType,
-						Description: `Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.`,
+						Description: `Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs. Default: ["Application","Security","System"]`,
 						Validators: []validator.List{
 							listvalidator.SizeAtLeast(1),
 							listvalidator.UniqueValues(),
@@ -23375,7 +23444,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -23552,9 +23621,14 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Generate separate metrics for each volume. Default: false`,
 											},
 											"volumes": schema.ListAttribute{
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+													types.StringValue("!HarddiskVolume*"),
+													types.StringValue("*"),
+												})),
 												ElementType: types.StringType,
-												Description: `Windows volumes to include/exclude. E.g.: C:, !E:, etc. Wildcards and ! (not) operators are supported. All volumes are included if this list is empty.`,
+												Description: `Windows volumes to include/exclude. E.g.: C:, !E:, etc. Wildcards and ! (not) operators are supported. All volumes are included if this list is empty. Default: ["!HarddiskVolume*","*"]`,
 											},
 										},
 									},
@@ -23593,9 +23667,18 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Generate full network metrics. Default: false`,
 											},
 											"devices": schema.ListAttribute{
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+													types.StringValue("!6to4*"),
+													types.StringValue("!*Debug*"),
+													types.StringValue("!*Virtual*"),
+													types.StringValue("!*Tunneling*"),
+													types.StringValue("!*IP-HTTPS*"),
+													types.StringValue("*"),
+												})),
 												ElementType: types.StringType,
-												Description: `Network interfaces to include/exclude. All interfaces are included if this list is empty.`,
+												Description: `Network interfaces to include/exclude. All interfaces are included if this list is empty. Default: ["!6to4*","!*Debug*","!*Virtual*","!*Tunneling*","!*IP-HTTPS*","*"]`,
 											},
 											"mode": schema.StringAttribute{
 												Computed:    true,
@@ -23860,7 +23943,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -24158,9 +24241,14 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"codes": schema.ListAttribute{
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								Default: listdefault.StaticValue(types.ListValueMust(types.Float64Type, []attr.Value{
+									types.Float64Value(429),
+									types.Float64Value(503),
+								})),
 								ElementType: types.Float64Type,
-								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+								Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503. Default: [429,503]`,
 								Validators: []validator.List{
 									listvalidator.SizeAtLeast(1),
 								},
@@ -24236,7 +24324,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -24650,7 +24738,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}`,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -24896,7 +24984,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Computed:    true,
 									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 									ElementType: types.StringType,
-									Description: `Tags for filtering and grouping in @{product}`,
+									Description: `Tags for filtering and grouping in @{product}. Default: []`,
 								},
 							},
 						},

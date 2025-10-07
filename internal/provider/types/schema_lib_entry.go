@@ -6,10 +6,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ParserLibEntry struct {
+type SchemaLibEntry struct {
 	Description types.String `tfsdk:"description"`
 	ID          types.String `tfsdk:"id"`
-	Lib         types.String `tfsdk:"lib"`
-	Tags        types.String `tfsdk:"tags"`
-	Type        types.String `tfsdk:"type"`
+	Schema      types.String `tfsdk:"schema"`
 }

@@ -56,7 +56,7 @@ Optional:
 - `component` (String) Optional, default component value. Default: "logstream"
 - `group` (String) Optional, default group value
 - `severity` (String) Default value for message severity. Defaults to info. The __severity value, if set, will overwrite this. Default: "info"; must be one of ["info", "warning", "error", "critical"]
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
 
 
 <a id="nestedatt--slack_target"></a>
@@ -70,7 +70,7 @@ Required:
 
 Optional:
 
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
 
 
 <a id="nestedatt--smtp_target"></a>
@@ -88,7 +88,7 @@ Optional:
 
 - `encryption_option` (String) Encryption method for SMTP. Default: "NONE"; must be one of ["NONE", "STARTTLS", "SSL"]
 - `password` (String) SMTP authentication password
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
 - `tls` (Attributes) TLS configuration options (see [below for nested schema](#nestedatt--smtp_target--tls))
 - `username` (String) SMTP authentication username
 
@@ -114,7 +114,7 @@ Required:
 
 Optional:
 
-- `allowlist` (List of String) Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic.
+- `allowlist` (List of String) Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic. Default: []
 - `assume_role_arn` (String) ARN of the role to assume
 - `assume_role_external_id` (String) External ID for role assumption
 - `aws_api_key` (String) AWS access key
@@ -124,7 +124,7 @@ Optional:
 - `endpoint` (String) SNS endpoint URL
 - `message_group_id` (String) Message group ID for FIFO topics
 - `phone_number` (String) The default phone number to send the notification to. This value can be overridden by the notification event __phoneNumber field.
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
 - `topic_arn` (String) The default ARN of the SNS topic to send notifications to
 - `topic_type` (String) Type of the topic selected in AWS SNS. Default: "fifo"; must be one of ["standard", "fifo"]
 
@@ -144,6 +144,6 @@ Optional:
 
 - `auth_type` (String) Authentication method for the webhook. Default: "none"; must be one of ["none", "token", "basic"]
 - `password` (String) Basic authentication password
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
 - `token` (String) Authentication token
 - `username` (String) Basic authentication username

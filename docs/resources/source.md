@@ -4138,7 +4138,7 @@ Optional:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--tls))
 - `unix_socket_path` (String) Path to the UNIX domain socket to listen on. Default: "$CRIBL_HOME/state/appscope.sock"
@@ -4270,7 +4270,7 @@ Optional:
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Default: false
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
 - `storage_account_name` (String) The name of your Azure storage account
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tenant_id` (String) The service principal's tenant ID
 - `text_secret` (String) Select or create a stored text secret
 - `visibility_timeout` (Number) The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a ReceiveMessage request. Default: 600
@@ -4340,7 +4340,7 @@ Optional:
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collection--preprocess))
 - `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
 - `type` (String) Default: "collection"; must be "collection"
 
@@ -4440,9 +4440,9 @@ Default: 60000
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 Default: 30000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--tls))
-- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
+- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only. Default: []
 - `type` (String) must be "confluent_cloud"
 
 <a id="nestedatt--input_confluent_cloud--connections"></a>
@@ -4571,7 +4571,7 @@ Optional:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_cribl--connections"></a>
 ### Nested Schema for `input_cribl.connections`
@@ -4641,7 +4641,7 @@ Optional:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_http--tls))
 - `type` (String) must be "cribl_http"
 
@@ -4731,7 +4731,7 @@ Optional:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http--tls))
 - `type` (String) must be "cribl_lake_http"
 
@@ -4815,7 +4815,7 @@ Optional:
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_tcp--tls))
 - `type` (String) must be "cribl_tcp"
 
@@ -4894,7 +4894,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `prefix` (String) A prefix that is applied to the metrics provided by Cribl Stream. Default: "cribl.logstream."
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_criblmetrics--connections"></a>
 ### Nested Schema for `input_criblmetrics.connections`
@@ -4980,7 +4980,7 @@ Optional:
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Default: false
 - `socket_timeout` (Number) Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure. Default: 300
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tag_after_processing` (String) must be one of ["false", "true"]
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 21600
 
@@ -5072,7 +5072,7 @@ Optional:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--tls))
 - `type` (String) must be "datadog_agent"
 
@@ -5159,7 +5159,7 @@ Optional:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_datagen--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_datagen--samples"></a>
 ### Nested Schema for `input_datagen.samples`
@@ -5222,7 +5222,7 @@ Optional:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_edge_prometheus--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
-- `dimension_list` (List of String) Other dimensions to include in events
+- `dimension_list` (List of String) Other dimensions to include in events. Default: ["host","source"]
 - `disabled` (Boolean) Default: false
 - `discovery_type` (String) Target discovery mechanism. Use static to manually enter a list of targets. Default: "static"; must be one of ["static", "dns", "ec2", "k8s-node", "k8s-pods"]
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours). Default: 3600
@@ -5232,7 +5232,7 @@ Optional:
 - `id` (String) Unique ID for this input
 - `interval` (Number) How often in seconds to scrape targets for metrics. Default: 15
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_edge_prometheus--metadata))
-- `name_list` (List of String) List of DNS names to resolve
+- `name_list` (List of String) List of DNS names to resolve. Default: []
 - `password` (String) Password for Prometheus Basic authentication
 - `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_edge_prometheus--persistence))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -5254,7 +5254,7 @@ Optional:
 - `search_filter` (Attributes List) EC2 Instance Search Filter (see [below for nested schema](#nestedatt--input_edge_prometheus--search_filter))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `signature_version` (String) Signature version to use for signing EC2 requests. Default: "v4"; must be one of ["v2", "v4"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `targets` (Attributes List) (see [below for nested schema](#nestedatt--input_edge_prometheus--targets))
 - `timeout` (Number) Timeout, in milliseconds, before aborting HTTP connection attempts; 1-60000 or 0 to disable. Default: 5000
 - `type` (String) must be "edge_prometheus"
@@ -5329,7 +5329,7 @@ Required:
 
 Optional:
 
-- `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned
+- `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned. Default: []
 
 
 <a id="nestedatt--input_edge_prometheus--targets"></a>
@@ -5387,7 +5387,7 @@ Optional:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--tls))
 - `type` (String) must be "elastic"
 - `username` (String)
@@ -5520,9 +5520,9 @@ Default: 60000
       Value must be lower than rebalanceTimeout.
       See details [here](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).
 Default: 30000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub--tls))
-- `topics` (List of String) The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.
+- `topics` (List of String) The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic. Default: []
 - `type` (String) must be "eventhub"
 
 <a id="nestedatt--input_eventhub--connections"></a>
@@ -5605,7 +5605,7 @@ Optional:
 - `schedule_type` (String) Select a schedule type; either an interval (in seconds) or a cron-style schedule. Default: "interval"; must be one of ["interval", "cronSchedule"]
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_exec--connections"></a>
 ### Nested Schema for `input_exec.connections`
@@ -5661,7 +5661,7 @@ Optional:
 - `description` (String)
 - `disabled` (Boolean) Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `filenames` (List of String) The full path of discovered files are matched against this wildcard list
+- `filenames` (List of String) The full path of discovered files are matched against this wildcard list. Default: ["*/log/*","*log"]
 - `force_text` (Boolean) Forces files containing binary data to be streamed as text. Default: false
 - `hash_len` (Number) Length of file header bytes to use in hash for unique file identification. Default: 256
 - `idle_timeout` (Number) Time, in seconds, before an idle file is closed. Default: 300
@@ -5676,7 +5676,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `suppress_missing_path_errors` (Boolean) Default: false
 - `tail_only` (Boolean) Read only new entries at the end of all files discovered at next startup. @{product} will then read newly discovered files from the head. Disable this to resume reading all files from head. Default: false
 
@@ -5748,7 +5748,7 @@ Optional:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_firehose--tls))
 - `type` (String) must be "firehose"
 
@@ -5836,7 +5836,7 @@ Optional:
 - `secret` (String) Select or create a stored text secret
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `type` (String) must be "google_pubsub"
 
 <a id="nestedatt--input_google_pubsub--connections"></a>
@@ -5918,7 +5918,7 @@ Optional:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana1--tls))
 - `type` (String) must be "grafana"
 
@@ -6089,7 +6089,7 @@ Optional:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--input_grafana_grafana2--tls))
 - `type` (String) must be "grafana"
 
@@ -6263,7 +6263,7 @@ Optional:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
 - `splunk_hec_acks` (Boolean) Default: false
 - `splunk_hec_api` (String) Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable. Default: "/services/collector"
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_http--tls))
 - `type` (String) must be "http"
 
@@ -6353,8 +6353,8 @@ Required:
 Optional:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100
-- `allowed_methods` (List of String) List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.
-- `allowed_paths` (List of String) List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all.
+- `allowed_methods` (List of String) List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all. Default: ["*"]
+- `allowed_paths` (List of String) List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all. Default: ["*"]
 - `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
 - `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext))
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
@@ -6380,7 +6380,7 @@ Optional:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw--tls))
 - `type` (String) must be "http_raw"
 
@@ -6476,7 +6476,7 @@ Optional:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
 - `interval` (Number) Time, in seconds, between scanning for journals. Default: 10
-- `journals` (List of String) The full path of discovered journals are matched against this wildcard list.
+- `journals` (List of String) The full path of discovered journals are matched against this wildcard list. Default: ["system"]
 - `max_age_dur` (String) The maximum log message age, in duration form (e.g,: 60s, 4h, 3d, 1w).  Default of no value will apply no max age filters.
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_journal_files--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -6484,7 +6484,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `rules` (Attributes List) Add rules to decide which journal objects to allow. Events are generated if no rules are given or if all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_journal_files--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `type` (String) must be "journal_files"
 
 <a id="nestedatt--input_journal_files--connections"></a>
@@ -6585,9 +6585,9 @@ Default: 60000
     Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
     See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 Default: 30000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--tls))
-- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
+- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only. Default: []
 - `type` (String) must be "kafka"
 
 <a id="nestedatt--input_kafka--connections"></a>
@@ -6736,7 +6736,7 @@ Optional:
 - `shard_expr` (String) A JavaScript expression to be called with each shardId for the stream. If the expression evaluates to a truthy value, the shard will be processed. Default: "true"
 - `shard_iterator_type` (String) Location at which to start reading a shard for the first time. Default: "TRIM_HORIZON"; must be one of ["TRIM_HORIZON", "LATEST"]
 - `signature_version` (String) Signature version to use for signing Kinesis stream requests. Default: "v4"; must be one of ["v2", "v4"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `type` (String) must be "kinesis"
 - `verify_kpl_check_sums` (Boolean) Verify Kinesis Producer Library (KPL) event checksums. Default: false
 
@@ -6796,7 +6796,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `rules` (Attributes List) Filtering on event fields (see [below for nested schema](#nestedatt--input_kube_events--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_kube_events--connections"></a>
 ### Nested Schema for `input_kube_events.connections`
@@ -6871,7 +6871,7 @@ Optional:
 - `rules` (Attributes List) Add rules to decide which Pods to collect logs from. Logs are collected if no rules are given or if all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_kube_logs--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `timestamps` (Boolean) For use when containers do not emit a timestamp, prefix each line of output with a timestamp. If you enable this setting, you can use the Kubernetes Logs Event Breaker and the kubernetes_logs Pre-processing Pipeline to remove them from the events after the timestamps are extracted. Default: false
 
 <a id="nestedatt--input_kube_logs--connections"></a>
@@ -6956,7 +6956,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `rules` (Attributes List) Add rules to decide which Kubernetes objects to generate metrics for. Events are generated if no rules are given or of all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_kube_metrics--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_kube_metrics--connections"></a>
 ### Nested Schema for `input_kube_metrics.connections`
@@ -7060,7 +7060,7 @@ Optional:
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_loki--tls))
 - `token` (String) Bearer token to include in the authorization header
@@ -7164,7 +7164,7 @@ Optional:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_metrics--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_metrics--tls))
 - `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
@@ -7243,7 +7243,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `shutdown_timeout_ms` (Number) Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000. Default: 5000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_model_driven_telemetry--tls))
 - `type` (String) must be "model_driven_telemetry"
 
@@ -7362,9 +7362,9 @@ Default: 60000
     See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 Default: 30000
 - `signature_version` (String) Signature version to use for signing MSK cluster requests. Default: "v4"; must be one of ["v2", "v4"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_msk--tls))
-- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
+- `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only. Default: []
 - `type` (String) must be "msk"
 
 <a id="nestedatt--input_msk--connections"></a>
@@ -7486,7 +7486,7 @@ Optional:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_netflow--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `template_cache_minutes` (Number) Specifies how many minutes NetFlow v9 templates are cached before being discarded if not refreshed. Adjust based on your network's template update frequency to optimize performance and memory usage. Default: 30
 - `type` (String) must be "netflow"
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
@@ -7560,7 +7560,7 @@ Optional:
 - `publisher_identifier` (String) Optional Publisher Identifier to use in API requests, defaults to tenant id if not defined. For more information see [here](https://docs.microsoft.com/en-us/office/office-365-management-api/office-365-management-activity-api-reference#start-a-subscription)
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_mgmt--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `timeout` (Number) HTTP request inactivity timeout, use 0 to disable. Default: 300
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector. Default: "4h"
@@ -7621,7 +7621,7 @@ Optional:
 
 Optional:
 
-- `codes` (List of Number) List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.
+- `codes` (List of Number) List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503. Default: [429,500,503]
 - `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored. Default: true
 - `interval` (Number) Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000
 - `limit` (Number) The maximum number of times to retry a failed HTTP request. Default: 5
@@ -7667,7 +7667,7 @@ Optional:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_msg_trace--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `start_date` (String) Backward offset for the search range's head. (E.g.: -3h@h) Message Trace data is delayed; this parameter (with Date range end) compensates for delay and gaps.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory.
 - `text_secret` (String) Select or create a secret that references your client_secret to pass in the OAuth request parameter.
 - `timeout` (Number) HTTP request inactivity timeout. Maximum is 2400 (40 minutes); enter 0 to wait indefinitely. Default: 300
@@ -7730,7 +7730,7 @@ Optional:
 
 Optional:
 
-- `codes` (List of Number) List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.
+- `codes` (List of Number) List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503. Default: [429,500,503]
 - `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored. Default: true
 - `interval` (Number) Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000
 - `limit` (Number) The maximum number of times to retry a failed HTTP request. Default: 5
@@ -7770,7 +7770,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_service--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `timeout` (Number) HTTP request inactivity timeout, use 0 to disable. Default: 300
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector. Default: "4h"
@@ -7828,7 +7828,7 @@ Optional:
 
 Optional:
 
-- `codes` (List of Number) List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.
+- `codes` (List of Number) List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503. Default: [429,500,503]
 - `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored. Default: true
 - `interval` (Number) Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000
 - `limit` (Number) The maximum number of times to retry a failed HTTP request. Default: 5
@@ -7882,7 +7882,7 @@ Optional:
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_open_telemetry--tls))
 - `token` (String) Bearer token to include in the authorization header
@@ -7976,7 +7976,7 @@ Optional:
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_prometheus--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
-- `dimension_list` (List of String) Other dimensions to include in events
+- `dimension_list` (List of String) Other dimensions to include in events. Default: ["host","source"]
 - `disabled` (Boolean) Default: false
 - `discovery_type` (String) Target discovery mechanism. Use static to manually enter a list of targets. Default: "static"; must be one of ["static", "dns", "ec2"]
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours). Default: 3600
@@ -7991,7 +7991,7 @@ Optional:
 - `log_level` (String) Collector runtime Log Level. Default: "info"; must be one of ["error", "warn", "info", "debug"]
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked. Default: 3
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_prometheus--metadata))
-- `name_list` (List of String) List of DNS names to resolve
+- `name_list` (List of String) List of DNS names to resolve. Default: []
 - `password` (String) Password for Prometheus Basic authentication
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus--pq))
@@ -8006,8 +8006,8 @@ Optional:
 - `search_filter` (Attributes List) EC2 Instance Search Filter (see [below for nested schema](#nestedatt--input_prometheus--search_filter))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `signature_version` (String) Signature version to use for signing EC2 requests. Default: "v4"; must be one of ["v2", "v4"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `target_list` (List of String) List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `target_list` (List of String) List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'. Default: []
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector. Default: "4h"
 - `type` (String) must be "prometheus"
 - `use_public_ip` (Boolean) Use public IP address for discovered targets. Set to false if the private IP address should be used. Default: true
@@ -8057,7 +8057,7 @@ Required:
 
 Optional:
 
-- `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned
+- `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned. Default: []
 
 
 
@@ -8102,7 +8102,7 @@ Optional:
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus_rw--tls))
 - `token` (String) Bearer token to include in the authorization header
@@ -8207,7 +8207,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `single_msg_udp_packets` (Boolean) If true, each UDP packet is assumed to contain a single message. If false, each UDP packet is assumed to contain multiple messages, separated by newlines. Default: false
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `type` (String) must be "raw_udp"
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
@@ -8297,7 +8297,7 @@ Optional:
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Default: false
 - `socket_timeout` (Number) Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure. Default: 300
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tag_after_processing` (Boolean) Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions. Default: false
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600
 
@@ -8407,7 +8407,7 @@ Optional:
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Default: false
 - `socket_timeout` (Number) Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure. Default: 300
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tag_after_processing` (String) must be one of ["false", "true"]
 - `validate_inventory_files` (Boolean) If set to Yes, each inventory file in the manifest will be validated against its checksum. Defaults to false. Default: false
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600
@@ -8517,7 +8517,7 @@ Optional:
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Default: false
 - `socket_timeout` (Number) Socket inactivity timeout (in seconds). Increase this value if timeouts occur due to backpressure. Default: 300
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tag_after_processing` (String) must be one of ["false", "true"]
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600
 
@@ -8597,7 +8597,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `snmp_v3_auth` (Attributes) Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues. (see [below for nested schema](#nestedatt--input_snmp--snmp_v3_auth))
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `type` (String) must be "snmp"
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 - `varbinds_with_types` (Boolean) If enabled, parses varbinds as an array of objects that include OID, value, and type. Default: false
@@ -8695,7 +8695,7 @@ Optional:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_splunk--tls))
 - `type` (String) must be "splunk"
 - `use_fwd_timezone` (Boolean) Event Breakers will determine events' time zone from UF-provided metadata, when TZ can't be inferred from the raw event. Default: true
@@ -8808,7 +8808,7 @@ Optional:
 - `splunk_hec_acks` (Boolean) Enable Splunk HEC acknowledgements. Default: false
 - `splunk_hec_api` (String) Absolute path on which to listen for the Splunk HTTP Event Collector API requests. This input supports the /event, /raw and /s2s endpoints. Default: "/services/collector"
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_hec--tls))
 - `type` (String) must be "splunk_hec"
 - `use_fwd_timezone` (Boolean) Event Breakers will determine events' time zone from UF-provided metadata, when TZ can't be inferred from the raw event. Default: true
@@ -8904,7 +8904,7 @@ Optional:
 
 - `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`. Default: "`Bearer ${token}`"
 - `auth_type` (String) Splunk Search authentication type. Default: "basic"; must be one of ["none", "basic", "credentialsSecret", "token", "textSecret", "oauth"]
-- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream. Default: ["Splunk Search Ruleset"]
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_splunk_search--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `cron_schedule` (String) A cron schedule on which to run this job. Default: "*/15 * * * *"
@@ -8940,7 +8940,7 @@ Optional:
 - `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `token` (String) Bearer token to include in the authorization header
 - `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
@@ -9026,7 +9026,7 @@ Optional:
 
 Optional:
 
-- `codes` (List of Number) List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.
+- `codes` (List of Number) List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503. Default: [429,503]
 - `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored. Default: true
 - `interval` (Number) Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000
 - `limit` (Number) The maximum number of times to retry a failed HTTP request. Default: 5
@@ -9075,7 +9075,7 @@ Optional:
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `signature_version` (String) Signature version to use for signing SQS requests. Default: "v4"; must be one of ["v2", "v4"]
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `type` (String) must be "sqs"
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600
 
@@ -9145,7 +9145,7 @@ Optional:
 - `id` (String) Unique ID for this input
 - `infer_framing` (Boolean) Enable if we should infer the syslog framing of the incoming messages. Default: true
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to send data. Default: "/.*/"
-- `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default)
+- `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default). Default: []
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited. Default: 1000
 - `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog1--metadata))
@@ -9158,7 +9158,7 @@ Optional:
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424. Default: true
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info. Default: "local"
@@ -9241,7 +9241,7 @@ Optional:
 - `id` (String) Unique ID for this input
 - `infer_framing` (Boolean) Enable if we should infer the syslog framing of the incoming messages. Default: true
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to send data. Default: "/.*/"
-- `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default)
+- `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default). Default: []
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited. Default: 1000
 - `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2--metadata))
@@ -9254,7 +9254,7 @@ Optional:
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424. Default: true
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info. Default: "local"
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2--tls))
@@ -9340,7 +9340,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `process` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--process))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_system_metrics--connections"></a>
 ### Nested Schema for `input_system_metrics.connections`
@@ -9361,7 +9361,7 @@ Optional:
 
 - `all_containers` (Boolean) Include stopped and paused containers. Default: false
 - `detail` (Boolean) Generate full container metrics. Default: false
-- `docker_socket` (List of String) Full paths for Docker's UNIX-domain socket
+- `docker_socket` (List of String) Full paths for Docker's UNIX-domain socket. Default: ["/var/run/docker.sock","/run/docker.sock"]
 - `docker_timeout` (Number) Timeout, in seconds, for the Docker API. Default: 5
 - `filters` (Attributes List) Containers matching any of these will be included. All are included if no filters are added. (see [below for nested schema](#nestedatt--input_system_metrics--container--filters))
 - `mode` (String) Select the level of detail for container metrics. Default: "basic"; must be one of ["basic", "all", "custom", "disabled"]
@@ -9412,10 +9412,10 @@ Optional:
 Optional:
 
 - `detail` (Boolean) Generate full disk metrics. Default: false
-- `devices` (List of String) Block devices to include/exclude. Examples: sda*, !loop*. Wildcards and ! (not) operators are supported. All devices are included if this list is empty.
-- `fstypes` (List of String) Filesystem types to include/exclude. Examples: ext4, !*tmpfs, !squashfs. Wildcards and ! (not) operators are supported. All types are included if this list is empty.
+- `devices` (List of String) Block devices to include/exclude. Examples: sda*, !loop*. Wildcards and ! (not) operators are supported. All devices are included if this list is empty. Default: ["!loop*","*"]
+- `fstypes` (List of String) Filesystem types to include/exclude. Examples: ext4, !*tmpfs, !squashfs. Wildcards and ! (not) operators are supported. All types are included if this list is empty. Default: []
 - `mode` (String) Select the level of detail for disk metrics. Default: "basic"; must be one of ["basic", "all", "custom", "disabled"]
-- `mountpoints` (List of String) Filesystem mountpoints to include/exclude. Examples: /, /home, !/proc*, !/tmp. Wildcards and ! (not) operators are supported. All mountpoints are included if this list is empty.
+- `mountpoints` (List of String) Filesystem mountpoints to include/exclude. Examples: /, /home, !/proc*, !/tmp. Wildcards and ! (not) operators are supported. All mountpoints are included if this list is empty. Default: []
 - `per_device` (Boolean) Generate separate metrics for each device. Default: false
 
 
@@ -9434,7 +9434,7 @@ Optional:
 Optional:
 
 - `detail` (Boolean) Generate full network metrics. Default: false
-- `devices` (List of String) Network interfaces to include/exclude. Examples: eth0, !lo. All interfaces are included if this list is empty.
+- `devices` (List of String) Network interfaces to include/exclude. Examples: eth0, !lo. All interfaces are included if this list is empty. Default: ["!lo","*"]
 - `mode` (String) Select the level of detail for network metrics. Default: "basic"; must be one of ["basic", "all", "custom", "disabled"]
 - `per_interface` (Boolean) Generate separate metrics for each interface. Default: false
 
@@ -9531,7 +9531,7 @@ Optional:
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_system_state--collectors"></a>
 ### Nested Schema for `input_system_state.collectors`
@@ -9719,7 +9719,7 @@ Optional:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_tcp--tls))
 - `type` (String) must be "tcp"
 
@@ -9816,7 +9816,7 @@ Optional:
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_tcpjson--tls))
 - `type` (String) must be "tcpjson"
@@ -9911,7 +9911,7 @@ Optional:
 - `principal` (String) Kerberos principal used for authentication, typically in the form HTTP/<hostname>@<REALM>
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_wef--tls))
 - `type` (String) must be "wef"
 
@@ -9934,7 +9934,7 @@ Optional:
 - `query_selector` (String) Default: "simple"; must be one of ["simple", "xml"]
 - `read_existing_events` (Boolean) Newly subscribed endpoints will send previously existing events. Disable to receive new events only. Default: false
 - `send_bookmarks` (Boolean) Keep track of which events have been received, resuming from that point after a re-subscription. This setting takes precedence over 'Read existing events'. See [Cribl Docs](https://docs.cribl.io/stream/sources-wef/#subscriptions) for more details. Default: true
-- `targets` (List of String) The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com
+- `targets` (List of String) The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com. Default: ["*"]
 - `version` (String) Version UUID for this subscription. If any subscription parameters are modified, this value will change.
 
 <a id="nestedatt--input_wef--subscriptions--metadata"></a>
@@ -10026,7 +10026,7 @@ Optional:
 - `event_format` (String) Format of individual events. Default: "json"; must be one of ["json", "xml"]
 - `id` (String) Unique ID for this input
 - `interval` (Number) Time, in seconds, between checking for new entries (Applicable for pre-4.8.0 nodes that use Windows Tools). Default: 10
-- `log_names` (List of String) Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.
+- `log_names` (List of String) Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs. Default: ["Application","Security","System"]
 - `max_event_bytes` (Number) The maximum number of bytes in an event before it is flushed to the pipelines. Default: 51200
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_win_event_logs--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -10034,7 +10034,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `read_mode` (String) Read all stored and future event logs, or only future events. Default: "oldest"; must be one of ["oldest", "newest"]
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_win_event_logs--connections"></a>
 ### Nested Schema for `input_win_event_logs.connections`
@@ -10096,7 +10096,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `process` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--process))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 
 <a id="nestedatt--input_windows_metrics--connections"></a>
 ### Nested Schema for `input_windows_metrics.connections`
@@ -10147,7 +10147,7 @@ Optional:
 
 - `mode` (String) Select the level of details for disk metrics. Default: "basic"; must be one of ["basic", "all", "custom", "disabled"]
 - `per_volume` (Boolean) Generate separate metrics for each volume. Default: false
-- `volumes` (List of String) Windows volumes to include/exclude. E.g.: C:, !E:, etc. Wildcards and ! (not) operators are supported. All volumes are included if this list is empty.
+- `volumes` (List of String) Windows volumes to include/exclude. E.g.: C:, !E:, etc. Wildcards and ! (not) operators are supported. All volumes are included if this list is empty. Default: ["!HarddiskVolume*","*"]
 
 
 <a id="nestedatt--input_windows_metrics--host--custom--memory"></a>
@@ -10165,7 +10165,7 @@ Optional:
 Optional:
 
 - `detail` (Boolean) Generate full network metrics. Default: false
-- `devices` (List of String) Network interfaces to include/exclude. All interfaces are included if this list is empty.
+- `devices` (List of String) Network interfaces to include/exclude. All interfaces are included if this list is empty. Default: ["!6to4*","!*Debug*","!*Virtual*","!*Tunneling*","!*IP-HTTPS*","*"]
 - `mode` (String) Select the level of details for network metrics. Default: "basic"; must be one of ["basic", "all", "custom", "disabled"]
 - `per_interface` (Boolean) Generate separate metrics for each interface. Default: false
 
@@ -10269,7 +10269,7 @@ Optional:
 - `request_timeout` (Number) HTTP request inactivity timeout. Use 0 to disable. Default: 300
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_wiz--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector. Default: "4h"
 - `type` (String) must be "wiz"
@@ -10327,7 +10327,7 @@ Optional:
 
 Optional:
 
-- `codes` (List of Number) List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.
+- `codes` (List of Number) List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503. Default: [429,503]
 - `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored. Default: true
 - `interval` (Number) Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute). Default: 1000
 - `limit` (Number) The maximum number of times to retry a failed HTTP request. Default: 5
@@ -10376,7 +10376,7 @@ Optional:
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_zscaler_hec--tls))
 - `type` (String) must be "zscaler_hec"
 

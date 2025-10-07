@@ -167,7 +167,7 @@ func (r *NotificationResource) Schema(ctx context.Context, req resource.SchemaRe
 				Optional:    true,
 				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
-				Description: `Targets to send any notifications to`,
+				Description: `Targets to send any notifications to. Default: []`,
 			},
 		},
 	}

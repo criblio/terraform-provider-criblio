@@ -3,7 +3,6 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -13,7 +12,7 @@ type OutputGooglePubsub struct {
 	CreateTopic               types.Bool                    `tfsdk:"create_topic"`
 	Description               types.String                  `tfsdk:"description"`
 	Environment               types.String                  `tfsdk:"environment"`
-	FlushPeriodSec            jsontypes.Normalized          `tfsdk:"flush_period_sec"`
+	FlushPeriodSec            types.Float64                 `tfsdk:"flush_period_sec"`
 	GoogleAuthMethod          types.String                  `tfsdk:"google_auth_method"`
 	ID                        types.String                  `tfsdk:"id"`
 	MaxInProgress             types.Float64                 `tfsdk:"max_in_progress"`

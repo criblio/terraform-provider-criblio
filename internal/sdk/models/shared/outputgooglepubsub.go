@@ -224,7 +224,7 @@ type OutputGooglePubsub struct {
 	// Maximum size (KB) of batches to send.
 	MaxRecordSizeKB *float64 `default:"256" json:"maxRecordSizeKB"`
 	// Maximum time to wait before sending a batch (when batch size limit is not reached).
-	FlushPeriodSec any `default:"[object Object]" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
 	// The maximum number of in-progress API requests before backpressure is applied.
 	MaxInProgress *float64 `default:"10" json:"maxInProgress"`
 	// How to handle events when all receivers are exerting backpressure
@@ -375,7 +375,7 @@ func (o *OutputGooglePubsub) GetMaxRecordSizeKB() *float64 {
 	return o.MaxRecordSizeKB
 }
 
-func (o *OutputGooglePubsub) GetFlushPeriodSec() any {
+func (o *OutputGooglePubsub) GetFlushPeriodSec() *float64 {
 	if o == nil {
 		return nil
 	}

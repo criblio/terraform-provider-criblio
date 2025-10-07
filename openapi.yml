@@ -39248,12 +39248,9 @@ components:
           title: Flush period (sec)
           description: Maximum time to wait before sending a batch (when batch size limit
             is not reached).
-          default:
-            type: number
-            default: 1
-          example:
-            type: number
-            default: 1
+          type: number
+          default: 1
+          example: 1
         maxInProgress:
           type: number
           title: Concurrent request limit
