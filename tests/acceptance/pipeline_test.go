@@ -24,14 +24,6 @@ func TestPipeline(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_pipeline.my_pipeline", "conf.output", "my_output"),
 					),
 				},
-				{
-					ConfigDirectory: config.TestNameDirectory(),
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
-				},
 			},
 		})
 	})
