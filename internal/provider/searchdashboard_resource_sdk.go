@@ -4,166 +4,14 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
-
-func (r *SearchDashboardResourceModel) RefreshFromOperationsListSearchDashboardResponseBody(ctx context.Context, resp *operations.ListSearchDashboardResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.SearchDashboard{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.SearchDashboard
-
-			items.CacheTTLSeconds = types.Float64PointerValue(itemsItem.CacheTTLSeconds)
-			items.Category = types.StringPointerValue(itemsItem.Category)
-			items.Created = types.Float64Value(itemsItem.Created)
-			items.CreatedBy = types.StringValue(itemsItem.CreatedBy)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.DisplayCreatedBy = types.StringPointerValue(itemsItem.DisplayCreatedBy)
-			items.DisplayModifiedBy = types.StringPointerValue(itemsItem.DisplayModifiedBy)
-			items.Elements = []tfTypes.ElementUnion{}
-
-			for _, elementsItem := range itemsItem.Elements {
-				var elements tfTypes.ElementUnion
-
-				if elementsItem.Element != nil {
-					elements.Element = &tfTypes.Element{}
-					elements.Element.Description = types.StringPointerValue(elementsItem.Element.Description)
-					elements.Element.Empty = types.BoolPointerValue(elementsItem.Element.Empty)
-					elements.Element.HidePanel = types.BoolPointerValue(elementsItem.Element.HidePanel)
-					elements.Element.HorizontalChart = types.BoolPointerValue(elementsItem.Element.HorizontalChart)
-					elements.Element.ID = types.StringValue(elementsItem.Element.ID)
-					if elementsItem.Element.Query != nil {
-						elements.Element.Query = &tfTypes.SearchQuery{}
-						if elementsItem.Element.Query.SearchQuerySaved != nil {
-							elements.Element.Query.SearchQuerySaved = &tfTypes.SearchQuerySaved{}
-							elements.Element.Query.SearchQuerySaved.Query = types.StringPointerValue(elementsItem.Element.Query.SearchQuerySaved.Query)
-							elements.Element.Query.SearchQuerySaved.QueryID = types.StringValue(elementsItem.Element.Query.SearchQuerySaved.QueryID)
-							if elementsItem.Element.Query.SearchQuerySaved.RunMode != nil {
-								elements.Element.Query.SearchQuerySaved.RunMode = types.StringValue(string(*elementsItem.Element.Query.SearchQuerySaved.RunMode))
-							} else {
-								elements.Element.Query.SearchQuerySaved.RunMode = types.StringNull()
-							}
-							elements.Element.Query.SearchQuerySaved.Type = types.StringValue(string(elementsItem.Element.Query.SearchQuerySaved.Type))
-						}
-						if elementsItem.Element.Query.SearchQueryInline != nil {
-							elements.Element.Query.SearchQueryInline = &tfTypes.SearchQueryInline{}
-							if elementsItem.Element.Query.SearchQueryInline.Earliest != nil {
-								elements.Element.Query.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
-								if elementsItem.Element.Query.SearchQueryInline.Earliest.Str != nil {
-									elements.Element.Query.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Earliest.Str)
-								}
-								if elementsItem.Element.Query.SearchQueryInline.Earliest.Number != nil {
-									elements.Element.Query.SearchQueryInline.Earliest.Number = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.Earliest.Number)
-								}
-							}
-							if elementsItem.Element.Query.SearchQueryInline.Latest != nil {
-								elements.Element.Query.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
-								if elementsItem.Element.Query.SearchQueryInline.Latest.Str != nil {
-									elements.Element.Query.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Latest.Str)
-								}
-								if elementsItem.Element.Query.SearchQueryInline.Latest.Number != nil {
-									elements.Element.Query.SearchQueryInline.Latest.Number = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.Latest.Number)
-								}
-							}
-							elements.Element.Query.SearchQueryInline.ParentSearchID = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.ParentSearchID)
-							elements.Element.Query.SearchQueryInline.Query = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Query)
-							elements.Element.Query.SearchQueryInline.SampleRate = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.SampleRate)
-							elements.Element.Query.SearchQueryInline.Timezone = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Timezone)
-							elements.Element.Query.SearchQueryInline.Type = types.StringValue(string(elementsItem.Element.Query.SearchQueryInline.Type))
-						}
-						if elementsItem.Element.Query.SearchQueryValues != nil {
-							elements.Element.Query.SearchQueryValues = &tfTypes.SearchQueryValues{}
-							elements.Element.Query.SearchQueryValues.Type = types.StringValue(string(elementsItem.Element.Query.SearchQueryValues.Type))
-							elements.Element.Query.SearchQueryValues.Values = make([]types.String, 0, len(elementsItem.Element.Query.SearchQueryValues.Values))
-							for _, v := range elementsItem.Element.Query.SearchQueryValues.Values {
-								elements.Element.Query.SearchQueryValues.Values = append(elements.Element.Query.SearchQueryValues.Values, types.StringValue(v))
-							}
-						}
-					}
-					elements.Element.Title = types.StringPointerValue(elementsItem.Element.Title)
-					elements.Element.Type = types.StringValue(string(elementsItem.Element.Type))
-					elements.Element.Variant = types.StringValue(elementsItem.Element.Variant)
-					elements.Element.W = types.Float64PointerValue(elementsItem.Element.W)
-					elements.Element.H = types.Float64PointerValue(elementsItem.Element.H)
-					elements.Element.X = types.Float64PointerValue(elementsItem.Element.X)
-					elements.Element.Y = types.Float64PointerValue(elementsItem.Element.Y)
-					elements.Element.ColorPalette = types.StringValue(elementsItem.Element.ColorPalette)
-					elements.Element.Layout.H = types.Float64Value(elementsItem.Element.Layout.H)
-					elements.Element.Layout.W = types.Float64Value(elementsItem.Element.Layout.W)
-					elements.Element.Layout.X = types.Float64Value(elementsItem.Element.Layout.X)
-					elements.Element.Layout.Y = types.Float64Value(elementsItem.Element.Layout.Y)
-					if elementsItem.Element.XAxis == nil {
-						elements.Element.XAxis = nil
-					} else {
-						elements.Element.XAxis = &tfTypes.XAxis{}
-						elements.Element.XAxis.DataField = types.StringPointerValue(elementsItem.Element.XAxis.DataField)
-						elements.Element.XAxis.Inverse = types.BoolPointerValue(elementsItem.Element.XAxis.Inverse)
-						elements.Element.XAxis.LabelInterval = types.StringPointerValue(elementsItem.Element.XAxis.LabelInterval)
-						elements.Element.XAxis.LabelOrientation = types.Float64PointerValue(elementsItem.Element.XAxis.LabelOrientation)
-						elements.Element.XAxis.Name = types.StringPointerValue(elementsItem.Element.XAxis.Name)
-						elements.Element.XAxis.Offset = types.Float64PointerValue(elementsItem.Element.XAxis.Offset)
-						elements.Element.XAxis.Position = types.StringPointerValue(elementsItem.Element.XAxis.Position)
-						elements.Element.XAxis.Type = types.StringPointerValue(elementsItem.Element.XAxis.Type)
-					}
-					if elementsItem.Element.YAxis == nil {
-						elements.Element.YAxis = nil
-					} else {
-						elements.Element.YAxis = &tfTypes.YAxis{}
-						elements.Element.YAxis.DataField = make([]types.String, 0, len(elementsItem.Element.YAxis.DataField))
-						for _, v := range elementsItem.Element.YAxis.DataField {
-							elements.Element.YAxis.DataField = append(elements.Element.YAxis.DataField, types.StringValue(v))
-						}
-						elements.Element.YAxis.Interval = types.Float64PointerValue(elementsItem.Element.YAxis.Interval)
-						elements.Element.YAxis.Max = types.Float64PointerValue(elementsItem.Element.YAxis.Max)
-						elements.Element.YAxis.Min = types.Float64PointerValue(elementsItem.Element.YAxis.Min)
-						elements.Element.YAxis.Position = types.StringPointerValue(elementsItem.Element.YAxis.Position)
-						elements.Element.YAxis.Scale = types.StringPointerValue(elementsItem.Element.YAxis.Scale)
-						elements.Element.YAxis.SplitLine = types.BoolPointerValue(elementsItem.Element.YAxis.SplitLine)
-						elements.Element.YAxis.Type = types.StringPointerValue(elementsItem.Element.YAxis.Type)
-					}
-				}
-
-				items.Elements = append(items.Elements, elements)
-			}
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Modified = types.Float64Value(itemsItem.Modified)
-			items.ModifiedBy = types.StringPointerValue(itemsItem.ModifiedBy)
-			items.Name = types.StringValue(itemsItem.Name)
-			items.PackID = types.StringPointerValue(itemsItem.PackID)
-			items.RefreshRate = types.Float64PointerValue(itemsItem.RefreshRate)
-			items.ResolvedDatasetIds = make([]types.String, 0, len(itemsItem.ResolvedDatasetIds))
-			for _, v := range itemsItem.ResolvedDatasetIds {
-				items.ResolvedDatasetIds = append(items.ResolvedDatasetIds, types.StringValue(v))
-			}
-			items.Owner = types.StringPointerValue(itemsItem.Owner)
-			items.Tags = make([]types.String, 0, len(itemsItem.Tags))
-			for _, v := range itemsItem.Tags {
-				items.Tags = append(items.Tags, types.StringValue(v))
-			}
-			if itemsItem.Schedule == nil {
-				items.Schedule = nil
-			} else {
-				items.Schedule = &tfTypes.SavedQuerySchedule{}
-				items.Schedule.CronSchedule = types.StringValue(itemsItem.Schedule.CronSchedule)
-				items.Schedule.Enabled = types.BoolValue(itemsItem.Schedule.Enabled)
-				items.Schedule.KeepLastN = types.Float64Value(itemsItem.Schedule.KeepLastN)
-				items.Schedule.Notifications.Disabled = types.BoolValue(itemsItem.Schedule.Notifications.Disabled)
-				items.Schedule.Tz = types.StringValue(itemsItem.Schedule.Tz)
-			}
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
 
 func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx context.Context, resp *shared.SearchDashboard) diag.Diagnostics {
 	var diags diag.Diagnostics
@@ -182,100 +30,92 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 
 		if elementsItem.Element != nil {
 			elements.Element = &tfTypes.Element{}
-			elements.Element.ColorPalette = types.StringValue(elementsItem.Element.ColorPalette)
 			elements.Element.Description = types.StringPointerValue(elementsItem.Element.Description)
 			elements.Element.Empty = types.BoolPointerValue(elementsItem.Element.Empty)
-			elements.Element.H = types.Float64PointerValue(elementsItem.Element.H)
 			elements.Element.HidePanel = types.BoolPointerValue(elementsItem.Element.HidePanel)
 			elements.Element.HorizontalChart = types.BoolPointerValue(elementsItem.Element.HorizontalChart)
 			elements.Element.ID = types.StringValue(elementsItem.Element.ID)
+			elements.Element.Index = types.Float64PointerValue(elementsItem.Element.Index)
+			elements.Element.InputID = types.StringPointerValue(elementsItem.Element.InputID)
 			elements.Element.Layout.H = types.Float64Value(elementsItem.Element.Layout.H)
 			elements.Element.Layout.W = types.Float64Value(elementsItem.Element.Layout.W)
 			elements.Element.Layout.X = types.Float64Value(elementsItem.Element.Layout.X)
 			elements.Element.Layout.Y = types.Float64Value(elementsItem.Element.Layout.Y)
-			if elementsItem.Element.Query != nil {
-				elements.Element.Query = &tfTypes.SearchQuery{}
-				if elementsItem.Element.Query.SearchQuerySaved != nil {
-					elements.Element.Query.SearchQuerySaved = &tfTypes.SearchQuerySaved{}
-					elements.Element.Query.SearchQuerySaved.Query = types.StringPointerValue(elementsItem.Element.Query.SearchQuerySaved.Query)
-					elements.Element.Query.SearchQuerySaved.QueryID = types.StringValue(elementsItem.Element.Query.SearchQuerySaved.QueryID)
-					if elementsItem.Element.Query.SearchQuerySaved.RunMode != nil {
-						elements.Element.Query.SearchQuerySaved.RunMode = types.StringValue(string(*elementsItem.Element.Query.SearchQuerySaved.RunMode))
-					} else {
-						elements.Element.Query.SearchQuerySaved.RunMode = types.StringNull()
-					}
-					elements.Element.Query.SearchQuerySaved.Type = types.StringValue(string(elementsItem.Element.Query.SearchQuerySaved.Type))
+			if elementsItem.Element.Search.SearchQuerySaved != nil {
+				elements.Element.Search.SearchQuerySaved = &tfTypes.SearchQuerySaved{}
+				elements.Element.Search.SearchQuerySaved.Query = types.StringPointerValue(elementsItem.Element.Search.SearchQuerySaved.Query)
+				elements.Element.Search.SearchQuerySaved.QueryID = types.StringValue(elementsItem.Element.Search.SearchQuerySaved.QueryID)
+				if elementsItem.Element.Search.SearchQuerySaved.RunMode != nil {
+					elements.Element.Search.SearchQuerySaved.RunMode = types.StringValue(string(*elementsItem.Element.Search.SearchQuerySaved.RunMode))
+				} else {
+					elements.Element.Search.SearchQuerySaved.RunMode = types.StringNull()
 				}
-				if elementsItem.Element.Query.SearchQueryInline != nil {
-					elements.Element.Query.SearchQueryInline = &tfTypes.SearchQueryInline{}
-					if elementsItem.Element.Query.SearchQueryInline.Earliest != nil {
-						elements.Element.Query.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
-						if elementsItem.Element.Query.SearchQueryInline.Earliest.Str != nil {
-							elements.Element.Query.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Earliest.Str)
-						}
-						if elementsItem.Element.Query.SearchQueryInline.Earliest.Number != nil {
-							elements.Element.Query.SearchQueryInline.Earliest.Number = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.Earliest.Number)
-						}
+				elements.Element.Search.SearchQuerySaved.Type = types.StringValue(string(elementsItem.Element.Search.SearchQuerySaved.Type))
+			}
+			if elementsItem.Element.Search.SearchQueryInline != nil {
+				elements.Element.Search.SearchQueryInline = &tfTypes.SearchQueryInline{}
+				if elementsItem.Element.Search.SearchQueryInline.Earliest != nil {
+					elements.Element.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
+					if elementsItem.Element.Search.SearchQueryInline.Earliest.Str != nil {
+						elements.Element.Search.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Earliest.Str)
 					}
-					if elementsItem.Element.Query.SearchQueryInline.Latest != nil {
-						elements.Element.Query.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
-						if elementsItem.Element.Query.SearchQueryInline.Latest.Str != nil {
-							elements.Element.Query.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Latest.Str)
-						}
-						if elementsItem.Element.Query.SearchQueryInline.Latest.Number != nil {
-							elements.Element.Query.SearchQueryInline.Latest.Number = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.Latest.Number)
-						}
+					if elementsItem.Element.Search.SearchQueryInline.Earliest.Number != nil {
+						elements.Element.Search.SearchQueryInline.Earliest.Number = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.Earliest.Number)
 					}
-					elements.Element.Query.SearchQueryInline.ParentSearchID = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.ParentSearchID)
-					elements.Element.Query.SearchQueryInline.Query = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Query)
-					elements.Element.Query.SearchQueryInline.SampleRate = types.Float64PointerValue(elementsItem.Element.Query.SearchQueryInline.SampleRate)
-					elements.Element.Query.SearchQueryInline.Timezone = types.StringPointerValue(elementsItem.Element.Query.SearchQueryInline.Timezone)
-					elements.Element.Query.SearchQueryInline.Type = types.StringValue(string(elementsItem.Element.Query.SearchQueryInline.Type))
 				}
-				if elementsItem.Element.Query.SearchQueryValues != nil {
-					elements.Element.Query.SearchQueryValues = &tfTypes.SearchQueryValues{}
-					elements.Element.Query.SearchQueryValues.Type = types.StringValue(string(elementsItem.Element.Query.SearchQueryValues.Type))
-					elements.Element.Query.SearchQueryValues.Values = make([]types.String, 0, len(elementsItem.Element.Query.SearchQueryValues.Values))
-					for _, v := range elementsItem.Element.Query.SearchQueryValues.Values {
-						elements.Element.Query.SearchQueryValues.Values = append(elements.Element.Query.SearchQueryValues.Values, types.StringValue(v))
+				if elementsItem.Element.Search.SearchQueryInline.Latest != nil {
+					elements.Element.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
+					if elementsItem.Element.Search.SearchQueryInline.Latest.Str != nil {
+						elements.Element.Search.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Latest.Str)
 					}
+					if elementsItem.Element.Search.SearchQueryInline.Latest.Number != nil {
+						elements.Element.Search.SearchQueryInline.Latest.Number = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.Latest.Number)
+					}
+				}
+				elements.Element.Search.SearchQueryInline.ParentSearchID = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.ParentSearchID)
+				elements.Element.Search.SearchQueryInline.Query = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Query)
+				elements.Element.Search.SearchQueryInline.SampleRate = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.SampleRate)
+				elements.Element.Search.SearchQueryInline.Timezone = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Timezone)
+				elements.Element.Search.SearchQueryInline.Type = types.StringValue(string(elementsItem.Element.Search.SearchQueryInline.Type))
+			}
+			if elementsItem.Element.Search.SearchQueryValues != nil {
+				elements.Element.Search.SearchQueryValues = &tfTypes.SearchQueryValues{}
+				elements.Element.Search.SearchQueryValues.Type = types.StringValue(string(elementsItem.Element.Search.SearchQueryValues.Type))
+				elements.Element.Search.SearchQueryValues.Values = make([]types.String, 0, len(elementsItem.Element.Search.SearchQueryValues.Values))
+				for _, v := range elementsItem.Element.Search.SearchQueryValues.Values {
+					elements.Element.Search.SearchQueryValues.Values = append(elements.Element.Search.SearchQueryValues.Values, types.StringValue(v))
 				}
 			}
 			elements.Element.Title = types.StringPointerValue(elementsItem.Element.Title)
 			elements.Element.Type = types.StringValue(string(elementsItem.Element.Type))
-			elements.Element.Variant = types.StringValue(elementsItem.Element.Variant)
-			elements.Element.W = types.Float64PointerValue(elementsItem.Element.W)
-			elements.Element.X = types.Float64PointerValue(elementsItem.Element.X)
-			if elementsItem.Element.XAxis == nil {
-				elements.Element.XAxis = nil
-			} else {
-				elements.Element.XAxis = &tfTypes.XAxis{}
-				elements.Element.XAxis.DataField = types.StringPointerValue(elementsItem.Element.XAxis.DataField)
-				elements.Element.XAxis.Inverse = types.BoolPointerValue(elementsItem.Element.XAxis.Inverse)
-				elements.Element.XAxis.LabelInterval = types.StringPointerValue(elementsItem.Element.XAxis.LabelInterval)
-				elements.Element.XAxis.LabelOrientation = types.Float64PointerValue(elementsItem.Element.XAxis.LabelOrientation)
-				elements.Element.XAxis.Name = types.StringPointerValue(elementsItem.Element.XAxis.Name)
-				elements.Element.XAxis.Offset = types.Float64PointerValue(elementsItem.Element.XAxis.Offset)
-				elements.Element.XAxis.Position = types.StringPointerValue(elementsItem.Element.XAxis.Position)
-				elements.Element.XAxis.Type = types.StringPointerValue(elementsItem.Element.XAxis.Type)
-			}
-			elements.Element.Y = types.Float64PointerValue(elementsItem.Element.Y)
-			if elementsItem.Element.YAxis == nil {
-				elements.Element.YAxis = nil
-			} else {
-				elements.Element.YAxis = &tfTypes.YAxis{}
-				elements.Element.YAxis.DataField = make([]types.String, 0, len(elementsItem.Element.YAxis.DataField))
-				for _, v := range elementsItem.Element.YAxis.DataField {
-					elements.Element.YAxis.DataField = append(elements.Element.YAxis.DataField, types.StringValue(v))
+			if len(elementsItem.Element.Value) > 0 {
+				elements.Element.Value = make(map[string]jsontypes.Normalized, len(elementsItem.Element.Value))
+				for key, value := range elementsItem.Element.Value {
+					result, _ := json.Marshal(value)
+					elements.Element.Value[key] = jsontypes.NewNormalizedValue(string(result))
 				}
-				elements.Element.YAxis.Interval = types.Float64PointerValue(elementsItem.Element.YAxis.Interval)
-				elements.Element.YAxis.Max = types.Float64PointerValue(elementsItem.Element.YAxis.Max)
-				elements.Element.YAxis.Min = types.Float64PointerValue(elementsItem.Element.YAxis.Min)
-				elements.Element.YAxis.Position = types.StringPointerValue(elementsItem.Element.YAxis.Position)
-				elements.Element.YAxis.Scale = types.StringPointerValue(elementsItem.Element.YAxis.Scale)
-				elements.Element.YAxis.SplitLine = types.BoolPointerValue(elementsItem.Element.YAxis.SplitLine)
-				elements.Element.YAxis.Type = types.StringPointerValue(elementsItem.Element.YAxis.Type)
 			}
+			if elementsItem.Element.Variant != nil {
+				elements.Element.Variant = types.StringValue(string(*elementsItem.Element.Variant))
+			} else {
+				elements.Element.Variant = types.StringNull()
+			}
+		}
+		if elementsItem.ElementMarkdown != nil {
+			elements.ElementMarkdown = &tfTypes.ElementMarkdown{}
+			elements.ElementMarkdown.Description = types.StringPointerValue(elementsItem.ElementMarkdown.Description)
+			elements.ElementMarkdown.Empty = types.BoolPointerValue(elementsItem.ElementMarkdown.Empty)
+			elements.ElementMarkdown.HidePanel = types.BoolPointerValue(elementsItem.ElementMarkdown.HidePanel)
+			elements.ElementMarkdown.ID = types.StringValue(elementsItem.ElementMarkdown.ID)
+			elements.ElementMarkdown.Index = types.Float64PointerValue(elementsItem.ElementMarkdown.Index)
+			elements.ElementMarkdown.Layout.H = types.Float64Value(elementsItem.ElementMarkdown.Layout.H)
+			elements.ElementMarkdown.Layout.W = types.Float64Value(elementsItem.ElementMarkdown.Layout.W)
+			elements.ElementMarkdown.Layout.X = types.Float64Value(elementsItem.ElementMarkdown.Layout.X)
+			elements.ElementMarkdown.Layout.Y = types.Float64Value(elementsItem.ElementMarkdown.Layout.Y)
+			elements.ElementMarkdown.Title = types.StringPointerValue(elementsItem.ElementMarkdown.Title)
+			elements.ElementMarkdown.Type = types.StringValue(string(elementsItem.ElementMarkdown.Type))
+			elements.ElementMarkdown.Value = types.StringPointerValue(elementsItem.ElementMarkdown.Value)
+			elements.ElementMarkdown.Variant = types.StringValue(string(elementsItem.ElementMarkdown.Variant))
 		}
 
 		r.Elements = append(r.Elements, elements)
@@ -284,7 +124,6 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 	r.Modified = types.Float64Value(resp.Modified)
 	r.ModifiedBy = types.StringPointerValue(resp.ModifiedBy)
 	r.Name = types.StringValue(resp.Name)
-	r.Owner = types.StringPointerValue(resp.Owner)
 	r.PackID = types.StringPointerValue(resp.PackID)
 	r.RefreshRate = types.Float64PointerValue(resp.RefreshRate)
 	r.ResolvedDatasetIds = make([]types.String, 0, len(resp.ResolvedDatasetIds))
@@ -300,10 +139,6 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 		r.Schedule.KeepLastN = types.Float64Value(resp.Schedule.KeepLastN)
 		r.Schedule.Notifications.Disabled = types.BoolValue(resp.Schedule.Notifications.Disabled)
 		r.Schedule.Tz = types.StringValue(resp.Schedule.Tz)
-	}
-	r.Tags = make([]types.String, 0, len(resp.Tags))
-	for _, v := range resp.Tags {
-		r.Tags = append(r.Tags, types.StringValue(v))
 	}
 
 	return diags
@@ -412,146 +247,174 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			var id string
 			id = elementsItem.Element.ID.ValueString()
 
-			var query *shared.SearchQuery
-			if elementsItem.Element.Query != nil {
-				var searchQuerySaved *shared.SearchQuerySaved
-				if elementsItem.Element.Query.SearchQuerySaved != nil {
-					query1 := new(string)
-					if !elementsItem.Element.Query.SearchQuerySaved.Query.IsUnknown() && !elementsItem.Element.Query.SearchQuerySaved.Query.IsNull() {
-						*query1 = elementsItem.Element.Query.SearchQuerySaved.Query.ValueString()
-					} else {
-						query1 = nil
-					}
-					var queryID string
-					queryID = elementsItem.Element.Query.SearchQuerySaved.QueryID.ValueString()
+			index := new(float64)
+			if !elementsItem.Element.Index.IsUnknown() && !elementsItem.Element.Index.IsNull() {
+				*index = elementsItem.Element.Index.ValueFloat64()
+			} else {
+				index = nil
+			}
+			inputID := new(string)
+			if !elementsItem.Element.InputID.IsUnknown() && !elementsItem.Element.InputID.IsNull() {
+				*inputID = elementsItem.Element.InputID.ValueString()
+			} else {
+				inputID = nil
+			}
+			var h float64
+			h = elementsItem.Element.Layout.H.ValueFloat64()
 
-					runMode := new(shared.SavesSearchRunMode)
-					if !elementsItem.Element.Query.SearchQuerySaved.RunMode.IsUnknown() && !elementsItem.Element.Query.SearchQuerySaved.RunMode.IsNull() {
-						*runMode = shared.SavesSearchRunMode(elementsItem.Element.Query.SearchQuerySaved.RunMode.ValueString())
+			var w float64
+			w = elementsItem.Element.Layout.W.ValueFloat64()
+
+			var x float64
+			x = elementsItem.Element.Layout.X.ValueFloat64()
+
+			var y float64
+			y = elementsItem.Element.Layout.Y.ValueFloat64()
+
+			layout := shared.DashboardLayout{
+				H: h,
+				W: w,
+				X: x,
+				Y: y,
+			}
+			var search shared.SearchQuery
+			var searchQuerySaved *shared.SearchQuerySaved
+			if elementsItem.Element.Search.SearchQuerySaved != nil {
+				query := new(string)
+				if !elementsItem.Element.Search.SearchQuerySaved.Query.IsUnknown() && !elementsItem.Element.Search.SearchQuerySaved.Query.IsNull() {
+					*query = elementsItem.Element.Search.SearchQuerySaved.Query.ValueString()
+				} else {
+					query = nil
+				}
+				var queryID string
+				queryID = elementsItem.Element.Search.SearchQuerySaved.QueryID.ValueString()
+
+				runMode := new(shared.SavesSearchRunMode)
+				if !elementsItem.Element.Search.SearchQuerySaved.RunMode.IsUnknown() && !elementsItem.Element.Search.SearchQuerySaved.RunMode.IsNull() {
+					*runMode = shared.SavesSearchRunMode(elementsItem.Element.Search.SearchQuerySaved.RunMode.ValueString())
+				} else {
+					runMode = nil
+				}
+				typeVar := shared.TypeSaved(elementsItem.Element.Search.SearchQuerySaved.Type.ValueString())
+				searchQuerySaved = &shared.SearchQuerySaved{
+					Query:   query,
+					QueryID: queryID,
+					RunMode: runMode,
+					Type:    typeVar,
+				}
+			}
+			if searchQuerySaved != nil {
+				search = shared.SearchQuery{
+					SearchQuerySaved: searchQuerySaved,
+				}
+			}
+			var searchQueryInline *shared.SearchQueryInline
+			if elementsItem.Element.Search.SearchQueryInline != nil {
+				var earliest *shared.SearchQueryEarliest
+				if elementsItem.Element.Search.SearchQueryInline.Earliest != nil {
+					str := new(string)
+					if !elementsItem.Element.Search.SearchQueryInline.Earliest.Str.IsUnknown() && !elementsItem.Element.Search.SearchQueryInline.Earliest.Str.IsNull() {
+						*str = elementsItem.Element.Search.SearchQueryInline.Earliest.Str.ValueString()
 					} else {
-						runMode = nil
+						str = nil
 					}
-					typeVar := shared.TypeSaved(elementsItem.Element.Query.SearchQuerySaved.Type.ValueString())
-					searchQuerySaved = &shared.SearchQuerySaved{
-						Query:   query1,
-						QueryID: queryID,
-						RunMode: runMode,
-						Type:    typeVar,
+					if str != nil {
+						earliest = &shared.SearchQueryEarliest{
+							Str: str,
+						}
+					}
+					number := new(float64)
+					if !elementsItem.Element.Search.SearchQueryInline.Earliest.Number.IsUnknown() && !elementsItem.Element.Search.SearchQueryInline.Earliest.Number.IsNull() {
+						*number = elementsItem.Element.Search.SearchQueryInline.Earliest.Number.ValueFloat64()
+					} else {
+						number = nil
+					}
+					if number != nil {
+						earliest = &shared.SearchQueryEarliest{
+							Number: number,
+						}
 					}
 				}
-				if searchQuerySaved != nil {
-					query = &shared.SearchQuery{
-						SearchQuerySaved: searchQuerySaved,
+				var latest *shared.SearchQueryLatest
+				if elementsItem.Element.Search.SearchQueryInline.Latest != nil {
+					str1 := new(string)
+					if !elementsItem.Element.Search.SearchQueryInline.Latest.Str.IsUnknown() && !elementsItem.Element.Search.SearchQueryInline.Latest.Str.IsNull() {
+						*str1 = elementsItem.Element.Search.SearchQueryInline.Latest.Str.ValueString()
+					} else {
+						str1 = nil
+					}
+					if str1 != nil {
+						latest = &shared.SearchQueryLatest{
+							Str: str1,
+						}
+					}
+					number1 := new(float64)
+					if !elementsItem.Element.Search.SearchQueryInline.Latest.Number.IsUnknown() && !elementsItem.Element.Search.SearchQueryInline.Latest.Number.IsNull() {
+						*number1 = elementsItem.Element.Search.SearchQueryInline.Latest.Number.ValueFloat64()
+					} else {
+						number1 = nil
+					}
+					if number1 != nil {
+						latest = &shared.SearchQueryLatest{
+							Number: number1,
+						}
 					}
 				}
-				var searchQueryInline *shared.SearchQueryInline
-				if elementsItem.Element.Query.SearchQueryInline != nil {
-					var earliest *shared.SearchQueryEarliest
-					if elementsItem.Element.Query.SearchQueryInline.Earliest != nil {
-						str := new(string)
-						if !elementsItem.Element.Query.SearchQueryInline.Earliest.Str.IsUnknown() && !elementsItem.Element.Query.SearchQueryInline.Earliest.Str.IsNull() {
-							*str = elementsItem.Element.Query.SearchQueryInline.Earliest.Str.ValueString()
-						} else {
-							str = nil
-						}
-						if str != nil {
-							earliest = &shared.SearchQueryEarliest{
-								Str: str,
-							}
-						}
-						number := new(float64)
-						if !elementsItem.Element.Query.SearchQueryInline.Earliest.Number.IsUnknown() && !elementsItem.Element.Query.SearchQueryInline.Earliest.Number.IsNull() {
-							*number = elementsItem.Element.Query.SearchQueryInline.Earliest.Number.ValueFloat64()
-						} else {
-							number = nil
-						}
-						if number != nil {
-							earliest = &shared.SearchQueryEarliest{
-								Number: number,
-							}
-						}
-					}
-					var latest *shared.SearchQueryLatest
-					if elementsItem.Element.Query.SearchQueryInline.Latest != nil {
-						str1 := new(string)
-						if !elementsItem.Element.Query.SearchQueryInline.Latest.Str.IsUnknown() && !elementsItem.Element.Query.SearchQueryInline.Latest.Str.IsNull() {
-							*str1 = elementsItem.Element.Query.SearchQueryInline.Latest.Str.ValueString()
-						} else {
-							str1 = nil
-						}
-						if str1 != nil {
-							latest = &shared.SearchQueryLatest{
-								Str: str1,
-							}
-						}
-						number1 := new(float64)
-						if !elementsItem.Element.Query.SearchQueryInline.Latest.Number.IsUnknown() && !elementsItem.Element.Query.SearchQueryInline.Latest.Number.IsNull() {
-							*number1 = elementsItem.Element.Query.SearchQueryInline.Latest.Number.ValueFloat64()
-						} else {
-							number1 = nil
-						}
-						if number1 != nil {
-							latest = &shared.SearchQueryLatest{
-								Number: number1,
-							}
-						}
-					}
-					parentSearchID := new(string)
-					if !elementsItem.Element.Query.SearchQueryInline.ParentSearchID.IsUnknown() && !elementsItem.Element.Query.SearchQueryInline.ParentSearchID.IsNull() {
-						*parentSearchID = elementsItem.Element.Query.SearchQueryInline.ParentSearchID.ValueString()
-					} else {
-						parentSearchID = nil
-					}
-					query2 := new(string)
-					if !elementsItem.Element.Query.SearchQueryInline.Query.IsUnknown() && !elementsItem.Element.Query.SearchQueryInline.Query.IsNull() {
-						*query2 = elementsItem.Element.Query.SearchQueryInline.Query.ValueString()
-					} else {
-						query2 = nil
-					}
-					sampleRate := new(float64)
-					if !elementsItem.Element.Query.SearchQueryInline.SampleRate.IsUnknown() && !elementsItem.Element.Query.SearchQueryInline.SampleRate.IsNull() {
-						*sampleRate = elementsItem.Element.Query.SearchQueryInline.SampleRate.ValueFloat64()
-					} else {
-						sampleRate = nil
-					}
-					timezone := new(string)
-					if !elementsItem.Element.Query.SearchQueryInline.Timezone.IsUnknown() && !elementsItem.Element.Query.SearchQueryInline.Timezone.IsNull() {
-						*timezone = elementsItem.Element.Query.SearchQueryInline.Timezone.ValueString()
-					} else {
-						timezone = nil
-					}
-					typeVar1 := shared.TypeInline(elementsItem.Element.Query.SearchQueryInline.Type.ValueString())
-					searchQueryInline = &shared.SearchQueryInline{
-						Earliest:       earliest,
-						Latest:         latest,
-						ParentSearchID: parentSearchID,
-						Query:          query2,
-						SampleRate:     sampleRate,
-						Timezone:       timezone,
-						Type:           typeVar1,
-					}
+				parentSearchID := new(string)
+				if !elementsItem.Element.Search.SearchQueryInline.ParentSearchID.IsUnknown() && !elementsItem.Element.Search.SearchQueryInline.ParentSearchID.IsNull() {
+					*parentSearchID = elementsItem.Element.Search.SearchQueryInline.ParentSearchID.ValueString()
+				} else {
+					parentSearchID = nil
 				}
-				if searchQueryInline != nil {
-					query = &shared.SearchQuery{
-						SearchQueryInline: searchQueryInline,
-					}
+				query1 := new(string)
+				if !elementsItem.Element.Search.SearchQueryInline.Query.IsUnknown() && !elementsItem.Element.Search.SearchQueryInline.Query.IsNull() {
+					*query1 = elementsItem.Element.Search.SearchQueryInline.Query.ValueString()
+				} else {
+					query1 = nil
 				}
-				var searchQueryValues *shared.SearchQueryValues
-				if elementsItem.Element.Query.SearchQueryValues != nil {
-					typeVar2 := shared.TypeValues(elementsItem.Element.Query.SearchQueryValues.Type.ValueString())
-					values := make([]string, 0, len(elementsItem.Element.Query.SearchQueryValues.Values))
-					for _, valuesItem := range elementsItem.Element.Query.SearchQueryValues.Values {
-						values = append(values, valuesItem.ValueString())
-					}
-					searchQueryValues = &shared.SearchQueryValues{
-						Type:   typeVar2,
-						Values: values,
-					}
+				sampleRate := new(float64)
+				if !elementsItem.Element.Search.SearchQueryInline.SampleRate.IsUnknown() && !elementsItem.Element.Search.SearchQueryInline.SampleRate.IsNull() {
+					*sampleRate = elementsItem.Element.Search.SearchQueryInline.SampleRate.ValueFloat64()
+				} else {
+					sampleRate = nil
 				}
-				if searchQueryValues != nil {
-					query = &shared.SearchQuery{
-						SearchQueryValues: searchQueryValues,
-					}
+				timezone := new(string)
+				if !elementsItem.Element.Search.SearchQueryInline.Timezone.IsUnknown() && !elementsItem.Element.Search.SearchQueryInline.Timezone.IsNull() {
+					*timezone = elementsItem.Element.Search.SearchQueryInline.Timezone.ValueString()
+				} else {
+					timezone = nil
+				}
+				typeVar1 := shared.TypeInline(elementsItem.Element.Search.SearchQueryInline.Type.ValueString())
+				searchQueryInline = &shared.SearchQueryInline{
+					Earliest:       earliest,
+					Latest:         latest,
+					ParentSearchID: parentSearchID,
+					Query:          query1,
+					SampleRate:     sampleRate,
+					Timezone:       timezone,
+					Type:           typeVar1,
+				}
+			}
+			if searchQueryInline != nil {
+				search = shared.SearchQuery{
+					SearchQueryInline: searchQueryInline,
+				}
+			}
+			var searchQueryValues *shared.SearchQueryValues
+			if elementsItem.Element.Search.SearchQueryValues != nil {
+				typeVar2 := shared.TypeValues(elementsItem.Element.Search.SearchQueryValues.Type.ValueString())
+				values := make([]string, 0, len(elementsItem.Element.Search.SearchQueryValues.Values))
+				for _, valuesItem := range elementsItem.Element.Search.SearchQueryValues.Values {
+					values = append(values, valuesItem.ValueString())
+				}
+				searchQueryValues = &shared.SearchQueryValues{
+					Type:   typeVar2,
+					Values: values,
+				}
+			}
+			if searchQueryValues != nil {
+				search = shared.SearchQuery{
+					SearchQueryValues: searchQueryValues,
 				}
 			}
 			title := new(string)
@@ -561,173 +424,17 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				title = nil
 			}
 			typeVar3 := shared.DashboardElementType(elementsItem.Element.Type.ValueString())
-			var variant string
-			variant = elementsItem.Element.Variant.ValueString()
-
-			w := new(float64)
-			if !elementsItem.Element.W.IsUnknown() && !elementsItem.Element.W.IsNull() {
-				*w = elementsItem.Element.W.ValueFloat64()
+			value := make(map[string]interface{})
+			for valueKey, valueValue := range elementsItem.Element.Value {
+				var valueInst interface{}
+				_ = json.Unmarshal([]byte(valueValue.ValueString()), &valueInst)
+				value[valueKey] = valueInst
+			}
+			variant := new(shared.DashboardElementVariant)
+			if !elementsItem.Element.Variant.IsUnknown() && !elementsItem.Element.Variant.IsNull() {
+				*variant = shared.DashboardElementVariant(elementsItem.Element.Variant.ValueString())
 			} else {
-				w = nil
-			}
-			h := new(float64)
-			if !elementsItem.Element.H.IsUnknown() && !elementsItem.Element.H.IsNull() {
-				*h = elementsItem.Element.H.ValueFloat64()
-			} else {
-				h = nil
-			}
-			x := new(float64)
-			if !elementsItem.Element.X.IsUnknown() && !elementsItem.Element.X.IsNull() {
-				*x = elementsItem.Element.X.ValueFloat64()
-			} else {
-				x = nil
-			}
-			y := new(float64)
-			if !elementsItem.Element.Y.IsUnknown() && !elementsItem.Element.Y.IsNull() {
-				*y = elementsItem.Element.Y.ValueFloat64()
-			} else {
-				y = nil
-			}
-			var colorPalette string
-			colorPalette = elementsItem.Element.ColorPalette.ValueString()
-
-			var h1 float64
-			h1 = elementsItem.Element.Layout.H.ValueFloat64()
-
-			var w1 float64
-			w1 = elementsItem.Element.Layout.W.ValueFloat64()
-
-			var x1 float64
-			x1 = elementsItem.Element.Layout.X.ValueFloat64()
-
-			var y1 float64
-			y1 = elementsItem.Element.Layout.Y.ValueFloat64()
-
-			layout := shared.DashboardLayout{
-				H: h1,
-				W: w1,
-				X: x1,
-				Y: y1,
-			}
-			var xAxis *shared.XAxis
-			if elementsItem.Element.XAxis != nil {
-				dataField := new(string)
-				if !elementsItem.Element.XAxis.DataField.IsUnknown() && !elementsItem.Element.XAxis.DataField.IsNull() {
-					*dataField = elementsItem.Element.XAxis.DataField.ValueString()
-				} else {
-					dataField = nil
-				}
-				inverse := new(bool)
-				if !elementsItem.Element.XAxis.Inverse.IsUnknown() && !elementsItem.Element.XAxis.Inverse.IsNull() {
-					*inverse = elementsItem.Element.XAxis.Inverse.ValueBool()
-				} else {
-					inverse = nil
-				}
-				labelInterval := new(string)
-				if !elementsItem.Element.XAxis.LabelInterval.IsUnknown() && !elementsItem.Element.XAxis.LabelInterval.IsNull() {
-					*labelInterval = elementsItem.Element.XAxis.LabelInterval.ValueString()
-				} else {
-					labelInterval = nil
-				}
-				labelOrientation := new(float64)
-				if !elementsItem.Element.XAxis.LabelOrientation.IsUnknown() && !elementsItem.Element.XAxis.LabelOrientation.IsNull() {
-					*labelOrientation = elementsItem.Element.XAxis.LabelOrientation.ValueFloat64()
-				} else {
-					labelOrientation = nil
-				}
-				name := new(string)
-				if !elementsItem.Element.XAxis.Name.IsUnknown() && !elementsItem.Element.XAxis.Name.IsNull() {
-					*name = elementsItem.Element.XAxis.Name.ValueString()
-				} else {
-					name = nil
-				}
-				offset := new(float64)
-				if !elementsItem.Element.XAxis.Offset.IsUnknown() && !elementsItem.Element.XAxis.Offset.IsNull() {
-					*offset = elementsItem.Element.XAxis.Offset.ValueFloat64()
-				} else {
-					offset = nil
-				}
-				position := new(string)
-				if !elementsItem.Element.XAxis.Position.IsUnknown() && !elementsItem.Element.XAxis.Position.IsNull() {
-					*position = elementsItem.Element.XAxis.Position.ValueString()
-				} else {
-					position = nil
-				}
-				typeVar4 := new(string)
-				if !elementsItem.Element.XAxis.Type.IsUnknown() && !elementsItem.Element.XAxis.Type.IsNull() {
-					*typeVar4 = elementsItem.Element.XAxis.Type.ValueString()
-				} else {
-					typeVar4 = nil
-				}
-				xAxis = &shared.XAxis{
-					DataField:        dataField,
-					Inverse:          inverse,
-					LabelInterval:    labelInterval,
-					LabelOrientation: labelOrientation,
-					Name:             name,
-					Offset:           offset,
-					Position:         position,
-					Type:             typeVar4,
-				}
-			}
-			var yAxis *shared.YAxis
-			if elementsItem.Element.YAxis != nil {
-				dataField1 := make([]string, 0, len(elementsItem.Element.YAxis.DataField))
-				for _, dataFieldItem := range elementsItem.Element.YAxis.DataField {
-					dataField1 = append(dataField1, dataFieldItem.ValueString())
-				}
-				interval := new(float64)
-				if !elementsItem.Element.YAxis.Interval.IsUnknown() && !elementsItem.Element.YAxis.Interval.IsNull() {
-					*interval = elementsItem.Element.YAxis.Interval.ValueFloat64()
-				} else {
-					interval = nil
-				}
-				max := new(float64)
-				if !elementsItem.Element.YAxis.Max.IsUnknown() && !elementsItem.Element.YAxis.Max.IsNull() {
-					*max = elementsItem.Element.YAxis.Max.ValueFloat64()
-				} else {
-					max = nil
-				}
-				min := new(float64)
-				if !elementsItem.Element.YAxis.Min.IsUnknown() && !elementsItem.Element.YAxis.Min.IsNull() {
-					*min = elementsItem.Element.YAxis.Min.ValueFloat64()
-				} else {
-					min = nil
-				}
-				position1 := new(string)
-				if !elementsItem.Element.YAxis.Position.IsUnknown() && !elementsItem.Element.YAxis.Position.IsNull() {
-					*position1 = elementsItem.Element.YAxis.Position.ValueString()
-				} else {
-					position1 = nil
-				}
-				scale := new(string)
-				if !elementsItem.Element.YAxis.Scale.IsUnknown() && !elementsItem.Element.YAxis.Scale.IsNull() {
-					*scale = elementsItem.Element.YAxis.Scale.ValueString()
-				} else {
-					scale = nil
-				}
-				splitLine := new(bool)
-				if !elementsItem.Element.YAxis.SplitLine.IsUnknown() && !elementsItem.Element.YAxis.SplitLine.IsNull() {
-					*splitLine = elementsItem.Element.YAxis.SplitLine.ValueBool()
-				} else {
-					splitLine = nil
-				}
-				typeVar5 := new(string)
-				if !elementsItem.Element.YAxis.Type.IsUnknown() && !elementsItem.Element.YAxis.Type.IsNull() {
-					*typeVar5 = elementsItem.Element.YAxis.Type.ValueString()
-				} else {
-					typeVar5 = nil
-				}
-				yAxis = &shared.YAxis{
-					DataField: dataField1,
-					Interval:  interval,
-					Max:       max,
-					Min:       min,
-					Position:  position1,
-					Scale:     scale,
-					SplitLine: splitLine,
-					Type:      typeVar5,
-				}
+				variant = nil
 			}
 			element := shared.Element{
 				Description:     description1,
@@ -735,26 +442,98 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				HidePanel:       hidePanel,
 				HorizontalChart: horizontalChart,
 				ID:              id,
-				Query:           query,
+				Index:           index,
+				InputID:         inputID,
+				Layout:          layout,
+				Search:          search,
 				Title:           title,
 				Type:            typeVar3,
+				Value:           value,
 				Variant:         variant,
-				W:               w,
-				H:               h,
-				X:               x,
-				Y:               y,
-				ColorPalette:    colorPalette,
-				Layout:          layout,
-				XAxis:           xAxis,
-				YAxis:           yAxis,
 			}
 			elements = append(elements, shared.ElementUnion{
 				Element: &element,
 			})
 		}
+		if elementsItem.ElementMarkdown != nil {
+			description2 := new(string)
+			if !elementsItem.ElementMarkdown.Description.IsUnknown() && !elementsItem.ElementMarkdown.Description.IsNull() {
+				*description2 = elementsItem.ElementMarkdown.Description.ValueString()
+			} else {
+				description2 = nil
+			}
+			empty1 := new(bool)
+			if !elementsItem.ElementMarkdown.Empty.IsUnknown() && !elementsItem.ElementMarkdown.Empty.IsNull() {
+				*empty1 = elementsItem.ElementMarkdown.Empty.ValueBool()
+			} else {
+				empty1 = nil
+			}
+			hidePanel1 := new(bool)
+			if !elementsItem.ElementMarkdown.HidePanel.IsUnknown() && !elementsItem.ElementMarkdown.HidePanel.IsNull() {
+				*hidePanel1 = elementsItem.ElementMarkdown.HidePanel.ValueBool()
+			} else {
+				hidePanel1 = nil
+			}
+			var id1 string
+			id1 = elementsItem.ElementMarkdown.ID.ValueString()
+
+			index1 := new(float64)
+			if !elementsItem.ElementMarkdown.Index.IsUnknown() && !elementsItem.ElementMarkdown.Index.IsNull() {
+				*index1 = elementsItem.ElementMarkdown.Index.ValueFloat64()
+			} else {
+				index1 = nil
+			}
+			var h1 float64
+			h1 = elementsItem.ElementMarkdown.Layout.H.ValueFloat64()
+
+			var w1 float64
+			w1 = elementsItem.ElementMarkdown.Layout.W.ValueFloat64()
+
+			var x1 float64
+			x1 = elementsItem.ElementMarkdown.Layout.X.ValueFloat64()
+
+			var y1 float64
+			y1 = elementsItem.ElementMarkdown.Layout.Y.ValueFloat64()
+
+			layout1 := shared.DashboardLayout{
+				H: h1,
+				W: w1,
+				X: x1,
+				Y: y1,
+			}
+			title1 := new(string)
+			if !elementsItem.ElementMarkdown.Title.IsUnknown() && !elementsItem.ElementMarkdown.Title.IsNull() {
+				*title1 = elementsItem.ElementMarkdown.Title.ValueString()
+			} else {
+				title1 = nil
+			}
+			typeVar4 := shared.SearchDashboardType(elementsItem.ElementMarkdown.Type.ValueString())
+			value1 := new(string)
+			if !elementsItem.ElementMarkdown.Value.IsUnknown() && !elementsItem.ElementMarkdown.Value.IsNull() {
+				*value1 = elementsItem.ElementMarkdown.Value.ValueString()
+			} else {
+				value1 = nil
+			}
+			variant1 := shared.Variant(elementsItem.ElementMarkdown.Variant.ValueString())
+			elementMarkdown := shared.ElementMarkdown{
+				Description: description2,
+				Empty:       empty1,
+				HidePanel:   hidePanel1,
+				ID:          id1,
+				Index:       index1,
+				Layout:      layout1,
+				Title:       title1,
+				Type:        typeVar4,
+				Value:       value1,
+				Variant:     variant1,
+			}
+			elements = append(elements, shared.ElementUnion{
+				ElementMarkdown: &elementMarkdown,
+			})
+		}
 	}
-	var id1 string
-	id1 = r.ID.ValueString()
+	var id2 string
+	id2 = r.ID.ValueString()
 
 	var modified float64
 	modified = r.Modified.ValueFloat64()
@@ -765,8 +544,8 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 	} else {
 		modifiedBy = nil
 	}
-	var name1 string
-	name1 = r.Name.ValueString()
+	var name string
+	name = r.Name.ValueString()
 
 	packID := new(string)
 	if !r.PackID.IsUnknown() && !r.PackID.IsNull() {
@@ -783,16 +562,6 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 	resolvedDatasetIds := make([]string, 0, len(r.ResolvedDatasetIds))
 	for _, resolvedDatasetIdsItem := range r.ResolvedDatasetIds {
 		resolvedDatasetIds = append(resolvedDatasetIds, resolvedDatasetIdsItem.ValueString())
-	}
-	owner := new(string)
-	if !r.Owner.IsUnknown() && !r.Owner.IsNull() {
-		*owner = r.Owner.ValueString()
-	} else {
-		owner = nil
-	}
-	tags := make([]string, 0, len(r.Tags))
-	for _, tagsItem := range r.Tags {
-		tags = append(tags, tagsItem.ValueString())
 	}
 	var schedule *shared.SavedQuerySchedule
 	if r.Schedule != nil {
@@ -831,15 +600,13 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 		DisplayCreatedBy:   displayCreatedBy,
 		DisplayModifiedBy:  displayModifiedBy,
 		Elements:           elements,
-		ID:                 id1,
+		ID:                 id2,
 		Modified:           modified,
 		ModifiedBy:         modifiedBy,
-		Name:               name1,
+		Name:               name,
 		PackID:             packID,
 		RefreshRate:        refreshRate,
 		ResolvedDatasetIds: resolvedDatasetIds,
-		Owner:              owner,
-		Tags:               tags,
 		Schedule:           schedule,
 	}
 

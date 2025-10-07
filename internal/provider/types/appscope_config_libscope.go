@@ -7,10 +7,8 @@ import (
 )
 
 type AppscopeConfigLibscope struct {
-	Commanddir    types.String           `tfsdk:"commanddir"`
-	Configevent   types.Bool             `tfsdk:"configevent"`
-	Log           *AppscopeConfigLog     `tfsdk:"log"`
-	Metric        *AppscopeConfigMetric  `tfsdk:"metric"`
-	Payload       *AppscopeConfigPayload `tfsdk:"payload"`
-	Summaryperiod types.Float64          `tfsdk:"summaryperiod"`
+	Commanddir    types.String       `tfsdk:"commanddir"`
+	Configevent   types.Bool         `tfsdk:"configevent"`
+	Log           *AppscopeConfigLog `tfsdk:"log"`
+	Summaryperiod types.Float64      `tfsdk:"summaryperiod"`
 }

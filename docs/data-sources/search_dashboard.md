@@ -22,13 +22,6 @@ data "criblio_search_dashboard" "my_searchdashboard" {
 
 ### Read-Only
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
 - `cache_ttl_seconds` (Number)
 - `category` (String)
 - `created` (Number)
@@ -36,50 +29,45 @@ Read-Only:
 - `description` (String)
 - `display_created_by` (String)
 - `display_modified_by` (String)
-- `elements` (Attributes List) (see [below for nested schema](#nestedatt--items--elements))
-- `id` (String)
+- `elements` (Attributes List) (see [below for nested schema](#nestedatt--elements))
+- `id` (String) The ID of this resource.
 - `modified` (Number)
 - `modified_by` (String)
 - `name` (String)
-- `owner` (String)
 - `pack_id` (String)
 - `refresh_rate` (Number)
 - `resolved_dataset_ids` (List of String)
-- `schedule` (Attributes) (see [below for nested schema](#nestedatt--items--schedule))
-- `tags` (List of String)
+- `schedule` (Attributes) (see [below for nested schema](#nestedatt--schedule))
 
-<a id="nestedatt--items--elements"></a>
-### Nested Schema for `items.elements`
-
-Read-Only:
-
-- `element` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element))
-
-<a id="nestedatt--items--elements--element"></a>
-### Nested Schema for `items.elements.element`
+<a id="nestedatt--elements"></a>
+### Nested Schema for `elements`
 
 Read-Only:
 
-- `color_palette` (String)
+- `element` (Attributes) (see [below for nested schema](#nestedatt--elements--element))
+- `element_markdown` (Attributes) (see [below for nested schema](#nestedatt--elements--element_markdown))
+
+<a id="nestedatt--elements--element"></a>
+### Nested Schema for `elements.element`
+
+Read-Only:
+
 - `description` (String)
 - `empty` (Boolean)
-- `h` (Number)
 - `hide_panel` (Boolean)
 - `horizontal_chart` (Boolean)
 - `id` (String)
-- `layout` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--layout))
-- `query` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query))
+- `index` (Number)
+- `input_id` (String)
+- `layout` (Attributes) (see [below for nested schema](#nestedatt--elements--element--layout))
+- `search` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search))
 - `title` (String)
 - `type` (String)
+- `value` (Map of String)
 - `variant` (String)
-- `w` (Number)
-- `x` (Number)
-- `x_axis` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--x_axis))
-- `y` (Number)
-- `y_axis` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--y_axis))
 
-<a id="nestedatt--items--elements--element--layout"></a>
-### Nested Schema for `items.elements.element.layout`
+<a id="nestedatt--elements--element--layout"></a>
+### Nested Schema for `elements.element.layout`
 
 Read-Only:
 
@@ -89,30 +77,30 @@ Read-Only:
 - `y` (Number)
 
 
-<a id="nestedatt--items--elements--element--query"></a>
-### Nested Schema for `items.elements.element.query`
+<a id="nestedatt--elements--element--search"></a>
+### Nested Schema for `elements.element.search`
 
 Read-Only:
 
-- `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_inline))
-- `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_saved))
-- `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_values))
+- `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline))
+- `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_saved))
+- `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_values))
 
-<a id="nestedatt--items--elements--element--query--search_query_inline"></a>
-### Nested Schema for `items.elements.element.query.search_query_inline`
+<a id="nestedatt--elements--element--search--search_query_inline"></a>
+### Nested Schema for `elements.element.search.search_query_inline`
 
 Read-Only:
 
-- `earliest` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_inline--earliest))
-- `latest` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_inline--latest))
+- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline--earliest))
+- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline--latest))
 - `parent_search_id` (String)
 - `query` (String)
 - `sample_rate` (Number)
 - `timezone` (String)
 - `type` (String)
 
-<a id="nestedatt--items--elements--element--query--search_query_inline--earliest"></a>
-### Nested Schema for `items.elements.element.query.search_query_inline.earliest`
+<a id="nestedatt--elements--element--search--search_query_inline--earliest"></a>
+### Nested Schema for `elements.element.search.search_query_inline.earliest`
 
 Read-Only:
 
@@ -120,8 +108,8 @@ Read-Only:
 - `str` (String)
 
 
-<a id="nestedatt--items--elements--element--query--search_query_inline--latest"></a>
-### Nested Schema for `items.elements.element.query.search_query_inline.latest`
+<a id="nestedatt--elements--element--search--search_query_inline--latest"></a>
+### Nested Schema for `elements.element.search.search_query_inline.latest`
 
 Read-Only:
 
@@ -130,8 +118,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--items--elements--element--query--search_query_saved"></a>
-### Nested Schema for `items.elements.element.query.search_query_saved`
+<a id="nestedatt--elements--element--search--search_query_saved"></a>
+### Nested Schema for `elements.element.search.search_query_saved`
 
 Read-Only:
 
@@ -141,8 +129,8 @@ Read-Only:
 - `type` (String)
 
 
-<a id="nestedatt--items--elements--element--query--search_query_values"></a>
-### Nested Schema for `items.elements.element.query.search_query_values`
+<a id="nestedatt--elements--element--search--search_query_values"></a>
+### Nested Schema for `elements.element.search.search_query_values`
 
 Read-Only:
 
@@ -151,51 +139,49 @@ Read-Only:
 
 
 
-<a id="nestedatt--items--elements--element--x_axis"></a>
-### Nested Schema for `items.elements.element.x_axis`
+
+<a id="nestedatt--elements--element_markdown"></a>
+### Nested Schema for `elements.element_markdown`
 
 Read-Only:
 
-- `data_field` (String)
-- `inverse` (Boolean)
-- `label_interval` (String)
-- `label_orientation` (Number)
-- `name` (String)
-- `offset` (Number)
-- `position` (String)
+- `description` (String)
+- `empty` (Boolean)
+- `hide_panel` (Boolean)
+- `id` (String)
+- `index` (Number)
+- `layout` (Attributes) (see [below for nested schema](#nestedatt--elements--element_markdown--layout))
+- `title` (String)
 - `type` (String)
+- `value` (String)
+- `variant` (String)
 
-
-<a id="nestedatt--items--elements--element--y_axis"></a>
-### Nested Schema for `items.elements.element.y_axis`
+<a id="nestedatt--elements--element_markdown--layout"></a>
+### Nested Schema for `elements.element_markdown.layout`
 
 Read-Only:
 
-- `data_field` (List of String)
-- `interval` (Number)
-- `max` (Number)
-- `min` (Number)
-- `position` (String)
-- `scale` (String)
-- `split_line` (Boolean)
-- `type` (String)
+- `h` (Number)
+- `w` (Number)
+- `x` (Number)
+- `y` (Number)
 
 
 
 
-<a id="nestedatt--items--schedule"></a>
-### Nested Schema for `items.schedule`
+<a id="nestedatt--schedule"></a>
+### Nested Schema for `schedule`
 
 Read-Only:
 
 - `cron_schedule` (String)
 - `enabled` (Boolean)
 - `keep_last_n` (Number)
-- `notifications` (Attributes) (see [below for nested schema](#nestedatt--items--schedule--notifications))
+- `notifications` (Attributes) (see [below for nested schema](#nestedatt--schedule--notifications))
 - `tz` (String)
 
-<a id="nestedatt--items--schedule--notifications"></a>
-### Nested Schema for `items.schedule.notifications`
+<a id="nestedatt--schedule--notifications"></a>
+### Nested Schema for `schedule.notifications`
 
 Read-Only:
 

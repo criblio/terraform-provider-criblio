@@ -4004,18 +4004,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Required:    true,
 						Description: `Unique ID for this output`,
 					},
-					"on_backpressure": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`block`),
-						Description: `How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"block",
-								"drop",
-							),
-						},
-					},
 					"type": schema.StringAttribute{
 						Required:    true,
 						Description: `must be "cribl_lake"`,

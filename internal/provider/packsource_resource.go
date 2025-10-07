@@ -8507,11 +8507,10 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringvalidator.RegexMatches(regexp.MustCompile(`^/|^$`), "must match pattern "+regexp.MustCompile(`^/|^$`).String()),
 						},
 					},
-					"enable_health_check": schema.BoolAttribute{
-						Computed:    true,
+					"enable_health_check": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
 						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						Description: `Parsed as JSON.`,
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -12561,13 +12560,15 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Required:    true,
-						Description: `must be one of ["instanceRole", "accessKeys", "profile"]`,
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`auto`),
+						Description: `AWS authentication method. Choose Auto to use IAM roles. Default: "auto"; must be one of ["auto", "manual", "secret"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
-								"instanceRole",
-								"accessKeys",
-								"profile",
+								"auto",
+								"manual",
+								"secret",
 							),
 						},
 					},
@@ -12978,7 +12979,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"region": schema.StringAttribute{
 						Required:    true,
-						Description: `AWS region where the MSK cluster is running`,
+						Description: `Region where the MSK cluster is located`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Computed:    true,

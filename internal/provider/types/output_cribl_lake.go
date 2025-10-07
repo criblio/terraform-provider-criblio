@@ -7,9 +7,8 @@ import (
 )
 
 type OutputCriblLake struct {
-	Description    types.String `tfsdk:"description"`
-	DestPath       types.String `tfsdk:"dest_path"`
-	ID             types.String `tfsdk:"id"`
-	OnBackpressure types.String `tfsdk:"on_backpressure"`
-	Type           types.String `tfsdk:"type"`
+	Description types.String `tfsdk:"description"`
+	DestPath    types.String `tfsdk:"dest_path"`
+	ID          types.String `tfsdk:"id"`
+	Type        types.String `tfsdk:"type"`
 }

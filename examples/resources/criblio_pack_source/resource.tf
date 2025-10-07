@@ -850,7 +850,7 @@ resource "criblio_pack_source" "my_packsource" {
       }
     ]
     credentials_secret  = "elastic-proxy-credentials"
-    custom_api_version  = "{\n    \"name\": \"Cribl Elastic Proxy\",\n    \"cluster_name\": \"cribl\",\n    \"cluster_uuid\": \"abcd1234efgh5678ijkl9012\",\n    \"version\": {\n        \"number\": \"8.11.1\",\n        \"build_type\": \"tar\",\n        \"build_hash\": \"1a2b3c4\",\n        \"build_date\": \"2025-09-01T00:00:00.000Z\",\n        \"build_snapshot\": false,\n        \"lucene_version\": \"9.10.0\",\n        \"minimum_wire_compatibility_version\": \"7.17.0\",\n        \"minimum_index_compatibility_version\": \"7.0.0\"\n    },\n    \"tagline\": \"You Know, for Search\"\n}"
+    custom_api_version  = "{ \\n\n    \"name\": \"Cribl Elastic Proxy\", \\n\n    \"cluster_name\": \"cribl\", \\n\n    \"cluster_uuid\": \"abcd1234efgh5678ijkl9012\", \\n\n    \"version\": { \\n\n        \"number\": \"8.11.1\", \\n\n        \"build_type\": \"tar\", \\n\n        \"build_hash\": \"1a2b3c4\", \\n\n        \"build_date\": \"2025-09-01T00:00:00.000Z\", \\n\n        \"build_snapshot\": false, \\n\n        \"lucene_version\": \"9.10.0\", \\n\n        \"minimum_wire_compatibility_version\": \"7.17.0\", \\n\n        \"minimum_index_compatibility_version\": \"7.0.0\" \\n\n    }, \\n\n    \"tagline\": \"You Know, for Search\" \\n\n}"
     description         = "Elasticsearch bulk listener with proxy for non-bulk APIs"
     disabled            = false
     elastic_api         = "/ingest"
@@ -1464,7 +1464,7 @@ resource "criblio_pack_source" "my_packsource" {
     description             = "HTTP listener for webhook events"
     disabled                = false
     elastic_api             = "/elastic"
-    enable_health_check     = true
+    enable_health_check     = "{ \"see\": \"documentation\" }"
     enable_proxy_header     = false
     environment             = "main"
     host                    = "0.0.0.0"
@@ -2157,7 +2157,7 @@ resource "criblio_pack_source" "my_packsource" {
     auto_commit_interval      = 5000
     auto_commit_threshold     = 1000
     aws_api_key               = "$${{secret:aws_access_key_id}"
-    aws_authentication_method = "instanceRole"
+    aws_authentication_method = "secret"
     aws_secret                = "aws-msk-credentials"
     aws_secret_key            = "$${{secret:aws_secret_access_key}"
     backoff_rate              = 3

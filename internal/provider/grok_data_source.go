@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,9 +28,11 @@ type GrokDataSource struct {
 
 // GrokDataSourceModel describes the data model.
 type GrokDataSourceModel struct {
-	GroupID types.String       `tfsdk:"group_id"`
-	ID      types.String       `tfsdk:"id"`
-	Items   []tfTypes.GrokFile `tfsdk:"items"`
+	Content types.String  `tfsdk:"content"`
+	GroupID types.String  `tfsdk:"group_id"`
+	ID      types.String  `tfsdk:"id"`
+	Size    types.Float64 `tfsdk:"size"`
+	Tags    types.String  `tfsdk:"tags"`
 }
 
 // Metadata returns the data source type name.
@@ -45,6 +46,9 @@ func (r *GrokDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 		MarkdownDescription: "Grok DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"content": schema.StringAttribute{
+				Computed: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
@@ -53,24 +57,11 @@ func (r *GrokDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"items": schema.ListNestedAttribute{
+			"size": schema.Float64Attribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"content": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"size": schema.Float64Attribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
+			},
+			"tags": schema.StringAttribute{
+				Computed: true,
 			},
 		},
 	}
@@ -136,11 +127,11 @@ func (r *GrokDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGrokFileByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedGrokFile(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

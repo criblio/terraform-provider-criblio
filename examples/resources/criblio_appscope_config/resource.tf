@@ -90,37 +90,37 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
                 type = "tcp"
               }
             }
-            metric = {
-              enable = true
-              format = {
-                statsdmaxlen = 512
-                statsdprefix = "app."
-                type         = "statsd"
-                verbosity    = 1
-              }
-              transport = {
-                buffer = "line"
-                host   = "localhost"
-                path   = "/var/run/appscope.sock"
-                port   = 8080
-                tls = {
-                  cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
-                  enable         = true
-                  validateserver = false
-                }
-                type = "tcp"
-              }
-              watch = [
-                {
-                  # ...
-                }
-              ]
-            }
-            payload = {
-              dir    = "/var/log/appscope/payloads"
-              enable = false
-            }
             summaryperiod = 60
+          }
+          metric = {
+            enable = true
+            format = {
+              statsdmaxlen = 512
+              statsdprefix = "webshop.prod."
+              type         = "statsd"
+              verbosity    = 3
+            }
+            transport = {
+              buffer = "line"
+              host   = "localhost"
+              path   = "/var/run/appscope.sock"
+              port   = 8080
+              tls = {
+                cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
+                enable         = true
+                validateserver = false
+              }
+              type = "tcp"
+            }
+            watch = [
+              {
+                # ...
+              }
+            ]
+          }
+          payload = {
+            dir    = "/var/lib/appscope/payloads"
+            enable = true
           }
           protocol = [
             {
@@ -179,28 +179,10 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
       ]
     }
     libscope = {
-      commanddir = "path/to/dir"
-      config = {
-        enable = true
-        format = {
-          level   = "info"
-          maxline = 1024
-        }
-        log = {
-          level = "debug"
-          transport = {
-            buffer = "line"
-            host   = "localhost"
-            path   = "/var/run/appscope.sock"
-            port   = 8080
-            tls = {
-              cacertpath     = "/etc/ssl/certs/ca-certificates.crt"
-              enable         = true
-              validateserver = false
-            }
-            type = "tcp"
-          }
-        }
+      commanddir  = "/var/run/appscope/commands"
+      configevent = true
+      log = {
+        level = "info"
         transport = {
           buffer = "line"
           host   = "localhost"
@@ -214,13 +196,16 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
           type = "tcp"
         }
       }
-      configevent = true
+      summaryperiod = 60
     }
     metric = {
-      enable       = true
-      format       = "statsd"
-      statsdmaxlen = 512
-      statsdprefix = "myPrefix-"
+      enable = true
+      format = {
+        statsdmaxlen = 512
+        statsdprefix = "webshop.prod."
+        type         = "statsd"
+        verbosity    = 3
+      }
       transport = {
         buffer = "line"
         host   = "localhost"
@@ -233,11 +218,15 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
         }
         type = "tcp"
       }
-      verbosity = 0
+      watch = [
+        {
+          # ...
+        }
+      ]
     }
     payload = {
-      dir    = "/var/log/appscope/payloads"
-      enable = false
+      dir    = "/var/lib/appscope/payloads"
+      enable = true
     }
     protocol = [
       {

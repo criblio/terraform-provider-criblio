@@ -1283,6 +1283,9 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						Computed:    true,
 						Optional:    true,
 						Description: `Azure AD application client secret`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
 					"connection_string": schema.StringAttribute{
 						Computed:    true,

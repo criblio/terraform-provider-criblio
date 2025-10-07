@@ -4427,6 +4427,7 @@ components:
               title: "Client Secret"
               description: "Azure AD application client secret"
               example: "superSecretClientKey"
+              minLength: 1
     GcsDataset:
       allOf:
         - $ref: '#/components/schemas/Dataset'
@@ -5430,58 +5431,74 @@ components:
             summaryperiod:
               type: number
               example: 60
-            metric:
+        metric:
+          type: object
+          properties:
+            enable:
+              type: boolean
+              example: true
+            format:
               type: object
               properties:
-                enable:
-                  type: boolean
-                  example: true
-                format:
-                  type: object
-                  properties:
-                    statsdmaxlen:
-                      type: number
-                      example: 512
-                    statsdprefix:
-                      type: string
-                      example: "app."
-                    type:
-                      type: string
-                      example: "statsd"
-                    verbosity:
-                      type: number
-                      example: 1
-                  example:
-                    type: "statsd"
-                    statsdprefix: "app."
-                    statsdmaxlen: 512
-                    verbosity: 1
-                transport:
-                  $ref: "#/components/schemas/AppscopeTransport"
-                watch:
-                  type: array
-                  items:
-                    type: object
-                  example:
-                    - type: "file"
-                      pattern: "/var/log/*.log"
-              required:
-                - enable
-                - format
-                - transport
-                - watch
-            payload:
-              type: object
-              properties:
-                dir:
+                statsdmaxlen:
+                  type: number
+                  example: 512
+                statsdprefix:
                   type: string
-                  example: "/var/log/appscope/payloads"
-                enable:
-                  type: boolean
-                  example: false
-              required:
-                - dir
-                - enable
+                  example: "webshop.prod."
+                type:
+                  type: string
+                  example: "statsd"
+                verbosity:
+                  type: number
+                  example: 3
+            transport:
+              $ref: "#/components/schemas/AppscopeTransport"
+            watch:
+              type: array
+              items:
+                type: object
+              example:
+                - type: "process"
+                  match: "nginx"
+                - type: "file"
+                  path: "/var/log/nginx/access.log"
+          required:
+            - enable
+            - format
+            - transport
+            - watch
+          example:
+            enable: true
+            format:
+              statsdmaxlen: 512
+              statsdprefix: "webshop.prod."
+              type: "statsd"
+              verbosity: 3
+            transport:
+              type: "udp"
+              host: "127.0.0.1"
+              port: 8125
+            watch:
+              - type: "process"
+                match: "nginx"
+              - type: "file"
+                path: "/var/log/nginx/access.log"
+        payload:
+          type: object
+          properties:
+            dir:
+              type: string
+              example: "/var/lib/appscope/payloads"
+            enable:
+              type: boolean
+              example: true
+          required:
+            - dir
+            - enable
+          example:
+            dir: "/var/lib/appscope/payloads"
+            enable: true
         protocol:
           type: array
           items:
@@ -5649,37 +5666,32 @@ components:
           properties:
             commanddir:
               type: string
-              example: "path/to/dir"
+              example: "/var/run/appscope/commands"
             configevent:
               type: boolean
               example: true
-            config:
+            log:
               type: object
               properties:
-                enable:
-                  type: boolean
-                  example: true
-                format:
-                  type: object
-                  properties:
-                    level:
-                      type: string
-                      enum: [info, debug, trace, warning, error]
-                      example: "info"
-                    maxline:
-                      type: number
-                      example: 1024
+                level:
+                  type: string
+                  enum:
+                    - error
+                    - debug
+                    - info
+                    - warning
+                    - none
+                  example: "info"
                 transport:
                   $ref: "#/components/schemas/AppscopeTransport"
-                log:
-                  type: object
-                  properties:
-                    level:
-                      type: string
-                      enum: [info, debug, trace]
-                      example: "debug"
-                    transport:
-                      $ref: "#/components/schemas/AppscopeTransport"
+              example:
+                level: "info"
+                transport:
+                  type: "file"
+                  path: "/var/log/appscope/appscope.log"
+            summaryperiod:
+              type: number
+              example: 60
         metric:
           type: object
           properties:
@@ -5687,32 +5699,67 @@ components:
               type: boolean
               example: true
             format:
-              type: string
-              enum: [statsd, ndjson]
-              example: "statsd"
-            statsdmaxlen:
-              type: number
-              example: 512
-            statsdprefix: 
-              type: string
-              example: "myPrefix-"
-            verbosity:
-              type: number
-              example: 0
+              type: object
+              properties:
+                statsdmaxlen:
+                  type: number
+                  example: 512
+                statsdprefix:
+                  type: string
+                  example: "webshop.prod."
+                type:
+                  type: string
+                  example: "statsd"
+                verbosity:
+                  type: number
+                  example: 3
             transport:
               $ref: "#/components/schemas/AppscopeTransport"
+            watch:
+              type: array
+              items:
+                type: object
+              example:
+                - type: "process"
+                  match: "nginx"
+                - type: "file"
+                  path: "/var/log/nginx/access.log"
+          required:
+            - enable
+            - format
+            - transport
+            - watch
+          example:
+            enable: true
+            format:
+              statsdmaxlen: 512
+              statsdprefix: "webshop.prod."
+              type: "statsd"
+              verbosity: 3
+            transport:
+              type: "udp"
+              host: "127.0.0.1"
+              port: 8125
+            watch:
+              - type: "process"
+                match: "nginx"
+              - type: "file"
+                path: "/var/log/nginx/access.log"
         payload:
           type: object
           properties:
             dir:
               type: string
-              example: "/var/log/appscope/payloads"
+              example: "/var/lib/appscope/payloads"
             enable:
               type: boolean
-              example: false
+              example: true
           required:
             - dir
             - enable
+          example:
+            dir: "/var/lib/appscope/payloads"
+            enable: true
         protocol:
           type: array
           items:
@@ -6331,7 +6378,7 @@ components:
                 properties:
                   description:
                     type: string
-                    example: "CPU usage chart"
+                    example: "5xx error rate for checkout"
                   empty:
                     type: boolean
                     example: false
@@ -6340,98 +6387,122 @@ components:
                     example: false
                   horizontalChart:
                     type: boolean
-                    example: true
+                    example: false
                   id:
                     type: string
-                    example: "element1"
-                  query:
-                    $ref: "#/components/schemas/SearchQuery"
-                  title:
+                    example: "panel-http-5xx"
+                  index:
+                    type: number
+                    example: 3
+                  inputId:
                     type: string
-                    example: "CPU Usage"
-                  type:
-                    $ref: "#/components/schemas/DashboardElementType"
-                  variant:
-                    type: string
-                    example: "default"
-                  w:
-                    type: number
-                    example: 6
-                  h:
-                    type: number
-                    example: 4
-                  x:
-                    type: number
-                    example: 0
-                  y:
-                    type: number
-                    example: 0
-                  colorPalette:
-                    type: string
-                    example: "blue"
+                    example: "service"
                   layout:
                     $ref: "#/components/schemas/DashboardLayout"
-                  xAxis:
+                    example:
+                      x: 0
+                      y: 6
+                      w: 12
+                      h: 4
+                  search:
+                    $ref: "#/components/schemas/SearchQuery"
+                    example:
+                      query: "status:>=500 service:checkout env:prod"
+                      timeRange:
+                        from: "now-1h"
+                        to: "now"
+                  title:
+                    type: string
+                    example: "HTTP 5xx errors"
+                  type:
+                    $ref: "#/components/schemas/DashboardElementType"
+                    example: "timeseries"
+                  value:
                     type: object
-                    properties:
-                      dataField:
-                        type: string
-                        example: "time"
-                      inverse:
-                        type: boolean
-                        example: false
-                      labelInterval:
-                        type: string
-                        example: "1m"
-                      labelOrientation:
-                        type: number
-                        example: 0
-                      name:
-                        type: string
-                        example: "Time"
-                      offset:
-                        type: number
-                        example: 0
-                      position:
-                        type: string
-                        example: "bottom"
-                      type:
-                        type: string
-                        example: "time"
-                  yAxis:
-                    type: object
-                    properties:
-                      dataField:
-                        type: array
-                        items:
-                          type: string
-                          example: "cpu"
-                        example: ["cpu"]
-                      interval:
-                        type: number
-                        example: 10
-                      max:
-                        type: number
-                        example: 100
-                      min:
-                        type: number
-                        example: 0
-                      position:
-                        type: string
-                        example: "left"
-                      scale:
-                        type: string
-                        example: "linear"
-                      splitLine:
-                        type: boolean
-                        example: true
-                      type:
-                        type: string
-                        example: "value"
+                    additionalProperties: true
+                    example:
+                      metric: "http.server.requests"
+                      aggregation: "rate_5m"
+                      groupBy:
+                        - "route"
+                      unit: "req/s"
+                      thresholds:
+                        - value: 50
+                          color: "yellow"
+                        - value: 100
+                          color: "red"
+                  variant:
+                    $ref: "#/components/schemas/DashboardElementVariant"
+                    example: "line"
                 required:
                   - id
                   - layout
-                  - colorPalette
+                  - search
+                  - type
+              - type: object
+                properties:
+                  description:
+                    type: string
+                    example: "Markdown panel for release notes"
+                  empty:
+                    type: boolean
+                    example: false
+                  hidePanel:
+                    type: boolean
+                    example: false
+                  id:
+                    type: string
+                    example: "panel-markdown-release-notes"
+                  index:
+                    type: number
+                    example: 7
+                  layout:
+                    $ref: "#/components/schemas/DashboardLayout"
+                    example:
+                      x: 0
+                      y: 10
+                      w: 12
+                      h: 4
+                  title:
+                    type: string
+                    example: "Release notes"
+                  type:
+                    type: string
+                    enum:
+                      - markdown.default
+                    example: "markdown.default"
+                  value:
+                    type: string
+                    example: |
+                      ## Release notes
+                      - Added payment retry logic
+                      - Improved log verbosity controls
+                  variant:
+                    type: string
+                    enum:
+                      - markdown
+                    example: "markdown"
+                example:
+                  description: "Markdown panel for release notes"
+                  empty: false
+                  hidePanel: false
+                  id: "panel-markdown-release-notes"
+                  index: 7
+                  layout:
+                    x: 0
+                    y: 10
+                    w: 12
+                    h: 4
+                  title: "Release notes"
+                  type: "markdown.default"
+                  value: |
+                    ## Release notes
+                    - Added payment retry logic
+                    - Improved log verbosity controls
+                  variant: "markdown"
+                required:
+                  - id
+                  - layout
                   - type
                   - variant
         id:
@@ -6458,15 +6529,6 @@ components:
             type: string
             example: "int"
           example: ["string", "int"]
-        owner:
-          type: string
-          example: "teamA"
-        tags:
-          type: array
-          items:
-            type: string
-            example: "monitoring"
-          example: ["monitoring", "system", "cpu"]
         schedule:
           $ref: "#/components/schemas/SavedQuerySchedule"
       required:
@@ -8882,19 +8944,6 @@ components:
           description: Leave enabled if you want the Source, upon first subscribing to a
             topic, to read starting with the earliest available message
           example: true
-        region:
-          type: string
-          title: AWS region
-          description: AWS region where the MSK cluster is running
-          example: us-east-1
-        awsAuthenticationMethod:
-          type: string
-          title: AWS authentication method
-          enum:
-            - instanceRole
-            - accessKeys
-            - profile
-          example: instanceRole
         sessionTimeout:
           type: number
           title: Session timeout (ms)
@@ -9156,6 +9205,21 @@ components:
           minimum: 1000
           maximum: 3600000
           example: 15000
+        awsAuthenticationMethod:
+          type: string
+          title: Authentication method
+          description: AWS authentication method. Choose Auto to use IAM roles.
+          default: auto
+          enum:
+            - auto
+            - manual
+            - secret
+          example: "secret"
+        region:
+          type: string
+          title: Region
+          description: Region where the MSK cluster is located
+          example: us-east-1
         reauthenticationThreshold:
           type: number
           title: Reauthentication threshold (ms)
@@ -9656,13 +9720,7 @@ components:
           minimum: 1
           maximum: 600
           example: 30
-        enableHealthCheck:
-          type: boolean
-          title: Health check endpoint
-          description: Expose the /cribl_health endpoint, which returns 200 OK when this
-            Source is healthy
-          default: false
-          example: true
+        enableHealthCheck: {}
         ipAllowlistRegex:
           type: string
           title: IP allowlist regex
@@ -12074,21 +12132,21 @@ components:
                 "tagline": "You Know, for Search"
             }
           example: |-
-            {
-                "name": "Cribl Elastic Proxy",
-                "cluster_name": "cribl",
-                "cluster_uuid": "abcd1234efgh5678ijkl9012",
-                "version": {
-                    "number": "8.11.1",
-                    "build_type": "tar",
-                    "build_hash": "1a2b3c4",
-                    "build_date": "2025-09-01T00:00:00.000Z",
-                    "build_snapshot": false,
-                    "lucene_version": "9.10.0",
-                    "minimum_wire_compatibility_version": "7.17.0",
-                    "minimum_index_compatibility_version": "7.0.0"
-                },
-                "tagline": "You Know, for Search"
+            { \n
+                "name": "Cribl Elastic Proxy", \n
+                "cluster_name": "cribl", \n
+                "cluster_uuid": "abcd1234efgh5678ijkl9012", \n
+                "version": { \n
+                    "number": "8.11.1", \n
+                    "build_type": "tar", \n
+                    "build_hash": "1a2b3c4", \n
+                    "build_date": "2025-09-01T00:00:00.000Z", \n
+                    "build_snapshot": false, \n
+                    "lucene_version": "9.10.0", \n
+                    "minimum_wire_compatibility_version": "7.17.0", \n
+                    "minimum_index_compatibility_version": "7.0.0" \n
+                }, \n
+                "tagline": "You Know, for Search" \n
             }
       type: object
     InputConfluentCloud:
@@ -52233,6 +52291,7 @@ components:
             - drop
           default: block
           example: block
+          x-speakeasy-ignore: true
         deadletterEnabled:
           type: boolean
           default: false
@@ -68260,7 +68319,7 @@ paths:
             type: string
           description: search job id
           example: "job-123"
-  /m/{groupId}/lib/database-connections:
+  "/m/{groupId}/lib/database-connections":
     get:
       operationId: getDatabaseConnectionConfig
       tags:
@@ -68889,9 +68948,7 @@ paths:
         - name: pack
           in: path
           required: true
-          schema:
-            &a109
-            type: string
+          schema: *a109
           description: pack ID to POST
           example: "example-pack"
         - name: groupId
@@ -68899,7 +68956,6 @@ paths:
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
-            &a109
             type: string
           example: "Cribl"
   "/m/{groupId}/p/{pack}/lib/vars/{id}":
@@ -68950,9 +69006,7 @@ paths:
         - name: pack
           in: path
           required: true
-          schema:
-            &a109
-            type: string
+          schema: *a109
           description: pack ID to PATCH
           example: "example-pack"
         - name: groupId
@@ -68960,7 +69014,6 @@ paths:
           required: true
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
-            &a109
             type: string
           example: "Cribl"
     delete:
@@ -68980,9 +69033,7 @@ paths:
         - name: pack
           in: path
           required: true
-          schema:
-            &a109
-            type: string
+          schema: *a109
           description: pack ID to DELETE
           example: "example-pack"
         - name: groupId
@@ -69819,8 +69870,7 @@ paths:
                   items:
                     type: array
                     items:
-                      type: object
-                      additionalProperties: true
+                      $ref: "#/components/schemas/OutputSamplesResponse"
               example:
                 count: 2
                 items:
@@ -70191,6 +70241,7 @@ paths:
             type: string
           example: "Cribl"
       requestBody:
+        &a131
         description: Pipeline object to be updated
         required: true
         content:
@@ -71037,7 +71088,9 @@ paths:
         - name: pack
           in: path
           required: true
-          schema: *a138
+          schema:
+            &a138
+            type: string
           description: pack ID to GET
           example: "myExistingPackId"
         - name: groupId
@@ -71066,9 +71119,7 @@ paths:
         - name: pack
           in: path
           required: true
-          schema:
-            &a138
-            type: string
+          schema: *a138
           description: pack ID to GET
           example: "myExistingPackId"
         - name: groupId
@@ -71105,9 +71156,7 @@ paths:
         - name: pack
           in: path
           required: true
-          schema:
-            &a138
-            type: string
+          schema: *a138
           description: pack ID to PATCH
           example: "myExistingPackId"
         - name: disabled
@@ -75659,6 +75708,7 @@ paths:
           required: true
           schema:
             type: string
+          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           example: "Cribl"
         - name: disabled
           in: query

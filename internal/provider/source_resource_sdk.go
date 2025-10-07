@@ -987,10 +987,6 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			fromBeginning1 = nil
 		}
-		var region string
-		region = r.InputMsk.Region.ValueString()
-
-		awsAuthenticationMethod := shared.AWSAuthenticationMethod(r.InputMsk.AwsAuthenticationMethod.ValueString())
 		sessionTimeout1 := new(float64)
 		if !r.InputMsk.SessionTimeout.IsUnknown() && !r.InputMsk.SessionTimeout.IsNull() {
 			*sessionTimeout1 = r.InputMsk.SessionTimeout.ValueFloat64()
@@ -1200,6 +1196,15 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			authenticationTimeout1 = nil
 		}
+		awsAuthenticationMethod := new(shared.InputMskAuthenticationMethod)
+		if !r.InputMsk.AwsAuthenticationMethod.IsUnknown() && !r.InputMsk.AwsAuthenticationMethod.IsNull() {
+			*awsAuthenticationMethod = shared.InputMskAuthenticationMethod(r.InputMsk.AwsAuthenticationMethod.ValueString())
+		} else {
+			awsAuthenticationMethod = nil
+		}
+		var region string
+		region = r.InputMsk.Region.ValueString()
+
 		reauthenticationThreshold1 := new(float64)
 		if !r.InputMsk.ReauthenticationThreshold.IsUnknown() && !r.InputMsk.ReauthenticationThreshold.IsNull() {
 			*reauthenticationThreshold1 = r.InputMsk.ReauthenticationThreshold.ValueFloat64()
@@ -1398,8 +1403,6 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Topics:                    topics1,
 			GroupID:                   groupId1,
 			FromBeginning:             fromBeginning1,
-			Region:                    region,
-			AwsAuthenticationMethod:   awsAuthenticationMethod,
 			SessionTimeout:            sessionTimeout1,
 			RebalanceTimeout:          rebalanceTimeout1,
 			HeartbeatInterval:         heartbeatInterval1,
@@ -1412,6 +1415,8 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			InitialBackoff:            initialBackoff1,
 			BackoffRate:               backoffRate1,
 			AuthenticationTimeout:     authenticationTimeout1,
+			AwsAuthenticationMethod:   awsAuthenticationMethod,
+			Region:                    region,
 			ReauthenticationThreshold: reauthenticationThreshold1,
 			AwsSecretKey:              awsSecretKey,
 			Endpoint:                  endpoint,
@@ -1695,11 +1700,9 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			keepAliveTimeout = nil
 		}
-		enableHealthCheck := new(bool)
+		var enableHealthCheck interface{}
 		if !r.InputHTTP.EnableHealthCheck.IsUnknown() && !r.InputHTTP.EnableHealthCheck.IsNull() {
-			*enableHealthCheck = r.InputHTTP.EnableHealthCheck.ValueBool()
-		} else {
-			enableHealthCheck = nil
+			_ = json.Unmarshal([]byte(r.InputHTTP.EnableHealthCheck.ValueString()), &enableHealthCheck)
 		}
 		ipAllowlistRegex := new(string)
 		if !r.InputHTTP.IPAllowlistRegex.IsUnknown() && !r.InputHTTP.IPAllowlistRegex.IsNull() {

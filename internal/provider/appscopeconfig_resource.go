@@ -452,140 +452,140 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 														},
 													},
 												},
-												"metric": schema.SingleNestedAttribute{
-													Computed: true,
-													Optional: true,
-													Attributes: map[string]schema.Attribute{
-														"enable": schema.BoolAttribute{
-															Computed:    true,
-															Optional:    true,
-															Description: `Not Null`,
-															Validators: []validator.Bool{
-																speakeasy_boolvalidators.NotNull(),
-															},
-														},
-														"format": schema.SingleNestedAttribute{
-															Computed: true,
-															Optional: true,
-															Attributes: map[string]schema.Attribute{
-																"statsdmaxlen": schema.Float64Attribute{
-																	Computed: true,
-																	Optional: true,
-																},
-																"statsdprefix": schema.StringAttribute{
-																	Computed: true,
-																	Optional: true,
-																},
-																"type": schema.StringAttribute{
-																	Computed: true,
-																	Optional: true,
-																},
-																"verbosity": schema.Float64Attribute{
-																	Computed: true,
-																	Optional: true,
-																},
-															},
-															Description: `Not Null`,
-															Validators: []validator.Object{
-																speakeasy_objectvalidators.NotNull(),
-															},
-														},
-														"transport": schema.SingleNestedAttribute{
-															Computed: true,
-															Optional: true,
-															Attributes: map[string]schema.Attribute{
-																"buffer": schema.StringAttribute{
-																	Computed:    true,
-																	Optional:    true,
-																	Description: `must be one of ["line", "full"]`,
-																	Validators: []validator.String{
-																		stringvalidator.OneOf(
-																			"line",
-																			"full",
-																		),
-																	},
-																},
-																"host": schema.StringAttribute{
-																	Computed: true,
-																	Optional: true,
-																},
-																"path": schema.StringAttribute{
-																	Computed: true,
-																	Optional: true,
-																},
-																"port": schema.Float64Attribute{
-																	Computed: true,
-																	Optional: true,
-																},
-																"tls": schema.SingleNestedAttribute{
-																	Computed: true,
-																	Optional: true,
-																	Attributes: map[string]schema.Attribute{
-																		"cacertpath": schema.StringAttribute{
-																			Computed: true,
-																			Optional: true,
-																		},
-																		"enable": schema.BoolAttribute{
-																			Computed: true,
-																			Optional: true,
-																		},
-																		"validateserver": schema.BoolAttribute{
-																			Computed: true,
-																			Optional: true,
-																		},
-																	},
-																},
-																"type": schema.StringAttribute{
-																	Computed: true,
-																	Optional: true,
-																},
-															},
-															Description: `Not Null`,
-															Validators: []validator.Object{
-																speakeasy_objectvalidators.NotNull(),
-															},
-														},
-														"watch": schema.ListNestedAttribute{
-															Computed: true,
-															Optional: true,
-															NestedObject: schema.NestedAttributeObject{
-																Validators: []validator.Object{
-																	speakeasy_objectvalidators.NotNull(),
-																},
-																Attributes: map[string]schema.Attribute{},
-															},
-															Description: `Not Null`,
-															Validators: []validator.List{
-																speakeasy_listvalidators.NotNull(),
-															},
-														},
-													},
-												},
-												"payload": schema.SingleNestedAttribute{
-													Computed: true,
-													Optional: true,
-													Attributes: map[string]schema.Attribute{
-														"dir": schema.StringAttribute{
-															Computed:    true,
-															Optional:    true,
-															Description: `Not Null`,
-															Validators: []validator.String{
-																speakeasy_stringvalidators.NotNull(),
-															},
-														},
-														"enable": schema.BoolAttribute{
-															Computed:    true,
-															Optional:    true,
-															Description: `Not Null`,
-															Validators: []validator.Bool{
-																speakeasy_boolvalidators.NotNull(),
-															},
-														},
-													},
-												},
 												"summaryperiod": schema.Float64Attribute{
 													Computed: true,
 													Optional: true,
+												},
+											},
+										},
+										"metric": schema.SingleNestedAttribute{
+											Computed: true,
+											Optional: true,
+											Attributes: map[string]schema.Attribute{
+												"enable": schema.BoolAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Not Null`,
+													Validators: []validator.Bool{
+														speakeasy_boolvalidators.NotNull(),
+													},
+												},
+												"format": schema.SingleNestedAttribute{
+													Computed: true,
+													Optional: true,
+													Attributes: map[string]schema.Attribute{
+														"statsdmaxlen": schema.Float64Attribute{
+															Computed: true,
+															Optional: true,
+														},
+														"statsdprefix": schema.StringAttribute{
+															Computed: true,
+															Optional: true,
+														},
+														"type": schema.StringAttribute{
+															Computed: true,
+															Optional: true,
+														},
+														"verbosity": schema.Float64Attribute{
+															Computed: true,
+															Optional: true,
+														},
+													},
+													Description: `Not Null`,
+													Validators: []validator.Object{
+														speakeasy_objectvalidators.NotNull(),
+													},
+												},
+												"transport": schema.SingleNestedAttribute{
+													Computed: true,
+													Optional: true,
+													Attributes: map[string]schema.Attribute{
+														"buffer": schema.StringAttribute{
+															Computed:    true,
+															Optional:    true,
+															Description: `must be one of ["line", "full"]`,
+															Validators: []validator.String{
+																stringvalidator.OneOf(
+																	"line",
+																	"full",
+																),
+															},
+														},
+														"host": schema.StringAttribute{
+															Computed: true,
+															Optional: true,
+														},
+														"path": schema.StringAttribute{
+															Computed: true,
+															Optional: true,
+														},
+														"port": schema.Float64Attribute{
+															Computed: true,
+															Optional: true,
+														},
+														"tls": schema.SingleNestedAttribute{
+															Computed: true,
+															Optional: true,
+															Attributes: map[string]schema.Attribute{
+																"cacertpath": schema.StringAttribute{
+																	Computed: true,
+																	Optional: true,
+																},
+																"enable": schema.BoolAttribute{
+																	Computed: true,
+																	Optional: true,
+																},
+																"validateserver": schema.BoolAttribute{
+																	Computed: true,
+																	Optional: true,
+																},
+															},
+														},
+														"type": schema.StringAttribute{
+															Computed: true,
+															Optional: true,
+														},
+													},
+													Description: `Not Null`,
+													Validators: []validator.Object{
+														speakeasy_objectvalidators.NotNull(),
+													},
+												},
+												"watch": schema.ListNestedAttribute{
+													Computed: true,
+													Optional: true,
+													NestedObject: schema.NestedAttributeObject{
+														Validators: []validator.Object{
+															speakeasy_objectvalidators.NotNull(),
+														},
+														Attributes: map[string]schema.Attribute{},
+													},
+													Description: `Not Null`,
+													Validators: []validator.List{
+														speakeasy_listvalidators.NotNull(),
+													},
+												},
+											},
+										},
+										"payload": schema.SingleNestedAttribute{
+											Computed: true,
+											Optional: true,
+											Attributes: map[string]schema.Attribute{
+												"dir": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Not Null`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+													},
+												},
+												"enable": schema.BoolAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Not Null`,
+													Validators: []validator.Bool{
+														speakeasy_boolvalidators.NotNull(),
+													},
 												},
 											},
 										},
@@ -860,105 +860,26 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 								Computed: true,
 								Optional: true,
 							},
-							"config": schema.SingleNestedAttribute{
+							"configevent": schema.BoolAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"log": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
-									"enable": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-									},
-									"format": schema.SingleNestedAttribute{
-										Computed: true,
-										Optional: true,
-										Attributes: map[string]schema.Attribute{
-											"level": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `must be one of ["info", "debug", "trace", "warning", "error"]`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"info",
-														"debug",
-														"trace",
-														"warning",
-														"error",
-													),
-												},
-											},
-											"maxline": schema.Float64Attribute{
-												Computed: true,
-												Optional: true,
-											},
-										},
-									},
-									"log": schema.SingleNestedAttribute{
-										Computed: true,
-										Optional: true,
-										Attributes: map[string]schema.Attribute{
-											"level": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Description: `must be one of ["info", "debug", "trace"]`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"info",
-														"debug",
-														"trace",
-													),
-												},
-											},
-											"transport": schema.SingleNestedAttribute{
-												Computed: true,
-												Optional: true,
-												Attributes: map[string]schema.Attribute{
-													"buffer": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `must be one of ["line", "full"]`,
-														Validators: []validator.String{
-															stringvalidator.OneOf(
-																"line",
-																"full",
-															),
-														},
-													},
-													"host": schema.StringAttribute{
-														Computed: true,
-														Optional: true,
-													},
-													"path": schema.StringAttribute{
-														Computed: true,
-														Optional: true,
-													},
-													"port": schema.Float64Attribute{
-														Computed: true,
-														Optional: true,
-													},
-													"tls": schema.SingleNestedAttribute{
-														Computed: true,
-														Optional: true,
-														Attributes: map[string]schema.Attribute{
-															"cacertpath": schema.StringAttribute{
-																Computed: true,
-																Optional: true,
-															},
-															"enable": schema.BoolAttribute{
-																Computed: true,
-																Optional: true,
-															},
-															"validateserver": schema.BoolAttribute{
-																Computed: true,
-																Optional: true,
-															},
-														},
-													},
-													"type": schema.StringAttribute{
-														Computed: true,
-														Optional: true,
-													},
-												},
-											},
+									"level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Description: `must be one of ["error", "debug", "info", "warning", "none"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"debug",
+												"info",
+												"warning",
+												"none",
+											),
 										},
 									},
 									"transport": schema.SingleNestedAttribute{
@@ -1014,7 +935,7 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 									},
 								},
 							},
-							"configevent": schema.BoolAttribute{
+							"summaryperiod": schema.Float64Attribute{
 								Computed: true,
 								Optional: true,
 							},
@@ -1025,27 +946,38 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"enable": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"format": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `must be one of ["statsd", "ndjson"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"statsd",
-										"ndjson",
-									),
+								Description: `Not Null`,
+								Validators: []validator.Bool{
+									speakeasy_boolvalidators.NotNull(),
 								},
 							},
-							"statsdmaxlen": schema.Float64Attribute{
+							"format": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
-							},
-							"statsdprefix": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"statsdmaxlen": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+									"statsdprefix": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"verbosity": schema.Float64Attribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Description: `Not Null`,
+								Validators: []validator.Object{
+									speakeasy_objectvalidators.NotNull(),
+								},
 							},
 							"transport": schema.SingleNestedAttribute{
 								Computed: true,
@@ -1097,10 +1029,24 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 										Optional: true,
 									},
 								},
+								Description: `Not Null`,
+								Validators: []validator.Object{
+									speakeasy_objectvalidators.NotNull(),
+								},
 							},
-							"verbosity": schema.Float64Attribute{
+							"watch": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
+									Attributes: map[string]schema.Attribute{},
+								},
+								Description: `Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
 							},
 						},
 					},
@@ -1520,90 +1466,90 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 																	},
 																},
 															},
-															"metric": schema.SingleNestedAttribute{
-																Computed: true,
-																Attributes: map[string]schema.Attribute{
-																	"enable": schema.BoolAttribute{
-																		Computed: true,
-																	},
-																	"format": schema.SingleNestedAttribute{
-																		Computed: true,
-																		Attributes: map[string]schema.Attribute{
-																			"statsdmaxlen": schema.Float64Attribute{
-																				Computed: true,
-																			},
-																			"statsdprefix": schema.StringAttribute{
-																				Computed: true,
-																			},
-																			"type": schema.StringAttribute{
-																				Computed: true,
-																			},
-																			"verbosity": schema.Float64Attribute{
-																				Computed: true,
-																			},
-																		},
-																	},
-																	"transport": schema.SingleNestedAttribute{
-																		Computed: true,
-																		Attributes: map[string]schema.Attribute{
-																			"buffer": schema.StringAttribute{
-																				Computed:    true,
-																				Description: `must be one of ["line", "full"]`,
-																				Validators: []validator.String{
-																					stringvalidator.OneOf(
-																						"line",
-																						"full",
-																					),
-																				},
-																			},
-																			"host": schema.StringAttribute{
-																				Computed: true,
-																			},
-																			"path": schema.StringAttribute{
-																				Computed: true,
-																			},
-																			"port": schema.Float64Attribute{
-																				Computed: true,
-																			},
-																			"tls": schema.SingleNestedAttribute{
-																				Computed: true,
-																				Attributes: map[string]schema.Attribute{
-																					"cacertpath": schema.StringAttribute{
-																						Computed: true,
-																					},
-																					"enable": schema.BoolAttribute{
-																						Computed: true,
-																					},
-																					"validateserver": schema.BoolAttribute{
-																						Computed: true,
-																					},
-																				},
-																			},
-																			"type": schema.StringAttribute{
-																				Computed: true,
-																			},
-																		},
-																	},
-																	"watch": schema.ListNestedAttribute{
-																		Computed: true,
-																		NestedObject: schema.NestedAttributeObject{
-																			Attributes: map[string]schema.Attribute{},
-																		},
-																	},
-																},
-															},
-															"payload": schema.SingleNestedAttribute{
-																Computed: true,
-																Attributes: map[string]schema.Attribute{
-																	"dir": schema.StringAttribute{
-																		Computed: true,
-																	},
-																	"enable": schema.BoolAttribute{
-																		Computed: true,
-																	},
-																},
-															},
 															"summaryperiod": schema.Float64Attribute{
+																Computed: true,
+															},
+														},
+													},
+													"metric": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"enable": schema.BoolAttribute{
+																Computed: true,
+															},
+															"format": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"statsdmaxlen": schema.Float64Attribute{
+																		Computed: true,
+																	},
+																	"statsdprefix": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"type": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"verbosity": schema.Float64Attribute{
+																		Computed: true,
+																	},
+																},
+															},
+															"transport": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"buffer": schema.StringAttribute{
+																		Computed:    true,
+																		Description: `must be one of ["line", "full"]`,
+																		Validators: []validator.String{
+																			stringvalidator.OneOf(
+																				"line",
+																				"full",
+																			),
+																		},
+																	},
+																	"host": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"path": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"port": schema.Float64Attribute{
+																		Computed: true,
+																	},
+																	"tls": schema.SingleNestedAttribute{
+																		Computed: true,
+																		Attributes: map[string]schema.Attribute{
+																			"cacertpath": schema.StringAttribute{
+																				Computed: true,
+																			},
+																			"enable": schema.BoolAttribute{
+																				Computed: true,
+																			},
+																			"validateserver": schema.BoolAttribute{
+																				Computed: true,
+																			},
+																		},
+																	},
+																	"type": schema.StringAttribute{
+																		Computed: true,
+																	},
+																},
+															},
+															"watch": schema.ListNestedAttribute{
+																Computed: true,
+																NestedObject: schema.NestedAttributeObject{
+																	Attributes: map[string]schema.Attribute{},
+																},
+															},
+														},
+													},
+													"payload": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"dir": schema.StringAttribute{
+																Computed: true,
+															},
+															"enable": schema.BoolAttribute{
 																Computed: true,
 															},
 														},
@@ -1765,88 +1711,23 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 										"commanddir": schema.StringAttribute{
 											Computed: true,
 										},
-										"config": schema.SingleNestedAttribute{
+										"configevent": schema.BoolAttribute{
+											Computed: true,
+										},
+										"log": schema.SingleNestedAttribute{
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
-												"enable": schema.BoolAttribute{
-													Computed: true,
-												},
-												"format": schema.SingleNestedAttribute{
-													Computed: true,
-													Attributes: map[string]schema.Attribute{
-														"level": schema.StringAttribute{
-															Computed:    true,
-															Description: `must be one of ["info", "debug", "trace", "warning", "error"]`,
-															Validators: []validator.String{
-																stringvalidator.OneOf(
-																	"info",
-																	"debug",
-																	"trace",
-																	"warning",
-																	"error",
-																),
-															},
-														},
-														"maxline": schema.Float64Attribute{
-															Computed: true,
-														},
-													},
-												},
-												"log": schema.SingleNestedAttribute{
-													Computed: true,
-													Attributes: map[string]schema.Attribute{
-														"level": schema.StringAttribute{
-															Computed:    true,
-															Description: `must be one of ["info", "debug", "trace"]`,
-															Validators: []validator.String{
-																stringvalidator.OneOf(
-																	"info",
-																	"debug",
-																	"trace",
-																),
-															},
-														},
-														"transport": schema.SingleNestedAttribute{
-															Computed: true,
-															Attributes: map[string]schema.Attribute{
-																"buffer": schema.StringAttribute{
-																	Computed:    true,
-																	Description: `must be one of ["line", "full"]`,
-																	Validators: []validator.String{
-																		stringvalidator.OneOf(
-																			"line",
-																			"full",
-																		),
-																	},
-																},
-																"host": schema.StringAttribute{
-																	Computed: true,
-																},
-																"path": schema.StringAttribute{
-																	Computed: true,
-																},
-																"port": schema.Float64Attribute{
-																	Computed: true,
-																},
-																"tls": schema.SingleNestedAttribute{
-																	Computed: true,
-																	Attributes: map[string]schema.Attribute{
-																		"cacertpath": schema.StringAttribute{
-																			Computed: true,
-																		},
-																		"enable": schema.BoolAttribute{
-																			Computed: true,
-																		},
-																		"validateserver": schema.BoolAttribute{
-																			Computed: true,
-																		},
-																	},
-																},
-																"type": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
+												"level": schema.StringAttribute{
+													Computed:    true,
+													Description: `must be one of ["error", "debug", "info", "warning", "none"]`,
+													Validators: []validator.String{
+														stringvalidator.OneOf(
+															"error",
+															"debug",
+															"info",
+															"warning",
+															"none",
+														),
 													},
 												},
 												"transport": schema.SingleNestedAttribute{
@@ -1892,7 +1773,7 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 												},
 											},
 										},
-										"configevent": schema.BoolAttribute{
+										"summaryperiod": schema.Float64Attribute{
 											Computed: true,
 										},
 									},
@@ -1903,21 +1784,22 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 										"enable": schema.BoolAttribute{
 											Computed: true,
 										},
-										"format": schema.StringAttribute{
-											Computed:    true,
-											Description: `must be one of ["statsd", "ndjson"]`,
-											Validators: []validator.String{
-												stringvalidator.OneOf(
-													"statsd",
-													"ndjson",
-												),
+										"format": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"statsdmaxlen": schema.Float64Attribute{
+													Computed: true,
+												},
+												"statsdprefix": schema.StringAttribute{
+													Computed: true,
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+												"verbosity": schema.Float64Attribute{
+													Computed: true,
+												},
 											},
-										},
-										"statsdmaxlen": schema.Float64Attribute{
-											Computed: true,
-										},
-										"statsdprefix": schema.StringAttribute{
-											Computed: true,
 										},
 										"transport": schema.SingleNestedAttribute{
 											Computed: true,
@@ -1960,8 +1842,11 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 												},
 											},
 										},
-										"verbosity": schema.Float64Attribute{
+										"watch": schema.ListNestedAttribute{
 											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{},
+											},
 										},
 									},
 								},

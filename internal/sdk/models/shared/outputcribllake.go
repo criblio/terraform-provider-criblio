@@ -31,42 +31,13 @@ func (e *OutputCriblLakeType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputCriblLakeBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputCriblLakeBackpressureBehavior string
-
-const (
-	OutputCriblLakeBackpressureBehaviorBlock OutputCriblLakeBackpressureBehavior = "block"
-	OutputCriblLakeBackpressureBehaviorDrop  OutputCriblLakeBackpressureBehavior = "drop"
-)
-
-func (e OutputCriblLakeBackpressureBehavior) ToPointer() *OutputCriblLakeBackpressureBehavior {
-	return &e
-}
-func (e *OutputCriblLakeBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputCriblLakeBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCriblLakeBackpressureBehavior: %v", v)
-	}
-}
-
 type OutputCriblLake struct {
 	// Unique ID for this output
 	ID   string              `json:"id"`
 	Type OutputCriblLakeType `json:"type"`
 	// Lake dataset to send the data to.
-	DestPath *string `json:"destPath,omitempty"`
-	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputCriblLakeBackpressureBehavior `default:"block" json:"onBackpressure"`
-	Description    *string                              `json:"description,omitempty"`
+	DestPath    *string `json:"destPath,omitempty"`
+	Description *string `json:"description,omitempty"`
 }
 
 func (o OutputCriblLake) MarshalJSON() ([]byte, error) {
@@ -99,13 +70,6 @@ func (o *OutputCriblLake) GetDestPath() *string {
 		return nil
 	}
 	return o.DestPath
-}
-
-func (o *OutputCriblLake) GetOnBackpressure() *OutputCriblLakeBackpressureBehavior {
-	if o == nil {
-		return nil
-	}
-	return o.OnBackpressure
 }
 
 func (o *OutputCriblLake) GetDescription() *string {

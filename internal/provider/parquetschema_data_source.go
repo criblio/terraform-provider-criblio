@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,9 +28,10 @@ type ParquetSchemaDataSource struct {
 
 // ParquetSchemaDataSourceModel describes the data model.
 type ParquetSchemaDataSourceModel struct {
-	GroupID types.String             `tfsdk:"group_id"`
-	ID      types.String             `tfsdk:"id"`
-	Items   []tfTypes.SchemaLibEntry `tfsdk:"items"`
+	Description types.String `tfsdk:"description"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Schema      types.String `tfsdk:"schema"`
 }
 
 // Metadata returns the data source type name.
@@ -45,6 +45,9 @@ func (r *ParquetSchemaDataSource) Schema(ctx context.Context, req datasource.Sch
 		MarkdownDescription: "ParquetSchema DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
@@ -53,22 +56,9 @@ func (r *ParquetSchemaDataSource) Schema(ctx context.Context, req datasource.Sch
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"schema": schema.StringAttribute{
-							Computed:    true,
-							Description: `JSON schema matching standards of draft version 2019-09`,
-						},
-					},
-				},
+			"schema": schema.StringAttribute{
+				Computed:    true,
+				Description: `JSON schema matching standards of draft version 2019-09`,
 			},
 		},
 	}
@@ -134,11 +124,11 @@ func (r *ParquetSchemaDataSource) Read(ctx context.Context, req datasource.ReadR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSchemaByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSchemaLibEntry(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

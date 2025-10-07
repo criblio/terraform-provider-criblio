@@ -18510,12 +18510,6 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 		} else {
 			destPath7 = nil
 		}
-		onBackpressure52 := new(shared.OutputCriblLakeBackpressureBehavior)
-		if !r.OutputCriblLake.OnBackpressure.IsUnknown() && !r.OutputCriblLake.OnBackpressure.IsNull() {
-			*onBackpressure52 = shared.OutputCriblLakeBackpressureBehavior(r.OutputCriblLake.OnBackpressure.ValueString())
-		} else {
-			onBackpressure52 = nil
-		}
 		description57 := new(string)
 		if !r.OutputCriblLake.Description.IsUnknown() && !r.OutputCriblLake.Description.IsNull() {
 			*description57 = r.OutputCriblLake.Description.ValueString()
@@ -18523,11 +18517,10 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			description57 = nil
 		}
 		outputCriblLake = &shared.OutputCriblLake{
-			ID:             id57,
-			Type:           typeVar57,
-			DestPath:       destPath7,
-			OnBackpressure: onBackpressure52,
-			Description:    description57,
+			ID:          id57,
+			Type:        typeVar57,
+			DestPath:    destPath7,
+			Description: description57,
 		}
 	}
 	if outputCriblLake != nil {
@@ -18901,11 +18894,11 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 		} else {
 			dumpFormatErrorsToDisk = nil
 		}
-		onBackpressure53 := new(shared.OutputClickHouseBackpressureBehavior)
+		onBackpressure52 := new(shared.OutputClickHouseBackpressureBehavior)
 		if !r.OutputClickHouse.OnBackpressure.IsUnknown() && !r.OutputClickHouse.OnBackpressure.IsNull() {
-			*onBackpressure53 = shared.OutputClickHouseBackpressureBehavior(r.OutputClickHouse.OnBackpressure.ValueString())
+			*onBackpressure52 = shared.OutputClickHouseBackpressureBehavior(r.OutputClickHouse.OnBackpressure.ValueString())
 		} else {
-			onBackpressure53 = nil
+			onBackpressure52 = nil
 		}
 		description59 := new(string)
 		if !r.OutputClickHouse.Description.IsUnknown() && !r.OutputClickHouse.Description.IsNull() {
@@ -19117,7 +19110,7 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			TimeoutRetrySettings:          timeoutRetrySettings26,
 			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader26,
 			DumpFormatErrorsToDisk:        dumpFormatErrorsToDisk,
-			OnBackpressure:                onBackpressure53,
+			OnBackpressure:                onBackpressure52,
 			Description:                   description59,
 			Username:                      username9,
 			Password:                      password9,
@@ -19326,11 +19319,11 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 		} else {
 			throttleRateReqPerSec1 = nil
 		}
-		onBackpressure54 := new(shared.OutputXsiamBackpressureBehavior)
+		onBackpressure53 := new(shared.OutputXsiamBackpressureBehavior)
 		if !r.OutputXsiam.OnBackpressure.IsUnknown() && !r.OutputXsiam.OnBackpressure.IsNull() {
-			*onBackpressure54 = shared.OutputXsiamBackpressureBehavior(r.OutputXsiam.OnBackpressure.ValueString())
+			*onBackpressure53 = shared.OutputXsiamBackpressureBehavior(r.OutputXsiam.OnBackpressure.ValueString())
 		} else {
-			onBackpressure54 = nil
+			onBackpressure53 = nil
 		}
 		totalMemoryLimitKb9 := new(float64)
 		if !r.OutputXsiam.TotalMemoryLimitKB.IsUnknown() && !r.OutputXsiam.TotalMemoryLimitKB.IsNull() {
@@ -19463,7 +19456,7 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			TimeoutRetrySettings:          timeoutRetrySettings27,
 			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader27,
 			ThrottleRateReqPerSec:         throttleRateReqPerSec1,
-			OnBackpressure:                onBackpressure54,
+			OnBackpressure:                onBackpressure53,
 			TotalMemoryLimitKB:            totalMemoryLimitKb9,
 			Description:                   description60,
 			URL:                           url17,
@@ -19751,11 +19744,11 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 		} else {
 			responseHonorRetryAfterHeader28 = nil
 		}
-		onBackpressure55 := new(shared.OutputDynatraceHTTPBackpressureBehavior)
+		onBackpressure54 := new(shared.OutputDynatraceHTTPBackpressureBehavior)
 		if !r.OutputDynatraceHTTP.OnBackpressure.IsUnknown() && !r.OutputDynatraceHTTP.OnBackpressure.IsNull() {
-			*onBackpressure55 = shared.OutputDynatraceHTTPBackpressureBehavior(r.OutputDynatraceHTTP.OnBackpressure.ValueString())
+			*onBackpressure54 = shared.OutputDynatraceHTTPBackpressureBehavior(r.OutputDynatraceHTTP.OnBackpressure.ValueString())
 		} else {
-			onBackpressure55 = nil
+			onBackpressure54 = nil
 		}
 		authType31 := new(shared.OutputDynatraceHTTPAuthenticationType)
 		if !r.OutputDynatraceHTTP.AuthType.IsUnknown() && !r.OutputDynatraceHTTP.AuthType.IsNull() {
@@ -19886,7 +19879,7 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			ResponseRetrySettings:         responseRetrySettings28,
 			TimeoutRetrySettings:          timeoutRetrySettings28,
 			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader28,
-			OnBackpressure:                onBackpressure55,
+			OnBackpressure:                onBackpressure54,
 			AuthType:                      authType31,
 			Format:                        format18,
 			Endpoint:                      endpoint13,
@@ -20073,11 +20066,11 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 		} else {
 			authTokenName1 = nil
 		}
-		onBackpressure56 := new(shared.OutputDynatraceOtlpBackpressureBehavior)
+		onBackpressure55 := new(shared.OutputDynatraceOtlpBackpressureBehavior)
 		if !r.OutputDynatraceOtlp.OnBackpressure.IsUnknown() && !r.OutputDynatraceOtlp.OnBackpressure.IsNull() {
-			*onBackpressure56 = shared.OutputDynatraceOtlpBackpressureBehavior(r.OutputDynatraceOtlp.OnBackpressure.ValueString())
+			*onBackpressure55 = shared.OutputDynatraceOtlpBackpressureBehavior(r.OutputDynatraceOtlp.OnBackpressure.ValueString())
 		} else {
-			onBackpressure56 = nil
+			onBackpressure55 = nil
 		}
 		description63 := new(string)
 		if !r.OutputDynatraceOtlp.Description.IsUnknown() && !r.OutputDynatraceOtlp.Description.IsNull() {
@@ -20253,7 +20246,7 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			EndpointType:                  endpointType,
 			TokenSecret:                   tokenSecret1,
 			AuthTokenName:                 authTokenName1,
-			OnBackpressure:                onBackpressure56,
+			OnBackpressure:                onBackpressure55,
 			Description:                   description63,
 			RejectUnauthorized:            rejectUnauthorized56,
 			UseRoundRobinDNS:              useRoundRobinDns28,

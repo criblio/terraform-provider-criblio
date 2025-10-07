@@ -24,55 +24,40 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
   elements = [
     {
       element = {
-        color_palette    = "blue"
-        description      = "CPU usage chart"
+        description      = "5xx error rate for checkout"
         empty            = false
-        h                = 4
         hide_panel       = false
-        horizontal_chart = true
-        id               = "element1"
+        horizontal_chart = false
+        id               = "panel-http-5xx"
+        index            = 3
+        input_id         = "service"
         layout = {
           h = 0
           w = 9
           x = 8
           y = 2
         }
-        query = {
-          search_query_saved = {
-            query    = "dataset=my_dataset | stats count"
-            query_id = "query123"
-            run_mode = "lastRun"
-            type     = "saved"
+        search = {
+          search_query_inline = {
+            earliest = {
+              number = 1696166400
+            }
+            latest = {
+              number = 1696170000
+            }
+            parent_search_id = "parentSearch1"
+            query            = "error OR warn"
+            sample_rate      = 0.5
+            timezone         = "UTC"
+            type             = "inline"
           }
         }
-        title   = "CPU Usage"
-        type    = "chart.line"
-        variant = "default"
-        w       = 6
-        x       = 0
-        x_axis = {
-          data_field        = "time"
-          inverse           = false
-          label_interval    = "1m"
-          label_orientation = 0
-          name              = "Time"
-          offset            = 0
-          position          = "bottom"
-          type              = "time"
+        title = "HTTP 5xx errors"
+        type  = "chart.line"
+        value = {
+          key = jsonencode("value")
         }
-        y = 0
-        y_axis = {
-          data_field = [
-            "cpu",
-          ]
-          interval   = 10
-          max        = 100
-          min        = 0
-          position   = "left"
-          scale      = "linear"
-          split_line = true
-          type       = "value"
-        }
+        variant = "markdown"
       }
     }
   ]
@@ -80,7 +65,6 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
   modified     = 1696170000
   modified_by  = "user456"
   name         = "System Metrics Dashboard"
-  owner        = "teamA"
   pack_id      = "New Pack Id"
   refresh_rate = 60
   resolved_dataset_ids = [
@@ -96,11 +80,6 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
     }
     tz = "UTC"
   }
-  tags = [
-    "monitoring",
-    "system",
-    "cpu",
-  ]
 }
 ```
 
@@ -124,16 +103,10 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
 - `display_created_by` (String)
 - `display_modified_by` (String)
 - `modified_by` (String)
-- `owner` (String)
 - `pack_id` (String)
 - `refresh_rate` (Number)
 - `resolved_dataset_ids` (List of String)
 - `schedule` (Attributes) (see [below for nested schema](#nestedatt--schedule))
-- `tags` (List of String)
-
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
 
 <a id="nestedatt--elements"></a>
 ### Nested Schema for `elements`
@@ -141,29 +114,26 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
 Optional:
 
 - `element` (Attributes) (see [below for nested schema](#nestedatt--elements--element))
+- `element_markdown` (Attributes) (see [below for nested schema](#nestedatt--elements--element_markdown))
 
 <a id="nestedatt--elements--element"></a>
 ### Nested Schema for `elements.element`
 
 Optional:
 
-- `color_palette` (String) Not Null
 - `description` (String)
 - `empty` (Boolean)
-- `h` (Number)
 - `hide_panel` (Boolean)
 - `horizontal_chart` (Boolean)
 - `id` (String) Not Null
+- `index` (Number)
+- `input_id` (String)
 - `layout` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--element--layout))
-- `query` (Attributes) (see [below for nested schema](#nestedatt--elements--element--query))
+- `search` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--element--search))
 - `title` (String)
 - `type` (String) Not Null; must be one of ["chart.line", "chart.column", "chart.horizontalBar", "chart.area", "chart.scatter", "chart.pie", "chart.funnel", "chart.gauge", "chart.map", "list.events", "list.table", "counter.single", "input.timerange", "input.dropdown", "input.text", "input.number"]
-- `variant` (String) Not Null
-- `w` (Number)
-- `x` (Number)
-- `x_axis` (Attributes) (see [below for nested schema](#nestedatt--elements--element--x_axis))
-- `y` (Number)
-- `y_axis` (Attributes) (see [below for nested schema](#nestedatt--elements--element--y_axis))
+- `value` (Map of String)
+- `variant` (String) must be one of ["visualization", "input", "markdown"]
 
 <a id="nestedatt--elements--element--layout"></a>
 ### Nested Schema for `elements.element.layout`
@@ -176,30 +146,30 @@ Optional:
 - `y` (Number) Not Null
 
 
-<a id="nestedatt--elements--element--query"></a>
-### Nested Schema for `elements.element.query`
+<a id="nestedatt--elements--element--search"></a>
+### Nested Schema for `elements.element.search`
 
 Optional:
 
-- `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--elements--element--query--search_query_inline))
-- `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--elements--element--query--search_query_saved))
-- `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--elements--element--query--search_query_values))
+- `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline))
+- `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_saved))
+- `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_values))
 
-<a id="nestedatt--elements--element--query--search_query_inline"></a>
-### Nested Schema for `elements.element.query.search_query_inline`
+<a id="nestedatt--elements--element--search--search_query_inline"></a>
+### Nested Schema for `elements.element.search.search_query_inline`
 
 Optional:
 
-- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--query--search_query_inline--earliest))
-- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--query--search_query_inline--latest))
+- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline--earliest))
+- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline--latest))
 - `parent_search_id` (String)
 - `query` (String)
 - `sample_rate` (Number)
 - `timezone` (String)
 - `type` (String) Not Null; must be "inline"
 
-<a id="nestedatt--elements--element--query--search_query_inline--earliest"></a>
-### Nested Schema for `elements.element.query.search_query_inline.earliest`
+<a id="nestedatt--elements--element--search--search_query_inline--earliest"></a>
+### Nested Schema for `elements.element.search.search_query_inline.earliest`
 
 Optional:
 
@@ -207,8 +177,8 @@ Optional:
 - `str` (String)
 
 
-<a id="nestedatt--elements--element--query--search_query_inline--latest"></a>
-### Nested Schema for `elements.element.query.search_query_inline.latest`
+<a id="nestedatt--elements--element--search--search_query_inline--latest"></a>
+### Nested Schema for `elements.element.search.search_query_inline.latest`
 
 Optional:
 
@@ -217,8 +187,8 @@ Optional:
 
 
 
-<a id="nestedatt--elements--element--query--search_query_saved"></a>
-### Nested Schema for `elements.element.query.search_query_saved`
+<a id="nestedatt--elements--element--search--search_query_saved"></a>
+### Nested Schema for `elements.element.search.search_query_saved`
 
 Optional:
 
@@ -228,8 +198,8 @@ Optional:
 - `type` (String) Not Null; must be "saved"
 
 
-<a id="nestedatt--elements--element--query--search_query_values"></a>
-### Nested Schema for `elements.element.query.search_query_values`
+<a id="nestedatt--elements--element--search--search_query_values"></a>
+### Nested Schema for `elements.element.search.search_query_values`
 
 Optional:
 
@@ -238,34 +208,32 @@ Optional:
 
 
 
-<a id="nestedatt--elements--element--x_axis"></a>
-### Nested Schema for `elements.element.x_axis`
+
+<a id="nestedatt--elements--element_markdown"></a>
+### Nested Schema for `elements.element_markdown`
 
 Optional:
 
-- `data_field` (String)
-- `inverse` (Boolean)
-- `label_interval` (String)
-- `label_orientation` (Number)
-- `name` (String)
-- `offset` (Number)
-- `position` (String)
-- `type` (String)
+- `description` (String)
+- `empty` (Boolean)
+- `hide_panel` (Boolean)
+- `id` (String) Not Null
+- `index` (Number)
+- `layout` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--element_markdown--layout))
+- `title` (String)
+- `type` (String) Not Null; must be "markdown.default"
+- `value` (String)
+- `variant` (String) Not Null; must be "markdown"
 
-
-<a id="nestedatt--elements--element--y_axis"></a>
-### Nested Schema for `elements.element.y_axis`
+<a id="nestedatt--elements--element_markdown--layout"></a>
+### Nested Schema for `elements.element_markdown.layout`
 
 Optional:
 
-- `data_field` (List of String)
-- `interval` (Number)
-- `max` (Number)
-- `min` (Number)
-- `position` (String)
-- `scale` (String)
-- `split_line` (Boolean)
-- `type` (String)
+- `h` (Number) Not Null
+- `w` (Number) Not Null
+- `x` (Number) Not Null
+- `y` (Number) Not Null
 
 
 
@@ -287,182 +255,3 @@ Optional:
 Optional:
 
 - `disabled` (Boolean) Not Null
-
-
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `cache_ttl_seconds` (Number)
-- `category` (String)
-- `created` (Number)
-- `created_by` (String)
-- `description` (String)
-- `display_created_by` (String)
-- `display_modified_by` (String)
-- `elements` (Attributes List) (see [below for nested schema](#nestedatt--items--elements))
-- `id` (String)
-- `modified` (Number)
-- `modified_by` (String)
-- `name` (String)
-- `owner` (String)
-- `pack_id` (String)
-- `refresh_rate` (Number)
-- `resolved_dataset_ids` (List of String)
-- `schedule` (Attributes) (see [below for nested schema](#nestedatt--items--schedule))
-- `tags` (List of String)
-
-<a id="nestedatt--items--elements"></a>
-### Nested Schema for `items.elements`
-
-Read-Only:
-
-- `element` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element))
-
-<a id="nestedatt--items--elements--element"></a>
-### Nested Schema for `items.elements.element`
-
-Read-Only:
-
-- `color_palette` (String)
-- `description` (String)
-- `empty` (Boolean)
-- `h` (Number)
-- `hide_panel` (Boolean)
-- `horizontal_chart` (Boolean)
-- `id` (String)
-- `layout` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--layout))
-- `query` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query))
-- `title` (String)
-- `type` (String) must be one of ["chart.line", "chart.column", "chart.horizontalBar", "chart.area", "chart.scatter", "chart.pie", "chart.funnel", "chart.gauge", "chart.map", "list.events", "list.table", "counter.single", "input.timerange", "input.dropdown", "input.text", "input.number"]
-- `variant` (String)
-- `w` (Number)
-- `x` (Number)
-- `x_axis` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--x_axis))
-- `y` (Number)
-- `y_axis` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--y_axis))
-
-<a id="nestedatt--items--elements--element--layout"></a>
-### Nested Schema for `items.elements.element.layout`
-
-Read-Only:
-
-- `h` (Number)
-- `w` (Number)
-- `x` (Number)
-- `y` (Number)
-
-
-<a id="nestedatt--items--elements--element--query"></a>
-### Nested Schema for `items.elements.element.query`
-
-Read-Only:
-
-- `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_inline))
-- `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_saved))
-- `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_values))
-
-<a id="nestedatt--items--elements--element--query--search_query_inline"></a>
-### Nested Schema for `items.elements.element.query.search_query_inline`
-
-Read-Only:
-
-- `earliest` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_inline--earliest))
-- `latest` (Attributes) (see [below for nested schema](#nestedatt--items--elements--element--query--search_query_inline--latest))
-- `parent_search_id` (String)
-- `query` (String)
-- `sample_rate` (Number)
-- `timezone` (String)
-- `type` (String) must be "inline"
-
-<a id="nestedatt--items--elements--element--query--search_query_inline--earliest"></a>
-### Nested Schema for `items.elements.element.query.search_query_inline.earliest`
-
-Read-Only:
-
-- `number` (Number)
-- `str` (String)
-
-
-<a id="nestedatt--items--elements--element--query--search_query_inline--latest"></a>
-### Nested Schema for `items.elements.element.query.search_query_inline.latest`
-
-Read-Only:
-
-- `number` (Number)
-- `str` (String)
-
-
-
-<a id="nestedatt--items--elements--element--query--search_query_saved"></a>
-### Nested Schema for `items.elements.element.query.search_query_saved`
-
-Read-Only:
-
-- `query` (String)
-- `query_id` (String)
-- `run_mode` (String) must be one of ["newSearch", "lastRun"]
-- `type` (String) must be "saved"
-
-
-<a id="nestedatt--items--elements--element--query--search_query_values"></a>
-### Nested Schema for `items.elements.element.query.search_query_values`
-
-Read-Only:
-
-- `type` (String) must be "values"
-- `values` (List of String)
-
-
-
-<a id="nestedatt--items--elements--element--x_axis"></a>
-### Nested Schema for `items.elements.element.x_axis`
-
-Read-Only:
-
-- `data_field` (String)
-- `inverse` (Boolean)
-- `label_interval` (String)
-- `label_orientation` (Number)
-- `name` (String)
-- `offset` (Number)
-- `position` (String)
-- `type` (String)
-
-
-<a id="nestedatt--items--elements--element--y_axis"></a>
-### Nested Schema for `items.elements.element.y_axis`
-
-Read-Only:
-
-- `data_field` (List of String)
-- `interval` (Number)
-- `max` (Number)
-- `min` (Number)
-- `position` (String)
-- `scale` (String)
-- `split_line` (Boolean)
-- `type` (String)
-
-
-
-
-<a id="nestedatt--items--schedule"></a>
-### Nested Schema for `items.schedule`
-
-Read-Only:
-
-- `cron_schedule` (String)
-- `enabled` (Boolean)
-- `keep_last_n` (Number)
-- `notifications` (Attributes) (see [below for nested schema](#nestedatt--items--schedule--notifications))
-- `tz` (String)
-
-<a id="nestedatt--items--schedule--notifications"></a>
-### Nested Schema for `items.schedule.notifications`
-
-Read-Only:
-
-- `disabled` (Boolean)

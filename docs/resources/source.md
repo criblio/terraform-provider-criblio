@@ -865,7 +865,7 @@ resource "criblio_source" "my_source" {
       }
     ]
     credentials_secret  = "elastic-proxy-credentials"
-    custom_api_version  = "{\n    \"name\": \"Cribl Elastic Proxy\",\n    \"cluster_name\": \"cribl\",\n    \"cluster_uuid\": \"abcd1234efgh5678ijkl9012\",\n    \"version\": {\n        \"number\": \"8.11.1\",\n        \"build_type\": \"tar\",\n        \"build_hash\": \"1a2b3c4\",\n        \"build_date\": \"2025-09-01T00:00:00.000Z\",\n        \"build_snapshot\": false,\n        \"lucene_version\": \"9.10.0\",\n        \"minimum_wire_compatibility_version\": \"7.17.0\",\n        \"minimum_index_compatibility_version\": \"7.0.0\"\n    },\n    \"tagline\": \"You Know, for Search\"\n}"
+    custom_api_version  = "{ \\n\n    \"name\": \"Cribl Elastic Proxy\", \\n\n    \"cluster_name\": \"cribl\", \\n\n    \"cluster_uuid\": \"abcd1234efgh5678ijkl9012\", \\n\n    \"version\": { \\n\n        \"number\": \"8.11.1\", \\n\n        \"build_type\": \"tar\", \\n\n        \"build_hash\": \"1a2b3c4\", \\n\n        \"build_date\": \"2025-09-01T00:00:00.000Z\", \\n\n        \"build_snapshot\": false, \\n\n        \"lucene_version\": \"9.10.0\", \\n\n        \"minimum_wire_compatibility_version\": \"7.17.0\", \\n\n        \"minimum_index_compatibility_version\": \"7.0.0\" \\n\n    }, \\n\n    \"tagline\": \"You Know, for Search\" \\n\n}"
     description         = "Elasticsearch bulk listener with proxy for non-bulk APIs"
     disabled            = false
     elastic_api         = "/ingest"
@@ -1250,7 +1250,7 @@ resource "criblio_source" "my_source" {
     description             = "HTTP listener for webhook events"
     disabled                = false
     elastic_api             = "/elastic"
-    enable_health_check     = true
+    enable_health_check     = "{ \"see\": \"documentation\" }"
     enable_proxy_header     = false
     environment             = "main"
     host                    = "0.0.0.0"
@@ -1943,7 +1943,7 @@ resource "criblio_source" "my_source" {
     auto_commit_interval      = 5000
     auto_commit_threshold     = 1000
     aws_api_key               = "$${{secret:aws_access_key_id}"
-    aws_authentication_method = "instanceRole"
+    aws_authentication_method = "secret"
     aws_secret                = "aws-msk-credentials"
     aws_secret_key            = "$${{secret:aws_secret_access_key}"
     backoff_rate              = 3
@@ -6244,7 +6244,7 @@ Optional:
 - `description` (String)
 - `disabled` (Boolean) Default: false
 - `elastic_api` (String) Absolute path on which to listen for the Elasticsearch API requests. Only _bulk (default /elastic/_bulk) is available. Use empty string to disable. Default: "/elastic"
-- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false
+- `enable_health_check` (String) Parsed as JSON.
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"
@@ -7305,9 +7305,8 @@ Optional:
 
 Required:
 
-- `aws_authentication_method` (String) must be one of ["instanceRole", "accessKeys", "profile"]
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).
-- `region` (String) AWS region where the MSK cluster is running
+- `region` (String) Region where the MSK cluster is located
 
 Optional:
 
@@ -7317,6 +7316,7 @@ Optional:
 - `auto_commit_interval` (Number) How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `auto_commit_threshold` (Number) How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `aws_api_key` (String)
+- `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles. Default: "auto"; must be one of ["auto", "manual", "secret"]
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details. Default: 2

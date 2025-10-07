@@ -2,7 +2,7 @@
 
 package shared
 
-type HBCriblInfoConfig struct {
+type Config struct {
 	FeaturesRev     *string  `json:"featuresRev,omitempty"`
 	HbPeriodSeconds *float64 `json:"hbPeriodSeconds,omitempty"`
 	LogStreamEnv    *string  `json:"logStreamEnv,omitempty"`
@@ -10,60 +10,60 @@ type HBCriblInfoConfig struct {
 	Version         *string  `json:"version,omitempty"`
 }
 
-func (h *HBCriblInfoConfig) GetFeaturesRev() *string {
-	if h == nil {
+func (c *Config) GetFeaturesRev() *string {
+	if c == nil {
 		return nil
 	}
-	return h.FeaturesRev
+	return c.FeaturesRev
 }
 
-func (h *HBCriblInfoConfig) GetHbPeriodSeconds() *float64 {
-	if h == nil {
+func (c *Config) GetHbPeriodSeconds() *float64 {
+	if c == nil {
 		return nil
 	}
-	return h.HbPeriodSeconds
+	return c.HbPeriodSeconds
 }
 
-func (h *HBCriblInfoConfig) GetLogStreamEnv() *string {
-	if h == nil {
+func (c *Config) GetLogStreamEnv() *string {
+	if c == nil {
 		return nil
 	}
-	return h.LogStreamEnv
+	return c.LogStreamEnv
 }
 
-func (h *HBCriblInfoConfig) GetPolicyRev() *string {
-	if h == nil {
+func (c *Config) GetPolicyRev() *string {
+	if c == nil {
 		return nil
 	}
-	return h.PolicyRev
+	return c.PolicyRev
 }
 
-func (h *HBCriblInfoConfig) GetVersion() *string {
-	if h == nil {
+func (c *Config) GetVersion() *string {
+	if c == nil {
 		return nil
 	}
-	return h.Version
+	return c.Version
 }
 
 type HBCriblInfo struct {
-	Config         HBCriblInfoConfig `json:"config"`
-	DeploymentID   *string           `json:"deploymentId,omitempty"`
-	DistMode       AppMode           `json:"distMode"`
-	EdgeNodes      *float64          `json:"edgeNodes,omitempty"`
-	Group          string            `json:"group"`
-	GUID           string            `json:"guid"`
-	InstallType    *string           `json:"installType,omitempty"`
-	LookupVersions *LookupVersions   `json:"lookupVersions,omitempty"`
-	Master         *HBLeaderInfo     `json:"master,omitempty"`
-	Pid            *float64          `json:"pid,omitempty"`
-	StartTime      float64           `json:"startTime"`
-	Tags           []string          `json:"tags"`
-	Version        *string           `json:"version,omitempty"`
+	Config         Config          `json:"config"`
+	DeploymentID   *string         `json:"deploymentId,omitempty"`
+	DistMode       AppMode         `json:"distMode"`
+	EdgeNodes      *float64        `json:"edgeNodes,omitempty"`
+	Group          string          `json:"group"`
+	GUID           string          `json:"guid"`
+	InstallType    *string         `json:"installType,omitempty"`
+	LookupVersions *LookupVersions `json:"lookupVersions,omitempty"`
+	Master         *HBLeaderInfo   `json:"master,omitempty"`
+	Pid            *float64        `json:"pid,omitempty"`
+	StartTime      float64         `json:"startTime"`
+	Tags           []string        `json:"tags"`
+	Version        *string         `json:"version,omitempty"`
 }
 
-func (h *HBCriblInfo) GetConfig() HBCriblInfoConfig {
+func (h *HBCriblInfo) GetConfig() Config {
 	if h == nil {
-		return HBCriblInfoConfig{}
+		return Config{}
 	}
 	return h.Config
 }

@@ -305,83 +305,83 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 																	},
 																},
 															},
-															"metric": schema.SingleNestedAttribute{
-																Computed: true,
-																Attributes: map[string]schema.Attribute{
-																	"enable": schema.BoolAttribute{
-																		Computed: true,
-																	},
-																	"format": schema.SingleNestedAttribute{
-																		Computed: true,
-																		Attributes: map[string]schema.Attribute{
-																			"statsdmaxlen": schema.Float64Attribute{
-																				Computed: true,
-																			},
-																			"statsdprefix": schema.StringAttribute{
-																				Computed: true,
-																			},
-																			"type": schema.StringAttribute{
-																				Computed: true,
-																			},
-																			"verbosity": schema.Float64Attribute{
-																				Computed: true,
-																			},
-																		},
-																	},
-																	"transport": schema.SingleNestedAttribute{
-																		Computed: true,
-																		Attributes: map[string]schema.Attribute{
-																			"buffer": schema.StringAttribute{
-																				Computed: true,
-																			},
-																			"host": schema.StringAttribute{
-																				Computed: true,
-																			},
-																			"path": schema.StringAttribute{
-																				Computed: true,
-																			},
-																			"port": schema.Float64Attribute{
-																				Computed: true,
-																			},
-																			"tls": schema.SingleNestedAttribute{
-																				Computed: true,
-																				Attributes: map[string]schema.Attribute{
-																					"cacertpath": schema.StringAttribute{
-																						Computed: true,
-																					},
-																					"enable": schema.BoolAttribute{
-																						Computed: true,
-																					},
-																					"validateserver": schema.BoolAttribute{
-																						Computed: true,
-																					},
-																				},
-																			},
-																			"type": schema.StringAttribute{
-																				Computed: true,
-																			},
-																		},
-																	},
-																	"watch": schema.ListNestedAttribute{
-																		Computed: true,
-																		NestedObject: schema.NestedAttributeObject{
-																			Attributes: map[string]schema.Attribute{},
-																		},
-																	},
-																},
-															},
-															"payload": schema.SingleNestedAttribute{
-																Computed: true,
-																Attributes: map[string]schema.Attribute{
-																	"dir": schema.StringAttribute{
-																		Computed: true,
-																	},
-																	"enable": schema.BoolAttribute{
-																		Computed: true,
-																	},
-																},
-															},
 															"summaryperiod": schema.Float64Attribute{
+																Computed: true,
+															},
+														},
+													},
+													"metric": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"enable": schema.BoolAttribute{
+																Computed: true,
+															},
+															"format": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"statsdmaxlen": schema.Float64Attribute{
+																		Computed: true,
+																	},
+																	"statsdprefix": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"type": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"verbosity": schema.Float64Attribute{
+																		Computed: true,
+																	},
+																},
+															},
+															"transport": schema.SingleNestedAttribute{
+																Computed: true,
+																Attributes: map[string]schema.Attribute{
+																	"buffer": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"host": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"path": schema.StringAttribute{
+																		Computed: true,
+																	},
+																	"port": schema.Float64Attribute{
+																		Computed: true,
+																	},
+																	"tls": schema.SingleNestedAttribute{
+																		Computed: true,
+																		Attributes: map[string]schema.Attribute{
+																			"cacertpath": schema.StringAttribute{
+																				Computed: true,
+																			},
+																			"enable": schema.BoolAttribute{
+																				Computed: true,
+																			},
+																			"validateserver": schema.BoolAttribute{
+																				Computed: true,
+																			},
+																		},
+																	},
+																	"type": schema.StringAttribute{
+																		Computed: true,
+																	},
+																},
+															},
+															"watch": schema.ListNestedAttribute{
+																Computed: true,
+																NestedObject: schema.NestedAttributeObject{
+																	Attributes: map[string]schema.Attribute{},
+																},
+															},
+														},
+													},
+													"payload": schema.SingleNestedAttribute{
+														Computed: true,
+														Attributes: map[string]schema.Attribute{
+															"dir": schema.StringAttribute{
+																Computed: true,
+															},
+															"enable": schema.BoolAttribute{
 																Computed: true,
 															},
 														},
@@ -532,64 +532,14 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 										"commanddir": schema.StringAttribute{
 											Computed: true,
 										},
-										"config": schema.SingleNestedAttribute{
+										"configevent": schema.BoolAttribute{
+											Computed: true,
+										},
+										"log": schema.SingleNestedAttribute{
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
-												"enable": schema.BoolAttribute{
+												"level": schema.StringAttribute{
 													Computed: true,
-												},
-												"format": schema.SingleNestedAttribute{
-													Computed: true,
-													Attributes: map[string]schema.Attribute{
-														"level": schema.StringAttribute{
-															Computed: true,
-														},
-														"maxline": schema.Float64Attribute{
-															Computed: true,
-														},
-													},
-												},
-												"log": schema.SingleNestedAttribute{
-													Computed: true,
-													Attributes: map[string]schema.Attribute{
-														"level": schema.StringAttribute{
-															Computed: true,
-														},
-														"transport": schema.SingleNestedAttribute{
-															Computed: true,
-															Attributes: map[string]schema.Attribute{
-																"buffer": schema.StringAttribute{
-																	Computed: true,
-																},
-																"host": schema.StringAttribute{
-																	Computed: true,
-																},
-																"path": schema.StringAttribute{
-																	Computed: true,
-																},
-																"port": schema.Float64Attribute{
-																	Computed: true,
-																},
-																"tls": schema.SingleNestedAttribute{
-																	Computed: true,
-																	Attributes: map[string]schema.Attribute{
-																		"cacertpath": schema.StringAttribute{
-																			Computed: true,
-																		},
-																		"enable": schema.BoolAttribute{
-																			Computed: true,
-																		},
-																		"validateserver": schema.BoolAttribute{
-																			Computed: true,
-																		},
-																	},
-																},
-																"type": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-													},
 												},
 												"transport": schema.SingleNestedAttribute{
 													Computed: true,
@@ -627,7 +577,7 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 												},
 											},
 										},
-										"configevent": schema.BoolAttribute{
+										"summaryperiod": schema.Float64Attribute{
 											Computed: true,
 										},
 									},
@@ -638,14 +588,22 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 										"enable": schema.BoolAttribute{
 											Computed: true,
 										},
-										"format": schema.StringAttribute{
+										"format": schema.SingleNestedAttribute{
 											Computed: true,
-										},
-										"statsdmaxlen": schema.Float64Attribute{
-											Computed: true,
-										},
-										"statsdprefix": schema.StringAttribute{
-											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"statsdmaxlen": schema.Float64Attribute{
+													Computed: true,
+												},
+												"statsdprefix": schema.StringAttribute{
+													Computed: true,
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+												"verbosity": schema.Float64Attribute{
+													Computed: true,
+												},
+											},
 										},
 										"transport": schema.SingleNestedAttribute{
 											Computed: true,
@@ -681,8 +639,11 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 												},
 											},
 										},
-										"verbosity": schema.Float64Attribute{
+										"watch": schema.ListNestedAttribute{
 											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{},
+											},
 										},
 									},
 								},

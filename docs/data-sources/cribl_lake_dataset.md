@@ -29,23 +29,31 @@ data "criblio_cribl_lake_dataset" "my_cribllakedataset" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `accelerated_fields` (List of String)
 - `bucket_name` (String)
 - `description` (String)
 - `format` (String)
+- `id` (String)
 - `retention_period_in_days` (Number)
-- `search_config` (Attributes) (see [below for nested schema](#nestedatt--search_config))
+- `search_config` (Attributes) (see [below for nested schema](#nestedatt--items--search_config))
 
-<a id="nestedatt--search_config"></a>
-### Nested Schema for `search_config`
+<a id="nestedatt--items--search_config"></a>
+### Nested Schema for `items.search_config`
 
 Read-Only:
 
 - `datatypes` (List of String)
-- `metadata` (Attributes) (see [below for nested schema](#nestedatt--search_config--metadata))
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--search_config--metadata))
 
-<a id="nestedatt--search_config--metadata"></a>
-### Nested Schema for `search_config.metadata`
+<a id="nestedatt--items--search_config--metadata"></a>
+### Nested Schema for `items.search_config.metadata`
 
 Read-Only:
 

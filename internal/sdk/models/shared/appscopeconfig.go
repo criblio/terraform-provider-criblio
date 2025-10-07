@@ -240,6 +240,41 @@ func (a *AppscopeConfigLog) GetTransport() *AppscopeTransport {
 	return a.Transport
 }
 
+type AppscopeConfigLibscope struct {
+	Commanddir    *string            `json:"commanddir,omitempty"`
+	Configevent   *bool              `json:"configevent,omitempty"`
+	Log           *AppscopeConfigLog `json:"log,omitempty"`
+	Summaryperiod *float64           `json:"summaryperiod,omitempty"`
+}
+
+func (a *AppscopeConfigLibscope) GetCommanddir() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Commanddir
+}
+
+func (a *AppscopeConfigLibscope) GetConfigevent() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.Configevent
+}
+
+func (a *AppscopeConfigLibscope) GetLog() *AppscopeConfigLog {
+	if a == nil {
+		return nil
+	}
+	return a.Log
+}
+
+func (a *AppscopeConfigLibscope) GetSummaryperiod() *float64 {
+	if a == nil {
+		return nil
+	}
+	return a.Summaryperiod
+}
+
 type AppscopeConfigMetricFormat struct {
 	Statsdmaxlen *float64 `json:"statsdmaxlen,omitempty"`
 	Statsdprefix *string  `json:"statsdprefix,omitempty"`
@@ -275,14 +310,14 @@ func (a *AppscopeConfigMetricFormat) GetVerbosity() *float64 {
 	return a.Verbosity
 }
 
-type MetricWatch struct {
+type AppscopeConfigMetricWatch struct {
 }
 
 type AppscopeConfigMetric struct {
-	Enable    bool                       `json:"enable"`
-	Format    AppscopeConfigMetricFormat `json:"format"`
-	Transport AppscopeTransport          `json:"transport"`
-	Watch     []MetricWatch              `json:"watch"`
+	Enable    bool                        `json:"enable"`
+	Format    AppscopeConfigMetricFormat  `json:"format"`
+	Transport AppscopeTransport           `json:"transport"`
+	Watch     []AppscopeConfigMetricWatch `json:"watch"`
 }
 
 func (a *AppscopeConfigMetric) GetEnable() bool {
@@ -306,9 +341,9 @@ func (a *AppscopeConfigMetric) GetTransport() AppscopeTransport {
 	return a.Transport
 }
 
-func (a *AppscopeConfigMetric) GetWatch() []MetricWatch {
+func (a *AppscopeConfigMetric) GetWatch() []AppscopeConfigMetricWatch {
 	if a == nil {
-		return []MetricWatch{}
+		return []AppscopeConfigMetricWatch{}
 	}
 	return a.Watch
 }
@@ -330,57 +365,6 @@ func (a *AppscopeConfigPayload) GetEnable() bool {
 		return false
 	}
 	return a.Enable
-}
-
-type AppscopeConfigLibscope struct {
-	Commanddir    *string                `json:"commanddir,omitempty"`
-	Configevent   *bool                  `json:"configevent,omitempty"`
-	Log           *AppscopeConfigLog     `json:"log,omitempty"`
-	Summaryperiod *float64               `json:"summaryperiod,omitempty"`
-	Metric        *AppscopeConfigMetric  `json:"metric,omitempty"`
-	Payload       *AppscopeConfigPayload `json:"payload,omitempty"`
-}
-
-func (a *AppscopeConfigLibscope) GetCommanddir() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Commanddir
-}
-
-func (a *AppscopeConfigLibscope) GetConfigevent() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.Configevent
-}
-
-func (a *AppscopeConfigLibscope) GetLog() *AppscopeConfigLog {
-	if a == nil {
-		return nil
-	}
-	return a.Log
-}
-
-func (a *AppscopeConfigLibscope) GetSummaryperiod() *float64 {
-	if a == nil {
-		return nil
-	}
-	return a.Summaryperiod
-}
-
-func (a *AppscopeConfigLibscope) GetMetric() *AppscopeConfigMetric {
-	if a == nil {
-		return nil
-	}
-	return a.Metric
-}
-
-func (a *AppscopeConfigLibscope) GetPayload() *AppscopeConfigPayload {
-	if a == nil {
-		return nil
-	}
-	return a.Payload
 }
 
 type AppscopeConfigProtocol struct {
@@ -457,6 +441,8 @@ type AppscopeConfig struct {
 	Cribl    *AppscopeConfigCribl     `json:"cribl,omitempty"`
 	Event    *AppscopeConfigEvent     `json:"event,omitempty"`
 	Libscope *AppscopeConfigLibscope  `json:"libscope,omitempty"`
+	Metric   *AppscopeConfigMetric    `json:"metric,omitempty"`
+	Payload  *AppscopeConfigPayload   `json:"payload,omitempty"`
 	Protocol []AppscopeConfigProtocol `json:"protocol,omitempty"`
 	Tags     []AppscopeConfigTag      `json:"tags,omitempty"`
 }
@@ -480,6 +466,20 @@ func (a *AppscopeConfig) GetLibscope() *AppscopeConfigLibscope {
 		return nil
 	}
 	return a.Libscope
+}
+
+func (a *AppscopeConfig) GetMetric() *AppscopeConfigMetric {
+	if a == nil {
+		return nil
+	}
+	return a.Metric
+}
+
+func (a *AppscopeConfig) GetPayload() *AppscopeConfigPayload {
+	if a == nil {
+		return nil
+	}
+	return a.Payload
 }
 
 func (a *AppscopeConfig) GetProtocol() []AppscopeConfigProtocol {

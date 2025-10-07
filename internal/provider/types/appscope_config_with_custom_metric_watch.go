@@ -2,5 +2,5 @@
 
 package types
 
-type MetricWatch struct {
+type AppscopeConfigWithCustomMetricWatch struct {
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type AppscopeConfigWithCustomWatch struct {
+type AppscopeConfigWithCustomWatchNdjson struct {
 	Allowbinary types.Bool     `tfsdk:"allowbinary"`
 	Enabled     types.Bool     `tfsdk:"enabled"`
 	Field       types.String   `tfsdk:"field"`

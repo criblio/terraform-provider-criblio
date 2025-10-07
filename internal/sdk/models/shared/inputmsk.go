@@ -192,35 +192,6 @@ func (i *InputMskPq) GetCompress() *InputMskCompression {
 	return i.Compress
 }
 
-type AWSAuthenticationMethod string
-
-const (
-	AWSAuthenticationMethodInstanceRole AWSAuthenticationMethod = "instanceRole"
-	AWSAuthenticationMethodAccessKeys   AWSAuthenticationMethod = "accessKeys"
-	AWSAuthenticationMethodProfile      AWSAuthenticationMethod = "profile"
-)
-
-func (e AWSAuthenticationMethod) ToPointer() *AWSAuthenticationMethod {
-	return &e
-}
-func (e *AWSAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "instanceRole":
-		fallthrough
-	case "accessKeys":
-		fallthrough
-	case "profile":
-		*e = AWSAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AWSAuthenticationMethod: %v", v)
-	}
-}
-
 type InputMskMetadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
@@ -525,6 +496,36 @@ func (i *InputMskKafkaSchemaRegistryAuthentication) GetTLS() *InputMskKafkaSchem
 	return i.TLS
 }
 
+// InputMskAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
+type InputMskAuthenticationMethod string
+
+const (
+	InputMskAuthenticationMethodAuto   InputMskAuthenticationMethod = "auto"
+	InputMskAuthenticationMethodManual InputMskAuthenticationMethod = "manual"
+	InputMskAuthenticationMethodSecret InputMskAuthenticationMethod = "secret"
+)
+
+func (e InputMskAuthenticationMethod) ToPointer() *InputMskAuthenticationMethod {
+	return &e
+}
+func (e *InputMskAuthenticationMethod) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "auto":
+		fallthrough
+	case "manual":
+		fallthrough
+	case "secret":
+		*e = InputMskAuthenticationMethod(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for InputMskAuthenticationMethod: %v", v)
+	}
+}
+
 // InputMskSignatureVersion - Signature version to use for signing MSK cluster requests
 type InputMskSignatureVersion string
 
@@ -745,9 +746,6 @@ type InputMsk struct {
 	GroupID *string `default:"Cribl" json:"groupId"`
 	// Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
 	FromBeginning *bool `default:"true" json:"fromBeginning"`
-	// AWS region where the MSK cluster is running
-	Region                  string                  `json:"region"`
-	AwsAuthenticationMethod AWSAuthenticationMethod `json:"awsAuthenticationMethod"`
 	//
 	//     Timeout used to detect client failures when using Kafka's group-management facilities.
 	//     If the client sends no heartbeats to the broker before the timeout expires,
@@ -782,6 +780,10 @@ type InputMsk struct {
 	BackoffRate *float64 `default:"2" json:"backoffRate"`
 	// Maximum time to wait for Kafka to respond to an authentication request
 	AuthenticationTimeout *float64 `default:"10000" json:"authenticationTimeout"`
+	// AWS authentication method. Choose Auto to use IAM roles.
+	AwsAuthenticationMethod *InputMskAuthenticationMethod `default:"auto" json:"awsAuthenticationMethod"`
+	// Region where the MSK cluster is located
+	Region string `json:"region"`
 	// Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 	ReauthenticationThreshold *float64 `default:"10000" json:"reauthenticationThreshold"`
 	AwsSecretKey              *string  `json:"awsSecretKey,omitempty"`
@@ -823,7 +825,7 @@ func (i InputMsk) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputMsk) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"brokers", "region", "awsAuthenticationMethod"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"brokers", "region"}); err != nil {
 		return err
 	}
 	return nil
@@ -927,20 +929,6 @@ func (i *InputMsk) GetFromBeginning() *bool {
 	return i.FromBeginning
 }
 
-func (i *InputMsk) GetRegion() string {
-	if i == nil {
-		return ""
-	}
-	return i.Region
-}
-
-func (i *InputMsk) GetAwsAuthenticationMethod() AWSAuthenticationMethod {
-	if i == nil {
-		return AWSAuthenticationMethod("")
-	}
-	return i.AwsAuthenticationMethod
-}
-
 func (i *InputMsk) GetSessionTimeout() *float64 {
 	if i == nil {
 		return nil
@@ -1023,6 +1011,20 @@ func (i *InputMsk) GetAuthenticationTimeout() *float64 {
 		return nil
 	}
 	return i.AuthenticationTimeout
+}
+
+func (i *InputMsk) GetAwsAuthenticationMethod() *InputMskAuthenticationMethod {
+	if i == nil {
+		return nil
+	}
+	return i.AwsAuthenticationMethod
+}
+
+func (i *InputMsk) GetRegion() string {
+	if i == nil {
+		return ""
+	}
+	return i.Region
 }
 
 func (i *InputMsk) GetReauthenticationThreshold() *float64 {

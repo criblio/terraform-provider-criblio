@@ -9,55 +9,40 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
   elements = [
     {
       element = {
-        color_palette    = "blue"
-        description      = "CPU usage chart"
+        description      = "5xx error rate for checkout"
         empty            = false
-        h                = 4
         hide_panel       = false
-        horizontal_chart = true
-        id               = "element1"
+        horizontal_chart = false
+        id               = "panel-http-5xx"
+        index            = 3
+        input_id         = "service"
         layout = {
           h = 0
           w = 9
           x = 8
           y = 2
         }
-        query = {
-          search_query_saved = {
-            query    = "dataset=my_dataset | stats count"
-            query_id = "query123"
-            run_mode = "lastRun"
-            type     = "saved"
+        search = {
+          search_query_inline = {
+            earliest = {
+              number = 1696166400
+            }
+            latest = {
+              number = 1696170000
+            }
+            parent_search_id = "parentSearch1"
+            query            = "error OR warn"
+            sample_rate      = 0.5
+            timezone         = "UTC"
+            type             = "inline"
           }
         }
-        title   = "CPU Usage"
-        type    = "chart.line"
-        variant = "default"
-        w       = 6
-        x       = 0
-        x_axis = {
-          data_field        = "time"
-          inverse           = false
-          label_interval    = "1m"
-          label_orientation = 0
-          name              = "Time"
-          offset            = 0
-          position          = "bottom"
-          type              = "time"
+        title = "HTTP 5xx errors"
+        type  = "chart.line"
+        value = {
+          key = jsonencode("value")
         }
-        y = 0
-        y_axis = {
-          data_field = [
-            "cpu",
-          ]
-          interval   = 10
-          max        = 100
-          min        = 0
-          position   = "left"
-          scale      = "linear"
-          split_line = true
-          type       = "value"
-        }
+        variant = "markdown"
       }
     }
   ]
@@ -65,7 +50,6 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
   modified     = 1696170000
   modified_by  = "user456"
   name         = "System Metrics Dashboard"
-  owner        = "teamA"
   pack_id      = "New Pack Id"
   refresh_rate = 60
   resolved_dataset_ids = [
@@ -81,9 +65,4 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
     }
     tz = "UTC"
   }
-  tags = [
-    "monitoring",
-    "system",
-    "cpu",
-  ]
 }
