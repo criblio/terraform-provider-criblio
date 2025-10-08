@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 0cad368a8b4f9d4a1e930a3a0d069b44
+  docChecksum: 45188079b26eb78f22ffc630002f9481
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.636.0
   generationVersion: 2.723.2
-  releaseVersion: 1.15.11
-  configChecksum: cc12911978837c2cbf0f99cf8f6932a9
+  releaseVersion: 1.15.13
+  configChecksum: d9b37101de6b9c0219153886f51a3bb6
   published: true
 features:
   terraform:
@@ -163,6 +163,8 @@ generatedFiles:
   - examples/resources/criblio_schema/import.sh
   - examples/resources/criblio_schema/resource.tf
   - examples/resources/criblio_search_dashboard/resource.tf
+  - examples/resources/criblio_search_dashboard_category/import-by-string-id.tf
+  - examples/resources/criblio_search_dashboard_category/import.sh
   - examples/resources/criblio_search_dashboard_category/resource.tf
   - examples/resources/criblio_search_dataset/import-by-string-id.tf
   - examples/resources/criblio_search_dataset/import.sh
@@ -496,7 +498,9 @@ generatedFiles:
   - internal/provider/types/gcs_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
+  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
+  - internal/provider/types/grok_file.go
   - internal/provider/types/group.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
@@ -1258,11 +1262,12 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
-  - internal/provider/types/pipeline.go
+  - internal/provider/types/parser_lib_entry.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
+  - internal/provider/types/project_config.go
   - internal/provider/types/prometheus_auth_oauth_header1.go
   - internal/provider/types/prometheus_auth_oauth_header2.go
   - internal/provider/types/prometheus_auth_oauth_param1.go
@@ -1282,7 +1287,6 @@ generatedFiles:
   - internal/provider/types/s3_provider.go
   - internal/provider/types/sample.go
   - internal/provider/types/sas_config.go
-  - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
   - internal/provider/types/schema_lib_entry.go
@@ -1301,6 +1305,7 @@ generatedFiles:
   - internal/provider/types/snowflake_provider.go
   - internal/provider/types/sns_target.go
   - internal/provider/types/socks_proxy_opts.go
+  - internal/provider/types/subscription.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
   - internal/provider/types/tailscale_account_config.go

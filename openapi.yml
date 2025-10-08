@@ -65204,15 +65204,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Lakehouse"
-              example:
-                count: 2
-                items:
-                  - id: "lakehouse-01"
-                    name: "Prod Lakehouse"
-                    region: "us-east-1"
-                  - id: "lakehouse-02"
-                    name: "EU Lakehouse"
-                    region: "eu-west-1"
         "401":
           description: Unauthorized
         "500":
@@ -65221,10 +65212,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-lake-001"
     post:
       tags:
         - LakeHouse
@@ -65294,10 +65281,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-lakehouse-get-001"
     patch:
       tags:
         - LakeHouse
@@ -65806,7 +65789,6 @@ paths:
         - dashboardCategories
       summary: Get a list of DashboardCategory objects
       description: Get a list of DashboardCategory objects
-      x-speakeasy-entity-operation: SearchDashboardCategory#get
       responses:
         &a38
         "200":
@@ -65855,6 +65837,7 @@ paths:
       tags: *a37
       summary: Get DashboardCategory by ID
       description: Get DashboardCategory by ID
+      x-speakeasy-entity-operation: SearchDashboardCategory#get
       parameters:
         - name: id
           in: path
@@ -67635,15 +67618,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/SearchMacro"
-              example:
-                count: 2
-                items:
-                  - id: "macro-errors"
-                    name: "Only errors"
-                    definition: "status >= 400"
-                  - id: "macro-service"
-                    name: "Filter by service"
-                    definition: "service = $service"
         "401":
           description: Unauthorized
         "500":
@@ -67702,8 +67676,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SearchMacro"
-            example:
-              definition: "status >= 500"
       responses: *a88
     delete:
       operationId: deleteSearchMacroById
@@ -67744,15 +67716,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/SavedQuery"
-              example:
-                count: 2
-                items:
-                  - id: "sq-errors"
-                    name: "Errors last 24h"
-                    query: "status >= 400 earliest=-24h latest=now"
-                  - id: "sq-latency"
-                    name: "High latency"
-                    query: "duration_ms > 1000 earliest=-1h latest=now"
         "401":
           description: Unauthorized
         "500":
@@ -67812,9 +67775,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SavedQuery"
-            example:
-              name: "Errors last 48h"
-              query: "status >= 400 earliest=-48h latest=now"
       responses: *a91
     delete:
       operationId: deleteSavedQueryById
@@ -67855,12 +67815,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/SearchJob"
-              example:
-                count: 1
-                items:
-                  - id: "job-123"
-                    status: "running"
-                    createdAt: "2025-10-06T12:00:00Z"
         "401":
           description: Unauthorized
         "500":
@@ -67881,10 +67835,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SearchJob"
-            example:
-              query: "service = 'api' | stats count by status"
-              earliest: "-15m"
-              latest: "now"
       responses: *a94
   "/search/jobs/{id}":
     get:
@@ -67921,8 +67871,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SearchJob"
-            example:
-              status: "stopping"
       responses: *a94
     delete:
       operationId: deleteSearchJobById

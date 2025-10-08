@@ -49,7 +49,8 @@ func (r *SearchDashboardCategoryDataSource) Schema(ctx context.Context, req data
 				Computed: true,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"is_pack": schema.BoolAttribute{
 				Computed: true,
@@ -99,7 +100,13 @@ func (r *SearchDashboardCategoryDataSource) Read(ctx context.Context, req dataso
 		return
 	}
 
-	res, err := r.client.DashboardCategories.ListDashboardCategory(ctx)
+	request, requestDiags := data.ToOperationsGetDashboardCategoryByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.DashboardCategories.GetDashboardCategoryByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
