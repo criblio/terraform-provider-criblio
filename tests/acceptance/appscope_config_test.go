@@ -14,7 +14,7 @@ func TestAppscopeConfig(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "description", "A sample AppScope configuration"),
 						resource.TestCheckResourceAttr("criblio_appscope_config.my_appscopeconfig", "group_id", "default"),
