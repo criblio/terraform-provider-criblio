@@ -1,7 +1,6 @@
 resource "criblio_grok" "my_search_grok" {
   group_id = "default_search"
   id       = "test_grok"
-  size     = 1
   content  = <<-EOT
 SYSLOG5424PRINTASCII [!-~]+
 

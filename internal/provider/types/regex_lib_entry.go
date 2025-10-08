@@ -6,10 +6,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Subscription struct {
+type RegexLibEntry struct {
 	Description types.String `tfsdk:"description"`
-	Disabled    types.Bool   `tfsdk:"disabled"`
-	Filter      types.String `tfsdk:"filter"`
 	ID          types.String `tfsdk:"id"`
-	Pipeline    types.String `tfsdk:"pipeline"`
+	Lib         types.String `tfsdk:"lib"`
+	Regex       types.String `tfsdk:"regex"`
+	SampleData  types.String `tfsdk:"sample_data"`
+	Tags        types.String `tfsdk:"tags"`
 }

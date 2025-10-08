@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -33,11 +32,10 @@ type CriblLakeHouseResource struct {
 
 // CriblLakeHouseResourceModel describes the resource data model.
 type CriblLakeHouseResourceModel struct {
-	Description types.String        `tfsdk:"description"`
-	ID          types.String        `tfsdk:"id"`
-	Items       []tfTypes.Lakehouse `tfsdk:"items"`
-	Status      types.String        `tfsdk:"status"`
-	TierSize    types.String        `tfsdk:"tier_size"`
+	Description types.String `tfsdk:"description"`
+	ID          types.String `tfsdk:"id"`
+	Status      types.String `tfsdk:"status"`
+	TierSize    types.String `tfsdk:"tier_size"`
 }
 
 func (r *CriblLakeHouseResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -56,41 +54,6 @@ func (r *CriblLakeHouseResource) Schema(ctx context.Context, req resource.Schema
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique identifier for the lakehouse`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed:    true,
-							Description: `Description of the lakehouse`,
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Unique identifier for the lakehouse`,
-						},
-						"status": schema.StringAttribute{
-							Computed:    true,
-							Description: `Status of the lakehouse`,
-						},
-						"tier_size": schema.StringAttribute{
-							Computed:    true,
-							Default:     stringdefault.StaticString(`small`),
-							Description: `Size of the lakehouse tier. Default: "small"; must be one of ["small", "medium", "large", "xlarge", "2xlarge", "3xlarge", "6xlarge"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"small",
-									"medium",
-									"large",
-									"xlarge",
-									"2xlarge",
-									"3xlarge",
-									"6xlarge",
-								),
-							},
-						},
-					},
-				},
 			},
 			"status": schema.StringAttribute{
 				Computed:    true,
@@ -193,43 +156,6 @@ func (r *CriblLakeHouseResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetDefaultLakeLakehouseByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.LakeHouse.GetDefaultLakeLakehouseByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDefaultLakeLakehouseByIDResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -279,11 +205,11 @@ func (r *CriblLakeHouseResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDefaultLakeLakehouseByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedLakehouse(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -334,43 +260,6 @@ func (r *CriblLakeHouseResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedLakehouse(ctx, &res.Object.Items[0])...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetDefaultLakeLakehouseByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.LakeHouse.GetDefaultLakeLakehouseByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDefaultLakeLakehouseByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

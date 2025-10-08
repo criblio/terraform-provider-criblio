@@ -65935,13 +65935,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/UsageGroup"
-              example:
-                count: 2
-                items:
-                  - id: "platform"
-                    name: "Platform"
-                  - id: "security"
-                    name: "Security"
         "401":
           description: Unauthorized
         "500":
@@ -65950,9 +65943,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                requestId: "req-usagegroups-001"
     post:
       operationId: createUsageGroup
       tags: *a40
@@ -68556,13 +68546,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GlobalVar"
-              example:
-                count: 2
-                items:
-                  - id: "ENV"
-                    value: "prod"
-                  - id: "SERVICE"
-                    value: "api"
         "401":
           description: Unauthorized
         "500":

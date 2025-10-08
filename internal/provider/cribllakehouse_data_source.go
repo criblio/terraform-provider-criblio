@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,8 +28,10 @@ type CriblLakeHouseDataSource struct {
 
 // CriblLakeHouseDataSourceModel describes the data model.
 type CriblLakeHouseDataSourceModel struct {
-	ID    types.String        `tfsdk:"id"`
-	Items []tfTypes.Lakehouse `tfsdk:"items"`
+	Description types.String `tfsdk:"description"`
+	ID          types.String `tfsdk:"id"`
+	Status      types.String `tfsdk:"status"`
+	TierSize    types.String `tfsdk:"tier_size"`
 }
 
 // Metadata returns the data source type name.
@@ -44,32 +45,21 @@ func (r *CriblLakeHouseDataSource) Schema(ctx context.Context, req datasource.Sc
 		MarkdownDescription: "CriblLakeHouse DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"description": schema.StringAttribute{
+				Computed:    true,
+				Description: `Description of the lakehouse`,
+			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `The ID of the lakehouse to retrieve`,
 			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed:    true,
-							Description: `Description of the lakehouse`,
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Unique identifier for the lakehouse`,
-						},
-						"status": schema.StringAttribute{
-							Computed:    true,
-							Description: `Status of the lakehouse`,
-						},
-						"tier_size": schema.StringAttribute{
-							Computed:    true,
-							Description: `Size of the lakehouse tier`,
-						},
-					},
-				},
+			"status": schema.StringAttribute{
+				Computed:    true,
+				Description: `Status of the lakehouse`,
+			},
+			"tier_size": schema.StringAttribute{
+				Computed:    true,
+				Description: `Size of the lakehouse tier`,
 			},
 		},
 	}
@@ -135,11 +125,11 @@ func (r *CriblLakeHouseDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDefaultLakeLakehouseByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedLakehouse(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
