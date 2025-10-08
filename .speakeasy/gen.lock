@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 02ef4892ec005e8d2aa69d0fbf3ccb24
+  docChecksum: e2e012a5b65fdf6903579f7dd45ea69d
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.636.0
   generationVersion: 2.723.2
-  releaseVersion: 1.15.0
-  configChecksum: 1e2a47078384f5fa8633b866ffd17f59
+  releaseVersion: 1.15.1
+  configChecksum: 0bb765365fb9c97a05385122923b6b45
   published: true
 features:
   terraform:
@@ -468,7 +468,6 @@ generatedFiles:
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
-  - internal/provider/types/dashboard_category.go
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
@@ -496,10 +495,8 @@ generatedFiles:
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
   - internal/provider/types/generic_dataset.go
-  - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
-  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/group.go
   - internal/provider/types/host_info.go
@@ -965,6 +962,7 @@ generatedFiles:
   - internal/provider/types/interfaces.go
   - internal/provider/types/internal_scheduling.go
   - internal/provider/types/lake_dataset_search_config.go
+  - internal/provider/types/lakehouse.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
@@ -980,6 +978,7 @@ generatedFiles:
   - internal/provider/types/meta_provider.go
   - internal/provider/types/ms_graph_account_config.go
   - internal/provider/types/mtls_settings.go
+  - internal/provider/types/notification.go
   - internal/provider/types/notifications.go
   - internal/provider/types/okta_account_config.go
   - internal/provider/types/output_azure_blob.go
@@ -1262,12 +1261,11 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
-  - internal/provider/types/pipeline.go
+  - internal/provider/types/parser_lib_entry.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
-  - internal/provider/types/project_config.go
   - internal/provider/types/prometheus_auth_oauth_header1.go
   - internal/provider/types/prometheus_auth_oauth_header2.go
   - internal/provider/types/prometheus_auth_oauth_param1.go
@@ -1288,10 +1286,9 @@ generatedFiles:
   - internal/provider/types/s3_provider.go
   - internal/provider/types/sample.go
   - internal/provider/types/sas_config.go
-  - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
-  - internal/provider/types/schema_lib_entry.go
+  - internal/provider/types/search_macro.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1314,6 +1311,7 @@ generatedFiles:
   - internal/provider/types/target_config.go
   - internal/provider/types/target_config_conf.go
   - internal/provider/types/tls_configuration.go
+  - internal/provider/types/usage_group.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/types/webhook_target.go

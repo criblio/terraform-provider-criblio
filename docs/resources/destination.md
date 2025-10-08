@@ -42,7 +42,7 @@ enable_statistics = true
 enable_write_page_index = true
 endpoint_suffix = "core.windows.net"
 environment = "main"
-file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+file_name_suffix = ".json.gz"
 format = "json"
 header_line = "timestamp,host,message"
 id = "azure-blob-out"
@@ -109,7 +109,7 @@ prefix = "ingestBy"
 value = "source:app1"
 }
 ]
-file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+file_name_suffix = ".json.gz"
 flush_immediately = true
 flush_period_sec = 1
 format = "json"
@@ -1387,7 +1387,7 @@ enable_page_checksum = true
 enable_statistics = true
 enable_write_page_index = true
 environment = "main"
-file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+file_name_suffix = ".json.gz"
 format = "json"
 header_line = "timestamp,host,message"
 id = "filesystem-out"
@@ -1609,7 +1609,7 @@ enable_statistics = true
 enable_write_page_index = true
 endpoint = "https://storage.googleapis.com"
 environment = "main"
-file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+file_name_suffix = ".json.gz"
 format = "json"
 header_line = "timestamp,host,message"
 id = "gcs-out"
@@ -2818,7 +2818,7 @@ enable_statistics = true
 enable_write_page_index = true
 endpoint = "https://s3.us-east-1.amazonaws.com"
 environment = "main"
-file_name_suffix = "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+file_name_suffix = ".json.gz"
 format = "json"
 header_line = "timestamp,host,message"
 id = "s3-out"

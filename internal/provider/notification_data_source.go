@@ -7,13 +7,10 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -32,13 +29,8 @@ type NotificationDataSource struct {
 
 // NotificationDataSourceModel describes the data model.
 type NotificationDataSourceModel struct {
-	Condition     types.String                      `tfsdk:"condition"`
-	Conf          *tfTypes.ConditionSpecificConfigs `tfsdk:"conf"`
-	Disabled      types.Bool                        `tfsdk:"disabled"`
-	Group         types.String                      `tfsdk:"group"`
-	ID            types.String                      `tfsdk:"id"`
-	TargetConfigs []tfTypes.TargetConfig            `tfsdk:"target_configs"`
-	Targets       []types.String                    `tfsdk:"targets"`
+	ID    types.String           `tfsdk:"id"`
+	Items []tfTypes.Notification `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -52,81 +44,88 @@ func (r *NotificationDataSource) Schema(ctx context.Context, req datasource.Sche
 		MarkdownDescription: "Notification DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"condition": schema.StringAttribute{
-				Computed:    true,
-				Description: `The condition that triggers this notification`,
-			},
-			"conf": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"message": schema.StringAttribute{
-						Computed:    true,
-						Description: `Message template for the notification`,
-					},
-					"saved_query_id": schema.StringAttribute{
-						Computed:    true,
-						Description: `ID of the saved query this notification is associated with`,
-					},
-					"trigger_comparator": schema.StringAttribute{
-						Computed:    true,
-						Description: `Comparison operator (e.g., >, <, =)`,
-					},
-					"trigger_count": schema.Float64Attribute{
-						Computed:    true,
-						Description: `Threshold count for the trigger`,
-					},
-					"trigger_type": schema.StringAttribute{
-						Computed:    true,
-						Description: `Type of trigger (e.g., resultsCount)`,
-					},
-				},
-				Description: `Configuration specific to the notification condition`,
-			},
-			"disabled": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether the notification is disabled`,
-			},
-			"group": schema.StringAttribute{
-				Computed:    true,
-				Description: `Group identifier for the notification`,
-			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(512),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
 			},
-			"target_configs": schema.ListNestedAttribute{
+			"items": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"condition": schema.StringAttribute{
+							Computed:    true,
+							Description: `The condition that triggers this notification`,
+						},
 						"conf": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"attachment_type": schema.StringAttribute{
+								"message": schema.StringAttribute{
 									Computed:    true,
-									Description: `Type of attachment for the notification`,
+									Description: `Message template for the notification`,
 								},
-								"include_results": schema.BoolAttribute{
+								"saved_query_id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Whether to include search results in the notification`,
+									Description: `ID of the saved query this notification is associated with`,
+								},
+								"trigger_comparator": schema.StringAttribute{
+									Computed:    true,
+									Description: `Comparison operator (e.g., >, <, =)`,
+								},
+								"trigger_count": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Threshold count for the trigger`,
+								},
+								"trigger_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of trigger (e.g., resultsCount)`,
 								},
 							},
+							Description: `Configuration specific to the notification condition`,
+						},
+						"disabled": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Whether the notification is disabled`,
+						},
+						"group": schema.StringAttribute{
+							Computed:    true,
+							Description: `Group identifier for the notification`,
 						},
 						"id": schema.StringAttribute{
 							Computed:    true,
-							Description: `ID of the notification target`,
+							Description: `Unique identifier for the notification`,
+						},
+						"target_configs": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"conf": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"attachment_type": schema.StringAttribute{
+												Computed:    true,
+												Description: `Type of attachment for the notification`,
+											},
+											"include_results": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Whether to include search results in the notification`,
+											},
+										},
+									},
+									"id": schema.StringAttribute{
+										Computed:    true,
+										Description: `ID of the notification target`,
+									},
+								},
+							},
+							Description: `Configuration for notification targets`,
+						},
+						"targets": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+							Description: `Targets to send any notifications to`,
 						},
 					},
 				},
-				Description: `Configuration for notification targets`,
-			},
-			"targets": schema.ListAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
-				Description: `Targets to send any notifications to`,
 			},
 		},
 	}
@@ -192,11 +191,11 @@ func (r *NotificationDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedNotification(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNotificationByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

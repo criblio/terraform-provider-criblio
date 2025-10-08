@@ -29,30 +29,22 @@ data "criblio_pipeline" "my_pipeline" {
 
 ### Read-Only
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
 
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--conf))
-- `id` (String)
-
-<a id="nestedatt--items--conf"></a>
-### Nested Schema for `items.conf`
+<a id="nestedatt--conf"></a>
+### Nested Schema for `conf`
 
 Read-Only:
 
 - `async_func_timeout` (Number) Time (in ms) to wait for an async function to complete processing of a data item
 - `description` (String)
-- `functions` (Attributes List) List of Functions to pass data through (see [below for nested schema](#nestedatt--items--conf--functions))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--conf--groups))
+- `functions` (Attributes List) List of Functions to pass data through (see [below for nested schema](#nestedatt--conf--functions))
+- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--conf--groups))
 - `output` (String) The output destination for events processed by this Pipeline
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 
-<a id="nestedatt--items--conf--functions"></a>
-### Nested Schema for `items.conf.functions`
+<a id="nestedatt--conf--functions"></a>
+### Nested Schema for `conf.functions`
 
 Read-Only:
 
@@ -65,8 +57,8 @@ Read-Only:
 - `id` (String) Function ID
 
 
-<a id="nestedatt--items--conf--groups"></a>
-### Nested Schema for `items.conf.groups`
+<a id="nestedatt--conf--groups"></a>
+### Nested Schema for `conf.groups`
 
 Read-Only:
 

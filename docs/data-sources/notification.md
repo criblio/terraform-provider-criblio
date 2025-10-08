@@ -27,15 +27,23 @@ data "criblio_notification" "my_notification" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `condition` (String) The condition that triggers this notification
-- `conf` (Attributes) Configuration specific to the notification condition (see [below for nested schema](#nestedatt--conf))
+- `conf` (Attributes) Configuration specific to the notification condition (see [below for nested schema](#nestedatt--items--conf))
 - `disabled` (Boolean) Whether the notification is disabled
 - `group` (String) Group identifier for the notification
-- `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--target_configs))
+- `id` (String) Unique identifier for the notification
+- `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--items--target_configs))
 - `targets` (List of String) Targets to send any notifications to
 
-<a id="nestedatt--conf"></a>
-### Nested Schema for `conf`
+<a id="nestedatt--items--conf"></a>
+### Nested Schema for `items.conf`
 
 Read-Only:
 
@@ -46,16 +54,16 @@ Read-Only:
 - `trigger_type` (String) Type of trigger (e.g., resultsCount)
 
 
-<a id="nestedatt--target_configs"></a>
-### Nested Schema for `target_configs`
+<a id="nestedatt--items--target_configs"></a>
+### Nested Schema for `items.target_configs`
 
 Read-Only:
 
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--target_configs--conf))
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--target_configs--conf))
 - `id` (String) ID of the notification target
 
-<a id="nestedatt--target_configs--conf"></a>
-### Nested Schema for `target_configs.conf`
+<a id="nestedatt--items--target_configs--conf"></a>
+### Nested Schema for `items.target_configs.conf`
 
 Read-Only:
 

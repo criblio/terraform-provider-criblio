@@ -11,38 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *ProjectResourceModel) RefreshFromOperationsGetProjectByIDResponseBody(ctx context.Context, resp *operations.GetProjectByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.ProjectConfig{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.ProjectConfig
-
-			if itemsItem.Consumers == nil {
-				items.Consumers = nil
-			} else {
-				items.Consumers = &tfTypes.Consumers{}
-			}
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Destinations = make([]types.String, 0, len(itemsItem.Destinations))
-			for _, v := range itemsItem.Destinations {
-				items.Destinations = append(items.Destinations, types.StringValue(v))
-			}
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Subscriptions = make([]types.String, 0, len(itemsItem.Subscriptions))
-			for _, v := range itemsItem.Subscriptions {
-				items.Subscriptions = append(items.Subscriptions, types.StringValue(v))
-			}
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
-
 func (r *ProjectResourceModel) RefreshFromSharedProjectConfig(ctx context.Context, resp *shared.ProjectConfig) diag.Diagnostics {
 	var diags diag.Diagnostics
 

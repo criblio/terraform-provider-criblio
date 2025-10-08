@@ -34566,7 +34566,7 @@ components:
             to the kind of compression being used (`none` or `gzip`).
           default: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ?
             ".gz" : ""}`'
-          example: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ? ".gz" : ""}`'
+          example: .json.gz
         maxFileSizeMB:
           type: number
           title: File size limit (MB)
@@ -35030,7 +35030,7 @@ components:
             to the kind of compression being used (`none` or `gzip`).
           default: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ?
             ".gz" : ""}`'
-          example: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ? ".gz" : ""}`'
+          example: .json.gz
         maxFileSizeMB:
           type: number
           title: File size limit (MB)
@@ -35432,7 +35432,7 @@ components:
             to the kind of compression being used (`none` or `gzip`).
           default: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ?
             ".gz" : ""}`'
-          example: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ? ".gz" : ""}`'
+          example: .json.gz
         maxFileSizeMB:
           type: number
           title: File size limit (MB)
@@ -35935,7 +35935,7 @@ components:
             to the kind of compression being used (`none` or `gzip`).
           default: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ?
             ".gz" : ""}`'
-          example: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ? ".gz" : ""}`'
+          example: .json.gz
         maxFileSizeMB:
           type: number
           title: File size limit (MB)
@@ -38322,7 +38322,7 @@ components:
             to the kind of compression being used (`none` or `gzip`).
           default: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ?
             ".gz" : ""}`'
-          example: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ? ".gz" : ""}`'
+          example: .json.gz
         maxFileSizeMB:
           type: number
           title: File size limit (MB)

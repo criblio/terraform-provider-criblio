@@ -33,6 +33,28 @@ func (r *SubscriptionResourceModel) RefreshFromOperationsGetSubscriptionByIDResp
 	return diags
 }
 
+func (r *SubscriptionResourceModel) RefreshFromOperationsUpdateSubscriptionByIDResponseBody(ctx context.Context, resp *operations.UpdateSubscriptionByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Subscription{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.Subscription
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
+			items.Filter = types.StringPointerValue(itemsItem.Filter)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Pipeline = types.StringValue(itemsItem.Pipeline)
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *SubscriptionResourceModel) RefreshFromSharedSubscription(ctx context.Context, resp *shared.Subscription) diag.Diagnostics {
 	var diags diag.Diagnostics
 
