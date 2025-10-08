@@ -87,7 +87,7 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 			`` + "\n" +
 			`This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.` + "\n" +
 			`` + "\n" +
-			`Complementary API reference documentation is available at https://docs.cribl.io/api-reference/. Product documentation is available at https://docs.cribl.io.`,
+			`Complementary API reference documentation is available at https://docs.cribl.io/cribl-as-code/api-reference/. Product documentation is available at https://docs.cribl.io.`,
 	}
 }
 

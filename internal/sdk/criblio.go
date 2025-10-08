@@ -55,7 +55,7 @@ func Pointer[T any](v T) *T { return &v }
 //
 // This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.
 //
-// Complementary API reference documentation is available at https://docs.cribl.io/api-reference/. Product documentation is available at https://docs.cribl.io.
+// Complementary API reference documentation is available at https://docs.cribl.io/cribl-as-code/api-reference/. Product documentation is available at https://docs.cribl.io.
 type CriblIo struct {
 	SDKVersion string
 	// Actions related to REST server health
