@@ -38,21 +38,6 @@ resource "criblio_subscription" "my_subscription" {
 - `disabled` (Boolean) Project Id. Requires replacement if changed.
 - `filter` (String) filter. Requires replacement if changed.
 
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `description` (String)
-- `disabled` (Boolean)
-- `filter` (String)
-- `id` (String)
-- `pipeline` (String)
-
 ## Import
 
 Import is supported using the following syntax:

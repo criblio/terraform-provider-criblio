@@ -67600,7 +67600,6 @@ paths:
         - macros
       summary: Get a list of SearchMacro objects
       description: Get a list of SearchMacro objects
-      x-speakeasy-entity-operation: SearchMacro#get
       responses:
         &a88
         "200":
@@ -67646,6 +67645,7 @@ paths:
       tags: *a87
       summary: Get SearchMacro by ID
       description: Get SearchMacro by ID
+      x-speakeasy-entity-operation: SearchMacro#get
       parameters:
         - name: id
           in: path
@@ -68447,11 +68447,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GlobalVar"
-              example:
-                count: 1
-                items:
-                  - id: "NEW_VAR"
-                    value: "value"
         "401":
           description: Unauthorized
         "500":
@@ -69986,10 +69981,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Routes"
-              example:
-                count: 1
-                items:
-                  - {}
         "401":
           description: Unauthorized
         "500":
@@ -70034,8 +70025,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Routes"
-            example:
-              routes: []
       responses: *a136
   "/m/{groupId}/routes/default":
     get:

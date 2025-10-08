@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SearchMacroDataSourceModel) RefreshFromOperationsListSearchMacroResponseBody(ctx context.Context, resp *operations.ListSearchMacroResponseBody) diag.Diagnostics {
+func (r *SearchMacroDataSourceModel) RefreshFromOperationsGetSearchMacroByIDResponseBody(ctx context.Context, resp *operations.GetSearchMacroByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -32,4 +32,17 @@ func (r *SearchMacroDataSourceModel) RefreshFromOperationsListSearchMacroRespons
 	}
 
 	return diags
+}
+
+func (r *SearchMacroDataSourceModel) ToOperationsGetSearchMacroByIDRequest(ctx context.Context) (*operations.GetSearchMacroByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetSearchMacroByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
 }

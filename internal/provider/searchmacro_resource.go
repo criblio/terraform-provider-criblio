@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -181,7 +182,13 @@ func (r *SearchMacroResource) Create(ctx context.Context, req resource.CreateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Macros.ListSearchMacro(ctx)
+	request1, request1Diags := data.ToOperationsGetSearchMacroByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Macros.GetSearchMacroByID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -201,7 +208,13 @@ func (r *SearchMacroResource) Create(ctx context.Context, req resource.CreateReq
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchMacroResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSearchMacroByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -229,7 +242,13 @@ func (r *SearchMacroResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	res, err := r.client.Macros.ListSearchMacro(ctx)
+	request, requestDiags := data.ToOperationsGetSearchMacroByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Macros.GetSearchMacroByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -253,7 +272,7 @@ func (r *SearchMacroResource) Read(ctx context.Context, req resource.ReadRequest
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchMacroResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSearchMacroByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -314,7 +333,13 @@ func (r *SearchMacroResource) Update(ctx context.Context, req resource.UpdateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Macros.ListSearchMacro(ctx)
+	request1, request1Diags := data.ToOperationsGetSearchMacroByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Macros.GetSearchMacroByID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -334,7 +359,13 @@ func (r *SearchMacroResource) Update(ctx context.Context, req resource.UpdateReq
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchMacroResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSearchMacroByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -388,5 +419,5 @@ func (r *SearchMacroResource) Delete(ctx context.Context, req resource.DeleteReq
 }
 
 func (r *SearchMacroResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource search_macro.")
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

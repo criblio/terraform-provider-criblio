@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SearchMacroResourceModel) RefreshFromOperationsListSearchMacroResponseBody(ctx context.Context, resp *operations.ListSearchMacroResponseBody) diag.Diagnostics {
+func (r *SearchMacroResourceModel) RefreshFromOperationsGetSearchMacroByIDResponseBody(ctx context.Context, resp *operations.GetSearchMacroByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -56,6 +56,19 @@ func (r *SearchMacroResourceModel) ToOperationsDeleteSearchMacroByIDRequest(ctx 
 	id = r.ID.ValueString()
 
 	out := operations.DeleteSearchMacroByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
+}
+
+func (r *SearchMacroResourceModel) ToOperationsGetSearchMacroByIDRequest(ctx context.Context) (*operations.GetSearchMacroByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetSearchMacroByIDRequest{
 		ID: id,
 	}
 

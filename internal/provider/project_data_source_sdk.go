@@ -6,37 +6,28 @@ import (
 	"context"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *ProjectDataSourceModel) RefreshFromOperationsGetProjectByIDResponseBody(ctx context.Context, resp *operations.GetProjectByIDResponseBody) diag.Diagnostics {
+func (r *ProjectDataSourceModel) RefreshFromSharedProjectConfig(ctx context.Context, resp *shared.ProjectConfig) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.ProjectConfig{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.ProjectConfig
-
-			if itemsItem.Consumers == nil {
-				items.Consumers = nil
-			} else {
-				items.Consumers = &tfTypes.Consumers{}
-			}
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Destinations = make([]types.String, 0, len(itemsItem.Destinations))
-			for _, v := range itemsItem.Destinations {
-				items.Destinations = append(items.Destinations, types.StringValue(v))
-			}
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Subscriptions = make([]types.String, 0, len(itemsItem.Subscriptions))
-			for _, v := range itemsItem.Subscriptions {
-				items.Subscriptions = append(items.Subscriptions, types.StringValue(v))
-			}
-
-			r.Items = append(r.Items, items)
-		}
+	if resp.Consumers == nil {
+		r.Consumers = nil
+	} else {
+		r.Consumers = &tfTypes.Consumers{}
+	}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.Destinations = make([]types.String, 0, len(resp.Destinations))
+	for _, v := range resp.Destinations {
+		r.Destinations = append(r.Destinations, types.StringValue(v))
+	}
+	r.ID = types.StringValue(resp.ID)
+	r.Subscriptions = make([]types.String, 0, len(resp.Subscriptions))
+	for _, v := range resp.Subscriptions {
+		r.Subscriptions = append(r.Subscriptions, types.StringValue(v))
 	}
 
 	return diags

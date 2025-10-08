@@ -29,6 +29,7 @@ type SearchMacroDataSource struct {
 
 // SearchMacroDataSourceModel describes the data model.
 type SearchMacroDataSourceModel struct {
+	ID    types.String          `tfsdk:"id"`
 	Items []tfTypes.SearchMacro `tfsdk:"items"`
 }
 
@@ -43,6 +44,10 @@ func (r *SearchMacroDataSource) Schema(ctx context.Context, req datasource.Schem
 		MarkdownDescription: "SearchMacro DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET`,
+			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
@@ -113,7 +118,13 @@ func (r *SearchMacroDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
-	res, err := r.client.Macros.ListSearchMacro(ctx)
+	request, requestDiags := data.ToOperationsGetSearchMacroByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Macros.GetSearchMacroByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -133,7 +144,7 @@ func (r *SearchMacroDataSource) Read(ctx context.Context, req datasource.ReadReq
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchMacroResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSearchMacroByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
