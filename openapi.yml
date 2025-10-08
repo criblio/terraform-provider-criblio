@@ -69876,11 +69876,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ProfilerItem"
-              example:
-                count: 2
-                items:
-                  - {}
-                  - {}
         "401":
           description: Unauthorized
         "500":
@@ -69901,9 +69896,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ProfilerItem"
-            example:
-              type: "cpu"
-              durationSec: 60
       responses: *a133
   "/system/profiler/{id}":
     get:
@@ -69940,8 +69932,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ProfilerItem"
-            example:
-              durationSec: 120
       responses: *a133
     delete:
       operationId: deleteProfilerItemById

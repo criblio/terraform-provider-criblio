@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,10 +28,15 @@ type PackVarsDataSource struct {
 
 // PackVarsDataSourceModel describes the data model.
 type PackVarsDataSourceModel struct {
-	GroupID types.String        `tfsdk:"group_id"`
-	Items   []tfTypes.GlobalVar `tfsdk:"items"`
-	Pack    types.String        `tfsdk:"pack"`
-	With    types.String        `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
+	Description types.String `tfsdk:"description"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Lib         types.String `tfsdk:"lib"`
+	Pack        types.String `tfsdk:"pack"`
+	Tags        types.String `tfsdk:"tags"`
+	Type        types.String `tfsdk:"type"`
+	Value       types.String `tfsdk:"value"`
+	With        types.String `queryParam:"style=form,explode=true,name=with" tfsdk:"with"`
 }
 
 // Metadata returns the data source type name.
@@ -46,43 +50,36 @@ func (r *PackVarsDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 		MarkdownDescription: "PackVars DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"description": schema.StringAttribute{
+				Computed:    true,
+				Description: `Brief description of this variable. Optional.`,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
-			"items": schema.ListNestedAttribute{
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Global variable name.`,
+			},
+			"lib": schema.StringAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed:    true,
-							Description: `Brief description of this variable. Optional.`,
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Global variable name.`,
-						},
-						"lib": schema.StringAttribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed:    true,
-							Description: `One or more tags related to this variable. Optional.`,
-						},
-						"type": schema.StringAttribute{
-							Computed:    true,
-							Description: `Type of variable`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value of variable`,
-						},
-					},
-				},
 			},
 			"pack": schema.StringAttribute{
 				Required:    true,
 				Description: `pack ID to GET`,
+			},
+			"tags": schema.StringAttribute{
+				Computed:    true,
+				Description: `One or more tags related to this variable. Optional.`,
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `Type of variable`,
+			},
+			"value": schema.StringAttribute{
+				Computed:    true,
+				Description: `Value of variable`,
 			},
 			"with": schema.StringAttribute{
 				Optional:    true,
@@ -152,11 +149,11 @@ func (r *PackVarsDataSource) Read(ctx context.Context, req datasource.ReadReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableLibVarsByPackResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedGlobalVar(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

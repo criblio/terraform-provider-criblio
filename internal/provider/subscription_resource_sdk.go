@@ -10,15 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SubscriptionResourceModel) RefreshFromOperationsUpdateSubscriptionByIDResponseBody(ctx context.Context, resp *operations.UpdateSubscriptionByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *SubscriptionResourceModel) RefreshFromSharedSubscription(ctx context.Context, resp *shared.Subscription) diag.Diagnostics {
 	var diags diag.Diagnostics
 

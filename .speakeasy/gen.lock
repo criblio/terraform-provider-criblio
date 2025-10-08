@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 417c06b9f4b064b5e87b985ce8f025a7
+  docChecksum: af6cd5e8914c374b20caf7b6524f1c74
   docVersion: 4.12.2-4b17c8d4
   speakeasyVersion: 1.636.0
   generationVersion: 2.723.2
-  releaseVersion: 1.15.14
-  configChecksum: 55da5ed9db6978fc5d41cdc90e922e5c
+  releaseVersion: 1.15.16
+  configChecksum: 5ff3b42fd988333b72c7066cb5aeec0f
   published: true
 features:
   terraform:
@@ -473,7 +473,6 @@ generatedFiles:
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
   - internal/provider/types/dashboard_layout.go
-  - internal/provider/types/database_connection_config.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
   - internal/provider/types/discover_request_param.go
@@ -499,10 +498,8 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
-  - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
-  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/grok_file.go
   - internal/provider/types/group.go
@@ -969,7 +966,6 @@ generatedFiles:
   - internal/provider/types/interfaces.go
   - internal/provider/types/internal_scheduling.go
   - internal/provider/types/lake_dataset_search_config.go
-  - internal/provider/types/lakehouse.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
@@ -1267,10 +1263,12 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
+  - internal/provider/types/pipeline.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
+  - internal/provider/types/project_config.go
   - internal/provider/types/prometheus_auth_oauth_header1.go
   - internal/provider/types/prometheus_auth_oauth_header2.go
   - internal/provider/types/prometheus_auth_oauth_param1.go
@@ -1291,11 +1289,9 @@ generatedFiles:
   - internal/provider/types/s3_provider.go
   - internal/provider/types/sample.go
   - internal/provider/types/sas_config.go
+  - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
-  - internal/provider/types/schema_lib_entry.go
-  - internal/provider/types/search_dashboard.go
-  - internal/provider/types/search_macro.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go

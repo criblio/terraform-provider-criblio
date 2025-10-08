@@ -13,6 +13,63 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *PipelineResourceModel) RefreshFromOperationsGetPipelineByIDResponseBody(ctx context.Context, resp *operations.GetPipelineByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Pipeline{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.Pipeline
+
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Conf.AsyncFuncTimeout = types.Int64PointerValue(itemsItem.Conf.AsyncFuncTimeout)
+			items.Conf.Output = types.StringPointerValue(itemsItem.Conf.Output)
+			items.Conf.Description = types.StringPointerValue(itemsItem.Conf.Description)
+			items.Conf.Streamtags = make([]types.String, 0, len(itemsItem.Conf.Streamtags))
+			for _, v := range itemsItem.Conf.Streamtags {
+				items.Conf.Streamtags = append(items.Conf.Streamtags, types.StringValue(v))
+			}
+			items.Conf.Functions = []tfTypes.PipelineFunctionConf{}
+
+			for _, functionsItem := range itemsItem.Conf.Functions {
+				var functions tfTypes.PipelineFunctionConf
+
+				functions.Filter = types.StringPointerValue(functionsItem.Filter)
+				functions.ID = types.StringValue(functionsItem.ID)
+				functions.Description = types.StringPointerValue(functionsItem.Description)
+				functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
+				functions.Final = types.BoolPointerValue(functionsItem.Final)
+				if len(functionsItem.Conf) > 0 {
+					functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
+					for key, value := range functionsItem.Conf {
+						result, _ := json.Marshal(value)
+						functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
+					}
+				}
+				functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
+
+				items.Conf.Functions = append(items.Conf.Functions, functions)
+			}
+			if len(itemsItem.Conf.Groups) > 0 {
+				items.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(itemsItem.Conf.Groups))
+				for pipelineGroupsKey, pipelineGroupsValue := range itemsItem.Conf.Groups {
+					var pipelineGroupsResult tfTypes.PipelineGroups
+					pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
+					pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
+					pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
+
+					items.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
+				}
+			}
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *PipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
 	var diags diag.Diagnostics
 
