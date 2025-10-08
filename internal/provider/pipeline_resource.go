@@ -46,6 +46,7 @@ type PipelineResourceModel struct {
 	Conf    tfTypes.PipelineConf `tfsdk:"conf"`
 	GroupID types.String         `tfsdk:"group_id"`
 	ID      types.String         `tfsdk:"id"`
+	Items   []tfTypes.Pipeline   `tfsdk:"items"`
 }
 
 func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -179,6 +180,100 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				Required:    true,
 				Description: `Unique ID to PATCH`,
 			},
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"conf": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"async_func_timeout": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
+									Validators: []validator.Int64{
+										int64validator.AtMost(10000),
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"functions": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"conf": schema.MapAttribute{
+												Computed:    true,
+												ElementType: jsontypes.NormalizedType{},
+												Validators: []validator.Map{
+													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+												},
+											},
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Simple description of this step`,
+											},
+											"disabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `If true, data will not be pushed through this function`,
+											},
+											"filter": schema.StringAttribute{
+												Computed:    true,
+												Default:     stringdefault.StaticString(`true`),
+												Description: `Filter that selects data to be fed through this Function. Default: "true"`,
+											},
+											"final": schema.BoolAttribute{
+												Computed:    true,
+												Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
+											},
+											"group_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Group ID`,
+											},
+											"id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Function ID`,
+											},
+										},
+									},
+									Description: `List of Functions to pass data through`,
+								},
+								"groups": schema.MapNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Short description of this group`,
+											},
+											"disabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Whether this group is disabled`,
+											},
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+								},
+								"output": schema.StringAttribute{
+									Computed:    true,
+									Default:     stringdefault.StaticString(`default`),
+									Description: `The output destination for events processed by this Pipeline. Default: "default"`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}. Default: []`,
+								},
+							},
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -258,6 +353,43 @@ func (r *PipelineResource) Create(ctx context.Context, req resource.CreateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1, request1Diags := data.ToOperationsGetPipelineByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Pipelines.GetPipelineByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelineByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -307,11 +439,11 @@ func (r *PipelineResource) Read(ctx context.Context, req resource.ReadRequest, r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipeline(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelineByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -362,6 +494,43 @@ func (r *PipelineResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedPipeline(ctx, &res.Object.Items[0])...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetPipelineByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Pipelines.GetPipelineByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelineByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

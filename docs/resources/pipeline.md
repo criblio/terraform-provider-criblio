@@ -57,6 +57,10 @@ resource "criblio_pipeline" "my_pipeline" {
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to PATCH
 
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
 
@@ -91,6 +95,51 @@ Optional:
 - `description` (String) Short description of this group
 - `disabled` (Boolean) Whether this group is disabled
 - `name` (String) Not Null
+
+
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--conf))
+- `id` (String)
+
+<a id="nestedatt--items--conf"></a>
+### Nested Schema for `items.conf`
+
+Read-Only:
+
+- `async_func_timeout` (Number) Time (in ms) to wait for an async function to complete processing of a data item
+- `description` (String)
+- `functions` (Attributes List) List of Functions to pass data through (see [below for nested schema](#nestedatt--items--conf--functions))
+- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--conf--groups))
+- `output` (String) The output destination for events processed by this Pipeline. Default: "default"
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+
+<a id="nestedatt--items--conf--functions"></a>
+### Nested Schema for `items.conf.functions`
+
+Read-Only:
+
+- `conf` (Map of String)
+- `description` (String) Simple description of this step
+- `disabled` (Boolean) If true, data will not be pushed through this function
+- `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
+- `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
+- `group_id` (String) Group ID
+- `id` (String) Function ID
+
+
+<a id="nestedatt--items--conf--groups"></a>
+### Nested Schema for `items.conf.groups`
+
+Read-Only:
+
+- `description` (String) Short description of this group
+- `disabled` (Boolean) Whether this group is disabled
+- `name` (String)
 
 ## Import
 

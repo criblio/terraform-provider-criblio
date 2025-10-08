@@ -65824,13 +65824,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardCategory"
-              example:
-                count: 2
-                items:
-                  - id: "observability"
-                    name: "Observability"
-                  - id: "security"
-                    name: "Security"
         "401":
           description: Unauthorized
         "500":
@@ -65892,8 +65885,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DashboardCategory"
-            example:
-              name: "Observability & SRE"
       responses: *a38
     delete:
       operationId: deleteDashboardCategoryById
@@ -65993,8 +65984,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/UsageGroup"
-            example:
-              name: "Platform Engineering"
       responses: *a41
     delete:
       operationId: deleteUsageGroupById
@@ -66035,13 +66024,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DatasetProviderType"
-              example:
-                count: 2
-                items:
-                  - id: "s3"
-                    name: "Amazon S3"
-                  - id: "azure-blob"
-                    name: "Azure Blob Storage"
         "401":
           description: Unauthorized
         "500":
@@ -66062,9 +66044,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DatasetProviderType"
-            example:
-              id: "gcs"
-              name: "Google Cloud Storage"
       responses: *a44
   "/search/dataset-provider-types/{id}":
     get:
@@ -66101,8 +66080,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DatasetProviderType"
-            example:
-              name: "Amazon S3 (updated)"
       responses: *a44
     delete:
       operationId: deleteDatasetProviderTypeById
@@ -66142,15 +66119,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GenericProvider"
-              example:
-                count: 2
-                items:
-                  - id: "provider-s3-main"
-                    type: "s3"
-                    name: "S3 Main Bucket"
-                  - id: "provider-azure-logs"
-                    type: "azure-blob"
-                    name: "Azure Logs Container"
         "401":
           description: Unauthorized
         "500":
@@ -66210,8 +66178,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GenericProvider"
-            example:
-              name: "S3 Main Bucket (updated)"
       responses: *a47
     delete:
       operationId: deleteDatasetProviderById
@@ -66252,15 +66218,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GenericDataset"
-              example:
-                count: 2
-                items:
-                  - id: "web-logs"
-                    name: "Web Logs"
-                    providerId: "provider-s3-main"
-                  - id: "security-events"
-                    name: "Security Events"
-                    providerId: "provider-s3-main"
         "401":
           description: Unauthorized
         "500":
@@ -66320,8 +66277,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GenericDataset"
-            example:
-              name: "Web Logs - Updated"
       responses: *a50
     delete:
       operationId: deleteDatasetById
@@ -66357,17 +66312,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/UserAccessControlList"
-              example:
-                count: 2
-                items:
-                  - user: "alice@example.com"
-                    perms:
-                      - resource: "dataset:web-logs"
-                        actions: ["read"]
-                  - user: "bob@example.com"
-                    perms:
-                      - resource: "dataset:web-logs"
-                        actions: ["read","write"]
         "401":
           &a52
           description: Unauthorized
@@ -66708,10 +66652,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GrokFile"
-            example:
-              id: "grok-common"
-              patterns:
-                COMBINEDAPACHELOG: "%{COMMONAPACHELOG} %{QS:referrer} %{QS:agent}"
       responses: *a63
     delete:
       x-speakeasy-entity-operation: Grok#delete
@@ -66769,10 +66709,6 @@ paths:
                     items:
                       $ref: "#/components/schemas/LookupFile"
                     x-speakeasy-ignore: true
-              example:
-                count: 1
-                items:
-                  - id: "countries.csv"
         "401":
           description: Unauthorized
         "500":
@@ -66909,11 +66845,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ParserLibEntry"
-              example:
-                count: 2
-                items:
-                  - id: "parser-json"
-                  - id: "parser-csv"
         "401":
           description: Unauthorized
         "500":
@@ -66994,8 +66925,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ParserLibEntry"
-            example:
-              name: "JSON Parser (updated)"
       responses: *a69
     delete:
       operationId: deleteParserById
@@ -67042,10 +66971,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ProtobufEncodingConfig"
-              example:
-                count: 1
-                items:
-                  - {}
         "401":
           description: Unauthorized
         "500":
@@ -67086,10 +67011,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ProtobufLibraryConfig"
-              example:
-                count: 1
-                items:
-                  - {}
         "401":
           description: Unauthorized
         "500":
@@ -67130,10 +67051,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ProtobufEncodingConfig"
-              example:
-                count: 1
-                items:
-                  - {}
         "401":
           description: Unauthorized
         "500":
@@ -67181,11 +67098,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ProtobufEncodingConfig"
-              example:
-                count: 2
-                items:
-                  - {}
-                  - {}
         "401":
           description: Unauthorized
         "500":
@@ -67522,13 +67434,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/SearchDashboard"
-              example:
-                count: 2
-                items:
-                  - id: "dash-overview"
-                    name: "Overview"
-                  - id: "dash-errors"
-                    name: "Errors"
         "401":
           description: Unauthorized
         "500":
@@ -67587,8 +67492,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SearchDashboard"
-            example:
-              name: "Overview (updated)"
       responses: *a78
     delete:
       operationId: deleteSearchDashboardById
@@ -67624,17 +67527,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/UserAccessControlList"
-              example:
-                count: 2
-                items:
-                  - user: "alice@example.com"
-                    perms:
-                      - resource: "dashboard:dash-overview"
-                        actions: ["read"]
-                  - user: "bob@example.com"
-                    perms:
-                      - resource: "dashboard:dash-overview"
-                        actions: ["read","write"]
         "401":
           &a80
           description: Unauthorized
@@ -67669,11 +67561,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/AccessControlSchema"
-            example:
-              entries:
-                - principal: "alice@example.com"
-                  resource: "dashboard:dash-overview"
-                  actions: ["read","write"]
       responses:
         &a85
         "200":
@@ -69916,13 +69803,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Pipeline"
-              example:
-                count: 2
-                items:
-                  - id: "main"
-                    name: "Main Pipeline"
-                  - id: "enrich"
-                    name: "Enrichment Pipeline"
         "401":
           description: Unauthorized
         "500":

@@ -6,8 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type GrokFile struct {
-	Content types.String `tfsdk:"content"`
-	ID      types.String `tfsdk:"id"`
-	Tags    types.String `tfsdk:"tags"`
+type Pipeline struct {
+	Conf PipelineConf `tfsdk:"conf"`
+	ID   types.String `tfsdk:"id"`
 }
