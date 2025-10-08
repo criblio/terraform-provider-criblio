@@ -7,55 +7,64 @@ import (
 	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *PipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
+func (r *PipelineDataSourceModel) RefreshFromOperationsGetPipelineByIDResponseBody(ctx context.Context, resp *operations.GetPipelineByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(resp.Conf.AsyncFuncTimeout)
-	r.Conf.Description = types.StringPointerValue(resp.Conf.Description)
-	r.Conf.Functions = []tfTypes.PipelineFunctionConf{}
+	if resp != nil {
+		r.Items = []tfTypes.Pipeline{}
 
-	for _, functionsItem := range resp.Conf.Functions {
-		var functions tfTypes.PipelineFunctionConf
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.Pipeline
 
-		if len(functionsItem.Conf) > 0 {
-			functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
-			for key, value := range functionsItem.Conf {
-				result, _ := json.Marshal(value)
-				functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
+			items.Conf.AsyncFuncTimeout = types.Int64PointerValue(itemsItem.Conf.AsyncFuncTimeout)
+			items.Conf.Description = types.StringPointerValue(itemsItem.Conf.Description)
+			items.Conf.Functions = []tfTypes.PipelineFunctionConf{}
+
+			for _, functionsItem := range itemsItem.Conf.Functions {
+				var functions tfTypes.PipelineFunctionConf
+
+				if len(functionsItem.Conf) > 0 {
+					functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
+					for key, value := range functionsItem.Conf {
+						result, _ := json.Marshal(value)
+						functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
+					}
+				}
+				functions.Description = types.StringPointerValue(functionsItem.Description)
+				functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
+				functions.Filter = types.StringPointerValue(functionsItem.Filter)
+				functions.Final = types.BoolPointerValue(functionsItem.Final)
+				functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
+				functions.ID = types.StringValue(functionsItem.ID)
+
+				items.Conf.Functions = append(items.Conf.Functions, functions)
 			}
-		}
-		functions.Description = types.StringPointerValue(functionsItem.Description)
-		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
-		functions.Filter = types.StringPointerValue(functionsItem.Filter)
-		functions.Final = types.BoolPointerValue(functionsItem.Final)
-		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-		functions.ID = types.StringValue(functionsItem.ID)
+			if len(itemsItem.Conf.Groups) > 0 {
+				items.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(itemsItem.Conf.Groups))
+				for pipelineGroupsKey, pipelineGroupsValue := range itemsItem.Conf.Groups {
+					var pipelineGroupsResult tfTypes.PipelineGroups
+					pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
+					pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
+					pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
 
-		r.Conf.Functions = append(r.Conf.Functions, functions)
-	}
-	if len(resp.Conf.Groups) > 0 {
-		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
-		for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
-			var pipelineGroupsResult tfTypes.PipelineGroups
-			pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
-			pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
-			pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
+					items.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
+				}
+			}
+			items.Conf.Output = types.StringPointerValue(itemsItem.Conf.Output)
+			items.Conf.Streamtags = make([]types.String, 0, len(itemsItem.Conf.Streamtags))
+			for _, v := range itemsItem.Conf.Streamtags {
+				items.Conf.Streamtags = append(items.Conf.Streamtags, types.StringValue(v))
+			}
+			items.ID = types.StringValue(itemsItem.ID)
 
-			r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
+			r.Items = append(r.Items, items)
 		}
 	}
-	r.Conf.Output = types.StringPointerValue(resp.Conf.Output)
-	r.Conf.Streamtags = make([]types.String, 0, len(resp.Conf.Streamtags))
-	for _, v := range resp.Conf.Streamtags {
-		r.Conf.Streamtags = append(r.Conf.Streamtags, types.StringValue(v))
-	}
-	r.ID = types.StringValue(resp.ID)
 
 	return diags
 }

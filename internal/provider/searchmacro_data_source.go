@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,7 +28,13 @@ type SearchMacroDataSource struct {
 
 // SearchMacroDataSourceModel describes the data model.
 type SearchMacroDataSourceModel struct {
-	Items []tfTypes.SearchMacro `tfsdk:"items"`
+	Created     types.Float64 `tfsdk:"created"`
+	CreatedBy   types.String  `tfsdk:"created_by"`
+	Description types.String  `tfsdk:"description"`
+	ID          types.String  `tfsdk:"id"`
+	Modified    types.Float64 `tfsdk:"modified"`
+	Replacement types.String  `tfsdk:"replacement"`
+	Tags        types.String  `tfsdk:"tags"`
 }
 
 // Metadata returns the data source type name.
@@ -43,33 +48,26 @@ func (r *SearchMacroDataSource) Schema(ctx context.Context, req datasource.Schem
 		MarkdownDescription: "SearchMacro DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"items": schema.ListNestedAttribute{
+			"created": schema.Float64Attribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"created": schema.Float64Attribute{
-							Computed: true,
-						},
-						"created_by": schema.StringAttribute{
-							Computed: true,
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"modified": schema.Float64Attribute{
-							Computed: true,
-						},
-						"replacement": schema.StringAttribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
+			},
+			"created_by": schema.StringAttribute{
+				Computed: true,
+			},
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
+			"id": schema.StringAttribute{
+				Computed: true,
+			},
+			"modified": schema.Float64Attribute{
+				Computed: true,
+			},
+			"replacement": schema.StringAttribute{
+				Computed: true,
+			},
+			"tags": schema.StringAttribute{
+				Computed: true,
 			},
 		},
 	}
@@ -129,11 +127,11 @@ func (r *SearchMacroDataSource) Read(ctx context.Context, req datasource.ReadReq
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchMacroResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSearchMacro(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -29,14 +28,13 @@ type SearchMacroResource struct {
 
 // SearchMacroResourceModel describes the resource data model.
 type SearchMacroResourceModel struct {
-	Created     types.Float64         `tfsdk:"created"`
-	CreatedBy   types.String          `tfsdk:"created_by"`
-	Description types.String          `tfsdk:"description"`
-	ID          types.String          `tfsdk:"id"`
-	Items       []tfTypes.SearchMacro `tfsdk:"items"`
-	Modified    types.Float64         `tfsdk:"modified"`
-	Replacement types.String          `tfsdk:"replacement"`
-	Tags        types.String          `tfsdk:"tags"`
+	Created     types.Float64 `tfsdk:"created"`
+	CreatedBy   types.String  `tfsdk:"created_by"`
+	Description types.String  `tfsdk:"description"`
+	ID          types.String  `tfsdk:"id"`
+	Modified    types.Float64 `tfsdk:"modified"`
+	Replacement types.String  `tfsdk:"replacement"`
+	Tags        types.String  `tfsdk:"tags"`
 }
 
 func (r *SearchMacroResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -62,34 +60,6 @@ func (r *SearchMacroResource) Schema(ctx context.Context, req resource.SchemaReq
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to PATCH`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"created": schema.Float64Attribute{
-							Computed: true,
-						},
-						"created_by": schema.StringAttribute{
-							Computed: true,
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"modified": schema.Float64Attribute{
-							Computed: true,
-						},
-						"replacement": schema.StringAttribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
 			},
 			"modified": schema.Float64Attribute{
 				Computed: true,
@@ -181,31 +151,6 @@ func (r *SearchMacroResource) Create(ctx context.Context, req resource.CreateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Macros.ListSearchMacro(ctx)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchMacroResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -249,11 +194,11 @@ func (r *SearchMacroResource) Read(ctx context.Context, req resource.ReadRequest
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchMacroResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSearchMacro(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -310,31 +255,6 @@ func (r *SearchMacroResource) Update(ctx context.Context, req resource.UpdateReq
 	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Macros.ListSearchMacro(ctx)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchMacroResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

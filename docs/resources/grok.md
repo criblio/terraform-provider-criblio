@@ -17,7 +17,6 @@ resource "criblio_grok" "my_grok" {
   content  = "%%{IPV4:client} %%{WORD:method} %%{URIPATHPARAM:request}"
   group_id = "Cribl"
   id       = "myGrokFile"
-  size     = 1024
   tags     = "logs,patterns"
 }
 ```
@@ -30,10 +29,22 @@ resource "criblio_grok" "my_grok" {
 - `content` (String)
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID to PATCH
-- `size` (Number)
 
 ### Optional
 
+- `tags` (String)
+
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `content` (String)
+- `id` (String)
 - `tags` (String)
 
 ## Import

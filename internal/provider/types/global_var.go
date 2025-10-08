@@ -6,11 +6,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type RegexLibEntry struct {
+type GlobalVar struct {
 	Description types.String `tfsdk:"description"`
 	ID          types.String `tfsdk:"id"`
 	Lib         types.String `tfsdk:"lib"`
-	Regex       types.String `tfsdk:"regex"`
-	SampleData  types.String `tfsdk:"sample_data"`
 	Tags        types.String `tfsdk:"tags"`
+	Type        types.String `tfsdk:"type"`
+	Value       types.String `tfsdk:"value"`
 }

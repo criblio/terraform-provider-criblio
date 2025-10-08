@@ -4,19 +4,28 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *GrokDataSourceModel) RefreshFromSharedGrokFile(ctx context.Context, resp *shared.GrokFile) diag.Diagnostics {
+func (r *GrokDataSourceModel) RefreshFromOperationsGetGrokFileByIDResponseBody(ctx context.Context, resp *operations.GetGrokFileByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.Content = types.StringValue(resp.Content)
-	r.ID = types.StringValue(resp.ID)
-	r.Size = types.Float64Value(resp.Size)
-	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp != nil {
+		r.Items = []tfTypes.GrokFile{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.GrokFile
+
+			items.Content = types.StringValue(itemsItem.Content)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Tags = types.StringPointerValue(itemsItem.Tags)
+
+			r.Items = append(r.Items, items)
+		}
+	}
 
 	return diags
 }

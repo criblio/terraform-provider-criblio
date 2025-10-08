@@ -5846,6 +5846,8 @@ components:
         size:
           type: number
           example: 1024
+          default: 1
+          x-speakeasy-terraform-ignore: true
         tags:
           type: string
           example: "logs,patterns"
@@ -35003,7 +35005,7 @@ components:
             the event's __partition field value – if present – otherwise to each
             location's root directory.
           default: "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')"
-          example: "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d') + '/host=' + host"
+          example: "2024/01/15"
         format:
           type: string
           title: Data format
@@ -35405,7 +35407,7 @@ components:
             the event's __partition field value – if present – otherwise to each
             location's root directory.
           default: "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')"
-          example: "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d') + '/host=' + host"
+          example: "2024/01/15"
         format:
           type: string
           title: Data format
@@ -38295,7 +38297,7 @@ components:
             the event's __partition field value – if present – otherwise to each
             location's root directory.
           default: "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')"
-          example: "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d') + '/host=' + host"
+          example: "2024/01/15"
         format:
           type: string
           title: Data format
@@ -41285,7 +41287,7 @@ components:
           description: Index or data stream to send events to. Must be a JavaScript
             expression (which can evaluate to a constant value), enclosed in
             quotes or backticks. Can be overwritten by an event's __index field.
-          example: '"logs-%{C.Time.strftime(_time, "%Y.%m.%d")}"'
+          example: '"logs-2024.01.15"'
         docType:
           type: string
           title: Type
@@ -41776,7 +41778,7 @@ components:
           description: Data stream or index to send events to. Must be a JavaScript
             expression (which can evaluate to a constant value), enclosed in
             quotes or backticks. Can be overwritten by an event's __index field.
-          example: '"logs-%{C.Time.strftime(_time, "%Y.%m.%d")}"'
+          example: '"logs-2024.01.15"'
         concurrency:
           type: number
           title: Request concurrency
@@ -43854,7 +43856,7 @@ components:
             the event's __partition field value – if present – otherwise to each
             location's root directory.
           default: "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')"
-          example: "C.Time.strftime(_time || Date.now()/1000, '%Y/%m/%d/%H')"
+          example: "2024/01/15"
         format:
           type: string
           title: Data format
@@ -47785,7 +47787,7 @@ components:
           title: Partitioning expression
           description: JS expression to define how files are partitioned and organized. If
             left blank, Cribl Stream will fallback on event.__partition.
-          example: "C.Time.strftime(_time || Date.now()/1000, '%Y/%m/%d/%H')"
+          example: ""
         maxDataSize:
           type: string
           title: Data size limit
@@ -52485,7 +52487,7 @@ components:
             organized within the time-buckets. If blank, the event's __partition
             property is used and otherwise, events go directly into the
             time-bucket directory.
-          example: "C.Time.strftime(_time || Date.now()/1000, '%Y/%m/%d/%H')"
+          example: ""
         description:
           type: string
           title: Description
@@ -64156,21 +64158,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Notification"
-              example:
-                count: 2
-                items:
-                  - id: "notif-001"
-                    type: "slack"
-                    targetId: "nt-slack-prod"
-                    title: "High error rate"
-                    message: "Error rate exceeded threshold in api service."
-                    severity: "critical"
-                  - id: "notif-002"
-                    type: "email"
-                    targetId: "nt-email-ops"
-                    title: "Daily report"
-                    message: "Ingest summary attached."
-                    severity: "info"
         "401":
           description: Unauthorized
         "500":
@@ -64196,12 +64183,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Notification"
-            example:
-              type: "slack"
-              targetId: "nt-slack-prod"
-              title: "Deployment complete"
-              message: "v6.0.1 deployed to production."
-              severity: "info"
       responses: *a20
   "/notifications/{id}":
     get:
@@ -64240,9 +64221,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Notification"
-            example:
-              title: "High latency - resolved"
-              severity: "info"
       responses: *a20
     delete:
       operationId: deleteNotificationById
@@ -65260,10 +65238,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Lakehouse'
-            example:
-              id: "lakehouse-03"
-              name: "Analytics Lakehouse"
-              region: "us-west-2"
       responses:
         "200":
           description: a list of CriblLakeHouse objects
@@ -65280,18 +65254,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Lakehouse"
-              example:
-                count: 3
-                items:
-                  - id: "lakehouse-01"
-                    name: "Prod Lakehouse"
-                    region: "us-east-1"
-                  - id: "lakehouse-02"
-                    name: "EU Lakehouse"
-                    region: "eu-west-1"
-                  - id: "lakehouse-03"
-                    name: "Analytics Lakehouse"
-                    region: "us-west-2"
   "/products/lake/lakes/default/lakehouses/{id}":
     get:
       tags:
@@ -65324,12 +65286,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Lakehouse"
-              example:
-                count: 1
-                items:
-                  - id: "lakehouse-01"
-                    name: "Prod Lakehouse"
-                    region: "us-east-1"
         "401":
           description: Unauthorized
         "500":
@@ -65363,9 +65319,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Lakehouse'
-            example:
-              name: "Prod Lakehouse - Updated"
-              region: "us-east-1"
       responses:
         "200":
           description: a list of Lakehouse objects
@@ -65382,12 +65335,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Lakehouse"
-              example:
-                count: 1
-                items:
-                  - id: "lakehouse-01"
-                    name: "Prod Lakehouse - Updated"
-                    region: "us-east-1"
         "401":
           description: Unauthorized
         "500":
@@ -65396,10 +65343,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-lakehouse-patch-001"
     delete:
       tags:
         - LakeHouse
@@ -65431,9 +65374,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Lakehouse"
-              example:
-                count: 0
-                items: []
         "401":
           description: Unauthorized
         "500":
@@ -65442,10 +65382,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-lakehouse-del-001"
   "/products/lake/lakes/{lakeId}/datasets":
     post:
       operationId: createCriblLakeDatasetByLakeId
@@ -65471,13 +65407,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/CriblLakeDataset"
-              example:
-                count: 1
-                items:
-                  - id: "web-logs"
-                    name: "Web Logs"
-                    provider: "s3"
-                    region: "us-east-1"
         "401":
           description: Unauthorized
         "500":
@@ -65496,11 +65425,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CriblLakeDataset"
-            example:
-              id: "web-logs"
-              name: "Web Logs"
-              provider: "s3"
-              region: "us-east-1"
       parameters:
         - name: lakeId
           in: path
@@ -65535,17 +65459,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/CriblLakeDataset"
-              example:
-                count: 2
-                items:
-                  - id: "web-logs"
-                    name: "Web Logs"
-                    provider: "s3"
-                    region: "us-east-1"
-                  - id: "security-events"
-                    name: "Security Events"
-                    provider: "s3"
-                    region: "eu-west-1"
         "401":
           description: Unauthorized
         "500":
@@ -65554,9 +65467,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                requestId: "req-lake-datasets-002"
       parameters:
         - name: lakeId
           in: path
@@ -65597,11 +65507,6 @@ paths:
           application/json:
             schema:
               type: object
-            example:
-              connections:
-                - type: "s3"
-                  bucket: "my-lakehouse-bucket"
-                  region: "us-east-1"
       responses:
         '200':
           description: Successfully created dataset connections
@@ -65609,8 +65514,6 @@ paths:
             application/json:
               schema:
                 type: object
-              example:
-                created: 1
         '400':
           description: Bad request - invalid parameters
         '404':
@@ -65657,12 +65560,6 @@ paths:
           application/json:
             schema:
               type: object
-            example:
-              connections:
-                - type: "s3"
-                  bucket: "my-lakehouse-bucket"
-                  region: "us-east-1"
-                  prefix: "updated/"
       responses:
         '200':
           description: Successfully updated dataset connections
@@ -65670,8 +65567,6 @@ paths:
             application/json:
               schema:
                 type: object
-              example:
-                updated: 1
         '400':
           description: Bad request - invalid parameters
         '404':
@@ -65716,9 +65611,6 @@ paths:
                     type: array
                     items:
                       type: object
-              example:
-                count: 0
-                items: []
   "/products/lake/lakes/{lakeId}/datasets/{id}":
     delete:
       operationId: deleteCriblLakeDatasetByLakeIdAndId
@@ -65963,9 +65855,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DashboardCategory"
-            example:
-              id: "product"
-              name: "Product"
       responses: *a38
   "/m/default_search/search/dashboard-categories/{id}":
     get:
@@ -66077,9 +65966,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/UsageGroup"
-            example:
-              id: "analytics"
-              name: "Analytics"
       responses: *a41
   "/m/default_search/search/usage-groups/{id}":
     get:
@@ -66296,13 +66182,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GenericProvider"
-            example:
-              id: "provider-s3-backup"
-              type: "s3"
-              name: "S3 Backup Bucket"
-              config:
-                bucket: "company-backup-logs"
-                region: "us-west-2"
       responses: *a47
   "/m/default_search/search/dataset-providers/{id}":
     get:
@@ -66413,10 +66292,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GenericDataset"
-            example:
-              id: "analytics"
-              name: "Analytics"
-              providerId: "provider-s3-main"
       responses: *a50
   "/m/default_search/search/datasets/{id}":
     get:
@@ -66626,10 +66501,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/AppscopeLibEntry"
-              example:
-                count: 1
-                items:
-                  - id: "scope-default"
         "401":
           description: Unauthorized
         "500":
@@ -66659,8 +66530,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/AppscopeLibEntry"
-            example:
-              id: "scope-new"
       responses: *a60
   "/m/{groupId}/lib/appscope-configs/{id}":
     get:
@@ -66713,8 +66582,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/AppscopeLibEntry"
-            example:
-              description: "Updated appscope config"
       responses: *a60
     delete:
       x-speakeasy-entity-operation: AppscopeConfig#delete
@@ -66770,10 +66637,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GrokFile"
-              example:
-                count: 1
-                items:
-                  - id: "grok-common"
         "401":
           description: Unauthorized
         "500":
@@ -66803,8 +66666,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GrokFile"
-            example:
-              id: "grok-new"
       responses: *a63
   "/m/{groupId}/lib/grok/{id}":
     get:
@@ -66951,9 +66812,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/LookupFile"
-            example:
-              id: "countries.csv"
-              description: "ISO country codes"
       responses: *a66
   "/m/{groupId}/system/lookups/{id}":
     get:
@@ -67095,9 +66953,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ParserLibEntry"
-            example:
-              id: "parser-json"
-              name: "JSON Parser"
       responses: *a69
   "/m/{groupId}/lib/parsers/{id}":
     get:
@@ -67425,9 +67280,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/RegexLibEntry"
-            example:
-              id: "apache"
-              pattern: '^%{IPORHOST:clientip} - - \\[%{HTTPDATE:timestamp}\\] "%{WORD:method} %{DATA:path} HTTP/%{NUMBER:version}" %{NUMBER:status} %{NUMBER:bytes}$'
       responses: *a72
   "/m/{groupId}/lib/regex/{id}":
     get:
@@ -67480,8 +67332,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/RegexLibEntry"
-            example:
-              pattern: '^%{IPORHOST:clientip} .* "%{WORD:method} %{DATA:path} HTTP/%{NUMBER:version}" %{NUMBER:status} %{NUMBER:bytes}$'
       responses: *a72
     delete:
       x-speakeasy-entity-operation: Regex#delete
@@ -67710,9 +67560,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SearchDashboard"
-            example:
-              id: "dash-latency"
-              name: "Latency"
       responses: *a78
   "/m/default_search/search/dashboards/{id}":
     get:
@@ -67941,10 +67788,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SearchMacro"
-            example:
-              id: "macro-latency"
-              name: "High latency"
-              definition: "duration_ms > 1000"
       responses: *a88
   "/m/default_search/search/macros/{id}":
     get:
@@ -68054,10 +67897,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SavedQuery"
-            example:
-              id: "sq-new"
-              name: "New query"
-              query: "service = 'api' | stats count by status"
       responses: *a91
   "/m/default_search/search/saved/{id}":
     get:
@@ -68394,13 +68233,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DatabaseConnectionConfig"
-            example:
-              id: "conn-clickhouse"
-              type: "clickhouse"
-              host: "db.example.com"
-              port: 8443
-              database: "logs"
-              username: "readonly"
       responses:
         &a97
         "200":
@@ -68624,9 +68456,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/EventBreakerRuleset"
-            example:
-              id: "breaker-syslog"
-              name: "Syslog breaker"
       responses: *a100
   "/m/{groupId}/lib/breakers/{id}":
     get:
@@ -68679,8 +68508,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/EventBreakerRuleset"
-            example:
-              name: "Syslog breaker (updated)"
       responses: *a100
     delete:
       x-speakeasy-entity-operation: EventBreakerRuleset#delete
@@ -68785,9 +68612,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GlobalVar"
-            example:
-              id: "NEW_VAR"
-              value: "value"
       responses:
         &a103
         "200":
@@ -68871,8 +68695,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GlobalVar"
-            example:
-              value: "staging"
       responses: *a103
     delete:
       x-speakeasy-entity-operation: GlobalVar#delete
@@ -69103,10 +68925,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/HmacFunction"
-            example:
-              id: "hmac-sha512"
-              algorithm: "sha512"
-              key: "********"
       responses: *a112
   "/m/{groupId}/lib/hmac-functions/{id}":
     get:
@@ -69260,11 +69078,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Input"
-            example:
-              type: "splunk_hec"
-              config:
-                port: 8088
-                tls: true
       responses: *a115
   "/m/{groupId}/system/inputs/{id}":
     get:
@@ -69317,9 +69130,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Input"
-            example:
-              config:
-                tls: false
       responses: *a115
     delete:
       x-speakeasy-entity-operation: Source#delete
@@ -69649,11 +69459,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Output"
-            example:
-              type: "s3"
-              config:
-                bucket: "company-logs"
-                region: "us-east-1"
       responses: *a121
   "/m/{groupId}/system/outputs/{id}":
     get:
@@ -69706,9 +69511,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Output"
-            example:
-              config:
-                prefix: "archived/"
       responses: *a121
     delete:
       x-speakeasy-entity-operation: Destination#delete
@@ -70016,13 +69818,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SchemaLibEntry"
-            example:
-              id: "schema-logs"
-              fields:
-                - name: "timestamp"
-                  type: "timestamp"
-                - name: "message"
-                  type: "string"
       responses: *a124
       parameters:
         - name: groupId
@@ -70083,14 +69878,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SchemaLibEntry"
-            example:
-              fields:
-                - name: "timestamp"
-                  type: "timestamp"
-                - name: "message"
-                  type: "string"
-                - name: "host"
-                  type: "string"
       responses: *a124
     delete:
       x-speakeasy-entity-operation: ParquetSchema#delete
@@ -70183,9 +69970,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Pipeline"
-            example:
-              id: "new-pipeline"
-              name: "New Pipeline"
       responses: *a127
   "/m/{groupId}/pipelines/{id}":
     get:
@@ -70239,8 +70023,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Pipeline"
-            example:
-              name: "Main Pipeline (updated)"
       responses: *a127
     delete:
       x-speakeasy-entity-operation: Pipeline#delete
@@ -70476,8 +70258,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Routes"
-            example:
-              routes: []
       parameters:
         - name: groupId
           in: path
@@ -70531,8 +70311,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/RouteDefinitions"
-            example:
-              routes: []
       parameters:
         - name: id
           in: path
@@ -70588,9 +70366,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Pipeline"
-            example:
-              id: "myNewPackPipeline"
-              name: "My New Pack Pipeline"
       responses: *a136
       parameters:
         - name: pack
@@ -70719,9 +70494,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Input"
-            example:
-              id: "pack-input-hec"
-              type: "splunk_hec"
       responses: *a127
       parameters:
         - name: pack
@@ -70934,11 +70706,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Output"
-            example:
-              type: "s3"
-              config:
-                bucket: "company-logs"
-                region: "us-east-1"
       responses: *a121
   "/m/{groupId}/p/{pack}/system/outputs/{id}":
     get:
@@ -71003,9 +70770,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Output"
-            example:
-              config:
-                prefix: "pack-archived/"
       responses: *a121
     delete:
       x-speakeasy-entity-operation: PackDestination#delete
@@ -71072,9 +70836,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/LookupFile"
-            example:
-              id: "countries.csv"
-              description: "ISO country codes"
       parameters:
         - name: pack
           in: path
@@ -71235,9 +70996,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/EventBreakerRuleset"
-            example:
-              id: "breaker-syslog"
-              name: "Syslog breaker"
       parameters:
         - name: pack
           in: path
@@ -71390,8 +71148,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Routes"
-            example:
-              routes: []
       parameters:
         - name: pack
           in: path
@@ -71442,13 +71198,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/SchemaLibEntry"
-              example:
-                count: 2
-                items:
-                  - id: "schema-logs"
-                    fields: []
-                  - id: "schema-metrics"
-                    fields: []
         "401":
           description: Unauthorized
         "500":
@@ -71479,13 +71228,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SchemaLibEntry"
-            example:
-              id: "schema-logs"
-              fields:
-                - name: "timestamp"
-                  type: "timestamp"
-                - name: "message"
-                  type: "string"
       responses: *a145
   "/m/{groupId}/lib/schemas/{id}":
     get:
@@ -71539,14 +71281,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SchemaLibEntry"
-            example:
-              fields:
-                - name: "timestamp"
-                  type: "timestamp"
-                - name: "message"
-                  type: "string"
-                - name: "host"
-                  type: "string"
       responses: *a145
     delete:
       x-speakeasy-entity-operation: Schema#delete
@@ -75611,13 +75345,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/PackInstallInfo"
-              example:
-                count: 1
-                items:
-                  - id: "observability-pack"
-                    version: "1.2.3"
-                    installed: true
-                    installedAt: "2025-10-06T12:30:00Z"
         "401":
           description: Unauthorized
         "500":
@@ -75626,10 +75353,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-abc12345"
       requestBody:
         description: PackRequestBody object
         required: true
@@ -75637,9 +75360,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/PackRequestBody"
-            example:
-              sourceUrl: "https://packs.example.com/observability-pack-1.2.3.tgz"
-              overwrite: false
     get:
       operationId: getPacksByGroup
       tags:
@@ -75663,17 +75383,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/PackInstallInfo"
-              example:
-                count: 2
-                items:
-                  - id: "observability-pack"
-                    version: "1.2.3"
-                    enabled: true
-                    updatedAt: "2025-10-06T12:00:00Z"
-                  - id: "security-pack"
-                    version: "0.9.0"
-                    enabled: false
-                    updatedAt: "2025-10-05T09:15:00Z"
         "401":
           description: Unauthorized
         "500":
@@ -75682,10 +75391,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-abc12345"
       parameters:
         - name: with
           in: query
@@ -75731,12 +75436,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-              example:
-                count: 1
-                items:
-                  - id: "observability-pack"
-                    status: "uploaded"
-                    uploadedAt: "2025-10-06T12:45:00Z"
         "401":
           description: Unauthorized
         "500":
@@ -75745,10 +75444,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-packs-upload-01"
       parameters:
         - name: filename
           in: query
@@ -75789,13 +75484,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/PackInstallInfo"
-              example:
-                count: 1
-                items:
-                  - id: "observability-pack"
-                    version: "1.2.3"
-                    enabled: true
-                    updatedAt: "2025-10-06T12:00:00Z"
         "401":
           description: Unauthorized
         "500":
@@ -78061,13 +77749,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GitCommitSummary"
-              example:
-                count: 1
-                items:
-                  - commit: "d34db33f"
-                    author: "alice@example.com"
-                    message: "Update pipeline and routes"
-                    timestamp: "2025-10-06T14:15:00Z"
         "401":
           description: Unauthorized
         "500":
@@ -78083,12 +77764,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GitCommitParams"
-            example:
-              message: "Update pipeline and routes"
-              author: "alice@example.com"
-              files:
-                - "pipelines/main.conf"
-                - "routes/default.yml"
   /version/count:
     get:
       operationId: getVersionCount
@@ -79835,11 +79510,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ProjectConfig"
-            example:
-              id: "project-abc123"
-              description: "Web logs ingestion"
-              destinations: ["s3-main"]
-              subscriptions: ["web-logs"]
       responses: *a174
   "/m/{groupId}/system/projects/{id}":
     get:
@@ -80238,14 +79908,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Subscription"
-              example:
-                count: 1
-                items:
-                  - id: "myUniqueSubscriptionId"
-                    pipeline: "myExistingPipelineId"
-                    description: "Words describe things"
-                    disabled: false
-                    filter: "truthy"
         "401":
           description: Unauthorized
         "500":
@@ -80519,15 +80181,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Group"
-              example:
-                count: 1
-                items:
-                  - id: "workers-west"
-                    cloud:
-                      provider: "aws"
-                      region: "us-west-2"
-                    onPrem: false
-                    workerRemoteAccess: true
         "401":
           description: Unauthorized
         "500":
@@ -80543,13 +80196,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ConfigGroup"
-            example:
-              id: "workers-west"
-              cloud:
-                provider: "aws"
-                region: "us-west-2"
-              onPrem: false
-              workerRemoteAccess: true
       parameters:
         - name: product
           in: path
@@ -80913,12 +80559,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ConfigGroup'
-              example:
-                count_total: 1
-                items:
-                  - id: "workers-west"
-                    version: "2025.10.06-1234"
-                    deployedAt: "2025-10-06T14:45:00Z"
         '401':
           description: Unauthorized
         '500':
@@ -80934,8 +80574,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/DeployRequest'
-            example:
-              targetVersion: "2025.10.06-1234"
       parameters:
       - name: id
         in: path

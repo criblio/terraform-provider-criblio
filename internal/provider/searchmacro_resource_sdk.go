@@ -4,36 +4,11 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
-
-func (r *SearchMacroResourceModel) RefreshFromOperationsListSearchMacroResponseBody(ctx context.Context, resp *operations.ListSearchMacroResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.SearchMacro{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.SearchMacro
-
-			items.Created = types.Float64PointerValue(itemsItem.Created)
-			items.CreatedBy = types.StringPointerValue(itemsItem.CreatedBy)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Modified = types.Float64PointerValue(itemsItem.Modified)
-			items.Replacement = types.StringValue(itemsItem.Replacement)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
 
 func (r *SearchMacroResourceModel) RefreshFromSharedSearchMacro(ctx context.Context, resp *shared.SearchMacro) diag.Diagnostics {
 	var diags diag.Diagnostics

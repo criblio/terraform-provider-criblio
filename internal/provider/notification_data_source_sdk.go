@@ -6,60 +6,51 @@ import (
 	"context"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *NotificationDataSourceModel) RefreshFromOperationsGetNotificationByIDResponseBody(ctx context.Context, resp *operations.GetNotificationByIDResponseBody) diag.Diagnostics {
+func (r *NotificationDataSourceModel) RefreshFromSharedNotification(ctx context.Context, resp *shared.Notification) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.Notification{}
+	r.Condition = types.StringValue(resp.Condition)
+	if resp.Conf == nil {
+		r.Conf = nil
+	} else {
+		r.Conf = &tfTypes.ConditionSpecificConfigs{}
+		r.Conf.Message = types.StringValue(resp.Conf.Message)
+		r.Conf.SavedQueryID = types.StringValue(resp.Conf.SavedQueryID)
+		r.Conf.TriggerComparator = types.StringPointerValue(resp.Conf.TriggerComparator)
+		r.Conf.TriggerCount = types.Float64PointerValue(resp.Conf.TriggerCount)
+		r.Conf.TriggerType = types.StringPointerValue(resp.Conf.TriggerType)
+	}
+	r.Disabled = types.BoolPointerValue(resp.Disabled)
+	r.Group = types.StringPointerValue(resp.Group)
+	r.ID = types.StringValue(resp.ID)
+	r.TargetConfigs = []tfTypes.TargetConfig{}
 
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.Notification
+	for _, targetConfigsItem := range resp.TargetConfigs {
+		var targetConfigs tfTypes.TargetConfig
 
-			items.Condition = types.StringValue(itemsItem.Condition)
-			if itemsItem.Conf == nil {
-				items.Conf = nil
+		if targetConfigsItem.Conf == nil {
+			targetConfigs.Conf = nil
+		} else {
+			targetConfigs.Conf = &tfTypes.TargetConfigConf{}
+			if targetConfigsItem.Conf.AttachmentType != nil {
+				targetConfigs.Conf.AttachmentType = types.StringValue(string(*targetConfigsItem.Conf.AttachmentType))
 			} else {
-				items.Conf = &tfTypes.ConditionSpecificConfigs{}
-				items.Conf.Message = types.StringValue(itemsItem.Conf.Message)
-				items.Conf.SavedQueryID = types.StringValue(itemsItem.Conf.SavedQueryID)
-				items.Conf.TriggerComparator = types.StringPointerValue(itemsItem.Conf.TriggerComparator)
-				items.Conf.TriggerCount = types.Float64PointerValue(itemsItem.Conf.TriggerCount)
-				items.Conf.TriggerType = types.StringPointerValue(itemsItem.Conf.TriggerType)
+				targetConfigs.Conf.AttachmentType = types.StringNull()
 			}
-			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
-			items.Group = types.StringPointerValue(itemsItem.Group)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.TargetConfigs = []tfTypes.TargetConfig{}
-
-			for _, targetConfigsItem := range itemsItem.TargetConfigs {
-				var targetConfigs tfTypes.TargetConfig
-
-				if targetConfigsItem.Conf == nil {
-					targetConfigs.Conf = nil
-				} else {
-					targetConfigs.Conf = &tfTypes.TargetConfigConf{}
-					if targetConfigsItem.Conf.AttachmentType != nil {
-						targetConfigs.Conf.AttachmentType = types.StringValue(string(*targetConfigsItem.Conf.AttachmentType))
-					} else {
-						targetConfigs.Conf.AttachmentType = types.StringNull()
-					}
-					targetConfigs.Conf.IncludeResults = types.BoolPointerValue(targetConfigsItem.Conf.IncludeResults)
-				}
-				targetConfigs.ID = types.StringValue(targetConfigsItem.ID)
-
-				items.TargetConfigs = append(items.TargetConfigs, targetConfigs)
-			}
-			items.Targets = make([]types.String, 0, len(itemsItem.Targets))
-			for _, v := range itemsItem.Targets {
-				items.Targets = append(items.Targets, types.StringValue(v))
-			}
-
-			r.Items = append(r.Items, items)
+			targetConfigs.Conf.IncludeResults = types.BoolPointerValue(targetConfigsItem.Conf.IncludeResults)
 		}
+		targetConfigs.ID = types.StringValue(targetConfigsItem.ID)
+
+		r.TargetConfigs = append(r.TargetConfigs, targetConfigs)
+	}
+	r.Targets = make([]types.String, 0, len(resp.Targets))
+	for _, v := range resp.Targets {
+		r.Targets = append(r.Targets, types.StringValue(v))
 	}
 
 	return diags

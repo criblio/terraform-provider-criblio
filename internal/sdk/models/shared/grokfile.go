@@ -2,11 +2,26 @@
 
 package shared
 
+import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
+)
+
 type GrokFile struct {
-	Content string  `json:"content"`
-	ID      string  `json:"id"`
-	Size    float64 `json:"size"`
-	Tags    *string `json:"tags,omitempty"`
+	Content string   `json:"content"`
+	ID      string   `json:"id"`
+	Size    *float64 `default:"1" json:"size"`
+	Tags    *string  `json:"tags,omitempty"`
+}
+
+func (g GrokFile) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GrokFile) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"content", "id"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (g *GrokFile) GetContent() string {
@@ -23,9 +38,9 @@ func (g *GrokFile) GetID() string {
 	return g.ID
 }
 
-func (g *GrokFile) GetSize() float64 {
+func (g *GrokFile) GetSize() *float64 {
 	if g == nil {
-		return 0.0
+		return nil
 	}
 	return g.Size
 }

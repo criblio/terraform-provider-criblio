@@ -29,6 +29,13 @@ data "criblio_grok" "my_grok" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `content` (String)
-- `size` (Number)
+- `id` (String)
 - `tags` (String)
