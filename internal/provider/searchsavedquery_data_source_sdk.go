@@ -6,39 +6,30 @@ import (
 	"context"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SearchSavedQueryDataSourceModel) RefreshFromOperationsGetSavedQueryByIDResponseBody(ctx context.Context, resp *operations.GetSavedQueryByIDResponseBody) diag.Diagnostics {
+func (r *SearchSavedQueryDataSourceModel) RefreshFromSharedSavedQuery(ctx context.Context, resp *shared.SavedQuery) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.SavedQuery{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.SavedQuery
-
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Earliest = types.StringPointerValue(itemsItem.Earliest)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.IsPrivate = types.BoolPointerValue(itemsItem.IsPrivate)
-			items.Latest = types.StringPointerValue(itemsItem.Latest)
-			items.Name = types.StringValue(itemsItem.Name)
-			items.Query = types.StringValue(itemsItem.Query)
-			if itemsItem.Schedule == nil {
-				items.Schedule = nil
-			} else {
-				items.Schedule = &tfTypes.SavedQuerySchedule{}
-				items.Schedule.CronSchedule = types.StringValue(itemsItem.Schedule.CronSchedule)
-				items.Schedule.Enabled = types.BoolValue(itemsItem.Schedule.Enabled)
-				items.Schedule.KeepLastN = types.Float64Value(itemsItem.Schedule.KeepLastN)
-				items.Schedule.Notifications.Disabled = types.BoolValue(itemsItem.Schedule.Notifications.Disabled)
-				items.Schedule.Tz = types.StringValue(itemsItem.Schedule.Tz)
-			}
-
-			r.Items = append(r.Items, items)
-		}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.Earliest = types.StringPointerValue(resp.Earliest)
+	r.ID = types.StringValue(resp.ID)
+	r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
+	r.Latest = types.StringPointerValue(resp.Latest)
+	r.Name = types.StringValue(resp.Name)
+	r.Query = types.StringValue(resp.Query)
+	if resp.Schedule == nil {
+		r.Schedule = nil
+	} else {
+		r.Schedule = &tfTypes.SavedQuerySchedule{}
+		r.Schedule.CronSchedule = types.StringValue(resp.Schedule.CronSchedule)
+		r.Schedule.Enabled = types.BoolValue(resp.Schedule.Enabled)
+		r.Schedule.KeepLastN = types.Float64Value(resp.Schedule.KeepLastN)
+		r.Schedule.Notifications.Disabled = types.BoolValue(resp.Schedule.Notifications.Disabled)
+		r.Schedule.Tz = types.StringValue(resp.Schedule.Tz)
 	}
 
 	return diags
