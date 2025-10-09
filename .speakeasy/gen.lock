@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: af6cd5e8914c374b20caf7b6524f1c74
+  docChecksum: b9104f87c4998bbcbb7ac1128664c4d0
   docVersion: 4.12.2-4b17c8d4
-  speakeasyVersion: 1.636.0
-  generationVersion: 2.723.2
-  releaseVersion: 1.15.16
-  configChecksum: 5ff3b42fd988333b72c7066cb5aeec0f
+  speakeasyVersion: 1.636.2
+  generationVersion: 2.723.8
+  releaseVersion: 1.15.20
+  configChecksum: 197414064f4b8ece765a46cdfab6fcbd
   published: true
 features:
   terraform:
@@ -32,6 +32,8 @@ generatedFiles:
   - .gitattributes
   - USAGE.md
   - examples/data-sources/criblio_appscope_config/data-source.tf
+  - examples/data-sources/criblio_certificate/data-source.tf
+  - examples/data-sources/criblio_certificates/data-source.tf
   - examples/data-sources/criblio_collector/data-source.tf
   - examples/data-sources/criblio_config_version/data-source.tf
   - examples/data-sources/criblio_cribl_lake_dataset/data-source.tf
@@ -77,6 +79,9 @@ generatedFiles:
   - examples/resources/criblio_appscope_config/import-by-string-id.tf
   - examples/resources/criblio_appscope_config/import.sh
   - examples/resources/criblio_appscope_config/resource.tf
+  - examples/resources/criblio_certificate/import-by-string-id.tf
+  - examples/resources/criblio_certificate/import.sh
+  - examples/resources/criblio_certificate/resource.tf
   - examples/resources/criblio_collector/import-by-string-id.tf
   - examples/resources/criblio_collector/import.sh
   - examples/resources/criblio_collector/resource.tf
@@ -206,6 +211,12 @@ generatedFiles:
   - internal/provider/appscopeconfig_data_source_sdk.go
   - internal/provider/appscopeconfig_resource.go
   - internal/provider/appscopeconfig_resource_sdk.go
+  - internal/provider/certificate_data_source.go
+  - internal/provider/certificate_data_source_sdk.go
+  - internal/provider/certificate_resource.go
+  - internal/provider/certificate_resource_sdk.go
+  - internal/provider/certificates_data_source.go
+  - internal/provider/certificates_data_source_sdk.go
   - internal/provider/collector_data_source.go
   - internal/provider/collector_data_source_sdk.go
   - internal/provider/collector_resource.go
@@ -435,7 +446,6 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_tag.go
   - internal/provider/types/appscope_config_with_custom_watch_ndjson.go
   - internal/provider/types/appscope_custom.go
-  - internal/provider/types/appscope_lib_entry.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/auth_request_header.go
@@ -449,6 +459,7 @@ generatedFiles:
   - internal/provider/types/azure_blob_dataset_extra_path.go
   - internal/provider/types/azure_blob_provider.go
   - internal/provider/types/cert_options.go
+  - internal/provider/types/certificate.go
   - internal/provider/types/click_house_dataset.go
   - internal/provider/types/click_house_provider.go
   - internal/provider/types/cloud.go
@@ -468,10 +479,12 @@ generatedFiles:
   - internal/provider/types/config_group_lookups.go
   - internal/provider/types/consumers.go
   - internal/provider/types/create_lakehouse_dataset_connections_request_body.go
+  - internal/provider/types/cribl_lake_dataset.go
   - internal/provider/types/cribl_leader_dataset.go
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
+  - internal/provider/types/dashboard_category.go
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
@@ -498,6 +511,7 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
+  - internal/provider/types/generic_dataset.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
   - internal/provider/types/google_workspace_account_config.go
@@ -1263,19 +1277,17 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
-  - internal/provider/types/pipeline.go
+  - internal/provider/types/parser_lib_entry.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
-  - internal/provider/types/project_config.go
   - internal/provider/types/prometheus_auth_oauth_header1.go
   - internal/provider/types/prometheus_auth_oauth_header2.go
   - internal/provider/types/prometheus_auth_oauth_param1.go
   - internal/provider/types/prometheus_auth_oauth_param2.go
   - internal/provider/types/prometheus_dataset.go
   - internal/provider/types/prometheus_provider.go
-  - internal/provider/types/regex_lib_entry.go
   - internal/provider/types/resource_type_label.go
   - internal/provider/types/retry_rules_configuration.go
   - internal/provider/types/routes.go
@@ -1292,6 +1304,7 @@ generatedFiles:
   - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
+  - internal/provider/types/search_dashboard.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1306,6 +1319,7 @@ generatedFiles:
   - internal/provider/types/snowflake_provider.go
   - internal/provider/types/sns_target.go
   - internal/provider/types/socks_proxy_opts.go
+  - internal/provider/types/subscription.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
   - internal/provider/types/tailscale_account_config.go
