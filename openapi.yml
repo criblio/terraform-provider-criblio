@@ -69662,8 +69662,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Pipeline"
-            example:
-              name: "My Updated Pack Pipeline"
       parameters:
         - name: id
           in: path
@@ -69792,10 +69790,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Input"
-            example:
-              type: "splunk_hec"
-              config:
-                tls: true
       responses: *a127
       parameters:
         - name: pack
@@ -69892,13 +69886,6 @@ paths:
                     items:
                       $ref: "#/components/schemas/Output"
                     x-speakeasy-ignore: true
-              example:
-                count: 2
-                items:
-                  - id: "pack-out-s3"
-                    type: "s3"
-                  - id: "pack-out-splunk"
-                    type: "splunk_hec"
         "401":
           description: Unauthorized
         "500":
