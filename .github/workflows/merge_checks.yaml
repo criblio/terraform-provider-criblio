@@ -158,6 +158,8 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - uses: dominikh/staticcheck-action@v1.3.1
+
       - name: Log initial git status
         run: |
           echo "Initial git status:"
