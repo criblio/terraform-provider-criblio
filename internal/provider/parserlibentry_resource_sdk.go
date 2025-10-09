@@ -4,38 +4,11 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
-
-func (r *ParserLibEntryResourceModel) RefreshFromOperationsListParserResponseBody(ctx context.Context, resp *operations.ListParserResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.ParserLibEntry{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.ParserLibEntry
-
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Lib = types.StringPointerValue(itemsItem.Lib)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-			if itemsItem.Type != nil {
-				items.Type = types.StringValue(string(*itemsItem.Type))
-			} else {
-				items.Type = types.StringNull()
-			}
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
 
 func (r *ParserLibEntryResourceModel) RefreshFromSharedParserLibEntry(ctx context.Context, resp *shared.ParserLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics

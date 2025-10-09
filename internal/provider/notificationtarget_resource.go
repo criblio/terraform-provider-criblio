@@ -102,9 +102,11 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"system_fields": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -136,9 +138,11 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"system_fields": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -207,9 +211,11 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"system_fields": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -280,7 +286,7 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic.`,
+						Description: `Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic. Default: []`,
 					},
 					"assume_role_arn": schema.StringAttribute{
 						Optional:    true,
@@ -345,9 +351,11 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `AWS region`,
 					},
 					"system_fields": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"topic_arn": schema.StringAttribute{
 						Optional:    true,
@@ -432,9 +440,11 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Basic authentication password`,
 					},
 					"system_fields": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"token": schema.StringAttribute{
 						Optional:    true,

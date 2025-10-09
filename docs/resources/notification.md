@@ -55,7 +55,11 @@ resource "criblio_notification" "my_notification" {
 - `disabled` (Boolean) Whether the notification is disabled. Default: false
 - `group` (String) Group identifier for the notification. Default: "default_search"
 - `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--target_configs))
-- `targets` (List of String) Targets to send any notifications to
+- `targets` (List of String) Targets to send any notifications to. Default: []
+
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
@@ -81,6 +85,49 @@ Optional:
 ### Nested Schema for `target_configs.conf`
 
 Optional:
+
+- `attachment_type` (String) Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]
+- `include_results` (Boolean) Whether to include search results in the notification. Default: false
+
+
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `condition` (String) The condition that triggers this notification
+- `conf` (Attributes) Configuration specific to the notification condition (see [below for nested schema](#nestedatt--items--conf))
+- `disabled` (Boolean) Whether the notification is disabled. Default: false
+- `group` (String) Group identifier for the notification. Default: "default_search"
+- `id` (String) Unique identifier for the notification
+- `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--items--target_configs))
+- `targets` (List of String) Targets to send any notifications to. Default: []
+
+<a id="nestedatt--items--conf"></a>
+### Nested Schema for `items.conf`
+
+Read-Only:
+
+- `message` (String) Message template for the notification
+- `saved_query_id` (String) ID of the saved query this notification is associated with
+- `trigger_comparator` (String) Comparison operator (e.g., >, <, =)
+- `trigger_count` (Number) Threshold count for the trigger
+- `trigger_type` (String) Type of trigger (e.g., resultsCount)
+
+
+<a id="nestedatt--items--target_configs"></a>
+### Nested Schema for `items.target_configs`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--target_configs--conf))
+- `id` (String) ID of the notification target
+
+<a id="nestedatt--items--target_configs--conf"></a>
+### Nested Schema for `items.target_configs.conf`
+
+Read-Only:
 
 - `attachment_type` (String) Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]
 - `include_results` (Boolean) Whether to include search results in the notification. Default: false

@@ -4,35 +4,11 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
-
-func (r *RegexResourceModel) RefreshFromOperationsGetRegexLibEntryByIDResponseBody(ctx context.Context, resp *operations.GetRegexLibEntryByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.RegexLibEntry{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.RegexLibEntry
-
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Lib = types.StringPointerValue(itemsItem.Lib)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Regex = types.StringValue(itemsItem.Regex)
-			items.SampleData = types.StringPointerValue(itemsItem.SampleData)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
 
 func (r *RegexResourceModel) RefreshFromSharedRegexLibEntry(ctx context.Context, resp *shared.RegexLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics

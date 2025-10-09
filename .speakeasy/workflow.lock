@@ -1,4 +1,4 @@
-speakeasyVersion: 1.631.5
+speakeasyVersion: 1.636.2
 sources:
     Cribl Control Plane and Management API:
         sourceNamespace: cribl-control-plane-and-management-api
@@ -15,7 +15,7 @@ targets:
         sourceBlobDigest: sha256:fff66a8b2b0e555b459b77873166ecd150e8d0f8b87ead34021e00911c9c578d
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: v1.631.5
+    speakeasyVersion: latest
     sources:
         Cribl Control Plane and Management API:
             inputs:
