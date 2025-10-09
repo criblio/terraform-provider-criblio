@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -33,14 +32,13 @@ type CertificateResource struct {
 
 // CertificateResourceModel describes the resource data model.
 type CertificateResourceModel struct {
-	Ca          types.String          `tfsdk:"ca"`
-	Cert        types.String          `tfsdk:"cert"`
-	Description types.String          `tfsdk:"description"`
-	ID          types.String          `tfsdk:"id"`
-	InUse       []types.String        `tfsdk:"in_use"`
-	Items       []tfTypes.Certificate `tfsdk:"items"`
-	Passphrase  types.String          `tfsdk:"passphrase"`
-	PrivKey     types.String          `tfsdk:"priv_key"`
+	Ca          types.String   `tfsdk:"ca"`
+	Cert        types.String   `tfsdk:"cert"`
+	Description types.String   `tfsdk:"description"`
+	ID          types.String   `tfsdk:"id"`
+	InUse       []types.String `tfsdk:"in_use"`
+	Passphrase  types.String   `tfsdk:"passphrase"`
+	PrivKey     types.String   `tfsdk:"priv_key"`
 }
 
 func (r *CertificateResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -76,43 +74,6 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				Optional:    true,
 				ElementType: types.StringType,
 				Description: `List of configurations that reference this certificate`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"ca": schema.StringAttribute{
-							Computed:    true,
-							Description: `Optionally, drag/drop or upload all CA certificates in PEM/Base64 format. Or, paste certificate contents here. Certificates can be used for client and/or server authentication.`,
-						},
-						"cert": schema.StringAttribute{
-							Computed:    true,
-							Description: `Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here`,
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-							},
-						},
-						"in_use": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-							Description: `List of configurations that reference this certificate`,
-						},
-						"passphrase": schema.StringAttribute{
-							Computed:  true,
-							Sensitive: true,
-						},
-						"priv_key": schema.StringAttribute{
-							Computed:  true,
-							Sensitive: true,
-						},
-					},
-				},
 			},
 			"passphrase": schema.StringAttribute{
 				Computed:  true,
@@ -202,43 +163,6 @@ func (r *CertificateResource) Create(ctx context.Context, req resource.CreateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetCertificateByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Certificates.GetCertificateByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetCertificateByIDResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -288,11 +212,11 @@ func (r *CertificateResource) Read(ctx context.Context, req resource.ReadRequest
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetCertificateByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCertificate(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -343,43 +267,6 @@ func (r *CertificateResource) Update(ctx context.Context, req resource.UpdateReq
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedCertificate(ctx, &res.Object.Items[0])...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetCertificateByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Certificates.GetCertificateByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetCertificateByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

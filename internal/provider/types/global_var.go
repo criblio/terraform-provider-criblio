@@ -6,9 +6,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type DashboardCategory struct {
+type GlobalVar struct {
 	Description types.String `tfsdk:"description"`
 	ID          types.String `tfsdk:"id"`
-	IsPack      types.Bool   `tfsdk:"is_pack"`
-	Name        types.String `tfsdk:"name"`
+	Lib         types.String `tfsdk:"lib"`
+	Tags        types.String `tfsdk:"tags"`
+	Type        types.String `tfsdk:"type"`
+	Value       types.String `tfsdk:"value"`
 }

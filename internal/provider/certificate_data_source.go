@@ -5,12 +5,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -29,8 +31,13 @@ type CertificateDataSource struct {
 
 // CertificateDataSourceModel describes the data model.
 type CertificateDataSourceModel struct {
-	ID    types.String          `tfsdk:"id"`
-	Items []tfTypes.Certificate `tfsdk:"items"`
+	Ca          types.String   `tfsdk:"ca"`
+	Cert        types.String   `tfsdk:"cert"`
+	Description types.String   `tfsdk:"description"`
+	ID          types.String   `tfsdk:"id"`
+	InUse       []types.String `tfsdk:"in_use"`
+	Passphrase  types.String   `tfsdk:"passphrase"`
+	PrivKey     types.String   `tfsdk:"priv_key"`
 }
 
 // Metadata returns the data source type name.
@@ -44,43 +51,36 @@ func (r *CertificateDataSource) Schema(ctx context.Context, req datasource.Schem
 		MarkdownDescription: "Certificate DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"ca": schema.StringAttribute{
+				Computed:    true,
+				Description: `Optionally, drag/drop or upload all CA certificates in PEM/Base64 format. Or, paste certificate contents here. Certificates can be used for client and/or server authentication.`,
+			},
+			"cert": schema.StringAttribute{
+				Computed:    true,
+				Description: `Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here`,
+			},
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"ca": schema.StringAttribute{
-							Computed:    true,
-							Description: `Optionally, drag/drop or upload all CA certificates in PEM/Base64 format. Or, paste certificate contents here. Certificates can be used for client and/or server authentication.`,
-						},
-						"cert": schema.StringAttribute{
-							Computed:    true,
-							Description: `Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here`,
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"in_use": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-							Description: `List of configurations that reference this certificate`,
-						},
-						"passphrase": schema.StringAttribute{
-							Computed:  true,
-							Sensitive: true,
-						},
-						"priv_key": schema.StringAttribute{
-							Computed:  true,
-							Sensitive: true,
-						},
-					},
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
+			},
+			"in_use": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `List of configurations that reference this certificate`,
+			},
+			"passphrase": schema.StringAttribute{
+				Computed:  true,
+				Sensitive: true,
+			},
+			"priv_key": schema.StringAttribute{
+				Computed:  true,
+				Sensitive: true,
 			},
 		},
 	}
@@ -146,11 +146,11 @@ func (r *CertificateDataSource) Read(ctx context.Context, req datasource.ReadReq
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetCertificateByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCertificate(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -27,17 +27,9 @@ data "criblio_certificate" "my_certificate" {
 
 ### Read-Only
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
 - `ca` (String) Optionally, drag/drop or upload all CA certificates in PEM/Base64 format. Or, paste certificate contents here. Certificates can be used for client and/or server authentication.
 - `cert` (String) Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here
 - `description` (String)
-- `id` (String)
 - `in_use` (List of String) List of configurations that reference this certificate
 - `passphrase` (String, Sensitive)
 - `priv_key` (String, Sensitive)

@@ -4,39 +4,11 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
-
-func (r *CertificateResourceModel) RefreshFromOperationsGetCertificateByIDResponseBody(ctx context.Context, resp *operations.GetCertificateByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.Certificate{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.Certificate
-
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Cert = types.StringValue(itemsItem.Cert)
-			items.PrivKey = types.StringValue(itemsItem.PrivKey)
-			items.Passphrase = types.StringPointerValue(itemsItem.Passphrase)
-			items.Ca = types.StringPointerValue(itemsItem.Ca)
-			items.InUse = make([]types.String, 0, len(itemsItem.InUse))
-			for _, v := range itemsItem.InUse {
-				items.InUse = append(items.InUse, types.StringValue(v))
-			}
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
 
 func (r *CertificateResourceModel) RefreshFromSharedCertificate(ctx context.Context, resp *shared.Certificate) diag.Diagnostics {
 	var diags diag.Diagnostics

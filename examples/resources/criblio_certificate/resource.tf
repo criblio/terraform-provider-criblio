@@ -8,6 +8,6 @@ resource "criblio_certificate" "my_certificate" {
     "of",
     "configurations",
   ]
-  passphrase = "Security.jpg"
+  passphrase = "SecurityPassphrase"
   priv_key   = "dont-share-this-key"
 }

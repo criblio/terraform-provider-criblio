@@ -4,29 +4,19 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SearchDashboardCategoryDataSourceModel) RefreshFromOperationsGetDashboardCategoryByIDResponseBody(ctx context.Context, resp *operations.GetDashboardCategoryByIDResponseBody) diag.Diagnostics {
+func (r *SearchDashboardCategoryDataSourceModel) RefreshFromSharedDashboardCategory(ctx context.Context, resp *shared.DashboardCategory) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.DashboardCategory{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.DashboardCategory
-
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.IsPack = types.BoolPointerValue(itemsItem.IsPack)
-			items.Name = types.StringValue(itemsItem.Name)
-
-			r.Items = append(r.Items, items)
-		}
-	}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.IsPack = types.BoolPointerValue(resp.IsPack)
+	r.Name = types.StringValue(resp.Name)
 
 	return diags
 }

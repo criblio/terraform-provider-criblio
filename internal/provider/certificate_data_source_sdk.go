@@ -4,35 +4,25 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *CertificateDataSourceModel) RefreshFromOperationsGetCertificateByIDResponseBody(ctx context.Context, resp *operations.GetCertificateByIDResponseBody) diag.Diagnostics {
+func (r *CertificateDataSourceModel) RefreshFromSharedCertificate(ctx context.Context, resp *shared.Certificate) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.Certificate{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.Certificate
-
-			items.Ca = types.StringPointerValue(itemsItem.Ca)
-			items.Cert = types.StringValue(itemsItem.Cert)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.InUse = make([]types.String, 0, len(itemsItem.InUse))
-			for _, v := range itemsItem.InUse {
-				items.InUse = append(items.InUse, types.StringValue(v))
-			}
-			items.Passphrase = types.StringPointerValue(itemsItem.Passphrase)
-			items.PrivKey = types.StringValue(itemsItem.PrivKey)
-
-			r.Items = append(r.Items, items)
-		}
+	r.Ca = types.StringPointerValue(resp.Ca)
+	r.Cert = types.StringValue(resp.Cert)
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.InUse = make([]types.String, 0, len(resp.InUse))
+	for _, v := range resp.InUse {
+		r.InUse = append(r.InUse, types.StringValue(v))
 	}
+	r.Passphrase = types.StringPointerValue(resp.Passphrase)
+	r.PrivKey = types.StringValue(resp.PrivKey)
 
 	return diags
 }

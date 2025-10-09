@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: b9104f87c4998bbcbb7ac1128664c4d0
-  docVersion: 4.12.2-4b17c8d4
+  docChecksum: 5272056786b141688d56316d06ae744d
+  docVersion: 4.14.0
   speakeasyVersion: 1.636.2
   generationVersion: 2.723.8
-  releaseVersion: 1.15.20
-  configChecksum: 197414064f4b8ece765a46cdfab6fcbd
+  releaseVersion: 1.16.0
+  configChecksum: b57a4148a07779c617becf9e2336536d
   published: true
 features:
   terraform:
@@ -446,6 +446,7 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_tag.go
   - internal/provider/types/appscope_config_with_custom_watch_ndjson.go
   - internal/provider/types/appscope_custom.go
+  - internal/provider/types/appscope_lib_entry.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/auth_request_header.go
@@ -484,7 +485,6 @@ generatedFiles:
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
-  - internal/provider/types/dashboard_category.go
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
@@ -511,9 +511,9 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
-  - internal/provider/types/generic_dataset.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
+  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/grok_file.go
   - internal/provider/types/group.go
@@ -1277,7 +1277,7 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
-  - internal/provider/types/parser_lib_entry.go
+  - internal/provider/types/pipeline.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
@@ -1304,7 +1304,6 @@ generatedFiles:
   - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
-  - internal/provider/types/search_dashboard.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1319,7 +1318,6 @@ generatedFiles:
   - internal/provider/types/snowflake_provider.go
   - internal/provider/types/sns_target.go
   - internal/provider/types/socks_proxy_opts.go
-  - internal/provider/types/subscription.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
   - internal/provider/types/tailscale_account_config.go
@@ -1327,6 +1325,7 @@ generatedFiles:
   - internal/provider/types/target_config.go
   - internal/provider/types/target_config_conf.go
   - internal/provider/types/tls_configuration.go
+  - internal/provider/types/usage_group.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/types/webhook_target.go
@@ -3444,7 +3443,7 @@ examples:
   createCertificate:
     speakeasy-default-create-certificate:
       requestBody:
-        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
+        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "SecurityPassphrase", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
@@ -3466,7 +3465,7 @@ examples:
         path:
           id: "cert-001"
       requestBody:
-        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
+        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "SecurityPassphrase", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
