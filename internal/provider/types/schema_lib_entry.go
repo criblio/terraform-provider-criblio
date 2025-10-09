@@ -6,9 +6,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Lakehouse struct {
+type SchemaLibEntry struct {
 	Description types.String `tfsdk:"description"`
 	ID          types.String `tfsdk:"id"`
-	Status      types.String `tfsdk:"status"`
-	TierSize    types.String `tfsdk:"tier_size"`
+	Schema      types.String `tfsdk:"schema"`
 }

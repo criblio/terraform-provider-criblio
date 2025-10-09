@@ -59,6 +59,7 @@ type SearchDatasetProviderResourceModel struct {
 	EdgeProvider                 *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"edge_provider" tfPlanOnly:"true"`
 	GcsProvider                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs_provider" tfPlanOnly:"true"`
 	ID                           types.String                          `tfsdk:"id"`
+	Items                        []tfTypes.GenericProvider             `tfsdk:"items"`
 	MetaProvider                 *tfTypes.MetaProvider                 `queryParam:"inline" tfsdk:"meta_provider" tfPlanOnly:"true"`
 	PrometheusProvider           *tfTypes.PrometheusProvider           `queryParam:"inline" tfsdk:"prometheus_provider" tfPlanOnly:"true"`
 	S3Provider                   *tfTypes.S3Provider                   `queryParam:"inline" tfsdk:"s3_provider" tfPlanOnly:"true"`
@@ -1645,6 +1646,1471 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				Computed:    true,
 				Description: `Unique identifier for the provider`,
 			},
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"api_aws_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_configs": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"assume_role_arn": schema.StringAttribute{
+												Computed:    true,
+												Description: `ARN of the role to assume`,
+											},
+											"assume_role_external_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `External ID for role assumption`,
+											},
+											"aws_api_key": schema.StringAttribute{
+												Computed:    true,
+												Description: `AWS access key`,
+											},
+											"aws_secret_key": schema.StringAttribute{
+												Computed:    true,
+												Description: `AWS secret key`,
+											},
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Account name`,
+											},
+										},
+									},
+									Description: `A list of account configurations`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_azure_data_explorer_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Client ID (also known as Secret ID) of the authorized application`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"client_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Client Secret of the authorized application`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Tenant ID of the authorized application`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_azure_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_configs": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"client_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `The clientId of the service principal`,
+												Validators: []validator.String{
+													stringvalidator.UTF8LengthAtLeast(1),
+												},
+											},
+											"client_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `The client secret of the service principal`,
+												Validators: []validator.String{
+													stringvalidator.UTF8LengthAtLeast(1),
+												},
+											},
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Account name`,
+											},
+											"tenant_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `The ID of your Azure tenant`,
+												Validators: []validator.String{
+													stringvalidator.UTF8LengthAtLeast(1),
+												},
+											},
+										},
+									},
+									Description: `A list of account configurations`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_elastic_search_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Elasticsearch API endpoint URL`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"password": schema.StringAttribute{
+									Computed:    true,
+									Description: `Elasticsearch password for authentication`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+								"username": schema.StringAttribute{
+									Computed:    true,
+									Description: `Elasticsearch username for authentication`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_gcp_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_configs": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Account name`,
+											},
+											"service_account_credentials": schema.StringAttribute{
+												Computed:    true,
+												Description: `JSON blob downloaded from the Google Cloud Console, containing creds for a service account`,
+											},
+										},
+									},
+									Description: `A list of account configurations`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_google_workspace_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_configs": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"service_account_credentials": schema.StringAttribute{
+												Computed:    true,
+												Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
+												Validators: []validator.String{
+													stringvalidator.UTF8LengthAtLeast(1),
+												},
+											},
+											"subject": schema.StringAttribute{
+												Computed:    true,
+												Description: `Email matching Google service account of the authorized principal whose role this integration is assuming`,
+											},
+										},
+									},
+									Description: `A list of account configurations`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_ms_graph_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_configs": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"client_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"client_secret": schema.StringAttribute{
+												Computed: true,
+											},
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Azure account name`,
+											},
+											"tenant_id": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `A list of account configurations`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_okta_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_configs": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"api_token": schema.StringAttribute{
+												Computed:    true,
+												Description: `API token for authorizing requests`,
+											},
+											"domain_endpoint": schema.StringAttribute{
+												Computed:    true,
+												Description: `URL for the subdomain of your organization. Example: subdomain.okta.com`,
+											},
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Okta account name`,
+											},
+										},
+									},
+									Description: `A list of account configurations`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_open_search_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `OpenSearch API endpoint URL. Example: https://opensearch.mycompany.com`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"password": schema.StringAttribute{
+									Computed:    true,
+									Description: `OpenSearch password for authentication`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+								"username": schema.StringAttribute{
+									Computed:    true,
+									Description: `OpenSearch username for authentication`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_tailscale_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_configs": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"client_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Client ID string`,
+											},
+											"client_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `Client secret string`,
+											},
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Tailscale account name`,
+											},
+										},
+									},
+									Description: `A list of account configuration`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"api_zoom_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_configs": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"account_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Zoom account ID`,
+											},
+											"client_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Client ID string`,
+											},
+											"client_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `Client secret string`,
+											},
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Zoom account name`,
+											},
+										},
+									},
+									Description: `A list of account configurations`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"apihttp_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Default:     stringdefault.StaticString(`none`),
+									Description: `The authentication method for API calls. Default: "none"; must be one of ["none", "basic", "login", "oauth"]`,
+									Validators: []validator.String{
+										stringvalidator.OneOf(
+											"none",
+											"basic",
+											"login",
+											"oauth",
+										),
+									},
+								},
+								"available_endpoints": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"data_field": schema.StringAttribute{
+												Computed:    true,
+												Description: `Within the response JSON, name of the field or array element to pull results from`,
+											},
+											"headers": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed:    true,
+															Description: `Header name`,
+														},
+														"value": schema.StringAttribute{
+															Computed:    true,
+															Description: `Header value`,
+														},
+													},
+												},
+												Description: `Optional headers for the endpoint`,
+											},
+											"method": schema.StringAttribute{
+												Computed:    true,
+												Default:     stringdefault.StaticString(`GET`),
+												Description: `Method for the endpoint. Default: "GET"; must be one of ["GET", "POST"]`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"GET",
+														"POST",
+													),
+												},
+											},
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"url": schema.StringAttribute{
+												Computed:    true,
+												Description: `The URL for this endpoint`,
+											},
+										},
+									},
+									Description: `A list of the available endpoints for this provider`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"aws_security_lake_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"azure_blob_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Default:     stringdefault.StaticString(`connection_string`),
+									Description: `Azure Storage authentication method. Default: "connection_string"; must be one of ["connection_string", "blob_sas_url", "client_secret"]`,
+									Validators: []validator.String{
+										stringvalidator.OneOf(
+											"connection_string",
+											"blob_sas_url",
+											"client_secret",
+										),
+									},
+								},
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Azure AD application client ID`,
+								},
+								"client_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Azure AD application client secret`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"connection_string": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage account connection string`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"location": schema.StringAttribute{
+									Computed:    true,
+									Description: `Primary region in which the storage account is located`,
+								},
+								"sas_configs": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"blob_sas_url": schema.StringAttribute{
+												Computed:    true,
+												Description: `Container-specific Blob SAS URL`,
+											},
+											"container_name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the Azure Blob Storage container`,
+											},
+										},
+									},
+									Description: `A list of container-specific SAS configurations`,
+								},
+								"storage_account_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `The name of your Azure storage account`,
+								},
+								"tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Azure AD tenant ID`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"click_house_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL to ClickHouse server with HTTP interface enabled. Ideally should be HTTPS over port 8443.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"password": schema.StringAttribute{
+									Computed:    true,
+									Description: `The ClickHouse user password for authentication`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+								"username": schema.StringAttribute{
+									Computed:    true,
+									Description: `The ClickHouse username for authentication`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"cribl_leader_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"edge_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"gcs_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Google Cloud Storage service endpoint`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"service_account_credentials": schema.StringAttribute{
+									Computed:    true,
+									Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+								}...),
+							},
+						},
+						"meta_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"prometheus_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Default:     stringdefault.StaticString(`none`),
+									Description: `Default: "none"; must be one of ["none", "basic", "token"]`,
+									Validators: []validator.String{
+										stringvalidator.OneOf(
+											"none",
+											"basic",
+											"token",
+										),
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Prometheus API endpoint URL. Example: https://prometheus.goats.biz`,
+									Validators: []validator.String{
+										stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.+`), "must match pattern "+regexp.MustCompile(`^https?://.+`).String()),
+									},
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"max_concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Default:     float64default.StaticFloat64(3),
+									Description: `Maximum number of concurrent API requests. Default: 3`,
+								},
+								"password": schema.StringAttribute{
+									Computed:    true,
+									Description: `Basic auth password`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bearer token`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+								"username": schema.StringAttribute{
+									Computed:    true,
+									Description: `Basic auth username`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"s3_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `ARN of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID for role assumption`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS access key`,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. must be one of ["auto", "manual"]`,
+									Validators: []validator.String{
+										stringvalidator.OneOf(
+											"auto",
+											"manual",
+										),
+									},
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS secret key`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `S3 bucket name`,
+								},
+								"bucket_path_suggestion": schema.StringAttribute{
+									Computed:    true,
+									Description: `Suggested bucket path`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"enable_abac_tagging": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether to enable ABAC source-ip tagging`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether to enable role assumption`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `S3 endpoint URL`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS region`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether to reject unauthorized requests`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse existing S3 connections`,
+								},
+								"session_token": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS session token`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS signature version. must be one of ["v2", "v4"]`,
+									Validators: []validator.String{
+										stringvalidator.OneOf("v2", "v4"),
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("snowflake_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+						"snowflake_provider": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_identifier": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Snowflake account identifier, in the format <orgname>-<account_name>`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Description of the provider`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional endpoint to override default REST API endpoint`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier for the provider`,
+								},
+								"max_concurrency": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Total number of concurrent executors for processing Snowflake partitions`,
+								},
+								"passphrase": schema.StringAttribute{
+									Computed:    true,
+									Description: `The key password for the private key`,
+								},
+								"priv_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `The private key string out of the key file, from the pair of keys generated for authentication`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of the provider`,
+								},
+								"username": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Snowflake user for key pair authentication`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("apihttp_provider"),
+									path.MatchRelative().AtParent().AtName("api_aws_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_provider"),
+									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+									path.MatchRelative().AtParent().AtName("api_okta_provider"),
+									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+									path.MatchRelative().AtParent().AtName("click_house_provider"),
+									path.MatchRelative().AtParent().AtName("prometheus_provider"),
+									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+									path.MatchRelative().AtParent().AtName("s3_provider"),
+									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+									path.MatchRelative().AtParent().AtName("meta_provider"),
+									path.MatchRelative().AtParent().AtName("edge_provider"),
+									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+									path.MatchRelative().AtParent().AtName("gcs_provider"),
+								}...),
+							},
+						},
+					},
+				},
+			},
 			"meta_provider": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
@@ -2106,6 +3572,43 @@ func (r *SearchDatasetProviderResource) Create(ctx context.Context, req resource
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1, request1Diags := data.ToOperationsGetDatasetProviderByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Datasets.GetDatasetProviderByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatasetProviderByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -2155,11 +3658,11 @@ func (r *SearchDatasetProviderResource) Read(ctx context.Context, req resource.R
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGenericProvider(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatasetProviderByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -2210,6 +3713,43 @@ func (r *SearchDatasetProviderResource) Update(ctx context.Context, req resource
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedGenericProvider(ctx, &res.Object.Items[0])...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetDatasetProviderByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Datasets.GetDatasetProviderByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatasetProviderByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

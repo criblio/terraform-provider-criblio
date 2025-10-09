@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,8 +28,10 @@ type SearchDashboardCategoryDataSource struct {
 
 // SearchDashboardCategoryDataSourceModel describes the data model.
 type SearchDashboardCategoryDataSourceModel struct {
-	ID    types.String                `tfsdk:"id"`
-	Items []tfTypes.DashboardCategory `tfsdk:"items"`
+	Description types.String `tfsdk:"description"`
+	ID          types.String `tfsdk:"id"`
+	IsPack      types.Bool   `tfsdk:"is_pack"`
+	Name        types.String `tfsdk:"name"`
 }
 
 // Metadata returns the data source type name.
@@ -44,28 +45,18 @@ func (r *SearchDashboardCategoryDataSource) Schema(ctx context.Context, req data
 		MarkdownDescription: "SearchDashboardCategory DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"items": schema.ListNestedAttribute{
+			"is_pack": schema.BoolAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"is_pack": schema.BoolAttribute{
-							Computed: true,
-						},
-						"name": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
+			},
+			"name": schema.StringAttribute{
+				Computed: true,
 			},
 		},
 	}
@@ -131,11 +122,11 @@ func (r *SearchDashboardCategoryDataSource) Read(ctx context.Context, req dataso
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDashboardCategoryByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDashboardCategory(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

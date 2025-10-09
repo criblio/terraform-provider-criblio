@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -28,10 +29,9 @@ type SchemaDataSource struct {
 
 // SchemaDataSourceModel describes the data model.
 type SchemaDataSourceModel struct {
-	Description types.String `tfsdk:"description"`
-	GroupID     types.String `tfsdk:"group_id"`
-	ID          types.String `tfsdk:"id"`
-	Schema      types.String `tfsdk:"schema"`
+	GroupID types.String             `tfsdk:"group_id"`
+	ID      types.String             `tfsdk:"id"`
+	Items   []tfTypes.SchemaLibEntry `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -45,9 +45,6 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 		MarkdownDescription: "Schema DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
-				Computed: true,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
@@ -56,9 +53,22 @@ func (r *SchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"schema": schema.StringAttribute{
-				Computed:    true,
-				Description: `JSON schema matching standards of draft version 2019-09`,
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+						"schema": schema.StringAttribute{
+							Computed:    true,
+							Description: `JSON schema matching standards of draft version 2019-09`,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -124,11 +134,11 @@ func (r *SchemaDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSchemaLibEntry(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetLibSchemasByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
