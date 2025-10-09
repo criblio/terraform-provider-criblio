@@ -4,28 +4,18 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SchemaDataSourceModel) RefreshFromOperationsGetLibSchemasByIDResponseBody(ctx context.Context, resp *operations.GetLibSchemasByIDResponseBody) diag.Diagnostics {
+func (r *SchemaDataSourceModel) RefreshFromSharedSchemaLibEntry(ctx context.Context, resp *shared.SchemaLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.SchemaLibEntry{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.SchemaLibEntry
-
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Schema = types.StringValue(itemsItem.Schema)
-
-			r.Items = append(r.Items, items)
-		}
-	}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Schema = types.StringValue(resp.Schema)
 
 	return diags
 }

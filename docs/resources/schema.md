@@ -34,19 +34,6 @@ resource "criblio_schema" "my_schema" {
 
 - `description` (String)
 
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `description` (String)
-- `id` (String)
-- `schema` (String) JSON schema matching standards of draft version 2019-09
-
 ## Import
 
 Import is supported using the following syntax:

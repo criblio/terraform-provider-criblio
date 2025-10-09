@@ -13,15 +13,6 @@ import (
 	"time"
 )
 
-func (r *SearchDatasetResourceModel) RefreshFromOperationsGetDatasetByIDResponseBody(ctx context.Context, resp *operations.GetDatasetByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context.Context, resp *shared.GenericDataset) diag.Diagnostics {
 	var diags diag.Diagnostics
 

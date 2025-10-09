@@ -43,7 +43,6 @@ type CriblLakeDatasetResourceModel struct {
 	Description           types.String                     `tfsdk:"description"`
 	Format                types.String                     `tfsdk:"format"`
 	ID                    types.String                     `tfsdk:"id"`
-	Items                 []tfTypes.CriblLakeDataset       `tfsdk:"items"`
 	LakeID                types.String                     `tfsdk:"lake_id"`
 	RetentionPeriodInDays types.Float64                    `tfsdk:"retention_period_in_days"`
 	SearchConfig          *tfTypes.LakeDatasetSearchConfig `tfsdk:"search_config"`
@@ -87,80 +86,6 @@ func (r *CriblLakeDatasetResource) Schema(ctx context.Context, req resource.Sche
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `dataset id to update`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"accelerated_fields": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-						},
-						"bucket_name": schema.StringAttribute{
-							Computed:    true,
-							Default:     stringdefault.StaticString(`lake-${workspaceName}-${organizationId}`),
-							Description: `Default: "lake-${workspaceName}-${organizationId}"`,
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"format": schema.StringAttribute{
-							Computed:    true,
-							Description: `must be one of ["json", "ddss", "parquet"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"json",
-									"ddss",
-									"parquet",
-								),
-							},
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"retention_period_in_days": schema.Float64Attribute{
-							Computed: true,
-						},
-						"search_config": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"datatypes": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Default:     booldefault.StaticBool(false),
-											Description: `Whether acceleration is enabled for this dataset. Default: false`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-							},
-						},
-					},
-				},
 			},
 			"lake_id": schema.StringAttribute{
 				Required:    true,
@@ -297,43 +222,6 @@ func (r *CriblLakeDatasetResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetCriblLakeDatasetByLakeIDAndIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Lake.GetCriblLakeDatasetByLakeIDAndID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -383,11 +271,11 @@ func (r *CriblLakeDatasetResource) Read(ctx context.Context, req resource.ReadRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCriblLakeDataset(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -438,43 +326,6 @@ func (r *CriblLakeDatasetResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedCriblLakeDataset(ctx, &res.Object.Items[0])...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetCriblLakeDatasetByLakeIDAndIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Lake.GetCriblLakeDatasetByLakeIDAndID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

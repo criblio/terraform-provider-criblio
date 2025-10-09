@@ -4,39 +4,11 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
-
-func (r *GlobalVarResourceModel) RefreshFromOperationsGetGlobalVariableByIDResponseBody(ctx context.Context, resp *operations.GetGlobalVariableByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.GlobalVar{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.GlobalVar
-
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Lib = types.StringPointerValue(itemsItem.Lib)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			if itemsItem.Type != nil {
-				items.Type = types.StringValue(string(*itemsItem.Type))
-			} else {
-				items.Type = types.StringNull()
-			}
-			items.Value = types.StringPointerValue(itemsItem.Value)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
 
 func (r *GlobalVarResourceModel) RefreshFromSharedGlobalVar(ctx context.Context, resp *shared.GlobalVar) diag.Diagnostics {
 	var diags diag.Diagnostics

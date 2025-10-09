@@ -11,6 +11,61 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *NotificationResourceModel) RefreshFromOperationsGetNotificationByIDResponseBody(ctx context.Context, resp *operations.GetNotificationByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Notification{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.Notification
+
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Disabled = types.BoolPointerValue(itemsItem.Disabled)
+			items.Condition = types.StringValue(itemsItem.Condition)
+			items.Targets = make([]types.String, 0, len(itemsItem.Targets))
+			for _, v := range itemsItem.Targets {
+				items.Targets = append(items.Targets, types.StringValue(v))
+			}
+			items.TargetConfigs = []tfTypes.TargetConfig{}
+
+			for _, targetConfigsItem := range itemsItem.TargetConfigs {
+				var targetConfigs tfTypes.TargetConfig
+
+				targetConfigs.ID = types.StringValue(targetConfigsItem.ID)
+				if targetConfigsItem.Conf == nil {
+					targetConfigs.Conf = nil
+				} else {
+					targetConfigs.Conf = &tfTypes.TargetConfigConf{}
+					targetConfigs.Conf.IncludeResults = types.BoolPointerValue(targetConfigsItem.Conf.IncludeResults)
+					if targetConfigsItem.Conf.AttachmentType != nil {
+						targetConfigs.Conf.AttachmentType = types.StringValue(string(*targetConfigsItem.Conf.AttachmentType))
+					} else {
+						targetConfigs.Conf.AttachmentType = types.StringNull()
+					}
+				}
+
+				items.TargetConfigs = append(items.TargetConfigs, targetConfigs)
+			}
+			if itemsItem.Conf == nil {
+				items.Conf = nil
+			} else {
+				items.Conf = &tfTypes.ConditionSpecificConfigs{}
+				items.Conf.SavedQueryID = types.StringValue(itemsItem.Conf.SavedQueryID)
+				items.Conf.Message = types.StringValue(itemsItem.Conf.Message)
+				items.Conf.TriggerType = types.StringPointerValue(itemsItem.Conf.TriggerType)
+				items.Conf.TriggerComparator = types.StringPointerValue(itemsItem.Conf.TriggerComparator)
+				items.Conf.TriggerCount = types.Float64PointerValue(itemsItem.Conf.TriggerCount)
+			}
+			items.Group = types.StringPointerValue(itemsItem.Group)
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *NotificationResourceModel) RefreshFromSharedNotification(ctx context.Context, resp *shared.Notification) diag.Diagnostics {
 	var diags diag.Diagnostics
 

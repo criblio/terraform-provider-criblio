@@ -29,12 +29,9 @@ type ProjectDataSource struct {
 
 // ProjectDataSourceModel describes the data model.
 type ProjectDataSourceModel struct {
-	Consumers     *tfTypes.Consumers `tfsdk:"consumers"`
-	Description   types.String       `tfsdk:"description"`
-	Destinations  []types.String     `tfsdk:"destinations"`
-	GroupID       types.String       `tfsdk:"group_id"`
-	ID            types.String       `tfsdk:"id"`
-	Subscriptions []types.String     `tfsdk:"subscriptions"`
+	GroupID types.String            `tfsdk:"group_id"`
+	ID      types.String            `tfsdk:"id"`
+	Items   []tfTypes.ProjectConfig `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -48,16 +45,6 @@ func (r *ProjectDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 		MarkdownDescription: "Project DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"consumers": schema.SingleNestedAttribute{
-				Computed: true,
-			},
-			"description": schema.StringAttribute{
-				Computed: true,
-			},
-			"destinations": schema.ListAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
@@ -66,9 +53,29 @@ func (r *ProjectDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"subscriptions": schema.ListAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"consumers": schema.SingleNestedAttribute{
+							Computed: true,
+						},
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"destinations": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+						"subscriptions": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -134,11 +141,11 @@ func (r *ProjectDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedProjectConfig(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetProjectByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

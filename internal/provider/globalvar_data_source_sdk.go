@@ -4,35 +4,25 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *GlobalVarDataSourceModel) RefreshFromOperationsGetGlobalVariableByIDResponseBody(ctx context.Context, resp *operations.GetGlobalVariableByIDResponseBody) diag.Diagnostics {
+func (r *GlobalVarDataSourceModel) RefreshFromSharedGlobalVar(ctx context.Context, resp *shared.GlobalVar) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.GlobalVar{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.GlobalVar
-
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Lib = types.StringPointerValue(itemsItem.Lib)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-			if itemsItem.Type != nil {
-				items.Type = types.StringValue(string(*itemsItem.Type))
-			} else {
-				items.Type = types.StringNull()
-			}
-			items.Value = types.StringPointerValue(itemsItem.Value)
-
-			r.Items = append(r.Items, items)
-		}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringPointerValue(resp.Lib)
+	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp.Type != nil {
+		r.Type = types.StringValue(string(*resp.Type))
+	} else {
+		r.Type = types.StringNull()
 	}
+	r.Value = types.StringPointerValue(resp.Value)
 
 	return diags
 }

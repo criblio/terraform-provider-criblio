@@ -31,9 +31,14 @@ type CriblLakeDatasetDataSource struct {
 
 // CriblLakeDatasetDataSourceModel describes the data model.
 type CriblLakeDatasetDataSourceModel struct {
-	ID     types.String               `tfsdk:"id"`
-	Items  []tfTypes.CriblLakeDataset `tfsdk:"items"`
-	LakeID types.String               `tfsdk:"lake_id"`
+	AcceleratedFields     []types.String                   `tfsdk:"accelerated_fields"`
+	BucketName            types.String                     `tfsdk:"bucket_name"`
+	Description           types.String                     `tfsdk:"description"`
+	Format                types.String                     `tfsdk:"format"`
+	ID                    types.String                     `tfsdk:"id"`
+	LakeID                types.String                     `tfsdk:"lake_id"`
+	RetentionPeriodInDays types.Float64                    `tfsdk:"retention_period_in_days"`
+	SearchConfig          *tfTypes.LakeDatasetSearchConfig `tfsdk:"search_config"`
 }
 
 // Metadata returns the data source type name.
@@ -47,72 +52,62 @@ func (r *CriblLakeDatasetDataSource) Schema(ctx context.Context, req datasource.
 		MarkdownDescription: "CriblLakeDataset DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"accelerated_fields": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+			},
+			"bucket_name": schema.StringAttribute{
+				Computed: true,
+			},
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
+			"format": schema.StringAttribute{
+				Computed: true,
+			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `dataset id to get`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"accelerated_fields": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-						},
-						"bucket_name": schema.StringAttribute{
-							Computed: true,
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"format": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"retention_period_in_days": schema.Float64Attribute{
-							Computed: true,
-						},
-						"search_config": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"datatypes": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-							},
-						},
-					},
-				},
 			},
 			"lake_id": schema.StringAttribute{
 				Required:    true,
 				Description: `lake id that contains the Datasets. must be "default"`,
 				Validators: []validator.String{
 					stringvalidator.OneOf("default"),
+				},
+			},
+			"retention_period_in_days": schema.Float64Attribute{
+				Computed: true,
+			},
+			"search_config": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"datatypes": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
 				},
 			},
 		},
@@ -179,11 +174,11 @@ func (r *CriblLakeDatasetDataSource) Read(ctx context.Context, req datasource.Re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCriblLakeDataset(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

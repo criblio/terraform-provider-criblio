@@ -4,31 +4,21 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *RegexDataSourceModel) RefreshFromOperationsGetRegexLibEntryByIDResponseBody(ctx context.Context, resp *operations.GetRegexLibEntryByIDResponseBody) diag.Diagnostics {
+func (r *RegexDataSourceModel) RefreshFromSharedRegexLibEntry(ctx context.Context, resp *shared.RegexLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.RegexLibEntry{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.RegexLibEntry
-
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Lib = types.StringPointerValue(itemsItem.Lib)
-			items.Regex = types.StringValue(itemsItem.Regex)
-			items.SampleData = types.StringPointerValue(itemsItem.SampleData)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-
-			r.Items = append(r.Items, items)
-		}
-	}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringPointerValue(resp.Lib)
+	r.Regex = types.StringValue(resp.Regex)
+	r.SampleData = types.StringPointerValue(resp.SampleData)
+	r.Tags = types.StringPointerValue(resp.Tags)
 
 	return diags
 }

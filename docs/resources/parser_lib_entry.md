@@ -38,6 +38,21 @@ resource "criblio_parser_lib_entry" "my_parserlibentry" {
 - `tags` (String) Optionally, add tags that you can use for filtering
 - `type` (String) Parser or formatter type to use. Default: "csv"; must be one of ["csv", "elff", "clf", "kvp", "json", "delim", "regex", "grok"]
 
+### Read-Only
+
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `description` (String)
+- `id` (String)
+- `lib` (String)
+- `tags` (String) Optionally, add tags that you can use for filtering
+- `type` (String) Parser or formatter type to use. Default: "csv"; must be one of ["csv", "elff", "clf", "kvp", "json", "delim", "regex", "grok"]
+
 ## Import
 
 Import is supported using the following syntax:
