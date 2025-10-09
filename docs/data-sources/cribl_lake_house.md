@@ -27,6 +27,14 @@ data "criblio_cribl_lake_house" "my_cribllakehouse" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `description` (String) Description of the lakehouse
+- `id` (String) Unique identifier for the lakehouse
 - `status` (String) Status of the lakehouse
 - `tier_size` (String) Size of the lakehouse tier

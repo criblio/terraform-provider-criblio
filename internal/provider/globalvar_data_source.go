@@ -5,14 +5,12 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -31,13 +29,9 @@ type GlobalVarDataSource struct {
 
 // GlobalVarDataSourceModel describes the data model.
 type GlobalVarDataSourceModel struct {
-	Description types.String `tfsdk:"description"`
-	GroupID     types.String `tfsdk:"group_id"`
-	ID          types.String `tfsdk:"id"`
-	Lib         types.String `tfsdk:"lib"`
-	Tags        types.String `tfsdk:"tags"`
-	Type        types.String `tfsdk:"type"`
-	Value       types.String `tfsdk:"value"`
+	GroupID types.String        `tfsdk:"group_id"`
+	ID      types.String        `tfsdk:"id"`
+	Items   []tfTypes.GlobalVar `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -51,10 +45,6 @@ func (r *GlobalVarDataSource) Schema(ctx context.Context, req datasource.SchemaR
 		MarkdownDescription: "GlobalVar DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
-				Computed:    true,
-				Description: `Brief description of this variable. Optional.`,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
@@ -62,24 +52,36 @@ func (r *GlobalVarDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
 			},
-			"lib": schema.StringAttribute{
+			"items": schema.ListNestedAttribute{
 				Computed: true,
-			},
-			"tags": schema.StringAttribute{
-				Computed:    true,
-				Description: `One or more tags related to this variable. Optional.`,
-			},
-			"type": schema.StringAttribute{
-				Computed:    true,
-				Description: `Type of variable`,
-			},
-			"value": schema.StringAttribute{
-				Computed:    true,
-				Description: `Value of variable`,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							Computed:    true,
+							Description: `Brief description of this variable. Optional.`,
+						},
+						"id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Global variable name.`,
+						},
+						"lib": schema.StringAttribute{
+							Computed: true,
+						},
+						"tags": schema.StringAttribute{
+							Computed:    true,
+							Description: `One or more tags related to this variable. Optional.`,
+						},
+						"type": schema.StringAttribute{
+							Computed:    true,
+							Description: `Type of variable`,
+						},
+						"value": schema.StringAttribute{
+							Computed:    true,
+							Description: `Value of variable`,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -145,11 +147,11 @@ func (r *GlobalVarDataSource) Read(ctx context.Context, req datasource.ReadReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGlobalVar(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
