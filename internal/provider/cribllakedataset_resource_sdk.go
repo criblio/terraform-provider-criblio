@@ -13,57 +13,6 @@ import (
 	"time"
 )
 
-func (r *CriblLakeDatasetResourceModel) RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx context.Context, resp *operations.GetCriblLakeDatasetByLakeIDAndIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.CriblLakeDataset{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.CriblLakeDataset
-
-			items.AcceleratedFields = make([]types.String, 0, len(itemsItem.AcceleratedFields))
-			for _, v := range itemsItem.AcceleratedFields {
-				items.AcceleratedFields = append(items.AcceleratedFields, types.StringValue(v))
-			}
-			items.BucketName = types.StringPointerValue(itemsItem.BucketName)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			if itemsItem.Format != nil {
-				items.Format = types.StringValue(string(*itemsItem.Format))
-			} else {
-				items.Format = types.StringNull()
-			}
-			items.ID = types.StringValue(itemsItem.ID)
-			items.RetentionPeriodInDays = types.Float64PointerValue(itemsItem.RetentionPeriodInDays)
-			if itemsItem.SearchConfig == nil {
-				items.SearchConfig = nil
-			} else {
-				items.SearchConfig = &tfTypes.LakeDatasetSearchConfig{}
-				items.SearchConfig.Datatypes = make([]types.String, 0, len(itemsItem.SearchConfig.Datatypes))
-				for _, v := range itemsItem.SearchConfig.Datatypes {
-					items.SearchConfig.Datatypes = append(items.SearchConfig.Datatypes, types.StringValue(v))
-				}
-				if itemsItem.SearchConfig.Metadata == nil {
-					items.SearchConfig.Metadata = nil
-				} else {
-					items.SearchConfig.Metadata = &tfTypes.DatasetMetadata{}
-					items.SearchConfig.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.SearchConfig.Metadata.Created))
-					items.SearchConfig.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(itemsItem.SearchConfig.Metadata.Modified))
-					items.SearchConfig.Metadata.Tags = make([]types.String, 0, len(itemsItem.SearchConfig.Metadata.Tags))
-					for _, v := range itemsItem.SearchConfig.Metadata.Tags {
-						items.SearchConfig.Metadata.Tags = append(items.SearchConfig.Metadata.Tags, types.StringValue(v))
-					}
-					items.SearchConfig.Metadata.EnableAcceleration = types.BoolPointerValue(itemsItem.SearchConfig.Metadata.EnableAcceleration)
-				}
-			}
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
-
 func (r *CriblLakeDatasetResourceModel) RefreshFromSharedCriblLakeDataset(ctx context.Context, resp *shared.CriblLakeDataset) diag.Diagnostics {
 	var diags diag.Diagnostics
 
