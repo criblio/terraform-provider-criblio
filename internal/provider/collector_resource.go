@@ -241,7 +241,6 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Default: []`,
 					},
 					"resume_on_boot": schema.BoolAttribute{
 						Computed:    true,
@@ -422,7 +421,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping. Default: []`,
+						Description: `Tags for filtering and grouping`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -580,7 +579,6 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Default: []`,
 					},
 					"resume_on_boot": schema.BoolAttribute{
 						Computed:    true,
@@ -761,7 +759,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping. Default: []`,
+						Description: `Tags for filtering and grouping`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -924,7 +922,6 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Default: []`,
 					},
 					"resume_on_boot": schema.BoolAttribute{
 						Computed:    true,
@@ -1105,7 +1102,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping. Default: []`,
+						Description: `Tags for filtering and grouping`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -1295,7 +1292,6 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Default: []`,
 					},
 					"resume_on_boot": schema.BoolAttribute{
 						Computed:    true,
@@ -1476,7 +1472,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping. Default: []`,
+						Description: `Tags for filtering and grouping`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -1684,7 +1680,6 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Default: []`,
 					},
 					"resume_on_boot": schema.BoolAttribute{
 						Computed:    true,
@@ -1865,7 +1860,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping. Default: []`,
+						Description: `Tags for filtering and grouping`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -2237,14 +2232,8 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"codes": schema.ListAttribute{
-												Computed: true,
-												Optional: true,
-												Default: listdefault.StaticValue(types.ListValueMust(types.Int64Type, []attr.Value{
-													types.Int64Value(429),
-													types.Int64Value(503),
-												})),
+												Optional:    true,
 												ElementType: types.Int64Type,
-												Description: `Default: [429,503]`,
 											},
 											"enable_header": schema.BoolAttribute{
 												Computed:    true,
@@ -2458,7 +2447,6 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Default: []`,
 					},
 					"resume_on_boot": schema.BoolAttribute{
 						Computed:    true,
@@ -2639,7 +2627,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping. Default: []`,
+						Description: `Tags for filtering and grouping`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -2838,7 +2826,6 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Default: []`,
 					},
 					"resume_on_boot": schema.BoolAttribute{
 						Computed:    true,
@@ -3019,7 +3006,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping. Default: []`,
+						Description: `Tags for filtering and grouping`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,
@@ -3254,7 +3241,6 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Default: []`,
 					},
 					"resume_on_boot": schema.BoolAttribute{
 						Computed:    true,
@@ -3435,7 +3421,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping. Default: []`,
+						Description: `Tags for filtering and grouping`,
 					},
 					"ttl": schema.StringAttribute{
 						Computed:    true,

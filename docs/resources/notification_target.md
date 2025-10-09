@@ -14,6 +14,20 @@ NotificationTarget Resource
 
 ```terraform
 resource "criblio_notification_target" "my_notificationtarget" {
+  id = "nt-slack-prod"
+  pager_duty_target = {
+    class       = "incident-class"
+    component   = "webserver"
+    group       = "oncall-team"
+    id          = "myPagerDutyTarget"
+    routing_key = "0123456789abcdef0123456789abcdef"
+    severity    = "critical"
+    system_fields = [
+      "cribl_host",
+      "cribl_pipe",
+    ]
+    type = "pager_duty"
+  }
   slack_target = {
     id = "mySlackTarget"
     system_fields = [
@@ -22,6 +36,64 @@ resource "criblio_notification_target" "my_notificationtarget" {
     ]
     type = "slack"
     url  = "https://hooks.slack.com/services/THISisanExample"
+  }
+  smtp_target = {
+    encryption_option = "STARTTLS"
+    from              = "alerts@example.com"
+    host              = "smtp.example.com"
+    id                = "mySmtpTarget"
+    password          = "smtpPass123"
+    port              = 587
+    system_fields = [
+      "cribl_host",
+      "cribl_pipe",
+    ]
+    tls = {
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      reject_unauthorized = true
+    }
+    type     = "smtp"
+    username = "smtpUser"
+  }
+  sns_target = {
+    allowlist = [
+      "+15551234567",
+      "+15559876543",
+    ]
+    assume_role_arn           = "arn:aws:iam::123456789012:role/MyRole"
+    assume_role_external_id   = "external-id-123"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
+    aws_authentication_method = "manual"
+    aws_secret_key            = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    destination_type          = "topic"
+    endpoint                  = "https://sns.us-east-1.amazonaws.com"
+    id                        = "mySnsTarget"
+    message_group_id          = "my-message-group-id"
+    phone_number              = "+15557654321"
+    region                    = "us-east-1"
+    system_fields = [
+      "cribl_host",
+      "cribl_pipe",
+    ]
+    topic_arn  = "arn:aws:sns:us-east-1:123456789012:my-topic"
+    topic_type = "fifo"
+    type       = "sns"
+  }
+  webhook_target = {
+    auth_type = "token"
+    format    = "ndjson"
+    id        = "myWebhookTarget"
+    method    = "POST"
+    password  = "webhookPass"
+    system_fields = [
+      "cribl_host",
+      "cribl_pipe",
+    ]
+    token    = "myWebhookSecretToken"
+    type     = "webhook"
+    url      = "https://hooks.example.com/webhook"
+    username = "webhookUser"
   }
 }
 ```
@@ -56,7 +128,7 @@ Optional:
 - `component` (String) Optional, default component value. Default: "logstream"
 - `group` (String) Optional, default group value
 - `severity` (String) Default value for message severity. Defaults to info. The __severity value, if set, will overwrite this. Default: "info"; must be one of ["info", "warning", "error", "critical"]
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 
 
 <a id="nestedatt--slack_target"></a>
@@ -70,7 +142,7 @@ Required:
 
 Optional:
 
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 
 
 <a id="nestedatt--smtp_target"></a>
@@ -88,7 +160,7 @@ Optional:
 
 - `encryption_option` (String) Encryption method for SMTP. Default: "NONE"; must be one of ["NONE", "STARTTLS", "SSL"]
 - `password` (String) SMTP authentication password
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `tls` (Attributes) TLS configuration options (see [below for nested schema](#nestedatt--smtp_target--tls))
 - `username` (String) SMTP authentication username
 
@@ -114,7 +186,7 @@ Required:
 
 Optional:
 
-- `allowlist` (List of String) Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic. Default: []
+- `allowlist` (List of String) Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic.
 - `assume_role_arn` (String) ARN of the role to assume
 - `assume_role_external_id` (String) External ID for role assumption
 - `aws_api_key` (String) AWS access key
@@ -124,7 +196,7 @@ Optional:
 - `endpoint` (String) SNS endpoint URL
 - `message_group_id` (String) Message group ID for FIFO topics
 - `phone_number` (String) The default phone number to send the notification to. This value can be overridden by the notification event __phoneNumber field.
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `topic_arn` (String) The default ARN of the SNS topic to send notifications to
 - `topic_type` (String) Type of the topic selected in AWS SNS. Default: "fifo"; must be one of ["standard", "fifo"]
 
@@ -144,6 +216,6 @@ Optional:
 
 - `auth_type` (String) Authentication method for the webhook. Default: "none"; must be one of ["none", "token", "basic"]
 - `password` (String) Basic authentication password
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `token` (String) Authentication token
 - `username` (String) Basic authentication username

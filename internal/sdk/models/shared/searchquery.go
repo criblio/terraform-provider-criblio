@@ -226,7 +226,7 @@ func (s SearchQueryInline) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchQueryInline) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"earliest", "latest", "query", "type"}); err != nil {
 		return err
 	}
 	return nil

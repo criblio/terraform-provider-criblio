@@ -7,10 +7,13 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -29,8 +32,32 @@ type SearchDatasetDataSource struct {
 
 // SearchDatasetDataSourceModel describes the data model.
 type SearchDatasetDataSourceModel struct {
-	ID    types.String             `tfsdk:"id"`
-	Items []tfTypes.GenericDataset `tfsdk:"items"`
+	APIAwsDataset               *tfTypes.APIAwsDataset               `queryParam:"inline" tfsdk:"api_aws_dataset" tfPlanOnly:"true"`
+	APIAzureDataExplorerDataset *tfTypes.APIAzureDataExplorerDataset `queryParam:"inline" tfsdk:"api_azure_data_explorer_dataset" tfPlanOnly:"true"`
+	APIAzureDataset             *tfTypes.APIAzureDataset             `queryParam:"inline" tfsdk:"api_azure_dataset" tfPlanOnly:"true"`
+	APIElasticSearchDataset     *tfTypes.APIElasticSearchDataset     `queryParam:"inline" tfsdk:"api_elastic_search_dataset" tfPlanOnly:"true"`
+	APIGcpDataset               *tfTypes.APIGcpDataset               `queryParam:"inline" tfsdk:"api_gcp_dataset" tfPlanOnly:"true"`
+	APIGoogleWorkspaceDataset   *tfTypes.APIGoogleWorkspaceDataset   `queryParam:"inline" tfsdk:"api_google_workspace_dataset" tfPlanOnly:"true"`
+	APIHTTPDataset              *tfTypes.APIHTTPDataset              `queryParam:"inline" tfsdk:"apihttp_dataset" tfPlanOnly:"true"`
+	APIMsGraphDataset           *tfTypes.APIMsGraphDataset           `queryParam:"inline" tfsdk:"api_ms_graph_dataset" tfPlanOnly:"true"`
+	APIOktaDataset              *tfTypes.APIOktaDataset              `queryParam:"inline" tfsdk:"api_okta_dataset" tfPlanOnly:"true"`
+	APIOpenSearchDataset        *tfTypes.APIOpenSearchDataset        `queryParam:"inline" tfsdk:"api_open_search_dataset" tfPlanOnly:"true"`
+	APITailscaleDataset         *tfTypes.APITailscaleDataset         `queryParam:"inline" tfsdk:"api_tailscale_dataset" tfPlanOnly:"true"`
+	APIZoomDataset              *tfTypes.APIZoomDataset              `queryParam:"inline" tfsdk:"api_zoom_dataset" tfPlanOnly:"true"`
+	AwsSecurityLakeDataset      *tfTypes.AwsSecurityLakeDataset      `queryParam:"inline" tfsdk:"aws_security_lake_dataset" tfPlanOnly:"true"`
+	AzureBlobDataset            *tfTypes.AzureBlobDataset            `queryParam:"inline" tfsdk:"azure_blob_dataset" tfPlanOnly:"true"`
+	ClickHouseDataset           *tfTypes.ClickHouseDataset           `queryParam:"inline" tfsdk:"click_house_dataset" tfPlanOnly:"true"`
+	CriblLeaderDataset          *tfTypes.CriblLeaderDataset          `queryParam:"inline" tfsdk:"cribl_leader_dataset" tfPlanOnly:"true"`
+	Description                 types.String                         `tfsdk:"description"`
+	EdgeDataset                 *tfTypes.EdgeDataset                 `queryParam:"inline" tfsdk:"edge_dataset" tfPlanOnly:"true"`
+	GcsDataset                  *tfTypes.GcsDataset                  `queryParam:"inline" tfsdk:"gcs_dataset" tfPlanOnly:"true"`
+	ID                          types.String                         `tfsdk:"id"`
+	MetaDataset                 *tfTypes.MetaDataset                 `queryParam:"inline" tfsdk:"meta_dataset" tfPlanOnly:"true"`
+	PrometheusDataset           *tfTypes.PrometheusDataset           `queryParam:"inline" tfsdk:"prometheus_dataset" tfPlanOnly:"true"`
+	ProviderID                  types.String                         `tfsdk:"provider_id"`
+	S3Dataset                   *tfTypes.S3Dataset                   `queryParam:"inline" tfsdk:"s3_dataset" tfPlanOnly:"true"`
+	SnowflakeDataset            *tfTypes.SnowflakeDataset            `queryParam:"inline" tfsdk:"snowflake_dataset" tfPlanOnly:"true"`
+	Type                        types.String                         `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -44,1153 +71,1177 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 		MarkdownDescription: "SearchDataset DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to GET`,
-			},
-			"items": schema.ListNestedAttribute{
+			"api_aws_dataset": schema.SingleNestedAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"api_aws_dataset": schema.SingleNestedAttribute{
-							Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"regions": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the AWS regions to query for this endpoint`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_azure_data_explorer_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"cluster": schema.StringAttribute{
+						Computed:    true,
+						Description: `Azure Data Explorer cluster name`,
+					},
+					"database": schema.StringAttribute{
+						Computed:    true,
+						Description: `Azure Data Explorer database name`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"location": schema.StringAttribute{
+						Computed:    true,
+						Description: `Location (region) of the Azure Data Explorer cluster`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"table": schema.StringAttribute{
+						Computed:    true,
+						Description: `Name of the table to query. May be a simple name (Example: logs) or a Kusto query`,
+					},
+					"timestamp_field": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional name of the field holding the timestamp of the event`,
+					},
+					"timestamp_field_contents": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the data stored in the timestamp field`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_azure_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"subscription_ids": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the subscription ids within the tenant to query with this dataset`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_elastic_search_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"index": schema.StringAttribute{
+						Computed:    true,
+						Description: `Name of the Elasticsearch index to search`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"timestamp_field": schema.StringAttribute{
+						Computed:    true,
+						Description: `Name of the field holding the timestamp of the event`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_gcp_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"endpoint_configs": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
+								"endpoint_name": schema.StringAttribute{
 									Computed:    true,
-									Description: `Description of the dataset`,
+									Description: `GCP endpoint`,
 								},
-								"enabled_endpoints": schema.ListAttribute{
+								"region": schema.StringAttribute{
 									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the endpoints that are enabled in this dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"regions": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the AWS regions to query for this endpoint`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
+									Description: `GCP region (required for some endpoints)`,
 								},
 							},
 						},
-						"api_azure_data_explorer_dataset": schema.SingleNestedAttribute{
-							Computed: true,
+						Description: `A list of the endpoint configurations that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_google_workspace_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"apihttp_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_ms_graph_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_okta_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_open_search_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"index": schema.StringAttribute{
+						Computed:    true,
+						Description: `Name of the OpenSearch index to search`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"timestamp_field": schema.StringAttribute{
+						Computed:    true,
+						Description: `Name of the field holding the timestamp of the event`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_tailscale_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"api_zoom_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"enabled_endpoints": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `A list of the endpoints that are enabled in this dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"aws_security_lake_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"filter": schema.StringAttribute{
+						Computed:    true,
+						Description: `A JavaScript filter expression to be evaluated against the provided path`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The templated path under which to look for data, in each folder`,
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"selected_buckets": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"cluster": schema.StringAttribute{
+								"name": schema.StringAttribute{
 									Computed:    true,
-									Description: `Azure Data Explorer cluster name`,
+									Description: `S3 bucket name`,
 								},
-								"database": schema.StringAttribute{
+								"region": schema.StringAttribute{
 									Computed:    true,
-									Description: `Azure Data Explorer database name`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"location": schema.StringAttribute{
-									Computed:    true,
-									Description: `Location (region) of the Azure Data Explorer cluster`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"table": schema.StringAttribute{
-									Computed:    true,
-									Description: `Name of the table to query. May be a simple name (Example: logs) or a Kusto query`,
-								},
-								"timestamp_field": schema.StringAttribute{
-									Computed:    true,
-									Description: `Optional name of the field holding the timestamp of the event`,
-								},
-								"timestamp_field_contents": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of the data stored in the timestamp field`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
+									Description: `AWS region where the bucket is located`,
 								},
 							},
 						},
-						"api_azure_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"enabled_endpoints": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the endpoints that are enabled in this dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"subscription_ids": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the subscription ids within the tenant to query with this dataset`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"api_elastic_search_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"index": schema.StringAttribute{
-									Computed:    true,
-									Description: `Name of the Elasticsearch index to search`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"timestamp_field": schema.StringAttribute{
-									Computed:    true,
-									Description: `Name of the field holding the timestamp of the event`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"api_gcp_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"endpoint_configs": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"endpoint_name": schema.StringAttribute{
-												Computed:    true,
-												Description: `GCP endpoint`,
-											},
-											"region": schema.StringAttribute{
-												Computed:    true,
-												Description: `GCP region (required for some endpoints)`,
-											},
-										},
-									},
-									Description: `A list of the endpoint configurations that are enabled in this dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"api_google_workspace_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"enabled_endpoints": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the endpoints that are enabled in this dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"api_ms_graph_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"enabled_endpoints": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the endpoints that are enabled in this dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"api_okta_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"enabled_endpoints": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the endpoints that are enabled in this dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"api_open_search_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"index": schema.StringAttribute{
-									Computed:    true,
-									Description: `Name of the OpenSearch index to search`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"timestamp_field": schema.StringAttribute{
-									Computed:    true,
-									Description: `Name of the field holding the timestamp of the event`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"api_tailscale_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"enabled_endpoints": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the endpoints that are enabled in this dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"api_zoom_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"enabled_endpoints": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the endpoints that are enabled in this dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"apihttp_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"enabled_endpoints": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `A list of the endpoints that are enabled in this dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"aws_security_lake_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"filter": schema.StringAttribute{
-									Computed:    true,
-									Description: `A JavaScript filter expression to be evaluated against the provided path`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"path": schema.StringAttribute{
-									Computed:    true,
-									Description: `The templated path under which to look for data, in each folder`,
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"selected_buckets": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"name": schema.StringAttribute{
-												Computed:    true,
-												Description: `S3 bucket name`,
-											},
-											"region": schema.StringAttribute{
-												Computed:    true,
-												Description: `AWS region where the bucket is located`,
-											},
-										},
-									},
-									Description: `A list of the buckets that should be searched by this dataset`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-							},
-						},
-						"azure_blob_dataset": schema.SingleNestedAttribute{
-							Computed: true,
+						Description: `A list of the buckets that should be searched by this dataset`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"azure_blob_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"container_name": schema.StringAttribute{
+						Computed:    true,
+						Description: `Azure Blob Storage container name`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"extra_paths": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"container_name": schema.StringAttribute{
 									Computed:    true,
-									Description: `Azure Blob Storage container name`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"extra_paths": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"container_name": schema.StringAttribute{
-												Computed:    true,
-												Description: `Name of the additional container`,
-											},
-											"filter": schema.StringAttribute{
-												Computed:    true,
-												Description: `A JavaScript filter expression to be evaluated against the provided path`,
-											},
-											"path": schema.StringAttribute{
-												Computed:    true,
-												Description: `Path inside the additional container`,
-											},
-										},
-									},
-									Description: `Additional container paths that are included in this dataset`,
+									Description: `Name of the additional container`,
 								},
 								"filter": schema.StringAttribute{
 									Computed:    true,
 									Description: `A JavaScript filter expression to be evaluated against the provided path`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
 								},
 								"path": schema.StringAttribute{
 									Computed:    true,
-									Description: `The templated path under which to look for data`,
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"skip_event_time_filter": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Whether to skip event time filtering`,
-								},
-								"storage_classes": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `Storage classes to include in the search`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
+									Description: `Path inside the additional container`,
 								},
 							},
 						},
-						"click_house_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"database": schema.StringAttribute{
-									Computed: true,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"table": schema.StringAttribute{
-									Computed:    true,
-									Description: `May be a simple name (Example: logs) or a SQL query (Example: select * from logs). Results will be limited to 100K for tables without sorting keys and queries.`,
-								},
-								"timestamp_field": schema.StringAttribute{
-									Computed:    true,
-									Description: `Optional name of the column holding the timestamp of the event to query`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
+						Description: `Additional container paths that are included in this dataset`,
+					},
+					"filter": schema.StringAttribute{
+						Computed:    true,
+						Description: `A JavaScript filter expression to be evaluated against the provided path`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
 							},
 						},
-						"cribl_leader_dataset": schema.SingleNestedAttribute{
-							Computed: true,
+					},
+					"path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The templated path under which to look for data`,
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"skip_event_time_filter": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to skip event time filtering`,
+					},
+					"storage_classes": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Storage classes to include in the search`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"click_house_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"database": schema.StringAttribute{
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"table": schema.StringAttribute{
+						Computed:    true,
+						Description: `May be a simple name (Example: logs) or a SQL query (Example: select * from logs). Results will be limited to 100K for tables without sorting keys and queries.`,
+					},
+					"timestamp_field": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional name of the column holding the timestamp of the event to query`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"cribl_leader_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"extra_paths": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"extra_paths": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"filter": schema.StringAttribute{
-												Computed:    true,
-												Description: `A JavaScript filter expression to be evaluated against the provided path`,
-											},
-											"path": schema.StringAttribute{
-												Computed:    true,
-												Description: `The directory from which to collect data`,
-											},
-										},
-									},
-									Description: `Additional paths that are included in this dataset`,
-								},
 								"filter": schema.StringAttribute{
 									Computed:    true,
 									Description: `A JavaScript filter expression to be evaluated against the provided path`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
 								},
 								"path": schema.StringAttribute{
 									Computed:    true,
 									Description: `The directory from which to collect data`,
 								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
 							},
 						},
-						"edge_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"filter": schema.StringAttribute{
-									Computed:    true,
-									Description: `A JavaScript filter expression to be evaluated against the provided path`,
-								},
-								"fleets": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `Fleets to query. '*' for all`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"path": schema.StringAttribute{
-									Computed:    true,
-									Description: `The directory where data will be collected. Environment variables and templating are supported.`,
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
+						Description: `Additional paths that are included in this dataset`,
+					},
+					"filter": schema.StringAttribute{
+						Computed:    true,
+						Description: `A JavaScript filter expression to be evaluated against the provided path`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
 							},
 						},
-						"gcs_dataset": schema.SingleNestedAttribute{
-							Computed: true,
+					},
+					"path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The directory from which to collect data`,
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"description": schema.StringAttribute{
+				Computed:    true,
+				Description: `Description of the dataset`,
+			},
+			"edge_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"filter": schema.StringAttribute{
+						Computed:    true,
+						Description: `A JavaScript filter expression to be evaluated against the provided path`,
+					},
+					"fleets": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Fleets to query. '*' for all`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The directory where data will be collected. Environment variables and templating are supported.`,
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"gcs_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"bucket": schema.StringAttribute{
+						Computed:    true,
+						Description: `Google Cloud Storage bucket path. Templating is supported.`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"extra_paths": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"bucket": schema.StringAttribute{
 									Computed:    true,
-									Description: `Google Cloud Storage bucket path. Templating is supported.`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"extra_paths": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"bucket": schema.StringAttribute{
-												Computed:    true,
-												Description: `Google Cloud Storage bucket path`,
-											},
-											"filter": schema.StringAttribute{
-												Computed:    true,
-												Description: `A JavaScript filter expression to be evaluated against the provided path`,
-											},
-											"region": schema.StringAttribute{
-												Computed:    true,
-												Description: `Where the extra bucket is located`,
-											},
-										},
-									},
-									Description: `Additional bucket paths that are included in this dataset`,
+									Description: `Google Cloud Storage bucket path`,
 								},
 								"filter": schema.StringAttribute{
 									Computed:    true,
 									Description: `A JavaScript filter expression to be evaluated against the provided path`,
 								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
 								"region": schema.StringAttribute{
 									Computed:    true,
-									Description: `Where the bucket is located`,
-								},
-								"skip_event_time_filter": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Whether to skip event time filtering`,
-								},
-								"storage_classes": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `Storage classes to include in the search`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
+									Description: `Where the extra bucket is located`,
 								},
 							},
 						},
-						"meta_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"datasets": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `IDs of the datasets that are searched by default`,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
+						Description: `Additional bucket paths that are included in this dataset`,
+					},
+					"filter": schema.StringAttribute{
+						Computed:    true,
+						Description: `A JavaScript filter expression to be evaluated against the provided path`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
 							},
 						},
-						"prometheus_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"desired_num_data_points": schema.Float64Attribute{
-									Computed:    true,
-									Description: `Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a 'step' predicate.`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"metric_name_pattern": schema.StringAttribute{
-									Computed:    true,
-									Description: `Optional regular expression used to filter metric names. When defined, only metrics whose name matches this pattern will be searched.`,
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"step_mode": schema.StringAttribute{
-									Computed:    true,
-									Description: `How to calculate the "step," or time range increment per data point, for the Prometheus query request`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"region": schema.StringAttribute{
+						Computed:    true,
+						Description: `Where the bucket is located`,
+					},
+					"skip_event_time_filter": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to skip event time filtering`,
+					},
+					"storage_classes": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Storage classes to include in the search`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(512),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
+				},
+			},
+			"meta_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"datasets": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `IDs of the datasets that are searched by default`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
 							},
 						},
-						"s3_dataset": schema.SingleNestedAttribute{
-							Computed: true,
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"prometheus_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"desired_num_data_points": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a 'step' predicate.`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"metric_name_pattern": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional regular expression used to filter metric names. When defined, only metrics whose name matches this pattern will be searched.`,
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"step_mode": schema.StringAttribute{
+						Computed:    true,
+						Description: `How to calculate the "step," or time range increment per data point, for the Prometheus query request`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"provider_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Dataset provider ID`,
+			},
+			"s3_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"auto_detect_region": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to automatically detect the region`,
+					},
+					"bucket": schema.StringAttribute{
+						Computed:    true,
+						Description: `S3 bucket name`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"extra_paths": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"auto_detect_region": schema.BoolAttribute{
 									Computed:    true,
@@ -1200,163 +1251,148 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 									Computed:    true,
 									Description: `S3 bucket name`,
 								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"extra_paths": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"auto_detect_region": schema.BoolAttribute{
-												Computed:    true,
-												Description: `Whether to automatically detect the region`,
-											},
-											"bucket": schema.StringAttribute{
-												Computed:    true,
-												Description: `S3 bucket name`,
-											},
-											"filter": schema.StringAttribute{
-												Computed:    true,
-												Description: `A JavaScript filter expression to be evaluated against the provided path`,
-											},
-											"path": schema.StringAttribute{
-												Computed:    true,
-												Description: `The templated path under which to look for data`,
-											},
-											"region": schema.StringAttribute{
-												Computed:    true,
-												Description: `AWS region where the bucket is located`,
-											},
-										},
-									},
-									Description: `Additional bucket paths that are included in this dataset`,
-								},
 								"filter": schema.StringAttribute{
 									Computed:    true,
 									Description: `A JavaScript filter expression to be evaluated against the provided path`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
 								},
 								"path": schema.StringAttribute{
 									Computed:    true,
 									Description: `The templated path under which to look for data`,
 								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
 								"region": schema.StringAttribute{
 									Computed:    true,
 									Description: `AWS region where the bucket is located`,
 								},
-								"skip_event_time_filter": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Whether to skip event time filtering`,
-								},
-								"storage_classes": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `Storage classes to include in the search`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
 							},
 						},
-						"snowflake_dataset": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"database": schema.StringAttribute{
-									Computed: true,
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Description of the dataset`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Unique identifier for the dataset`,
-								},
-								"metadata": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"created": schema.StringAttribute{
-											Computed:    true,
-											Description: `Creation timestamp`,
-										},
-										"enable_acceleration": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Whether acceleration is enabled for this dataset`,
-										},
-										"modified": schema.StringAttribute{
-											Computed:    true,
-											Description: `Last modification timestamp`,
-										},
-										"tags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags associated with the dataset`,
-										},
-									},
-								},
-								"provider_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider ID`,
-								},
-								"role": schema.StringAttribute{
-									Computed:    true,
-									Description: `Optional Snowflake role to use when executing the statement`,
-								},
-								"schema": schema.StringAttribute{
-									Computed:    true,
-									Description: `The schema in the database that contains the table(s) to query`,
-								},
-								"table": schema.StringAttribute{
-									Computed:    true,
-									Description: `May be a simple name (Example: logs) or a SQL query (Example: select * from logs)`,
-								},
-								"timestamp_field": schema.StringAttribute{
-									Computed:    true,
-									Description: `Optional name of the column holding the timestamp of the event to query`,
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Dataset provider type, set automatically from the dataset provider`,
-								},
-								"warehouse": schema.StringAttribute{
-									Computed:    true,
-									Description: `If not set, uses DEFAULT_WAREHOUSE`,
-								},
+						Description: `Additional bucket paths that are included in this dataset`,
+					},
+					"filter": schema.StringAttribute{
+						Computed:    true,
+						Description: `A JavaScript filter expression to be evaluated against the provided path`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
 							},
 						},
 					},
+					"path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The templated path under which to look for data`,
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"region": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS region where the bucket is located`,
+					},
+					"skip_event_time_filter": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether to skip event time filtering`,
+					},
+					"storage_classes": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Storage classes to include in the search`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
 				},
+			},
+			"snowflake_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"database": schema.StringAttribute{
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"role": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional Snowflake role to use when executing the statement`,
+					},
+					"schema": schema.StringAttribute{
+						Computed:    true,
+						Description: `The schema in the database that contains the table(s) to query`,
+					},
+					"table": schema.StringAttribute{
+						Computed:    true,
+						Description: `May be a simple name (Example: logs) or a SQL query (Example: select * from logs)`,
+					},
+					"timestamp_field": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional name of the column holding the timestamp of the event to query`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+					"warehouse": schema.StringAttribute{
+						Computed:    true,
+						Description: `If not set, uses DEFAULT_WAREHOUSE`,
+					},
+				},
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `Dataset provider type, set automatically from the dataset provider`,
 			},
 		},
 	}
@@ -1422,11 +1458,11 @@ func (r *SearchDatasetDataSource) Read(ctx context.Context, req datasource.ReadR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatasetByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedGenericDataset(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

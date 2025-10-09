@@ -6,9 +6,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Lakehouse struct {
+type DashboardCategory struct {
 	Description types.String `tfsdk:"description"`
 	ID          types.String `tfsdk:"id"`
-	Status      types.String `tfsdk:"status"`
-	TierSize    types.String `tfsdk:"tier_size"`
+	IsPack      types.Bool   `tfsdk:"is_pack"`
+	Name        types.String `tfsdk:"name"`
 }

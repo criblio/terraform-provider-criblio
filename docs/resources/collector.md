@@ -867,11 +867,11 @@ Optional:
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--input))
-- `remove_fields` (List of String) Default: []
+- `remove_fields` (List of String)
 - `resume_on_boot` (Boolean) Default: true
 - `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_azure_blob--saved_state))
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_azure_blob--schedule))
-- `streamtags` (List of String) Tags for filtering and grouping. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String) Default: "4h"
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 
@@ -1006,11 +1006,11 @@ Optional:
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--input))
-- `remove_fields` (List of String) Default: []
+- `remove_fields` (List of String)
 - `resume_on_boot` (Boolean) Default: true
 - `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_cribl_lake--saved_state))
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_cribl_lake--schedule))
-- `streamtags` (List of String) Tags for filtering and grouping. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String) Default: "4h"
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 
@@ -1134,11 +1134,11 @@ Optional:
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--input))
-- `remove_fields` (List of String) Default: []
+- `remove_fields` (List of String)
 - `resume_on_boot` (Boolean) Default: true
 - `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_database--saved_state))
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_database--schedule))
-- `streamtags` (List of String) Tags for filtering and grouping. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String) Default: "4h"
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 
@@ -1264,11 +1264,11 @@ Optional:
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--input))
-- `remove_fields` (List of String) Default: []
+- `remove_fields` (List of String)
 - `resume_on_boot` (Boolean) Default: true
 - `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_gcs--saved_state))
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_gcs--schedule))
-- `streamtags` (List of String) Tags for filtering and grouping. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String) Default: "4h"
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 
@@ -1402,11 +1402,11 @@ Optional:
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--input))
-- `remove_fields` (List of String) Default: []
+- `remove_fields` (List of String)
 - `resume_on_boot` (Boolean) Default: true
 - `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_health_check--saved_state))
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_health_check--schedule))
-- `streamtags` (List of String) Tags for filtering and grouping. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String) Default: "4h"
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 
@@ -1537,11 +1537,11 @@ Optional:
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--input))
-- `remove_fields` (List of String) Default: []
+- `remove_fields` (List of String)
 - `resume_on_boot` (Boolean) Default: true
 - `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_rest--saved_state))
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_rest--schedule))
-- `streamtags` (List of String) Tags for filtering and grouping. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String) Default: "4h"
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 
@@ -1703,7 +1703,7 @@ Optional:
 
 Optional:
 
-- `codes` (List of Number) Default: [429,503]
+- `codes` (List of Number)
 - `enable_header` (Boolean) Default: true
 - `interval` (Number) Default: 1000
 - `limit` (Number) Default: 5
@@ -1829,11 +1829,11 @@ Optional:
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--input))
-- `remove_fields` (List of String) Default: []
+- `remove_fields` (List of String)
 - `resume_on_boot` (Boolean) Default: true
 - `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_s3--saved_state))
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_s3--schedule))
-- `streamtags` (List of String) Tags for filtering and grouping. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String) Default: "4h"
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 
@@ -1970,11 +1970,11 @@ Optional:
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--input))
-- `remove_fields` (List of String) Default: []
+- `remove_fields` (List of String)
 - `resume_on_boot` (Boolean) Default: true
 - `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_splunk--saved_state))
 - `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_splunk--schedule))
-- `streamtags` (List of String) Tags for filtering and grouping. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping
 - `ttl` (String) Default: "4h"
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 

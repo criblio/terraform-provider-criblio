@@ -73,7 +73,7 @@ Optional:
 - `functions` (Attributes List) List of Functions to pass data through (see [below for nested schema](#nestedatt--conf--functions))
 - `groups` (Attributes Map) (see [below for nested schema](#nestedatt--conf--groups))
 - `output` (String) The output destination for events processed by this Pipeline. Default: "default"
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}
 
 <a id="nestedatt--conf--functions"></a>
 ### Nested Schema for `conf.functions`

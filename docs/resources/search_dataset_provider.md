@@ -14,6 +14,105 @@ SearchDatasetProvider Resource
 
 ```terraform
 resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
+  api_aws_provider = {
+    account_configs = [
+      {
+        assume_role_arn         = "arn:aws:iam::123456789012:role/MyRole"
+        assume_role_external_id = "external-id-123"
+        aws_api_key             = "AKIAIOSFODNN7EXAMPLE"
+        aws_secret_key          = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+        name                    = "aws-account-1"
+      }
+    ]
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  api_azure_data_explorer_provider = {
+    client_id     = "11111111-1111-1111-1111-111111111111"
+    client_secret = "superSecretAzureKey"
+    description   = "my generic provider description"
+    id            = "myUniqueGenericProviderId"
+    tenant_id     = "00000000-0000-0000-0000-000000000000"
+    type          = "generic"
+  }
+  api_azure_provider = {
+    account_configs = [
+      {
+        client_id     = "12345678-aaaa-bbbb-cccc-123456789abc"
+        client_secret = "superSecret"
+        name          = "azure-account-1"
+        tenant_id     = "tenant-12345"
+      }
+    ]
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  api_elastic_search_provider = {
+    description = "my generic provider description"
+    endpoint    = "https://elasticsearch.example.com"
+    id          = "myUniqueGenericProviderId"
+    password    = "elastic_pass"
+    type        = "generic"
+    username    = "elastic_user"
+  }
+  api_gcp_provider = {
+    account_configs = [
+      {
+        name                        = "gcp-account-1"
+        service_account_credentials = "{...}"
+      }
+    ]
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  api_google_workspace_provider = {
+    account_configs = [
+      {
+        name                        = "workspace-account-1"
+        service_account_credentials = "{...}"
+        subject                     = "admin@example.com"
+      }
+    ]
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  apihttp_provider = {
+    authentication_method = "basic"
+    available_endpoints = [
+      {
+        data_field = "users"
+        headers = [
+          {
+            name  = "Authorization"
+            value = "Bearer token123"
+          }
+        ]
+        method = "GET"
+        name   = "getUsers"
+        url    = "https://api.example.com/users"
+      }
+    ]
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  api_ms_graph_provider = {
+    account_configs = [
+      {
+        client_id     = "client-456"
+        client_secret = "secret-789"
+        name          = "msgraph-account-1"
+        tenant_id     = "tenant-123"
+      }
+    ]
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
   api_okta_provider = {
     account_configs = [
       {
@@ -25,6 +124,134 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
     description = "my generic provider description"
     id          = "myUniqueGenericProviderId"
     type        = "generic"
+  }
+  api_open_search_provider = {
+    description = "my generic provider description"
+    endpoint    = "https://opensearch.example.com"
+    id          = "myUniqueGenericProviderId"
+    password    = "opensearch_pass"
+    type        = "generic"
+    username    = "opensearch_user"
+  }
+  api_tailscale_provider = {
+    account_configs = [
+      {
+        client_id     = "tailscale-client-id-123"
+        client_secret = "tailscale-client-secret-abc"
+        name          = "my-tailscale-account"
+      }
+    ]
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  api_zoom_provider = {
+    account_configs = [
+      {
+        account_id    = "123456789"
+        client_id     = "zoom-client-id-abc"
+        client_secret = "zoom-client-secret-xyz"
+        name          = "my-zoom-account"
+      }
+    ]
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  aws_security_lake_provider = {
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  azure_blob_provider = {
+    authentication_method = "connection_string"
+    client_id             = "00000000-0000-0000-0000-000000000000"
+    client_secret         = "superSecretClientKey"
+    connection_string     = "DefaultEndpointsProtocol=https;AccountName=myaccount;AccountKey=myKey;EndpointSuffix=core.windows.net"
+    description           = "my generic provider description"
+    id                    = "myUniqueGenericProviderId"
+    location              = "eastus2"
+    sas_configs = [
+      {
+        blob_sas_url   = "https://myaccount.blob.core.windows.net/my-container?sp=rl&st=2025-09-30T00:00:00Z&se=2025-10-01T00:00:00Z&spr=https&sv=2021-08-06&sr=c&sig=mysignature"
+        container_name = "my-container"
+      }
+    ]
+    storage_account_name = "myAccountName"
+    tenant_id            = "11111111-1111-1111-1111-111111111111"
+    type                 = "generic"
+  }
+  click_house_provider = {
+    description = "my generic provider description"
+    endpoint    = "https://clickhouse.example.com:8443"
+    id          = "myUniqueGenericProviderId"
+    password    = "click_password"
+    type        = "generic"
+    username    = "click_user"
+  }
+  cribl_leader_provider = {
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  edge_provider = {
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  gcs_provider = {
+    description                 = "my generic provider description"
+    endpoint                    = "https://storage.googleapis.com"
+    id                          = "myUniqueGenericProviderId"
+    service_account_credentials = "{ \\n\n  \"type\": \"service_account\", \\n\n  \"project_id\": \"my-gcp-project\", \\n\n  \"private_key_id\": \"abcd1234efgh5678ijkl90\", \\n\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9...==\\n-----END PRIVATE KEY-----\\n\", \\n\n  \"client_email\": \"my-service-account@my-gcp-project.iam.gserviceaccount.com\", \\n\n  \"client_id\": \"123456789012345678901\", \\n\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\", \\n\n  \"token_uri\": \"https://oauth2.googleapis.com/token\", \\n\n  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\", \\n\n  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/my-service-account%40my-gcp-project.iam.gserviceaccount.com\" \\n\n} \\n\n"
+    type                        = "generic"
+  }
+  meta_provider = {
+    description = "my generic provider description"
+    id          = "myUniqueGenericProviderId"
+    type        = "generic"
+  }
+  prometheus_provider = {
+    auth_type       = "basic"
+    description     = "my generic provider description"
+    endpoint        = "https://prometheus.example.com"
+    id              = "myUniqueGenericProviderId"
+    max_concurrency = 10
+    password        = "prom_pass"
+    token           = "prometheusBearerToken123"
+    type            = "generic"
+    username        = "prom_user"
+  }
+  s3_provider = {
+    assume_role_arn           = "arn:aws:iam::123456789012:role/my-s3-role"
+    assume_role_external_id   = "external-id-123"
+    aws_api_key               = "AKIAEXAMPLE"
+    aws_authentication_method = "auto"
+    aws_secret_key            = "mySecretKey123"
+    bucket                    = "my-s3-bucket"
+    bucket_path_suggestion    = "https://s3.us-east-1.amazonaws.com/mybucket"
+    description               = "my generic provider description"
+    enable_abac_tagging       = true
+    enable_assume_role        = true
+    endpoint                  = "https://s3.us-east-1.amazonaws.com"
+    id                        = "myUniqueGenericProviderId"
+    region                    = "us-east-1"
+    reject_unauthorized       = true
+    reuse_connections         = true
+    session_token             = "MyAWSSessionToken"
+    signature_version         = "v4"
+    type                      = "generic"
+  }
+  snowflake_provider = {
+    account_identifier = "myorg-myaccount"
+    description        = "my generic provider description"
+    endpoint           = "https://myorg-myaccount.snowflakecomputing.com"
+    id                 = "myUniqueGenericProviderId"
+    max_concurrency    = 10
+    passphrase         = "myPassphrase"
+    priv_key           = "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqh...\n-----END PRIVATE KEY-----"
+    type               = "generic"
+    username           = "snowflake_user"
   }
 }
 ```
@@ -61,6 +288,7 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
 
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
 - `type` (String) Type of the provider
 
 <a id="nestedatt--api_aws_provider"></a>
@@ -454,6 +682,427 @@ Optional:
 - `priv_key` (String) The private key string out of the key file, from the pair of keys generated for authentication. Not Null
 - `type` (String) Type of the provider. Not Null
 - `username` (String) The Snowflake user for key pair authentication. Not Null
+
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `api_aws_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_aws_provider))
+- `api_azure_data_explorer_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_azure_data_explorer_provider))
+- `api_azure_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_azure_provider))
+- `api_elastic_search_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_elastic_search_provider))
+- `api_gcp_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_gcp_provider))
+- `api_google_workspace_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_google_workspace_provider))
+- `api_ms_graph_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_ms_graph_provider))
+- `api_okta_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_okta_provider))
+- `api_open_search_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_open_search_provider))
+- `api_tailscale_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_tailscale_provider))
+- `api_zoom_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_zoom_provider))
+- `apihttp_provider` (Attributes) (see [below for nested schema](#nestedatt--items--apihttp_provider))
+- `aws_security_lake_provider` (Attributes) (see [below for nested schema](#nestedatt--items--aws_security_lake_provider))
+- `azure_blob_provider` (Attributes) (see [below for nested schema](#nestedatt--items--azure_blob_provider))
+- `click_house_provider` (Attributes) (see [below for nested schema](#nestedatt--items--click_house_provider))
+- `cribl_leader_provider` (Attributes) (see [below for nested schema](#nestedatt--items--cribl_leader_provider))
+- `edge_provider` (Attributes) (see [below for nested schema](#nestedatt--items--edge_provider))
+- `gcs_provider` (Attributes) (see [below for nested schema](#nestedatt--items--gcs_provider))
+- `meta_provider` (Attributes) (see [below for nested schema](#nestedatt--items--meta_provider))
+- `prometheus_provider` (Attributes) (see [below for nested schema](#nestedatt--items--prometheus_provider))
+- `s3_provider` (Attributes) (see [below for nested schema](#nestedatt--items--s3_provider))
+- `snowflake_provider` (Attributes) (see [below for nested schema](#nestedatt--items--snowflake_provider))
+
+<a id="nestedatt--items--api_aws_provider"></a>
+### Nested Schema for `items.api_aws_provider`
+
+Read-Only:
+
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_aws_provider--account_configs))
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--api_aws_provider--account_configs"></a>
+### Nested Schema for `items.api_aws_provider.account_configs`
+
+Read-Only:
+
+- `assume_role_arn` (String) ARN of the role to assume
+- `assume_role_external_id` (String) External ID for role assumption
+- `aws_api_key` (String) AWS access key
+- `aws_secret_key` (String) AWS secret key
+- `name` (String) Account name
+
+
+
+<a id="nestedatt--items--api_azure_data_explorer_provider"></a>
+### Nested Schema for `items.api_azure_data_explorer_provider`
+
+Read-Only:
+
+- `client_id` (String) The Client ID (also known as Secret ID) of the authorized application
+- `client_secret` (String) The Client Secret of the authorized application
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `tenant_id` (String) The Tenant ID of the authorized application
+- `type` (String) Type of the provider
+
+
+<a id="nestedatt--items--api_azure_provider"></a>
+### Nested Schema for `items.api_azure_provider`
+
+Read-Only:
+
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_azure_provider--account_configs))
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--api_azure_provider--account_configs"></a>
+### Nested Schema for `items.api_azure_provider.account_configs`
+
+Read-Only:
+
+- `client_id` (String) The clientId of the service principal
+- `client_secret` (String) The client secret of the service principal
+- `name` (String) Account name
+- `tenant_id` (String) The ID of your Azure tenant
+
+
+
+<a id="nestedatt--items--api_elastic_search_provider"></a>
+### Nested Schema for `items.api_elastic_search_provider`
+
+Read-Only:
+
+- `description` (String) Description of the provider
+- `endpoint` (String) Elasticsearch API endpoint URL
+- `id` (String) Unique identifier for the provider
+- `password` (String) Elasticsearch password for authentication
+- `type` (String) Type of the provider
+- `username` (String) Elasticsearch username for authentication
+
+
+<a id="nestedatt--items--api_gcp_provider"></a>
+### Nested Schema for `items.api_gcp_provider`
+
+Read-Only:
+
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_gcp_provider--account_configs))
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--api_gcp_provider--account_configs"></a>
+### Nested Schema for `items.api_gcp_provider.account_configs`
+
+Read-Only:
+
+- `name` (String) Account name
+- `service_account_credentials` (String) JSON blob downloaded from the Google Cloud Console, containing creds for a service account
+
+
+
+<a id="nestedatt--items--api_google_workspace_provider"></a>
+### Nested Schema for `items.api_google_workspace_provider`
+
+Read-Only:
+
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_google_workspace_provider--account_configs))
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--api_google_workspace_provider--account_configs"></a>
+### Nested Schema for `items.api_google_workspace_provider.account_configs`
+
+Read-Only:
+
+- `name` (String)
+- `service_account_credentials` (String) Contents of Google Cloud service account credentials (JSON keys) file
+- `subject` (String) Email matching Google service account of the authorized principal whose role this integration is assuming
+
+
+
+<a id="nestedatt--items--api_ms_graph_provider"></a>
+### Nested Schema for `items.api_ms_graph_provider`
+
+Read-Only:
+
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_ms_graph_provider--account_configs))
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--api_ms_graph_provider--account_configs"></a>
+### Nested Schema for `items.api_ms_graph_provider.account_configs`
+
+Read-Only:
+
+- `client_id` (String)
+- `client_secret` (String)
+- `name` (String) Azure account name
+- `tenant_id` (String)
+
+
+
+<a id="nestedatt--items--api_okta_provider"></a>
+### Nested Schema for `items.api_okta_provider`
+
+Read-Only:
+
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_okta_provider--account_configs))
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--api_okta_provider--account_configs"></a>
+### Nested Schema for `items.api_okta_provider.account_configs`
+
+Read-Only:
+
+- `api_token` (String) API token for authorizing requests
+- `domain_endpoint` (String) URL for the subdomain of your organization. Example: subdomain.okta.com
+- `name` (String) Okta account name
+
+
+
+<a id="nestedatt--items--api_open_search_provider"></a>
+### Nested Schema for `items.api_open_search_provider`
+
+Read-Only:
+
+- `description` (String) Description of the provider
+- `endpoint` (String) OpenSearch API endpoint URL. Example: https://opensearch.mycompany.com
+- `id` (String) Unique identifier for the provider
+- `password` (String) OpenSearch password for authentication
+- `type` (String) Type of the provider
+- `username` (String) OpenSearch username for authentication
+
+
+<a id="nestedatt--items--api_tailscale_provider"></a>
+### Nested Schema for `items.api_tailscale_provider`
+
+Read-Only:
+
+- `account_configs` (Attributes List) A list of account configuration (see [below for nested schema](#nestedatt--items--api_tailscale_provider--account_configs))
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--api_tailscale_provider--account_configs"></a>
+### Nested Schema for `items.api_tailscale_provider.account_configs`
+
+Read-Only:
+
+- `client_id` (String) Client ID string
+- `client_secret` (String) Client secret string
+- `name` (String) Tailscale account name
+
+
+
+<a id="nestedatt--items--api_zoom_provider"></a>
+### Nested Schema for `items.api_zoom_provider`
+
+Read-Only:
+
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_zoom_provider--account_configs))
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--api_zoom_provider--account_configs"></a>
+### Nested Schema for `items.api_zoom_provider.account_configs`
+
+Read-Only:
+
+- `account_id` (String) Zoom account ID
+- `client_id` (String) Client ID string
+- `client_secret` (String) Client secret string
+- `name` (String) Zoom account name
+
+
+
+<a id="nestedatt--items--apihttp_provider"></a>
+### Nested Schema for `items.apihttp_provider`
+
+Read-Only:
+
+- `authentication_method` (String) The authentication method for API calls. Default: "none"; must be one of ["none", "basic", "login", "oauth"]
+- `available_endpoints` (Attributes List) A list of the available endpoints for this provider (see [below for nested schema](#nestedatt--items--apihttp_provider--available_endpoints))
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--apihttp_provider--available_endpoints"></a>
+### Nested Schema for `items.apihttp_provider.available_endpoints`
+
+Read-Only:
+
+- `data_field` (String) Within the response JSON, name of the field or array element to pull results from
+- `headers` (Attributes List) Optional headers for the endpoint (see [below for nested schema](#nestedatt--items--apihttp_provider--available_endpoints--headers))
+- `method` (String) Method for the endpoint. Default: "GET"; must be one of ["GET", "POST"]
+- `name` (String)
+- `url` (String) The URL for this endpoint
+
+<a id="nestedatt--items--apihttp_provider--available_endpoints--headers"></a>
+### Nested Schema for `items.apihttp_provider.available_endpoints.headers`
+
+Read-Only:
+
+- `name` (String) Header name
+- `value` (String) Header value
+
+
+
+
+<a id="nestedatt--items--aws_security_lake_provider"></a>
+### Nested Schema for `items.aws_security_lake_provider`
+
+Read-Only:
+
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+
+<a id="nestedatt--items--azure_blob_provider"></a>
+### Nested Schema for `items.azure_blob_provider`
+
+Read-Only:
+
+- `authentication_method` (String) Azure Storage authentication method. Default: "connection_string"; must be one of ["connection_string", "blob_sas_url", "client_secret"]
+- `client_id` (String) Azure AD application client ID
+- `client_secret` (String) Azure AD application client secret
+- `connection_string` (String) Storage account connection string
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `location` (String) Primary region in which the storage account is located
+- `sas_configs` (Attributes List) A list of container-specific SAS configurations (see [below for nested schema](#nestedatt--items--azure_blob_provider--sas_configs))
+- `storage_account_name` (String) The name of your Azure storage account
+- `tenant_id` (String) Azure AD tenant ID
+- `type` (String) Type of the provider
+
+<a id="nestedatt--items--azure_blob_provider--sas_configs"></a>
+### Nested Schema for `items.azure_blob_provider.sas_configs`
+
+Read-Only:
+
+- `blob_sas_url` (String) Container-specific Blob SAS URL
+- `container_name` (String) Name of the Azure Blob Storage container
+
+
+
+<a id="nestedatt--items--click_house_provider"></a>
+### Nested Schema for `items.click_house_provider`
+
+Read-Only:
+
+- `description` (String) Description of the provider
+- `endpoint` (String) URL to ClickHouse server with HTTP interface enabled. Ideally should be HTTPS over port 8443.
+- `id` (String) Unique identifier for the provider
+- `password` (String) The ClickHouse user password for authentication
+- `type` (String) Type of the provider
+- `username` (String) The ClickHouse username for authentication
+
+
+<a id="nestedatt--items--cribl_leader_provider"></a>
+### Nested Schema for `items.cribl_leader_provider`
+
+Read-Only:
+
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+
+<a id="nestedatt--items--edge_provider"></a>
+### Nested Schema for `items.edge_provider`
+
+Read-Only:
+
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+
+<a id="nestedatt--items--gcs_provider"></a>
+### Nested Schema for `items.gcs_provider`
+
+Read-Only:
+
+- `description` (String) Description of the provider
+- `endpoint` (String) Google Cloud Storage service endpoint
+- `id` (String) Unique identifier for the provider
+- `service_account_credentials` (String) Contents of Google Cloud service account credentials (JSON keys) file
+- `type` (String) Type of the provider
+
+
+<a id="nestedatt--items--meta_provider"></a>
+### Nested Schema for `items.meta_provider`
+
+Read-Only:
+
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+
+<a id="nestedatt--items--prometheus_provider"></a>
+### Nested Schema for `items.prometheus_provider`
+
+Read-Only:
+
+- `auth_type` (String) Default: "none"; must be one of ["none", "basic", "token"]
+- `description` (String) Description of the provider
+- `endpoint` (String) Prometheus API endpoint URL. Example: https://prometheus.goats.biz
+- `id` (String) Unique identifier for the provider
+- `max_concurrency` (Number) Maximum number of concurrent API requests. Default: 3
+- `password` (String) Basic auth password
+- `token` (String) Bearer token
+- `type` (String) Type of the provider
+- `username` (String) Basic auth username
+
+
+<a id="nestedatt--items--s3_provider"></a>
+### Nested Schema for `items.s3_provider`
+
+Read-Only:
+
+- `assume_role_arn` (String) ARN of the role to assume
+- `assume_role_external_id` (String) External ID for role assumption
+- `aws_api_key` (String) AWS access key
+- `aws_authentication_method` (String) AWS authentication method. must be one of ["auto", "manual"]
+- `aws_secret_key` (String) AWS secret key
+- `bucket` (String) S3 bucket name
+- `bucket_path_suggestion` (String) Suggested bucket path
+- `description` (String) Description of the provider
+- `enable_abac_tagging` (Boolean) Whether to enable ABAC source-ip tagging
+- `enable_assume_role` (Boolean) Whether to enable role assumption
+- `endpoint` (String) S3 endpoint URL
+- `id` (String) Unique identifier for the provider
+- `region` (String) AWS region
+- `reject_unauthorized` (Boolean) Whether to reject unauthorized requests
+- `reuse_connections` (Boolean) Reuse existing S3 connections
+- `session_token` (String) AWS session token
+- `signature_version` (String) AWS signature version. must be one of ["v2", "v4"]
+- `type` (String) Type of the provider
+
+
+<a id="nestedatt--items--snowflake_provider"></a>
+### Nested Schema for `items.snowflake_provider`
+
+Read-Only:
+
+- `account_identifier` (String) The Snowflake account identifier, in the format <orgname>-<account_name>
+- `description` (String) Description of the provider
+- `endpoint` (String) Optional endpoint to override default REST API endpoint
+- `id` (String) Unique identifier for the provider
+- `max_concurrency` (Number) Total number of concurrent executors for processing Snowflake partitions
+- `passphrase` (String) The key password for the private key
+- `priv_key` (String) The private key string out of the key file, from the pair of keys generated for authentication
+- `type` (String) Type of the provider
+- `username` (String) The Snowflake user for key pair authentication
 
 ## Import
 

@@ -496,14 +496,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"tenant_id": schema.StringAttribute{
 						Optional:    true,
@@ -846,9 +844,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -1052,7 +1047,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -1089,14 +1084,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"table": schema.StringAttribute{
 						Required:    true,
@@ -1132,7 +1125,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -1368,7 +1361,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 100),
+							float64validator.AtMost(100),
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
@@ -1499,14 +1492,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -1704,9 +1695,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -1843,7 +1831,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -1864,21 +1852,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Optional: true,
@@ -1898,7 +1884,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -2113,7 +2099,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Fields to exclude from sending to ClickHouse. Default: []`,
+						Description: `Fields to exclude from sending to ClickHouse`,
 					},
 					"extra_http_headers": schema.ListNestedAttribute{
 						Optional: true,
@@ -2188,9 +2174,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -2359,7 +2342,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -2380,7 +2363,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
 						Optional:    true,
@@ -2399,14 +2382,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"table_name": schema.StringAttribute{
 						Required:    true,
@@ -2437,7 +2418,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -2840,14 +2821,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -3083,7 +3062,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1),
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry. Default: 1`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 100),
+									float64validator.AtMost(100),
 								},
 							},
 							"request_timeout": schema.Float64Attribute{
@@ -3194,7 +3173,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 100),
+							float64validator.AtMost(100),
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
@@ -3331,14 +3310,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -3521,7 +3498,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -3529,15 +3506,9 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"exclude_fields": schema.ListAttribute{
-						Computed: true,
-						Optional: true,
-						Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
-							types.StringValue("__kube_*"),
-							types.StringValue("__metadata"),
-							types.StringValue("__winEvent"),
-						})),
+						Optional:    true,
 						ElementType: types.StringType,
-						Description: `Fields to exclude from the event. By default, all internal fields except ` + "`" + `__output` + "`" + ` are sent. Example: ` + "`" + `cribl_pipe` + "`" + `, ` + "`" + `c*` + "`" + `. Wildcards supported. Default: ["__kube_*","__metadata","__winEvent"]`,
+						Description: `Fields to exclude from the event. By default, all internal fields except ` + "`" + `__output` + "`" + ` are sent. Example: ` + "`" + `cribl_pipe` + "`" + `, ` + "`" + `c*` + "`" + `. Wildcards supported.`,
 					},
 					"exclude_self": schema.BoolAttribute{
 						Computed:    true,
@@ -3602,9 +3573,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -3737,7 +3705,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -3758,21 +3726,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Optional: true,
@@ -3792,7 +3758,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -3929,9 +3895,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
-									Validators: []validator.Float64{
-										float64validator.AtLeast(0),
-									},
 								},
 							},
 						},
@@ -4134,7 +4097,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -4142,15 +4105,9 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"exclude_fields": schema.ListAttribute{
-						Computed: true,
-						Optional: true,
-						Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
-							types.StringValue("__kube_*"),
-							types.StringValue("__metadata"),
-							types.StringValue("__winEvent"),
-						})),
+						Optional:    true,
 						ElementType: types.StringType,
-						Description: `Fields to exclude from the event. By default, all internal fields except ` + "`" + `__output` + "`" + ` are sent. Example: ` + "`" + `cribl_pipe` + "`" + `, ` + "`" + `c*` + "`" + `. Wildcards supported. Default: ["__kube_*","__metadata","__winEvent"]`,
+						Description: `Fields to exclude from the event. By default, all internal fields except ` + "`" + `__output` + "`" + ` are sent. Example: ` + "`" + `cribl_pipe` + "`" + `, ` + "`" + `c*` + "`" + `. Wildcards supported.`,
 					},
 					"exclude_self": schema.BoolAttribute{
 						Computed:    true,
@@ -4200,9 +4157,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
-									Validators: []validator.Float64{
-										float64validator.AtLeast(0),
-									},
 								},
 							},
 						},
@@ -4241,9 +4195,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited. Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -4340,14 +4291,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -4608,9 +4557,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -4743,7 +4689,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -4764,21 +4710,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -4802,7 +4746,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -5039,9 +4983,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -5178,7 +5119,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -5199,7 +5140,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"send_counters_as_count": schema.BoolAttribute{
 						Computed:    true,
@@ -5253,21 +5194,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"tags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of tags to send with logs, such as 'env:prod' and 'env_staging:east'. Default: []`,
+						Description: `List of tags to send with logs, such as 'env:prod' and 'env_staging:east'`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -5291,7 +5230,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -5323,9 +5262,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -5473,16 +5409,9 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"exclude_fields": schema.ListAttribute{
-						Computed: true,
-						Optional: true,
-						Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
-							types.StringValue("sev"),
-							types.StringValue("_time"),
-							types.StringValue("ts"),
-							types.StringValue("thread"),
-						})),
+						Optional:    true,
 						ElementType: types.StringType,
-						Description: `Fields to exclude from the event if the Message field is either unspecified or refers to an object. Ignored if the Message field is a string. If empty, we send all non-internal fields. Default: ["sev","_time","ts","thread"]`,
+						Description: `Fields to exclude from the event if the Message field is either unspecified or refers to an object. Ignored if the Message field is a string. If empty, we send all non-internal fields.`,
 					},
 					"extra_http_headers": schema.ListNestedAttribute{
 						Optional: true,
@@ -5526,9 +5455,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -5665,7 +5591,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -5686,7 +5612,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"server_host_field": schema.StringAttribute{
 						Optional:    true,
@@ -5710,14 +5636,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -5741,7 +5665,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -5777,9 +5701,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -5886,14 +5807,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -5990,14 +5909,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -6131,14 +6048,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"time_window": schema.StringAttribute{
 						Computed:    true,
@@ -6571,7 +6486,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of fields to partition the path by, in addition to time, which is included automatically. The effective partition will be YYYY/MM/DD/HH/<list/of/fields>. Default: []`,
+						Description: `List of fields to partition the path by, in addition to time, which is included automatically. The effective partition will be YYYY/MM/DD/HH/<list/of/fields>.`,
 					},
 					"pipeline": schema.StringAttribute{
 						Optional:    true,
@@ -6649,14 +6564,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -6867,7 +6780,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 50000),
+							float64validator.AtMost(50000),
 						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
@@ -7014,7 +6927,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -7035,21 +6948,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"telemetry_type": schema.StringAttribute{
 						Computed:    true,
@@ -7085,7 +6996,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -7121,9 +7032,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -7519,7 +7427,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -7540,21 +7448,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Optional: true,
@@ -7574,7 +7480,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -7742,7 +7648,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"doc_type": schema.StringAttribute{
@@ -7856,9 +7762,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -7991,7 +7894,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -8018,21 +7921,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Optional: true,
@@ -8052,7 +7953,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -8105,9 +8006,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
-									Validators: []validator.Float64{
-										float64validator.AtLeast(0),
-									},
 								},
 							},
 						},
@@ -8321,9 +8219,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -8456,7 +8351,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -8477,21 +8372,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Optional: true,
@@ -8511,7 +8404,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -8839,14 +8732,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timezone_offset": schema.StringAttribute{
 						Optional: true,
@@ -9209,14 +9100,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -9457,9 +9346,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -9600,7 +9486,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -9621,7 +9507,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"service_account_credentials": schema.StringAttribute{
 						Optional:    true,
@@ -9636,14 +9522,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Optional: true,
@@ -9663,7 +9547,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -9695,9 +9579,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -9923,9 +9804,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Max number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -10114,14 +9992,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"throttle_rate_req_per_sec": schema.Int64Attribute{
 						Optional:    true,
@@ -10142,9 +10018,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"total_splits_expression": schema.StringAttribute{
 						Optional:    true,
@@ -10618,14 +10491,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -10907,14 +10778,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"topic_name": schema.StringAttribute{
 						Required:    true,
@@ -11131,9 +11000,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order. Default: 0`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
 							},
 							"max_payload_size_kb": schema.Float64Attribute{
 								Computed:    true,
@@ -11335,7 +11201,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 											Default:     float64default.StaticFloat64(1000),
 											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 											Validators: []validator.Float64{
-												float64validator.Between(0, 600000),
+												float64validator.AtMost(600000),
 											},
 										},
 										"max_backoff": schema.Float64Attribute{
@@ -11356,24 +11222,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `List of headers that are safe to log in plain text. Default: []`,
+								Description: `List of headers that are safe to log in plain text`,
 							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}. Default: []`,
+								Description: `Tags for filtering and grouping in @{product}`,
 							},
 							"system_fields": schema.ListAttribute{
-								Computed: true,
-								Optional: true,
-								Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
-									types.StringValue("cribl_host"),
-									types.StringValue("cribl_wp"),
-								})),
+								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively. Default: ["cribl_host","cribl_wp"]`,
+								Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.`,
 							},
 							"timeout_retry_settings": schema.SingleNestedAttribute{
 								Optional: true,
@@ -11393,7 +11254,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 										Default:     float64default.StaticFloat64(1000),
 										Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 										Validators: []validator.Float64{
-											float64validator.Between(0, 600000),
+											float64validator.AtMost(600000),
 										},
 									},
 									"max_backoff": schema.Float64Attribute{
@@ -11575,9 +11436,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Optional:    true,
 								Default:     float64default.StaticFloat64(0),
 								Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order. Default: 0`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
 							},
 							"max_payload_size_kb": schema.Float64Attribute{
 								Computed:    true,
@@ -11779,7 +11637,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 											Default:     float64default.StaticFloat64(1000),
 											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 											Validators: []validator.Float64{
-												float64validator.Between(0, 600000),
+												float64validator.AtMost(600000),
 											},
 										},
 										"max_backoff": schema.Float64Attribute{
@@ -11800,24 +11658,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `List of headers that are safe to log in plain text. Default: []`,
+								Description: `List of headers that are safe to log in plain text`,
 							},
 							"streamtags": schema.ListAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}. Default: []`,
+								Description: `Tags for filtering and grouping in @{product}`,
 							},
 							"system_fields": schema.ListAttribute{
-								Computed: true,
-								Optional: true,
-								Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
-									types.StringValue("cribl_host"),
-									types.StringValue("cribl_wp"),
-								})),
+								Optional:    true,
 								ElementType: types.StringType,
-								Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively. Default: ["cribl_host","cribl_wp"]`,
+								Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.`,
 							},
 							"timeout_retry_settings": schema.SingleNestedAttribute{
 								Optional: true,
@@ -11837,7 +11690,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 										Default:     float64default.StaticFloat64(1000),
 										Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 										Validators: []validator.Float64{
-											float64validator.Between(0, 600000),
+											float64validator.AtMost(600000),
 										},
 									},
 									"max_backoff": schema.Float64Attribute{
@@ -11974,7 +11827,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -12111,14 +11964,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -12293,9 +12144,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -12428,7 +12276,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -12449,21 +12297,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"team": schema.StringAttribute{
 						Optional:    true,
@@ -12491,7 +12337,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -12694,9 +12540,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -12829,7 +12672,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -12850,21 +12693,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -12888,7 +12729,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -13127,9 +12968,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -13301,7 +13139,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -13322,7 +13160,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
 						Optional:    true,
@@ -13337,14 +13175,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -13368,7 +13204,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -13690,7 +13526,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1),
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry. Default: 1`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 100),
+									float64validator.AtMost(100),
 								},
 							},
 							"request_timeout": schema.Float64Attribute{
@@ -13801,7 +13637,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 100),
+							float64validator.AtMost(100),
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
@@ -13938,14 +13774,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -14319,14 +14153,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -14512,9 +14344,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Defaults to 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order. Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -14667,7 +14496,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -14688,24 +14517,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed: true,
-						Optional: true,
-						Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
-							types.StringValue("cribl_host"),
-							types.StringValue("cribl_wp"),
-						})),
+						Optional:    true,
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as labels to generated logs. Default: ["cribl_host","cribl_wp"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as labels to generated logs.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -14729,7 +14553,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -14765,9 +14589,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -15250,14 +15071,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -15560,7 +15379,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1),
 								Description: `Maximum number of times to try fetching schemas from the Schema Registry. Default: 1`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 100),
+									float64validator.AtMost(100),
 								},
 							},
 							"request_timeout": schema.Float64Attribute{
@@ -15671,7 +15490,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(5),
 						Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 100),
+							float64validator.AtMost(100),
 						},
 					},
 					"on_backpressure": schema.StringAttribute{
@@ -15807,14 +15626,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Optional: true,
@@ -15975,7 +15792,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every datagram sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -16019,14 +15836,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -16198,9 +16013,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -16379,7 +16191,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -16400,21 +16212,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -16438,7 +16248,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -16470,9 +16280,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -16652,9 +16459,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -16800,7 +16604,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -16821,21 +16625,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -16859,7 +16661,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -17330,7 +17132,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -17351,7 +17153,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
 						Optional:    true,
@@ -17366,14 +17168,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -17397,7 +17197,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -17687,9 +17487,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -17869,7 +17666,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -17890,7 +17687,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
 						Optional:    true,
@@ -17911,17 +17708,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed: true,
-						Optional: true,
-						Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
-							types.StringValue("cribl_host"),
-							types.StringValue("cribl_wp"),
-						})),
+						Optional:    true,
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics. Default: ["cribl_host","cribl_wp"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -17945,7 +17737,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -18169,14 +17961,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -18305,14 +18095,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -18827,14 +18615,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -19321,14 +19107,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -19592,9 +19376,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -19727,7 +19508,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -19748,7 +19529,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"scope": schema.StringAttribute{
 						Computed:    true,
@@ -19769,14 +19550,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Optional: true,
@@ -19796,7 +19575,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -19828,9 +19607,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -20215,7 +19991,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -20236,21 +20012,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Optional: true,
@@ -20270,7 +20044,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -20529,9 +20303,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -20670,7 +20441,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -20691,21 +20462,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -20729,7 +20498,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -20855,7 +20624,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -20899,14 +20668,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -21170,14 +20937,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"topic_arn": schema.StringAttribute{
 						Required:    true,
@@ -21336,9 +21101,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1),
 						Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur. Default: 1`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_s2_sversion": schema.StringAttribute{
 						Computed:    true,
@@ -21456,14 +21218,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -21665,7 +21425,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"enable_multi_metrics": schema.BoolAttribute{
@@ -21741,9 +21501,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -21882,7 +21639,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -21903,21 +21660,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"tcp_routing": schema.StringAttribute{
 						Computed:    true,
@@ -21947,7 +21702,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -22016,9 +21771,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
-									Validators: []validator.Float64{
-										float64validator.AtLeast(0),
-									},
 								},
 							},
 						},
@@ -22149,7 +21901,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"enable_ack": schema.BoolAttribute{
@@ -22212,9 +21964,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
-									Validators: []validator.Float64{
-										float64validator.AtLeast(0),
-									},
 								},
 							},
 						},
@@ -22332,18 +22081,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited. Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_failed_health_checks": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     float64default.StaticFloat64(1),
 						Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur. Default: 1`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_s2_sversion": schema.StringAttribute{
 						Computed:    true,
@@ -22453,7 +22196,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(100),
 						Description: `How long (in milliseconds) each LB endpoint can report blocked before the Destination reports unhealthy, blocking the sender. (Grace period for fluctuations.) Use 0 to disable; max 1 minute. Default: 100`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 60000),
+							float64validator.AtMost(60000),
 						},
 					},
 					"streamtags": schema.ListAttribute{
@@ -22461,14 +22204,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -22878,14 +22619,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"type": schema.StringAttribute{
 						Optional:    true,
@@ -22980,7 +22719,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -23117,14 +22856,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -23234,7 +22971,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -23371,14 +23108,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -23559,9 +23294,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -23694,7 +23426,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -23715,21 +23447,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Optional: true,
@@ -23749,7 +23479,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -23781,9 +23511,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -24097,14 +23824,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -24207,7 +23932,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(0),
 						Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every message sent will incur a DNS lookup. Default: 0`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"write_timeout": schema.Float64Attribute{
@@ -24332,7 +24057,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -24385,9 +24110,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
-									Validators: []validator.Float64{
-										float64validator.AtLeast(0),
-									},
 								},
 							},
 						},
@@ -24426,9 +24148,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited. Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -24529,14 +24248,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -24793,9 +24510,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -24928,7 +24642,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -24949,21 +24663,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -24987,7 +24699,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -25192,7 +24904,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -25297,9 +25009,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -25480,7 +25189,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -25501,7 +25210,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
 						Optional:    true,
@@ -25516,14 +25225,12 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -25547,7 +25254,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -25655,9 +25362,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -25689,9 +25393,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
-									Validators: []validator.Float64{
-										float64validator.AtLeast(0),
-									},
 								},
 							},
 						},
@@ -25809,7 +25510,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Default:     float64default.StaticFloat64(600),
 						Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records. Default: 600`,
 						Validators: []validator.Float64{
-							float64validator.Between(0, 86400),
+							float64validator.AtMost(86400),
 						},
 					},
 					"environment": schema.StringAttribute{
@@ -25879,9 +25580,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     float64default.StaticFloat64(0),
 						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -26014,7 +25712,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Default:     float64default.StaticFloat64(1000),
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
-										float64validator.Between(0, 600000),
+										float64validator.AtMost(600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
@@ -26035,21 +25733,19 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `List of headers that are safe to log in plain text. Default: []`,
+						Description: `List of headers that are safe to log in plain text`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_pipe")})),
 						ElementType: types.StringType,
-						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]`,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Optional:    true,
@@ -26082,7 +25778,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 								Default:     float64default.StaticFloat64(1000),
 								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.Between(0, 600000),
+									float64validator.AtMost(600000),
 								},
 							},
 							"max_backoff": schema.Float64Attribute{
@@ -26118,9 +25814,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					"total_memory_limit_kb": schema.Float64Attribute{
 						Optional:    true,
 						Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
-						Validators: []validator.Float64{
-							float64validator.AtLeast(0),
-						},
 					},
 					"type": schema.StringAttribute{
 						Required:    true,
@@ -26152,9 +25845,6 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 									Optional:    true,
 									Default:     float64default.StaticFloat64(1),
 									Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1`,
-									Validators: []validator.Float64{
-										float64validator.AtLeast(0),
-									},
 								},
 							},
 						},

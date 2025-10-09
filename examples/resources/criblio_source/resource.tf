@@ -458,6 +458,43 @@ resource "criblio_source" "my_source" {
     }
     type = "cribl_lake_http"
   }
+  input_criblmetrics = {
+    connections = [
+      {
+        output   = "s3-metrics"
+        pipeline = "default"
+      }
+    ]
+    description   = "Emit Cribl internal metrics"
+    disabled      = false
+    environment   = "main"
+    full_fidelity = true
+    id            = "cribl-metrics"
+    metadata = [
+      {
+        name  = "source"
+        value = "\"criblmetrics\""
+      }
+    ]
+    pipeline = "default"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled     = false
+    prefix         = "cribl.logstream."
+    send_to_routes = true
+    streamtags = [
+      "cribl",
+      "internal",
+    ]
+    type = "criblmetrics"
+  }
   input_cribl_tcp = {
     connections = [
       {
@@ -513,43 +550,6 @@ resource "criblio_source" "my_source" {
       request_cert        = false
     }
     type = "cribl_tcp"
-  }
-  input_criblmetrics = {
-    connections = [
-      {
-        output   = "s3-metrics"
-        pipeline = "default"
-      }
-    ]
-    description   = "Emit Cribl internal metrics"
-    disabled      = false
-    environment   = "main"
-    full_fidelity = true
-    id            = "cribl-metrics"
-    metadata = [
-      {
-        name  = "source"
-        value = "\"criblmetrics\""
-      }
-    ]
-    pipeline = "default"
-    pq = {
-      commit_frequency = 100
-      compress         = "gzip"
-      max_buffer_size  = 5000
-      max_file_size    = "100 MB"
-      max_size         = "10GB"
-      mode             = "always"
-      path             = "/opt/cribl/state/queues"
-    }
-    pq_enabled     = false
-    prefix         = "cribl.logstream."
-    send_to_routes = true
-    streamtags = [
-      "cribl",
-      "internal",
-    ]
-    type = "criblmetrics"
   }
   input_crowdstrike = {
     assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-s3-access"
@@ -3721,53 +3721,6 @@ resource "criblio_source" "my_source" {
     }
     type = "wef"
   }
-  input_win_event_logs = {
-    batch_size = 500
-    connections = [
-      {
-        output   = "s3-logs"
-        pipeline = "default"
-      }
-    ]
-    description           = "Collect Windows Event Logs from local system"
-    disable_native_module = false
-    disabled              = false
-    environment           = "main"
-    event_format          = "json"
-    id                    = "win-event-logs"
-    interval              = 10
-    log_names = [
-      "Application",
-      "Security",
-      "System",
-      "Microsoft-Windows-Sysmon/Operational",
-    ]
-    max_event_bytes = 131072
-    metadata = [
-      {
-        name  = "source"
-        value = "\"win_event_logs\""
-      }
-    ]
-    pipeline = "default"
-    pq = {
-      commit_frequency = 100
-      compress         = "gzip"
-      max_buffer_size  = 5000
-      max_file_size    = "100 MB"
-      max_size         = "10GB"
-      mode             = "always"
-      path             = "/opt/cribl/state/queues"
-    }
-    pq_enabled     = false
-    read_mode      = "newest"
-    send_to_routes = true
-    streamtags = [
-      "windows",
-      "eventlogs",
-    ]
-    type = "win_event_logs"
-  }
   input_windows_metrics = {
     connections = [
       {
@@ -3857,6 +3810,53 @@ resource "criblio_source" "my_source" {
       "metrics",
     ]
     type = "windows_metrics"
+  }
+  input_win_event_logs = {
+    batch_size = 500
+    connections = [
+      {
+        output   = "s3-logs"
+        pipeline = "default"
+      }
+    ]
+    description           = "Collect Windows Event Logs from local system"
+    disable_native_module = false
+    disabled              = false
+    environment           = "main"
+    event_format          = "json"
+    id                    = "win-event-logs"
+    interval              = 10
+    log_names = [
+      "Application",
+      "Security",
+      "System",
+      "Microsoft-Windows-Sysmon/Operational",
+    ]
+    max_event_bytes = 131072
+    metadata = [
+      {
+        name  = "source"
+        value = "\"win_event_logs\""
+      }
+    ]
+    pipeline = "default"
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "100 MB"
+      max_size         = "10GB"
+      mode             = "always"
+      path             = "/opt/cribl/state/queues"
+    }
+    pq_enabled     = false
+    read_mode      = "newest"
+    send_to_routes = true
+    streamtags = [
+      "windows",
+      "eventlogs",
+    ]
+    type = "win_event_logs"
   }
   input_wiz = {
     auth_audience_override = "wiz-api"

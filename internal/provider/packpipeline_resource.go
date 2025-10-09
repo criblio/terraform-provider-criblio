@@ -139,7 +139,7 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 						Optional:    true,
 						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 						ElementType: types.StringType,
-						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+						Description: `Tags for filtering and grouping in @{product}`,
 					},
 				},
 			},
