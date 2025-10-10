@@ -29,17 +29,9 @@ data "criblio_hmac_function" "my_hmacfunction" {
 
 ### Read-Only
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
 - `description` (String)
 - `header_expression` (String)
 - `header_name` (String)
-- `id` (String)
 - `lib` (String)
 - `string_builders` (List of String)
 - `string_delim` (String)

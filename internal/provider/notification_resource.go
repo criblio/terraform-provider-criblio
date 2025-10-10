@@ -44,7 +44,6 @@ type NotificationResourceModel struct {
 	Disabled      types.Bool                        `tfsdk:"disabled"`
 	Group         types.String                      `tfsdk:"group"`
 	ID            types.String                      `tfsdk:"id"`
-	Items         []tfTypes.Notification            `tfsdk:"items"`
 	TargetConfigs []tfTypes.TargetConfig            `tfsdk:"target_configs"`
 	Targets       []types.String                    `tfsdk:"targets"`
 }
@@ -117,100 +116,6 @@ func (r *NotificationResource) Schema(ctx context.Context, req resource.SchemaRe
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(512),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"condition": schema.StringAttribute{
-							Computed:    true,
-							Description: `The condition that triggers this notification`,
-						},
-						"conf": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"message": schema.StringAttribute{
-									Computed:    true,
-									Description: `Message template for the notification`,
-								},
-								"saved_query_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `ID of the saved query this notification is associated with`,
-								},
-								"trigger_comparator": schema.StringAttribute{
-									Computed:    true,
-									Description: `Comparison operator (e.g., >, <, =)`,
-								},
-								"trigger_count": schema.Float64Attribute{
-									Computed:    true,
-									Description: `Threshold count for the trigger`,
-								},
-								"trigger_type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Type of trigger (e.g., resultsCount)`,
-								},
-							},
-							Description: `Configuration specific to the notification condition`,
-						},
-						"disabled": schema.BoolAttribute{
-							Computed:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `Whether the notification is disabled. Default: false`,
-						},
-						"group": schema.StringAttribute{
-							Computed:    true,
-							Default:     stringdefault.StaticString(`default_search`),
-							Description: `Group identifier for the notification. Default: "default_search"`,
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Unique identifier for the notification`,
-							Validators: []validator.String{
-								stringvalidator.UTF8LengthAtMost(512),
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-							},
-						},
-						"target_configs": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"conf": schema.SingleNestedAttribute{
-										Computed: true,
-										Attributes: map[string]schema.Attribute{
-											"attachment_type": schema.StringAttribute{
-												Computed:    true,
-												Default:     stringdefault.StaticString(`inline`),
-												Description: `Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"inline",
-														"attachment",
-													),
-												},
-											},
-											"include_results": schema.BoolAttribute{
-												Computed:    true,
-												Default:     booldefault.StaticBool(false),
-												Description: `Whether to include search results in the notification. Default: false`,
-											},
-										},
-									},
-									"id": schema.StringAttribute{
-										Computed:    true,
-										Description: `ID of the notification target`,
-									},
-								},
-							},
-							Description: `Configuration for notification targets`,
-						},
-						"targets": schema.ListAttribute{
-							Computed:    true,
-							Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-							ElementType: types.StringType,
-							Description: `Targets to send any notifications to. Default: []`,
-						},
-					},
 				},
 			},
 			"target_configs": schema.ListNestedAttribute{
@@ -343,43 +248,6 @@ func (r *NotificationResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetNotificationByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Notifications.GetNotificationByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetNotificationByIDResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -429,11 +297,11 @@ func (r *NotificationResource) Read(ctx context.Context, req resource.ReadReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetNotificationByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedNotification(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -484,43 +352,6 @@ func (r *NotificationResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedNotification(ctx, &res.Object.Items[0])...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetNotificationByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Notifications.GetNotificationByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetNotificationByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

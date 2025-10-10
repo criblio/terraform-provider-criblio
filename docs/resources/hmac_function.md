@@ -46,23 +46,6 @@ resource "criblio_hmac_function" "my_hmacfunction" {
 - `description` (String)
 - `string_delim` (String)
 
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `description` (String)
-- `header_expression` (String)
-- `header_name` (String)
-- `id` (String)
-- `lib` (String) must be one of ["cribl", "cribl-custom", "custom"]
-- `string_builders` (List of String)
-- `string_delim` (String)
-
 ## Import
 
 Import is supported using the following syntax:

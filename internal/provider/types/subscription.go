@@ -6,11 +6,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type GlobalVar struct {
+type Subscription struct {
 	Description types.String `tfsdk:"description"`
+	Disabled    types.Bool   `tfsdk:"disabled"`
+	Filter      types.String `tfsdk:"filter"`
 	ID          types.String `tfsdk:"id"`
-	Lib         types.String `tfsdk:"lib"`
-	Tags        types.String `tfsdk:"tags"`
-	Type        types.String `tfsdk:"type"`
-	Value       types.String `tfsdk:"value"`
+	Pipeline    types.String `tfsdk:"pipeline"`
 }

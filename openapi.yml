@@ -67848,7 +67848,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
-          example: "Cribl"
+          example: "default"
     post:
       x-speakeasy-entity-operation: GlobalVar#create
       parameters:
