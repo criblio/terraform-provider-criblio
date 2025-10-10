@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,9 +28,18 @@ type DatabaseConnectionDataSource struct {
 
 // DatabaseConnectionDataSourceModel describes the data model.
 type DatabaseConnectionDataSourceModel struct {
-	GroupID types.String                       `tfsdk:"group_id"`
-	ID      types.String                       `tfsdk:"id"`
-	Items   []tfTypes.DatabaseConnectionConfig `tfsdk:"items"`
+	AuthType          types.String  `tfsdk:"auth_type"`
+	ConfigObj         types.String  `tfsdk:"config_obj"`
+	ConnectionString  types.String  `tfsdk:"connection_string"`
+	ConnectionTimeout types.Float64 `tfsdk:"connection_timeout"`
+	DatabaseType      types.String  `tfsdk:"database_type"`
+	Description       types.String  `tfsdk:"description"`
+	GroupID           types.String  `tfsdk:"group_id"`
+	ID                types.String  `tfsdk:"id"`
+	Password          types.String  `tfsdk:"password"`
+	RequestTimeout    types.Float64 `tfsdk:"request_timeout"`
+	Tags              types.String  `tfsdk:"tags"`
+	User              types.String  `tfsdk:"user"`
 }
 
 // Metadata returns the data source type name.
@@ -45,6 +53,24 @@ func (r *DatabaseConnectionDataSource) Schema(ctx context.Context, req datasourc
 		MarkdownDescription: "DatabaseConnection DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"auth_type": schema.StringAttribute{
+				Computed: true,
+			},
+			"config_obj": schema.StringAttribute{
+				Computed: true,
+			},
+			"connection_string": schema.StringAttribute{
+				Computed: true,
+			},
+			"connection_timeout": schema.Float64Attribute{
+				Computed: true,
+			},
+			"database_type": schema.StringAttribute{
+				Computed: true,
+			},
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
@@ -53,45 +79,17 @@ func (r *DatabaseConnectionDataSource) Schema(ctx context.Context, req datasourc
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"items": schema.ListNestedAttribute{
+			"password": schema.StringAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"auth_type": schema.StringAttribute{
-							Computed: true,
-						},
-						"config_obj": schema.StringAttribute{
-							Computed: true,
-						},
-						"connection_string": schema.StringAttribute{
-							Computed: true,
-						},
-						"connection_timeout": schema.Float64Attribute{
-							Computed: true,
-						},
-						"database_type": schema.StringAttribute{
-							Computed: true,
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"password": schema.StringAttribute{
-							Computed: true,
-						},
-						"request_timeout": schema.Float64Attribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed: true,
-						},
-						"user": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
+			},
+			"request_timeout": schema.Float64Attribute{
+				Computed: true,
+			},
+			"tags": schema.StringAttribute{
+				Computed: true,
+			},
+			"user": schema.StringAttribute{
+				Computed: true,
 			},
 		},
 	}
@@ -157,11 +155,11 @@ func (r *DatabaseConnectionDataSource) Read(ctx context.Context, req datasource.
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatabaseConnectionConfigByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDatabaseConnectionConfig(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -28,14 +29,9 @@ type HmacFunctionDataSource struct {
 
 // HmacFunctionDataSourceModel describes the data model.
 type HmacFunctionDataSourceModel struct {
-	Description      types.String   `tfsdk:"description"`
-	GroupID          types.String   `tfsdk:"group_id"`
-	HeaderExpression types.String   `tfsdk:"header_expression"`
-	HeaderName       types.String   `tfsdk:"header_name"`
-	ID               types.String   `tfsdk:"id"`
-	Lib              types.String   `tfsdk:"lib"`
-	StringBuilders   []types.String `tfsdk:"string_builders"`
-	StringDelim      types.String   `tfsdk:"string_delim"`
+	GroupID types.String           `tfsdk:"group_id"`
+	ID      types.String           `tfsdk:"id"`
+	Items   []tfTypes.HmacFunction `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -49,32 +45,42 @@ func (r *HmacFunctionDataSource) Schema(ctx context.Context, req datasource.Sche
 		MarkdownDescription: "HmacFunction DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
-				Computed: true,
-			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
-			},
-			"header_expression": schema.StringAttribute{
-				Computed: true,
-			},
-			"header_name": schema.StringAttribute{
-				Computed: true,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"lib": schema.StringAttribute{
+			"items": schema.ListNestedAttribute{
 				Computed: true,
-			},
-			"string_builders": schema.ListAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
-			},
-			"string_delim": schema.StringAttribute{
-				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"header_expression": schema.StringAttribute{
+							Computed: true,
+						},
+						"header_name": schema.StringAttribute{
+							Computed: true,
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+						"lib": schema.StringAttribute{
+							Computed: true,
+						},
+						"string_builders": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+						},
+						"string_delim": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -140,11 +146,11 @@ func (r *HmacFunctionDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedHmacFunction(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetHmacFunctionByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

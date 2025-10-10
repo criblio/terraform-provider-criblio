@@ -30,9 +30,9 @@ type PipelineDataSource struct {
 
 // PipelineDataSourceModel describes the data model.
 type PipelineDataSourceModel struct {
-	GroupID types.String       `tfsdk:"group_id"`
-	ID      types.String       `tfsdk:"id"`
-	Items   []tfTypes.Pipeline `tfsdk:"items"`
+	Conf    tfTypes.PipelineConf `tfsdk:"conf"`
+	GroupID types.String         `tfsdk:"group_id"`
+	ID      types.String         `tfsdk:"id"`
 }
 
 // Metadata returns the data source type name.
@@ -46,6 +46,81 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 		MarkdownDescription: "Pipeline DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"conf": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"async_func_timeout": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
+					},
+					"description": schema.StringAttribute{
+						Computed: true,
+					},
+					"functions": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"conf": schema.MapAttribute{
+									Computed:    true,
+									ElementType: jsontypes.NormalizedType{},
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Simple description of this step`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, data will not be pushed through this function`,
+								},
+								"filter": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filter that selects data to be fed through this Function`,
+								},
+								"final": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
+								},
+								"group_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Group ID`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Function ID`,
+								},
+							},
+						},
+						Description: `List of Functions to pass data through`,
+					},
+					"groups": schema.MapNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Short description of this group`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether this group is disabled`,
+								},
+								"name": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+					},
+					"output": schema.StringAttribute{
+						Computed:    true,
+						Description: `The output destination for events processed by this Pipeline`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}`,
+					},
+				},
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
@@ -53,91 +128,6 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"conf": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"async_func_timeout": schema.Int64Attribute{
-									Computed:    true,
-									Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
-								},
-								"description": schema.StringAttribute{
-									Computed: true,
-								},
-								"functions": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"conf": schema.MapAttribute{
-												Computed:    true,
-												ElementType: jsontypes.NormalizedType{},
-											},
-											"description": schema.StringAttribute{
-												Computed:    true,
-												Description: `Simple description of this step`,
-											},
-											"disabled": schema.BoolAttribute{
-												Computed:    true,
-												Description: `If true, data will not be pushed through this function`,
-											},
-											"filter": schema.StringAttribute{
-												Computed:    true,
-												Description: `Filter that selects data to be fed through this Function`,
-											},
-											"final": schema.BoolAttribute{
-												Computed:    true,
-												Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
-											},
-											"group_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Group ID`,
-											},
-											"id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Function ID`,
-											},
-										},
-									},
-									Description: `List of Functions to pass data through`,
-								},
-								"groups": schema.MapNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"description": schema.StringAttribute{
-												Computed:    true,
-												Description: `Short description of this group`,
-											},
-											"disabled": schema.BoolAttribute{
-												Computed:    true,
-												Description: `Whether this group is disabled`,
-											},
-											"name": schema.StringAttribute{
-												Computed: true,
-											},
-										},
-									},
-								},
-								"output": schema.StringAttribute{
-									Computed:    true,
-									Description: `The output destination for events processed by this Pipeline`,
-								},
-								"streamtags": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `Tags for filtering and grouping in @{product}`,
-								},
-							},
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
 			},
 		},
 	}
@@ -203,11 +193,11 @@ func (r *PipelineDataSource) Read(ctx context.Context, req datasource.ReadReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelineByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedPipeline(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
