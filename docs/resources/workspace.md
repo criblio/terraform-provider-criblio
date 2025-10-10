@@ -17,12 +17,11 @@ resource "criblio_workspace" "my_workspace" {
   alias           = "Production Environment"
   description     = "Main production workspace for customer data processing"
   organization_id = "...my_organization_id..."
-  region          = "us-west-2"
   tags = [
     "production",
     "customer-data",
   ]
-  workspace_id = "my-workspace"
+  workspace_id = "main"
 }
 ```
 
@@ -31,8 +30,7 @@ resource "criblio_workspace" "my_workspace" {
 
 ### Required
 
-- `organization_id` (String) Organization identifier
-- `region` (String) AWS region where the workspace is deployed. must be one of ["us-west-2", "us-east-1", "eu-central-1", "eu-west-2", "ap-southeast-2", "ca-central-1", "us-east-2"]; Requires replacement if changed.
+- `organization_id` (String) The <code>id</code> of the Organization where you want to create the Workspace.
 - `workspace_id` (String) Unique identifier for the workspace
 
 ### Optional
@@ -45,7 +43,8 @@ resource "criblio_workspace" "my_workspace" {
 
 - `last_updated` (String) Timestamp when the workspace was last updated
 - `leader_fqdn` (String) Fully Qualified Domain Name of the workspace leader
-- `state` (String) Current state of the workspace. must be one of ["Workspace-Requested", "Workspace-Provisioning", "Workspace-Provisioning-Failed", "Workspace-Provisioned", "Workspace-Active", "Workspace-Updated", "Workspace-Failed-Update", "Workspace-Cleanup-Requested", "Workspace-Cleanup-Started", "Workspace-Cleanup-Terraform-Completed", "Workspace-Cleanup-Terraform-Failed", "Workspace-Cleanup-Completed", "Workspace-Cleanup-Failed"]
+- `region` (String) AWS region where the workspace is deployed. must be one of ["us-west-2", "us-east-1", "us-east-2", "eu-central-1", "eu-central-2", "eu-west-2", "ap-southeast-1", "ap-southeast-2", "ca-central-1"]
+- `state` (String) Current state of the workspace. must be one of ["Provisioning", "Active", "Inactive", "Failed", "Deprovisioning"]
 
 ## Import
 

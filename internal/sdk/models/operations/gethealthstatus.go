@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+// GetHealthStatusResponseBody - Health status
+type GetHealthStatusResponseBody struct {
+	Status *string `json:"status,omitempty"`
+}
+
+func (g *GetHealthStatusResponseBody) GetStatus() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Status
+}
+
 type GetHealthStatusResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -14,7 +26,7 @@ type GetHealthStatusResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Health status
-	String *string
+	Object *GetHealthStatusResponseBody
 }
 
 func (g *GetHealthStatusResponse) GetContentType() string {
@@ -38,9 +50,9 @@ func (g *GetHealthStatusResponse) GetRawResponse() *http.Response {
 	return g.RawResponse
 }
 
-func (g *GetHealthStatusResponse) GetString() *string {
+func (g *GetHealthStatusResponse) GetObject() *GetHealthStatusResponseBody {
 	if g == nil {
 		return nil
 	}
-	return g.String
+	return g.Object
 }

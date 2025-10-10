@@ -12,9 +12,9 @@ var V1WorkspacesGetWorkspaceServerList = []string{
 }
 
 type V1WorkspacesGetWorkspaceRequest struct {
-	// Organization identifier
+	// The <code>id</code> of the Organization that contains the Workspace.
 	OrganizationID string `pathParam:"style=simple,explode=false,name=organizationId"`
-	// Workspace identifier
+	// The <code>id</code> of the Workspace to get.
 	WorkspaceID string `pathParam:"style=simple,explode=false,name=workspaceId"`
 }
 
@@ -39,8 +39,9 @@ type V1WorkspacesGetWorkspaceResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// The workspace details have been successfully retrieved
+	// The Workspace details have been retrieved
 	WorkspaceSchema *shared.WorkspaceSchema
+	DefaultErrorDTO *shared.DefaultErrorDTO
 }
 
 func (v *V1WorkspacesGetWorkspaceResponse) GetContentType() string {
@@ -69,4 +70,11 @@ func (v *V1WorkspacesGetWorkspaceResponse) GetWorkspaceSchema() *shared.Workspac
 		return nil
 	}
 	return v.WorkspaceSchema
+}
+
+func (v *V1WorkspacesGetWorkspaceResponse) GetDefaultErrorDTO() *shared.DefaultErrorDTO {
+	if v == nil {
+		return nil
+	}
+	return v.DefaultErrorDTO
 }

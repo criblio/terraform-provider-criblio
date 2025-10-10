@@ -71,7 +71,7 @@ func (r *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			},
 			"organization_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Organization identifier`,
+				Description: `The <code>id</code> of the Organization that contains the Workspace.`,
 			},
 			"region": schema.StringAttribute{
 				Computed:    true,
@@ -88,7 +88,7 @@ func (r *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			},
 			"workspace_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Workspace identifier`,
+				Description: `The <code>id</code> of the Workspace to get.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(4, 41),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9]*$`), "must match pattern "+regexp.MustCompile(`^[a-z0-9]*$`).String()),

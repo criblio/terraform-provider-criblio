@@ -87,7 +87,7 @@ func (r *WorkspacesDataSource) Schema(ctx context.Context, req datasource.Schema
 			},
 			"organization_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Organization identifier`,
+				Description: `The <code>id</code> of the Organization that contains the Workspaces.`,
 			},
 		},
 	}

@@ -7,15 +7,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -80,45 +77,35 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"organization_id": schema.StringAttribute{
 				Required:    true,
-				Description: `Organization identifier`,
+				Description: `The <code>id</code> of the Organization where you want to create the Workspace.`,
 			},
 			"region": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `AWS region where the workspace is deployed. must be one of ["us-west-2", "us-east-1", "eu-central-1", "eu-west-2", "ap-southeast-2", "ca-central-1", "us-east-2"]; Requires replacement if changed.`,
+				Computed:    true,
+				Description: `AWS region where the workspace is deployed. must be one of ["us-west-2", "us-east-1", "us-east-2", "eu-central-1", "eu-central-2", "eu-west-2", "ap-southeast-1", "ap-southeast-2", "ca-central-1"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"us-west-2",
 						"us-east-1",
+						"us-east-2",
 						"eu-central-1",
+						"eu-central-2",
 						"eu-west-2",
+						"ap-southeast-1",
 						"ap-southeast-2",
 						"ca-central-1",
-						"us-east-2",
 					),
 				},
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,
-				Description: `Current state of the workspace. must be one of ["Workspace-Requested", "Workspace-Provisioning", "Workspace-Provisioning-Failed", "Workspace-Provisioned", "Workspace-Active", "Workspace-Updated", "Workspace-Failed-Update", "Workspace-Cleanup-Requested", "Workspace-Cleanup-Started", "Workspace-Cleanup-Terraform-Completed", "Workspace-Cleanup-Terraform-Failed", "Workspace-Cleanup-Completed", "Workspace-Cleanup-Failed"]`,
+				Description: `Current state of the workspace. must be one of ["Provisioning", "Active", "Inactive", "Failed", "Deprovisioning"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
-						"Workspace-Requested",
-						"Workspace-Provisioning",
-						"Workspace-Provisioning-Failed",
-						"Workspace-Provisioned",
-						"Workspace-Active",
-						"Workspace-Updated",
-						"Workspace-Failed-Update",
-						"Workspace-Cleanup-Requested",
-						"Workspace-Cleanup-Started",
-						"Workspace-Cleanup-Terraform-Completed",
-						"Workspace-Cleanup-Terraform-Failed",
-						"Workspace-Cleanup-Completed",
-						"Workspace-Cleanup-Failed",
+						"Provisioning",
+						"Active",
+						"Inactive",
+						"Failed",
+						"Deprovisioning",
 					),
 				},
 			},
@@ -310,17 +297,8 @@ func (r *WorkspaceResource) Update(ctx context.Context, req resource.UpdateReque
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	if res.StatusCode != 204 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	if !(res.WorkspaceSchema != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedWorkspaceSchema(ctx, res.WorkspaceSchema)...)
-
-	if resp.Diagnostics.HasError() {
 		return
 	}
 

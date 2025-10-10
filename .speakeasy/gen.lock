@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: ddeefb7ebc2ea5b17fe3596088540062
+  docChecksum: 5b9e1993f6afc8f6c86a1f60ccfe3cf9
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.17.3
-  configChecksum: 0e7454b9e502609f6f7efbf48be67785
+  releaseVersion: 1.17.4
+  configChecksum: fb7f4b531e07b349f549b5a481419467
   published: true
 features:
   terraform:
@@ -446,7 +446,6 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_tag.go
   - internal/provider/types/appscope_config_with_custom_watch_ndjson.go
   - internal/provider/types/appscope_custom.go
-  - internal/provider/types/appscope_lib_entry.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/auth_request_header.go
@@ -485,6 +484,7 @@ generatedFiles:
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
   - internal/provider/types/dashboard_layout.go
+  - internal/provider/types/database_connection_config.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
   - internal/provider/types/discover_request_param.go
@@ -1276,6 +1276,7 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
+  - internal/provider/types/pipeline.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
@@ -1286,7 +1287,6 @@ generatedFiles:
   - internal/provider/types/prometheus_auth_oauth_param2.go
   - internal/provider/types/prometheus_dataset.go
   - internal/provider/types/prometheus_provider.go
-  - internal/provider/types/regex_lib_entry.go
   - internal/provider/types/resource_type_label.go
   - internal/provider/types/retry_rules_configuration.go
   - internal/provider/types/routes.go
@@ -1303,7 +1303,7 @@ generatedFiles:
   - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
-  - internal/provider/types/schema_lib_entry.go
+  - internal/provider/types/search_macro.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1983,6 +1983,7 @@ generatedFiles:
   - internal/sdk/models/shared/datatypeoverrides.go
   - internal/sdk/models/shared/datatypepreviewinput.go
   - internal/sdk/models/shared/datatypepreviewrequestbody.go
+  - internal/sdk/models/shared/defaulterrordto.go
   - internal/sdk/models/shared/deployrequest.go
   - internal/sdk/models/shared/diag.go
   - internal/sdk/models/shared/distributedsummary.go
@@ -7873,17 +7874,19 @@ examples:
     speakeasy-default-get-health-status:
       responses:
         "200":
-          application/json: "OK"
+          application/json: {"status": "OK"}
   v1.workspaces.createWorkspace:
     speakeasy-default-v1-workspaces-create-workspace:
       parameters:
         path:
           organizationId: "<id>"
       requestBody:
-        application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+        application/json: {"workspaceId": "main", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
       responses:
         "201":
-          application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+          application/json: {"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+        default:
+          application/json: {"statusCode": 2135.91, "message": "<value>"}
   v1.workspaces.listWorkspaces:
     speakeasy-default-v1-workspaces-list-workspaces:
       parameters:
@@ -7891,7 +7894,9 @@ examples:
           organizationId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}], "count": 5}
+          application/json: {"items": [{"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Inactive", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}], "count": 5}
+        default:
+          application/json: {"statusCode": 1171.44, "message": "<value>"}
   v1.workspaces.updateWorkspace:
     speakeasy-default-v1-workspaces-update-workspace:
       parameters:
@@ -7903,12 +7908,17 @@ examples:
       responses:
         "200":
           application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+        default:
+          application/json: {"statusCode": 8141.25, "message": "<value>"}
   v1.workspaces.deleteWorkspace:
     speakeasy-default-v1-workspaces-delete-workspace:
       parameters:
         path:
           organizationId: "<id>"
           workspaceId: "<id>"
+      responses:
+        default:
+          application/json: {"statusCode": 8158.92, "message": "<value>"}
   v1.workspaces.getWorkspace:
     speakeasy-default-v1-workspaces-get-workspace:
       parameters:
@@ -7917,6 +7927,8 @@ examples:
           workspaceId: "<id>"
       responses:
         "200":
-          application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+          application/json: {"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+        default:
+          application/json: {"statusCode": 8847.69, "message": "<value>"}
 examplesVersion: 1.0.2
 generatedTests: {}

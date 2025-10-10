@@ -27,9 +27,17 @@ data "criblio_search_macro" "my_searchmacro" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `created` (Number)
 - `created_by` (String)
 - `description` (String)
+- `id` (String)
 - `modified` (Number)
 - `replacement` (String)
 - `tags` (String)

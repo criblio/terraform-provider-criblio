@@ -12,7 +12,7 @@ var V1WorkspacesCreateWorkspaceServerList = []string{
 }
 
 type V1WorkspacesCreateWorkspaceRequest struct {
-	// Organization identifier
+	// The <code>id</code> of the Organization where you want to create the Workspace.
 	OrganizationID            string                           `pathParam:"style=simple,explode=false,name=organizationId"`
 	WorkspaceCreateRequestDTO shared.WorkspaceCreateRequestDTO `request:"mediaType=application/json"`
 }
@@ -38,8 +38,9 @@ type V1WorkspacesCreateWorkspaceResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// The workspace has been successfully created
+	// The Workspace has been successfully created
 	WorkspaceSchema *shared.WorkspaceSchema
+	DefaultErrorDTO *shared.DefaultErrorDTO
 }
 
 func (v *V1WorkspacesCreateWorkspaceResponse) GetContentType() string {
@@ -68,4 +69,11 @@ func (v *V1WorkspacesCreateWorkspaceResponse) GetWorkspaceSchema() *shared.Works
 		return nil
 	}
 	return v.WorkspaceSchema
+}
+
+func (v *V1WorkspacesCreateWorkspaceResponse) GetDefaultErrorDTO() *shared.DefaultErrorDTO {
+	if v == nil {
+		return nil
+	}
+	return v.DefaultErrorDTO
 }

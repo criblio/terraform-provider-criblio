@@ -12,9 +12,9 @@ var V1WorkspacesUpdateWorkspaceServerList = []string{
 }
 
 type V1WorkspacesUpdateWorkspaceRequest struct {
-	// Organization identifier
+	// The <code>id</code> of the Organization that contains the Workspace.
 	OrganizationID string `pathParam:"style=simple,explode=false,name=organizationId"`
-	// Workspace identifier
+	// The <code>id</code> of the Workspace to update.
 	WorkspaceID              string                          `pathParam:"style=simple,explode=false,name=workspaceId"`
 	WorkspacePatchRequestDTO shared.WorkspacePatchRequestDTO `request:"mediaType=application/json"`
 }
@@ -46,9 +46,8 @@ type V1WorkspacesUpdateWorkspaceResponse struct {
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
-	RawResponse *http.Response
-	// The workspace has been successfully updated
-	WorkspaceSchema *shared.WorkspaceSchema
+	RawResponse     *http.Response
+	DefaultErrorDTO *shared.DefaultErrorDTO
 }
 
 func (v *V1WorkspacesUpdateWorkspaceResponse) GetContentType() string {
@@ -72,9 +71,9 @@ func (v *V1WorkspacesUpdateWorkspaceResponse) GetRawResponse() *http.Response {
 	return v.RawResponse
 }
 
-func (v *V1WorkspacesUpdateWorkspaceResponse) GetWorkspaceSchema() *shared.WorkspaceSchema {
+func (v *V1WorkspacesUpdateWorkspaceResponse) GetDefaultErrorDTO() *shared.DefaultErrorDTO {
 	if v == nil {
 		return nil
 	}
-	return v.WorkspaceSchema
+	return v.DefaultErrorDTO
 }

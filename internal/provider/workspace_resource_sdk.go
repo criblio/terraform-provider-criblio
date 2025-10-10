@@ -117,7 +117,6 @@ func (r *WorkspaceResourceModel) ToSharedWorkspaceCreateRequestDTO(ctx context.C
 	var workspaceID string
 	workspaceID = r.WorkspaceID.ValueString()
 
-	region := shared.WorkspaceCreateRequestDTORegion(r.Region.ValueString())
 	alias := new(string)
 	if !r.Alias.IsUnknown() && !r.Alias.IsNull() {
 		*alias = r.Alias.ValueString()
@@ -136,7 +135,6 @@ func (r *WorkspaceResourceModel) ToSharedWorkspaceCreateRequestDTO(ctx context.C
 	}
 	out := shared.WorkspaceCreateRequestDTO{
 		WorkspaceID: workspaceID,
-		Region:      region,
 		Alias:       alias,
 		Description: description,
 		Tags:        tags,

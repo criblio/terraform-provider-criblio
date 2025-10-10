@@ -12,7 +12,7 @@ var V1WorkspacesListWorkspacesServerList = []string{
 }
 
 type V1WorkspacesListWorkspacesRequest struct {
-	// Organization identifier
+	// The <code>id</code> of the Organization that contains the Workspaces.
 	OrganizationID string `pathParam:"style=simple,explode=false,name=organizationId"`
 }
 
@@ -30,8 +30,9 @@ type V1WorkspacesListWorkspacesResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// List of workspaces has been successfully retrieved
+	// List of Workspaces has been successfully retrieved
 	WorkspacesListResponseDTO *shared.WorkspacesListResponseDTO
+	DefaultErrorDTO           *shared.DefaultErrorDTO
 }
 
 func (v *V1WorkspacesListWorkspacesResponse) GetContentType() string {
@@ -60,4 +61,11 @@ func (v *V1WorkspacesListWorkspacesResponse) GetWorkspacesListResponseDTO() *sha
 		return nil
 	}
 	return v.WorkspacesListResponseDTO
+}
+
+func (v *V1WorkspacesListWorkspacesResponse) GetDefaultErrorDTO() *shared.DefaultErrorDTO {
+	if v == nil {
+		return nil
+	}
+	return v.DefaultErrorDTO
 }

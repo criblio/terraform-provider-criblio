@@ -3,6 +3,7 @@
 package operations
 
 import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
@@ -11,9 +12,9 @@ var V1WorkspacesDeleteWorkspaceServerList = []string{
 }
 
 type V1WorkspacesDeleteWorkspaceRequest struct {
-	// Organization identifier
+	// The <code>id</code> of the Organization that contains the Workspace.
 	OrganizationID string `pathParam:"style=simple,explode=false,name=organizationId"`
-	// Workspace identifier
+	// The <code>id</code> of the Workspace to delete.
 	WorkspaceID string `pathParam:"style=simple,explode=false,name=workspaceId"`
 }
 
@@ -37,7 +38,8 @@ type V1WorkspacesDeleteWorkspaceResponse struct {
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
-	RawResponse *http.Response
+	RawResponse     *http.Response
+	DefaultErrorDTO *shared.DefaultErrorDTO
 }
 
 func (v *V1WorkspacesDeleteWorkspaceResponse) GetContentType() string {
@@ -59,4 +61,11 @@ func (v *V1WorkspacesDeleteWorkspaceResponse) GetRawResponse() *http.Response {
 		return nil
 	}
 	return v.RawResponse
+}
+
+func (v *V1WorkspacesDeleteWorkspaceResponse) GetDefaultErrorDTO() *shared.DefaultErrorDTO {
+	if v == nil {
+		return nil
+	}
+	return v.DefaultErrorDTO
 }
