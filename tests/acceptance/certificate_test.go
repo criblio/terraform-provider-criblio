@@ -13,7 +13,8 @@ func TestCertificate(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_certificate.my_certificate", "id", "my-demo-cert-001"),
 						resource.TestCheckResourceAttr("criblio_certificate.my_certificate", "description", "Demo x509 certificate for Cribl configuration"),

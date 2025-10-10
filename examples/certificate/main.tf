@@ -16,11 +16,9 @@ data "criblio_certificates" "my_certificates" {
 
 }
 
-/*
 output "my_certificates" {
   value     = data.criblio_certificates.my_certificates
   sensitive = true
 }
-*/
 
 
