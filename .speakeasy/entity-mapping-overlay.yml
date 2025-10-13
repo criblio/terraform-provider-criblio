@@ -1,0 +1,211 @@
+overlay: 1.0.0
+info:
+  title: Add x-speakeasy-entity tags to resolve non-deterministic generation
+  version: 1.0.0
+actions:
+  # Core entity schemas
+  - target: "$.components.schemas.Certificate"
+    update:
+      x-speakeasy-entity: Certificate
+  
+  - target: "$.components.schemas.ProjectConfig"
+    update:
+      x-speakeasy-entity: Project
+  
+  - target: "$.components.schemas.Notification"
+    update:
+      x-speakeasy-entity: Notification
+  
+  - target: "$.components.schemas.NotificationTarget"
+    update:
+      x-speakeasy-entity: NotificationTarget
+  
+  - target: "$.components.schemas.Collector"
+    update:
+      x-speakeasy-entity: Collector
+  
+  - target: "$.components.schemas.CriblLakeHouse"
+    update:
+      x-speakeasy-entity: CriblLakeHouse
+  
+  - target: "$.components.schemas.CriblLakeDataset"
+    update:
+      x-speakeasy-entity: CriblLakeDataset
+  
+  - target: "$.components.schemas.LakehouseDatasetConnection"
+    update:
+      x-speakeasy-entity: LakehouseDatasetConnection
+  
+  - target: "$.components.schemas.SearchDashboardCategory"
+    update:
+      x-speakeasy-entity: SearchDashboardCategory
+  
+  - target: "$.components.schemas.SearchUsageGroup"
+    update:
+      x-speakeasy-entity: SearchUsageGroup
+  
+  - target: "$.components.schemas.SearchDatasetProvider"
+    update:
+      x-speakeasy-entity: SearchDatasetProvider
+  
+  - target: "$.components.schemas.SearchDataset"
+    update:
+      x-speakeasy-entity: SearchDataset
+  
+  # Temporarily commented out due to type mismatch issue
+  # - target: "$.components.schemas.AppscopeConfig"
+  #   update:
+  #     x-speakeasy-entity: AppscopeConfig
+  
+  - target: "$.components.schemas.Grok"
+    update:
+      x-speakeasy-entity: Grok
+  
+  - target: "$.components.schemas.LookupFile"
+    update:
+      x-speakeasy-entity: LookupFile
+  
+  - target: "$.components.schemas.ParserLibEntry"
+    update:
+      x-speakeasy-entity: ParserLibEntry
+  
+  - target: "$.components.schemas.Regex"
+    update:
+      x-speakeasy-entity: Regex
+  
+  - target: "$.components.schemas.SearchDashboard"
+    update:
+      x-speakeasy-entity: SearchDashboard
+  
+  - target: "$.components.schemas.SearchMacro"
+    update:
+      x-speakeasy-entity: SearchMacro
+  
+  - target: "$.components.schemas.SearchSavedQuery"
+    update:
+      x-speakeasy-entity: SearchSavedQuery
+  
+  - target: "$.components.schemas.DatabaseConnection"
+    update:
+      x-speakeasy-entity: DatabaseConnection
+  
+  - target: "$.components.schemas.EventBreakerRuleset"
+    update:
+      x-speakeasy-entity: EventBreakerRuleset
+  
+  - target: "$.components.schemas.GlobalVar"
+    update:
+      x-speakeasy-entity: GlobalVar
+  
+  - target: "$.components.schemas.PackVars"
+    update:
+      x-speakeasy-entity: PackVars
+  
+  - target: "$.components.schemas.HmacFunction"
+    update:
+      x-speakeasy-entity: HmacFunction
+  
+  - target: "$.components.schemas.Source"
+    update:
+      x-speakeasy-entity: Source
+  
+  - target: "$.components.schemas.Destination"
+    update:
+      x-speakeasy-entity: Destination
+  
+  - target: "$.components.schemas.ParquetSchema"
+    update:
+      x-speakeasy-entity: ParquetSchema
+  
+  - target: "$.components.schemas.Pipeline"
+    update:
+      x-speakeasy-entity: Pipeline
+  
+  - target: "$.components.schemas.Routes"
+    update:
+      x-speakeasy-entity: Routes
+  
+  - target: "$.components.schemas.PackPipeline"
+    update:
+      x-speakeasy-entity: PackPipeline
+  
+  - target: "$.components.schemas.PackSource"
+    update:
+      x-speakeasy-entity: PackSource
+  
+  - target: "$.components.schemas.PackDestination"
+    update:
+      x-speakeasy-entity: PackDestination
+  
+  - target: "$.components.schemas.PackLookups"
+    update:
+      x-speakeasy-entity: PackLookups
+  
+  - target: "$.components.schemas.PackBreakers"
+    update:
+      x-speakeasy-entity: PackBreakers
+  
+  - target: "$.components.schemas.PackRoutes"
+    update:
+      x-speakeasy-entity: PackRoutes
+  
+  - target: "$.components.schemas.Schema"
+    update:
+      x-speakeasy-entity: Schema
+  
+  - target: "$.components.schemas.Pack"
+    update:
+      x-speakeasy-entity: Pack
+  
+  - target: "$.components.schemas.Commit"
+    update:
+      x-speakeasy-entity: Commit
+  
+  - target: "$.components.schemas.Subscription"
+    update:
+      x-speakeasy-entity: Subscription
+  
+  - target: "$.components.schemas.ConfigVersion"
+    update:
+      x-speakeasy-entity: ConfigVersion
+  
+  - target: "$.components.schemas.Group"
+    update:
+      x-speakeasy-entity: Group
+  
+  - target: "$.components.schemas.Deploy"
+    update:
+      x-speakeasy-entity: Deploy
+  
+  - target: "$.components.schemas.InstanceSettings"
+    update:
+      x-speakeasy-entity: InstanceSettings
+  
+  # Additional schemas that may be referenced in responses
+  - target: "$.components.schemas.Error"
+    update:
+      x-speakeasy-entity: Error
+  
+  - target: "$.components.schemas.BannerMessage"
+    update:
+      x-speakeasy-entity: BannerMessage
+  
+  - target: "$.components.schemas.GenericDataset"
+    update:
+      x-speakeasy-entity: GenericDataset
+  
+  - target: "$.components.schemas.APIAwsDataset"
+    update:
+      x-speakeasy-entity: APIAwsDataset
+  
+  - target: "$.components.schemas.DatasetMetadata"
+    update:
+      x-speakeasy-entity: DatasetMetadata
+  
+  - target: "$.components.schemas.UserAccessControlList"
+    update:
+      x-speakeasy-entity: UserAccessControlList
+  
+  - target: "$.components.schemas.AccessControlSchema"
+    update:
+      x-speakeasy-entity: AccessControlSchema
