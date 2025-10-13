@@ -231,7 +231,7 @@ actions:
     update:
       x-speakeasy-entity: SearchDatasetProvider
       
-  - target: "$.paths['/m/default_search/search/usage-groups/{id}'].get.responses['200'].content.application/json.schema"
+  - target: "$.paths['/m/default_search/search/usage-groups'].get.responses['200'].content.application/json.schema"
     update:
       x-speakeasy-entity: SearchUsageGroup
       
