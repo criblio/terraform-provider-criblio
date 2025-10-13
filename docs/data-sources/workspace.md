@@ -15,7 +15,7 @@ Workspace DataSource
 ```terraform
 data "criblio_workspace" "my_workspace" {
   organization_id = "...my_organization_id..."
-  workspace_id    = "my-workspace"
+  workspace_id    = "main"
 }
 ```
 
@@ -24,8 +24,8 @@ data "criblio_workspace" "my_workspace" {
 
 ### Required
 
-- `organization_id` (String) Organization identifier
-- `workspace_id` (String) Workspace identifier
+- `organization_id` (String) The <code>id</code> of the Organization that contains the Workspace.
+- `workspace_id` (String) The <code>id</code> of the Workspace to get.
 
 ### Read-Only
 

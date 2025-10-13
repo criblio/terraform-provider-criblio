@@ -32,6 +32,8 @@ generatedFiles:
   - .gitattributes
   - USAGE.md
   - examples/data-sources/criblio_appscope_config/data-source.tf
+  - examples/data-sources/criblio_certificate/data-source.tf
+  - examples/data-sources/criblio_certificates/data-source.tf
   - examples/data-sources/criblio_collector/data-source.tf
   - examples/data-sources/criblio_config_version/data-source.tf
   - examples/data-sources/criblio_cribl_lake_dataset/data-source.tf
@@ -77,6 +79,9 @@ generatedFiles:
   - examples/resources/criblio_appscope_config/import-by-string-id.tf
   - examples/resources/criblio_appscope_config/import.sh
   - examples/resources/criblio_appscope_config/resource.tf
+  - examples/resources/criblio_certificate/import-by-string-id.tf
+  - examples/resources/criblio_certificate/import.sh
+  - examples/resources/criblio_certificate/resource.tf
   - examples/resources/criblio_collector/import-by-string-id.tf
   - examples/resources/criblio_collector/import.sh
   - examples/resources/criblio_collector/resource.tf
@@ -206,6 +211,12 @@ generatedFiles:
   - internal/provider/appscopeconfig_data_source_sdk.go
   - internal/provider/appscopeconfig_resource.go
   - internal/provider/appscopeconfig_resource_sdk.go
+  - internal/provider/certificate_data_source.go
+  - internal/provider/certificate_data_source_sdk.go
+  - internal/provider/certificate_resource.go
+  - internal/provider/certificate_resource_sdk.go
+  - internal/provider/certificates_data_source.go
+  - internal/provider/certificates_data_source_sdk.go
   - internal/provider/collector_data_source.go
   - internal/provider/collector_data_source_sdk.go
   - internal/provider/collector_resource.go
@@ -435,7 +446,6 @@ generatedFiles:
   - internal/provider/types/appscope_config_with_custom_tag.go
   - internal/provider/types/appscope_config_with_custom_watch_ndjson.go
   - internal/provider/types/appscope_custom.go
-  - internal/provider/types/appscope_lib_entry.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
   - internal/provider/types/auth_request_header.go
@@ -449,6 +459,7 @@ generatedFiles:
   - internal/provider/types/azure_blob_dataset_extra_path.go
   - internal/provider/types/azure_blob_provider.go
   - internal/provider/types/cert_options.go
+  - internal/provider/types/certificate.go
   - internal/provider/types/click_house_dataset.go
   - internal/provider/types/click_house_provider.go
   - internal/provider/types/cloud.go
@@ -504,7 +515,6 @@ generatedFiles:
   - internal/provider/types/git_commit_summary_files.go
   - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
-  - internal/provider/types/grok_file.go
   - internal/provider/types/group.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
@@ -1267,7 +1277,7 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
-  - internal/provider/types/pipeline.go
+  - internal/provider/types/parser_lib_entry.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
@@ -1278,7 +1288,6 @@ generatedFiles:
   - internal/provider/types/prometheus_auth_oauth_param2.go
   - internal/provider/types/prometheus_dataset.go
   - internal/provider/types/prometheus_provider.go
-  - internal/provider/types/regex_lib_entry.go
   - internal/provider/types/resource_type_label.go
   - internal/provider/types/retry_rules_configuration.go
   - internal/provider/types/routes.go
@@ -1976,6 +1985,7 @@ generatedFiles:
   - internal/sdk/models/shared/datatypeoverrides.go
   - internal/sdk/models/shared/datatypepreviewinput.go
   - internal/sdk/models/shared/datatypepreviewrequestbody.go
+  - internal/sdk/models/shared/defaulterrordto.go
   - internal/sdk/models/shared/deployrequest.go
   - internal/sdk/models/shared/diag.go
   - internal/sdk/models/shared/distributedsummary.go
@@ -3436,7 +3446,7 @@ examples:
   createCertificate:
     speakeasy-default-create-certificate:
       requestBody:
-        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
+        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "SecurityPassphrase", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
@@ -3458,7 +3468,7 @@ examples:
         path:
           id: "cert-001"
       requestBody:
-        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
+        application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "SecurityPassphrase", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
@@ -5231,7 +5241,7 @@ examples:
     speakeasy-default-get-global-variable:
       parameters:
         path:
-          groupId: "Cribl"
+          groupId: "default"
         query:
           with: "refs"
       responses:
@@ -7866,17 +7876,19 @@ examples:
     speakeasy-default-get-health-status:
       responses:
         "200":
-          application/json: "OK"
+          application/json: {"status": "OK"}
   v1.workspaces.createWorkspace:
     speakeasy-default-v1-workspaces-create-workspace:
       parameters:
         path:
           organizationId: "<id>"
       requestBody:
-        application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+        application/json: {"workspaceId": "main", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
       responses:
         "201":
-          application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+          application/json: {"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+        default:
+          application/json: {"statusCode": 2135.91, "message": "<value>"}
   v1.workspaces.listWorkspaces:
     speakeasy-default-v1-workspaces-list-workspaces:
       parameters:
@@ -7884,7 +7896,9 @@ examples:
           organizationId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}], "count": 5}
+          application/json: {"items": [{"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Inactive", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}], "count": 5}
+        default:
+          application/json: {"statusCode": 1171.44, "message": "<value>"}
   v1.workspaces.updateWorkspace:
     speakeasy-default-v1-workspaces-update-workspace:
       parameters:
@@ -7896,12 +7910,17 @@ examples:
       responses:
         "200":
           application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+        default:
+          application/json: {"statusCode": 8141.25, "message": "<value>"}
   v1.workspaces.deleteWorkspace:
     speakeasy-default-v1-workspaces-delete-workspace:
       parameters:
         path:
           organizationId: "<id>"
           workspaceId: "<id>"
+      responses:
+        default:
+          application/json: {"statusCode": 8158.92, "message": "<value>"}
   v1.workspaces.getWorkspace:
     speakeasy-default-v1-workspaces-get-workspace:
       parameters:
@@ -7910,6 +7929,8 @@ examples:
           workspaceId: "<id>"
       responses:
         "200":
-          application/json: {"workspaceId": "my-workspace", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Workspace-Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+          application/json: {"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+        default:
+          application/json: {"statusCode": 8847.69, "message": "<value>"}
 examplesVersion: 1.0.2
 generatedTests: {}

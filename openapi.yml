@@ -6,8 +6,8 @@ info:
 
     This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.
 
-    Complementary API reference documentation is available at https://docs.cribl.io/api-reference/. Product documentation is available at https://docs.cribl.io.
-  version: 4.12.2-4b17c8d4
+    Complementary API reference documentation is available at https://docs.cribl.io/cribl-as-code/api-reference/. Product documentation is available at https://docs.cribl.io.
+  version: 4.14.0
   contact:
     name: Support
     email: support@cribl.io
@@ -148,10 +148,12 @@ components:
           type: string
           title: Private key
           example: "dont-share-this-key"
+          x-speakeasy-param-sensitive: true
         passphrase:
           type: string
           title: Passphrase
-          example: "Security.jpg"
+          example: "SecurityPassphrase"
+          x-speakeasy-param-sensitive: true
         ca:
           type: string
           title: CA certificate
@@ -62364,14 +62366,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Subscription"
-              example:
-                count: 1
-                items:
-                  - id: "sub-default"
-                    pipeline: "main"
-                    description: "Default subscription to main pipeline"
-                    disabled: false
-                    filter: "env = 'prod'"
         "401":
           description: Unauthorized
         "500":
@@ -62380,10 +62374,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-3f9c2a1b"
       parameters:
         - name: groupId
           in: path
@@ -62426,13 +62416,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-              example:
-                count: 2
-                items:
-                  - file: "routes/default.yml"
-                    changeType: "modified"
-                  - file: "system.yml"
-                    changeType: "modified"
         "401":
           description: Unauthorized
         "500":
@@ -62441,10 +62424,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-7a1b9e4d"
       parameters:
         - name: groupId
           in: path
@@ -62487,14 +62466,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-              example:
-                count: 1
-                items:
-                  - file: "routes/default.yml"
-                    diff: |-
-                      @@ -1,3 +1,3 @@
-                      - filter: env = 'dev'
-                      + filter: env = 'prod'
         "401":
           description: Unauthorized
         "500":
@@ -62503,10 +62474,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-2d4c8f11"
       parameters:
         - name: groupId
           in: path
@@ -62554,17 +62521,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GitFilesResponse"
-              example:
-                count: 2
-                items:
-                  - file: "routes/default.yml"
-                    changeType: "modified"
-                    additions: 3
-                    deletions: 1
-                  - file: "system.yml"
-                    changeType: "modified"
-                    additions: 1
-                    deletions: 0
         "401":
           description: Unauthorized
         "500":
@@ -62573,10 +62529,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-7a1b9e4d"
       parameters:
         - name: groupId
           in: path
@@ -62618,14 +62570,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GitCommitSummary"
-              example:
-                count: 1
-                items:
-                  - commit: "1a2b3c4d5e6f7g8h9i0j"
-                    message: "Update system settings and routes"
-                    author: "cribl-bot <dev@acme.com>"
-                    filesChanged: 2
-                    date: "2025-10-06T12:00:00Z"
         "401":
           description: Unauthorized
         "500":
@@ -62634,10 +62578,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-5c2f1b88"
       requestBody:
         description: ProjectGitCommitParams object
         required: true
@@ -62645,13 +62585,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ProjectGitCommitParams"
-            example:
-              message: "Update system settings and routes"
-              files:
-                - "system.yml"
-                - "routes/default.yml"
-              effective: true
-              group: "ops"
       parameters:
         - name: groupId
           in: path
@@ -62696,18 +62629,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-              example:
-                count: 3
-                items:
-                  - _raw: '127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] "GET /healthz HTTP/1.1" 200 2'
-                    timestamp: "2025-10-06T12:00:00Z"
-                    source: "web_access"
-                  - _raw: '{"level":"info","msg":"service started"}'
-                    timestamp: "2025-10-06T12:00:01Z"
-                    source: "app_log"
-                  - _raw: "<34>1 2025-10-06T12:00:02Z host app - - - started"
-                    timestamp: "2025-10-06T12:00:02Z"
-                    source: "syslog"
         "401":
           description: Unauthorized
         "500":
@@ -62716,10 +62637,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-9f1a2c3d"
       requestBody:
         description: CaptureParams object
         required: true
@@ -62727,10 +62644,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CaptureParams"
-            example:
-              durationSeconds: 10
-              maxEvents: 100
-              filter: "env = 'prod'"
       parameters:
         - name: groupId
           in: path
@@ -62782,18 +62695,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-              example:
-                count: 3
-                items:
-                  - _raw: '127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] "GET /healthz HTTP/1.1" 200 2'
-                    timestamp: "2025-10-06T12:00:00Z"
-                    destination: "Output:main"
-                  - _raw: '{"level":"info","msg":"service started"}'
-                    timestamp: "2025-10-06T12:00:01Z"
-                    destination: "Output:main"
-                  - _raw: "<34>1 2025-10-06T12:00:02Z host app - - - started"
-                    timestamp: "2025-10-06T12:00:02Z"
-                    destination: "Output:main"
         "401":
           description: Unauthorized
         "500":
@@ -62802,10 +62703,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-abc123"
       requestBody:
         description: CaptureParams object
         required: true
@@ -62813,10 +62710,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CaptureParams"
-            example:
-              durationSeconds: 10
-              maxEvents: 100
-              destinationId: "Output:main"
       parameters:
         - name: groupId
           in: path
@@ -62861,14 +62754,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-              example:
-                count: 1
-                items:
-                  - results:
-                      - _raw: "processed event"
-                        pipeline: "main"
-                        status: "ok"
-                    previewId: "prev-12345"
         "401":
           description: Unauthorized
         "500":
@@ -62877,10 +62762,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-def456"
       requestBody:
         description: PreviewDataParams object
         required: true
@@ -62888,13 +62769,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/PreviewDataParams"
-            example:
-              pipelineId: "main"
-              events:
-                - _raw: "test event"
-              options:
-                earliest: "-5m"
-                latest: "now"
       parameters:
         - name: groupId
           in: path
@@ -62934,13 +62808,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Pipeline"
-              example:
-                count: 2
-                items:
-                  - id: "main"
-                    name: "Main Pipeline"
-                  - id: "enrich"
-                    name: "Enrichment Pipeline"
         "401":
           description: Unauthorized
         "500":
@@ -62948,11 +62815,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-ghi789"
+                  $ref: "#/components/schemas/Error"
       parameters:
         - name: groupId
           in: path
@@ -62982,9 +62845,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Pipeline"
-            example:
-              id: "new-pipeline"
-              name: "New Pipeline"
       responses:
         "200":
           description: A list of Pipeline objects for specified Project
@@ -63001,15 +62861,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Pipeline"
-              example:
-                count: 3
-                items:
-                  - id: "main"
-                    name: "Main Pipeline"
-                  - id: "enrich"
-                    name: "Enrichment Pipeline"
-                  - id: "new-pipeline"
-                    name: "New Pipeline"
         "401":
           description: Unauthorized
         "500":
@@ -63018,10 +62869,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-9f1a2c3d"
       parameters:
         - name: groupId
           in: path
@@ -63061,11 +62908,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Pipeline"
-              example:
-                count: 1
-                items:
-                  - id: "main"
-                    name: "Main Pipeline"
         "401":
           description: Unauthorized
         "500":
@@ -63074,10 +62916,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-xyz001"
       parameters:
         - name: groupId
           in: path
@@ -63114,9 +62952,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Pipeline"
-            example:
-              id: "main"
-              name: "Main Pipeline (updated)"
       responses:
         "200":
           description: A list of Pipeline objects for specified Project
@@ -63133,11 +62968,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Pipeline"
-              example:
-                count: 1
-                items:
-                  - id: "main"
-                    name: "Main Pipeline (updated)"
         "401":
           description: Unauthorized
         "500":
@@ -63146,10 +62976,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-xyz002"
       parameters:
         - name: groupId
           in: path
@@ -63195,11 +63021,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Pipeline"
-              example:
-                count: 1
-                items:
-                  - id: "main"
-                    name: "Main Pipeline"
         "401":
           description: Unauthorized
         "500":
@@ -63208,10 +63029,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-xyz003"
       parameters:
         - name: groupId
           in: path
@@ -63258,17 +63075,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/InstanceSettingsSchema"
-              example:
-                count: 1
-                items:
-                  - id: "default"
-                    api:
-                      host: "leader.example.com"
-                      port: 9000
-                      protocol: "https"
-                    system:
-                      intercom: false
-                      upgrade: "api"
         "401":
           description: Unauthorized
         "500":
@@ -63277,10 +63083,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-inst-001"
   /system/banners:
     get:
       operationId: listBannerMessage
@@ -63306,17 +63108,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/BannerMessage"
-              example:
-                count: 2
-                items:
-                  - id: "bnr-001"
-                    message: "Scheduled maintenance at 02:00 UTC."
-                    type: "info"
-                    enabled: true
-                  - id: "bnr-002"
-                    message: "Incident resolved."
-                    type: "success"
-                    enabled: false
         "401":
           description: Unauthorized
         "500":
@@ -63325,10 +63116,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-bnr-001"
     post:
       operationId: createBannerMessage
       tags: *a1
@@ -63341,10 +63128,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/BannerMessage"
-            example:
-              message: "New feature rollout today."
-              type: "info"
-              enabled: true
       responses: *a2
   "/system/banners/{id}":
     get:
@@ -63381,10 +63164,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/BannerMessage"
-            example:
-              message: "Maintenance window extended."
-              type: "warning"
-              enabled: true
       responses: *a2
     delete:
       operationId: deleteBannerMessageById
@@ -63407,6 +63186,7 @@ paths:
         - certificates
       summary: Get a list of Certificate objects
       description: Get a list of Certificate objects
+      x-speakeasy-entity-operation: Certificates#get
       responses:
         &a5
         "200":
@@ -63424,21 +63204,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Certificate"
-              example:
-                count: 2
-                items:
-                  - id: "cert-001"
-                    commonName: "leader.example.com"
-                    issuer: "Acme Internal CA"
-                    validFrom: "2025-01-01T00:00:00Z"
-                    validTo: "2027-01-01T00:00:00Z"
-                    fingerprint: "SHA256:3A:7F:91:...:B2"
-                  - id: "cert-002"
-                    commonName: "api.example.com"
-                    issuer: "Acme Internal CA"
-                    validFrom: "2025-06-01T00:00:00Z"
-                    validTo: "2027-06-01T00:00:00Z"
-                    fingerprint: "SHA256:9C:12:DE:...:5F"
         "401":
           description: Unauthorized
         "500":
@@ -63447,15 +63212,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-cert-001"
     post:
       operationId: createCertificate
       tags: *a4
       summary: Create Certificate
       description: Create Certificate
+      x-speakeasy-entity-operation: Certificate#create
       requestBody:
         description: New Certificate object
         required: true
@@ -63463,13 +63225,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Certificate"
-            example:
-              commonName: "leader.example.com"
-              certPem: "-----BEGIN CERTIFICATE-----MIIB...-----END CERTIFICATE-----"
-              keyPem: "-----BEGIN PRIVATE KEY-----MIIE...-----END PRIVATE KEY-----"
-              issuer: "Acme Internal CA"
-              validFrom: "2025-01-01T00:00:00Z"
-              validTo: "2027-01-01T00:00:00Z"
       responses: *a5
   "/system/certificates/{id}":
     get:
@@ -63477,6 +63232,7 @@ paths:
       tags: *a4
       summary: Get Certificate by ID
       description: Get Certificate by ID
+      x-speakeasy-entity-operation: Certificate#get
       parameters:
         - name: id
           in: path
@@ -63492,6 +63248,7 @@ paths:
       tags: *a4
       summary: Update Certificate
       description: Update Certificate
+      x-speakeasy-entity-operation: Certificate#update
       parameters:
         - name: id
           in: path
@@ -63505,16 +63262,13 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Certificate"
-            example:
-              commonName: "leader.example.com"
-              issuer: "Acme Internal CA"
-              validTo: "2027-01-01T00:00:00Z"
       responses: *a5
     delete:
       operationId: deleteCertificateById
       tags: *a4
       summary: Delete Certificate
       description: Delete Certificate
+      x-speakeasy-entity-operation: Certificate#delete
       parameters:
         - name: id
           in: path
@@ -63547,11 +63301,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/FeaturesEntry"
-              example:
-                count: 1
-                items:
-                  - id: "search-speedups"
-                    enabled: true
         "401":
           description: Unauthorized
         "500":
@@ -63560,10 +63309,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-feat-001"
       parameters:
         - name: id
           in: path
@@ -63596,13 +63341,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/FeaturesEntry"
-              example:
-                count: 2
-                items:
-                  - id: "search-speedups"
-                    enabled: true
-                  - id: "dark-mode"
-                    enabled: false
         "401":
           description: Unauthorized
         "500":
@@ -63611,10 +63349,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-feat-002"
   /m/{groupId}/lib/jobs:
     get:
       operationId: listCollectors
@@ -63651,15 +63385,6 @@ paths:
                     items:
                       $ref: "#/components/schemas/InputCollector"
                     x-speakeasy-ignore: true
-              example:
-                count: 1
-                items:
-                  - id: "collector-1"
-                    type: "http"
-                    description: "HTTP collector for app logs"
-                    config:
-                      url: "https://api.example.com/logs"
-                      method: "GET"
         "401":
           description: Unauthorized
         "500":
@@ -63668,10 +63393,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-coll-001"
     post:
       operationId: createSavedJob
       tags: *a7
@@ -63702,15 +63423,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/InputCollector"
-            example:
-              id: "collector-2"
-              type: "http"
-              description: "HTTP collector for metrics"
-              config:
-                url: "https://api.example.com/metrics"
-                method: "POST"
-                headers:
-                  Authorization: "Bearer <token>"
       responses: *a8
   "/m/{groupId}/lib/jobs/{id}":
     get:
@@ -63765,13 +63477,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/InputCollector"
-            example:
-              description: "Updated HTTP collector for app logs"
-              config:
-                url: "https://api.example.com/logs"
-                method: "GET"
-                headers:
-                  Authorization: "Bearer <token>"
       responses: *a8
     delete:
       operationId: deleteCollectorById
@@ -63820,15 +63525,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/KeyMetadataEntity"
-              example:
-                count: 2
-                items:
-                  - id: "key-001"
-                    name: "encryption-key-prod"
-                    createdAt: "2025-09-01T12:00:00Z"
-                  - id: "key-002"
-                    name: "signing-key-ci"
-                    createdAt: "2025-10-01T08:30:00Z"
         "401":
           description: Unauthorized
         "500":
@@ -63837,10 +63533,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-keys-001"
     post:
       operationId: createKeyMetadataEntity
       tags: *a10
@@ -63853,8 +63545,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/KeyMetadataEntity"
-            example:
-              name: "encryption-key-prod"
       responses: *a11
   "/system/keys/{id}":
     get:
@@ -63891,8 +63581,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/KeyMetadataEntity"
-            example:
-              name: "encryption-key-prod-rotated"
       responses: *a11
     delete:
       operationId: deleteKeyMetadataEntityById
@@ -63932,17 +63620,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/BulletinMessage"
-              example:
-                count: 2
-                items:
-                  - id: "msg-001"
-                    title: "Maintenance"
-                    message: "Scheduled maintenance at 02:00 UTC."
-                    level: "info"
-                  - id: "msg-002"
-                    title: "Incident"
-                    message: "Degraded performance in EU region."
-                    level: "warning"
         "401":
           description: Unauthorized
         "500":
@@ -63951,10 +63628,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-msg-001"
     post:
       operationId: createBulletinMessage
       tags: *a13
@@ -63967,10 +63640,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/BulletinMessage"
-            example:
-              title: "Maintenance"
-              message: "Scheduled maintenance at 02:00 UTC."
-              level: "info"
       responses: *a14
   "/system/messages/{id}":
     get:
@@ -64028,23 +63697,6 @@ paths:
                     items:
                       $ref: "#/components/schemas/NotificationTarget"
                     x-speakeasy-ignore: true
-              example:
-                count: 2
-                items:
-                  - id: "nt-slack-prod"
-                    type: "slack"
-                    name: "Slack - Prod Alerts"
-                    config:
-                      webhookUrl: "https://hooks.slack.com/services/T000/B000/XXXXX"
-                      channel: "#alerts"
-                  - id: "nt-email-ops"
-                    type: "smtp"
-                    name: "Email - Ops Team"
-                    config:
-                      smtpHost: "smtp.example.com"
-                      smtpPort: 587
-                      to:
-                        - "ops@example.com"
         "401":
           description: Unauthorized
         "500":
@@ -64053,10 +63705,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-nt-001"
     post:
       operationId: createNotificationTarget
       tags: *a16
@@ -64070,13 +63718,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/NotificationTarget"
-            example:
-              id: "nt-slack-prod"
-              type: "slack"
-              name: "Slack - Prod Alerts"
-              config:
-                webhookUrl: "https://hooks.slack.com/services/T000/B000/XXXXX"
-                channel: "#alerts"
       responses: *a17
   "/notification-targets/{id}":
     get:
@@ -64114,10 +63755,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/NotificationTarget"
-            example:
-              name: "Slack - Production Alerts"
-              config:
-                channel: "#prod-alerts"
       responses: *a17
     delete:
       operationId: deleteNotificationTargetById
@@ -64166,10 +63803,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-notif-001"
     post:
       operationId: createNotification
       tags: *a19
@@ -64261,17 +63894,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/PolicyRule"
-              example:
-                count: 2
-                items:
-                  - id: "policy-read-pipelines"
-                    action: "read"
-                    resource: "pipeline:*"
-                    effect: "allow"
-                  - id: "policy-write-routes"
-                    action: "write"
-                    resource: "routes:*"
-                    effect: "allow"
         "401":
           description: Unauthorized
         "500":
@@ -64280,10 +63902,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-pol-001"
     post:
       operationId: createPolicyRule
       tags: *a22
@@ -64296,11 +63914,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/PolicyRule"
-            example:
-              id: "policy-read-pipelines"
-              action: "read"
-              resource: "pipeline:*"
-              effect: "allow"
       responses: *a23
   "/system/policies/{id}":
     get:
@@ -64337,8 +63950,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/PolicyRule"
-            example:
-              effect: "deny"
       responses: *a23
     delete:
       operationId: deletePolicyRuleById
@@ -64378,15 +63989,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Role"
-              example:
-                count: 2
-                items:
-                  - id: "role-admin"
-                    name: "Admin"
-                    description: "Full access to all resources"
-                  - id: "role-viewer"
-                    name: "Viewer"
-                    description: "Read-only access to dashboards and data"
         "401":
           description: Unauthorized
         "500":
@@ -64395,10 +63997,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-role-001"
     post:
       operationId: createRole
       tags: *a25
@@ -64411,10 +64009,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Role"
-            example:
-              id: "role-analyst"
-              name: "Analyst"
-              description: "Access to search and saved queries"
       responses: *a26
   "/system/roles/{id}":
     get:
@@ -64451,8 +64045,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Role"
-            example:
-              description: "Access to search, saved queries, and metrics"
       responses: *a26
     delete:
       operationId: deleteRoleById
@@ -64492,15 +64084,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ScriptLibEntry"
-              example:
-                count: 2
-                items:
-                  - id: "util-parse-json"
-                    name: "Parse JSON Utility"
-                    language: "javascript"
-                  - id: "util-enrich-ip"
-                    name: "Enrich IP with Geo"
-                    language: "javascript"
         "401":
           description: Unauthorized
         "500":
@@ -64509,10 +64092,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-script-001"
     post:
       operationId: createScript
       tags: *a28
@@ -64525,11 +64104,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ScriptLibEntry"
-            example:
-              id: "util-normalize-log"
-              name: "Normalize Log"
-              language: "javascript"
-              code: "function normalize(e){ /* ... */ return e; }"
       responses: *a29
   "/system/scripts/{id}":
     get:
@@ -64566,11 +64140,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ScriptLibEntry"
-            example:
-              id: "util-parse-json"
-              name: "Parse JSON Utility"
-              language: "javascript"
-              code: "function parse(e){ try { e._json = JSON.parse(e._raw); } catch(_){} return e; }"
       responses: *a29
     delete:
       operationId: deleteScriptById
@@ -64600,9 +64169,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Team"
-            example:
-              name: "Platform Team"
-              description: "Owns core pipelines and infrastructure"
       responses:
         &a32
         "200":
@@ -64651,15 +64217,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Team"
-              example:
-                count: 2
-                items:
-                  - id: "team-platform"
-                    name: "Platform Team"
-                    description: "Owns core pipelines and infrastructure"
-                  - id: "team-analytics"
-                    name: "Analytics Team"
-                    description: "Builds dashboards and insights"
         "401":
           description: Unauthorized
         "500":
@@ -64668,10 +64225,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-team-001"
       parameters:
         - name: product
           in: query
@@ -64719,8 +64272,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Team"
-            example:
-              description: "Owns core pipelines, infrastructure, and security"
       responses: *a32
     delete:
       operationId: deleteTeamById
@@ -64759,15 +64310,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ResourcePolicy"
-              example:
-                count: 2
-                items:
-                  - resource: "pipeline:main"
-                    actions: ["read","write"]
-                    effect: "allow"
-                  - resource: "output:s3-main"
-                    actions: ["read"]
-                    effect: "allow"
         "401":
           description: Unauthorized
         "500":
@@ -64776,10 +64318,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-team-acl-001"
       parameters:
         - name: id
           in: path
@@ -64825,11 +64363,6 @@ paths:
                     type: array
                     items:
                       type: string
-              example:
-                count: 2
-                items:
-                  - "admin"
-                  - "analyst"
         "401":
           description: Unauthorized
         "500":
@@ -64838,10 +64371,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-team-roles-001"
       parameters:
         - name: id
           in: path
@@ -64874,11 +64403,6 @@ paths:
                     type: array
                     items:
                       type: string
-              example:
-                count: 2
-                items:
-                  - "alice@example.com"
-                  - "bob@example.com"
         "401":
           description: Unauthorized
         "500":
@@ -64887,10 +64411,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-team-users-001"
       parameters:
         - name: id
           in: path
@@ -64922,11 +64442,6 @@ paths:
                     type: array
                     items:
                       type: string
-              example:
-                count: 2
-                items:
-                  - "alice@example.com"
-                  - "charlie@example.com"
         "401":
           description: Unauthorized
         "500":
@@ -64935,10 +64450,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-team-users-002"
       requestBody:
         description: MembershipSchema object
         required: true
@@ -64985,20 +64496,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/User"
-              example:
-                count: 2
-                items:
-                  - id: "user-12345"
-                    email: "alice@example.com"
-                    name: "Alice Doe"
-                    roles:
-                      - "admin"
-                      - "analyst"
-                  - id: "user-67890"
-                    email: "bob@example.com"
-                    name: "Bob Smith"
-                    roles:
-                      - "viewer"
         "401":
           description: Unauthorized
         "500":
@@ -65007,10 +64504,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-users-001"
     post:
       operationId: createUser
       tags: *a34
@@ -65069,14 +64562,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/UserProfile"
-              example:
-                count: 1
-                items:
-                  - id: "user-12345"
-                    email: "alice@example.com"
-                    name: "Alice Doe"
-                    roles: ["admin","analyst"]
-                    mfaEnabled: true
         "401":
           description: Unauthorized
         "500":
@@ -65085,10 +64570,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-user-001"
       requestBody:
         description: UserProfile object
         required: true
@@ -65096,9 +64577,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/UserProfile"
-            example:
-              name: "Alice Doe"
-              mfaEnabled: true
+
       parameters:
         - name: id
           in: path
@@ -65145,12 +64624,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/User"
-              example:
-                count: 1
-                items:
-                  - id: "user-12345"
-                    email: "alice@example.com"
-                    name: "Alice Doe"
         "401":
           description: Unauthorized
         "500":
@@ -65159,10 +64632,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-user-002"
       requestBody:
         description: UserInfo object
         required: true
@@ -65170,9 +64639,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/UserInfo"
-            example:
-              name: "Alice Doe"
-              phone: "+1-415-555-0100"
       parameters:
         - name: id
           in: path
@@ -67130,11 +66596,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/RegexLibEntry"
-              example:
-                count: 2
-                items:
-                  - id: "apache"
-                  - id: "nginx"
         "401":
           description: Unauthorized
         "500":
@@ -67264,13 +66725,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DataSample"
-              example:
-                count: 2
-                items:
-                  - id: "apache-sample"
-                    description: "Apache access log sample"
-                  - id: "syslog-sample"
-                    description: "Syslog sample"
         "401":
           description: Unauthorized
         "500":
@@ -67291,9 +66745,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DataSample"
-            example:
-              id: "nginx-sample"
-              description: "Nginx access log sample"
       responses: *a75
   "/system/samples/{id}":
     get:
@@ -67330,8 +66781,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DataSample"
-            example:
-              description: "Apache access log sample (updated)"
       responses: *a75
     delete:
       operationId: deleteDataSampleById
@@ -67370,11 +66819,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/SampleContent"
-              example:
-                count: 2
-                items:
-                  - _raw: '127.0.0.1 - - [06/Oct/2025:12:00:00 +0000] "GET / HTTP/1.1" 200 1024'
-                  - _raw: "<34>1 2025-10-06T12:00:00Z host app - - - started"
         "401":
           description: Unauthorized
         "500":
@@ -68404,7 +67848,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
           schema:
             type: string
-          example: "Cribl"
+          example: "default"
     post:
       x-speakeasy-entity-operation: GlobalVar#create
       parameters:
@@ -70218,8 +69662,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Pipeline"
-            example:
-              name: "My Updated Pack Pipeline"
       parameters:
         - name: id
           in: path
@@ -70348,10 +69790,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Input"
-            example:
-              type: "splunk_hec"
-              config:
-                tls: true
       responses: *a127
       parameters:
         - name: pack
@@ -70448,13 +69886,6 @@ paths:
                     items:
                       $ref: "#/components/schemas/Output"
                     x-speakeasy-ignore: true
-              example:
-                count: 2
-                items:
-                  - id: "pack-out-s3"
-                    type: "s3"
-                  - id: "pack-out-splunk"
-                    type: "splunk_hec"
         "401":
           description: Unauthorized
         "500":

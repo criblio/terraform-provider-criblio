@@ -207,12 +207,12 @@ func (s *Health) Get(ctx context.Context, opts ...operations.Option) (*operation
 				return nil, err
 			}
 
-			var out string
+			var out operations.GetHealthStatusResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.String = &out
+			res.Object = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

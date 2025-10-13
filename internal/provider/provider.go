@@ -87,7 +87,7 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 			`` + "\n" +
 			`This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.` + "\n" +
 			`` + "\n" +
-			`Complementary API reference documentation is available at https://docs.cribl.io/api-reference/. Product documentation is available at https://docs.cribl.io.`,
+			`Complementary API reference documentation is available at https://docs.cribl.io/cribl-as-code/api-reference/. Product documentation is available at https://docs.cribl.io.`,
 	}
 }
 
@@ -223,6 +223,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewAppscopeConfigResource,
+		NewCertificateResource,
 		NewCollectorResource,
 		NewCommitResource,
 		NewCriblLakeDatasetResource,
@@ -270,6 +271,8 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewAppscopeConfigDataSource,
+		NewCertificateDataSource,
+		NewCertificatesDataSource,
 		NewCollectorDataSource,
 		NewConfigVersionDataSource,
 		NewCriblLakeDatasetDataSource,

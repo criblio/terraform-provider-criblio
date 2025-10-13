@@ -30,7 +30,8 @@ func newWorkspaces(rootSDK *CriblIo, sdkConfig config.SDKConfiguration, hooks *h
 	}
 }
 
-// V1WorkspacesCreateWorkspace - Create a new workspace
+// V1WorkspacesCreateWorkspace - Create a Workspace in the specified Organization
+// Create a new Workspace in the specified Organization.
 func (s *Workspaces) V1WorkspacesCreateWorkspace(ctx context.Context, request operations.V1WorkspacesCreateWorkspaceRequest, opts ...operations.Option) (*operations.V1WorkspacesCreateWorkspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -226,18 +227,34 @@ func (s *Workspaces) V1WorkspacesCreateWorkspace(ctx context.Context, request op
 		}
 	case httpRes.StatusCode == 500:
 	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.DefaultErrorDTO
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.DefaultErrorDTO = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
 	}
 
 	return res, nil
 
 }
 
-// V1WorkspacesListWorkspaces - List all workspaces for an organization
+// V1WorkspacesListWorkspaces - List all Workspaces for the specified Organization
+// Get a list of all Workspaces for the specified Organization.
 func (s *Workspaces) V1WorkspacesListWorkspaces(ctx context.Context, request operations.V1WorkspacesListWorkspacesRequest, opts ...operations.Option) (*operations.V1WorkspacesListWorkspacesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -426,18 +443,34 @@ func (s *Workspaces) V1WorkspacesListWorkspaces(ctx context.Context, request ope
 		}
 	case httpRes.StatusCode == 500:
 	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.DefaultErrorDTO
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.DefaultErrorDTO = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
 	}
 
 	return res, nil
 
 }
 
-// V1WorkspacesUpdateWorkspace - Update an existing workspace
+// V1WorkspacesUpdateWorkspace - Update a Workspace
+// Update the specified Workspace.
 func (s *Workspaces) V1WorkspacesUpdateWorkspace(ctx context.Context, request operations.V1WorkspacesUpdateWorkspaceRequest, opts ...operations.Option) (*operations.V1WorkspacesUpdateWorkspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -610,7 +643,9 @@ func (s *Workspaces) V1WorkspacesUpdateWorkspace(ctx context.Context, request op
 	}
 
 	switch {
-	case httpRes.StatusCode == 200:
+	case httpRes.StatusCode == 204:
+	case httpRes.StatusCode == 500:
+	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -618,12 +653,12 @@ func (s *Workspaces) V1WorkspacesUpdateWorkspace(ctx context.Context, request op
 				return nil, err
 			}
 
-			var out shared.WorkspaceSchema
+			var out shared.DefaultErrorDTO
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.WorkspaceSchema = &out
+			res.DefaultErrorDTO = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -631,20 +666,14 @@ func (s *Workspaces) V1WorkspacesUpdateWorkspace(ctx context.Context, request op
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 500:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
 	}
 
 	return res, nil
 
 }
 
-// V1WorkspacesDeleteWorkspace - Delete a workspace
+// V1WorkspacesDeleteWorkspace - Delete a Workspace
+// Delete the specified Workspace in the specified Organization.
 func (s *Workspaces) V1WorkspacesDeleteWorkspace(ctx context.Context, request operations.V1WorkspacesDeleteWorkspaceRequest, opts ...operations.Option) (*operations.V1WorkspacesDeleteWorkspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -693,7 +722,7 @@ func (s *Workspaces) V1WorkspacesDeleteWorkspace(ctx context.Context, request op
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
-	req.Header.Set("Accept", "*/*")
+	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
@@ -813,18 +842,34 @@ func (s *Workspaces) V1WorkspacesDeleteWorkspace(ctx context.Context, request op
 	case httpRes.StatusCode == 202:
 	case httpRes.StatusCode == 500:
 	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.DefaultErrorDTO
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.DefaultErrorDTO = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
 	}
 
 	return res, nil
 
 }
 
-// V1WorkspacesGetWorkspace - Get a specific workspace by ID
+// V1WorkspacesGetWorkspace - Get a Workspace
+// Get the specified Workspace.
 func (s *Workspaces) V1WorkspacesGetWorkspace(ctx context.Context, request operations.V1WorkspacesGetWorkspaceRequest, opts ...operations.Option) (*operations.V1WorkspacesGetWorkspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1013,11 +1058,26 @@ func (s *Workspaces) V1WorkspacesGetWorkspace(ctx context.Context, request opera
 		}
 	case httpRes.StatusCode == 500:
 	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.DefaultErrorDTO
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.DefaultErrorDTO = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
 	}
 
 	return res, nil

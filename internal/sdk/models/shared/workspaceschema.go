@@ -15,11 +15,13 @@ type WorkspaceSchemaRegion string
 const (
 	WorkspaceSchemaRegionUsWest2      WorkspaceSchemaRegion = "us-west-2"
 	WorkspaceSchemaRegionUsEast1      WorkspaceSchemaRegion = "us-east-1"
+	WorkspaceSchemaRegionUsEast2      WorkspaceSchemaRegion = "us-east-2"
 	WorkspaceSchemaRegionEuCentral1   WorkspaceSchemaRegion = "eu-central-1"
+	WorkspaceSchemaRegionEuCentral2   WorkspaceSchemaRegion = "eu-central-2"
 	WorkspaceSchemaRegionEuWest2      WorkspaceSchemaRegion = "eu-west-2"
+	WorkspaceSchemaRegionApSoutheast1 WorkspaceSchemaRegion = "ap-southeast-1"
 	WorkspaceSchemaRegionApSoutheast2 WorkspaceSchemaRegion = "ap-southeast-2"
 	WorkspaceSchemaRegionCaCentral1   WorkspaceSchemaRegion = "ca-central-1"
-	WorkspaceSchemaRegionUsEast2      WorkspaceSchemaRegion = "us-east-2"
 )
 
 func (e WorkspaceSchemaRegion) ToPointer() *WorkspaceSchemaRegion {
@@ -35,15 +37,19 @@ func (e *WorkspaceSchemaRegion) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "us-east-1":
 		fallthrough
+	case "us-east-2":
+		fallthrough
 	case "eu-central-1":
 		fallthrough
+	case "eu-central-2":
+		fallthrough
 	case "eu-west-2":
+		fallthrough
+	case "ap-southeast-1":
 		fallthrough
 	case "ap-southeast-2":
 		fallthrough
 	case "ca-central-1":
-		fallthrough
-	case "us-east-2":
 		*e = WorkspaceSchemaRegion(v)
 		return nil
 	default:
@@ -55,19 +61,11 @@ func (e *WorkspaceSchemaRegion) UnmarshalJSON(data []byte) error {
 type State string
 
 const (
-	StateWorkspaceRequested                 State = "Workspace-Requested"
-	StateWorkspaceProvisioning              State = "Workspace-Provisioning"
-	StateWorkspaceProvisioningFailed        State = "Workspace-Provisioning-Failed"
-	StateWorkspaceProvisioned               State = "Workspace-Provisioned"
-	StateWorkspaceActive                    State = "Workspace-Active"
-	StateWorkspaceUpdated                   State = "Workspace-Updated"
-	StateWorkspaceFailedUpdate              State = "Workspace-Failed-Update"
-	StateWorkspaceCleanupRequested          State = "Workspace-Cleanup-Requested"
-	StateWorkspaceCleanupStarted            State = "Workspace-Cleanup-Started"
-	StateWorkspaceCleanupTerraformCompleted State = "Workspace-Cleanup-Terraform-Completed"
-	StateWorkspaceCleanupTerraformFailed    State = "Workspace-Cleanup-Terraform-Failed"
-	StateWorkspaceCleanupCompleted          State = "Workspace-Cleanup-Completed"
-	StateWorkspaceCleanupFailed             State = "Workspace-Cleanup-Failed"
+	StateProvisioning   State = "Provisioning"
+	StateActive         State = "Active"
+	StateInactive       State = "Inactive"
+	StateFailed         State = "Failed"
+	StateDeprovisioning State = "Deprovisioning"
 )
 
 func (e State) ToPointer() *State {
@@ -79,31 +77,15 @@ func (e *State) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "Workspace-Requested":
+	case "Provisioning":
 		fallthrough
-	case "Workspace-Provisioning":
+	case "Active":
 		fallthrough
-	case "Workspace-Provisioning-Failed":
+	case "Inactive":
 		fallthrough
-	case "Workspace-Provisioned":
+	case "Failed":
 		fallthrough
-	case "Workspace-Active":
-		fallthrough
-	case "Workspace-Updated":
-		fallthrough
-	case "Workspace-Failed-Update":
-		fallthrough
-	case "Workspace-Cleanup-Requested":
-		fallthrough
-	case "Workspace-Cleanup-Started":
-		fallthrough
-	case "Workspace-Cleanup-Terraform-Completed":
-		fallthrough
-	case "Workspace-Cleanup-Terraform-Failed":
-		fallthrough
-	case "Workspace-Cleanup-Completed":
-		fallthrough
-	case "Workspace-Cleanup-Failed":
+	case "Deprovisioning":
 		*e = State(v)
 		return nil
 	default:

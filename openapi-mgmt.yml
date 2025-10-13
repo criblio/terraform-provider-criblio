@@ -10,8 +10,11 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                example: OK
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
         default:
           description: Unexpected error
       summary: Get the health status of the application
@@ -23,13 +26,15 @@ paths:
     servers:
       - url: https://gateway.cribl.cloud
     post:
+      description: Create a new Workspace in the specified Organization.
       operationId: v1.workspaces.createWorkspace
       x-speakeasy-entity-operation: Workspace#create
       parameters:
         - name: organizationId
           required: true
           in: path
-          description: Organization identifier
+          description: The <code>id</code> of the Organization where you want to create
+            the Workspace.
           schema:
             type: string
       requestBody:
@@ -40,55 +45,69 @@ paths:
               $ref: "#/components/schemas/WorkspaceCreateRequestDTO"
       responses:
         "201":
-          description: The workspace has been successfully created
+          description: The Workspace has been successfully created
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/WorkspaceSchema"
         "500":
           description: Internal Server Error
-      summary: Create a new workspace
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultErrorDTO"
+      summary: Create a Workspace in the specified Organization
       tags:
         - workspaces
     get:
+      description: Get a list of all Workspaces for the specified Organization.
       operationId: v1.workspaces.listWorkspaces
       x-speakeasy-entity-operation: Workspaces#read
       parameters:
         - name: organizationId
           required: true
           in: path
-          description: Organization identifier
+          description: The <code>id</code> of the Organization that contains the Workspaces.
           schema:
             type: string
       responses:
         "200":
-          description: List of workspaces has been successfully retrieved
+          description: List of Workspaces has been successfully retrieved
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/WorkspacesListResponseDTO"
         "500":
           description: Internal Server Error
-      summary: List all workspaces for an organization
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultErrorDTO"
+      summary: List all Workspaces for the specified Organization
       tags:
         - workspaces
   /v1/organizations/{organizationId}/workspaces/{workspaceId}:
     servers:
       - url: https://gateway.cribl.cloud
     patch:
+      description: Update the specified Workspace.
       operationId: v1.workspaces.updateWorkspace
       x-speakeasy-entity-operation: Workspace#update
       parameters:
         - name: organizationId
           required: true
           in: path
-          description: Organization identifier
+          description: The <code>id</code> of the Organization that contains the Workspace.
           schema:
             type: string
         - name: workspaceId
           required: true
           in: path
-          description: Workspace identifier
+          description: The <code>id</code> of the Workspace to update.
           schema:
             type: string
       requestBody:
@@ -98,100 +117,119 @@ paths:
             schema:
               $ref: "#/components/schemas/WorkspacePatchRequestDTO"
       responses:
-        "200":
-          description: The workspace has been successfully updated
+        "204":
+          description: The Workspace has been successfully updated
+        "500":
+          description: Internal Server Error
+        default:
+          description: ""
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WorkspaceSchema"
-        "500":
-          description: Internal Server Error
-      summary: Update an existing workspace
+                $ref: "#/components/schemas/DefaultErrorDTO"
+      summary: Update a Workspace
       tags:
         - workspaces
-      x-speakeasy-entity-operation: Workspace#update
     delete:
+      description: Delete the specified Workspace in the specified Organization.
       operationId: v1.workspaces.deleteWorkspace
       x-speakeasy-entity-operation: Workspace#delete
       parameters:
         - name: organizationId
           required: true
           in: path
-          description: Organization identifier
+          description: The <code>id</code> of the Organization that contains the Workspace.
           schema:
             type: string
         - name: workspaceId
           required: true
           in: path
-          description: Workspace identifier
+          description: The <code>id</code> of the Workspace to delete.
           schema:
             type: string
       responses:
         "202":
-          description: The workspace deletion has been accepted
+          description: The Workspace deletion has been accepted
         "500":
           description: Internal Server Error
-      summary: Delete a workspace
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultErrorDTO"
+      summary: Delete a Workspace
       tags:
         - workspaces
     get:
+      description: Get the specified Workspace.
       operationId: v1.workspaces.getWorkspace
       x-speakeasy-entity-operation: Workspace#get
       parameters:
         - name: organizationId
           required: true
           in: path
-          description: Organization identifier
+          description: The <code>id</code> of the Organization that contains the Workspace.
           schema:
             type: string
         - name: workspaceId
           required: true
           in: path
-          description: Workspace identifier
+          description: The <code>id</code> of the Workspace to get.
           schema:
             type: string
       responses:
         "200":
-          description: The workspace details have been successfully retrieved
+          description: The Workspace details have been retrieved
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/WorkspaceSchema"
         "500":
           description: Internal Server Error
-      summary: Get a specific workspace by ID
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultErrorDTO"
+      summary: Get a Workspace
       tags:
         - workspaces
 components:
   schemas:
+    DefaultErrorDTO:
+      type: object
+      properties:
+        statusCode:
+          type: number
+        message:
+          type: string
+      required:
+        - statusCode
+        - message
     AWSRegions:
       type: string
       enum:
         - us-west-2
         - us-east-1
+        - us-east-2
         - eu-central-1
+        - eu-central-2
         - eu-west-2
+        - ap-southeast-1
         - ap-southeast-2
         - ca-central-1
-        - us-east-2
       description: AWS region where the workspace is deployed
       x-speakeasy-unknown-values: allow
     WorkspaceState:
       type: string
       enum:
-        - Workspace-Requested
-        - Workspace-Provisioning
-        - Workspace-Provisioning-Failed
-        - Workspace-Provisioned
-        - Workspace-Active
-        - Workspace-Updated
-        - Workspace-Failed-Update
-        - Workspace-Cleanup-Requested
-        - Workspace-Cleanup-Started
-        - Workspace-Cleanup-Terraform-Completed
-        - Workspace-Cleanup-Terraform-Failed
-        - Workspace-Cleanup-Completed
-        - Workspace-Cleanup-Failed
+        - Provisioning
+        - Active
+        - Inactive
+        - Failed
+        - Deprovisioning
       description: Current state of the workspace
       x-speakeasy-unknown-values: allow
     WorkspaceSchema:
@@ -203,7 +241,7 @@ components:
           minLength: 4
           maxLength: 41
           pattern: ^[a-z0-9]*$
-          example: my-workspace
+          example: main
         region:
           description: AWS region where the workspace is deployed
           example: us-west-2
@@ -220,7 +258,7 @@ components:
           example: workspace-leader.example.com
         state:
           description: Current state of the workspace
-          example: Workspace-Active
+          example: Active
           allOf:
             - $ref: "#/components/schemas/WorkspaceState"
         alias:
@@ -254,12 +292,7 @@ components:
           minLength: 4
           maxLength: 41
           pattern: ^[a-z0-9]*$
-          example: my-workspace
-        region:
-          description: AWS region where the workspace is deployed
-          example: us-west-2
-          allOf:
-            - $ref: "#/components/schemas/AWSRegions"
+          example: main
         alias:
           type: string
           description: User-friendly alias for the workspace
@@ -278,7 +311,6 @@ components:
             type: string
       required:
         - workspaceId
-        - region
     WorkspacePatchRequestDTO:
       type: object
       properties:

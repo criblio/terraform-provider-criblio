@@ -8,7 +8,7 @@ terraform import -no-color criblio_subscription.my_subscription '{"group_id": "d
 echo
 terraform import -no-color criblio_subscription.my_subscription_with_enabled '{"group_id": "default", "id": "my_subscription_with_enabled"}'
 echo
-terraform import -no-color criblio_regex.my_regex '{"group_id": "default", "id": "test_regex"}'
+terraform import -no-color criblio_regex.my_regex '{"group_id": "default", "id": "test_regex_2"}'
 echo
 terraform import -no-color criblio_database_connection.my_databaseconnection '{"group_id": "default", "id": "my_databaseconnection"}'
 echo
