@@ -3,7 +3,6 @@ info:
   title: Add x-speakeasy-entity tags to resolve non-deterministic generation
   version: 1.0.0
 actions:
-  # Core entity schemas
   - target: "$.components.schemas.Certificate"
     update:
       x-speakeasy-entity: Certificate
@@ -196,7 +195,6 @@ actions:
     update:
       x-speakeasy-entity: InstanceSettings
 
-  # Additional schemas that may be referenced in responses
   - target: "$.components.schemas.Error"
     update:
       x-speakeasy-entity: Error
@@ -224,6 +222,22 @@ actions:
   - target: "$.components.schemas.AccessControlSchema"
     update:
       x-speakeasy-entity: AccessControlSchema
+
+  - target: "$.paths['/m/default_search/search/datasets/{id}'].get.responses['200'].content.application/json.schema"
+    update:
+      x-speakeasy-entity: SearchDataset
+       
+  - target: "$.paths['/m/default_search/search/dataset-providers/{id}'].get.responses['200'].content.application/json.schema"
+    update:
+      x-speakeasy-entity: SearchDatasetProvider
+      
+  - target: "$.paths['/m/default_search/search/usage-groups/{id}'].get.responses['200'].content.application/json.schema"
+    update:
+      x-speakeasy-entity: SearchUsageGroup
+      
+  - target: "$.paths['/m/{groupId}/lib/parquet-schemas/{id}'].get.responses['200'].content.application/json.schema"
+    update:
+      x-speakeasy-entity: ParquetSchema
   
   - target: "$.components.schemas.AccessControlSchema"
     update:
