@@ -52,10 +52,9 @@ actions:
     update:
       x-speakeasy-entity: SearchDataset
   
-  # Temporarily commented out due to type mismatch issue
-  # - target: "$.components.schemas.AppscopeConfig"
-  #   update:
-  #     x-speakeasy-entity: AppscopeConfig
+  - target: "$.components.schemas.AppscopeConfig"
+    update:
+      x-speakeasy-entity: AppscopeConfig
   
   - target: "$.components.schemas.Grok"
     update:
