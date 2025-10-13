@@ -5,33 +5,22 @@ package provider
 import (
 	"context"
 	"encoding/json"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SearchUsageGroupDataSourceModel) RefreshFromOperationsListUsageGroupResponseBody(ctx context.Context, resp *operations.ListUsageGroupResponseBody) diag.Diagnostics {
+func (r *SearchUsageGroupDataSourceModel) RefreshFromSharedUsageGroup(ctx context.Context, resp *shared.UsageGroup) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.UsageGroup{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.UsageGroup
-
-			items.CoordinatorHeapMemoryLimit = types.Float64PointerValue(itemsItem.CoordinatorHeapMemoryLimit)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Enabled = types.BoolPointerValue(itemsItem.Enabled)
-			items.ID = types.StringValue(itemsItem.ID)
-			rulesResult, _ := json.Marshal(itemsItem.Rules)
-			items.Rules = jsontypes.NewNormalizedValue(string(rulesResult))
-			items.UsersCount = types.Float64PointerValue(itemsItem.UsersCount)
-
-			r.Items = append(r.Items, items)
-		}
-	}
+	r.CoordinatorHeapMemoryLimit = types.Float64PointerValue(resp.CoordinatorHeapMemoryLimit)
+	r.Description = types.StringPointerValue(resp.Description)
+	r.Enabled = types.BoolPointerValue(resp.Enabled)
+	r.ID = types.StringValue(resp.ID)
+	rulesResult, _ := json.Marshal(resp.Rules)
+	r.Rules = jsontypes.NewNormalizedValue(string(rulesResult))
+	r.UsersCount = types.Float64PointerValue(resp.UsersCount)
 
 	return diags
 }
