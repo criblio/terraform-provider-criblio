@@ -11,6 +11,24 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *GroupResourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ctx context.Context, resp *operations.GetGroupsByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
+func (r *GroupResourceModel) RefreshFromOperationsUpdateGroupsByIDResponseBody(ctx context.Context, resp *operations.UpdateGroupsByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
 func (r *GroupResourceModel) RefreshFromSharedGroup(ctx context.Context, resp *shared.Group) diag.Diagnostics {
 	var diags diag.Diagnostics
 

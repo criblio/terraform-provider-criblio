@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 7395c8a259cecc8087b1934381a78e27
+  docChecksum: 811f7fc5622a7ab16f5e9d139ea9356f
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
@@ -462,7 +462,6 @@ generatedFiles:
   - internal/provider/types/certificate.go
   - internal/provider/types/click_house_dataset.go
   - internal/provider/types/click_house_provider.go
-  - internal/provider/types/cloud.go
   - internal/provider/types/cloud_workspace_schema.go
   - internal/provider/types/cloud_workspace_schema_check_server_identity.go
   - internal/provider/types/cloud_workspace_schema_tls.go
@@ -7132,7 +7131,7 @@ examples:
           fields: "git.commit,git.localChanges"
       responses:
         "200":
-          application/json: {"items": [{"onPrem": false, "workerRemoteAccess": true, "streamtags": ["prod", "web"], "cloud": {"provider": "aws", "region": "us-east-1"}, "provisioned": true, "isFleet": false, "estimatedIngestRate": 250000, "name": "edge-group-prod", "id": "grp-prod-edge"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteGroupsById:
@@ -7142,7 +7141,7 @@ examples:
           id: "workers-west"
       responses:
         "200":
-          application/json: {"items": [{"onPrem": false, "workerRemoteAccess": true, "streamtags": ["prod", "web"], "cloud": {"provider": "aws", "region": "us-east-1"}, "provisioned": true, "isFleet": false, "estimatedIngestRate": 250000, "name": "edge-group-prod", "id": "grp-prod-edge"}]}
+          application/json: {}
         "500":
           application/json: {}
   updateGroupsById:
@@ -7152,7 +7151,7 @@ examples:
           id: "workers-west"
       responses:
         "200":
-          application/json: {"items": [{"onPrem": false, "workerRemoteAccess": true, "streamtags": ["prod", "web"], "cloud": {"provider": "aws", "region": "us-east-1"}, "provisioned": true, "isFleet": false, "estimatedIngestRate": 250000, "name": "edge-group-prod", "id": "grp-prod-edge"}]}
+          application/json: {}
         "500":
           application/json: {}
   getSearchJobsResultsById:

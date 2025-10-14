@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,16 +28,8 @@ type GroupDataSource struct {
 
 // GroupDataSourceModel describes the data model.
 type GroupDataSourceModel struct {
-	Cloud               *tfTypes.Cloud `tfsdk:"cloud"`
-	EstimatedIngestRate types.Float64  `tfsdk:"estimated_ingest_rate"`
-	Fields              types.String   `queryParam:"style=form,explode=true,name=fields" tfsdk:"fields"`
-	ID                  types.String   `tfsdk:"id"`
-	IsFleet             types.Bool     `tfsdk:"is_fleet"`
-	Name                types.String   `tfsdk:"name"`
-	OnPrem              types.Bool     `tfsdk:"on_prem"`
-	Provisioned         types.Bool     `tfsdk:"provisioned"`
-	Streamtags          []types.String `tfsdk:"streamtags"`
-	WorkerRemoteAccess  types.Bool     `tfsdk:"worker_remote_access"`
+	Fields types.String `queryParam:"style=form,explode=true,name=fields" tfsdk:"fields"`
+	ID     types.String `tfsdk:"id"`
 }
 
 // Metadata returns the data source type name.
@@ -52,20 +43,6 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 		MarkdownDescription: "Group DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"cloud": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"provider": schema.StringAttribute{
-						Computed: true,
-					},
-					"region": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"estimated_ingest_rate": schema.Float64Attribute{
-				Computed: true,
-			},
 			"fields": schema.StringAttribute{
 				Optional:    true,
 				Description: `fields to add to results: git.commit, git.localChanges, git.log`,
@@ -73,26 +50,6 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Group id`,
-			},
-			"is_fleet": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Must be true if product is 'edge'`,
-			},
-			"name": schema.StringAttribute{
-				Computed: true,
-			},
-			"on_prem": schema.BoolAttribute{
-				Computed: true,
-			},
-			"provisioned": schema.BoolAttribute{
-				Computed: true,
-			},
-			"streamtags": schema.ListAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
-			},
-			"worker_remote_access": schema.BoolAttribute{
-				Computed: true,
 			},
 		},
 	}
@@ -158,11 +115,11 @@ func (r *GroupDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGroup(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

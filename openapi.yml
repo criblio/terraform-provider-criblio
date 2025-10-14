@@ -79575,6 +79575,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Group'
+                    x-speakeasy-ignore: true
               example:
                 count_total: 1
                 items:
@@ -79612,6 +79613,7 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Group"
+                    x-speakeasy-ignore: true
               example:
                 count: 1
                 items:

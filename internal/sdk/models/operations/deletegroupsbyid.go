@@ -3,7 +3,6 @@
 package operations
 
 import (
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
@@ -21,14 +20,6 @@ func (d *DeleteGroupsByIDRequest) GetID() string {
 
 // DeleteGroupsByIDResponseBody - a list of ConfigGroup objects
 type DeleteGroupsByIDResponseBody struct {
-	Items []shared.Group `json:"items,omitempty"`
-}
-
-func (d *DeleteGroupsByIDResponseBody) GetItems() []shared.Group {
-	if d == nil {
-		return nil
-	}
-	return d.Items
 }
 
 type DeleteGroupsByIDResponse struct {

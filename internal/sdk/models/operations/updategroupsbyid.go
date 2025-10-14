@@ -3,7 +3,6 @@
 package operations
 
 import (
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
@@ -21,14 +20,6 @@ func (u *UpdateGroupsByIDRequest) GetID() string {
 
 // UpdateGroupsByIDResponseBody - a list of ConfigGroup objects
 type UpdateGroupsByIDResponseBody struct {
-	Items []shared.Group `json:"items,omitempty"`
-}
-
-func (u *UpdateGroupsByIDResponseBody) GetItems() []shared.Group {
-	if u == nil {
-		return nil
-	}
-	return u.Items
 }
 
 type UpdateGroupsByIDResponse struct {
