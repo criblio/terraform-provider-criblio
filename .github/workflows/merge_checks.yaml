@@ -135,3 +135,96 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: dominikh/staticcheck-action@v1.3.1
+
+
+  validate-determinism:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Speakeasy
+        uses: mheap/setup-go-cli@fa9b01cdd4115eac636164f0de43bf7d51c82697 # v1
+        with:
+          owner: speakeasy-api
+          repo: speakeasy
+          cli_name: speakeasy
+          package_type: zip
+
+      - name: Configure speakeasy CLI
+        run: |
+          mkdir -p ~/.speakeasy
+          echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
+
+      - name: Checkout current repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: dominikh/staticcheck-action@v1.3.1
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.1.7"
+
+      - name: Log initial git status
+        run: |
+          echo "Initial git status:"
+          git status
+
+      - name: Run Speakeasy with frozen workflow lockfile
+        run: speakeasy run --frozen-workflow-lockfile
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          echo "Run commit hooks for continuity:"
+          ./.githooks/pre-commit
+
+          echo "Git status after speakeasy run and commit hooks:"
+          git status
+
+          # Reset ignored files to avoid counting them as changes
+          git checkout HEAD -- .speakeasy/gen.lock .speakeasy/workflow.lock 2>/dev/null || true
+
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+            echo "Non-deterministic changes detected!"
+          else
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+            echo "No changes detected - workflow is deterministic"
+          fi
+
+      - name: Create branch and push changes if non-deterministic
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        run: |
+          # Extract branch name from ref
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          NON_DETERMINISM_BRANCH="speakeasy-nondeterminism/${BRANCH_NAME}"
+
+          echo "Creating branch: $NON_DETERMINISM_BRANCH"
+
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create and checkout new branch
+          git checkout -b "$NON_DETERMINISM_BRANCH"
+
+          # Stage all changes
+          git add -A
+
+          # Show what we're committing
+          echo "Changes to be committed:"
+          git status
+
+          # Commit changes
+          git commit -m "Non-deterministic changes detected from branch ${BRANCH_NAME}"
+
+          # Push to remote
+          git push origin "$NON_DETERMINISM_BRANCH" --force
+
+      - name: Fail workflow if changes detected
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          NON_DETERMINISM_BRANCH="speakeasy-nondeterminism/${BRANCH_NAME}"
+          echo "::error::Non-deterministic changes detected! Changes have been pushed to branch: $NON_DETERMINISM_BRANCH"
+          exit 1

@@ -4,11 +4,39 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
+
+func (r *HmacFunctionResourceModel) RefreshFromOperationsGetHmacFunctionByIDResponseBody(ctx context.Context, resp *operations.GetHmacFunctionByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.HmacFunction{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.HmacFunction
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.HeaderExpression = types.StringValue(itemsItem.HeaderExpression)
+			items.HeaderName = types.StringValue(itemsItem.HeaderName)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Lib = types.StringValue(string(itemsItem.Lib))
+			items.StringBuilders = make([]types.String, 0, len(itemsItem.StringBuilders))
+			for _, v := range itemsItem.StringBuilders {
+				items.StringBuilders = append(items.StringBuilders, types.StringValue(v))
+			}
+			items.StringDelim = types.StringPointerValue(itemsItem.StringDelim)
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
 
 func (r *HmacFunctionResourceModel) RefreshFromSharedHmacFunction(ctx context.Context, resp *shared.HmacFunction) diag.Diagnostics {
 	var diags diag.Diagnostics

@@ -4,11 +4,40 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
+
+func (r *DatabaseConnectionResourceModel) RefreshFromOperationsGetDatabaseConnectionConfigByIDResponseBody(ctx context.Context, resp *operations.GetDatabaseConnectionConfigByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.DatabaseConnectionConfig{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.DatabaseConnectionConfig
+
+			items.AuthType = types.StringValue(itemsItem.AuthType)
+			items.ConfigObj = types.StringPointerValue(itemsItem.ConfigObj)
+			items.ConnectionString = types.StringPointerValue(itemsItem.ConnectionString)
+			items.ConnectionTimeout = types.Float64PointerValue(itemsItem.ConnectionTimeout)
+			items.DatabaseType = types.StringValue(string(itemsItem.DatabaseType))
+			items.Description = types.StringValue(itemsItem.Description)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Password = types.StringPointerValue(itemsItem.Password)
+			items.RequestTimeout = types.Float64PointerValue(itemsItem.RequestTimeout)
+			items.Tags = types.StringPointerValue(itemsItem.Tags)
+			items.User = types.StringPointerValue(itemsItem.User)
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
 
 func (r *DatabaseConnectionResourceModel) RefreshFromSharedDatabaseConnectionConfig(ctx context.Context, resp *shared.DatabaseConnectionConfig) diag.Diagnostics {
 	var diags diag.Diagnostics

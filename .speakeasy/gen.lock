@@ -484,6 +484,7 @@ generatedFiles:
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
   - internal/provider/types/dashboard_layout.go
+  - internal/provider/types/database_connection_config.go
   - internal/provider/types/dataset_metadata.go
   - internal/provider/types/discover_request_header.go
   - internal/provider/types/discover_request_param.go
@@ -979,7 +980,6 @@ generatedFiles:
   - internal/provider/types/interfaces.go
   - internal/provider/types/internal_scheduling.go
   - internal/provider/types/lake_dataset_search_config.go
-  - internal/provider/types/lakehouse.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
@@ -1325,7 +1325,6 @@ generatedFiles:
   - internal/provider/types/target_config.go
   - internal/provider/types/target_config_conf.go
   - internal/provider/types/tls_configuration.go
-  - internal/provider/types/usage_group.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/types/webhook_target.go
