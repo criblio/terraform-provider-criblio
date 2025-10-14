@@ -540,6 +540,7 @@ type OutputMskTLSSettingsClientSide struct {
 	Disabled *bool `default:"false" json:"disabled"`
 	// Reject certificates that are not authorized by a CA in the CA certificate path, or by another
 	//
+	//
 	//                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
 	// Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.

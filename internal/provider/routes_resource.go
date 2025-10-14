@@ -7,12 +7,15 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
+	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -37,8 +40,7 @@ type RoutesResourceModel struct {
 	GroupID  types.String                    `tfsdk:"group_id"`
 	Groups   map[string]tfTypes.RoutesGroups `tfsdk:"groups"`
 	ID       types.String                    `tfsdk:"id"`
-	Items    []tfTypes.Routes                `tfsdk:"items"`
-	Routes   []tfTypes.RoutesRoute1          `tfsdk:"routes"`
+	Routes   []tfTypes.RoutesRoute           `tfsdk:"routes"`
 }
 
 func (r *RoutesResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -50,15 +52,21 @@ func (r *RoutesResource) Schema(ctx context.Context, req resource.SchemaRequest,
 		MarkdownDescription: "Routes Resource",
 		Attributes: map[string]schema.Attribute{
 			"comments": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
 					Attributes: map[string]schema.Attribute{
 						"additional_properties": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
 							Optional:    true,
 							Description: `Parsed as JSON.`,
 						},
 						"comment": schema.StringAttribute{
+							Computed:    true,
 							Optional:    true,
 							Description: `Optional, short description of this Route's purpose`,
 						},
@@ -71,141 +79,58 @@ func (r *RoutesResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `group Id`,
 			},
 			"groups": schema.MapNestedAttribute{
+				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
 					Attributes: map[string]schema.Attribute{
 						"description": schema.StringAttribute{
+							Computed:    true,
 							Optional:    true,
 							Description: `Short description of this group`,
 						},
 						"disabled": schema.BoolAttribute{
+							Computed:    true,
 							Optional:    true,
 							Description: `Whether this group is disabled`,
 						},
 						"name": schema.StringAttribute{
-							Required: true,
+							Computed:    true,
+							Optional:    true,
+							Description: `Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
 						},
 					},
 				},
 			},
 			"id": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Routes ID`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"comments": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"comment": schema.StringAttribute{
-										Computed:    true,
-										Description: `Optional, short description of this Route's purpose`,
-									},
-								},
-							},
-							Description: `Comments`,
-						},
-						"groups": schema.MapNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										Computed:    true,
-										Description: `Short description of this group`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Whether this group is disabled`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Routes ID`,
-						},
-						"routes": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Disable this routing rule`,
-									},
-									"enable_output_expression": schema.BoolAttribute{
-										Computed:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false`,
-									},
-									"filter": schema.StringAttribute{
-										Computed:    true,
-										Default:     stringdefault.StaticString(`true`),
-										Description: `JavaScript expression to select data to route. Default: "true"`,
-									},
-									"final": schema.BoolAttribute{
-										Computed:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true`,
-									},
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"output": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"output_expression": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"pipeline": schema.StringAttribute{
-										Computed:    true,
-										Description: `Pipeline to send the matching data to`,
-									},
-								},
-							},
-							Description: `Pipeline routing rules`,
-						},
-					},
-				},
 			},
 			"routes": schema.ListNestedAttribute{
 				Required: true,
 				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
 					Attributes: map[string]schema.Attribute{
 						"additional_properties": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
 							Optional:    true,
 							Description: `Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
+							Computed: true,
 							Optional: true,
 						},
 						"disabled": schema.BoolAttribute{
+							Computed:    true,
 							Optional:    true,
 							Description: `Disable this routing rule`,
 						},
@@ -227,22 +152,36 @@ func (r *RoutesResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Default:     booldefault.StaticBool(true),
 							Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true`,
 						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
 						"name": schema.StringAttribute{
-							Required: true,
+							Computed:    true,
+							Optional:    true,
+							Description: `Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
 						},
 						"output": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
 							Optional:    true,
 							Description: `Parsed as JSON.`,
 						},
 						"output_expression": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
 							Optional:    true,
 							Description: `Parsed as JSON.`,
 						},
 						"pipeline": schema.StringAttribute{
-							Required:    true,
-							Description: `Pipeline to send the matching data to`,
+							Computed:    true,
+							Optional:    true,
+							Description: `Pipeline to send the matching data to. Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
 						},
 					},
 				},
@@ -312,48 +251,11 @@ func (r *RoutesResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreateRoutesByGroupIDResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetRoutesByGroupIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Routes.GetRoutesByGroupID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoutesByGroupIDResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedRoutes(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -413,11 +315,11 @@ func (r *RoutesResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoutesByGroupIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedRoutes(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -463,48 +365,11 @@ func (r *RoutesResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreateRoutesByGroupIDResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetRoutesByGroupIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Routes.GetRoutesByGroupID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoutesByGroupIDResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedRoutes(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -3,10 +3,968 @@
 package shared
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
+
+type TypeSMTP string
+
+const (
+	TypeSMTPSMTP TypeSMTP = "smtp"
+)
+
+func (e TypeSMTP) ToPointer() *TypeSMTP {
+	return &e
+}
+func (e *TypeSMTP) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "smtp":
+		*e = TypeSMTP(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for TypeSMTP: %v", v)
+	}
+}
+
+// Encryption method for SMTP
+type Encryption string
+
+const (
+	EncryptionNone     Encryption = "NONE"
+	EncryptionStarttls Encryption = "STARTTLS"
+	EncryptionSsl      Encryption = "SSL"
+)
+
+func (e Encryption) ToPointer() *Encryption {
+	return &e
+}
+func (e *Encryption) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "NONE":
+		fallthrough
+	case "STARTTLS":
+		fallthrough
+	case "SSL":
+		*e = Encryption(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for Encryption: %v", v)
+	}
+}
+
+// NotificationTargetMinimumTLSVersion - Minimum TLS version to accept
+type NotificationTargetMinimumTLSVersion string
+
+const (
+	NotificationTargetMinimumTLSVersionTlSv1  NotificationTargetMinimumTLSVersion = "TLSv1"
+	NotificationTargetMinimumTLSVersionTlSv11 NotificationTargetMinimumTLSVersion = "TLSv1.1"
+	NotificationTargetMinimumTLSVersionTlSv12 NotificationTargetMinimumTLSVersion = "TLSv1.2"
+	NotificationTargetMinimumTLSVersionTlSv13 NotificationTargetMinimumTLSVersion = "TLSv1.3"
+)
+
+func (e NotificationTargetMinimumTLSVersion) ToPointer() *NotificationTargetMinimumTLSVersion {
+	return &e
+}
+func (e *NotificationTargetMinimumTLSVersion) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "TLSv1":
+		fallthrough
+	case "TLSv1.1":
+		fallthrough
+	case "TLSv1.2":
+		fallthrough
+	case "TLSv1.3":
+		*e = NotificationTargetMinimumTLSVersion(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for NotificationTargetMinimumTLSVersion: %v", v)
+	}
+}
+
+// NotificationTargetMaximumTLSVersion - Maximum TLS version to accept
+type NotificationTargetMaximumTLSVersion string
+
+const (
+	NotificationTargetMaximumTLSVersionTlSv1  NotificationTargetMaximumTLSVersion = "TLSv1"
+	NotificationTargetMaximumTLSVersionTlSv11 NotificationTargetMaximumTLSVersion = "TLSv1.1"
+	NotificationTargetMaximumTLSVersionTlSv12 NotificationTargetMaximumTLSVersion = "TLSv1.2"
+	NotificationTargetMaximumTLSVersionTlSv13 NotificationTargetMaximumTLSVersion = "TLSv1.3"
+)
+
+func (e NotificationTargetMaximumTLSVersion) ToPointer() *NotificationTargetMaximumTLSVersion {
+	return &e
+}
+func (e *NotificationTargetMaximumTLSVersion) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "TLSv1":
+		fallthrough
+	case "TLSv1.1":
+		fallthrough
+	case "TLSv1.2":
+		fallthrough
+	case "TLSv1.3":
+		*e = NotificationTargetMaximumTLSVersion(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for NotificationTargetMaximumTLSVersion: %v", v)
+	}
+}
+
+// TLSConfiguration - TLS configuration options
+type TLSConfiguration struct {
+	// Whether to reject unauthorized certificates
+	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	// Minimum TLS version to accept
+	MinVersion *NotificationTargetMinimumTLSVersion `default:"TLSv1.2" json:"minVersion"`
+	// Maximum TLS version to accept
+	MaxVersion *NotificationTargetMaximumTLSVersion `default:"TLSv1.3" json:"maxVersion"`
+}
+
+func (t TLSConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *TLSConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *TLSConfiguration) GetRejectUnauthorized() *bool {
+	if t == nil {
+		return nil
+	}
+	return t.RejectUnauthorized
+}
+
+func (t *TLSConfiguration) GetMinVersion() *NotificationTargetMinimumTLSVersion {
+	if t == nil {
+		return nil
+	}
+	return t.MinVersion
+}
+
+func (t *TLSConfiguration) GetMaxVersion() *NotificationTargetMaximumTLSVersion {
+	if t == nil {
+		return nil
+	}
+	return t.MaxVersion
+}
+
+type SMTPTarget struct {
+	// Unique ID for this notification target
+	ID   string   `json:"id"`
+	Type TypeSMTP `json:"type"`
+	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+	SystemFields []string `json:"systemFields,omitempty"`
+	// SMTP server hostname
+	Host string `json:"host"`
+	// SMTP server port
+	Port int64 `json:"port"`
+	// Email address to send from
+	From string `json:"from"`
+	// SMTP authentication username
+	Username *string `json:"username,omitempty"`
+	// SMTP authentication password
+	Password *string `json:"password,omitempty"`
+	// Encryption method for SMTP
+	EncryptionOption *Encryption `default:"NONE" json:"encryptionOption"`
+	// TLS configuration options
+	TLS *TLSConfiguration `json:"tls,omitempty"`
+}
+
+func (s SMTPTarget) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SMTPTarget) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "host", "port", "from"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SMTPTarget) GetID() string {
+	if s == nil {
+		return ""
+	}
+	return s.ID
+}
+
+func (s *SMTPTarget) GetType() TypeSMTP {
+	if s == nil {
+		return TypeSMTP("")
+	}
+	return s.Type
+}
+
+func (s *SMTPTarget) GetSystemFields() []string {
+	if s == nil {
+		return nil
+	}
+	return s.SystemFields
+}
+
+func (s *SMTPTarget) GetHost() string {
+	if s == nil {
+		return ""
+	}
+	return s.Host
+}
+
+func (s *SMTPTarget) GetPort() int64 {
+	if s == nil {
+		return 0
+	}
+	return s.Port
+}
+
+func (s *SMTPTarget) GetFrom() string {
+	if s == nil {
+		return ""
+	}
+	return s.From
+}
+
+func (s *SMTPTarget) GetUsername() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Username
+}
+
+func (s *SMTPTarget) GetPassword() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Password
+}
+
+func (s *SMTPTarget) GetEncryptionOption() *Encryption {
+	if s == nil {
+		return nil
+	}
+	return s.EncryptionOption
+}
+
+func (s *SMTPTarget) GetTLS() *TLSConfiguration {
+	if s == nil {
+		return nil
+	}
+	return s.TLS
+}
+
+type NotificationTargetTypeSns string
+
+const (
+	NotificationTargetTypeSnsSns NotificationTargetTypeSns = "sns"
+)
+
+func (e NotificationTargetTypeSns) ToPointer() *NotificationTargetTypeSns {
+	return &e
+}
+func (e *NotificationTargetTypeSns) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "sns":
+		*e = NotificationTargetTypeSns(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for NotificationTargetTypeSns: %v", v)
+	}
+}
+
+// NotificationTargetAuthenticationMethod - AWS authentication method
+type NotificationTargetAuthenticationMethod string
+
+const (
+	NotificationTargetAuthenticationMethodAuto   NotificationTargetAuthenticationMethod = "auto"
+	NotificationTargetAuthenticationMethodManual NotificationTargetAuthenticationMethod = "manual"
+	NotificationTargetAuthenticationMethodSecret NotificationTargetAuthenticationMethod = "secret"
+)
+
+func (e NotificationTargetAuthenticationMethod) ToPointer() *NotificationTargetAuthenticationMethod {
+	return &e
+}
+func (e *NotificationTargetAuthenticationMethod) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "auto":
+		fallthrough
+	case "manual":
+		fallthrough
+	case "secret":
+		*e = NotificationTargetAuthenticationMethod(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for NotificationTargetAuthenticationMethod: %v", v)
+	}
+}
+
+// DestinationType - The type of destination to send notifications to
+type DestinationType string
+
+const (
+	DestinationTypePhoneNumber DestinationType = "phoneNumber"
+	DestinationTypeTopic       DestinationType = "topic"
+)
+
+func (e DestinationType) ToPointer() *DestinationType {
+	return &e
+}
+func (e *DestinationType) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "phoneNumber":
+		fallthrough
+	case "topic":
+		*e = DestinationType(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for DestinationType: %v", v)
+	}
+}
+
+// TopicType - Type of the topic selected in AWS SNS
+type TopicType string
+
+const (
+	TopicTypeStandard TopicType = "standard"
+	TopicTypeFifo     TopicType = "fifo"
+)
+
+func (e TopicType) ToPointer() *TopicType {
+	return &e
+}
+func (e *TopicType) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "standard":
+		fallthrough
+	case "fifo":
+		*e = TopicType(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for TopicType: %v", v)
+	}
+}
+
+type SnsTarget struct {
+	// Unique ID for this notification target
+	ID   string                    `json:"id"`
+	Type NotificationTargetTypeSns `json:"type"`
+	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+	SystemFields []string `json:"systemFields,omitempty"`
+	// AWS authentication method
+	AwsAuthenticationMethod *NotificationTargetAuthenticationMethod `json:"awsAuthenticationMethod,omitempty"`
+	// ARN of the role to assume
+	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+	// External ID for role assumption
+	AssumeRoleExternalID *string `json:"assumeRoleExternalId,omitempty"`
+	// AWS access key
+	AwsAPIKey *string `json:"awsApiKey,omitempty"`
+	// AWS secret key
+	AwsSecretKey *string `json:"awsSecretKey,omitempty"`
+	// AWS region
+	Region string `json:"region"`
+	// SNS endpoint URL
+	Endpoint *string `json:"endpoint,omitempty"`
+	// Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic.
+	Allowlist []string `json:"allowlist,omitempty"`
+	// The type of destination to send notifications to
+	DestinationType *DestinationType `default:"topic" json:"destinationType"`
+	// The default phone number to send the notification to. This value can be overridden by the notification event __phoneNumber field.
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
+	// The default ARN of the SNS topic to send notifications to
+	TopicArn *string `json:"topicArn,omitempty"`
+	// Type of the topic selected in AWS SNS
+	TopicType *TopicType `default:"fifo" json:"topicType"`
+	// Message group ID for FIFO topics
+	MessageGroupID *string `json:"messageGroupId,omitempty"`
+}
+
+func (s SnsTarget) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SnsTarget) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "region"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SnsTarget) GetID() string {
+	if s == nil {
+		return ""
+	}
+	return s.ID
+}
+
+func (s *SnsTarget) GetType() NotificationTargetTypeSns {
+	if s == nil {
+		return NotificationTargetTypeSns("")
+	}
+	return s.Type
+}
+
+func (s *SnsTarget) GetSystemFields() []string {
+	if s == nil {
+		return nil
+	}
+	return s.SystemFields
+}
+
+func (s *SnsTarget) GetAwsAuthenticationMethod() *NotificationTargetAuthenticationMethod {
+	if s == nil {
+		return nil
+	}
+	return s.AwsAuthenticationMethod
+}
+
+func (s *SnsTarget) GetAssumeRoleArn() *string {
+	if s == nil {
+		return nil
+	}
+	return s.AssumeRoleArn
+}
+
+func (s *SnsTarget) GetAssumeRoleExternalID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.AssumeRoleExternalID
+}
+
+func (s *SnsTarget) GetAwsAPIKey() *string {
+	if s == nil {
+		return nil
+	}
+	return s.AwsAPIKey
+}
+
+func (s *SnsTarget) GetAwsSecretKey() *string {
+	if s == nil {
+		return nil
+	}
+	return s.AwsSecretKey
+}
+
+func (s *SnsTarget) GetRegion() string {
+	if s == nil {
+		return ""
+	}
+	return s.Region
+}
+
+func (s *SnsTarget) GetEndpoint() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Endpoint
+}
+
+func (s *SnsTarget) GetAllowlist() []string {
+	if s == nil {
+		return nil
+	}
+	return s.Allowlist
+}
+
+func (s *SnsTarget) GetDestinationType() *DestinationType {
+	if s == nil {
+		return nil
+	}
+	return s.DestinationType
+}
+
+func (s *SnsTarget) GetPhoneNumber() *string {
+	if s == nil {
+		return nil
+	}
+	return s.PhoneNumber
+}
+
+func (s *SnsTarget) GetTopicArn() *string {
+	if s == nil {
+		return nil
+	}
+	return s.TopicArn
+}
+
+func (s *SnsTarget) GetTopicType() *TopicType {
+	if s == nil {
+		return nil
+	}
+	return s.TopicType
+}
+
+func (s *SnsTarget) GetMessageGroupID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.MessageGroupID
+}
+
+type TypeSlack string
+
+const (
+	TypeSlackSlack TypeSlack = "slack"
+)
+
+func (e TypeSlack) ToPointer() *TypeSlack {
+	return &e
+}
+func (e *TypeSlack) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "slack":
+		*e = TypeSlack(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for TypeSlack: %v", v)
+	}
+}
+
+type SlackTarget struct {
+	// Unique ID for this notification target
+	ID   string    `json:"id"`
+	Type TypeSlack `json:"type"`
+	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+	SystemFields []string `json:"systemFields,omitempty"`
+	// Slack's Incoming Webhook URL
+	URL string `json:"url"`
+}
+
+func (s SlackTarget) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SlackTarget) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "url"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SlackTarget) GetID() string {
+	if s == nil {
+		return ""
+	}
+	return s.ID
+}
+
+func (s *SlackTarget) GetType() TypeSlack {
+	if s == nil {
+		return TypeSlack("")
+	}
+	return s.Type
+}
+
+func (s *SlackTarget) GetSystemFields() []string {
+	if s == nil {
+		return nil
+	}
+	return s.SystemFields
+}
+
+func (s *SlackTarget) GetURL() string {
+	if s == nil {
+		return ""
+	}
+	return s.URL
+}
+
+type TypePagerDuty string
+
+const (
+	TypePagerDutyPagerDuty TypePagerDuty = "pager_duty"
+)
+
+func (e TypePagerDuty) ToPointer() *TypePagerDuty {
+	return &e
+}
+func (e *TypePagerDuty) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "pager_duty":
+		*e = TypePagerDuty(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for TypePagerDuty: %v", v)
+	}
+}
+
+// NotificationTargetSeverity - Default value for message severity. Defaults to info. The __severity value, if set, will overwrite this.
+type NotificationTargetSeverity string
+
+const (
+	NotificationTargetSeverityInfo     NotificationTargetSeverity = "info"
+	NotificationTargetSeverityWarning  NotificationTargetSeverity = "warning"
+	NotificationTargetSeverityError    NotificationTargetSeverity = "error"
+	NotificationTargetSeverityCritical NotificationTargetSeverity = "critical"
+)
+
+func (e NotificationTargetSeverity) ToPointer() *NotificationTargetSeverity {
+	return &e
+}
+func (e *NotificationTargetSeverity) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "info":
+		fallthrough
+	case "warning":
+		fallthrough
+	case "error":
+		fallthrough
+	case "critical":
+		*e = NotificationTargetSeverity(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for NotificationTargetSeverity: %v", v)
+	}
+}
+
+type PagerDutyTarget struct {
+	// Unique ID for this notification target
+	ID   string        `json:"id"`
+	Type TypePagerDuty `json:"type"`
+	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+	SystemFields []string `json:"systemFields,omitempty"`
+	// 32-character integration key for an integration on a service or global ruleset
+	RoutingKey string `json:"routingKey"`
+	// Optional, default group value
+	Group *string `json:"group,omitempty"`
+	// Optional, default class value
+	Class *string `json:"class,omitempty"`
+	// Optional, default component value
+	Component *string `default:"logstream" json:"component"`
+	// Default value for message severity. Defaults to info. The __severity value, if set, will overwrite this.
+	Severity *NotificationTargetSeverity `default:"info" json:"severity"`
+}
+
+func (p PagerDutyTarget) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PagerDutyTarget) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"id", "type", "routingKey"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PagerDutyTarget) GetID() string {
+	if p == nil {
+		return ""
+	}
+	return p.ID
+}
+
+func (p *PagerDutyTarget) GetType() TypePagerDuty {
+	if p == nil {
+		return TypePagerDuty("")
+	}
+	return p.Type
+}
+
+func (p *PagerDutyTarget) GetSystemFields() []string {
+	if p == nil {
+		return nil
+	}
+	return p.SystemFields
+}
+
+func (p *PagerDutyTarget) GetRoutingKey() string {
+	if p == nil {
+		return ""
+	}
+	return p.RoutingKey
+}
+
+func (p *PagerDutyTarget) GetGroup() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Group
+}
+
+func (p *PagerDutyTarget) GetClass() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Class
+}
+
+func (p *PagerDutyTarget) GetComponent() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Component
+}
+
+func (p *PagerDutyTarget) GetSeverity() *NotificationTargetSeverity {
+	if p == nil {
+		return nil
+	}
+	return p.Severity
+}
+
+type NotificationTargetTypeWebhook string
+
+const (
+	NotificationTargetTypeWebhookWebhook NotificationTargetTypeWebhook = "webhook"
+)
+
+func (e NotificationTargetTypeWebhook) ToPointer() *NotificationTargetTypeWebhook {
+	return &e
+}
+func (e *NotificationTargetTypeWebhook) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "webhook":
+		*e = NotificationTargetTypeWebhook(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for NotificationTargetTypeWebhook: %v", v)
+	}
+}
+
+// NotificationTargetFormat - Format of the webhook payload
+type NotificationTargetFormat string
+
+const (
+	NotificationTargetFormatNdjson    NotificationTargetFormat = "ndjson"
+	NotificationTargetFormatJSONArray NotificationTargetFormat = "json_array"
+	NotificationTargetFormatCustom    NotificationTargetFormat = "custom"
+)
+
+func (e NotificationTargetFormat) ToPointer() *NotificationTargetFormat {
+	return &e
+}
+func (e *NotificationTargetFormat) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "ndjson":
+		fallthrough
+	case "json_array":
+		fallthrough
+	case "custom":
+		*e = NotificationTargetFormat(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for NotificationTargetFormat: %v", v)
+	}
+}
+
+// HTTPMethod - HTTP method to use for the webhook
+type HTTPMethod string
+
+const (
+	HTTPMethodPost  HTTPMethod = "POST"
+	HTTPMethodPatch HTTPMethod = "PATCH"
+	HTTPMethodPut   HTTPMethod = "PUT"
+)
+
+func (e HTTPMethod) ToPointer() *HTTPMethod {
+	return &e
+}
+func (e *HTTPMethod) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "POST":
+		fallthrough
+	case "PATCH":
+		fallthrough
+	case "PUT":
+		*e = HTTPMethod(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for HTTPMethod: %v", v)
+	}
+}
+
+// NotificationTargetAuthenticationType - Authentication method for the webhook
+type NotificationTargetAuthenticationType string
+
+const (
+	NotificationTargetAuthenticationTypeNone  NotificationTargetAuthenticationType = "none"
+	NotificationTargetAuthenticationTypeToken NotificationTargetAuthenticationType = "token"
+	NotificationTargetAuthenticationTypeBasic NotificationTargetAuthenticationType = "basic"
+)
+
+func (e NotificationTargetAuthenticationType) ToPointer() *NotificationTargetAuthenticationType {
+	return &e
+}
+func (e *NotificationTargetAuthenticationType) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "none":
+		fallthrough
+	case "token":
+		fallthrough
+	case "basic":
+		*e = NotificationTargetAuthenticationType(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for NotificationTargetAuthenticationType: %v", v)
+	}
+}
+
+type WebhookTarget struct {
+	// Unique ID for this notification target
+	ID   string                        `json:"id"`
+	Type NotificationTargetTypeWebhook `json:"type"`
+	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
+	SystemFields []string `json:"systemFields,omitempty"`
+	// URL to send the webhook to
+	URL string `json:"url"`
+	// Format of the webhook payload
+	Format NotificationTargetFormat `json:"format"`
+	// HTTP method to use for the webhook
+	Method HTTPMethod `json:"method"`
+	// Authentication method for the webhook
+	AuthType *NotificationTargetAuthenticationType `default:"none" json:"authType"`
+	// Authentication token
+	Token *string `json:"token,omitempty"`
+	// Basic authentication username
+	Username *string `json:"username,omitempty"`
+	// Basic authentication password
+	Password *string `json:"password,omitempty"`
+}
+
+func (w WebhookTarget) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(w, "", false)
+}
+
+func (w *WebhookTarget) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"id", "type", "url", "format", "method"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (w *WebhookTarget) GetID() string {
+	if w == nil {
+		return ""
+	}
+	return w.ID
+}
+
+func (w *WebhookTarget) GetType() NotificationTargetTypeWebhook {
+	if w == nil {
+		return NotificationTargetTypeWebhook("")
+	}
+	return w.Type
+}
+
+func (w *WebhookTarget) GetSystemFields() []string {
+	if w == nil {
+		return nil
+	}
+	return w.SystemFields
+}
+
+func (w *WebhookTarget) GetURL() string {
+	if w == nil {
+		return ""
+	}
+	return w.URL
+}
+
+func (w *WebhookTarget) GetFormat() NotificationTargetFormat {
+	if w == nil {
+		return NotificationTargetFormat("")
+	}
+	return w.Format
+}
+
+func (w *WebhookTarget) GetMethod() HTTPMethod {
+	if w == nil {
+		return HTTPMethod("")
+	}
+	return w.Method
+}
+
+func (w *WebhookTarget) GetAuthType() *NotificationTargetAuthenticationType {
+	if w == nil {
+		return nil
+	}
+	return w.AuthType
+}
+
+func (w *WebhookTarget) GetToken() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Token
+}
+
+func (w *WebhookTarget) GetUsername() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Username
+}
+
+func (w *WebhookTarget) GetPassword() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Password
+}
 
 type NotificationTargetType string
 

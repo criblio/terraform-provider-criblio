@@ -532,6 +532,7 @@ type OutputOpenTelemetryTLSSettingsClientSide struct {
 	Disabled *bool `default:"true" json:"disabled"`
 	// Reject certificates that are not authorized by a CA in the CA certificate path, or by another
 	//
+	//
 	//                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
 	// The name of the predefined certificate
@@ -796,6 +797,7 @@ type OutputOpenTelemetry struct {
 	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
 	OauthHeaders []OutputOpenTelemetryOauthHeader `json:"oauthHeaders,omitempty"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
+	//
 	//
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.

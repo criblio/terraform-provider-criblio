@@ -27,43 +27,48 @@ data "criblio_search_dataset_provider" "my_searchdatasetprovider" {
 
 ### Read-Only
 
-- `api_aws_provider` (Attributes) (see [below for nested schema](#nestedatt--api_aws_provider))
-- `api_azure_data_explorer_provider` (Attributes) (see [below for nested schema](#nestedatt--api_azure_data_explorer_provider))
-- `api_azure_provider` (Attributes) (see [below for nested schema](#nestedatt--api_azure_provider))
-- `api_elastic_search_provider` (Attributes) (see [below for nested schema](#nestedatt--api_elastic_search_provider))
-- `api_gcp_provider` (Attributes) (see [below for nested schema](#nestedatt--api_gcp_provider))
-- `api_google_workspace_provider` (Attributes) (see [below for nested schema](#nestedatt--api_google_workspace_provider))
-- `api_ms_graph_provider` (Attributes) (see [below for nested schema](#nestedatt--api_ms_graph_provider))
-- `api_okta_provider` (Attributes) (see [below for nested schema](#nestedatt--api_okta_provider))
-- `api_open_search_provider` (Attributes) (see [below for nested schema](#nestedatt--api_open_search_provider))
-- `api_tailscale_provider` (Attributes) (see [below for nested schema](#nestedatt--api_tailscale_provider))
-- `api_zoom_provider` (Attributes) (see [below for nested schema](#nestedatt--api_zoom_provider))
-- `apihttp_provider` (Attributes) (see [below for nested schema](#nestedatt--apihttp_provider))
-- `aws_security_lake_provider` (Attributes) (see [below for nested schema](#nestedatt--aws_security_lake_provider))
-- `azure_blob_provider` (Attributes) (see [below for nested schema](#nestedatt--azure_blob_provider))
-- `click_house_provider` (Attributes) (see [below for nested schema](#nestedatt--click_house_provider))
-- `cribl_leader_provider` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_provider))
-- `description` (String) Description of the provider
-- `edge_provider` (Attributes) (see [below for nested schema](#nestedatt--edge_provider))
-- `gcs_provider` (Attributes) (see [below for nested schema](#nestedatt--gcs_provider))
-- `meta_provider` (Attributes) (see [below for nested schema](#nestedatt--meta_provider))
-- `prometheus_provider` (Attributes) (see [below for nested schema](#nestedatt--prometheus_provider))
-- `s3_provider` (Attributes) (see [below for nested schema](#nestedatt--s3_provider))
-- `snowflake_provider` (Attributes) (see [below for nested schema](#nestedatt--snowflake_provider))
-- `type` (String) Type of the provider
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
 
-<a id="nestedatt--api_aws_provider"></a>
-### Nested Schema for `api_aws_provider`
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
 
 Read-Only:
 
-- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--api_aws_provider--account_configs))
+- `api_aws_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_aws_provider))
+- `api_azure_data_explorer_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_azure_data_explorer_provider))
+- `api_azure_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_azure_provider))
+- `api_elastic_search_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_elastic_search_provider))
+- `api_gcp_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_gcp_provider))
+- `api_google_workspace_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_google_workspace_provider))
+- `api_ms_graph_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_ms_graph_provider))
+- `api_okta_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_okta_provider))
+- `api_open_search_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_open_search_provider))
+- `api_tailscale_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_tailscale_provider))
+- `api_zoom_provider` (Attributes) (see [below for nested schema](#nestedatt--items--api_zoom_provider))
+- `apihttp_provider` (Attributes) (see [below for nested schema](#nestedatt--items--apihttp_provider))
+- `aws_security_lake_provider` (Attributes) (see [below for nested schema](#nestedatt--items--aws_security_lake_provider))
+- `azure_blob_provider` (Attributes) (see [below for nested schema](#nestedatt--items--azure_blob_provider))
+- `click_house_provider` (Attributes) (see [below for nested schema](#nestedatt--items--click_house_provider))
+- `cribl_leader_provider` (Attributes) (see [below for nested schema](#nestedatt--items--cribl_leader_provider))
+- `edge_provider` (Attributes) (see [below for nested schema](#nestedatt--items--edge_provider))
+- `gcs_provider` (Attributes) (see [below for nested schema](#nestedatt--items--gcs_provider))
+- `meta_provider` (Attributes) (see [below for nested schema](#nestedatt--items--meta_provider))
+- `prometheus_provider` (Attributes) (see [below for nested schema](#nestedatt--items--prometheus_provider))
+- `s3_provider` (Attributes) (see [below for nested schema](#nestedatt--items--s3_provider))
+- `snowflake_provider` (Attributes) (see [below for nested schema](#nestedatt--items--snowflake_provider))
+
+<a id="nestedatt--items--api_aws_provider"></a>
+### Nested Schema for `items.api_aws_provider`
+
+Read-Only:
+
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_aws_provider--account_configs))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `type` (String) Type of the provider
 
-<a id="nestedatt--api_aws_provider--account_configs"></a>
-### Nested Schema for `api_aws_provider.account_configs`
+<a id="nestedatt--items--api_aws_provider--account_configs"></a>
+### Nested Schema for `items.api_aws_provider.account_configs`
 
 Read-Only:
 
@@ -75,8 +80,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--api_azure_data_explorer_provider"></a>
-### Nested Schema for `api_azure_data_explorer_provider`
+<a id="nestedatt--items--api_azure_data_explorer_provider"></a>
+### Nested Schema for `items.api_azure_data_explorer_provider`
 
 Read-Only:
 
@@ -88,18 +93,18 @@ Read-Only:
 - `type` (String) Type of the provider
 
 
-<a id="nestedatt--api_azure_provider"></a>
-### Nested Schema for `api_azure_provider`
+<a id="nestedatt--items--api_azure_provider"></a>
+### Nested Schema for `items.api_azure_provider`
 
 Read-Only:
 
-- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--api_azure_provider--account_configs))
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_azure_provider--account_configs))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `type` (String) Type of the provider
 
-<a id="nestedatt--api_azure_provider--account_configs"></a>
-### Nested Schema for `api_azure_provider.account_configs`
+<a id="nestedatt--items--api_azure_provider--account_configs"></a>
+### Nested Schema for `items.api_azure_provider.account_configs`
 
 Read-Only:
 
@@ -110,8 +115,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--api_elastic_search_provider"></a>
-### Nested Schema for `api_elastic_search_provider`
+<a id="nestedatt--items--api_elastic_search_provider"></a>
+### Nested Schema for `items.api_elastic_search_provider`
 
 Read-Only:
 
@@ -123,18 +128,18 @@ Read-Only:
 - `username` (String) Elasticsearch username for authentication
 
 
-<a id="nestedatt--api_gcp_provider"></a>
-### Nested Schema for `api_gcp_provider`
+<a id="nestedatt--items--api_gcp_provider"></a>
+### Nested Schema for `items.api_gcp_provider`
 
 Read-Only:
 
-- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--api_gcp_provider--account_configs))
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_gcp_provider--account_configs))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `type` (String) Type of the provider
 
-<a id="nestedatt--api_gcp_provider--account_configs"></a>
-### Nested Schema for `api_gcp_provider.account_configs`
+<a id="nestedatt--items--api_gcp_provider--account_configs"></a>
+### Nested Schema for `items.api_gcp_provider.account_configs`
 
 Read-Only:
 
@@ -143,18 +148,18 @@ Read-Only:
 
 
 
-<a id="nestedatt--api_google_workspace_provider"></a>
-### Nested Schema for `api_google_workspace_provider`
+<a id="nestedatt--items--api_google_workspace_provider"></a>
+### Nested Schema for `items.api_google_workspace_provider`
 
 Read-Only:
 
-- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--api_google_workspace_provider--account_configs))
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_google_workspace_provider--account_configs))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `type` (String) Type of the provider
 
-<a id="nestedatt--api_google_workspace_provider--account_configs"></a>
-### Nested Schema for `api_google_workspace_provider.account_configs`
+<a id="nestedatt--items--api_google_workspace_provider--account_configs"></a>
+### Nested Schema for `items.api_google_workspace_provider.account_configs`
 
 Read-Only:
 
@@ -164,18 +169,18 @@ Read-Only:
 
 
 
-<a id="nestedatt--api_ms_graph_provider"></a>
-### Nested Schema for `api_ms_graph_provider`
+<a id="nestedatt--items--api_ms_graph_provider"></a>
+### Nested Schema for `items.api_ms_graph_provider`
 
 Read-Only:
 
-- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--api_ms_graph_provider--account_configs))
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_ms_graph_provider--account_configs))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `type` (String) Type of the provider
 
-<a id="nestedatt--api_ms_graph_provider--account_configs"></a>
-### Nested Schema for `api_ms_graph_provider.account_configs`
+<a id="nestedatt--items--api_ms_graph_provider--account_configs"></a>
+### Nested Schema for `items.api_ms_graph_provider.account_configs`
 
 Read-Only:
 
@@ -186,18 +191,18 @@ Read-Only:
 
 
 
-<a id="nestedatt--api_okta_provider"></a>
-### Nested Schema for `api_okta_provider`
+<a id="nestedatt--items--api_okta_provider"></a>
+### Nested Schema for `items.api_okta_provider`
 
 Read-Only:
 
-- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--api_okta_provider--account_configs))
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_okta_provider--account_configs))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `type` (String) Type of the provider
 
-<a id="nestedatt--api_okta_provider--account_configs"></a>
-### Nested Schema for `api_okta_provider.account_configs`
+<a id="nestedatt--items--api_okta_provider--account_configs"></a>
+### Nested Schema for `items.api_okta_provider.account_configs`
 
 Read-Only:
 
@@ -207,8 +212,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--api_open_search_provider"></a>
-### Nested Schema for `api_open_search_provider`
+<a id="nestedatt--items--api_open_search_provider"></a>
+### Nested Schema for `items.api_open_search_provider`
 
 Read-Only:
 
@@ -220,18 +225,18 @@ Read-Only:
 - `username` (String) OpenSearch username for authentication
 
 
-<a id="nestedatt--api_tailscale_provider"></a>
-### Nested Schema for `api_tailscale_provider`
+<a id="nestedatt--items--api_tailscale_provider"></a>
+### Nested Schema for `items.api_tailscale_provider`
 
 Read-Only:
 
-- `account_configs` (Attributes List) A list of account configuration (see [below for nested schema](#nestedatt--api_tailscale_provider--account_configs))
+- `account_configs` (Attributes List) A list of account configuration (see [below for nested schema](#nestedatt--items--api_tailscale_provider--account_configs))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `type` (String) Type of the provider
 
-<a id="nestedatt--api_tailscale_provider--account_configs"></a>
-### Nested Schema for `api_tailscale_provider.account_configs`
+<a id="nestedatt--items--api_tailscale_provider--account_configs"></a>
+### Nested Schema for `items.api_tailscale_provider.account_configs`
 
 Read-Only:
 
@@ -241,18 +246,18 @@ Read-Only:
 
 
 
-<a id="nestedatt--api_zoom_provider"></a>
-### Nested Schema for `api_zoom_provider`
+<a id="nestedatt--items--api_zoom_provider"></a>
+### Nested Schema for `items.api_zoom_provider`
 
 Read-Only:
 
-- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--api_zoom_provider--account_configs))
+- `account_configs` (Attributes List) A list of account configurations (see [below for nested schema](#nestedatt--items--api_zoom_provider--account_configs))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `type` (String) Type of the provider
 
-<a id="nestedatt--api_zoom_provider--account_configs"></a>
-### Nested Schema for `api_zoom_provider.account_configs`
+<a id="nestedatt--items--api_zoom_provider--account_configs"></a>
+### Nested Schema for `items.api_zoom_provider.account_configs`
 
 Read-Only:
 
@@ -263,30 +268,30 @@ Read-Only:
 
 
 
-<a id="nestedatt--apihttp_provider"></a>
-### Nested Schema for `apihttp_provider`
+<a id="nestedatt--items--apihttp_provider"></a>
+### Nested Schema for `items.apihttp_provider`
 
 Read-Only:
 
 - `authentication_method` (String) The authentication method for API calls
-- `available_endpoints` (Attributes List) A list of the available endpoints for this provider (see [below for nested schema](#nestedatt--apihttp_provider--available_endpoints))
+- `available_endpoints` (Attributes List) A list of the available endpoints for this provider (see [below for nested schema](#nestedatt--items--apihttp_provider--available_endpoints))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `type` (String) Type of the provider
 
-<a id="nestedatt--apihttp_provider--available_endpoints"></a>
-### Nested Schema for `apihttp_provider.available_endpoints`
+<a id="nestedatt--items--apihttp_provider--available_endpoints"></a>
+### Nested Schema for `items.apihttp_provider.available_endpoints`
 
 Read-Only:
 
 - `data_field` (String) Within the response JSON, name of the field or array element to pull results from
-- `headers` (Attributes List) Optional headers for the endpoint (see [below for nested schema](#nestedatt--apihttp_provider--available_endpoints--headers))
+- `headers` (Attributes List) Optional headers for the endpoint (see [below for nested schema](#nestedatt--items--apihttp_provider--available_endpoints--headers))
 - `method` (String) Method for the endpoint
 - `name` (String)
 - `url` (String) The URL for this endpoint
 
-<a id="nestedatt--apihttp_provider--available_endpoints--headers"></a>
-### Nested Schema for `apihttp_provider.available_endpoints.headers`
+<a id="nestedatt--items--apihttp_provider--available_endpoints--headers"></a>
+### Nested Schema for `items.apihttp_provider.available_endpoints.headers`
 
 Read-Only:
 
@@ -296,8 +301,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--aws_security_lake_provider"></a>
-### Nested Schema for `aws_security_lake_provider`
+<a id="nestedatt--items--aws_security_lake_provider"></a>
+### Nested Schema for `items.aws_security_lake_provider`
 
 Read-Only:
 
@@ -306,8 +311,8 @@ Read-Only:
 - `type` (String) Type of the provider
 
 
-<a id="nestedatt--azure_blob_provider"></a>
-### Nested Schema for `azure_blob_provider`
+<a id="nestedatt--items--azure_blob_provider"></a>
+### Nested Schema for `items.azure_blob_provider`
 
 Read-Only:
 
@@ -318,13 +323,13 @@ Read-Only:
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
 - `location` (String) Primary region in which the storage account is located
-- `sas_configs` (Attributes List) A list of container-specific SAS configurations (see [below for nested schema](#nestedatt--azure_blob_provider--sas_configs))
+- `sas_configs` (Attributes List) A list of container-specific SAS configurations (see [below for nested schema](#nestedatt--items--azure_blob_provider--sas_configs))
 - `storage_account_name` (String) The name of your Azure storage account
 - `tenant_id` (String) Azure AD tenant ID
 - `type` (String) Type of the provider
 
-<a id="nestedatt--azure_blob_provider--sas_configs"></a>
-### Nested Schema for `azure_blob_provider.sas_configs`
+<a id="nestedatt--items--azure_blob_provider--sas_configs"></a>
+### Nested Schema for `items.azure_blob_provider.sas_configs`
 
 Read-Only:
 
@@ -333,8 +338,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--click_house_provider"></a>
-### Nested Schema for `click_house_provider`
+<a id="nestedatt--items--click_house_provider"></a>
+### Nested Schema for `items.click_house_provider`
 
 Read-Only:
 
@@ -346,8 +351,8 @@ Read-Only:
 - `username` (String) The ClickHouse username for authentication
 
 
-<a id="nestedatt--cribl_leader_provider"></a>
-### Nested Schema for `cribl_leader_provider`
+<a id="nestedatt--items--cribl_leader_provider"></a>
+### Nested Schema for `items.cribl_leader_provider`
 
 Read-Only:
 
@@ -356,8 +361,8 @@ Read-Only:
 - `type` (String) Type of the provider
 
 
-<a id="nestedatt--edge_provider"></a>
-### Nested Schema for `edge_provider`
+<a id="nestedatt--items--edge_provider"></a>
+### Nested Schema for `items.edge_provider`
 
 Read-Only:
 
@@ -366,8 +371,8 @@ Read-Only:
 - `type` (String) Type of the provider
 
 
-<a id="nestedatt--gcs_provider"></a>
-### Nested Schema for `gcs_provider`
+<a id="nestedatt--items--gcs_provider"></a>
+### Nested Schema for `items.gcs_provider`
 
 Read-Only:
 
@@ -378,8 +383,8 @@ Read-Only:
 - `type` (String) Type of the provider
 
 
-<a id="nestedatt--meta_provider"></a>
-### Nested Schema for `meta_provider`
+<a id="nestedatt--items--meta_provider"></a>
+### Nested Schema for `items.meta_provider`
 
 Read-Only:
 
@@ -388,8 +393,8 @@ Read-Only:
 - `type` (String) Type of the provider
 
 
-<a id="nestedatt--prometheus_provider"></a>
-### Nested Schema for `prometheus_provider`
+<a id="nestedatt--items--prometheus_provider"></a>
+### Nested Schema for `items.prometheus_provider`
 
 Read-Only:
 
@@ -404,8 +409,8 @@ Read-Only:
 - `username` (String) Basic auth username
 
 
-<a id="nestedatt--s3_provider"></a>
-### Nested Schema for `s3_provider`
+<a id="nestedatt--items--s3_provider"></a>
+### Nested Schema for `items.s3_provider`
 
 Read-Only:
 
@@ -429,8 +434,8 @@ Read-Only:
 - `type` (String) Type of the provider
 
 
-<a id="nestedatt--snowflake_provider"></a>
-### Nested Schema for `snowflake_provider`
+<a id="nestedatt--items--snowflake_provider"></a>
+### Nested Schema for `items.snowflake_provider`
 
 Read-Only:
 

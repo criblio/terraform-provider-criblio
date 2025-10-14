@@ -100,20 +100,13 @@ resource "criblio_group" "my_group" {
 - `worker_count` (Number) Requires replacement if changed.
 - `worker_remote_access` (Boolean) Requires replacement if changed.
 
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
 <a id="nestedatt--cloud"></a>
 ### Nested Schema for `cloud`
-
-Required:
-
-- `region` (String) Requires replacement if changed.
 
 Optional:
 
 - `provider` (String) must be one of ["aws", "azure"]; Requires replacement if changed.
+- `region` (String) Not Null; Requires replacement if changed.
 
 
 <a id="nestedatt--git"></a>
@@ -161,31 +154,6 @@ Optional:
 
 - `deployed_version` (String) Requires replacement if changed.
 - `version` (String) Requires replacement if changed.
-
-
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `cloud` (Attributes) (see [below for nested schema](#nestedatt--items--cloud))
-- `estimated_ingest_rate` (Number)
-- `id` (String)
-- `is_fleet` (Boolean) Must be true if product is 'edge'
-- `name` (String)
-- `on_prem` (Boolean)
-- `provisioned` (Boolean)
-- `streamtags` (List of String)
-- `worker_remote_access` (Boolean)
-
-<a id="nestedatt--items--cloud"></a>
-### Nested Schema for `items.cloud`
-
-Read-Only:
-
-- `provider` (String) must be one of ["aws", "azure"]
-- `region` (String)
 
 ## Import
 

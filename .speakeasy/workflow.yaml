@@ -5,6 +5,8 @@ sources:
         inputs:
             - location: openapi.yml
             - location: openapi-mgmt.yml
+        overlays:
+            - location: .speakeasy/entity-mapping-overlay.yml
         registry:
             location: registry.speakeasyapi.dev/cribl/cribl/cribl-control-plane-and-management-api
 targets:

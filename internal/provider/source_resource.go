@@ -13110,6 +13110,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Default:  booldefault.StaticBool(true),
 								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
 									`` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},

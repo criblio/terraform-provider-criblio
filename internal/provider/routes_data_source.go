@@ -30,8 +30,11 @@ type RoutesDataSource struct {
 
 // RoutesDataSourceModel describes the data model.
 type RoutesDataSourceModel struct {
-	GroupID types.String     `tfsdk:"group_id"`
-	Items   []tfTypes.Routes `tfsdk:"items"`
+	Comments []tfTypes.Comment               `tfsdk:"comments"`
+	GroupID  types.String                    `tfsdk:"group_id"`
+	Groups   map[string]tfTypes.RoutesGroups `tfsdk:"groups"`
+	ID       types.String                    `tfsdk:"id"`
+	Routes   []tfTypes.RoutesRoute           `tfsdk:"routes"`
 }
 
 // Metadata returns the data source type name.
@@ -45,107 +48,100 @@ func (r *RoutesDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 		MarkdownDescription: "Routes DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"comments": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"additional_properties": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
+							Description: `Parsed as JSON.`,
+						},
+						"comment": schema.StringAttribute{
+							Computed:    true,
+							Description: `Optional, short description of this Route's purpose`,
+						},
+					},
+				},
+				Description: `Comments`,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
 			},
-			"items": schema.ListNestedAttribute{
+			"groups": schema.MapNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"comments": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"comment": schema.StringAttribute{
-										Computed:    true,
-										Description: `Optional, short description of this Route's purpose`,
-									},
-								},
-							},
-							Description: `Comments`,
-						},
-						"groups": schema.MapNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										Computed:    true,
-										Description: `Short description of this group`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Whether this group is disabled`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"id": schema.StringAttribute{
+						"description": schema.StringAttribute{
 							Computed:    true,
-							Description: `Routes ID`,
+							Description: `Short description of this group`,
 						},
-						"routes": schema.ListNestedAttribute{
+						"disabled": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Whether this group is disabled`,
+						},
+						"name": schema.StringAttribute{
 							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Disable this routing rule`,
-									},
-									"enable_output_expression": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below`,
-									},
-									"filter": schema.StringAttribute{
-										Computed:    true,
-										Description: `JavaScript expression to select data to route`,
-									},
-									"final": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it`,
-									},
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"output": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"output_expression": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"pipeline": schema.StringAttribute{
-										Computed:    true,
-										Description: `Pipeline to send the matching data to`,
-									},
-								},
-							},
-							Description: `Pipeline routing rules`,
 						},
 					},
 				},
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Routes ID`,
+			},
+			"routes": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"additional_properties": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
+							Description: `Parsed as JSON.`,
+						},
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"disabled": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Disable this routing rule`,
+						},
+						"enable_output_expression": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below`,
+						},
+						"filter": schema.StringAttribute{
+							Computed:    true,
+							Description: `JavaScript expression to select data to route`,
+						},
+						"final": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it`,
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+						"name": schema.StringAttribute{
+							Computed: true,
+						},
+						"output": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
+							Description: `Parsed as JSON.`,
+						},
+						"output_expression": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
+							Description: `Parsed as JSON.`,
+						},
+						"pipeline": schema.StringAttribute{
+							Computed:    true,
+							Description: `Pipeline to send the matching data to`,
+						},
+					},
+				},
+				Description: `Pipeline routing rules`,
 			},
 		},
 	}
@@ -211,11 +207,11 @@ func (r *RoutesDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoutesByGroupIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedRoutes(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
