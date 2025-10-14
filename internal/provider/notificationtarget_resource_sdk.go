@@ -79,7 +79,7 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 		var id string
 		id = r.WebhookTarget.ID.ValueString()
 
-		typeVar := shared.WebhookTargetType(r.WebhookTarget.Type.ValueString())
+		typeVar := shared.NotificationTargetTypeWebhook(r.WebhookTarget.Type.ValueString())
 		systemFields := make([]string, 0, len(r.WebhookTarget.SystemFields))
 		for _, systemFieldsItem := range r.WebhookTarget.SystemFields {
 			systemFields = append(systemFields, systemFieldsItem.ValueString())
@@ -87,11 +87,11 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 		var url string
 		url = r.WebhookTarget.URL.ValueString()
 
-		format := shared.WebhookTargetFormat(r.WebhookTarget.Format.ValueString())
+		format := shared.NotificationTargetFormat(r.WebhookTarget.Format.ValueString())
 		method := shared.HTTPMethod(r.WebhookTarget.Method.ValueString())
-		authType := new(shared.WebhookTargetAuthenticationType)
+		authType := new(shared.NotificationTargetAuthenticationType)
 		if !r.WebhookTarget.AuthType.IsUnknown() && !r.WebhookTarget.AuthType.IsNull() {
-			*authType = shared.WebhookTargetAuthenticationType(r.WebhookTarget.AuthType.ValueString())
+			*authType = shared.NotificationTargetAuthenticationType(r.WebhookTarget.AuthType.ValueString())
 		} else {
 			authType = nil
 		}
@@ -136,7 +136,7 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 		var id1 string
 		id1 = r.PagerDutyTarget.ID.ValueString()
 
-		typeVar1 := shared.PagerDutyTargetType(r.PagerDutyTarget.Type.ValueString())
+		typeVar1 := shared.TypePagerDuty(r.PagerDutyTarget.Type.ValueString())
 		systemFields1 := make([]string, 0, len(r.PagerDutyTarget.SystemFields))
 		for _, systemFieldsItem1 := range r.PagerDutyTarget.SystemFields {
 			systemFields1 = append(systemFields1, systemFieldsItem1.ValueString())
@@ -162,9 +162,9 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 		} else {
 			component = nil
 		}
-		severity := new(shared.PagerDutyTargetSeverity)
+		severity := new(shared.NotificationTargetSeverity)
 		if !r.PagerDutyTarget.Severity.IsUnknown() && !r.PagerDutyTarget.Severity.IsNull() {
-			*severity = shared.PagerDutyTargetSeverity(r.PagerDutyTarget.Severity.ValueString())
+			*severity = shared.NotificationTargetSeverity(r.PagerDutyTarget.Severity.ValueString())
 		} else {
 			severity = nil
 		}
@@ -189,7 +189,7 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 		var id2 string
 		id2 = r.SlackTarget.ID.ValueString()
 
-		typeVar2 := shared.SlackTargetType(r.SlackTarget.Type.ValueString())
+		typeVar2 := shared.TypeSlack(r.SlackTarget.Type.ValueString())
 		systemFields2 := make([]string, 0, len(r.SlackTarget.SystemFields))
 		for _, systemFieldsItem2 := range r.SlackTarget.SystemFields {
 			systemFields2 = append(systemFields2, systemFieldsItem2.ValueString())
@@ -214,14 +214,14 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 		var id3 string
 		id3 = r.SnsTarget.ID.ValueString()
 
-		typeVar3 := shared.SnsTargetType(r.SnsTarget.Type.ValueString())
+		typeVar3 := shared.NotificationTargetTypeSns(r.SnsTarget.Type.ValueString())
 		systemFields3 := make([]string, 0, len(r.SnsTarget.SystemFields))
 		for _, systemFieldsItem3 := range r.SnsTarget.SystemFields {
 			systemFields3 = append(systemFields3, systemFieldsItem3.ValueString())
 		}
-		awsAuthenticationMethod := new(shared.SnsTargetAuthenticationMethod)
+		awsAuthenticationMethod := new(shared.NotificationTargetAuthenticationMethod)
 		if !r.SnsTarget.AwsAuthenticationMethod.IsUnknown() && !r.SnsTarget.AwsAuthenticationMethod.IsNull() {
-			*awsAuthenticationMethod = shared.SnsTargetAuthenticationMethod(r.SnsTarget.AwsAuthenticationMethod.ValueString())
+			*awsAuthenticationMethod = shared.NotificationTargetAuthenticationMethod(r.SnsTarget.AwsAuthenticationMethod.ValueString())
 		} else {
 			awsAuthenticationMethod = nil
 		}
@@ -321,7 +321,7 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 		var id4 string
 		id4 = r.SMTPTarget.ID.ValueString()
 
-		typeVar4 := shared.SMTPTargetType(r.SMTPTarget.Type.ValueString())
+		typeVar4 := shared.TypeSMTP(r.SMTPTarget.Type.ValueString())
 		systemFields4 := make([]string, 0, len(r.SMTPTarget.SystemFields))
 		for _, systemFieldsItem4 := range r.SMTPTarget.SystemFields {
 			systemFields4 = append(systemFields4, systemFieldsItem4.ValueString())
@@ -361,15 +361,15 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 			} else {
 				rejectUnauthorized = nil
 			}
-			minVersion := new(shared.SMTPTargetMinimumTLSVersion)
+			minVersion := new(shared.NotificationTargetMinimumTLSVersion)
 			if !r.SMTPTarget.TLS.MinVersion.IsUnknown() && !r.SMTPTarget.TLS.MinVersion.IsNull() {
-				*minVersion = shared.SMTPTargetMinimumTLSVersion(r.SMTPTarget.TLS.MinVersion.ValueString())
+				*minVersion = shared.NotificationTargetMinimumTLSVersion(r.SMTPTarget.TLS.MinVersion.ValueString())
 			} else {
 				minVersion = nil
 			}
-			maxVersion := new(shared.SMTPTargetMaximumTLSVersion)
+			maxVersion := new(shared.NotificationTargetMaximumTLSVersion)
 			if !r.SMTPTarget.TLS.MaxVersion.IsUnknown() && !r.SMTPTarget.TLS.MaxVersion.IsNull() {
-				*maxVersion = shared.SMTPTargetMaximumTLSVersion(r.SMTPTarget.TLS.MaxVersion.ValueString())
+				*maxVersion = shared.NotificationTargetMaximumTLSVersion(r.SMTPTarget.TLS.MaxVersion.ValueString())
 			} else {
 				maxVersion = nil
 			}

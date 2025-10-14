@@ -6,41 +6,32 @@ import (
 	"context"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *GroupDataSourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ctx context.Context, resp *operations.GetGroupsByIDResponseBody) diag.Diagnostics {
+func (r *GroupDataSourceModel) RefreshFromSharedGroup(ctx context.Context, resp *shared.Group) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.Group{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.Group
-
-			if itemsItem.Cloud == nil {
-				items.Cloud = nil
-			} else {
-				items.Cloud = &tfTypes.Cloud{}
-				items.Cloud.Provider = types.StringValue(string(itemsItem.Cloud.Provider))
-				items.Cloud.Region = types.StringValue(itemsItem.Cloud.Region)
-			}
-			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
-			items.Name = types.StringPointerValue(itemsItem.Name)
-			items.OnPrem = types.BoolPointerValue(itemsItem.OnPrem)
-			items.Provisioned = types.BoolValue(itemsItem.Provisioned)
-			items.Streamtags = make([]types.String, 0, len(itemsItem.Streamtags))
-			for _, v := range itemsItem.Streamtags {
-				items.Streamtags = append(items.Streamtags, types.StringValue(v))
-			}
-			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
-
-			r.Items = append(r.Items, items)
-		}
+	if resp.Cloud == nil {
+		r.Cloud = nil
+	} else {
+		r.Cloud = &tfTypes.Cloud{}
+		r.Cloud.Provider = types.StringValue(string(resp.Cloud.Provider))
+		r.Cloud.Region = types.StringValue(resp.Cloud.Region)
 	}
+	r.EstimatedIngestRate = types.Float64PointerValue(resp.EstimatedIngestRate)
+	r.ID = types.StringValue(resp.ID)
+	r.IsFleet = types.BoolPointerValue(resp.IsFleet)
+	r.Name = types.StringPointerValue(resp.Name)
+	r.OnPrem = types.BoolPointerValue(resp.OnPrem)
+	r.Provisioned = types.BoolValue(resp.Provisioned)
+	r.Streamtags = make([]types.String, 0, len(resp.Streamtags))
+	for _, v := range resp.Streamtags {
+		r.Streamtags = append(r.Streamtags, types.StringValue(v))
+	}
+	r.WorkerRemoteAccess = types.BoolPointerValue(resp.WorkerRemoteAccess)
 
 	return diags
 }

@@ -27,20 +27,13 @@ data "criblio_routes" "my_routes" {
 
 ### Read-Only
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--items--comments))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--groups))
+- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--comments))
+- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--groups))
 - `id` (String) Routes ID
-- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--items--routes))
+- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--routes))
 
-<a id="nestedatt--items--comments"></a>
-### Nested Schema for `items.comments`
+<a id="nestedatt--comments"></a>
+### Nested Schema for `comments`
 
 Read-Only:
 
@@ -48,8 +41,8 @@ Read-Only:
 - `comment` (String) Optional, short description of this Route's purpose
 
 
-<a id="nestedatt--items--groups"></a>
-### Nested Schema for `items.groups`
+<a id="nestedatt--groups"></a>
+### Nested Schema for `groups`
 
 Read-Only:
 
@@ -58,8 +51,8 @@ Read-Only:
 - `name` (String)
 
 
-<a id="nestedatt--items--routes"></a>
-### Nested Schema for `items.routes`
+<a id="nestedatt--routes"></a>
+### Nested Schema for `routes`
 
 Read-Only:
 
