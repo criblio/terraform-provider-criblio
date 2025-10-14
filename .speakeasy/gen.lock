@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: aae18515faab6d194a6040e443ce08da
+  docChecksum: 7395c8a259cecc8087b1934381a78e27
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.17.6
-  configChecksum: 22ec5cc9b9223cf6725ae85855093a38
+  releaseVersion: 1.17.7
+  configChecksum: a06127158ba8558fabe39702a623f008
   published: true
 features:
   terraform:
@@ -509,10 +509,13 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
+  - internal/provider/types/generic_dataset.go
+  - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
+  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
-  - internal/provider/types/group.go
+  - internal/provider/types/grok_file.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
   - internal/provider/types/http_endpoint.go
@@ -1274,7 +1277,6 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
-  - internal/provider/types/parser_lib_entry.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
   - internal/provider/types/pipeline_groups.go
@@ -1298,10 +1300,10 @@ generatedFiles:
   - internal/provider/types/s3_provider.go
   - internal/provider/types/sample.go
   - internal/provider/types/sas_config.go
+  - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
   - internal/provider/types/schema_lib_entry.go
-  - internal/provider/types/search_dashboard.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -1316,7 +1318,6 @@ generatedFiles:
   - internal/provider/types/snowflake_provider.go
   - internal/provider/types/sns_target.go
   - internal/provider/types/socks_proxy_opts.go
-  - internal/provider/types/subscription.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
   - internal/provider/types/tailscale_account_config.go
@@ -2228,7 +2229,6 @@ generatedFiles:
   - internal/sdk/models/shared/packclone.go
   - internal/sdk/models/shared/packinstallinfo.go
   - internal/sdk/models/shared/packrequestbody.go
-  - internal/sdk/models/shared/pagerdutytarget.go
   - internal/sdk/models/shared/paginationconfig.go
   - internal/sdk/models/shared/parserlibentry.go
   - internal/sdk/models/shared/parsermode.go
@@ -2310,9 +2310,6 @@ generatedFiles:
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/senddiagbundle.go
   - internal/sdk/models/shared/serviceslimits.go
-  - internal/sdk/models/shared/slacktarget.go
-  - internal/sdk/models/shared/smtptarget.go
-  - internal/sdk/models/shared/snstarget.go
   - internal/sdk/models/shared/socksproxyopts.go
   - internal/sdk/models/shared/sortbyfield.go
   - internal/sdk/models/shared/stagedependency.go
@@ -2347,7 +2344,6 @@ generatedFiles:
   - internal/sdk/models/shared/userprofile.go
   - internal/sdk/models/shared/vaultkmstlsclientconfig.go
   - internal/sdk/models/shared/versioninfo.go
-  - internal/sdk/models/shared/webhooktarget.go
   - internal/sdk/models/shared/workspacecreaterequestdto.go
   - internal/sdk/models/shared/workspacepatchrequestdto.go
   - internal/sdk/models/shared/workspaceschema.go

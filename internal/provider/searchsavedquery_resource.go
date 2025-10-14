@@ -39,6 +39,7 @@ type SearchSavedQueryResourceModel struct {
 	Earliest    types.String                `tfsdk:"earliest"`
 	ID          types.String                `tfsdk:"id"`
 	IsPrivate   types.Bool                  `tfsdk:"is_private"`
+	Items       []tfTypes.SavedQuery        `tfsdk:"items"`
 	Latest      types.String                `tfsdk:"latest"`
 	Name        types.String                `tfsdk:"name"`
 	Query       types.String                `tfsdk:"query"`
@@ -71,6 +72,66 @@ func (r *SearchSavedQueryResource) Schema(ctx context.Context, req resource.Sche
 				Computed:    true,
 				Optional:    true,
 				Description: `Whether the saved query is private`,
+			},
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							Computed:    true,
+							Description: `Description of the saved query`,
+						},
+						"earliest": schema.StringAttribute{
+							Computed:    true,
+							Description: `Earliest time for the search range`,
+						},
+						"id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Unique identifier for the saved query`,
+						},
+						"is_private": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Whether the saved query is private`,
+						},
+						"latest": schema.StringAttribute{
+							Computed:    true,
+							Description: `Latest time for the search range`,
+						},
+						"name": schema.StringAttribute{
+							Computed:    true,
+							Description: `Name of the saved query`,
+						},
+						"query": schema.StringAttribute{
+							Computed:    true,
+							Description: `The search query string`,
+						},
+						"schedule": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"cron_schedule": schema.StringAttribute{
+									Computed: true,
+								},
+								"enabled": schema.BoolAttribute{
+									Computed: true,
+								},
+								"keep_last_n": schema.Float64Attribute{
+									Computed: true,
+								},
+								"notifications": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"tz": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+					},
+				},
 			},
 			"latest": schema.StringAttribute{
 				Computed:    true,
@@ -220,6 +281,43 @@ func (r *SearchSavedQueryResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1, request1Diags := data.ToOperationsGetSavedQueryByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.SavedQueries.GetSavedQueryByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSavedQueryByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -269,11 +367,11 @@ func (r *SearchSavedQueryResource) Read(ctx context.Context, req resource.ReadRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSavedQuery(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSavedQueryByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -324,6 +422,43 @@ func (r *SearchSavedQueryResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedSavedQuery(ctx, &res.Object.Items[0])...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetSavedQueryByIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.SavedQueries.GetSavedQueryByID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSavedQueryByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

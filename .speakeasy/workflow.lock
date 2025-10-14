@@ -2,8 +2,8 @@ speakeasyVersion: 1.636.3
 sources:
     Cribl Control Plane and Management API:
         sourceNamespace: cribl-control-plane-and-management-api
-        sourceRevisionDigest: sha256:b8508a74078ab4853a6dc5a4af46825ceb504c5f650c457998e5f4035111cc57
-        sourceBlobDigest: sha256:1cbd589231ece1060cc76423be3202588fd1fbc56be408032d0fb051fad30bdb
+        sourceRevisionDigest: sha256:8891538383042907c0316c3b620572a7f8cb2eb4e3673381a5925b26bb03c587
+        sourceBlobDigest: sha256:7dc5c52024697f2ab9395ff9cf5881c7cd0128c4d80373de67e213891ee788fe
         tags:
             - latest
             - 4.14.0
@@ -11,8 +11,8 @@ targets:
     cribl-io:
         source: Cribl Control Plane and Management API
         sourceNamespace: cribl-control-plane-and-management-api
-        sourceRevisionDigest: sha256:b8508a74078ab4853a6dc5a4af46825ceb504c5f650c457998e5f4035111cc57
-        sourceBlobDigest: sha256:1cbd589231ece1060cc76423be3202588fd1fbc56be408032d0fb051fad30bdb
+        sourceRevisionDigest: sha256:8891538383042907c0316c3b620572a7f8cb2eb4e3673381a5925b26bb03c587
+        sourceBlobDigest: sha256:7dc5c52024697f2ab9395ff9cf5881c7cd0128c4d80373de67e213891ee788fe
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -21,6 +21,8 @@ workflow:
             inputs:
                 - location: openapi.yml
                 - location: openapi-mgmt.yml
+            overlays:
+                - location: .speakeasy/entity-mapping-overlay.yml
             registry:
                 location: registry.speakeasyapi.dev/cribl/cribl/cribl-control-plane-and-management-api
     targets:

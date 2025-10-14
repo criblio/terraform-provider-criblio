@@ -983,6 +983,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:  booldefault.StaticBool(true),
 						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).` + "\n" +
 							`` + "\n" +
+							`` + "\n" +
 							`        Enabled by default. When this setting is also present in TLS Settings (Client Side),` + "\n" +
 							`        that value will take precedence.` + "\n" +
 							`Default: true`,
@@ -2321,6 +2322,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional: true,
 						Default:  booldefault.StaticBool(true),
 						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).` + "\n" +
+							`` + "\n" +
 							`` + "\n" +
 							`        Enabled by default. When this setting is also present in TLS Settings (Client Side),` + "\n" +
 							`        that value will take precedence.` + "\n" +
@@ -14005,6 +14007,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:  booldefault.StaticBool(true),
 								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
 									`` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
@@ -15874,6 +15877,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:  booldefault.StaticBool(true),
 								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
 									`` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
@@ -17293,6 +17297,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Default:  booldefault.StaticBool(true),
 						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).` + "\n" +
 							`` + "\n" +
+							`` + "\n" +
 							`        Enabled by default. When this setting is also present in TLS Settings (Client Side),` + "\n" +
 							`        that value will take precedence.` + "\n" +
 							`Default: true`,
@@ -17483,6 +17488,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
 								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+									`` + "\n" +
 									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
@@ -20357,6 +20363,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Default:  booldefault.StaticBool(true),
 								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
 									`` + "\n" +
+									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
 							},
@@ -22540,6 +22547,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Optional: true,
 								Default:  booldefault.StaticBool(true),
 								MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+									`` + "\n" +
 									`` + "\n" +
 									`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.` + "\n" +
 									`Default: true`,
