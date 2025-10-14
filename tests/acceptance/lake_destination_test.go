@@ -8,7 +8,7 @@ import (
 )
 
 func TestLakeDestination(t *testing.T) {
-         t.Skip("Skipping lake destination due to RPC timeouts")
+	t.Skip("Skipping lake destination due to RPC timeouts")
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
