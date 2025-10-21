@@ -13,7 +13,6 @@ on:
 # GitHub considers creating releases and uploading assets as writing content.
 permissions:
   contents: write
-  dependency-graph: write
 
 jobs:
   goreleaser:
