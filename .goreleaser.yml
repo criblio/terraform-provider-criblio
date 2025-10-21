@@ -56,6 +56,8 @@ release:
   extra_files:
     - glob: 'terraform-registry-manifest.json'
       name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
+    - glob: 'sbom-*.json'
+      name_template: '{{ .ProjectName }}_{{ .Version }}_sbom.json'
   # If you want to manually examine the release before it goes live, uncomment this line:
   # draft: true
 changelog:

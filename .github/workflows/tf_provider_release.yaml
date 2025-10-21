@@ -13,6 +13,7 @@ on:
 # GitHub considers creating releases and uploading assets as writing content.
 permissions:
   contents: write
+  dependency-graph: write
 
 jobs:
   goreleaser:
@@ -26,6 +27,28 @@ jobs:
         with:
           go-version-file: 'go.mod'
           cache: true
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          output-file: sbom-spdx.json
+      
+      - name: Generate CycloneDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: sbom-cyclonedx.json
+      
+      - name: Upload SBOM to GitHub Dependency Graph
+        run: |
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.v3+json" \
+               -X POST \
+               https://api.github.com/repos/${{ github.repository }}/dependency-graph/sbom \
+               -d @sbom-spdx.json
+      
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@111c56156bcc6918c056dbef52164cfa583dc549 # v5.2.0
         id: import_gpg
