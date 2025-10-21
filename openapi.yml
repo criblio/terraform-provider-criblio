@@ -1867,7 +1867,7 @@ components:
                     serviceAccountCredentials:
                       type: string
                       title: Service account credentials
-                      example: "-----BEGIN PRIVATE KEY-----\nMIIEv...example...IDAQAB\n-----END PRIVATE KEY-----\n"
+                      example: "***REDACTED***"
                     bucket:
                       type: string
                       title: GCS bucket
@@ -4518,19 +4518,7 @@ components:
               title: "Service account credentials"
               description: "Contents of Google Cloud service account credentials (JSON keys) file"
               minLength: 1
-              example: |
-                { \n
-                  "type": "service_account", \n
-                  "project_id": "example-project-id", \n
-                  "private_key_id": "example-private-key-id", \n
-                  "private_key": "-----BEGIN PRIVATE KEY-----\nEXAMPLE_PRIVATE_KEY_CONTENT\n-----END PRIVATE KEY-----\n", \n
-                  "client_email": "example-service-account@example-project.iam.gserviceaccount.com", \n
-                  "client_id": "123456789012345678901", \n
-                  "auth_uri": "https://accounts.google.com/o/oauth2/auth", \n
-                  "token_uri": "https://oauth2.googleapis.com/token", \n
-                  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", \n
-                  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/example-service-account%40example-project.iam.gserviceaccount.com" \n
-                } \n
+              example: "***REDACTED***"
             endpoint:
               type: string
               title: "Endpoint"
