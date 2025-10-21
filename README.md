@@ -167,8 +167,6 @@ terraform plan
 
 <!-- No Authentication [security] -->
 
-
-<!-- Start Available Resources and Data Sources [operations] -->
 ## Security and Compliance
 
 This provider includes comprehensive security features:
@@ -179,6 +177,7 @@ This provider includes comprehensive security features:
 
 For detailed security information, see [SBOM.md](SBOM.md).
 
+<!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
 
 ### Resources
