@@ -169,16 +169,6 @@ terraform plan
 
 
 <!-- Start Available Resources and Data Sources [operations] -->
-## Security and Compliance
-
-This provider includes comprehensive security features:
-
-- **Software Bill of Materials (SBOM)** - Automatic generation of dependency inventories
-- **Vulnerability Scanning** - Continuous security monitoring
-- **Dependency Management** - Automated dependency updates and security alerts
-
-For detailed security information, see [SBOM.md](SBOM.md).
-
 ## Available Resources and Data Sources
 
 ### Resources
