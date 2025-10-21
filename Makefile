@@ -26,5 +26,15 @@ test-speakeasy:
 	speakeasy test && speakeasy lint openapi --non-interactive -s openapi.yml
 
 build-speakeasy: 
-	speakeasy run --skip-versioning --output console --minimal 
+	speakeasy run --skip-versioning --output console --minimal
+
+install-sbom-tools:
+	go install github.com/anchore/syft/cmd/syft@latest
+
+sbom: install-sbom-tools
+	@echo "Generating SBOM files..."
+	syft scan . -o spdx-json=sbom-spdx.json
+	syft scan . -o cyclonedx-json=sbom-cyclonedx.json
+	@echo "SBOM files generated:"
+	@ls -la sbom-*.json 
 
