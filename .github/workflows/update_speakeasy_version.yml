@@ -1,5 +1,9 @@
 name: Updated Speakeasy Version
 on:
+   schedule:
+     - cron: "0 0 * * 1"
+   workflow_dispatch:
+
 jobs:
   update_speakeasy_version:
     runs-on: ubuntu-latest
