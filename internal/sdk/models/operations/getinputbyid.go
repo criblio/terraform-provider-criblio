@@ -3,7 +3,6 @@
 package operations
 
 import (
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
@@ -28,12 +27,12 @@ func (g *GetInputByIDRequest) GetGroupID() string {
 	return g.GroupID
 }
 
-// GetInputByIDResponseBody - a list of Input objects
+// GetInputByIDResponseBody - a list of any objects
 type GetInputByIDResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (g *GetInputByIDResponseBody) GetItems() []shared.Input {
+func (g *GetInputByIDResponseBody) GetItems() []map[string]any {
 	if g == nil {
 		return nil
 	}
@@ -47,10 +46,8 @@ type GetInputByIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Input objects
+	// a list of any objects
 	Object *GetInputByIDResponseBody
-	// Unexpected error
-	Error *shared.Error
 }
 
 func (g *GetInputByIDResponse) GetContentType() string {
@@ -79,11 +76,4 @@ func (g *GetInputByIDResponse) GetObject() *GetInputByIDResponseBody {
 		return nil
 	}
 	return g.Object
-}
-
-func (g *GetInputByIDResponse) GetError() *shared.Error {
-	if g == nil {
-		return nil
-	}
-	return g.Error
 }

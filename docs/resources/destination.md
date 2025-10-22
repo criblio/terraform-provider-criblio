@@ -9446,3 +9446,25 @@ Required:
 Optional:
 
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability. Default: 1
+
+## Import
+
+Import is supported using the following syntax:
+
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = criblio_destination.my_criblio_destination
+  id = jsonencode({
+    group_id = "Cribl"
+    id = "out-s3-main"
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+```shell
+terraform import criblio_destination.my_criblio_destination '{"group_id": "Cribl", "id": "out-s3-main"}'
+```

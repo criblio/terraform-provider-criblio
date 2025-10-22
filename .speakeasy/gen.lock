@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 1027335d957e176282d331f796600b73
+  docChecksum: 2a808db839d622abeb380bb4814b2df4
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.17.13
-  configChecksum: fab8a251efc50c246f8db084001709e8
+  releaseVersion: 1.17.16
+  configChecksum: f8d7c1b94fd1b7007e9a2057d5303c35
   published: true
 features:
   terraform:
@@ -34,11 +34,13 @@ generatedFiles:
   - examples/data-sources/criblio_appscope_config/data-source.tf
   - examples/data-sources/criblio_certificate/data-source.tf
   - examples/data-sources/criblio_certificates/data-source.tf
+  - examples/data-sources/criblio_collector/data-source.tf
   - examples/data-sources/criblio_collectors/data-source.tf
   - examples/data-sources/criblio_config_version/data-source.tf
   - examples/data-sources/criblio_cribl_lake_dataset/data-source.tf
   - examples/data-sources/criblio_cribl_lake_house/data-source.tf
   - examples/data-sources/criblio_database_connection/data-source.tf
+  - examples/data-sources/criblio_destination/data-source.tf
   - examples/data-sources/criblio_destinations/data-source.tf
   - examples/data-sources/criblio_event_breaker_ruleset/data-source.tf
   - examples/data-sources/criblio_global_var/data-source.tf
@@ -48,6 +50,7 @@ generatedFiles:
   - examples/data-sources/criblio_instance_settings/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
   - examples/data-sources/criblio_notification/data-source.tf
+  - examples/data-sources/criblio_notification_target/data-source.tf
   - examples/data-sources/criblio_notification_targets/data-source.tf
   - examples/data-sources/criblio_pack/data-source.tf
   - examples/data-sources/criblio_pack_breakers/data-source.tf
@@ -71,6 +74,7 @@ generatedFiles:
   - examples/data-sources/criblio_search_macro/data-source.tf
   - examples/data-sources/criblio_search_saved_query/data-source.tf
   - examples/data-sources/criblio_search_usage_group/data-source.tf
+  - examples/data-sources/criblio_source/data-source.tf
   - examples/data-sources/criblio_sources/data-source.tf
   - examples/data-sources/criblio_subscription/data-source.tf
   - examples/data-sources/criblio_workspace/data-source.tf
@@ -82,6 +86,8 @@ generatedFiles:
   - examples/resources/criblio_certificate/import-by-string-id.tf
   - examples/resources/criblio_certificate/import.sh
   - examples/resources/criblio_certificate/resource.tf
+  - examples/resources/criblio_collector/import-by-string-id.tf
+  - examples/resources/criblio_collector/import.sh
   - examples/resources/criblio_collector/resource.tf
   - examples/resources/criblio_commit/resource.tf
   - examples/resources/criblio_cribl_lake_dataset/import-by-string-id.tf
@@ -94,6 +100,8 @@ generatedFiles:
   - examples/resources/criblio_database_connection/import.sh
   - examples/resources/criblio_database_connection/resource.tf
   - examples/resources/criblio_deploy/resource.tf
+  - examples/resources/criblio_destination/import-by-string-id.tf
+  - examples/resources/criblio_destination/import.sh
   - examples/resources/criblio_destination/resource.tf
   - examples/resources/criblio_event_breaker_ruleset/import-by-string-id.tf
   - examples/resources/criblio_event_breaker_ruleset/import.sh
@@ -117,6 +125,8 @@ generatedFiles:
   - examples/resources/criblio_notification/import-by-string-id.tf
   - examples/resources/criblio_notification/import.sh
   - examples/resources/criblio_notification/resource.tf
+  - examples/resources/criblio_notification_target/import-by-string-id.tf
+  - examples/resources/criblio_notification_target/import.sh
   - examples/resources/criblio_notification_target/resource.tf
   - examples/resources/criblio_pack/import-by-string-id.tf
   - examples/resources/criblio_pack/import.sh
@@ -180,6 +190,8 @@ generatedFiles:
   - examples/resources/criblio_search_saved_query/import.sh
   - examples/resources/criblio_search_saved_query/resource.tf
   - examples/resources/criblio_search_usage_group/resource.tf
+  - examples/resources/criblio_source/import-by-string-id.tf
+  - examples/resources/criblio_source/import.sh
   - examples/resources/criblio_source/resource.tf
   - examples/resources/criblio_subscription/import-by-string-id.tf
   - examples/resources/criblio_subscription/import.sh
@@ -211,6 +223,8 @@ generatedFiles:
   - internal/provider/certificate_resource_sdk.go
   - internal/provider/certificates_data_source.go
   - internal/provider/certificates_data_source_sdk.go
+  - internal/provider/collector_data_source.go
+  - internal/provider/collector_data_source_sdk.go
   - internal/provider/collector_resource.go
   - internal/provider/collector_resource_sdk.go
   - internal/provider/collectors_data_source.go
@@ -233,6 +247,8 @@ generatedFiles:
   - internal/provider/databaseconnection_resource_sdk.go
   - internal/provider/deploy_resource.go
   - internal/provider/deploy_resource_sdk.go
+  - internal/provider/destination_data_source.go
+  - internal/provider/destination_data_source_sdk.go
   - internal/provider/destination_resource.go
   - internal/provider/destination_resource_sdk.go
   - internal/provider/destinations_data_source.go
@@ -269,6 +285,8 @@ generatedFiles:
   - internal/provider/notification_data_source_sdk.go
   - internal/provider/notification_resource.go
   - internal/provider/notification_resource_sdk.go
+  - internal/provider/notificationtarget_data_source.go
+  - internal/provider/notificationtarget_data_source_sdk.go
   - internal/provider/notificationtarget_resource.go
   - internal/provider/notificationtarget_resource_sdk.go
   - internal/provider/notificationtargets_data_source.go
@@ -376,6 +394,8 @@ generatedFiles:
   - internal/provider/searchusagegroup_data_source_sdk.go
   - internal/provider/searchusagegroup_resource.go
   - internal/provider/searchusagegroup_resource_sdk.go
+  - internal/provider/source_data_source.go
+  - internal/provider/source_data_source_sdk.go
   - internal/provider/source_resource.go
   - internal/provider/source_resource_sdk.go
   - internal/provider/sources_data_source.go
@@ -506,7 +526,6 @@ generatedFiles:
   - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
-  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/grok_file.go
   - internal/provider/types/host_info.go
@@ -3523,7 +3542,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {"items": [{"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "cribllake", "conf": {"dataset": "my-dataset"}}}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSavedJobById:
@@ -3643,6 +3662,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   createNotificationTarget:
     speakeasy-default-create-notification-target:
+      parameters:
+        query:
+          id: "nt-slack-prod"
       requestBody:
         application/json: {"id": "<id>", "type": "webhook", "systemFields": ["cribl_host"], "url": "https://physical-plumber.info/", "format": "json_array", "method": "PUT", "authType": "none"}
       responses:
@@ -3657,7 +3679,7 @@ examples:
           id: "nt-slack-prod"
       responses:
         "200":
-          application/json: {"items": [{"id": "myPagerDutyTarget", "type": "pager_duty", "systemFields": ["cribl_host", "cribl_pipe"], "routingKey": "0123456789abcdef0123456789abcdef", "group": "oncall-team", "class": "incident-class", "component": "webserver", "severity": "critical"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   updateNotificationTargetById:
@@ -5272,7 +5294,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteGlobalVariableById:
@@ -5439,7 +5461,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "win-event-logs", "type": "win_event_logs", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["windows", "eventlogs"], "connections": [{"pipeline": "default", "output": "s3-logs"}], "pq": {"mode": "always", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "100 MB", "maxSize": "10GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "logNames": ["Application", "Security", "System", "Microsoft-Windows-Sysmon/Operational"], "readMode": "newest", "eventFormat": "json", "disableNativeModule": false, "interval": 10, "batchSize": 500, "metadata": [{"name": "source", "value": "\"win_event_logs\""}], "maxEventBytes": 131072, "description": "Collect Windows Event Logs from local system"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   updateInputById:
@@ -5542,7 +5564,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "sumologic_logs_prod", "type": "sumo_logic", "pipeline": "main", "systemFields": ["cribl_pipe", "cribl_breaker"], "environment": "main", "streamtags": ["prod", "sumologic"], "url": "https://endpoint1.collection.us2.sumologic.com/receiver/v1/http/ABCDEFG1234567890", "customSource": "cribl-stream", "customCategory": "prod/app/logs", "format": "json", "concurrency": 8, "maxPayloadSizeKB": 512, "maxPayloadEvents": 500, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 2, "extraHttpHeaders": [{"name": "X-Request-ID", "value": "123e4567-e89b-12d3-a456-426614174000"}], "useRoundRobinDns": true, "failedRequestLoggingMode": "payloadAndHeaders", "safeHeaders": ["content-type", "x-request-id"], "responseRetrySettings": [{"httpStatus": 429, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 30000}], "timeoutRetrySettings": {"timeoutRetry": true, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 30000}, "responseHonorRetryAfterHeader": true, "onBackpressure": "block", "totalMemoryLimitKB": 51200, "description": "Send logs to Sumo Logic with retries and batching", "pqMaxFileSize": "100 MB", "pqMaxSize": "10GB", "pqPath": "/opt/cribl/state/queues", "pqCompress": "gzip", "pqOnBackpressure": "block", "pqMode": "backpressure", "pqControls": {}}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   updateOutputById:

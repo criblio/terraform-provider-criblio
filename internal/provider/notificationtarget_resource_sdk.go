@@ -4,9 +4,11 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -15,6 +17,39 @@ func (r *NotificationTargetResourceModel) RefreshFromOperationsCreateNotificatio
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Items = nil
+		for _, itemsItem := range resp.Items {
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
+func (r *NotificationTargetResourceModel) RefreshFromOperationsGetNotificationTargetByIDResponseBody(ctx context.Context, resp *operations.GetNotificationTargetByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = nil
+		for _, itemsItem := range resp.Items {
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
+			r.Items = append(r.Items, items)
+		}
 	}
 
 	return diags
@@ -147,6 +182,27 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 	return diags
 }
 
+func (r *NotificationTargetResourceModel) ToOperationsCreateNotificationTargetRequest(ctx context.Context) (*operations.CreateNotificationTargetRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	notificationTarget, notificationTargetDiags := r.ToSharedNotificationTarget(ctx)
+	diags.Append(notificationTargetDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateNotificationTargetRequest{
+		ID:                 id,
+		NotificationTarget: *notificationTarget,
+	}
+
+	return &out, diags
+}
+
 func (r *NotificationTargetResourceModel) ToOperationsDeleteNotificationTargetByIDRequest(ctx context.Context) (*operations.DeleteNotificationTargetByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -154,6 +210,19 @@ func (r *NotificationTargetResourceModel) ToOperationsDeleteNotificationTargetBy
 	id = r.ID.ValueString()
 
 	out := operations.DeleteNotificationTargetByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
+}
+
+func (r *NotificationTargetResourceModel) ToOperationsGetNotificationTargetByIDRequest(ctx context.Context) (*operations.GetNotificationTargetByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetNotificationTargetByIDRequest{
 		ID: id,
 	}
 

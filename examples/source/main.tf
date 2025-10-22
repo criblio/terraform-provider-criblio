@@ -1,17 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id    = "main"
-  cloud_domain    = "cribl-playground.cloud"
-}
-
 resource "criblio_source" "my_http_source" {
   group_id = "default"
   id       = "http-listener"
@@ -59,7 +45,7 @@ resource "criblio_source" "my_http_source" {
       }
     ]
     pipeline = "default"
-    port     = 10085
+    port     = 10089
     pq = {
       commit_frequency = 100
       compress         = "gzip"
@@ -95,6 +81,18 @@ resource "criblio_source" "my_http_source" {
     type = "http"
   }
 }
+
+/*
+data "criblio_source" "my_source" {
+  group_id = "default"
+  id       = "http-listener"
+}
+
+output "my_connections" {
+  value = data.criblio_source.my_source.items[0].connections
+}
+
+*/
 
 data "criblio_sources" "my_sources" {
   group_id = "default"

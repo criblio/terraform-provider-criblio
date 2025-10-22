@@ -257,7 +257,7 @@ func (s *NotificationTargets) ListNotificationTarget(ctx context.Context, opts .
 
 // CreateNotificationTarget - Create NotificationTarget
 // Create NotificationTarget
-func (s *NotificationTargets) CreateNotificationTarget(ctx context.Context, request shared.NotificationTarget, opts ...operations.Option) (*operations.CreateNotificationTargetResponse, error) {
+func (s *NotificationTargets) CreateNotificationTarget(ctx context.Context, request operations.CreateNotificationTargetRequest, opts ...operations.Option) (*operations.CreateNotificationTargetResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -290,7 +290,7 @@ func (s *NotificationTargets) CreateNotificationTarget(ctx context.Context, requ
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "NotificationTarget", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -314,6 +314,10 @@ func (s *NotificationTargets) CreateNotificationTarget(ctx context.Context, requ
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
@@ -645,28 +649,6 @@ func (s *NotificationTargets) GetNotificationTargetByID(ctx context.Context, req
 			}
 
 			res.Object = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	case httpRes.StatusCode == 401:
-	case httpRes.StatusCode == 500:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.Error
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Error = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

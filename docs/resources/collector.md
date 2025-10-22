@@ -2100,3 +2100,25 @@ Optional:
 
 <a id="nestedatt--input_collector_splunk--schedule--run--time_warning"></a>
 ### Nested Schema for `input_collector_splunk.schedule.run.time_warning`
+
+## Import
+
+Import is supported using the following syntax:
+
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = criblio_collector.my_criblio_collector
+  id = jsonencode({
+    group_id = "myExistingGroupId"
+    id = "myExistingJobId"
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+```shell
+terraform import criblio_collector.my_criblio_collector '{"group_id": "myExistingGroupId", "id": "myExistingJobId"}'
+```

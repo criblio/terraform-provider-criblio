@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -36,15 +35,14 @@ type PackVarsResource struct {
 
 // PackVarsResourceModel describes the resource data model.
 type PackVarsResourceModel struct {
-	Description types.String        `tfsdk:"description"`
-	GroupID     types.String        `tfsdk:"group_id"`
-	ID          types.String        `tfsdk:"id"`
-	Items       []tfTypes.GlobalVar `tfsdk:"items"`
-	Lib         types.String        `tfsdk:"lib"`
-	Pack        types.String        `tfsdk:"pack"`
-	Tags        types.String        `tfsdk:"tags"`
-	Type        types.String        `tfsdk:"type"`
-	Value       types.String        `tfsdk:"value"`
+	Description types.String `tfsdk:"description"`
+	GroupID     types.String `tfsdk:"group_id"`
+	ID          types.String `tfsdk:"id"`
+	Lib         types.String `tfsdk:"lib"`
+	Pack        types.String `tfsdk:"pack"`
+	Tags        types.String `tfsdk:"tags"`
+	Type        types.String `tfsdk:"type"`
+	Value       types.String `tfsdk:"value"`
 }
 
 func (r *PackVarsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,52 +67,6 @@ func (r *PackVarsResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Global variable name.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed:    true,
-							Description: `Brief description of this variable. Optional.`,
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Global variable name.`,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-							},
-						},
-						"lib": schema.StringAttribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed:    true,
-							Description: `One or more tags related to this variable. Optional.`,
-						},
-						"type": schema.StringAttribute{
-							Computed:    true,
-							Default:     stringdefault.StaticString(`any`),
-							Description: `Type of variable. Default: "any"; must be one of ["string", "number", "encryptedString", "boolean", "array", "object", "expression", "any"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"string",
-									"number",
-									"encryptedString",
-									"boolean",
-									"array",
-									"object",
-									"expression",
-									"any",
-								),
-							},
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value of variable`,
-						},
-					},
 				},
 			},
 			"lib": schema.StringAttribute{
@@ -232,43 +184,6 @@ func (r *PackVarsResource) Create(ctx context.Context, req resource.CreateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetGlobalVariableLibVarsByPackRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.GlobalVariables.GetGlobalVariableLibVarsByPack(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableLibVarsByPackResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -292,13 +207,13 @@ func (r *PackVarsResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetGlobalVariableLibVarsByPackRequest(ctx)
+	request, requestDiags := data.ToOperationsGetGlobalVariableLibVarsByPackAndIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.GlobalVariables.GetGlobalVariableLibVarsByPack(ctx, *request)
+	res, err := r.client.GlobalVariables.GetGlobalVariableLibVarsByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -318,11 +233,11 @@ func (r *PackVarsResource) Read(ctx context.Context, req resource.ReadRequest, r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableLibVarsByPackResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedGlobalVar(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -373,43 +288,6 @@ func (r *PackVarsResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedGlobalVar(ctx, &res.Object.Items[0])...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetGlobalVariableLibVarsByPackRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.GlobalVariables.GetGlobalVariableLibVarsByPack(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableLibVarsByPackResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -473,11 +351,12 @@ func (r *PackVarsResource) ImportState(ctx context.Context, req resource.ImportS
 	dec.DisallowUnknownFields()
 	var data struct {
 		GroupID string `json:"group_id"`
+		ID      string `json:"id"`
 		Pack    string `json:"pack"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "pack": "example-pack"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "ENV", "pack": "example-pack"}': `+err.Error())
 		return
 	}
 
@@ -486,6 +365,11 @@ func (r *PackVarsResource) ImportState(ctx context.Context, req resource.ImportS
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	if len(data.ID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"ENV"`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if len(data.Pack) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '"example-pack"`)
 		return

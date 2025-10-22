@@ -1,8 +1,9 @@
+
 resource "criblio_pack_vars" "my_packvars" {
   description = "my_description"
   group_id    = "default"
   id          = "my_id"
-  lib         = "my_lib"
+  lib         = "custom"
   pack        = criblio_pack.vars_pack.id
   tags        = "my_tags"
   type        = "object"

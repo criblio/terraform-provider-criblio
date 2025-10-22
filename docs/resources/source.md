@@ -10462,3 +10462,25 @@ Optional:
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false
+
+## Import
+
+Import is supported using the following syntax:
+
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = criblio_source.my_criblio_source
+  id = jsonencode({
+    group_id = "Cribl"
+    id = "input-hec-1"
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+```shell
+terraform import criblio_source.my_criblio_source '{"group_id": "Cribl", "id": "input-hec-1"}'
+```

@@ -34,6 +34,27 @@ func (r *SourceResourceModel) RefreshFromOperationsCreateInputResponseBody(ctx c
 	return diags
 }
 
+func (r *SourceResourceModel) RefreshFromOperationsGetInputByIDResponseBody(ctx context.Context, resp *operations.GetInputByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = nil
+		for _, itemsItem := range resp.Items {
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *SourceResourceModel) RefreshFromSharedInput(ctx context.Context, resp *shared.Input) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -7200,6 +7221,23 @@ func (r *SourceResourceModel) ToOperationsDeleteInputByIDRequest(ctx context.Con
 	groupID = r.GroupID.ValueString()
 
 	out := operations.DeleteInputByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *SourceResourceModel) ToOperationsGetInputByIDRequest(ctx context.Context) (*operations.GetInputByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.GetInputByIDRequest{
 		ID:      id,
 		GroupID: groupID,
 	}

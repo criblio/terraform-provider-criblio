@@ -63434,6 +63434,7 @@ paths:
       tags: *a7
       summary: Get Collector by ID
       description: Get Collector by ID
+      x-speakeasy-entity-operation: Collector#get
       parameters:
         - name: id
           in: path
@@ -63451,7 +63452,23 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           default: default
           example: "myExistingGroupId"
-      responses: *a8
+      responses:
+        "200":
+          description: a list of any objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
     patch:
       operationId: updateCollectorById
       tags: *a7
@@ -63720,6 +63737,14 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/NotificationTarget"
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: The id of this notification target instance
+          schema:
+            type: string
+          example: "nt-slack-prod"
       responses:
         "200":
           description: a list of any objects
@@ -63743,6 +63768,7 @@ paths:
       tags: *a16
       summary: Get NotificationTarget by ID
       description: Get NotificationTarget by ID
+      x-speakeasy-entity-operation: NotificationTarget#get
       parameters:
         - name: id
           in: path
@@ -63752,7 +63778,23 @@ paths:
             type: string
             example: "nt-slack-prod"
           description: Unique ID to GET
-      responses: *a17
+      responses:
+        "200":
+          description: a list of any objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
     patch:
       operationId: updateNotificationTargetById
       tags: *a16
@@ -67970,7 +68012,13 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GlobalVar"
-      responses: *a103
+      responses: 
+        "200":
+          description: Global Variable object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalVar"
     delete:
       x-speakeasy-entity-operation: GlobalVar#delete
       operationId: deleteGlobalVariableById
@@ -67994,7 +68042,6 @@ paths:
       responses: *a103
   "/m/{groupId}/p/{pack}/lib/vars":
     get:
-      x-speakeasy-entity-operation: PackVars#read
       operationId: getGlobalVariableLibVarsByPack
       tags: *a105
       summary: List all GlobalVars with references within a Pack
@@ -68052,6 +68099,7 @@ paths:
       tags: *a102
       summary: Get Global Variable by ID within a Pack
       description: Get Global Variable by ID within a Pack
+      x-speakeasy-entity-operation: PackVars#get
       responses: *a103
       parameters:
         - name: id
@@ -68369,6 +68417,7 @@ paths:
       tags: *a114
       summary: Get Input by ID
       description: Get Input by ID
+      x-speakeasy-entity-operation: Source#get
       parameters:
         - name: id
           in: path
@@ -68385,7 +68434,23 @@ paths:
           schema:
             type: string
           example: "Cribl"
-      responses: *a115
+      responses:
+        "200":
+          description: a list of any objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
     patch:
       x-speakeasy-entity-operation: Source#update
       operationId: updateInputById
@@ -68758,6 +68823,7 @@ paths:
       tags: *a120
       summary: Get Output by ID
       description: Get Output by ID
+      x-speakeasy-entity-operation: Destination#get
       parameters:
         - name: id
           in: path
@@ -68774,7 +68840,23 @@ paths:
           schema:
             type: string
           example: "Cribl"
-      responses: *a121
+      responses:
+        "200":
+          description: a list of any objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
     patch:
       x-speakeasy-entity-operation: Destination#update
       operationId: updateOutputById

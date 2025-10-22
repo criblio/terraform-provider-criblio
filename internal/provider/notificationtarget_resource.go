@@ -40,7 +40,7 @@ type NotificationTargetResource struct {
 
 // NotificationTargetResourceModel describes the resource data model.
 type NotificationTargetResourceModel struct {
-	ID              types.String                      `tfsdk:"id"`
+	ID              types.String                      `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
 	Items           []map[string]jsontypes.Normalized `tfsdk:"items"`
 	PagerDutyTarget *tfTypes.PagerDutyTarget          `queryParam:"inline" tfsdk:"pager_duty_target" tfPlanOnly:"true"`
 	SlackTarget     *tfTypes.SlackTarget              `queryParam:"inline" tfsdk:"slack_target" tfPlanOnly:"true"`
@@ -59,7 +59,7 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to DELETE`,
+				Description: `The id of this notification target instance`,
 			},
 			"items": schema.ListAttribute{
 				Computed: true,
@@ -528,7 +528,7 @@ func (r *NotificationTargetResource) Create(ctx context.Context, req resource.Cr
 		return
 	}
 
-	request, requestDiags := data.ToSharedNotificationTarget(ctx)
+	request, requestDiags := data.ToOperationsCreateNotificationTargetRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -588,7 +588,41 @@ func (r *NotificationTargetResource) Read(ctx context.Context, req resource.Read
 		return
 	}
 
-	// Not Implemented; we rely entirely on CREATE API request response
+	request, requestDiags := data.ToOperationsGetNotificationTargetByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.NotificationTargets.GetNotificationTargetByID(ctx, *request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if res.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+	if !(res.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNotificationTargetByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -694,5 +728,5 @@ func (r *NotificationTargetResource) Delete(ctx context.Context, req resource.De
 }
 
 func (r *NotificationTargetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource notification_target.")
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

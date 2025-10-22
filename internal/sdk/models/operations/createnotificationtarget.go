@@ -3,8 +3,30 @@
 package operations
 
 import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
+
+type CreateNotificationTargetRequest struct {
+	// The id of this notification target instance
+	ID string `queryParam:"style=form,explode=true,name=id"`
+	// New NotificationTarget object
+	NotificationTarget shared.NotificationTarget `request:"mediaType=application/json"`
+}
+
+func (c *CreateNotificationTargetRequest) GetID() string {
+	if c == nil {
+		return ""
+	}
+	return c.ID
+}
+
+func (c *CreateNotificationTargetRequest) GetNotificationTarget() shared.NotificationTarget {
+	if c == nil {
+		return shared.NotificationTarget{}
+	}
+	return c.NotificationTarget
+}
 
 // CreateNotificationTargetResponseBody - a list of any objects
 type CreateNotificationTargetResponseBody struct {

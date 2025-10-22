@@ -34,6 +34,27 @@ func (r *CollectorResourceModel) RefreshFromOperationsCreateSavedJobResponseBody
 	return diags
 }
 
+func (r *CollectorResourceModel) RefreshFromOperationsGetSavedJobByIDResponseBody(ctx context.Context, resp *operations.GetSavedJobByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = nil
+		for _, itemsItem := range resp.Items {
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Context, resp *shared.InputCollector) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -1295,6 +1316,23 @@ func (r *CollectorResourceModel) ToOperationsDeleteCollectorByIDRequest(ctx cont
 	groupID = r.GroupID.ValueString()
 
 	out := operations.DeleteCollectorByIDRequest{
+		ID:      id,
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}
+
+func (r *CollectorResourceModel) ToOperationsGetSavedJobByIDRequest(ctx context.Context) (*operations.GetSavedJobByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.GetSavedJobByIDRequest{
 		ID:      id,
 		GroupID: groupID,
 	}

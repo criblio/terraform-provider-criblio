@@ -3,7 +3,6 @@
 package operations
 
 import (
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
@@ -19,12 +18,12 @@ func (g *GetNotificationTargetByIDRequest) GetID() string {
 	return g.ID
 }
 
-// GetNotificationTargetByIDResponseBody - a list of NotificationTarget objects
+// GetNotificationTargetByIDResponseBody - a list of any objects
 type GetNotificationTargetByIDResponseBody struct {
-	Items []shared.NotificationTarget `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (g *GetNotificationTargetByIDResponseBody) GetItems() []shared.NotificationTarget {
+func (g *GetNotificationTargetByIDResponseBody) GetItems() []map[string]any {
 	if g == nil {
 		return nil
 	}
@@ -38,10 +37,8 @@ type GetNotificationTargetByIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of NotificationTarget objects
+	// a list of any objects
 	Object *GetNotificationTargetByIDResponseBody
-	// Unexpected error
-	Error *shared.Error
 }
 
 func (g *GetNotificationTargetByIDResponse) GetContentType() string {
@@ -70,11 +67,4 @@ func (g *GetNotificationTargetByIDResponse) GetObject() *GetNotificationTargetBy
 		return nil
 	}
 	return g.Object
-}
-
-func (g *GetNotificationTargetByIDResponse) GetError() *shared.Error {
-	if g == nil {
-		return nil
-	}
-	return g.Error
 }
