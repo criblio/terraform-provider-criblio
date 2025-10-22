@@ -156,6 +156,19 @@ func (r *NotificationTargetResourceModel) ToOperationsDeleteNotificationTargetBy
 	return &out, diags
 }
 
+func (r *NotificationTargetResourceModel) ToOperationsGetNotificationTargetByIDRequest(ctx context.Context) (*operations.GetNotificationTargetByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetNotificationTargetByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
+}
+
 func (r *NotificationTargetResourceModel) ToOperationsUpdateNotificationTargetByIDRequest(ctx context.Context) (*operations.UpdateNotificationTargetByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

@@ -132,3 +132,22 @@ Optional:
 - `type` (String) Not Null; must be "webhook"
 - `url` (String) URL to send the webhook to. Not Null
 - `username` (String) Basic authentication username
+
+## Import
+
+Import is supported using the following syntax:
+
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = criblio_notification_target.my_criblio_notification_target
+  id = "nt-slack-prod"
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+```shell
+terraform import criblio_notification_target.my_criblio_notification_target "nt-slack-prod"
+```

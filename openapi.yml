@@ -63711,6 +63711,7 @@ paths:
       tags: *a16
       summary: Get NotificationTarget by ID
       description: Get NotificationTarget by ID
+      x-speakeasy-entity-operation: NotificationTarget#get
       parameters:
         - name: id
           in: path
@@ -63809,7 +63810,6 @@ paths:
       tags: *a19
       summary: Get Notification by ID
       description: Get Notification by ID
-      x-speakeasy-entity-operation: Notification#get
       parameters:
         - name: id
           in: path

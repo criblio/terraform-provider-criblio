@@ -243,7 +243,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_hmac_function](docs/data-sources/hmac_function.md)
 * [criblio_instance_settings](docs/data-sources/instance_settings.md)
 * [criblio_lookup_file](docs/data-sources/lookup_file.md)
-* [criblio_notification](docs/data-sources/notification.md)
+* [criblio_notification_target](docs/data-sources/notification_target.md)
 * [criblio_notification_targets](docs/data-sources/notification_targets.md)
 * [criblio_pack](docs/data-sources/pack.md)
 * [criblio_pack_breakers](docs/data-sources/pack_breakers.md)

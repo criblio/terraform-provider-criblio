@@ -1,0 +1,1 @@
+terraform import criblio_notification_target.my_criblio_notification_target "nt-slack-prod"

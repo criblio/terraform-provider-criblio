@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 3e22be1f7109897ef4b25ed34884e43a
+  docChecksum: 62a1544a9b656954a56b2dc23c259dee
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.17.10
-  configChecksum: 78e90cdd48d2d042a6c73d9075bd5f98
+  releaseVersion: 1.17.11
+  configChecksum: 0a6029028a6a14bbfd2d5dcc836fd6dd
   published: true
 features:
   terraform:
@@ -47,7 +47,7 @@ generatedFiles:
   - examples/data-sources/criblio_hmac_function/data-source.tf
   - examples/data-sources/criblio_instance_settings/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
-  - examples/data-sources/criblio_notification/data-source.tf
+  - examples/data-sources/criblio_notification_target/data-source.tf
   - examples/data-sources/criblio_notification_targets/data-source.tf
   - examples/data-sources/criblio_pack/data-source.tf
   - examples/data-sources/criblio_pack_breakers/data-source.tf
@@ -114,9 +114,9 @@ generatedFiles:
   - examples/resources/criblio_lookup_file/import-by-string-id.tf
   - examples/resources/criblio_lookup_file/import.sh
   - examples/resources/criblio_lookup_file/resource.tf
-  - examples/resources/criblio_notification/import-by-string-id.tf
-  - examples/resources/criblio_notification/import.sh
   - examples/resources/criblio_notification/resource.tf
+  - examples/resources/criblio_notification_target/import-by-string-id.tf
+  - examples/resources/criblio_notification_target/import.sh
   - examples/resources/criblio_notification_target/resource.tf
   - examples/resources/criblio_pack/import-by-string-id.tf
   - examples/resources/criblio_pack/import.sh
@@ -265,10 +265,10 @@ generatedFiles:
   - internal/provider/lookupfile_data_source_sdk.go
   - internal/provider/lookupfile_resource.go
   - internal/provider/lookupfile_resource_sdk.go
-  - internal/provider/notification_data_source.go
-  - internal/provider/notification_data_source_sdk.go
   - internal/provider/notification_resource.go
   - internal/provider/notification_resource_sdk.go
+  - internal/provider/notificationtarget_data_source.go
+  - internal/provider/notificationtarget_data_source_sdk.go
   - internal/provider/notificationtarget_resource.go
   - internal/provider/notificationtarget_resource_sdk.go
   - internal/provider/notificationtargets_data_source.go
