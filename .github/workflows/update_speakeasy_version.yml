@@ -1,7 +1,5 @@
 name: Updated Speakeasy Version
 on:
-
-
 jobs:
   update_speakeasy_version:
     runs-on: ubuntu-latest
@@ -13,27 +11,39 @@ jobs:
           repo: speakeasy
           cli_name: speakeasy
           package_type: zip
-  
+
       - name: Configure speakeasy CLI
         run: |
           mkdir -p ~/.speakeasy
           echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
+
       - name: Checkout current repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           ref: ${{ github.ref }}
-  
+
       - uses: dominikh/staticcheck-action@v1.3.1
-  
+
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.1.7"
-  
+
       - name: Run Speakeasy with frozen workflow lockfile
-        run: | 
+        run: |
           #update the thing
           version=`speakeasy update | cut -d ' ' -f 4`
 
-          if [[ ! `echo $version | grep 
+          if [[ ! `echo $version | grep "v[0-9]\.[0-9][0-9][0-9]\.[0]"` ]]; then
+              echo "Speakeasy version found not valid, look into it!"
+              exit 1
+          fi
+
+          yq eval ".speakeasyVersion = \"$version\"" -i .speakeasy/workflow.yaml
 
           speakeasy run --frozen-workflow-lockfile
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        env:
+          commit-message: "Updating speakeasy version"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
