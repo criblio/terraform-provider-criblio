@@ -15,7 +15,7 @@ targets:
         sourceBlobDigest: sha256:7dc5c52024697f2ab9395ff9cf5881c7cd0128c4d80373de67e213891ee788fe
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: latest
+    speakeasyVersion: v1.636.3
     sources:
         Cribl Control Plane and Management API:
             inputs:
