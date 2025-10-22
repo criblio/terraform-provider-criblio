@@ -13,8 +13,7 @@ func TestPackVars(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
-					ExpectNonEmptyPlan: true,
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_pack.vars_pack", "id", "pack-with-vars"),
 						resource.TestCheckResourceAttr("criblio_pack.vars_pack", "group_id", "default"),
