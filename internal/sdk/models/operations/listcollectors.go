@@ -21,6 +21,14 @@ func (l *ListCollectorsRequest) GetGroupID() string {
 
 // ListCollectorsResponseBody - a list of Collector objects
 type ListCollectorsResponseBody struct {
+	Items []shared.InputCollector `json:"items,omitempty"`
+}
+
+func (l *ListCollectorsResponseBody) GetItems() []shared.InputCollector {
+	if l == nil {
+		return nil
+	}
+	return l.Items
 }
 
 type ListCollectorsResponse struct {

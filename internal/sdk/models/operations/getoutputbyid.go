@@ -30,6 +30,14 @@ func (g *GetOutputByIDRequest) GetGroupID() string {
 
 // GetOutputByIDResponseBody - a list of Output objects
 type GetOutputByIDResponseBody struct {
+	Items []shared.Output `json:"items,omitempty"`
+}
+
+func (g *GetOutputByIDResponseBody) GetItems() []shared.Output {
+	if g == nil {
+		return nil
+	}
+	return g.Items
 }
 
 type GetOutputByIDResponse struct {

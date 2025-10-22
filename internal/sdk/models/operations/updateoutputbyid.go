@@ -39,6 +39,14 @@ func (u *UpdateOutputByIDRequest) GetOutput() shared.Output {
 
 // UpdateOutputByIDResponseBody - a list of Output objects
 type UpdateOutputByIDResponseBody struct {
+	Items []shared.Output `json:"items,omitempty"`
+}
+
+func (u *UpdateOutputByIDResponseBody) GetItems() []shared.Output {
+	if u == nil {
+		return nil
+	}
+	return u.Items
 }
 
 type UpdateOutputByIDResponse struct {

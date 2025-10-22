@@ -30,6 +30,14 @@ func (d *DeleteOutputByIDRequest) GetGroupID() string {
 
 // DeleteOutputByIDResponseBody - a list of Output objects
 type DeleteOutputByIDResponseBody struct {
+	Items []shared.Output `json:"items,omitempty"`
+}
+
+func (d *DeleteOutputByIDResponseBody) GetItems() []shared.Output {
+	if d == nil {
+		return nil
+	}
+	return d.Items
 }
 
 type DeleteOutputByIDResponse struct {

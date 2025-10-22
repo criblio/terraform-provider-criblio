@@ -30,6 +30,14 @@ func (d *DeleteInputByIDRequest) GetGroupID() string {
 
 // DeleteInputByIDResponseBody - a list of Input objects
 type DeleteInputByIDResponseBody struct {
+	Items []shared.Input `json:"items,omitempty"`
+}
+
+func (d *DeleteInputByIDResponseBody) GetItems() []shared.Input {
+	if d == nil {
+		return nil
+	}
+	return d.Items
 }
 
 type DeleteInputByIDResponse struct {

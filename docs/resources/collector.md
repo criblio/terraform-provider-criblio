@@ -279,7 +279,7 @@ resource "criblio_collector" "my_collector" {
         max_batch_size              = 200
         path                        = "logs/2025/10/"
         recurse                     = true
-        service_account_credentials = "-----BEGIN PRIVATE KEY-----\nMIIEv...example...IDAQAB\n-----END PRIVATE KEY-----\n"
+        service_account_credentials = "***REDACTED***"
       }
       type = "gcs"
     }
@@ -854,15 +854,20 @@ resource "criblio_collector" "my_collector" {
 - `input_collector_s3` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3))
 - `input_collector_splunk` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk))
 
+### Read-Only
+
+- `environment` (String)
+- `ignore_group_jobs_limit` (Boolean) Default: false
+- `resume_on_boot` (Boolean) Default: true
+- `ttl` (String) Default: "4h"
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
+
 <a id="nestedatt--input_collector_azure_blob"></a>
 ### Nested Schema for `input_collector_azure_blob`
 
-Required:
-
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector))
-
 Optional:
 
+- `collector` (Attributes) Not Null (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector))
 - `environment` (String)
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
@@ -878,13 +883,10 @@ Optional:
 <a id="nestedatt--input_collector_azure_blob--collector"></a>
 ### Nested Schema for `input_collector_azure_blob.collector`
 
-Required:
-
-- `type` (String) must be "azureblob"
-
 Optional:
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf))
+- `type` (String) Not Null; must be "azureblob"
 
 <a id="nestedatt--input_collector_azure_blob--collector--conf"></a>
 ### Nested Schema for `input_collector_azure_blob.collector.conf`
@@ -924,10 +926,10 @@ Optional:
 <a id="nestedatt--input_collector_azure_blob--input--metadata"></a>
 ### Nested Schema for `input_collector_azure_blob.input.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_collector_azure_blob--input--preprocess"></a>
@@ -996,12 +998,9 @@ Optional:
 <a id="nestedatt--input_collector_cribl_lake"></a>
 ### Nested Schema for `input_collector_cribl_lake`
 
-Required:
-
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector))
-
 Optional:
 
+- `collector` (Attributes) Not Null (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector))
 - `environment` (String)
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
@@ -1017,13 +1016,10 @@ Optional:
 <a id="nestedatt--input_collector_cribl_lake--collector"></a>
 ### Nested Schema for `input_collector_cribl_lake.collector`
 
-Required:
-
-- `type` (String) must be "cribllake"
-
 Optional:
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector--conf))
+- `type` (String) Not Null; must be "cribllake"
 
 <a id="nestedatt--input_collector_cribl_lake--collector--conf"></a>
 ### Nested Schema for `input_collector_cribl_lake.collector.conf`
@@ -1052,10 +1048,10 @@ Optional:
 <a id="nestedatt--input_collector_cribl_lake--input--metadata"></a>
 ### Nested Schema for `input_collector_cribl_lake.input.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_collector_cribl_lake--input--preprocess"></a>
@@ -1124,12 +1120,9 @@ Optional:
 <a id="nestedatt--input_collector_database"></a>
 ### Nested Schema for `input_collector_database`
 
-Required:
-
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--collector))
-
 Optional:
 
+- `collector` (Attributes) Not Null (see [below for nested schema](#nestedatt--input_collector_database--collector))
 - `environment` (String)
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
@@ -1145,13 +1138,10 @@ Optional:
 <a id="nestedatt--input_collector_database--collector"></a>
 ### Nested Schema for `input_collector_database.collector`
 
-Required:
-
-- `type` (String) must be "database"
-
 Optional:
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--collector--conf))
+- `type` (String) Not Null; must be "database"
 
 <a id="nestedatt--input_collector_database--collector--conf"></a>
 ### Nested Schema for `input_collector_database.collector.conf`
@@ -1182,10 +1172,10 @@ Optional:
 <a id="nestedatt--input_collector_database--input--metadata"></a>
 ### Nested Schema for `input_collector_database.input.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_collector_database--input--preprocess"></a>
@@ -1254,12 +1244,9 @@ Optional:
 <a id="nestedatt--input_collector_gcs"></a>
 ### Nested Schema for `input_collector_gcs`
 
-Required:
-
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--collector))
-
 Optional:
 
+- `collector` (Attributes) Not Null (see [below for nested schema](#nestedatt--input_collector_gcs--collector))
 - `environment` (String)
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
@@ -1275,13 +1262,10 @@ Optional:
 <a id="nestedatt--input_collector_gcs--collector"></a>
 ### Nested Schema for `input_collector_gcs.collector`
 
-Required:
-
-- `type` (String) must be "gcs"
-
 Optional:
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--collector--conf))
+- `type` (String) Not Null; must be "gcs"
 
 <a id="nestedatt--input_collector_gcs--collector--conf"></a>
 ### Nested Schema for `input_collector_gcs.collector.conf`
@@ -1320,10 +1304,10 @@ Optional:
 <a id="nestedatt--input_collector_gcs--input--metadata"></a>
 ### Nested Schema for `input_collector_gcs.input.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_collector_gcs--input--preprocess"></a>
@@ -1392,12 +1376,9 @@ Optional:
 <a id="nestedatt--input_collector_health_check"></a>
 ### Nested Schema for `input_collector_health_check`
 
-Required:
-
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--collector))
-
 Optional:
 
+- `collector` (Attributes) Not Null (see [below for nested schema](#nestedatt--input_collector_health_check--collector))
 - `environment` (String)
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
@@ -1413,13 +1394,10 @@ Optional:
 <a id="nestedatt--input_collector_health_check--collector"></a>
 ### Nested Schema for `input_collector_health_check.collector`
 
-Required:
-
-- `type` (String) must be "healthcheck"
-
 Optional:
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf))
+- `type` (String) Not Null; must be "healthcheck"
 
 <a id="nestedatt--input_collector_health_check--collector--conf"></a>
 ### Nested Schema for `input_collector_health_check.collector.conf`
@@ -1455,10 +1433,10 @@ Optional:
 <a id="nestedatt--input_collector_health_check--input--metadata"></a>
 ### Nested Schema for `input_collector_health_check.input.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_collector_health_check--input--preprocess"></a>
@@ -1527,12 +1505,9 @@ Optional:
 <a id="nestedatt--input_collector_rest"></a>
 ### Nested Schema for `input_collector_rest`
 
-Required:
-
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector))
-
 Optional:
 
+- `collector` (Attributes) Not Null (see [below for nested schema](#nestedatt--input_collector_rest--collector))
 - `environment` (String)
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
@@ -1548,13 +1523,10 @@ Optional:
 <a id="nestedatt--input_collector_rest--collector"></a>
 ### Nested Schema for `input_collector_rest.collector`
 
-Required:
-
-- `type` (String) must be "rest"
-
 Optional:
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf))
+- `type` (String) Not Null; must be "rest"
 
 <a id="nestedatt--input_collector_rest--collector--conf"></a>
 ### Nested Schema for `input_collector_rest.collector.conf`
@@ -1747,10 +1719,10 @@ Optional:
 <a id="nestedatt--input_collector_rest--input--metadata"></a>
 ### Nested Schema for `input_collector_rest.input.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_collector_rest--input--preprocess"></a>
@@ -1819,12 +1791,9 @@ Optional:
 <a id="nestedatt--input_collector_s3"></a>
 ### Nested Schema for `input_collector_s3`
 
-Required:
-
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--collector))
-
 Optional:
 
+- `collector` (Attributes) Not Null (see [below for nested schema](#nestedatt--input_collector_s3--collector))
 - `environment` (String)
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
@@ -1840,13 +1809,10 @@ Optional:
 <a id="nestedatt--input_collector_s3--collector"></a>
 ### Nested Schema for `input_collector_s3.collector`
 
-Required:
-
-- `type` (String) must be "s3"
-
 Optional:
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--collector--conf))
+- `type` (String) Not Null; must be "s3"
 
 <a id="nestedatt--input_collector_s3--collector--conf"></a>
 ### Nested Schema for `input_collector_s3.collector.conf`
@@ -1888,10 +1854,10 @@ Optional:
 <a id="nestedatt--input_collector_s3--input--metadata"></a>
 ### Nested Schema for `input_collector_s3.input.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_collector_s3--input--preprocess"></a>
@@ -1960,12 +1926,9 @@ Optional:
 <a id="nestedatt--input_collector_splunk"></a>
 ### Nested Schema for `input_collector_splunk`
 
-Required:
-
-- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--collector))
-
 Optional:
 
+- `collector` (Attributes) Not Null (see [below for nested schema](#nestedatt--input_collector_splunk--collector))
 - `environment` (String)
 - `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
@@ -1981,13 +1944,10 @@ Optional:
 <a id="nestedatt--input_collector_splunk--collector"></a>
 ### Nested Schema for `input_collector_splunk.collector`
 
-Required:
-
-- `type` (String) must be "splunk"
-
 Optional:
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--collector--conf))
+- `type` (String) Not Null; must be "splunk"
 
 <a id="nestedatt--input_collector_splunk--collector--conf"></a>
 ### Nested Schema for `input_collector_splunk.collector.conf`
@@ -2032,10 +1992,10 @@ Optional:
 <a id="nestedatt--input_collector_splunk--input--metadata"></a>
 ### Nested Schema for `input_collector_splunk.input.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_collector_splunk--input--preprocess"></a>
@@ -2096,25 +2056,3 @@ Optional:
 
 <a id="nestedatt--input_collector_splunk--schedule--run--time_warning"></a>
 ### Nested Schema for `input_collector_splunk.schedule.run.time_warning`
-
-## Import
-
-Import is supported using the following syntax:
-
-In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
-
-```terraform
-import {
-  to = criblio_collector.my_criblio_collector
-  id = jsonencode({
-    group_id = "myExistingGroupId"
-    id = "myExistingJobId"
-  })
-}
-```
-
-The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
-
-```shell
-terraform import criblio_collector.my_criblio_collector '{"group_id": "myExistingGroupId", "id": "myExistingJobId"}'
-```

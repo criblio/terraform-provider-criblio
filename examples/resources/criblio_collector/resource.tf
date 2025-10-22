@@ -264,7 +264,7 @@ resource "criblio_collector" "my_collector" {
         max_batch_size              = 200
         path                        = "logs/2025/10/"
         recurse                     = true
-        service_account_credentials = "-----BEGIN PRIVATE KEY-----\nMIIEv...example...IDAQAB\n-----END PRIVATE KEY-----\n"
+        service_account_credentials = "***REDACTED***"
       }
       type = "gcs"
     }
