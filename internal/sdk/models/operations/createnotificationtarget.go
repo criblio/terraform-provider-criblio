@@ -28,7 +28,7 @@ func (c *CreateNotificationTargetRequest) GetNotificationTarget() shared.Notific
 	return c.NotificationTarget
 }
 
-// CreateNotificationTargetResponseBody - a list of any objects
+// CreateNotificationTargetResponseBody - a list of NotificationTarget objects
 type CreateNotificationTargetResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
@@ -47,8 +47,10 @@ type CreateNotificationTargetResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of any objects
+	// a list of NotificationTarget objects
 	Object *CreateNotificationTargetResponseBody
+	// Unexpected error
+	Error *shared.Error
 }
 
 func (c *CreateNotificationTargetResponse) GetContentType() string {
@@ -77,4 +79,11 @@ func (c *CreateNotificationTargetResponse) GetObject() *CreateNotificationTarget
 		return nil
 	}
 	return c.Object
+}
+
+func (c *CreateNotificationTargetResponse) GetError() *shared.Error {
+	if c == nil {
+		return nil
+	}
+	return c.Error
 }

@@ -3,13 +3,14 @@
 package operations
 
 import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
 type GetInputByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -27,7 +28,7 @@ func (g *GetInputByIDRequest) GetGroupID() string {
 	return g.GroupID
 }
 
-// GetInputByIDResponseBody - a list of any objects
+// GetInputByIDResponseBody - a list of Input objects
 type GetInputByIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
@@ -46,8 +47,10 @@ type GetInputByIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of any objects
+	// a list of Input objects
 	Object *GetInputByIDResponseBody
+	// Unexpected error
+	Error *shared.Error
 }
 
 func (g *GetInputByIDResponse) GetContentType() string {
@@ -76,4 +79,11 @@ func (g *GetInputByIDResponse) GetObject() *GetInputByIDResponseBody {
 		return nil
 	}
 	return g.Object
+}
+
+func (g *GetInputByIDResponse) GetError() *shared.Error {
+	if g == nil {
+		return nil
+	}
+	return g.Error
 }

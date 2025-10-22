@@ -14,7 +14,7 @@ Source Resource
 
 ```terraform
 resource "criblio_source" "my_source" {
-  group_id = "Cribl"
+  group_id = "default"
   id       = "input-hec-1"
   input_appscope = {
     auth_token = "***REDACTED***"
@@ -4040,7 +4040,7 @@ resource "criblio_source" "my_source" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
 - `id` (String) The id of this source instance
 
 ### Optional
@@ -10473,7 +10473,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_source.my_criblio_source
   id = jsonencode({
-    group_id = "Cribl"
+    group_id = "default"
     id = "input-hec-1"
   })
 }
@@ -10482,5 +10482,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_source.my_criblio_source '{"group_id": "Cribl", "id": "input-hec-1"}'
+terraform import criblio_source.my_criblio_source '{"group_id": "default", "id": "input-hec-1"}'
 ```

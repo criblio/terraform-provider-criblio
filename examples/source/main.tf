@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+  cloud_domain    = "cribl-playground.cloud"
+}
+
 resource "criblio_source" "my_http_source" {
   group_id = "default"
   id       = "http-listener"
@@ -82,6 +96,49 @@ resource "criblio_source" "my_http_source" {
   }
 }
 
+# Update existing CriblLogs source to connect to our HTTP source
+resource "criblio_source" "cribl_logs" {
+  group_id = "default"
+  id       = "CriblLogs"
+  input_cribl = {
+    id = "CriblLogs"
+    connections = [
+      {
+        output   = "default" # This will route to your HTTP source
+        pipeline = "default"
+      }
+    ]
+    description = "Internal Cribl-generated events routed to HTTP source"
+    disabled    = false
+    environment = "main"
+    filter      = "channel.startsWith('input:') || channel.startsWith('output:') || channel.startsWith('SourcePQ:') || channel.startsWith('DestPQ:') || source.includes('audit.log') || source.includes('access.log')"
+    metadata = [
+      {
+        name  = "source"
+        value = "\"cribl\""
+      }
+    ]
+    pipeline       = "default"
+    pq_enabled     = false
+    send_to_routes = false
+    streamtags = [
+      "internal",
+      "cribl",
+    ]
+    type = "cribl"
+  }
+}
+
+data "criblio_source" "my_source" {
+  group_id = "default"
+  id       = "CriblLogs"
+}
+
+output "my_source" {
+  value = data.criblio_source.my_source
+}
+
+
 /*
 data "criblio_source" "my_source" {
   group_id = "default"
@@ -92,15 +149,16 @@ output "my_connections" {
   value = data.criblio_source.my_source.items[0].connections
 }
 
-*/
 
 data "criblio_sources" "my_sources" {
   group_id = "default"
 }
 
+
 output "my_sources" {
   value = data.criblio_sources.my_sources
 }
+
 
 output "my_http_source_content" {
   value       = data.criblio_sources.my_sources.items[0].input_http
@@ -122,3 +180,4 @@ output "http_source_by_id" {
   ]
   description = "HTTP source with specific ID 'cribl_http_source'"
 }
+*/

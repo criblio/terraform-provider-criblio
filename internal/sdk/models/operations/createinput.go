@@ -8,7 +8,7 @@ import (
 )
 
 type CreateInputRequest struct {
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// The id of this source instance
 	ID string `queryParam:"style=form,explode=true,name=id"`
@@ -37,7 +37,7 @@ func (c *CreateInputRequest) GetInput() shared.Input {
 	return c.Input
 }
 
-// CreateInputResponseBody - a list of any objects
+// CreateInputResponseBody - a list of Input objects
 type CreateInputResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
@@ -56,8 +56,10 @@ type CreateInputResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of any objects
+	// a list of Input objects
 	Object *CreateInputResponseBody
+	// Unexpected error
+	Error *shared.Error
 }
 
 func (c *CreateInputResponse) GetContentType() string {
@@ -86,4 +88,11 @@ func (c *CreateInputResponse) GetObject() *CreateInputResponseBody {
 		return nil
 	}
 	return c.Object
+}
+
+func (c *CreateInputResponse) GetError() *shared.Error {
+	if c == nil {
+		return nil
+	}
+	return c.Error
 }

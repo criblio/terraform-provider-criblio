@@ -26428,11 +26428,11 @@ func (r *DestinationResource) Update(ctx context.Context, req resource.UpdateReq
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedOutput(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateOutputByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -26500,12 +26500,12 @@ func (r *DestinationResource) ImportState(ctx context.Context, req resource.Impo
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "out-s3-main"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "default", "id": "out-s3-main"}': `+err.Error())
 		return
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"default"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)

@@ -8,7 +8,7 @@ import (
 )
 
 type ListInputRequest struct {
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -21,10 +21,10 @@ func (l *ListInputRequest) GetGroupID() string {
 
 // ListInputResponseBody - a list of Input objects
 type ListInputResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (l *ListInputResponseBody) GetItems() []shared.Input {
+func (l *ListInputResponseBody) GetItems() []map[string]any {
 	if l == nil {
 		return nil
 	}

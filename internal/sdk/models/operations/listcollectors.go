@@ -21,10 +21,10 @@ func (l *ListCollectorsRequest) GetGroupID() string {
 
 // ListCollectorsResponseBody - a list of Collector objects
 type ListCollectorsResponseBody struct {
-	Items []shared.InputCollector `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (l *ListCollectorsResponseBody) GetItems() []shared.InputCollector {
+func (l *ListCollectorsResponseBody) GetItems() []map[string]any {
 	if l == nil {
 		return nil
 	}

@@ -47,7 +47,7 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,

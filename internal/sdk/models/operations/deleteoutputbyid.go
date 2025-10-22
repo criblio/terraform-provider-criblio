@@ -10,7 +10,7 @@ import (
 type DeleteOutputByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,10 +30,10 @@ func (d *DeleteOutputByIDRequest) GetGroupID() string {
 
 // DeleteOutputByIDResponseBody - a list of Output objects
 type DeleteOutputByIDResponseBody struct {
-	Items []shared.Output `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (d *DeleteOutputByIDResponseBody) GetItems() []shared.Output {
+func (d *DeleteOutputByIDResponseBody) GetItems() []map[string]any {
 	if d == nil {
 		return nil
 	}

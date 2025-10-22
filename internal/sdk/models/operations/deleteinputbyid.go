@@ -10,7 +10,7 @@ import (
 type DeleteInputByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,10 +30,10 @@ func (d *DeleteInputByIDRequest) GetGroupID() string {
 
 // DeleteInputByIDResponseBody - a list of Input objects
 type DeleteInputByIDResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (d *DeleteInputByIDResponseBody) GetItems() []shared.Input {
+func (d *DeleteInputByIDResponseBody) GetItems() []map[string]any {
 	if d == nil {
 		return nil
 	}

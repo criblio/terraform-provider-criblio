@@ -1,3 +1,3 @@
 data "criblio_sources" "my_sources" {
-  group_id = "Cribl"
+  group_id = "default"
 }

@@ -39,10 +39,10 @@ func (u *UpdateCollectorByIDRequest) GetInputCollector() shared.InputCollector {
 
 // UpdateCollectorByIDResponseBody - a list of Collector objects
 type UpdateCollectorByIDResponseBody struct {
-	Items []shared.InputCollector `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (u *UpdateCollectorByIDResponseBody) GetItems() []shared.InputCollector {
+func (u *UpdateCollectorByIDResponseBody) GetItems() []map[string]any {
 	if u == nil {
 		return nil
 	}

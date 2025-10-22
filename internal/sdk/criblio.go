@@ -355,9 +355,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.17.16",
+		SDKVersion: "1.17.18",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.17.16 2.723.11 4.14.0 github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.17.18 2.723.11 4.14.0 github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {

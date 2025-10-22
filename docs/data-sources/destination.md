@@ -14,7 +14,7 @@ Destination DataSource
 
 ```terraform
 data "criblio_destination" "my_destination" {
-  group_id = "Cribl"
+  group_id = "default"
   id       = "out-s3-main"
 }
 ```
@@ -24,7 +24,7 @@ data "criblio_destination" "my_destination" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
 - `id` (String) Unique ID to GET
 
 ### Read-Only

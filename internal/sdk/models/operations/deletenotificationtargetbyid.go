@@ -21,10 +21,10 @@ func (d *DeleteNotificationTargetByIDRequest) GetID() string {
 
 // DeleteNotificationTargetByIDResponseBody - a list of NotificationTarget objects
 type DeleteNotificationTargetByIDResponseBody struct {
-	Items []shared.NotificationTarget `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (d *DeleteNotificationTargetByIDResponseBody) GetItems() []shared.NotificationTarget {
+func (d *DeleteNotificationTargetByIDResponseBody) GetItems() []map[string]any {
 	if d == nil {
 		return nil
 	}

@@ -119,7 +119,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -25065,11 +25065,11 @@ func (r *SourceResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedInput(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateInputByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -25137,12 +25137,12 @@ func (r *SourceResource) ImportState(ctx context.Context, req resource.ImportSta
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "input-hec-1"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "default", "id": "input-hec-1"}': `+err.Error())
 		return
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"default"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)

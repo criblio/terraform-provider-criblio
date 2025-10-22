@@ -63372,7 +63372,8 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/InputCollector"
+                      type: object
+                      additionalProperties: true
         "401":
           description: Unauthorized
         "500":
@@ -63411,23 +63412,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/InputCollector"
-      responses:
-        "200":
-          description: a list of any objects
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    x-speakeasy-ignore: true
-                    type: integer
-                    description: number of items present in the items array
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
+      responses: *a8
   "/m/{groupId}/lib/jobs/{id}":
     get:
       operationId: getSavedJobById
@@ -63715,7 +63700,8 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/NotificationTarget"
+                      type: object
+                      additionalProperties: true
         "401":
           description: Unauthorized
         "500":
@@ -63745,23 +63731,7 @@ paths:
           schema:
             type: string
           example: "nt-slack-prod"
-      responses:
-        "200":
-          description: a list of any objects
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    x-speakeasy-ignore: true
-                    type: integer
-                    description: number of items present in the items array
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
+      responses: *a17
   "/notification-targets/{id}":
     get:
       operationId: getNotificationTargetById
@@ -63778,23 +63748,7 @@ paths:
             type: string
             example: "nt-slack-prod"
           description: Unique ID to GET
-      responses:
-        "200":
-          description: a list of any objects
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    x-speakeasy-ignore: true
-                    type: integer
-                    description: number of items present in the items array
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
+      responses: *a17
     patch:
       operationId: updateNotificationTargetById
       tags: *a16
@@ -68330,10 +68284,11 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "Cribl"
+          example: "default"
+          default: default
       operationId: listInput
       tags:
         &a114
@@ -68357,7 +68312,8 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Input"
+                      type: object
+                      additionalProperties: true
         "401":
           description: Unauthorized
         "500":
@@ -68372,10 +68328,11 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "Cribl"
+          example: "default"
+          default: default
         - name: id
           in: query
           required: true
@@ -68394,23 +68351,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Input"
-      responses:
-        "200":
-          description: a list of any objects
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    x-speakeasy-ignore: true
-                    type: integer
-                    description: number of items present in the items array
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
+      responses: *a115
   "/m/{groupId}/system/inputs/{id}":
     get:
       operationId: getInputById
@@ -68430,27 +68371,12 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "Cribl"
-      responses:
-        "200":
-          description: a list of any objects
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    x-speakeasy-ignore: true
-                    type: integer
-                    description: number of items present in the items array
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
+          example: "default"
+          default: default
+      responses: *a115
     patch:
       x-speakeasy-entity-operation: Source#update
       operationId: updateInputById
@@ -68467,10 +68393,11 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "Cribl"
+          example: "default"
+          default: default
       requestBody:
         description: Input object to be updated
         required: true
@@ -68495,10 +68422,11 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "Cribl"
+          example: "default"
+          default: default
       responses: *a115
   "/m/{groupId}/system/inputs/{id}/hectoken":
     post:
@@ -68763,7 +68691,8 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Output"
+                      type: object
+                      additionalProperties: true
         "401":
           description: Unauthorized
         "500":
@@ -68800,23 +68729,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Output"
-      responses:
-        "200":
-          description: a list of any objects
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    x-speakeasy-ignore: true
-                    type: integer
-                    description: number of items present in the items array
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
+      responses: *a121
   "/m/{groupId}/system/outputs/{id}":
     get:
       operationId: getOutputById
@@ -68836,27 +68749,12 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "Cribl"
-      responses:
-        "200":
-          description: a list of any objects
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    x-speakeasy-ignore: true
-                    type: integer
-                    description: number of items present in the items array
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
+          example: "default"
+          default: default
+      responses: *a121
     patch:
       x-speakeasy-entity-operation: Destination#update
       operationId: updateOutputById
@@ -68873,10 +68771,11 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "Cribl"
+          example: "default"
+          default: default
       requestBody:
         description: Output object to be updated
         required: true
@@ -68901,10 +68800,11 @@ paths:
         - name: groupId
           in: path
           required: true
-          description: The consumer group to which this instance belongs. Defaults to 'Cribl'.
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
           schema:
             type: string
-          example: "Cribl"
+          example: "default"
+          default: default
       responses: *a121
   "/m/{groupId}/system/outputs/{id}/pq":
     delete:
