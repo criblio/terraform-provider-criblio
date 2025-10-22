@@ -1,5 +1,5 @@
 workflowVersion: 1.0.0
-speakeasyVersion: 1.636.3
+speakeasyVersion: v1.636.3
 sources:
     Cribl Control Plane and Management API:
         inputs:
