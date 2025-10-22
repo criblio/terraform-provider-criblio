@@ -11,6 +11,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *NotificationTargetResourceModel) RefreshFromOperationsCreateNotificationTargetResponseBody(ctx context.Context, resp *operations.CreateNotificationTargetResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
 func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ctx context.Context, resp *shared.NotificationTarget) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -20,7 +29,6 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 		r.PagerDutyTarget.Component = types.StringPointerValue(resp.PagerDutyTarget.Component)
 		r.PagerDutyTarget.Group = types.StringPointerValue(resp.PagerDutyTarget.Group)
 		r.PagerDutyTarget.ID = types.StringValue(resp.PagerDutyTarget.ID)
-		r.ID = r.PagerDutyTarget.ID
 		r.PagerDutyTarget.RoutingKey = types.StringValue(resp.PagerDutyTarget.RoutingKey)
 		if resp.PagerDutyTarget.Severity != nil {
 			r.PagerDutyTarget.Severity = types.StringValue(string(*resp.PagerDutyTarget.Severity))
@@ -36,7 +44,6 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 	if resp.SlackTarget != nil {
 		r.SlackTarget = &tfTypes.SlackTarget{}
 		r.SlackTarget.ID = types.StringValue(resp.SlackTarget.ID)
-		r.ID = r.SlackTarget.ID
 		r.SlackTarget.SystemFields = make([]types.String, 0, len(resp.SlackTarget.SystemFields))
 		for _, v := range resp.SlackTarget.SystemFields {
 			r.SlackTarget.SystemFields = append(r.SlackTarget.SystemFields, types.StringValue(v))
@@ -54,7 +61,6 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 		r.SMTPTarget.From = types.StringValue(resp.SMTPTarget.From)
 		r.SMTPTarget.Host = types.StringValue(resp.SMTPTarget.Host)
 		r.SMTPTarget.ID = types.StringValue(resp.SMTPTarget.ID)
-		r.ID = r.SMTPTarget.ID
 		r.SMTPTarget.Password = types.StringPointerValue(resp.SMTPTarget.Password)
 		r.SMTPTarget.Port = types.Int64Value(resp.SMTPTarget.Port)
 		r.SMTPTarget.SystemFields = make([]types.String, 0, len(resp.SMTPTarget.SystemFields))
@@ -102,7 +108,6 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 		}
 		r.SnsTarget.Endpoint = types.StringPointerValue(resp.SnsTarget.Endpoint)
 		r.SnsTarget.ID = types.StringValue(resp.SnsTarget.ID)
-		r.ID = r.SnsTarget.ID
 		r.SnsTarget.MessageGroupID = types.StringPointerValue(resp.SnsTarget.MessageGroupID)
 		r.SnsTarget.PhoneNumber = types.StringPointerValue(resp.SnsTarget.PhoneNumber)
 		r.SnsTarget.Region = types.StringValue(resp.SnsTarget.Region)
@@ -127,7 +132,6 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 		}
 		r.WebhookTarget.Format = types.StringValue(string(resp.WebhookTarget.Format))
 		r.WebhookTarget.ID = types.StringValue(resp.WebhookTarget.ID)
-		r.ID = r.WebhookTarget.ID
 		r.WebhookTarget.Method = types.StringValue(string(resp.WebhookTarget.Method))
 		r.WebhookTarget.Password = types.StringPointerValue(resp.WebhookTarget.Password)
 		r.WebhookTarget.SystemFields = make([]types.String, 0, len(resp.WebhookTarget.SystemFields))
@@ -150,19 +154,6 @@ func (r *NotificationTargetResourceModel) ToOperationsDeleteNotificationTargetBy
 	id = r.ID.ValueString()
 
 	out := operations.DeleteNotificationTargetByIDRequest{
-		ID: id,
-	}
-
-	return &out, diags
-}
-
-func (r *NotificationTargetResourceModel) ToOperationsGetNotificationTargetByIDRequest(ctx context.Context) (*operations.GetNotificationTargetByIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.GetNotificationTargetByIDRequest{
 		ID: id,
 	}
 

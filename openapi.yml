@@ -63411,7 +63411,23 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/InputCollector"
-      responses: *a8
+      responses:
+        "200":
+          description: a list of any objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
   "/m/{groupId}/lib/jobs/{id}":
     get:
       operationId: getSavedJobById
@@ -63704,14 +63720,29 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/NotificationTarget"
-      responses: *a17
+      responses:
+        "200":
+          description: a list of any objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
   "/notification-targets/{id}":
     get:
       operationId: getNotificationTargetById
       tags: *a16
       summary: Get NotificationTarget by ID
       description: Get NotificationTarget by ID
-      x-speakeasy-entity-operation: NotificationTarget#get
       parameters:
         - name: id
           in: path
@@ -63810,6 +63841,7 @@ paths:
       tags: *a19
       summary: Get Notification by ID
       description: Get Notification by ID
+      x-speakeasy-entity-operation: Notification#get
       parameters:
         - name: id
           in: path
@@ -68314,7 +68346,23 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Input"
-      responses: *a115
+      responses:
+        "200":
+          description: a list of any objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
   "/m/{groupId}/system/inputs/{id}":
     get:
       operationId: getInputById
@@ -68687,7 +68735,23 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Output"
-      responses: *a121
+      responses:
+        "200":
+          description: a list of any objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
   "/m/{groupId}/system/outputs/{id}":
     get:
       operationId: getOutputById

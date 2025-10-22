@@ -37,12 +37,12 @@ func (c *CreateInputRequest) GetInput() shared.Input {
 	return c.Input
 }
 
-// CreateInputResponseBody - a list of Input objects
+// CreateInputResponseBody - a list of any objects
 type CreateInputResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (c *CreateInputResponseBody) GetItems() []shared.Input {
+func (c *CreateInputResponseBody) GetItems() []map[string]any {
 	if c == nil {
 		return nil
 	}
@@ -56,10 +56,8 @@ type CreateInputResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Input objects
+	// a list of any objects
 	Object *CreateInputResponseBody
-	// Unexpected error
-	Error *shared.Error
 }
 
 func (c *CreateInputResponse) GetContentType() string {
@@ -88,11 +86,4 @@ func (c *CreateInputResponse) GetObject() *CreateInputResponseBody {
 		return nil
 	}
 	return c.Object
-}
-
-func (c *CreateInputResponse) GetError() *shared.Error {
-	if c == nil {
-		return nil
-	}
-	return c.Error
 }

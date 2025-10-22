@@ -100,6 +100,10 @@ data "criblio_sources" "my_sources" {
   group_id = "default"
 }
 
+output "my_sources" {
+  value = data.criblio_sources.my_sources
+}
+
 output "my_http_source_content" {
   value       = data.criblio_sources.my_sources.items[0].input_http
   description = "Content of the HTTP source from the data source"

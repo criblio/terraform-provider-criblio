@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 62a1544a9b656954a56b2dc23c259dee
+  docChecksum: 1027335d957e176282d331f796600b73
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.17.11
-  configChecksum: 0a6029028a6a14bbfd2d5dcc836fd6dd
+  releaseVersion: 1.17.13
+  configChecksum: fab8a251efc50c246f8db084001709e8
   published: true
 features:
   terraform:
@@ -47,7 +47,7 @@ generatedFiles:
   - examples/data-sources/criblio_hmac_function/data-source.tf
   - examples/data-sources/criblio_instance_settings/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
-  - examples/data-sources/criblio_notification_target/data-source.tf
+  - examples/data-sources/criblio_notification/data-source.tf
   - examples/data-sources/criblio_notification_targets/data-source.tf
   - examples/data-sources/criblio_pack/data-source.tf
   - examples/data-sources/criblio_pack_breakers/data-source.tf
@@ -114,9 +114,9 @@ generatedFiles:
   - examples/resources/criblio_lookup_file/import-by-string-id.tf
   - examples/resources/criblio_lookup_file/import.sh
   - examples/resources/criblio_lookup_file/resource.tf
+  - examples/resources/criblio_notification/import-by-string-id.tf
+  - examples/resources/criblio_notification/import.sh
   - examples/resources/criblio_notification/resource.tf
-  - examples/resources/criblio_notification_target/import-by-string-id.tf
-  - examples/resources/criblio_notification_target/import.sh
   - examples/resources/criblio_notification_target/resource.tf
   - examples/resources/criblio_pack/import-by-string-id.tf
   - examples/resources/criblio_pack/import.sh
@@ -265,10 +265,10 @@ generatedFiles:
   - internal/provider/lookupfile_data_source_sdk.go
   - internal/provider/lookupfile_resource.go
   - internal/provider/lookupfile_resource_sdk.go
+  - internal/provider/notification_data_source.go
+  - internal/provider/notification_data_source_sdk.go
   - internal/provider/notification_resource.go
   - internal/provider/notification_resource_sdk.go
-  - internal/provider/notificationtarget_data_source.go
-  - internal/provider/notificationtarget_data_source_sdk.go
   - internal/provider/notificationtarget_resource.go
   - internal/provider/notificationtarget_resource_sdk.go
   - internal/provider/notificationtargets_data_source.go
@@ -3512,7 +3512,7 @@ examples:
         application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "splunk"}}
       responses:
         "200":
-          application/json: {"items": [{"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "splunk", "conf": {"searchHead": "https://splunk.example.com", "search": "index=main sourcetype=syslog | stats count", "earliest": "-24h", "latest": "now", "endpoint": "/services/search/jobs", "outputMode": "json", "authentication": "token", "timeout": 60, "useRoundRobinDns": false, "disableTimeFilter": false, "rejectUnauthorized": true, "handleEscapedChars": true, "username": "splunkUser", "password": "splunkPassword", "credentialsSecret": "splunkCredentialsSecret", "token": "splunkBearerToken", "tokenSecret": "splunkBearerTokenSecret"}}}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getSavedJobById:
@@ -3647,7 +3647,7 @@ examples:
         application/json: {"id": "<id>", "type": "webhook", "systemFields": ["cribl_host"], "url": "https://physical-plumber.info/", "format": "json_array", "method": "PUT", "authType": "none"}
       responses:
         "200":
-          application/json: {"items": [{"id": "myWebhookTarget", "type": "webhook", "systemFields": ["cribl_host", "cribl_pipe"], "url": "https://hooks.example.com/webhook", "format": "ndjson", "method": "POST", "authType": "token", "token": "myWebhookSecretToken", "username": "webhookUser", "password": "webhookPass"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getNotificationTargetById:
@@ -5428,7 +5428,7 @@ examples:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 301.76, "ipWhitelistRegex": "/.*/", "maxActiveCxn": 1000, "socketIdleTimeout": 0, "socketEndingMaxWait": 30, "socketMaxLifespan": 0, "enableProxyHeader": false, "staleChannelFlushMs": 10000, "enableHeader": false, "authType": "manual"}
       responses:
         "200":
-          application/json: {"items": [{"id": "tcp-listener", "type": "tcp", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["tcp", "ingest"], "connections": [{"pipeline": "default", "output": "s3-raw"}], "pq": {"mode": "always", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "100 MB", "maxSize": "10GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "host": "0.0.0.0", "port": 9000, "tls": {"disabled": true, "certificateName": "tcp-cert", "privKeyPath": "/etc/ssl/private/server.key", "passphrase": "***REDACTED***", "certPath": "/etc/ssl/certs/server.crt", "caPath": "/etc/ssl/certs/ca-bundle.crt", "requestCert": false, "minVersion": "TLSv1.2", "maxVersion": "TLSv1.3"}, "ipWhitelistRegex": "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$", "maxActiveCxn": 2000, "socketIdleTimeout": 60, "socketEndingMaxWait": 30, "socketMaxLifespan": 3600, "enableProxyHeader": false, "metadata": [{"name": "source", "value": "\"tcp\""}], "breakerRulesets": ["multiline-json", "tcp-syslog-breaker"], "staleChannelFlushMs": 1500, "enableHeader": false, "preprocess": {"disabled": true, "command": "jq -r .message", "args": ["--compact-output"]}, "description": "Receive generic TCP payloads", "authType": "manual"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getInputById:
@@ -5531,7 +5531,7 @@ examples:
         application/json: {"type": "elastic", "systemFields": ["cribl_pipe"], "streamtags": [], "loadBalanced": true, "index": "<value>", "concurrency": 5, "maxPayloadSizeKB": 4096, "maxPayloadEvents": 0, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 1, "failedRequestLoggingMode": "none", "safeHeaders": [], "responseRetrySettings": [], "responseHonorRetryAfterHeader": false, "extraParams": [{"name": "filter_path", "value": "errors,items.*.error,items.*._index,items.*.status"}], "elasticVersion": "auto", "includeDocId": false, "writeAction": "create", "retryPartialErrors": false, "onBackpressure": "block", "useRoundRobinDns": false, "excludeSelf": false, "dnsResolvePeriodSec": 600, "loadBalanceStatsPeriodSec": 300, "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
         "200":
-          application/json: {"items": [{"id": "elastic-out", "type": "elastic", "pipeline": "default", "systemFields": ["cribl_pipe"], "environment": "main", "streamtags": ["elastic", "es"], "loadBalanced": true, "index": "\"logs-2024.01.15\"", "docType": "_doc", "concurrency": 8, "maxPayloadSizeKB": 4096, "maxPayloadEvents": 0, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 1, "extraHttpHeaders": [{"name": "X-Request-ID", "value": "abc123"}], "failedRequestLoggingMode": "payload", "safeHeaders": ["X-Request-ID"], "responseRetrySettings": [{"httpStatus": 429, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 10000}], "timeoutRetrySettings": {"timeoutRetry": true, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 30000}, "responseHonorRetryAfterHeader": true, "extraParams": [{"name": "filter_path", "value": "errors,items.*.error,items.*._index,items.*.status"}], "auth": {"disabled": false, "authType": "manualAPIKey"}, "elasticVersion": "7", "elasticPipeline": "ingest-grok-pipeline", "includeDocId": true, "writeAction": "create", "retryPartialErrors": true, "onBackpressure": "block", "description": "Send documents to Elasticsearch bulk API with retries and custom params", "url": "https://es.example.com:9200/_bulk", "useRoundRobinDns": true, "excludeSelf": false, "urls": [{"url": "https://es-node-1.example.com:9200/_bulk", "weight": 2}, {"url": "https://es-node-2.example.com:9200/_bulk", "weight": 1}], "dnsResolvePeriodSec": 300, "loadBalanceStatsPeriodSec": 300, "pqMaxFileSize": "100 MB", "pqMaxSize": "10GB", "pqPath": "/opt/cribl/state/queues", "pqCompress": "gzip", "pqOnBackpressure": "block", "pqMode": "backpressure", "pqControls": {}}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getOutputById:

@@ -84,3 +84,22 @@ Optional:
 
 - `attachment_type` (String) Type of attachment for the notification. Default: "inline"; must be one of ["inline", "attachment"]
 - `include_results` (Boolean) Whether to include search results in the notification. Default: false
+
+## Import
+
+Import is supported using the following syntax:
+
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = criblio_notification.my_criblio_notification
+  id = "notif-001"
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+```shell
+terraform import criblio_notification.my_criblio_notification "notif-001"
+```

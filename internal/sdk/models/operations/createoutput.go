@@ -37,12 +37,12 @@ func (c *CreateOutputRequest) GetOutput() shared.Output {
 	return c.Output
 }
 
-// CreateOutputResponseBody - a list of Output objects
+// CreateOutputResponseBody - a list of any objects
 type CreateOutputResponseBody struct {
-	Items []shared.Output `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (c *CreateOutputResponseBody) GetItems() []shared.Output {
+func (c *CreateOutputResponseBody) GetItems() []map[string]any {
 	if c == nil {
 		return nil
 	}
@@ -56,10 +56,8 @@ type CreateOutputResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Output objects
+	// a list of any objects
 	Object *CreateOutputResponseBody
-	// Unexpected error
-	Error *shared.Error
 }
 
 func (c *CreateOutputResponse) GetContentType() string {
@@ -88,11 +86,4 @@ func (c *CreateOutputResponse) GetObject() *CreateOutputResponseBody {
 		return nil
 	}
 	return c.Object
-}
-
-func (c *CreateOutputResponse) GetError() *shared.Error {
-	if c == nil {
-		return nil
-	}
-	return c.Error
 }

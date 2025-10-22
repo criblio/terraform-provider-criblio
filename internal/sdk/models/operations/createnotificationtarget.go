@@ -3,16 +3,15 @@
 package operations
 
 import (
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
-// CreateNotificationTargetResponseBody - a list of NotificationTarget objects
+// CreateNotificationTargetResponseBody - a list of any objects
 type CreateNotificationTargetResponseBody struct {
-	Items []shared.NotificationTarget `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (c *CreateNotificationTargetResponseBody) GetItems() []shared.NotificationTarget {
+func (c *CreateNotificationTargetResponseBody) GetItems() []map[string]any {
 	if c == nil {
 		return nil
 	}
@@ -26,10 +25,8 @@ type CreateNotificationTargetResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of NotificationTarget objects
+	// a list of any objects
 	Object *CreateNotificationTargetResponseBody
-	// Unexpected error
-	Error *shared.Error
 }
 
 func (c *CreateNotificationTargetResponse) GetContentType() string {
@@ -58,11 +55,4 @@ func (c *CreateNotificationTargetResponse) GetObject() *CreateNotificationTarget
 		return nil
 	}
 	return c.Object
-}
-
-func (c *CreateNotificationTargetResponse) GetError() *shared.Error {
-	if c == nil {
-		return nil
-	}
-	return c.Error
 }

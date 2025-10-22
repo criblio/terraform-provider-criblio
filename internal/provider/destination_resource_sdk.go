@@ -13,6 +13,27 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *DestinationResourceModel) RefreshFromOperationsCreateOutputResponseBody(ctx context.Context, resp *operations.CreateOutputResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = nil
+		for _, itemsItem := range resp.Items {
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, resp *shared.Output) diag.Diagnostics {
 	var diags diag.Diagnostics
 

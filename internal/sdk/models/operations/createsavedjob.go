@@ -37,12 +37,12 @@ func (c *CreateSavedJobRequest) GetInputCollector() shared.InputCollector {
 	return c.InputCollector
 }
 
-// CreateSavedJobResponseBody - a list of Collector objects
+// CreateSavedJobResponseBody - a list of any objects
 type CreateSavedJobResponseBody struct {
-	Items []shared.InputCollector `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (c *CreateSavedJobResponseBody) GetItems() []shared.InputCollector {
+func (c *CreateSavedJobResponseBody) GetItems() []map[string]any {
 	if c == nil {
 		return nil
 	}
@@ -56,10 +56,8 @@ type CreateSavedJobResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Collector objects
+	// a list of any objects
 	Object *CreateSavedJobResponseBody
-	// Unexpected error
-	Error *shared.Error
 }
 
 func (c *CreateSavedJobResponse) GetContentType() string {
@@ -88,11 +86,4 @@ func (c *CreateSavedJobResponse) GetObject() *CreateSavedJobResponseBody {
 		return nil
 	}
 	return c.Object
-}
-
-func (c *CreateSavedJobResponse) GetError() *shared.Error {
-	if c == nil {
-		return nil
-	}
-	return c.Error
 }

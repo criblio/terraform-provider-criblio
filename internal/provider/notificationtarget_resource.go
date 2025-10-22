@@ -7,8 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	speakeasy_int64validators "github.com/criblio/terraform-provider-criblio/internal/validators/int64validators"
-	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -41,12 +40,13 @@ type NotificationTargetResource struct {
 
 // NotificationTargetResourceModel describes the resource data model.
 type NotificationTargetResourceModel struct {
-	ID              types.String             `tfsdk:"id"`
-	PagerDutyTarget *tfTypes.PagerDutyTarget `queryParam:"inline" tfsdk:"pager_duty_target" tfPlanOnly:"true"`
-	SlackTarget     *tfTypes.SlackTarget     `queryParam:"inline" tfsdk:"slack_target" tfPlanOnly:"true"`
-	SMTPTarget      *tfTypes.SMTPTarget      `queryParam:"inline" tfsdk:"smtp_target" tfPlanOnly:"true"`
-	SnsTarget       *tfTypes.SnsTarget       `queryParam:"inline" tfsdk:"sns_target" tfPlanOnly:"true"`
-	WebhookTarget   *tfTypes.WebhookTarget   `queryParam:"inline" tfsdk:"webhook_target" tfPlanOnly:"true"`
+	ID              types.String                      `tfsdk:"id"`
+	Items           []map[string]jsontypes.Normalized `tfsdk:"items"`
+	PagerDutyTarget *tfTypes.PagerDutyTarget          `queryParam:"inline" tfsdk:"pager_duty_target" tfPlanOnly:"true"`
+	SlackTarget     *tfTypes.SlackTarget              `queryParam:"inline" tfsdk:"slack_target" tfPlanOnly:"true"`
+	SMTPTarget      *tfTypes.SMTPTarget               `queryParam:"inline" tfsdk:"smtp_target" tfPlanOnly:"true"`
+	SnsTarget       *tfTypes.SnsTarget                `queryParam:"inline" tfsdk:"sns_target" tfPlanOnly:"true"`
+	WebhookTarget   *tfTypes.WebhookTarget            `queryParam:"inline" tfsdk:"webhook_target" tfPlanOnly:"true"`
 }
 
 func (r *NotificationTargetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -58,18 +58,19 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 		MarkdownDescription: "NotificationTarget Resource",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Unique ID for this notification target`,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
+				Required:    true,
+				Description: `Unique ID to DELETE`,
+			},
+			"items": schema.ListAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: jsontypes.NormalizedType{},
 				},
 			},
 			"pager_duty_target": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"class": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optional, default class value`,
 					},
@@ -80,26 +81,19 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Optional, default component value. Default: "logstream"`,
 					},
 					"group": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Optional, default group value`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this notification target. Not Null`,
+						Required:    true,
+						Description: `Unique ID for this notification target`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 						},
 					},
 					"routing_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `32-character integration key for an integration on a service or global ruleset. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `32-character integration key for an integration on a service or global ruleset`,
 					},
 					"severity": schema.StringAttribute{
 						Computed:    true,
@@ -123,11 +117,9 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "pager_duty"`,
+						Required:    true,
+						Description: `must be "pager_duty"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"pager_duty",
 							),
@@ -144,15 +136,12 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 				},
 			},
 			"slack_target": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this notification target. Not Null`,
+						Required:    true,
+						Description: `Unique ID for this notification target`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 						},
 					},
@@ -164,20 +153,16 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "slack"`,
+						Required:    true,
+						Description: `must be "slack"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("slack"),
 						},
 					},
 					"url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Slack's Incoming Webhook URL. Not Null`,
+						Required:    true,
+						Description: `Slack's Incoming Webhook URL`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://[a-zA-Z0-9-.]+`), "must match pattern "+regexp.MustCompile(`^https?://[a-zA-Z0-9-.]+`).String()),
 						},
 					},
@@ -192,7 +177,6 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 				},
 			},
 			"smtp_target": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"encryption_option": schema.StringAttribute{
@@ -209,41 +193,28 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"from": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Email address to send from. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `Email address to send from`,
 					},
 					"host": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `SMTP server hostname. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `SMTP server hostname`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this notification target. Not Null`,
+						Required:    true,
+						Description: `Unique ID for this notification target`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 						},
 					},
 					"password": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SMTP authentication password`,
 					},
 					"port": schema.Int64Attribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `SMTP server port. Not Null`,
+						Required:    true,
+						Description: `SMTP server port`,
 						Validators: []validator.Int64{
-							speakeasy_int64validators.NotNull(),
 							int64validator.Between(1, 65535),
 						},
 					},
@@ -255,7 +226,6 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"tls": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"max_version": schema.StringAttribute{
@@ -296,16 +266,13 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `TLS configuration options`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "smtp"`,
+						Required:    true,
+						Description: `must be "smtp"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("smtp"),
 						},
 					},
 					"username": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SMTP authentication username`,
 					},
@@ -320,7 +287,6 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 				},
 			},
 			"sns_target": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"allowlist": schema.ListAttribute{
@@ -331,22 +297,18 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic. Default: []`,
 					},
 					"assume_role_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `ARN of the role to assume`,
 					},
 					"assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `External ID for role assumption`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `AWS access key`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `AWS authentication method. must be one of ["auto", "manual", "secret"]`,
 						Validators: []validator.String{
@@ -358,7 +320,6 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"aws_secret_key": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `AWS secret key`,
 					},
@@ -375,36 +336,27 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"endpoint": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `SNS endpoint URL`,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this notification target. Not Null`,
+						Required:    true,
+						Description: `Unique ID for this notification target`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 						},
 					},
 					"message_group_id": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Message group ID for FIFO topics`,
 					},
 					"phone_number": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The default phone number to send the notification to. This value can be overridden by the notification event __phoneNumber field.`,
 					},
 					"region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `AWS region. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `AWS region`,
 					},
 					"system_fields": schema.ListAttribute{
 						Computed:    true,
@@ -414,7 +366,6 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"topic_arn": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `The default ARN of the SNS topic to send notifications to`,
 					},
@@ -431,11 +382,9 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "sns"`,
+						Required:    true,
+						Description: `must be "sns"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("sns"),
 						},
 					},
@@ -450,7 +399,6 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 				},
 			},
 			"webhook_target": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_type": schema.StringAttribute{
@@ -467,11 +415,9 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Format of the webhook payload. Not Null; must be one of ["ndjson", "json_array", "custom"]`,
+						Required:    true,
+						Description: `Format of the webhook payload. must be one of ["ndjson", "json_array", "custom"]`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"ndjson",
 								"json_array",
@@ -480,20 +426,16 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique ID for this notification target. Not Null`,
+						Required:    true,
+						Description: `Unique ID for this notification target`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 						},
 					},
 					"method": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `HTTP method to use for the webhook. Not Null; must be one of ["POST", "PATCH", "PUT"]`,
+						Required:    true,
+						Description: `HTTP method to use for the webhook. must be one of ["POST", "PATCH", "PUT"]`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"POST",
 								"PATCH",
@@ -502,7 +444,6 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"password": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Basic authentication password`,
 					},
@@ -514,30 +455,24 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
 					"token": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Authentication token`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Not Null; must be "webhook"`,
+						Required:    true,
+						Description: `must be "webhook"`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf("webhook"),
 						},
 					},
 					"url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `URL to send the webhook to. Not Null`,
+						Required:    true,
+						Description: `URL to send the webhook to`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.+`), "must match pattern "+regexp.MustCompile(`^https?://.+`).String()),
 						},
 					},
 					"username": schema.StringAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Basic authentication username`,
 					},
@@ -615,11 +550,11 @@ func (r *NotificationTargetResource) Create(ctx context.Context, req resource.Cr
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedNotificationTarget(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateNotificationTargetResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -653,41 +588,7 @@ func (r *NotificationTargetResource) Read(ctx context.Context, req resource.Read
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetNotificationTargetByIDRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.NotificationTargets.GetNotificationTargetByID(ctx, *request)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
-		}
-		return
-	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	if res.StatusCode == 404 {
-		resp.State.RemoveResource(ctx)
-		return
-	}
-	if res.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedNotificationTarget(ctx, &res.Object.Items[0])...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	// Not Implemented; we rely entirely on CREATE API request response
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -793,5 +694,5 @@ func (r *NotificationTargetResource) Delete(ctx context.Context, req resource.De
 }
 
 func (r *NotificationTargetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
+	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource notification_target.")
 }

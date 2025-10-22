@@ -4,12 +4,35 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
+
+func (r *CollectorResourceModel) RefreshFromOperationsCreateSavedJobResponseBody(ctx context.Context, resp *operations.CreateSavedJobResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = nil
+		for _, itemsItem := range resp.Items {
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
 
 func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Context, resp *shared.InputCollector) diag.Diagnostics {
 	var diags diag.Diagnostics
@@ -34,11 +57,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		}
 		r.InputCollectorAzureBlob.Collector.Type = types.StringValue(string(resp.InputCollectorAzureBlob.Collector.Type))
 		r.InputCollectorAzureBlob.Environment = types.StringPointerValue(resp.InputCollectorAzureBlob.Environment)
-		r.Environment = r.InputCollectorAzureBlob.Environment
 		r.InputCollectorAzureBlob.ID = types.StringPointerValue(resp.InputCollectorAzureBlob.ID)
-		r.ID = r.InputCollectorAzureBlob.ID
 		r.InputCollectorAzureBlob.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorAzureBlob.IgnoreGroupJobsLimit)
-		r.IgnoreGroupJobsLimit = r.InputCollectorAzureBlob.IgnoreGroupJobsLimit
 		if resp.InputCollectorAzureBlob.Input == nil {
 			r.InputCollectorAzureBlob.Input = nil
 		} else {
@@ -84,7 +104,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorAzureBlob.RemoveFields = append(r.InputCollectorAzureBlob.RemoveFields, types.StringValue(v))
 		}
 		r.InputCollectorAzureBlob.ResumeOnBoot = types.BoolPointerValue(resp.InputCollectorAzureBlob.ResumeOnBoot)
-		r.ResumeOnBoot = r.InputCollectorAzureBlob.ResumeOnBoot
 		if resp.InputCollectorAzureBlob.SavedState == nil {
 			r.InputCollectorAzureBlob.SavedState = nil
 		} else {
@@ -146,9 +165,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorAzureBlob.Streamtags = append(r.InputCollectorAzureBlob.Streamtags, types.StringValue(v))
 		}
 		r.InputCollectorAzureBlob.TTL = types.StringPointerValue(resp.InputCollectorAzureBlob.TTL)
-		r.TTL = r.InputCollectorAzureBlob.TTL
 		r.InputCollectorAzureBlob.WorkerAffinity = types.BoolPointerValue(resp.InputCollectorAzureBlob.WorkerAffinity)
-		r.WorkerAffinity = r.InputCollectorAzureBlob.WorkerAffinity
 	}
 	if resp.InputCollectorCriblLake != nil {
 		r.InputCollectorCriblLake = &tfTypes.InputCollectorCriblLake{}
@@ -160,11 +177,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		}
 		r.InputCollectorCriblLake.Collector.Type = types.StringValue(string(resp.InputCollectorCriblLake.Collector.Type))
 		r.InputCollectorCriblLake.Environment = types.StringPointerValue(resp.InputCollectorCriblLake.Environment)
-		r.Environment = r.InputCollectorCriblLake.Environment
 		r.InputCollectorCriblLake.ID = types.StringPointerValue(resp.InputCollectorCriblLake.ID)
-		r.ID = r.InputCollectorCriblLake.ID
 		r.InputCollectorCriblLake.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorCriblLake.IgnoreGroupJobsLimit)
-		r.IgnoreGroupJobsLimit = r.InputCollectorCriblLake.IgnoreGroupJobsLimit
 		if resp.InputCollectorCriblLake.Input == nil {
 			r.InputCollectorCriblLake.Input = nil
 		} else {
@@ -210,7 +224,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorCriblLake.RemoveFields = append(r.InputCollectorCriblLake.RemoveFields, types.StringValue(v))
 		}
 		r.InputCollectorCriblLake.ResumeOnBoot = types.BoolPointerValue(resp.InputCollectorCriblLake.ResumeOnBoot)
-		r.ResumeOnBoot = r.InputCollectorCriblLake.ResumeOnBoot
 		if resp.InputCollectorCriblLake.SavedState == nil {
 			r.InputCollectorCriblLake.SavedState = nil
 		} else {
@@ -272,9 +285,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorCriblLake.Streamtags = append(r.InputCollectorCriblLake.Streamtags, types.StringValue(v))
 		}
 		r.InputCollectorCriblLake.TTL = types.StringPointerValue(resp.InputCollectorCriblLake.TTL)
-		r.TTL = r.InputCollectorCriblLake.TTL
 		r.InputCollectorCriblLake.WorkerAffinity = types.BoolPointerValue(resp.InputCollectorCriblLake.WorkerAffinity)
-		r.WorkerAffinity = r.InputCollectorCriblLake.WorkerAffinity
 	}
 	if resp.InputCollectorDatabase != nil {
 		r.InputCollectorDatabase = &tfTypes.InputCollectorDatabase{}
@@ -288,11 +299,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		}
 		r.InputCollectorDatabase.Collector.Type = types.StringValue(string(resp.InputCollectorDatabase.Collector.Type))
 		r.InputCollectorDatabase.Environment = types.StringPointerValue(resp.InputCollectorDatabase.Environment)
-		r.Environment = r.InputCollectorDatabase.Environment
 		r.InputCollectorDatabase.ID = types.StringPointerValue(resp.InputCollectorDatabase.ID)
-		r.ID = r.InputCollectorDatabase.ID
 		r.InputCollectorDatabase.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorDatabase.IgnoreGroupJobsLimit)
-		r.IgnoreGroupJobsLimit = r.InputCollectorDatabase.IgnoreGroupJobsLimit
 		if resp.InputCollectorDatabase.Input == nil {
 			r.InputCollectorDatabase.Input = nil
 		} else {
@@ -338,7 +346,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorDatabase.RemoveFields = append(r.InputCollectorDatabase.RemoveFields, types.StringValue(v))
 		}
 		r.InputCollectorDatabase.ResumeOnBoot = types.BoolPointerValue(resp.InputCollectorDatabase.ResumeOnBoot)
-		r.ResumeOnBoot = r.InputCollectorDatabase.ResumeOnBoot
 		if resp.InputCollectorDatabase.SavedState == nil {
 			r.InputCollectorDatabase.SavedState = nil
 		} else {
@@ -400,9 +407,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorDatabase.Streamtags = append(r.InputCollectorDatabase.Streamtags, types.StringValue(v))
 		}
 		r.InputCollectorDatabase.TTL = types.StringPointerValue(resp.InputCollectorDatabase.TTL)
-		r.TTL = r.InputCollectorDatabase.TTL
 		r.InputCollectorDatabase.WorkerAffinity = types.BoolPointerValue(resp.InputCollectorDatabase.WorkerAffinity)
-		r.WorkerAffinity = r.InputCollectorDatabase.WorkerAffinity
 	}
 	if resp.InputCollectorGCS != nil {
 		r.InputCollectorGCS = &tfTypes.InputCollectorGCS{}
@@ -423,11 +428,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		}
 		r.InputCollectorGCS.Collector.Type = types.StringValue(string(resp.InputCollectorGCS.Collector.Type))
 		r.InputCollectorGCS.Environment = types.StringPointerValue(resp.InputCollectorGCS.Environment)
-		r.Environment = r.InputCollectorGCS.Environment
 		r.InputCollectorGCS.ID = types.StringPointerValue(resp.InputCollectorGCS.ID)
-		r.ID = r.InputCollectorGCS.ID
 		r.InputCollectorGCS.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorGCS.IgnoreGroupJobsLimit)
-		r.IgnoreGroupJobsLimit = r.InputCollectorGCS.IgnoreGroupJobsLimit
 		if resp.InputCollectorGCS.Input == nil {
 			r.InputCollectorGCS.Input = nil
 		} else {
@@ -473,7 +475,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorGCS.RemoveFields = append(r.InputCollectorGCS.RemoveFields, types.StringValue(v))
 		}
 		r.InputCollectorGCS.ResumeOnBoot = types.BoolPointerValue(resp.InputCollectorGCS.ResumeOnBoot)
-		r.ResumeOnBoot = r.InputCollectorGCS.ResumeOnBoot
 		if resp.InputCollectorGCS.SavedState == nil {
 			r.InputCollectorGCS.SavedState = nil
 		} else {
@@ -535,9 +536,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorGCS.Streamtags = append(r.InputCollectorGCS.Streamtags, types.StringValue(v))
 		}
 		r.InputCollectorGCS.TTL = types.StringPointerValue(resp.InputCollectorGCS.TTL)
-		r.TTL = r.InputCollectorGCS.TTL
 		r.InputCollectorGCS.WorkerAffinity = types.BoolPointerValue(resp.InputCollectorGCS.WorkerAffinity)
-		r.WorkerAffinity = r.InputCollectorGCS.WorkerAffinity
 	}
 	if resp.InputCollectorHealthCheck != nil {
 		r.InputCollectorHealthCheck = &tfTypes.InputCollectorHealthCheck{}
@@ -564,11 +563,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		}
 		r.InputCollectorHealthCheck.Collector.Type = types.StringValue(string(resp.InputCollectorHealthCheck.Collector.Type))
 		r.InputCollectorHealthCheck.Environment = types.StringPointerValue(resp.InputCollectorHealthCheck.Environment)
-		r.Environment = r.InputCollectorHealthCheck.Environment
 		r.InputCollectorHealthCheck.ID = types.StringPointerValue(resp.InputCollectorHealthCheck.ID)
-		r.ID = r.InputCollectorHealthCheck.ID
 		r.InputCollectorHealthCheck.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorHealthCheck.IgnoreGroupJobsLimit)
-		r.IgnoreGroupJobsLimit = r.InputCollectorHealthCheck.IgnoreGroupJobsLimit
 		if resp.InputCollectorHealthCheck.Input == nil {
 			r.InputCollectorHealthCheck.Input = nil
 		} else {
@@ -614,7 +610,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorHealthCheck.RemoveFields = append(r.InputCollectorHealthCheck.RemoveFields, types.StringValue(v))
 		}
 		r.InputCollectorHealthCheck.ResumeOnBoot = types.BoolPointerValue(resp.InputCollectorHealthCheck.ResumeOnBoot)
-		r.ResumeOnBoot = r.InputCollectorHealthCheck.ResumeOnBoot
 		if resp.InputCollectorHealthCheck.SavedState == nil {
 			r.InputCollectorHealthCheck.SavedState = nil
 		} else {
@@ -676,9 +671,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorHealthCheck.Streamtags = append(r.InputCollectorHealthCheck.Streamtags, types.StringValue(v))
 		}
 		r.InputCollectorHealthCheck.TTL = types.StringPointerValue(resp.InputCollectorHealthCheck.TTL)
-		r.TTL = r.InputCollectorHealthCheck.TTL
 		r.InputCollectorHealthCheck.WorkerAffinity = types.BoolPointerValue(resp.InputCollectorHealthCheck.WorkerAffinity)
-		r.WorkerAffinity = r.InputCollectorHealthCheck.WorkerAffinity
 	}
 	if resp.InputCollectorRest != nil {
 		r.InputCollectorRest = &tfTypes.InputCollectorRest{}
@@ -877,11 +870,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		}
 		r.InputCollectorRest.Collector.Type = types.StringValue(string(resp.InputCollectorRest.Collector.Type))
 		r.InputCollectorRest.Environment = types.StringPointerValue(resp.InputCollectorRest.Environment)
-		r.Environment = r.InputCollectorRest.Environment
 		r.InputCollectorRest.ID = types.StringPointerValue(resp.InputCollectorRest.ID)
-		r.ID = r.InputCollectorRest.ID
 		r.InputCollectorRest.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorRest.IgnoreGroupJobsLimit)
-		r.IgnoreGroupJobsLimit = r.InputCollectorRest.IgnoreGroupJobsLimit
 		if resp.InputCollectorRest.Input == nil {
 			r.InputCollectorRest.Input = nil
 		} else {
@@ -927,7 +917,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorRest.RemoveFields = append(r.InputCollectorRest.RemoveFields, types.StringValue(v))
 		}
 		r.InputCollectorRest.ResumeOnBoot = types.BoolPointerValue(resp.InputCollectorRest.ResumeOnBoot)
-		r.ResumeOnBoot = r.InputCollectorRest.ResumeOnBoot
 		if resp.InputCollectorRest.SavedState == nil {
 			r.InputCollectorRest.SavedState = nil
 		} else {
@@ -989,9 +978,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorRest.Streamtags = append(r.InputCollectorRest.Streamtags, types.StringValue(v))
 		}
 		r.InputCollectorRest.TTL = types.StringPointerValue(resp.InputCollectorRest.TTL)
-		r.TTL = r.InputCollectorRest.TTL
 		r.InputCollectorRest.WorkerAffinity = types.BoolPointerValue(resp.InputCollectorRest.WorkerAffinity)
-		r.WorkerAffinity = r.InputCollectorRest.WorkerAffinity
 	}
 	if resp.InputCollectorS3 != nil {
 		r.InputCollectorS3 = &tfTypes.InputCollectorS3{}
@@ -1015,11 +1002,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		}
 		r.InputCollectorS3.Collector.Type = types.StringValue(string(resp.InputCollectorS3.Collector.Type))
 		r.InputCollectorS3.Environment = types.StringPointerValue(resp.InputCollectorS3.Environment)
-		r.Environment = r.InputCollectorS3.Environment
 		r.InputCollectorS3.ID = types.StringPointerValue(resp.InputCollectorS3.ID)
-		r.ID = r.InputCollectorS3.ID
 		r.InputCollectorS3.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorS3.IgnoreGroupJobsLimit)
-		r.IgnoreGroupJobsLimit = r.InputCollectorS3.IgnoreGroupJobsLimit
 		if resp.InputCollectorS3.Input == nil {
 			r.InputCollectorS3.Input = nil
 		} else {
@@ -1065,7 +1049,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorS3.RemoveFields = append(r.InputCollectorS3.RemoveFields, types.StringValue(v))
 		}
 		r.InputCollectorS3.ResumeOnBoot = types.BoolPointerValue(resp.InputCollectorS3.ResumeOnBoot)
-		r.ResumeOnBoot = r.InputCollectorS3.ResumeOnBoot
 		if resp.InputCollectorS3.SavedState == nil {
 			r.InputCollectorS3.SavedState = nil
 		} else {
@@ -1127,9 +1110,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorS3.Streamtags = append(r.InputCollectorS3.Streamtags, types.StringValue(v))
 		}
 		r.InputCollectorS3.TTL = types.StringPointerValue(resp.InputCollectorS3.TTL)
-		r.TTL = r.InputCollectorS3.TTL
 		r.InputCollectorS3.WorkerAffinity = types.BoolPointerValue(resp.InputCollectorS3.WorkerAffinity)
-		r.WorkerAffinity = r.InputCollectorS3.WorkerAffinity
 	}
 	if resp.InputCollectorSplunk != nil {
 		r.InputCollectorSplunk = &tfTypes.InputCollectorSplunk{}
@@ -1165,11 +1146,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		}
 		r.InputCollectorSplunk.Collector.Type = types.StringValue(string(resp.InputCollectorSplunk.Collector.Type))
 		r.InputCollectorSplunk.Environment = types.StringPointerValue(resp.InputCollectorSplunk.Environment)
-		r.Environment = r.InputCollectorSplunk.Environment
 		r.InputCollectorSplunk.ID = types.StringPointerValue(resp.InputCollectorSplunk.ID)
-		r.ID = r.InputCollectorSplunk.ID
 		r.InputCollectorSplunk.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorSplunk.IgnoreGroupJobsLimit)
-		r.IgnoreGroupJobsLimit = r.InputCollectorSplunk.IgnoreGroupJobsLimit
 		if resp.InputCollectorSplunk.Input == nil {
 			r.InputCollectorSplunk.Input = nil
 		} else {
@@ -1215,7 +1193,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorSplunk.RemoveFields = append(r.InputCollectorSplunk.RemoveFields, types.StringValue(v))
 		}
 		r.InputCollectorSplunk.ResumeOnBoot = types.BoolPointerValue(resp.InputCollectorSplunk.ResumeOnBoot)
-		r.ResumeOnBoot = r.InputCollectorSplunk.ResumeOnBoot
 		if resp.InputCollectorSplunk.SavedState == nil {
 			r.InputCollectorSplunk.SavedState = nil
 		} else {
@@ -1277,9 +1254,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorSplunk.Streamtags = append(r.InputCollectorSplunk.Streamtags, types.StringValue(v))
 		}
 		r.InputCollectorSplunk.TTL = types.StringPointerValue(resp.InputCollectorSplunk.TTL)
-		r.TTL = r.InputCollectorSplunk.TTL
 		r.InputCollectorSplunk.WorkerAffinity = types.BoolPointerValue(resp.InputCollectorSplunk.WorkerAffinity)
-		r.WorkerAffinity = r.InputCollectorSplunk.WorkerAffinity
 	}
 
 	return diags
