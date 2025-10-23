@@ -1,17 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id    = "main"
-  cloud_domain    = "cribl-playground.cloud"
-}
-
 resource "criblio_source" "my_http_source" {
   group_id = "default"
   id       = "http-listener"
@@ -94,48 +80,6 @@ resource "criblio_source" "my_http_source" {
     }
     type = "http"
   }
-}
-
-# Update existing CriblLogs source to connect to our HTTP source
-resource "criblio_source" "cribl_logs" {
-  group_id = "default"
-  id       = "CriblLogs"
-  input_cribl = {
-    id = "CriblLogs"
-    connections = [
-      {
-        output   = "default" # This will route to your HTTP source
-        pipeline = "default"
-      }
-    ]
-    description = "Internal Cribl-generated events routed to HTTP source"
-    disabled    = false
-    environment = "main"
-    filter      = "channel.startsWith('input:') || channel.startsWith('output:') || channel.startsWith('SourcePQ:') || channel.startsWith('DestPQ:') || source.includes('audit.log') || source.includes('access.log')"
-    metadata = [
-      {
-        name  = "source"
-        value = "\"cribl\""
-      }
-    ]
-    pipeline       = "default"
-    pq_enabled     = false
-    send_to_routes = false
-    streamtags = [
-      "internal",
-      "cribl",
-    ]
-    type = "cribl"
-  }
-}
-
-data "criblio_source" "my_source" {
-  group_id = "default"
-  id       = "CriblLogs"
-}
-
-output "my_source" {
-  value = data.criblio_source.my_source
 }
 
 
