@@ -39,10 +39,10 @@ func (g *GetGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
 
 // GetGlobalVariableLibVarsByPackAndIDResponseBody - a list of Global Variable objects
 type GetGlobalVariableLibVarsByPackAndIDResponseBody struct {
-	Items []shared.GlobalVar `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (g *GetGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {
+func (g *GetGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []map[string]any {
 	if g == nil {
 		return nil
 	}

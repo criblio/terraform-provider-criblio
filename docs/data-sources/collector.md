@@ -26,3 +26,7 @@ data "criblio_collector" "my_collector" {
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
 - `id` (String) Unique ID to GET
+
+### Read-Only
+
+- `items` (List of Map of String)

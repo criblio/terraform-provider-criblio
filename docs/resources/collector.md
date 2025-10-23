@@ -854,6 +854,10 @@ resource "criblio_collector" "my_collector" {
 - `input_collector_s3` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3))
 - `input_collector_splunk` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk))
 
+### Read-Only
+
+- `items` (List of Map of String)
+
 <a id="nestedatt--input_collector_azure_blob"></a>
 ### Nested Schema for `input_collector_azure_blob`
 

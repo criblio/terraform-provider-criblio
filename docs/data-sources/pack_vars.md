@@ -15,8 +15,8 @@ PackVars DataSource
 ```terraform
 data "criblio_pack_vars" "my_packvars" {
   group_id = "Cribl"
+  id       = "ENV"
   pack     = "example-pack"
-  with     = "refs"
 }
 ```
 
@@ -26,24 +26,9 @@ data "criblio_pack_vars" "my_packvars" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET for pack
 - `pack` (String) pack ID to GET
-
-### Optional
-
-- `with` (String) Pass "refs" to include references to fields the variable is used in for pack
 
 ### Read-Only
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `description` (String) Brief description of this variable. Optional.
-- `id` (String) Global variable name.
-- `lib` (String)
-- `tags` (String) One or more tags related to this variable. Optional.
-- `type` (String) Type of variable
-- `value` (String) Value of variable
+- `items` (List of Map of String)

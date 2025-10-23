@@ -8,7 +8,7 @@ import (
 )
 
 type CreateInputRequest struct {
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// The id of this source instance
 	ID string `queryParam:"style=form,explode=true,name=id"`
@@ -39,6 +39,14 @@ func (c *CreateInputRequest) GetInput() shared.Input {
 
 // CreateInputResponseBody - a list of Input objects
 type CreateInputResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
+}
+
+func (c *CreateInputResponseBody) GetItems() []map[string]any {
+	if c == nil {
+		return nil
+	}
+	return c.Items
 }
 
 type CreateInputResponse struct {

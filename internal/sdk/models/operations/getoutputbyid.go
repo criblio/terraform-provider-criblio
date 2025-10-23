@@ -10,7 +10,7 @@ import (
 type GetOutputByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
@@ -30,6 +30,14 @@ func (g *GetOutputByIDRequest) GetGroupID() string {
 
 // GetOutputByIDResponseBody - a list of Output objects
 type GetOutputByIDResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
+}
+
+func (g *GetOutputByIDResponseBody) GetItems() []map[string]any {
+	if g == nil {
+		return nil
+	}
+	return g.Items
 }
 
 type GetOutputByIDResponse struct {

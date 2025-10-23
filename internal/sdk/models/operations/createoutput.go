@@ -39,6 +39,14 @@ func (c *CreateOutputRequest) GetOutput() shared.Output {
 
 // CreateOutputResponseBody - a list of Output objects
 type CreateOutputResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
+}
+
+func (c *CreateOutputResponseBody) GetItems() []map[string]any {
+	if c == nil {
+		return nil
+	}
+	return c.Items
 }
 
 type CreateOutputResponse struct {

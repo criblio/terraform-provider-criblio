@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -28,8 +29,9 @@ type SourceDataSource struct {
 
 // SourceDataSourceModel describes the data model.
 type SourceDataSourceModel struct {
-	GroupID types.String `tfsdk:"group_id"`
-	ID      types.String `tfsdk:"id"`
+	GroupID types.String                      `tfsdk:"group_id"`
+	ID      types.String                      `tfsdk:"id"`
+	Items   []map[string]jsontypes.Normalized `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -45,11 +47,17 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
+			},
+			"items": schema.ListAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: jsontypes.NormalizedType{},
+				},
 			},
 		},
 	}

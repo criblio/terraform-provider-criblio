@@ -4045,6 +4045,10 @@ resource "criblio_destination" "my_destination" {
 - `output_webhook` (Attributes) (see [below for nested schema](#nestedatt--output_webhook))
 - `output_xsiam` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam))
 
+### Read-Only
+
+- `items` (List of Map of String)
+
 <a id="nestedatt--output_azure_blob"></a>
 ### Nested Schema for `output_azure_blob`
 
@@ -9453,7 +9457,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_destination.my_criblio_destination
   id = jsonencode({
-    group_id = "Cribl"
+    group_id = "default"
     id = "out-s3-main"
   })
 }
@@ -9462,5 +9466,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_destination.my_criblio_destination '{"group_id": "Cribl", "id": "out-s3-main"}'
+terraform import criblio_destination.my_criblio_destination '{"group_id": "default", "id": "out-s3-main"}'
 ```

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -28,6 +29,8 @@ type NotificationTargetDataSource struct {
 
 // NotificationTargetDataSourceModel describes the data model.
 type NotificationTargetDataSourceModel struct {
+	ID    types.String                      `tfsdk:"id"`
+	Items []map[string]jsontypes.Normalized `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -40,7 +43,18 @@ func (r *NotificationTargetDataSource) Schema(ctx context.Context, req datasourc
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "NotificationTarget DataSource",
 
-		Attributes: map[string]schema.Attribute{},
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET`,
+			},
+			"items": schema.ListAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: jsontypes.NormalizedType{},
+				},
+			},
+		},
 	}
 }
 
@@ -82,7 +96,13 @@ func (r *NotificationTargetDataSource) Read(ctx context.Context, req datasource.
 		return
 	}
 
-	res, err := r.client.NotificationTargets.ListNotificationTarget(ctx)
+	request, requestDiags := data.ToOperationsGetNotificationTargetByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.NotificationTargets.GetNotificationTargetByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -102,7 +122,7 @@ func (r *NotificationTargetDataSource) Read(ctx context.Context, req datasource.
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListNotificationTargetResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNotificationTargetByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

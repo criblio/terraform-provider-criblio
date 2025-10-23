@@ -48,6 +48,7 @@ type DestinationResource struct {
 type DestinationResourceModel struct {
 	GroupID                      types.String                          `tfsdk:"group_id"`
 	ID                           types.String                          `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
+	Items                        []map[string]jsontypes.Normalized     `tfsdk:"items"`
 	OutputAzureBlob              *tfTypes.OutputAzureBlob              `queryParam:"inline" tfsdk:"output_azure_blob" tfPlanOnly:"true"`
 	OutputAzureDataExplorer      *tfTypes.OutputAzureDataExplorer      `queryParam:"inline" tfsdk:"output_azure_data_explorer" tfPlanOnly:"true"`
 	OutputAzureEventhub          *tfTypes.OutputAzureEventhub          `queryParam:"inline" tfsdk:"output_azure_eventhub" tfPlanOnly:"true"`
@@ -128,6 +129,12 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group id to create`,
+			},
+			"items": schema.ListAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: jsontypes.NormalizedType{},
+				},
 			},
 			"output_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
@@ -26493,12 +26500,12 @@ func (r *DestinationResource) ImportState(ctx context.Context, req resource.Impo
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "out-s3-main"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "default", "id": "out-s3-main"}': `+err.Error())
 		return
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"default"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)

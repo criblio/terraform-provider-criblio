@@ -21,6 +21,14 @@ func (d *DeleteNotificationTargetByIDRequest) GetID() string {
 
 // DeleteNotificationTargetByIDResponseBody - a list of NotificationTarget objects
 type DeleteNotificationTargetByIDResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
+}
+
+func (d *DeleteNotificationTargetByIDResponseBody) GetItems() []map[string]any {
+	if d == nil {
+		return nil
+	}
+	return d.Items
 }
 
 type DeleteNotificationTargetByIDResponse struct {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -28,8 +29,9 @@ type CollectorDataSource struct {
 
 // CollectorDataSourceModel describes the data model.
 type CollectorDataSourceModel struct {
-	GroupID types.String `tfsdk:"group_id"`
-	ID      types.String `tfsdk:"id"`
+	GroupID types.String                      `tfsdk:"group_id"`
+	ID      types.String                      `tfsdk:"id"`
+	Items   []map[string]jsontypes.Normalized `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -50,6 +52,12 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
+			},
+			"items": schema.ListAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: jsontypes.NormalizedType{},
+				},
 			},
 		},
 	}

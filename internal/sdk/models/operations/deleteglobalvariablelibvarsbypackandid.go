@@ -39,10 +39,10 @@ func (d *DeleteGlobalVariableLibVarsByPackAndIDRequest) GetGroupID() string {
 
 // DeleteGlobalVariableLibVarsByPackAndIDResponseBody - a list of Global Variable objects
 type DeleteGlobalVariableLibVarsByPackAndIDResponseBody struct {
-	Items []shared.GlobalVar `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (d *DeleteGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {
+func (d *DeleteGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []map[string]any {
 	if d == nil {
 		return nil
 	}

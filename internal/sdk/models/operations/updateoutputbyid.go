@@ -10,7 +10,7 @@ import (
 type UpdateOutputByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
+	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Output object to be updated
 	Output shared.Output `request:"mediaType=application/json"`
@@ -39,6 +39,14 @@ func (u *UpdateOutputByIDRequest) GetOutput() shared.Output {
 
 // UpdateOutputByIDResponseBody - a list of Output objects
 type UpdateOutputByIDResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
+}
+
+func (u *UpdateOutputByIDResponseBody) GetItems() []map[string]any {
+	if u == nil {
+		return nil
+	}
+	return u.Items
 }
 
 type UpdateOutputByIDResponse struct {

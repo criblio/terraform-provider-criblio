@@ -14,7 +14,7 @@ Source DataSource
 
 ```terraform
 data "criblio_source" "my_source" {
-  group_id = "Cribl"
+  group_id = "default"
   id       = "input-hec-1"
 }
 ```
@@ -24,5 +24,9 @@ data "criblio_source" "my_source" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
 - `id` (String) Unique ID to GET
+
+### Read-Only
+
+- `items` (List of Map of String)

@@ -40,6 +40,10 @@ resource "criblio_global_var" "my_globalvar" {
 - `type` (String) Type of variable. Default: "any"; must be one of ["string", "number", "encryptedString", "boolean", "array", "object", "expression", "any"]
 - `value` (String) Value of variable
 
+### Read-Only
+
+- `items` (List of Map of String)
+
 ## Import
 
 Import is supported using the following syntax:

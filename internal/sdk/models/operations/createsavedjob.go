@@ -39,6 +39,14 @@ func (c *CreateSavedJobRequest) GetInputCollector() shared.InputCollector {
 
 // CreateSavedJobResponseBody - a list of Collector objects
 type CreateSavedJobResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
+}
+
+func (c *CreateSavedJobResponseBody) GetItems() []map[string]any {
+	if c == nil {
+		return nil
+	}
+	return c.Items
 }
 
 type CreateSavedJobResponse struct {

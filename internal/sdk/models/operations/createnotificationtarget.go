@@ -7,8 +7,37 @@ import (
 	"net/http"
 )
 
+type CreateNotificationTargetRequest struct {
+	// The id of this notification target instance
+	ID string `queryParam:"style=form,explode=true,name=id"`
+	// New NotificationTarget object
+	NotificationTarget shared.NotificationTarget `request:"mediaType=application/json"`
+}
+
+func (c *CreateNotificationTargetRequest) GetID() string {
+	if c == nil {
+		return ""
+	}
+	return c.ID
+}
+
+func (c *CreateNotificationTargetRequest) GetNotificationTarget() shared.NotificationTarget {
+	if c == nil {
+		return shared.NotificationTarget{}
+	}
+	return c.NotificationTarget
+}
+
 // CreateNotificationTargetResponseBody - a list of NotificationTarget objects
 type CreateNotificationTargetResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
+}
+
+func (c *CreateNotificationTargetResponseBody) GetItems() []map[string]any {
+	if c == nil {
+		return nil
+	}
+	return c.Items
 }
 
 type CreateNotificationTargetResponse struct {

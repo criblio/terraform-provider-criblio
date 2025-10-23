@@ -135,4 +135,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: dominikh/staticcheck-action@v1.3.1
+        with:
+          checks: inherit,-ST1000
 

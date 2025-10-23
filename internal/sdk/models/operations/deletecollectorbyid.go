@@ -30,6 +30,14 @@ func (d *DeleteCollectorByIDRequest) GetGroupID() string {
 
 // DeleteCollectorByIDResponseBody - a list of Collector objects
 type DeleteCollectorByIDResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
+}
+
+func (d *DeleteCollectorByIDResponseBody) GetItems() []map[string]any {
+	if d == nil {
+		return nil
+	}
+	return d.Items
 }
 
 type DeleteCollectorByIDResponse struct {

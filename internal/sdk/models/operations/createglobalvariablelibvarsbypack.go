@@ -39,10 +39,10 @@ func (c *CreateGlobalVariableLibVarsByPackRequest) GetGlobalVar() shared.GlobalV
 
 // CreateGlobalVariableLibVarsByPackResponseBody - a list of Global Variable objects
 type CreateGlobalVariableLibVarsByPackResponseBody struct {
-	Items []shared.GlobalVar `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (c *CreateGlobalVariableLibVarsByPackResponseBody) GetItems() []shared.GlobalVar {
+func (c *CreateGlobalVariableLibVarsByPackResponseBody) GetItems() []map[string]any {
 	if c == nil {
 		return nil
 	}

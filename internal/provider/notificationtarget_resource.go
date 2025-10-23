@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -39,12 +40,13 @@ type NotificationTargetResource struct {
 
 // NotificationTargetResourceModel describes the resource data model.
 type NotificationTargetResourceModel struct {
-	ID              types.String             `tfsdk:"id"`
-	PagerDutyTarget *tfTypes.PagerDutyTarget `queryParam:"inline" tfsdk:"pager_duty_target" tfPlanOnly:"true"`
-	SlackTarget     *tfTypes.SlackTarget     `queryParam:"inline" tfsdk:"slack_target" tfPlanOnly:"true"`
-	SMTPTarget      *tfTypes.SMTPTarget      `queryParam:"inline" tfsdk:"smtp_target" tfPlanOnly:"true"`
-	SnsTarget       *tfTypes.SnsTarget       `queryParam:"inline" tfsdk:"sns_target" tfPlanOnly:"true"`
-	WebhookTarget   *tfTypes.WebhookTarget   `queryParam:"inline" tfsdk:"webhook_target" tfPlanOnly:"true"`
+	ID              types.String                      `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
+	Items           []map[string]jsontypes.Normalized `tfsdk:"items"`
+	PagerDutyTarget *tfTypes.PagerDutyTarget          `queryParam:"inline" tfsdk:"pager_duty_target" tfPlanOnly:"true"`
+	SlackTarget     *tfTypes.SlackTarget              `queryParam:"inline" tfsdk:"slack_target" tfPlanOnly:"true"`
+	SMTPTarget      *tfTypes.SMTPTarget               `queryParam:"inline" tfsdk:"smtp_target" tfPlanOnly:"true"`
+	SnsTarget       *tfTypes.SnsTarget                `queryParam:"inline" tfsdk:"sns_target" tfPlanOnly:"true"`
+	WebhookTarget   *tfTypes.WebhookTarget            `queryParam:"inline" tfsdk:"webhook_target" tfPlanOnly:"true"`
 }
 
 func (r *NotificationTargetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -57,7 +59,13 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to DELETE`,
+				Description: `The id of this notification target instance`,
+			},
+			"items": schema.ListAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: jsontypes.NormalizedType{},
+				},
 			},
 			"pager_duty_target": schema.SingleNestedAttribute{
 				Optional: true,
@@ -520,7 +528,7 @@ func (r *NotificationTargetResource) Create(ctx context.Context, req resource.Cr
 		return
 	}
 
-	request, requestDiags := data.ToSharedNotificationTarget(ctx)
+	request, requestDiags := data.ToOperationsCreateNotificationTargetRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -580,7 +588,13 @@ func (r *NotificationTargetResource) Read(ctx context.Context, req resource.Read
 		return
 	}
 
-	res, err := r.client.NotificationTargets.ListNotificationTarget(ctx)
+	request, requestDiags := data.ToOperationsGetNotificationTargetByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.NotificationTargets.GetNotificationTargetByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -604,7 +618,7 @@ func (r *NotificationTargetResource) Read(ctx context.Context, req resource.Read
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListNotificationTargetResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNotificationTargetByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -665,31 +679,6 @@ func (r *NotificationTargetResource) Update(ctx context.Context, req resource.Up
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.NotificationTargets.ListNotificationTarget(ctx)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListNotificationTargetResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -739,5 +728,5 @@ func (r *NotificationTargetResource) Delete(ctx context.Context, req resource.De
 }
 
 func (r *NotificationTargetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource notification_target.")
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

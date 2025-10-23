@@ -106,6 +106,7 @@ type SourceResourceModel struct {
 	InputWinEventLogs         *tfTypes.InputWinEventLogs         `queryParam:"inline" tfsdk:"input_win_event_logs" tfPlanOnly:"true"`
 	InputWiz                  *tfTypes.InputWiz                  `queryParam:"inline" tfsdk:"input_wiz" tfPlanOnly:"true"`
 	InputZscalerHec           *tfTypes.InputZscalerHec           `queryParam:"inline" tfsdk:"input_zscaler_hec" tfPlanOnly:"true"`
+	Items                     []map[string]jsontypes.Normalized  `tfsdk:"items"`
 }
 
 func (r *SourceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -118,7 +119,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -24880,6 +24881,12 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					}...),
 				},
 			},
+			"items": schema.ListAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: jsontypes.NormalizedType{},
+				},
+			},
 		},
 	}
 }
@@ -25130,12 +25137,12 @@ func (r *SourceResource) ImportState(ctx context.Context, req resource.ImportSta
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "input-hec-1"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "default", "id": "input-hec-1"}': `+err.Error())
 		return
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"default"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)

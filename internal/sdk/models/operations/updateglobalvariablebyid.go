@@ -39,10 +39,10 @@ func (u *UpdateGlobalVariableByIDRequest) GetGlobalVar() shared.GlobalVar {
 
 // UpdateGlobalVariableByIDResponseBody - a list of Global Variable objects
 type UpdateGlobalVariableByIDResponseBody struct {
-	Items []shared.GlobalVar `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (u *UpdateGlobalVariableByIDResponseBody) GetItems() []shared.GlobalVar {
+func (u *UpdateGlobalVariableByIDResponseBody) GetItems() []map[string]any {
 	if u == nil {
 		return nil
 	}

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 15a39e0992559b55b93b6f37c50d4a44
+  docChecksum: e8b1871e748e71c15a7dd0e4a6cb6773
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.17.7
-  configChecksum: a06127158ba8558fabe39702a623f008
+  releaseVersion: 1.17.19
+  configChecksum: d5f3be0b8a3305a54c04930b9457bde7
   published: true
 features:
   terraform:
@@ -35,11 +35,13 @@ generatedFiles:
   - examples/data-sources/criblio_certificate/data-source.tf
   - examples/data-sources/criblio_certificates/data-source.tf
   - examples/data-sources/criblio_collector/data-source.tf
+  - examples/data-sources/criblio_collectors/data-source.tf
   - examples/data-sources/criblio_config_version/data-source.tf
   - examples/data-sources/criblio_cribl_lake_dataset/data-source.tf
   - examples/data-sources/criblio_cribl_lake_house/data-source.tf
   - examples/data-sources/criblio_database_connection/data-source.tf
   - examples/data-sources/criblio_destination/data-source.tf
+  - examples/data-sources/criblio_destinations/data-source.tf
   - examples/data-sources/criblio_event_breaker_ruleset/data-source.tf
   - examples/data-sources/criblio_global_var/data-source.tf
   - examples/data-sources/criblio_grok/data-source.tf
@@ -49,6 +51,7 @@ generatedFiles:
   - examples/data-sources/criblio_lookup_file/data-source.tf
   - examples/data-sources/criblio_notification/data-source.tf
   - examples/data-sources/criblio_notification_target/data-source.tf
+  - examples/data-sources/criblio_notification_targets/data-source.tf
   - examples/data-sources/criblio_pack/data-source.tf
   - examples/data-sources/criblio_pack_breakers/data-source.tf
   - examples/data-sources/criblio_pack_destination/data-source.tf
@@ -72,6 +75,7 @@ generatedFiles:
   - examples/data-sources/criblio_search_saved_query/data-source.tf
   - examples/data-sources/criblio_search_usage_group/data-source.tf
   - examples/data-sources/criblio_source/data-source.tf
+  - examples/data-sources/criblio_sources/data-source.tf
   - examples/data-sources/criblio_subscription/data-source.tf
   - examples/data-sources/criblio_workspace/data-source.tf
   - examples/data-sources/criblio_workspaces/data-source.tf
@@ -121,6 +125,8 @@ generatedFiles:
   - examples/resources/criblio_notification/import-by-string-id.tf
   - examples/resources/criblio_notification/import.sh
   - examples/resources/criblio_notification/resource.tf
+  - examples/resources/criblio_notification_target/import-by-string-id.tf
+  - examples/resources/criblio_notification_target/import.sh
   - examples/resources/criblio_notification_target/resource.tf
   - examples/resources/criblio_pack/import-by-string-id.tf
   - examples/resources/criblio_pack/import.sh
@@ -221,6 +227,8 @@ generatedFiles:
   - internal/provider/collector_data_source_sdk.go
   - internal/provider/collector_resource.go
   - internal/provider/collector_resource_sdk.go
+  - internal/provider/collectors_data_source.go
+  - internal/provider/collectors_data_source_sdk.go
   - internal/provider/commit_resource.go
   - internal/provider/commit_resource_sdk.go
   - internal/provider/configversion_data_source.go
@@ -243,6 +251,8 @@ generatedFiles:
   - internal/provider/destination_data_source_sdk.go
   - internal/provider/destination_resource.go
   - internal/provider/destination_resource_sdk.go
+  - internal/provider/destinations_data_source.go
+  - internal/provider/destinations_data_source_sdk.go
   - internal/provider/eventbreakerruleset_data_source.go
   - internal/provider/eventbreakerruleset_data_source_sdk.go
   - internal/provider/eventbreakerruleset_resource.go
@@ -279,6 +289,8 @@ generatedFiles:
   - internal/provider/notificationtarget_data_source_sdk.go
   - internal/provider/notificationtarget_resource.go
   - internal/provider/notificationtarget_resource_sdk.go
+  - internal/provider/notificationtargets_data_source.go
+  - internal/provider/notificationtargets_data_source_sdk.go
   - internal/provider/pack_data_source.go
   - internal/provider/pack_data_source_sdk.go
   - internal/provider/pack_resource.go
@@ -386,6 +398,8 @@ generatedFiles:
   - internal/provider/source_data_source_sdk.go
   - internal/provider/source_resource.go
   - internal/provider/source_resource_sdk.go
+  - internal/provider/sources_data_source.go
+  - internal/provider/sources_data_source_sdk.go
   - internal/provider/subscription_data_source.go
   - internal/provider/subscription_data_source_sdk.go
   - internal/provider/subscription_resource.go
@@ -512,7 +526,6 @@ generatedFiles:
   - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
-  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/grok_file.go
   - internal/provider/types/host_info.go
@@ -3645,6 +3658,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   createNotificationTarget:
     speakeasy-default-create-notification-target:
+      parameters:
+        query:
+          id: "nt-slack-prod"
       requestBody:
         application/json: {"id": "<id>", "type": "webhook", "systemFields": ["cribl_host"], "url": "https://physical-plumber.info/", "format": "json_array", "method": "PUT", "authType": "none"}
       responses:
@@ -5250,7 +5266,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariableById:
@@ -5261,7 +5277,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   updateGlobalVariableById:
@@ -5274,7 +5290,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteGlobalVariableById:
@@ -5285,7 +5301,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariableLibVarsByPack:
@@ -5311,7 +5327,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariableLibVarsByPackAndId:
@@ -5323,7 +5339,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   updateGlobalVariableLibVarsByPackAndId:
@@ -5337,7 +5353,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteGlobalVariableLibVarsByPackAndId:
@@ -5349,7 +5365,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   listHmacFunction:
@@ -5413,7 +5429,7 @@ examples:
     speakeasy-default-list-input:
       parameters:
         path:
-          groupId: "Cribl"
+          groupId: "default"
       responses:
         "200":
           application/json: {}
@@ -5423,7 +5439,7 @@ examples:
     speakeasy-default-create-input:
       parameters:
         path:
-          groupId: "Cribl"
+          groupId: "default"
         query:
           id: "input-hec-1"
       requestBody:
@@ -5438,7 +5454,7 @@ examples:
       parameters:
         path:
           id: "input-hec-1"
-          groupId: "Cribl"
+          groupId: "default"
       responses:
         "200":
           application/json: {}
@@ -5449,7 +5465,7 @@ examples:
       parameters:
         path:
           id: "input-hec-1"
-          groupId: "Cribl"
+          groupId: "default"
       requestBody:
         application/json: {"id": "<id>", "type": "kube_events", "disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "rules": []}
       responses:
@@ -5462,7 +5478,7 @@ examples:
       parameters:
         path:
           id: "input-hec-1"
-          groupId: "Cribl"
+          groupId: "default"
       responses:
         "200":
           application/json: {}
@@ -5541,7 +5557,7 @@ examples:
       parameters:
         path:
           id: "out-s3-main"
-          groupId: "Cribl"
+          groupId: "default"
       responses:
         "200":
           application/json: {}
@@ -5552,7 +5568,7 @@ examples:
       parameters:
         path:
           id: "out-s3-main"
-          groupId: "Cribl"
+          groupId: "default"
       requestBody:
         application/json: {"type": "signalfx", "systemFields": ["cribl_pipe"], "streamtags": [], "authType": "manual", "realm": "us0", "concurrency": 5, "maxPayloadSizeKB": 4096, "maxPayloadEvents": 0, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 1, "useRoundRobinDns": false, "failedRequestLoggingMode": "none", "safeHeaders": [], "responseRetrySettings": [], "responseHonorRetryAfterHeader": false, "onBackpressure": "block", "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
@@ -5565,7 +5581,7 @@ examples:
       parameters:
         path:
           id: "out-s3-main"
-          groupId: "Cribl"
+          groupId: "default"
       responses:
         "200":
           application/json: {}

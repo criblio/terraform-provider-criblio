@@ -4,15 +4,42 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *NotificationTargetDataSourceModel) RefreshFromOperationsListNotificationTargetResponseBody(ctx context.Context, resp *operations.ListNotificationTargetResponseBody) diag.Diagnostics {
+func (r *NotificationTargetDataSourceModel) RefreshFromOperationsGetNotificationTargetByIDResponseBody(ctx context.Context, resp *operations.GetNotificationTargetByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Items = nil
+		for _, itemsItem := range resp.Items {
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
+			r.Items = append(r.Items, items)
+		}
 	}
 
 	return diags
+}
+
+func (r *NotificationTargetDataSourceModel) ToOperationsGetNotificationTargetByIDRequest(ctx context.Context) (*operations.GetNotificationTargetByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetNotificationTargetByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
 }
