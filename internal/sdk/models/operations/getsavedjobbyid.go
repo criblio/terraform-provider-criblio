@@ -3,6 +3,7 @@
 package operations
 
 import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
@@ -27,7 +28,7 @@ func (g *GetSavedJobByIDRequest) GetGroupID() string {
 	return g.GroupID
 }
 
-// GetSavedJobByIDResponseBody - a list of any objects
+// GetSavedJobByIDResponseBody - a list of Collector objects
 type GetSavedJobByIDResponseBody struct {
 	Items []map[string]any `json:"items,omitempty"`
 }
@@ -46,8 +47,10 @@ type GetSavedJobByIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of any objects
+	// a list of Collector objects
 	Object *GetSavedJobByIDResponseBody
+	// Unexpected error
+	Error *shared.Error
 }
 
 func (g *GetSavedJobByIDResponse) GetContentType() string {
@@ -76,4 +79,11 @@ func (g *GetSavedJobByIDResponse) GetObject() *GetSavedJobByIDResponseBody {
 		return nil
 	}
 	return g.Object
+}
+
+func (g *GetSavedJobByIDResponse) GetError() *shared.Error {
+	if g == nil {
+		return nil
+	}
+	return g.Error
 }

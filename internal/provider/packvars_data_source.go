@@ -5,8 +5,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -29,10 +29,10 @@ type PackVarsDataSource struct {
 
 // PackVarsDataSourceModel describes the data model.
 type PackVarsDataSourceModel struct {
-	GroupID types.String        `tfsdk:"group_id"`
-	ID      types.String        `tfsdk:"id"`
-	Items   []tfTypes.GlobalVar `tfsdk:"items"`
-	Pack    types.String        `tfsdk:"pack"`
+	GroupID types.String                      `tfsdk:"group_id"`
+	ID      types.String                      `tfsdk:"id"`
+	Items   []map[string]jsontypes.Normalized `tfsdk:"items"`
+	Pack    types.String                      `tfsdk:"pack"`
 }
 
 // Metadata returns the data source type name.
@@ -54,34 +54,10 @@ func (r *PackVarsDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Required:    true,
 				Description: `Unique ID to GET for pack`,
 			},
-			"items": schema.ListNestedAttribute{
+			"items": schema.ListAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed:    true,
-							Description: `Brief description of this variable. Optional.`,
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Global variable name.`,
-						},
-						"lib": schema.StringAttribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed:    true,
-							Description: `One or more tags related to this variable. Optional.`,
-						},
-						"type": schema.StringAttribute{
-							Computed:    true,
-							Description: `Type of variable`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value of variable`,
-						},
-					},
+				ElementType: types.MapType{
+					ElemType: jsontypes.NormalizedType{},
 				},
 			},
 			"pack": schema.StringAttribute{

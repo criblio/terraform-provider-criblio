@@ -37,6 +37,18 @@ func (u *UpdateGlobalVariableByIDRequest) GetGlobalVar() shared.GlobalVar {
 	return u.GlobalVar
 }
 
+// UpdateGlobalVariableByIDResponseBody - a list of Global Variable objects
+type UpdateGlobalVariableByIDResponseBody struct {
+	Items []map[string]any `json:"items,omitempty"`
+}
+
+func (u *UpdateGlobalVariableByIDResponseBody) GetItems() []map[string]any {
+	if u == nil {
+		return nil
+	}
+	return u.Items
+}
+
 type UpdateGlobalVariableByIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -44,8 +56,10 @@ type UpdateGlobalVariableByIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Global Variable object
-	GlobalVar *shared.GlobalVar
+	// a list of Global Variable objects
+	Object *UpdateGlobalVariableByIDResponseBody
+	// Unexpected error
+	Error *shared.Error
 }
 
 func (u *UpdateGlobalVariableByIDResponse) GetContentType() string {
@@ -69,9 +83,16 @@ func (u *UpdateGlobalVariableByIDResponse) GetRawResponse() *http.Response {
 	return u.RawResponse
 }
 
-func (u *UpdateGlobalVariableByIDResponse) GetGlobalVar() *shared.GlobalVar {
+func (u *UpdateGlobalVariableByIDResponse) GetObject() *UpdateGlobalVariableByIDResponseBody {
 	if u == nil {
 		return nil
 	}
-	return u.GlobalVar
+	return u.Object
+}
+
+func (u *UpdateGlobalVariableByIDResponse) GetError() *shared.Error {
+	if u == nil {
+		return nil
+	}
+	return u.Error
 }

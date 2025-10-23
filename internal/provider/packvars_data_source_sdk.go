@@ -4,32 +4,26 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
+	"encoding/json"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 func (r *PackVarsDataSourceModel) RefreshFromOperationsGetGlobalVariableLibVarsByPackAndIDResponseBody(ctx context.Context, resp *operations.GetGlobalVariableLibVarsByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.GlobalVar{}
-
+		r.Items = nil
 		for _, itemsItem := range resp.Items {
-			var items tfTypes.GlobalVar
-
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Lib = types.StringPointerValue(itemsItem.Lib)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-			if itemsItem.Type != nil {
-				items.Type = types.StringValue(string(*itemsItem.Type))
-			} else {
-				items.Type = types.StringNull()
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
 			}
-			items.Value = types.StringPointerValue(itemsItem.Value)
-
 			r.Items = append(r.Items, items)
 		}
 	}

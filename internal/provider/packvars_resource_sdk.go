@@ -4,33 +4,27 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
+	"encoding/json"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *PackVarsResourceModel) RefreshFromOperationsGetGlobalVariableLibVarsByPackAndIDResponseBody(ctx context.Context, resp *operations.GetGlobalVariableLibVarsByPackAndIDResponseBody) diag.Diagnostics {
+func (r *PackVarsResourceModel) RefreshFromOperationsCreateGlobalVariableLibVarsByPackResponseBody(ctx context.Context, resp *operations.CreateGlobalVariableLibVarsByPackResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.GlobalVar{}
-
+		r.Items = nil
 		for _, itemsItem := range resp.Items {
-			var items tfTypes.GlobalVar
-
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Lib = types.StringPointerValue(itemsItem.Lib)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			if itemsItem.Type != nil {
-				items.Type = types.StringValue(string(*itemsItem.Type))
-			} else {
-				items.Type = types.StringNull()
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
 			}
-			items.Value = types.StringPointerValue(itemsItem.Value)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-
 			r.Items = append(r.Items, items)
 		}
 	}
@@ -38,19 +32,44 @@ func (r *PackVarsResourceModel) RefreshFromOperationsGetGlobalVariableLibVarsByP
 	return diags
 }
 
-func (r *PackVarsResourceModel) RefreshFromSharedGlobalVar(ctx context.Context, resp *shared.GlobalVar) diag.Diagnostics {
+func (r *PackVarsResourceModel) RefreshFromOperationsGetGlobalVariableLibVarsByPackAndIDResponseBody(ctx context.Context, resp *operations.GetGlobalVariableLibVarsByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.Description = types.StringPointerValue(resp.Description)
-	r.ID = types.StringValue(resp.ID)
-	r.Lib = types.StringPointerValue(resp.Lib)
-	r.Tags = types.StringPointerValue(resp.Tags)
-	if resp.Type != nil {
-		r.Type = types.StringValue(string(*resp.Type))
-	} else {
-		r.Type = types.StringNull()
+	if resp != nil {
+		r.Items = nil
+		for _, itemsItem := range resp.Items {
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
+			r.Items = append(r.Items, items)
+		}
 	}
-	r.Value = types.StringPointerValue(resp.Value)
+
+	return diags
+}
+
+func (r *PackVarsResourceModel) RefreshFromOperationsUpdateGlobalVariableLibVarsByPackAndIDResponseBody(ctx context.Context, resp *operations.UpdateGlobalVariableLibVarsByPackAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = nil
+		for _, itemsItem := range resp.Items {
+			var items map[string]jsontypes.Normalized
+			if len(itemsItem) > 0 {
+				items = make(map[string]jsontypes.Normalized, len(itemsItem))
+				for key, value := range itemsItem {
+					result, _ := json.Marshal(value)
+					items[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
+			r.Items = append(r.Items, items)
+		}
+	}
 
 	return diags
 }

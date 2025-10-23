@@ -30,10 +30,10 @@ func (d *DeleteGlobalVariableByIDRequest) GetGroupID() string {
 
 // DeleteGlobalVariableByIDResponseBody - a list of Global Variable objects
 type DeleteGlobalVariableByIDResponseBody struct {
-	Items []shared.GlobalVar `json:"items,omitempty"`
+	Items []map[string]any `json:"items,omitempty"`
 }
 
-func (d *DeleteGlobalVariableByIDResponseBody) GetItems() []shared.GlobalVar {
+func (d *DeleteGlobalVariableByIDResponseBody) GetItems() []map[string]any {
 	if d == nil {
 		return nil
 	}

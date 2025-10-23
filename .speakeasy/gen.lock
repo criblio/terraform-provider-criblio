@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 5c7b054e349c2f4dc62a59525db93c22
+  docChecksum: e8b1871e748e71c15a7dd0e4a6cb6773
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.17.18
-  configChecksum: d1e92fc4f790743ca8eeb47715f4d245
+  releaseVersion: 1.17.19
+  configChecksum: d5f3be0b8a3305a54c04930b9457bde7
   published: true
 features:
   terraform:
@@ -526,7 +526,6 @@ generatedFiles:
   - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
-  - internal/provider/types/global_var.go
   - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/grok_file.go
   - internal/provider/types/host_info.go
@@ -5267,7 +5266,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariableById:
@@ -5278,7 +5277,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   updateGlobalVariableById:
@@ -5291,7 +5290,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteGlobalVariableById:
@@ -5302,7 +5301,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariableLibVarsByPack:
@@ -5328,7 +5327,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariableLibVarsByPackAndId:
@@ -5340,7 +5339,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   updateGlobalVariableLibVarsByPackAndId:
@@ -5354,7 +5353,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteGlobalVariableLibVarsByPackAndId:
@@ -5366,7 +5365,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
+          application/json: {}
         "500":
           application/json: {"message": "This is my error message string"}
   listHmacFunction:

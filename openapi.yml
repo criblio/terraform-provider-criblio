@@ -63437,23 +63437,7 @@ paths:
           description: The consumer group to which this instance belongs. Defaults to 'default'.
           default: default
           example: "myExistingGroupId"
-      responses:
-        "200":
-          description: a list of any objects
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    x-speakeasy-ignore: true
-                    type: integer
-                    description: number of items present in the items array
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
+      responses: *a8
     patch:
       operationId: updateCollectorById
       tags: *a7
@@ -67904,7 +67888,8 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/GlobalVar"
+                      type: object
+                      additionalProperties: true
         "401":
           description: Unauthorized
         "500":
@@ -67966,13 +67951,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GlobalVar"
-      responses: 
-        "200":
-          description: Global Variable object
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GlobalVar"
+      responses: *a103
     delete:
       x-speakeasy-entity-operation: GlobalVar#delete
       operationId: deleteGlobalVariableById

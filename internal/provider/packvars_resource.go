@@ -7,8 +7,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -36,15 +36,15 @@ type PackVarsResource struct {
 
 // PackVarsResourceModel describes the resource data model.
 type PackVarsResourceModel struct {
-	Description types.String        `tfsdk:"description"`
-	GroupID     types.String        `tfsdk:"group_id"`
-	ID          types.String        `tfsdk:"id"`
-	Items       []tfTypes.GlobalVar `tfsdk:"items"`
-	Lib         types.String        `tfsdk:"lib"`
-	Pack        types.String        `tfsdk:"pack"`
-	Tags        types.String        `tfsdk:"tags"`
-	Type        types.String        `tfsdk:"type"`
-	Value       types.String        `tfsdk:"value"`
+	Description types.String                      `tfsdk:"description"`
+	GroupID     types.String                      `tfsdk:"group_id"`
+	ID          types.String                      `tfsdk:"id"`
+	Items       []map[string]jsontypes.Normalized `tfsdk:"items"`
+	Lib         types.String                      `tfsdk:"lib"`
+	Pack        types.String                      `tfsdk:"pack"`
+	Tags        types.String                      `tfsdk:"tags"`
+	Type        types.String                      `tfsdk:"type"`
+	Value       types.String                      `tfsdk:"value"`
 }
 
 func (r *PackVarsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -56,7 +56,6 @@ func (r *PackVarsResource) Schema(ctx context.Context, req resource.SchemaReques
 		MarkdownDescription: "PackVars Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Brief description of this variable. Optional.`,
 			},
@@ -71,54 +70,13 @@ func (r *PackVarsResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
 			},
-			"items": schema.ListNestedAttribute{
+			"items": schema.ListAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed:    true,
-							Description: `Brief description of this variable. Optional.`,
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Global variable name.`,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-							},
-						},
-						"lib": schema.StringAttribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed:    true,
-							Description: `One or more tags related to this variable. Optional.`,
-						},
-						"type": schema.StringAttribute{
-							Computed:    true,
-							Default:     stringdefault.StaticString(`any`),
-							Description: `Type of variable. Default: "any"; must be one of ["string", "number", "encryptedString", "boolean", "array", "object", "expression", "any"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"string",
-									"number",
-									"encryptedString",
-									"boolean",
-									"array",
-									"object",
-									"expression",
-									"any",
-								),
-							},
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value of variable`,
-						},
-					},
+				ElementType: types.MapType{
+					ElemType: jsontypes.NormalizedType{},
 				},
 			},
 			"lib": schema.StringAttribute{
-				Computed: true,
 				Optional: true,
 			},
 			"pack": schema.StringAttribute{
@@ -126,7 +84,6 @@ func (r *PackVarsResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `pack ID to POST`,
 			},
 			"tags": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `One or more tags related to this variable. Optional.`,
 			},
@@ -149,7 +106,6 @@ func (r *PackVarsResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"value": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Value of variable`,
 			},
@@ -217,11 +173,11 @@ func (r *PackVarsResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGlobalVar(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateGlobalVariableLibVarsByPackResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -368,11 +324,11 @@ func (r *PackVarsResource) Update(ctx context.Context, req resource.UpdateReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGlobalVar(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateGlobalVariableLibVarsByPackAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

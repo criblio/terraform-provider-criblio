@@ -29,8 +29,4 @@ data "criblio_global_var" "my_globalvar" {
 
 ### Read-Only
 
-- `description` (String) Brief description of this variable. Optional.
-- `lib` (String)
-- `tags` (String) One or more tags related to this variable. Optional.
-- `type` (String) Type of variable
-- `value` (String) Value of variable
+- `items` (List of Map of String)
