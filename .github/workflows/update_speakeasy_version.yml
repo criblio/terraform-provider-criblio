@@ -1,13 +1,14 @@
-name: Updated Speakeasy Version
+name: Update Speakeasy Version
 on:
-   schedule:
-     - cron: "0 0 1,15 * *"
-   workflow_dispatch:
+  schedule:
+    - cron: "0 0 1,15 * *"
+  workflow_dispatch:
 
 jobs:
   update_speakeasy_version:
     runs-on: ubuntu-latest
     steps:
+
       - name: Install Speakeasy
         uses: mheap/setup-go-cli@fa9b01cdd4115eac636164f0de43bf7d51c82697 # v1
         with:
