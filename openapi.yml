@@ -62134,6 +62134,82 @@ components:
       required:
         - perms
         - team
+    MappingRulesetFunctionConf:
+      type: object
+      required:
+        - id
+        - conf
+      additionalProperties: false
+      properties:
+        filter:
+          title: Filter
+          description: Filter that selects data to be fed through this Function
+          type: string
+          default: "true"
+        id:
+          title: ID
+          description: Function ID
+          type: string
+        description:
+          title: Description
+          description: Simple description of this step
+          type: string
+        disabled:
+          title: Disabled
+          description: If true, data will not be pushed through this function
+          type: boolean
+        final:
+          title: Final
+          description: If enabled, stops the results of this Function from being passed to
+            the downstream Functions
+          type: boolean
+        conf:
+          type: object
+          title: Function-specific configs
+          properties:
+            add:
+              type: array
+              title: Add fields
+              description: List of fields to add to the event
+              items:
+                type: object
+                required:
+                  - name
+                  - value
+                properties:
+                  name:
+                    type: string
+                    title: Field name
+                    description: Name of the field to add
+                  value:
+                    type: string
+                    title: Field value
+                    description: Value to assign to the field
+        groupId:
+          title: Group ID
+          description: Group ID
+          type: string
+    MappingRuleset:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          title: ID
+        conf:
+          type: object
+          additionalProperties: false
+          properties:
+            functions:
+              title: Functions
+              description: List of functions to pass data through
+              type: array
+              items:
+                $ref: "#/components/schemas/MappingRulesetFunctionConf"
+        active:
+          type: boolean
 security:
   - bearerAuth: []
   - clientOauth: []
@@ -79801,6 +79877,257 @@ paths:
           type: string
         description: Group ID
         example: "workers-west"
+  /admin/products/{product}/mappings:
+    post:
+      operationId: createAdminProductsMappingsByProduct
+      tags: []
+      summary: Create a new mapping ruleset for the specified product
+      description: Create a new mapping ruleset for the specified product
+      x-speakeasy-entity-operation: MappingRuleset#create
+      deprecated: false
+      responses:
+        "200":
+          description: a list of MappingRuleset objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MappingRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      requestBody:
+        description: MappingRuleset object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MappingRuleset"
+      parameters:
+        - name: product
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - stream
+              - edge
+          example: "stream"
+          description: Name of the Cribl product to create the mappings for
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The id of the mapping ruleset to get
+          example: "my-mapping-ruleset-id"
+    get:
+      operationId: getAdminProductsMappingsByProduct
+      tags: []
+      summary: Get a list of mapping rulesets for the specified product
+      description: Get a list of mapping rulesets for the specified product
+      x-speakeasy-entity-operation: Mappings#get
+      deprecated: false
+      responses:
+        "200":
+          description: a list of MappingRuleset objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MappingRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      parameters:
+        - name: product
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - stream
+              - edge
+          example: "stream"
+          description: Name of the Cribl product to get the mappings for
+  /admin/products/{product}/mappings/{id}:
+    delete:
+      operationId: deleteAdminProductsMappingsByProductAndId
+      tags: []
+      summary: Delete a specific mapping ruleset by ID for the specified product
+      description: Delete a specific mapping ruleset by ID for the specified product
+      x-speakeasy-entity-operation: MappingRuleset#delete
+      deprecated: false
+      responses:
+        "200":
+          description: a list of MappingRuleset objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MappingRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      parameters:
+        - name: product
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - stream
+              - edge
+          example: "stream"
+          description: Name of the Cribl product to delete the mappings for
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The id of the mapping ruleset to delete
+    get:
+      operationId: getAdminProductsMappingsByProductAndId
+      tags: []
+      summary: Get a specific mapping ruleset by ID for the specified product
+      description: Get a specific mapping ruleset by ID for the specified product
+      x-speakeasy-entity-operation: MappingRuleset#get
+      deprecated: false
+      responses:
+        "200":
+          description: a list of MappingRuleset objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MappingRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      parameters:
+        - name: product
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - stream
+              - edge
+          example: "stream"
+          description: Name of the Cribl product to get the mappings for
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The id of the mapping ruleset to get
+    patch:
+      operationId: updateAdminProductsMappingsByProductAndId
+      tags: []
+      summary: Update a specific mapping ruleset by ID for the specified product
+      description: Update a specific mapping ruleset by ID for the specified product
+      x-speakeasy-entity-operation: MappingRuleset#update
+      deprecated: false
+      responses:
+        "200":
+          description: a list of MappingRuleset objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MappingRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      requestBody:
+        description: MappingRuleset object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MappingRuleset"
+      parameters:
+        - name: product
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - stream
+              - edge
+          example: "stream"
+          description: Name of the Cribl product to update the mappings for
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The id of the mapping ruleset to update
 servers:
 - url: https://{workspaceId}-{organizationId}.{cloudDomain}
   x-speakeasy-server-id: cloud

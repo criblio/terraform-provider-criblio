@@ -21,8 +21,10 @@ generation:
     generateTests: true
     generateNewTests: false
     skipResponseBodyAssertions: false
+  schemas:
+    allOfMergeStrategy: shallowMerge
 terraform:
-  version: 1.17.19
+  version: 1.18.8
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []

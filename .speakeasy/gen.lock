@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: e8b1871e748e71c15a7dd0e4a6cb6773
+  docChecksum: abaeeb5086c25619dc896cffd96977a8
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.17.19
-  configChecksum: d5f3be0b8a3305a54c04930b9457bde7
+  releaseVersion: 1.18.8
+  configChecksum: f64ec851bfc87e55e358381c139eda25
   published: true
 features:
   terraform:
@@ -49,6 +49,8 @@ generatedFiles:
   - examples/data-sources/criblio_hmac_function/data-source.tf
   - examples/data-sources/criblio_instance_settings/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
+  - examples/data-sources/criblio_mapping_ruleset/data-source.tf
+  - examples/data-sources/criblio_mappings/data-source.tf
   - examples/data-sources/criblio_notification/data-source.tf
   - examples/data-sources/criblio_notification_target/data-source.tf
   - examples/data-sources/criblio_notification_targets/data-source.tf
@@ -122,6 +124,9 @@ generatedFiles:
   - examples/resources/criblio_lookup_file/import-by-string-id.tf
   - examples/resources/criblio_lookup_file/import.sh
   - examples/resources/criblio_lookup_file/resource.tf
+  - examples/resources/criblio_mapping_ruleset/import-by-string-id.tf
+  - examples/resources/criblio_mapping_ruleset/import.sh
+  - examples/resources/criblio_mapping_ruleset/resource.tf
   - examples/resources/criblio_notification/import-by-string-id.tf
   - examples/resources/criblio_notification/import.sh
   - examples/resources/criblio_notification/resource.tf
@@ -281,6 +286,12 @@ generatedFiles:
   - internal/provider/lookupfile_data_source_sdk.go
   - internal/provider/lookupfile_resource.go
   - internal/provider/lookupfile_resource_sdk.go
+  - internal/provider/mappingruleset_data_source.go
+  - internal/provider/mappingruleset_data_source_sdk.go
+  - internal/provider/mappingruleset_resource.go
+  - internal/provider/mappingruleset_resource_sdk.go
+  - internal/provider/mappings_data_source.go
+  - internal/provider/mappings_data_source_sdk.go
   - internal/provider/notification_data_source.go
   - internal/provider/notification_data_source_sdk.go
   - internal/provider/notification_resource.go
@@ -407,6 +418,7 @@ generatedFiles:
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
+  - internal/provider/types/add.go
   - internal/provider/types/additional_property.go
   - internal/provider/types/allow.go
   - internal/provider/types/api_aws_dataset.go
@@ -517,6 +529,7 @@ generatedFiles:
   - internal/provider/types/failover_configs.go
   - internal/provider/types/field.go
   - internal/provider/types/firewall.go
+  - internal/provider/types/function_specific_configs.go
   - internal/provider/types/gcp_account_config.go
   - internal/provider/types/gcp_endpoint_config.go
   - internal/provider/types/gcs_dataset.go
@@ -1000,6 +1013,9 @@ generatedFiles:
   - internal/provider/types/loki_auth_oauth_param1.go
   - internal/provider/types/loki_auth_oauth_param2.go
   - internal/provider/types/lookup.go
+  - internal/provider/types/mapping_ruleset.go
+  - internal/provider/types/mapping_ruleset_conf.go
+  - internal/provider/types/mapping_ruleset_function_conf.go
   - internal/provider/types/master_schema.go
   - internal/provider/types/master_schema_check_server_identity.go
   - internal/provider/types/master_schema_tls.go
@@ -1426,6 +1442,7 @@ generatedFiles:
   - internal/sdk/messages.go
   - internal/sdk/metrics.go
   - internal/sdk/models/errors/apierror.go
+  - internal/sdk/models/operations/createadminproductsmappingsbyproduct.go
   - internal/sdk/models/operations/createaiconsent.go
   - internal/sdk/models/operations/createaisettingsfeatures.go
   - internal/sdk/models/operations/createaisettingsfeaturesbyfeature.go
@@ -1533,6 +1550,7 @@ generatedFiles:
   - internal/sdk/models/operations/createversionpush.go
   - internal/sdk/models/operations/createversionrevert.go
   - internal/sdk/models/operations/createversionsync.go
+  - internal/sdk/models/operations/deleteadminproductsmappingsbyproductandid.go
   - internal/sdk/models/operations/deleteappscopelibentrybyid.go
   - internal/sdk/models/operations/deleteauthusersinvalidationbyid.go
   - internal/sdk/models/operations/deleteauthuserstokenbyid.go
@@ -1595,6 +1613,8 @@ generatedFiles:
   - internal/sdk/models/operations/deleteteambyid.go
   - internal/sdk/models/operations/deleteusagegroupbyid.go
   - internal/sdk/models/operations/deleteuserbyid.go
+  - internal/sdk/models/operations/getadminproductsmappingsbyproduct.go
+  - internal/sdk/models/operations/getadminproductsmappingsbyproductandid.go
   - internal/sdk/models/operations/getaiconsent.go
   - internal/sdk/models/operations/getaisettingsfeatures.go
   - internal/sdk/models/operations/getaisettingsfeaturesbyfeature.go
@@ -1844,6 +1864,7 @@ generatedFiles:
   - internal/sdk/models/operations/reloadsettings.go
   - internal/sdk/models/operations/triggerrestart.go
   - internal/sdk/models/operations/undolastcommit.go
+  - internal/sdk/models/operations/updateadminproductsmappingsbyproductandid.go
   - internal/sdk/models/operations/updateappscopelibentrybyid.go
   - internal/sdk/models/operations/updatebannermessagebyid.go
   - internal/sdk/models/operations/updatebreakersbypackandid.go
@@ -2146,6 +2167,8 @@ generatedFiles:
   - internal/sdk/models/shared/logininfo.go
   - internal/sdk/models/shared/lookupfile.go
   - internal/sdk/models/shared/lookupversions.go
+  - internal/sdk/models/shared/mappingruleset.go
+  - internal/sdk/models/shared/mappingrulesetfunctionconf.go
   - internal/sdk/models/shared/mappingtype.go
   - internal/sdk/models/shared/masterschema.go
   - internal/sdk/models/shared/masterworkerentry.go
@@ -7940,5 +7963,125 @@ examples:
           application/json: {"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
         default:
           application/json: {"statusCode": 8847.69, "message": "<value>"}
+  createProductsMappingsByProduct:
+    speakeasy-default-create-products-mappings-by-product:
+      parameters:
+        path:
+          product: "stream"
+        query:
+          id: "my-mapping-ruleset-id"
+      requestBody:
+        application/json: {"id": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  getProductsMappingsByProduct:
+    speakeasy-default-get-products-mappings-by-product:
+      parameters:
+        path:
+          product: "stream"
+        query:
+          id: "my-mapping-ruleset-id"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  deleteProductsMappingsByProductAndId:
+    speakeasy-default-delete-products-mappings-by-product-and-id:
+      parameters:
+        path:
+          product: "stream"
+          id: "my-mapping-ruleset-id"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  getProductsMappingsByProductAndId:
+    speakeasy-default-get-products-mappings-by-product-and-id:
+      parameters:
+        path:
+          product: "stream"
+          id: "my-mapping-ruleset-id"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  updateProductsMappingsByProductAndId:
+    speakeasy-default-update-products-mappings-by-product-and-id:
+      parameters:
+        path:
+          product: "stream"
+          id: "my-mapping-ruleset-id"
+      requestBody:
+        application/json: {"id": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  createAdminProductsMappingsByProduct:
+    speakeasy-default-create-admin-products-mappings-by-product:
+      parameters:
+        path:
+          product: "stream"
+        query:
+          id: "my-mapping-ruleset-id"
+      requestBody:
+        application/json: {"id": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  getAdminProductsMappingsByProduct:
+    speakeasy-default-get-admin-products-mappings-by-product:
+      parameters:
+        path:
+          product: "stream"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  deleteAdminProductsMappingsByProductAndId:
+    speakeasy-default-delete-admin-products-mappings-by-product-and-id:
+      parameters:
+        path:
+          product: "stream"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  getAdminProductsMappingsByProductAndId:
+    speakeasy-default-get-admin-products-mappings-by-product-and-id:
+      parameters:
+        path:
+          product: "stream"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  updateAdminProductsMappingsByProductAndId:
+    speakeasy-default-update-admin-products-mappings-by-product-and-id:
+      parameters:
+        path:
+          product: "stream"
+          id: "<id>"
+      requestBody:
+        application/json: {"id": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "500":
+          application/json: {"message": "This is my error message string"}
 examplesVersion: 1.0.2
 generatedTests: {}
