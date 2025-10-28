@@ -1013,3 +1013,408 @@ func TestGatewayHostOverride(t *testing.T) {
 	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
 	os.Setenv("CRIBL_BEARER_TOKEN", "")
 }
+
+func TestOnPremSDKInit(t *testing.T) {
+	// Test that SDKInit handles on-prem configuration
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
+
+	hook := NewCriblTerraformHook()
+	url, _ := hook.SDKInit("should-be-overridden", nil)
+
+	expectedURL := "http://localhost:9000"
+	if url != expectedURL {
+		t.Errorf("SDKInit for on-prem returned %q, expected %q", url, expectedURL)
+	}
+	if hook.baseURL != expectedURL {
+		t.Errorf("Hook baseURL %q, expected %q", hook.baseURL, expectedURL)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+}
+
+func TestOnPremAuthenticationWithBearerToken(t *testing.T) {
+	// Test on-prem authentication using direct bearer token
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
+	os.Setenv("CRIBL_BEARER_TOKEN", "my-onprem-token")
+
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("http://localhost:9000", nil)
+
+	req, _ := http.NewRequest("GET", "/api/v1/test", nil)
+	ctx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context: context.Background(),
+		},
+	}
+
+	resultReq, err := hook.BeforeRequest(ctx, req)
+	if err != nil {
+		t.Fatalf("BeforeRequest failed: %v", err)
+	}
+
+	// Verify token was set
+	expectedAuth := "Bearer my-onprem-token"
+	if resultReq.Header.Get("Authorization") != expectedAuth {
+		t.Errorf("Expected Authorization %q, got %q", expectedAuth, resultReq.Header.Get("Authorization"))
+	}
+
+	// Verify URL was set correctly
+	expectedURL := "http://localhost:9000/api/v1/test"
+	if resultReq.URL.String() != expectedURL {
+		t.Errorf("Expected URL %q, got %q", expectedURL, resultReq.URL.String())
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestOnPremAuthenticationWithUsernamePassword(t *testing.T) {
+	// Test on-prem authentication using username/password
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
+	os.Setenv("CRIBL_ONPREM_USERNAME", "admin")
+	os.Setenv("CRIBL_ONPREM_PASSWORD", "admin")
+	os.Setenv("CRIBL_BEARER_TOKEN", "") // Not using direct token
+
+	// Create a test server that returns a successful auth response
+	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/api/v1/auth/login" && r.Method == "POST" {
+			// Verify request body
+			bodyBytes, _ := io.ReadAll(r.Body)
+			if !strings.Contains(string(bodyBytes), "username") || !strings.Contains(string(bodyBytes), "password") {
+				t.Errorf("Request body should contain username and password")
+			}
+			// Return successful auth response
+			w.Write([]byte(`{"token": "test-token-from-login", "forcePasswordChange": false}`))
+		}
+	}))
+	defer testServer.Close()
+
+	hook := NewCriblTerraformHook()
+	// Override the server URL to use test server
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", testServer.URL)
+
+	// Use http.DefaultClient to make actual HTTP requests to the test server
+	hook.SDKInit(testServer.URL, &http.Client{})
+
+	req, _ := http.NewRequest("GET", "/api/v1/test", nil)
+	ctx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context: context.Background(),
+		},
+	}
+
+	resultReq, err := hook.BeforeRequest(ctx, req)
+	if err != nil {
+		t.Fatalf("BeforeRequest failed: %v", err)
+	}
+
+	// Verify token was set
+	expectedAuth := "Bearer test-token-from-login"
+	if resultReq.Header.Get("Authorization") != expectedAuth {
+		t.Errorf("Expected Authorization %q, got %q", expectedAuth, resultReq.Header.Get("Authorization"))
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	os.Setenv("CRIBL_ONPREM_USERNAME", "")
+	os.Setenv("CRIBL_ONPREM_PASSWORD", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestOnPremTokenCaching(t *testing.T) {
+	// Test that tokens are cached and reused
+	requestCount := 0
+	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/api/v1/auth/login" && r.Method == "POST" {
+			requestCount++
+			w.Write([]byte(`{"token": "cached-token", "forcePasswordChange": false}`))
+		}
+	}))
+	defer testServer.Close()
+
+	// Set environment variables with the test server URL BEFORE creating hook
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", testServer.URL)
+	os.Setenv("CRIBL_ONPREM_USERNAME", "admin")
+	os.Setenv("CRIBL_ONPREM_PASSWORD", "admin")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	// Create hook and initialize with test server URL
+	hook := NewCriblTerraformHook()
+	hook.SDKInit(testServer.URL, &http.Client{})
+
+	req1, _ := http.NewRequest("GET", "/api/v1/test1", nil)
+	req2, _ := http.NewRequest("GET", "/api/v1/test2", nil)
+	ctx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context: context.Background(),
+		},
+	}
+
+	// First request - should fetch token
+	_, err := hook.BeforeRequest(ctx, req1)
+	if err != nil {
+		t.Fatalf("First BeforeRequest failed: %v", err)
+	}
+
+	// Second request - should use cached token
+	_, err = hook.BeforeRequest(ctx, req2)
+	if err != nil {
+		t.Fatalf("Second BeforeRequest failed: %v", err)
+	}
+
+	// Should only have called the auth endpoint once
+	if requestCount != 1 {
+		t.Errorf("Expected auth endpoint to be called 1 time, got %d", requestCount)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	os.Setenv("CRIBL_ONPREM_USERNAME", "")
+	os.Setenv("CRIBL_ONPREM_PASSWORD", "")
+}
+
+func TestOnPremAuthenticationErrors(t *testing.T) {
+	// Test error handling when on-prem auth fails
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
+	os.Setenv("CRIBL_ONPREM_USERNAME", "admin")
+	os.Setenv("CRIBL_ONPREM_PASSWORD", "wrong-password")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/api/v1/auth/login" && r.Method == "POST" {
+			// Return 401 Unauthorized
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte(`{"error": "Invalid credentials"}`))
+		}
+	}))
+	defer testServer.Close()
+
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", testServer.URL)
+
+	hook := NewCriblTerraformHook()
+	hook.SDKInit(testServer.URL, &http.Client{})
+
+	req, _ := http.NewRequest("GET", "/api/v1/test", nil)
+	ctx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context: context.Background(),
+		},
+	}
+
+	_, err := hook.BeforeRequest(ctx, req)
+	if err == nil {
+		t.Fatalf("Expected error but got none")
+	}
+
+	if !strings.Contains(err.Error(), "failed to get on-prem bearer token") {
+		t.Errorf("Expected error about failing to get token, got: %v", err)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	os.Setenv("CRIBL_ONPREM_USERNAME", "")
+	os.Setenv("CRIBL_ONPREM_PASSWORD", "")
+}
+
+func TestOnPremURLRouting(t *testing.T) {
+	// Test that on-prem requests are routed correctly
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
+	os.Setenv("CRIBL_BEARER_TOKEN", "test-token")
+
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("http://localhost:9000", nil)
+
+	testCases := []struct {
+		path     string
+		expected string
+	}{
+		{"/api/v1/sources", "http://localhost:9000/api/v1/sources"},
+		{"/api/v1/destinations", "http://localhost:9000/api/v1/destinations"},
+		{"/api/v1/system/health", "http://localhost:9000/api/v1/system/health"},
+	}
+
+	for _, tc := range testCases {
+		req, _ := http.NewRequest("GET", tc.path, nil)
+		ctx := BeforeRequestContext{
+			HookContext: HookContext{
+				Context: context.Background(),
+			},
+		}
+
+		resultReq, err := hook.BeforeRequest(ctx, req)
+		if err != nil {
+			t.Errorf("BeforeRequest failed for %s: %v", tc.path, err)
+			continue
+		}
+
+		if resultReq.URL.String() != tc.expected {
+			t.Errorf("For path %q, expected URL %q, got %q", tc.path, tc.expected, resultReq.URL.String())
+		}
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestOnPremMissingCredentials(t *testing.T) {
+	// Test error when on-prem URL is set but no credentials provided
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+	os.Setenv("CRIBL_ONPREM_USERNAME", "")
+	os.Setenv("CRIBL_ONPREM_PASSWORD", "")
+
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("http://localhost:9000", nil)
+
+	req, _ := http.NewRequest("GET", "/api/v1/test", nil)
+	ctx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context: context.Background(),
+		},
+	}
+
+	_, err := hook.BeforeRequest(ctx, req)
+	if err == nil {
+		t.Fatalf("Expected error when no credentials provided")
+	}
+
+	if !strings.Contains(err.Error(), "requires either CRIBL_BEARER_TOKEN or both CRIBL_ONPREM_USERNAME and CRIBL_ONPREM_PASSWORD") {
+		t.Errorf("Expected error about missing credentials, got: %v", err)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+}
+
+func TestOnPremRestrictedEndpoints(t *testing.T) {
+	// Test that restricted endpoints return errors for on-prem deployments
+	restrictedPaths := []struct {
+		path        string
+		description string
+	}{
+		{"/products/search/jobs", "Search endpoints"},
+		{"/products/lake/lakes", "Lake endpoints"},
+		{"/products/lake/lakehouses", "Lakehouse endpoints"},
+		{"/v1/organizations/org/workspaces", "Workspace creation via gateway"},
+		{"/api/v1/organizations/org/workspaces", "Workspace management"},
+		{"/search/jobs", "Search jobs"},
+		{"/products/lake/datasets", "Lake datasets"},
+		{"/api/v1/m/default_search/search/saved", "Search saved queries"},
+		{"/api/v1/m/default_search/search/usage-groups", "Search usage groups"},
+		{"/api/v1/m/default_search/search/saved-query", "Search saved query via group path"},
+		{"/m/default_search/search/dashboards", "Search dashboards"},
+	}
+	
+	// Set up on-prem configuration
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
+	os.Setenv("CRIBL_BEARER_TOKEN", "test-token")
+	
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("http://localhost:9000", nil)
+	
+	for _, tc := range restrictedPaths {
+		req, _ := http.NewRequest("GET", tc.path, nil)
+		ctx := BeforeRequestContext{
+			HookContext: HookContext{
+				Context: context.Background(),
+			},
+		}
+		
+		_, err := hook.BeforeRequest(ctx, req)
+		if err == nil {
+			t.Errorf("Expected error for restricted endpoint %s (%s), got none", tc.path, tc.description)
+		} else if !strings.Contains(err.Error(), "not supported for on-prem deployments") {
+			t.Errorf("Expected error message about unsupported endpoint, got: %v", err)
+		}
+	}
+	
+	// Clean up
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestOnPremAllowedEndpoints(t *testing.T) {
+	// Test that allowed endpoints work fine for on-prem deployments
+	allowedPaths := []struct {
+		path        string
+		description string
+	}{
+		{"/sources", "Sources endpoint"},
+		{"/destinations", "Destinations endpoint"},
+		{"/routes", "Routes endpoint"},
+		{"/pipelines", "Pipelines endpoint"},
+		{"/packs", "Packs endpoint"},
+		{"/system/inputs", "System inputs"},
+		{"/system/outputs", "System outputs"},
+		{"/groups/default", "Worker groups"},
+	}
+	
+	// Set up on-prem configuration
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
+	os.Setenv("CRIBL_BEARER_TOKEN", "test-token")
+	
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("http://localhost:9000", nil)
+	
+	for _, tc := range allowedPaths {
+		req, _ := http.NewRequest("GET", tc.path, nil)
+		ctx := BeforeRequestContext{
+			HookContext: HookContext{
+				Context: context.Background(),
+			},
+		}
+		
+		resultReq, err := hook.BeforeRequest(ctx, req)
+		if err != nil {
+			t.Errorf("Unexpected error for allowed endpoint %s (%s): %v", tc.path, tc.description, err)
+			continue
+		}
+		
+		// Verify that the URL was set correctly
+		if !strings.HasPrefix(resultReq.URL.String(), "http://localhost:9000") {
+			t.Errorf("Expected URL to start with http://localhost:9000, got %s", resultReq.URL.String())
+		}
+	}
+	
+	// Clean up
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestOnPremWithProviderConfig(t *testing.T) {
+	// Test that on-prem configuration works when server_url is provided via provider config
+	
+	// Set environment variables
+	os.Setenv("CRIBL_BEARER_TOKEN", "provider-provided-token")
+	
+	// Simulate provider configuration that provides on-prem server URL
+	// The provider config's server_url gets passed as baseURL to SDKInit
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("http://localhost:9000", &MockHTTPClient{})
+	
+	// Create test request context
+	myCtx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context: context.Background(),
+		},
+	}
+	
+	req, _ := http.NewRequest("GET", "/api/v1/sources", nil)
+	resultReq, err := hook.BeforeRequest(myCtx, req)
+	
+	if err != nil {
+		t.Fatalf("BeforeRequest failed: %v", err)
+	}
+	
+	// Verify token was set
+	expectedAuth := "Bearer provider-provided-token"
+	if resultReq.Header.Get("Authorization") != expectedAuth {
+		t.Errorf("Expected Authorization %q, got %q", expectedAuth, resultReq.Header.Get("Authorization"))
+	}
+	
+	// Clean up
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}

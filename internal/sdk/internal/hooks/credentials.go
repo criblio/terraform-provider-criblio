@@ -16,6 +16,11 @@ type CriblConfig struct {
 	OrganizationID string `json:"organization_id" ini:"organization_id"`
 	Workspace      string `json:"workspace" ini:"workspace"`
 	CloudDomain    string `json:"cloud_domain" ini:"cloud_domain"`
+	
+	// On-prem configuration fields
+	OnpremServerURL string `json:"onprem_server_url" ini:"onprem_server_url"`
+	OnpremUsername  string `json:"onprem_username" ini:"onprem_username"`
+	OnpremPassword  string `json:"onprem_password" ini:"onprem_password"`
 }
 
 type CriblConfigFile struct {
@@ -124,19 +129,34 @@ func GetCredentials() (*CriblConfig, error) {
 	organizationID := os.Getenv("CRIBL_ORGANIZATION_ID")
 	workspace := os.Getenv("CRIBL_WORKSPACE_ID")
 	cloudDomain := os.Getenv("CRIBL_CLOUD_DOMAIN")
+	
+	// Read on-prem environment variables
+	onpremServerURL := os.Getenv("CRIBL_ONPREM_SERVER_URL")
+	onpremUsername := os.Getenv("CRIBL_ONPREM_USERNAME")
+	onpremPassword := os.Getenv("CRIBL_ONPREM_PASSWORD")
 
-	log.Printf("[DEBUG] Environment variables - clientID=%s, orgID=%s, workspace=%s, domain=%s",
-		clientID, organizationID, workspace, cloudDomain)
+	log.Printf("[DEBUG] Environment variables - clientID=%s, orgID=%s, workspace=%s, domain=%s, onpremURL=%s",
+		clientID, organizationID, workspace, cloudDomain, onpremServerURL)
 
 	// If we have direct credentials in environment, use them
 	if clientID != "" && clientSecret != "" {
-		log.Printf("[DEBUG] Using credentials from environment variables")
+		log.Printf("[DEBUG] Using cloud credentials from environment variables")
 		return &CriblConfig{
 			ClientID:       clientID,
 			ClientSecret:   clientSecret,
 			OrganizationID: organizationID,
 			Workspace:      workspace,
 			CloudDomain:    cloudDomain,
+		}, nil
+	}
+	
+	// If we have on-prem credentials in environment, use them
+	if onpremServerURL != "" {
+		log.Printf("[DEBUG] Using on-prem credentials from environment variables")
+		return &CriblConfig{
+			OnpremServerURL: onpremServerURL,
+			OnpremUsername:  onpremUsername,
+			OnpremPassword:  onpremPassword,
 		}, nil
 	}
 

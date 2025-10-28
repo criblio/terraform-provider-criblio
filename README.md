@@ -30,7 +30,16 @@ provider "criblio" {
 
 ## Authentication
 
-The Cribl provider supports multiple authentication methods with the following precedence order (highest to lowest priority):
+The Cribl provider supports multiple authentication methods and deployment types:
+
+### Deployment Types
+
+1. **Cribl.Cloud** - Managed cloud deployment (default)
+2. **On-Prem/Customer-Managed** - Self-hosted deployments
+
+### Precedence Order
+
+Authentication methods follow this precedence order (highest to lowest priority):
 
 1. **Provider configuration block** (highest priority - overrides all other methods)
 2. **Environment variables**
@@ -42,6 +51,8 @@ You can configure authentication using any of these methods, but provider config
 
 You can set the following environment variables:
 
+#### For Cribl.Cloud Deployments
+
 ```bash
 # Direct authentication
 export CRIBL_BEARER_TOKEN="your-bearer-token"
@@ -51,13 +62,20 @@ export CRIBL_CLIENT_ID="your-client-id"
 export CRIBL_CLIENT_SECRET="your-client-secret"
 export CRIBL_ORGANIZATION_ID="your-organization-id"
 export CRIBL_WORKSPACE_ID="your-workspace-id"
+```
 
-# Optional: specify cloud domain (defaults to cribl.cloud)
-export CRIBL_CLOUD_DOMAIN="cribl-playground.cloud"  # for playground environment
-# export CRIBL_CLOUD_DOMAIN="cribl-staging.cloud"  # for staging environment
-# export CRIBL_CLOUD_DOMAIN="cribl.cloud"          # for production environment
+#### For On-Prem Deployments
 
+```bash
+# Required: Server URL
+export CRIBL_ONPREM_SERVER_URL="http://localhost:9000"  # or https://your-server.com
 
+# Authentication option 1: Bearer token
+export CRIBL_BEARER_TOKEN="your-bearer-token"
+
+# OR Authentication option 2: Username and password
+export CRIBL_ONPREM_USERNAME="admin"
+export CRIBL_ONPREM_PASSWORD="admin"
 ```
 
 ### Credentials File
@@ -65,6 +83,7 @@ export CRIBL_CLOUD_DOMAIN="cribl-playground.cloud"  # for playground environment
 You can store your credentials in `~/.cribl/credentials` or `~/.cribl` (legacy) with the following format:
 
 ```ini
+# For Cribl.Cloud deployments
 [default]
 client_id = your-client-id
 client_secret = your-client-secret
@@ -79,6 +98,12 @@ client_secret = another-client-secret
 organization_id = another-organization-id
 workspace = another-workspace-id
 cloud_domain = cribl.cloud
+
+# For on-prem deployments
+[onprem]
+onprem_server_url = http://localhost:9000
+onprem_username = admin
+onprem_password = admin
 ```
 
 To use a specific profile, set the `CRIBL_PROFILE` environment variable:
@@ -91,6 +116,8 @@ export CRIBL_PROFILE="profile2"
 
 You can configure authentication directly in your Terraform configuration. This has the highest precedence and will override any environment variables or credentials file settings:
 
+#### For Cribl.Cloud
+
 ```hcl
 provider "criblio" {
   # Using bearer token
@@ -101,7 +128,7 @@ provider "criblio" {
   client_secret    = "your-client-secret"
   organization_id  = "your-organization-id"
   workspace_id     = "your-workspace-id"
-
+  cloud_domain     = "cribl.cloud" 
 }
 ```
 
@@ -129,6 +156,83 @@ provider "criblio" {
   workspace_id    = "your-workspace-id"
 }
 ```
+
+### 3. On-Prem Deployments (Customer-Managed)
+
+The provider supports customer-managed (on-prem) deployments through **environment variables** or **credentials file only**. Configure on-prem using one of these methods:
+
+**Note:** On-prem deployments only support workspace resources (sources, destinations, routes, pipelines, packs, etc.) and do not support Search, Lake, Lakehouse, or workspace management features.
+
+#### Method 1: Environment Variables (Recommended)
+
+```bash
+# Required: Server URL
+export CRIBL_ONPREM_SERVER_URL="http://localhost:9000"  # or https://your-server.com:9000
+
+# Authentication option 1: Bearer token (recommended for automation)
+export CRIBL_BEARER_TOKEN="your-bearer-token"
+
+# OR Authentication option 2: Username and password
+export CRIBL_ONPREM_USERNAME="admin"
+export CRIBL_ONPREM_PASSWORD="admin"
+```
+
+Then use the provider without authentication settings (they come from environment):
+
+```hcl
+provider "criblio" {
+  # No configuration needed - uses environment variables
+}
+```
+
+#### Method 2: Credentials File
+
+Create or edit `~/.cribl/credentials`:
+
+```ini
+[onprem]
+onprem_server_url = http://localhost:9000
+onprem_username = admin
+onprem_password = admin
+```
+
+To use this profile:
+
+```bash
+export CRIBL_PROFILE="onprem"
+```
+
+```hcl
+provider "criblio" {
+  # No configuration needed - uses credentials file
+}
+```
+
+**Important Notes:**
+- On-prem deployments **do not support** Search, Lake, Lakehouse, or workspace management resources
+- The bearer token is automatically obtained via `/api/v1/auth/login` when using username/password
+- Token caching is handled automatically for efficient re-authentication
+- Configuration through the provider block is not supported - use environment variables or credentials file instead
+
+#### Supported Resources for On-Prem
+
+✅ **Supported:**
+- `criblio_source` - Data sources (HTTP, TCP, Syslog, etc.)
+- `criblio_destination` - Data destinations (Splunk, S3, Kafka, etc.)
+- `criblio_routes` - Routing rules
+- `criblio_pipeline` - Data pipelines
+- `criblio_pack` - Configuration packs
+- `criblio_group` - Worker groups
+- `criblio_certificate` - Certificates
+- `criblio_collector` - Collectors
+- And other workspace configuration resources
+
+❌ **Not Supported:**
+- `criblio_search_*` - All Search resources
+- `criblio_cribl_lake_*` - All Lake resources
+- `criblio_cribl_lake_house` - Lakehouse resources
+- `criblio_workspace` - Workspace management (only available via gateway/cloud)
+- `criblio_notification_target` - Part of Search feature set
 
 ### Example with Environment Variables
 

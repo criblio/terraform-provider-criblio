@@ -44,6 +44,14 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 	log.Printf("[DEBUG] Initializing SDK with baseURL: %s", baseURL)
 	o.client = client
 
+	// Check for on-prem configuration in environment variables first
+	onpremServerURL := os.Getenv("CRIBL_ONPREM_SERVER_URL")
+	if onpremServerURL != "" {
+		log.Printf("[DEBUG] On-prem configuration detected in environment, using server URL: %s", onpremServerURL)
+		o.baseURL = onpremServerURL
+		return onpremServerURL, client
+	}
+
 	// Get credentials from config or environment
 	log.Printf("[DEBUG] Attempting to get credentials")
 	config, err := GetCredentials()
@@ -51,6 +59,13 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 		log.Printf("[ERROR] Failed to get credentials: %v", err)
 		o.baseURL = baseURL
 		return baseURL, client
+	}
+
+	// Check for on-prem configuration in credentials file
+	if config != nil && config.OnpremServerURL != "" {
+		log.Printf("[DEBUG] On-prem configuration detected in credentials file, using server URL: %s", config.OnpremServerURL)
+		o.baseURL = config.OnpremServerURL
+		return config.OnpremServerURL, client
 	}
 
 	// Set orgID and workspaceID from config
@@ -223,6 +238,55 @@ func (o *CriblTerraformHook) isGatewayPath(path string) bool {
 	return strings.HasPrefix(cleanPath, "organizations/")
 }
 
+// isRestrictedOnPremEndpoint determines if a path is for a restricted endpoint that is not supported on on-prem deployments
+func (o *CriblTerraformHook) isRestrictedOnPremEndpoint(path string) bool {
+	// These endpoints are only available in Cribl.Cloud (gateway) and not in on-prem deployments
+	
+	// Check for search endpoints (can be in format /m/group/search/... or search/...)
+	// Search endpoints contain "search/" somewhere in the path
+	if strings.Contains(path, "search/") {
+		// Exclude /system/config-search from restrictions as it's an admin endpoint
+		if !strings.Contains(path, "/system/config-search") {
+			return true
+		}
+	}
+	
+	// Check for lake endpoints
+	if strings.Contains(path, "/lake/") || strings.Contains(path, "products/lake/") {
+		return true
+	}
+	
+	// Check for lakehouse endpoints
+	if strings.Contains(path, "lakehouse") {
+		return true
+	}
+	
+	// Check for products/search endpoints
+	if strings.Contains(path, "products/search/") {
+		return true
+	}
+	
+	// Check for gateway/management endpoints
+	restrictedPrefixes := []string{
+		"v1/organizations/",    // Gateway management endpoints
+		"organizations/",       // Workspace management endpoints  
+	}
+	
+	// Check for restricted prefixes
+	for _, prefix := range restrictedPrefixes {
+		if strings.HasPrefix(path, prefix) {
+			return true
+		}
+	}
+	
+	// Check for workspace management (these are gateway paths)
+	if strings.Contains(path, "workspace") && !strings.Contains(path, "/system/") {
+		return true
+	}
+	
+	return false
+}
+
 // constructGatewayURL builds the gateway URL using the appropriate cloud domain
 func (o *CriblTerraformHook) constructGatewayURL(providerCloudDomain string, config *CriblConfig) string {
 	// Get cloud domain with proper precedence: Provider > Environment > Credentials > Default
@@ -240,7 +304,177 @@ func (o *CriblTerraformHook) constructGatewayURL(providerCloudDomain string, con
 	return fmt.Sprintf("https://gateway.%s", cloudDomain)
 }
 
+// handleOnPremRequest handles authentication and routing for on-prem deployments
+func (o *CriblTerraformHook) handleOnPremRequest(ctx BeforeRequestContext, req *http.Request, serverURL string) (*http.Request, error) {
+	log.Printf("[DEBUG] Handling on-prem request to: %s", serverURL)
+	
+	// Get username and password from environment
+	username := os.Getenv("CRIBL_ONPREM_USERNAME")
+	password := os.Getenv("CRIBL_ONPREM_PASSWORD")
+	bearerToken := os.Getenv("CRIBL_BEARER_TOKEN")
+	
+	// Get credentials from config file as fallback
+	config, err := GetCredentials()
+	if err != nil {
+		log.Printf("[WARN] Failed to get credentials from config: %v", err)
+	}
+	
+	// Use config as fallback if not in environment
+	if username == "" && config != nil {
+		username = config.OnpremUsername
+	}
+	if password == "" && config != nil {
+		password = config.OnpremPassword
+	}
+	
+	var authToken string
+	
+	// Try direct bearer token first
+	if bearerToken != "" {
+		log.Printf("[DEBUG] Using direct bearer token for on-prem authentication")
+		authToken = bearerToken
+	} else if username != "" && password != "" {
+		// Check for cached token
+		sessionKey := fmt.Sprintf("onprem:%s:%s:%s", serverURL, username, password)
+		var tokenInfo *TokenInfo
+		
+		if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
+			tokenInfo = cachedTokenInfo.(*TokenInfo)
+			if time.Until(tokenInfo.ExpiresAt) < 30*time.Minute {
+				tokenInfo = nil
+			}
+		}
+		
+		if tokenInfo == nil {
+			log.Printf("[DEBUG] Retrieving bearer token using username/password for on-prem authentication")
+			newTokenInfo, err := o.getOnPremBearerToken(ctx.Context, serverURL, username, password)
+			if err != nil {
+				return req, fmt.Errorf("failed to get on-prem bearer token: %v", err)
+			}
+			tokenInfo = newTokenInfo
+			o.sessions.Store(sessionKey, tokenInfo)
+		}
+		
+		authToken = tokenInfo.Token
+	} else {
+		return req, fmt.Errorf("on-prem authentication requires either CRIBL_BEARER_TOKEN or both CRIBL_ONPREM_USERNAME and CRIBL_ONPREM_PASSWORD")
+	}
+	
+	// Set authorization header
+	req.Header.Set("Authorization", "Bearer "+authToken)
+	
+	// Validate that the requested endpoint is supported for on-prem deployments
+	path := strings.TrimLeft(req.URL.Path, "/")
+	
+	// Remove /api/v1 if already present in path
+	path = strings.TrimPrefix(path, "api/v1/")
+	path = strings.TrimPrefix(path, "api/v1")
+	
+	// Check if this is a restricted endpoint for on-prem
+	if o.isRestrictedOnPremEndpoint(path) {
+		return req, fmt.Errorf("endpoint '%s' is not supported for on-prem deployments. On-prem deployments only support workspace resources (sources, destinations, routes, pipelines, etc.)", path)
+	}
+	
+	// Handle URL routing for on-prem (always use serverURL/api/v1 path)
+	baseURL := strings.TrimRight(serverURL, "/")
+	
+	// Construct full URL
+	if path == "" {
+		newURL := fmt.Sprintf("%s/api/v1", baseURL)
+		parsedURL, err := url.Parse(newURL)
+		if err != nil {
+			return req, fmt.Errorf("failed to parse on-prem URL: %v", err)
+		}
+		req.URL = parsedURL
+	} else {
+		newURL := fmt.Sprintf("%s/api/v1/%s", baseURL, path)
+		parsedURL, err := url.Parse(newURL)
+		if err != nil {
+			return req, fmt.Errorf("failed to parse on-prem URL: %v", err)
+		}
+		req.URL = parsedURL
+	}
+	
+	log.Printf("[DEBUG] On-prem request URL: %s", req.URL.String())
+	
+	return req, nil
+}
+
+// getOnPremBearerToken authenticates with on-prem server using username/password
+// Reference: https://docs.cribl.io/cribl-as-code/authentication/#sdk-cust-managed-auth
+func (o *CriblTerraformHook) getOnPremBearerToken(ctx context.Context, serverURL, username, password string) (*TokenInfo, error) {
+	// Construct auth URL - use /api/v1/auth/login as per documentation
+	baseURL := strings.TrimRight(serverURL, "/")
+	authURL := fmt.Sprintf("%s/api/v1/auth/login", baseURL)
+	
+	log.Printf("[DEBUG] Getting on-prem bearer token from: %s", authURL)
+	
+	// Create request with username/password in JSON body
+	requestBody := map[string]string{
+		"username": username,
+		"password": password,
+	}
+	
+	jsonData, err := json.Marshal(requestBody)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err)
+	}
+	
+	req, err := http.NewRequestWithContext(ctx, "POST", authURL, strings.NewReader(string(jsonData)))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	
+	resp, err := o.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to make request: %v", err)
+	}
+	defer resp.Body.Close()
+	
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response: %v", err)
+	}
+	
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to get token: status=%d, body=%s", resp.StatusCode, string(body))
+	}
+	
+	// Parse response - response contains "token" field with "Bearer " prefix
+	var result struct {
+		Token               string `json:"token"`
+		ForcePasswordChange bool   `json:"forcePasswordChange"`
+	}
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, fmt.Errorf("failed to parse response: %v", err)
+	}
+	
+	// Remove "Bearer " prefix if present
+	token := strings.TrimPrefix(result.Token, "Bearer ")
+	
+	// Token TTL from global settings (default 3600 seconds / 1 hour)
+	// Reference: Settings > Global > General Settings > API Server Settings > Advanced > Auth-token TTL
+	expiresIn := 3600 // Default to 1 hour
+	expiresAt := time.Now().Add(time.Duration(expiresIn) * time.Second)
+	
+	log.Printf("[DEBUG] Successfully obtained on-prem bearer token (expires in %d seconds)", expiresIn)
+	
+	return &TokenInfo{
+		Token:     token,
+		ExpiresAt: expiresAt,
+	}, nil
+}
+
 func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.Request) (*http.Request, error) {
+	// Check for on-prem configuration first
+	onpremServerURL := os.Getenv("CRIBL_ONPREM_SERVER_URL")
+	
+	// Handle on-prem authentication
+	if onpremServerURL != "" {
+		return o.handleOnPremRequest(ctx, req, onpremServerURL)
+	}
+
 	// First try to get credentials from security context
 	var clientID, clientSecret, orgID, workspaceID, cloudDomain string
 
