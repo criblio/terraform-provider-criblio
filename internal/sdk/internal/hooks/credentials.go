@@ -16,7 +16,7 @@ type CriblConfig struct {
 	OrganizationID string `json:"organization_id" ini:"organization_id"`
 	Workspace      string `json:"workspace" ini:"workspace"`
 	CloudDomain    string `json:"cloud_domain" ini:"cloud_domain"`
-	
+
 	// On-prem configuration fields
 	OnpremServerURL string `json:"onprem_server_url" ini:"onprem_server_url"`
 	OnpremUsername  string `json:"onprem_username" ini:"onprem_username"`
@@ -129,7 +129,7 @@ func GetCredentials() (*CriblConfig, error) {
 	organizationID := os.Getenv("CRIBL_ORGANIZATION_ID")
 	workspace := os.Getenv("CRIBL_WORKSPACE_ID")
 	cloudDomain := os.Getenv("CRIBL_CLOUD_DOMAIN")
-	
+
 	// Read on-prem environment variables
 	onpremServerURL := os.Getenv("CRIBL_ONPREM_SERVER_URL")
 	onpremUsername := os.Getenv("CRIBL_ONPREM_USERNAME")
@@ -149,7 +149,7 @@ func GetCredentials() (*CriblConfig, error) {
 			CloudDomain:    cloudDomain,
 		}, nil
 	}
-	
+
 	// If we have on-prem credentials in environment, use them
 	if onpremServerURL != "" {
 		log.Printf("[DEBUG] Using on-prem credentials from environment variables")

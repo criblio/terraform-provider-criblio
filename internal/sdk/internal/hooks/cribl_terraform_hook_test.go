@@ -1307,14 +1307,14 @@ func TestOnPremRestrictedEndpoints(t *testing.T) {
 		{"/api/v1/m/default_search/search/saved-query", "Search saved query via group path"},
 		{"/m/default_search/search/dashboards", "Search dashboards"},
 	}
-	
+
 	// Set up on-prem configuration
 	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
 	os.Setenv("CRIBL_BEARER_TOKEN", "test-token")
-	
+
 	hook := NewCriblTerraformHook()
 	hook.SDKInit("http://localhost:9000", nil)
-	
+
 	for _, tc := range restrictedPaths {
 		req, _ := http.NewRequest("GET", tc.path, nil)
 		ctx := BeforeRequestContext{
@@ -1322,7 +1322,7 @@ func TestOnPremRestrictedEndpoints(t *testing.T) {
 				Context: context.Background(),
 			},
 		}
-		
+
 		_, err := hook.BeforeRequest(ctx, req)
 		if err == nil {
 			t.Errorf("Expected error for restricted endpoint %s (%s), got none", tc.path, tc.description)
@@ -1330,7 +1330,7 @@ func TestOnPremRestrictedEndpoints(t *testing.T) {
 			t.Errorf("Expected error message about unsupported endpoint, got: %v", err)
 		}
 	}
-	
+
 	// Clean up
 	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
 	os.Setenv("CRIBL_BEARER_TOKEN", "")
@@ -1351,14 +1351,14 @@ func TestOnPremAllowedEndpoints(t *testing.T) {
 		{"/system/outputs", "System outputs"},
 		{"/groups/default", "Worker groups"},
 	}
-	
+
 	// Set up on-prem configuration
 	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
 	os.Setenv("CRIBL_BEARER_TOKEN", "test-token")
-	
+
 	hook := NewCriblTerraformHook()
 	hook.SDKInit("http://localhost:9000", nil)
-	
+
 	for _, tc := range allowedPaths {
 		req, _ := http.NewRequest("GET", tc.path, nil)
 		ctx := BeforeRequestContext{
@@ -1366,19 +1366,19 @@ func TestOnPremAllowedEndpoints(t *testing.T) {
 				Context: context.Background(),
 			},
 		}
-		
+
 		resultReq, err := hook.BeforeRequest(ctx, req)
 		if err != nil {
 			t.Errorf("Unexpected error for allowed endpoint %s (%s): %v", tc.path, tc.description, err)
 			continue
 		}
-		
+
 		// Verify that the URL was set correctly
 		if !strings.HasPrefix(resultReq.URL.String(), "http://localhost:9000") {
 			t.Errorf("Expected URL to start with http://localhost:9000, got %s", resultReq.URL.String())
 		}
 	}
-	
+
 	// Clean up
 	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
 	os.Setenv("CRIBL_BEARER_TOKEN", "")
@@ -1386,35 +1386,35 @@ func TestOnPremAllowedEndpoints(t *testing.T) {
 
 func TestOnPremWithProviderConfig(t *testing.T) {
 	// Test that on-prem configuration works when server_url is provided via provider config
-	
+
 	// Set environment variables
 	os.Setenv("CRIBL_BEARER_TOKEN", "provider-provided-token")
-	
+
 	// Simulate provider configuration that provides on-prem server URL
 	// The provider config's server_url gets passed as baseURL to SDKInit
 	hook := NewCriblTerraformHook()
 	hook.SDKInit("http://localhost:9000", &MockHTTPClient{})
-	
+
 	// Create test request context
 	myCtx := BeforeRequestContext{
 		HookContext: HookContext{
 			Context: context.Background(),
 		},
 	}
-	
+
 	req, _ := http.NewRequest("GET", "/api/v1/sources", nil)
 	resultReq, err := hook.BeforeRequest(myCtx, req)
-	
+
 	if err != nil {
 		t.Fatalf("BeforeRequest failed: %v", err)
 	}
-	
+
 	// Verify token was set
 	expectedAuth := "Bearer provider-provided-token"
 	if resultReq.Header.Get("Authorization") != expectedAuth {
 		t.Errorf("Expected Authorization %q, got %q", expectedAuth, resultReq.Header.Get("Authorization"))
 	}
-	
+
 	// Clean up
 	os.Setenv("CRIBL_BEARER_TOKEN", "")
 }
