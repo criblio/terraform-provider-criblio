@@ -35,7 +35,7 @@ The Cribl provider supports multiple authentication methods and deployment types
 ### Deployment Types
 
 1. **Cribl.Cloud** - Managed cloud deployment (default)
-2. **On-Prem/Customer-Managed** - Self-hosted deployments
+2. **On-Prem** - Self-hosted deployments
 
 ### Precedence Order
 
@@ -157,9 +157,9 @@ provider "criblio" {
 }
 ```
 
-### 3. On-Prem Deployments (Customer-Managed)
+### 3. On-Prem Deployments
 
-The provider supports customer-managed (on-prem) deployments through **environment variables** or **credentials file only**. Configure on-prem using one of these methods:
+The provider supports on-prem deployments through **environment variables** or **credentials file only**. Configure on-prem using one of these methods:
 
 **Note:** On-prem deployments only support workspace resources (sources, destinations, routes, pipelines, packs, etc.) and do not support Search, Lake, Lakehouse, or workspace management features.
 
