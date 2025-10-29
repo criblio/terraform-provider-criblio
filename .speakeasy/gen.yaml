@@ -24,7 +24,7 @@ generation:
   schemas:
     allOfMergeStrategy: shallowMerge
 terraform:
-  version: 1.18.8
+  version: 1.18.10
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
