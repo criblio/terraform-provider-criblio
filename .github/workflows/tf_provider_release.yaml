@@ -30,8 +30,6 @@ jobs:
         with:
           go-version-file: 'go.mod'
           cache: true
-      - name: SHORT CIRCUT
-        run: exit 1
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:

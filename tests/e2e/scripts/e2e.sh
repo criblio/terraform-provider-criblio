@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ ! `echo "$PWD"| rev | cut -d '/' -f 1 | rev` == terraform-provider-criblio ]]; then
+if [[ ! $(echo "$PWD" | rev | cut -d '/' -f 1 | rev) == terraform-provider-criblio ]]; then
     echo "Script must be run from project root directory"
     return 1
 fi
@@ -9,46 +9,46 @@ cd tests/e2e
 
 exitCode=0
 
-for i in {0..2}; do 
+for i in {0..2}; do
     echo "RUNNING TERRAFORM ATTEMPT $i"
     echo "-----------------------------"
 
     #remove stale terraform files
     echo -n "Removing stale Terraform files..."
-    rm -rf .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup .terraform 
-    echo " Done!" 
+    rm -rf .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup .terraform
+    echo " Done!"
 
     #the remote mirror won't have our custom version, so this will always fail, hence || true
     terraform providers mirror ./local-plugins || true
     terraform init -plugin-dir ./local-plugins
 
-    terraform apply -auto-approve 
-    tfApply=$? 
+    terraform apply -auto-approve
+    tfApply=$?
 
     #remove our state files to test if we can import everything into a fresh state
-    rm -rf .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup .terraform 
+    rm -rf .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup .terraform
     terraform providers mirror ./local-plugins || true
     terraform init -plugin-dir ./local-plugins
 
-    #because imports leverage the data sources to read in state files, 
+    #because imports leverage the data sources to read in state files,
     #this will exersize both import and data functionality
-    ./scripts/import.sh 
+    ./scripts/import.sh
 
     #make sure we didn't break something
     terraform refresh
     tfRefresh=$?
 
-    terraform destroy -auto-approve 
-    tfDestroy=$? 
-    if [[ $tfApply -ne 0 ]] || [[ $tfRefresh -ne 0 ]] || [[ $tfDestroy -ne 0  ]]; then 
-	echo echo "***FAILURE IN TERRAFORM OPS***" 
-	echo 
-	echo "Exit Codes -> Apply: $tfApply, Refresh: $tfRefresh, Destroy: $tfDestroy"
-	echo 
-	exitCode=1
+    terraform destroy -auto-approve
+    tfDestroy=$?
+    if [[ $tfApply -ne 0 ]] || [[ $tfRefresh -ne 0 ]] || [[ $tfDestroy -ne 0 ]]; then
+        echo echo "***FAILURE IN TERRAFORM OPS***"
+        echo
+        echo "Exit Codes -> Apply: $tfApply, Refresh: $tfRefresh, Destroy: $tfDestroy"
+        echo
+        exitCode=1
     else
-	exitCode=0
-	break
+        exitCode=0
+        break
     fi
 done
 
