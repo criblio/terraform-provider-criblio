@@ -5,8 +5,8 @@ management:
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.18.10
-  configChecksum: dc45ad238d3c845d3a9014901487cfe3
+  releaseVersion: 1.18.18
+  configChecksum: e1369639b708bb7a0dd652cc4c1e5556
   published: true
 features:
   terraform:
@@ -324,7 +324,6 @@ generatedFiles:
   - internal/provider/packpipeline_resource_sdk.go
   - internal/provider/packroutes_data_source.go
   - internal/provider/packroutes_data_source_sdk.go
-  - internal/provider/packroutes_resource.go
   - internal/provider/packroutes_resource_sdk.go
   - internal/provider/packsource_data_source.go
   - internal/provider/packsource_data_source_sdk.go
@@ -371,7 +370,6 @@ generatedFiles:
   - internal/provider/regex_resource_sdk.go
   - internal/provider/routes_data_source.go
   - internal/provider/routes_data_source_sdk.go
-  - internal/provider/routes_resource.go
   - internal/provider/routes_resource_sdk.go
   - internal/provider/schema_data_source.go
   - internal/provider/schema_data_source_sdk.go
