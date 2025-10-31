@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: abaeeb5086c25619dc896cffd96977a8
+  docChecksum: daccff4bd3bf45ee37a9000895daca3d
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.18.18
-  configChecksum: e1369639b708bb7a0dd652cc4c1e5556
+  releaseVersion: 1.18.21
+  configChecksum: cb6af13a707b3143fa762ab3ed5e3eab
   published: true
 features:
   terraform:
@@ -304,7 +304,6 @@ generatedFiles:
   - internal/provider/notificationtargets_data_source_sdk.go
   - internal/provider/pack_data_source.go
   - internal/provider/pack_data_source_sdk.go
-  - internal/provider/pack_resource.go
   - internal/provider/pack_resource_sdk.go
   - internal/provider/packbreakers_data_source.go
   - internal/provider/packbreakers_data_source_sdk.go
@@ -6885,7 +6884,7 @@ examples:
         path:
           groupId: "Cribl"
         query:
-          filename: "observability-pack-1.2.3.tgz"
+          filename: "observability-pack-1.2.3.crbl"
           disabled: false
       requestBody:
         application/json: {"allowCustomFunctions": false, "author": "Cribl", "description": "Parsers and routes for Apache logs", "displayName": "Apache Logs Pack", "exports": ["pipelines/parse_apache", "routes/apache_to_clickhouse"], "force": false, "id": "pack-apache-logs", "isDisabled": false, "inputs": 2, "minLogStreamVersion": "4.10.0", "outputs": 1, "source": "https://github.com/org/packs/apache", "spec": "1.0.0", "tags": {"dataType": ["logs"], "domain": ["web"], "streamtags": ["env:prod"], "technology": ["apache"]}, "version": "2.3.1"}

@@ -1,6 +1,8 @@
 package tests
 
 import (
+	"fmt"
+	"path/filepath"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
@@ -21,7 +23,14 @@ func TestPackFromFile(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "description", "Pack from file"),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "display_name", "Pack from file"),
-						resource.TestCheckResourceAttr("criblio_pack.my_pack", "filename", "cribl-palo-alto-networks-source-1.0.0.crbl"),
+						resource.TestCheckResourceAttrWith("criblio_pack.my_pack", "filename", func(value string) error {
+							baseName := filepath.Base(value)
+							expectedName := "cribl-palo-alto-networks-source-1.0.0.crbl"
+							if baseName != expectedName {
+								return fmt.Errorf("expected filename base name %q, got %q (full path: %q)", expectedName, baseName, value)
+							}
+							return nil
+						}),
 						resource.TestCheckResourceAttr("criblio_pack.my_pack", "version", "1.0.0"),
 					),
 				},

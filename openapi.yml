@@ -74607,8 +74607,8 @@ paths:
           required: false
           schema:
             type: string
-          description: the file to upload
-          example: "observability-pack-1.2.3.tgz"
+          description: the file to upload, if this option is used, the description and display_name will be ignored and the pack file's metadata will be used
+          example: "observability-pack-1.2.3.crbl"
         - name: disabled
           in: query
           required: false
