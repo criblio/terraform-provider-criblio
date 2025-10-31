@@ -8,7 +8,7 @@ resource "criblio_pack" "my_pack" {
     "pipelines/parse_apache",
     "routes/apache_to_clickhouse",
   ]
-  filename               = "observability-pack-1.2.3.tgz"
+  filename               = "observability-pack-1.2.3.crbl"
   force                  = false
   group_id               = "Cribl"
   id                     = "pack-apache-logs"
