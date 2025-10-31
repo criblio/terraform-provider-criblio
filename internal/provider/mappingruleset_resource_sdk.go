@@ -11,6 +11,54 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *MappingRulesetResourceModel) RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx context.Context, resp *operations.GetAdminProductsMappingsByProductAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.MappingRuleset{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.MappingRuleset
+
+			items.ID = types.StringValue(itemsItem.ID)
+			if itemsItem.Conf == nil {
+				items.Conf = nil
+			} else {
+				items.Conf = &tfTypes.MappingRulesetConf{}
+				items.Conf.Functions = []tfTypes.MappingRulesetFunctionConf{}
+
+				for _, functionsItem := range itemsItem.Conf.Functions {
+					var functions tfTypes.MappingRulesetFunctionConf
+
+					functions.Filter = types.StringPointerValue(functionsItem.Filter)
+					functions.ID = types.StringValue(functionsItem.ID)
+					functions.Description = types.StringPointerValue(functionsItem.Description)
+					functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
+					functions.Final = types.BoolPointerValue(functionsItem.Final)
+					functions.Conf.Add = []tfTypes.Add{}
+
+					for _, addItem := range functionsItem.Conf.Add {
+						var add tfTypes.Add
+
+						add.Name = types.StringValue(addItem.Name)
+						add.Value = types.StringValue(addItem.Value)
+
+						functions.Conf.Add = append(functions.Conf.Add, add)
+					}
+					functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
+
+					items.Conf.Functions = append(items.Conf.Functions, functions)
+				}
+			}
+			items.Active = types.BoolPointerValue(itemsItem.Active)
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *MappingRulesetResourceModel) RefreshFromSharedMappingRuleset(ctx context.Context, resp *shared.MappingRuleset) diag.Diagnostics {
 	var diags diag.Diagnostics
 

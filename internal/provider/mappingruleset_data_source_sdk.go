@@ -6,45 +6,54 @@ import (
 	"context"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *MappingRulesetDataSourceModel) RefreshFromSharedMappingRuleset(ctx context.Context, resp *shared.MappingRuleset) diag.Diagnostics {
+func (r *MappingRulesetDataSourceModel) RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx context.Context, resp *operations.GetAdminProductsMappingsByProductAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.Active = types.BoolPointerValue(resp.Active)
-	if resp.Conf == nil {
-		r.Conf = nil
-	} else {
-		r.Conf = &tfTypes.MappingRulesetConf{}
-		r.Conf.Functions = []tfTypes.MappingRulesetFunctionConf{}
+	if resp != nil {
+		r.Items = []tfTypes.MappingRuleset{}
 
-		for _, functionsItem := range resp.Conf.Functions {
-			var functions tfTypes.MappingRulesetFunctionConf
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.MappingRuleset
 
-			functions.Conf.Add = []tfTypes.Add{}
+			items.Active = types.BoolPointerValue(itemsItem.Active)
+			if itemsItem.Conf == nil {
+				items.Conf = nil
+			} else {
+				items.Conf = &tfTypes.MappingRulesetConf{}
+				items.Conf.Functions = []tfTypes.MappingRulesetFunctionConf{}
 
-			for _, addItem := range functionsItem.Conf.Add {
-				var add tfTypes.Add
+				for _, functionsItem := range itemsItem.Conf.Functions {
+					var functions tfTypes.MappingRulesetFunctionConf
 
-				add.Name = types.StringValue(addItem.Name)
-				add.Value = types.StringValue(addItem.Value)
+					functions.Conf.Add = []tfTypes.Add{}
 
-				functions.Conf.Add = append(functions.Conf.Add, add)
+					for _, addItem := range functionsItem.Conf.Add {
+						var add tfTypes.Add
+
+						add.Name = types.StringValue(addItem.Name)
+						add.Value = types.StringValue(addItem.Value)
+
+						functions.Conf.Add = append(functions.Conf.Add, add)
+					}
+					functions.Description = types.StringPointerValue(functionsItem.Description)
+					functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
+					functions.Filter = types.StringPointerValue(functionsItem.Filter)
+					functions.Final = types.BoolPointerValue(functionsItem.Final)
+					functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
+					functions.ID = types.StringValue(functionsItem.ID)
+
+					items.Conf.Functions = append(items.Conf.Functions, functions)
+				}
 			}
-			functions.Description = types.StringPointerValue(functionsItem.Description)
-			functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
-			functions.Filter = types.StringPointerValue(functionsItem.Filter)
-			functions.Final = types.BoolPointerValue(functionsItem.Final)
-			functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-			functions.ID = types.StringValue(functionsItem.ID)
+			items.ID = types.StringValue(itemsItem.ID)
 
-			r.Conf.Functions = append(r.Conf.Functions, functions)
+			r.Items = append(r.Items, items)
 		}
 	}
-	r.ID = types.StringValue(resp.ID)
 
 	return diags
 }

@@ -31,10 +31,9 @@ type MappingRulesetDataSource struct {
 
 // MappingRulesetDataSourceModel describes the data model.
 type MappingRulesetDataSourceModel struct {
-	Active  types.Bool                  `tfsdk:"active"`
-	Conf    *tfTypes.MappingRulesetConf `tfsdk:"conf"`
-	ID      types.String                `tfsdk:"id"`
-	Product types.String                `tfsdk:"product"`
+	ID      types.String             `tfsdk:"id"`
+	Items   []tfTypes.MappingRuleset `tfsdk:"items"`
+	Product types.String             `tfsdk:"product"`
 }
 
 // Metadata returns the data source type name.
@@ -48,70 +47,80 @@ func (r *MappingRulesetDataSource) Schema(ctx context.Context, req datasource.Sc
 		MarkdownDescription: "MappingRuleset DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"active": schema.BoolAttribute{
-				Computed: true,
-			},
-			"conf": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"functions": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"conf": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"add": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed:    true,
-														Description: `Name of the field to add`,
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Description: `Value to assign to the field`,
-													},
-												},
-											},
-											Description: `List of fields to add to the event`,
-										},
-									},
-								},
-								"description": schema.StringAttribute{
-									Computed:    true,
-									Description: `Simple description of this step`,
-								},
-								"disabled": schema.BoolAttribute{
-									Computed:    true,
-									Description: `If true, data will not be pushed through this function`,
-								},
-								"filter": schema.StringAttribute{
-									Computed:    true,
-									Description: `Filter that selects data to be fed through this Function`,
-								},
-								"final": schema.BoolAttribute{
-									Computed:    true,
-									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
-								},
-								"group_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Group ID`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Function ID`,
-								},
-							},
-						},
-						Description: `List of functions to pass data through`,
-					},
-				},
-			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `The id of the mapping ruleset to get`,
+			},
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"active": schema.BoolAttribute{
+							Computed: true,
+						},
+						"conf": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"functions": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"conf": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"add": schema.ListNestedAttribute{
+														Computed: true,
+														NestedObject: schema.NestedAttributeObject{
+															Attributes: map[string]schema.Attribute{
+																"name": schema.StringAttribute{
+																	Computed:    true,
+																	Description: `Name of the field to add`,
+																},
+																"value": schema.StringAttribute{
+																	Computed:    true,
+																	Description: `Value to assign to the field`,
+																},
+															},
+														},
+														Description: `List of fields to add to the event`,
+													},
+												},
+											},
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Simple description of this step`,
+											},
+											"disabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `If true, data will not be pushed through this function`,
+											},
+											"filter": schema.StringAttribute{
+												Computed:    true,
+												Description: `Filter that selects data to be fed through this Function`,
+											},
+											"final": schema.BoolAttribute{
+												Computed:    true,
+												Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
+											},
+											"group_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Group ID`,
+											},
+											"id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Function ID`,
+											},
+										},
+									},
+									Description: `List of functions to pass data through`,
+								},
+							},
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
 			},
 			"product": schema.StringAttribute{
 				Required:    true,
@@ -187,11 +196,11 @@ func (r *MappingRulesetDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedMappingRuleset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

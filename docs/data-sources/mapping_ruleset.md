@@ -29,22 +29,30 @@ data "criblio_mapping_ruleset" "my_mappingruleset" {
 
 ### Read-Only
 
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
 - `active` (Boolean)
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--conf))
+- `id` (String)
 
-<a id="nestedatt--conf"></a>
-### Nested Schema for `conf`
-
-Read-Only:
-
-- `functions` (Attributes List) List of functions to pass data through (see [below for nested schema](#nestedatt--conf--functions))
-
-<a id="nestedatt--conf--functions"></a>
-### Nested Schema for `conf.functions`
+<a id="nestedatt--items--conf"></a>
+### Nested Schema for `items.conf`
 
 Read-Only:
 
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--conf--functions--conf))
+- `functions` (Attributes List) List of functions to pass data through (see [below for nested schema](#nestedatt--items--conf--functions))
+
+<a id="nestedatt--items--conf--functions"></a>
+### Nested Schema for `items.conf.functions`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--conf--functions--conf))
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function
@@ -52,15 +60,15 @@ Read-Only:
 - `group_id` (String) Group ID
 - `id` (String) Function ID
 
-<a id="nestedatt--conf--functions--conf"></a>
-### Nested Schema for `conf.functions.conf`
+<a id="nestedatt--items--conf--functions--conf"></a>
+### Nested Schema for `items.conf.functions.conf`
 
 Read-Only:
 
-- `add` (Attributes List) List of fields to add to the event (see [below for nested schema](#nestedatt--conf--functions--conf--add))
+- `add` (Attributes List) List of fields to add to the event (see [below for nested schema](#nestedatt--items--conf--functions--conf--add))
 
-<a id="nestedatt--conf--functions--conf--add"></a>
-### Nested Schema for `conf.functions.conf.add`
+<a id="nestedatt--items--conf--functions--conf--add"></a>
+### Nested Schema for `items.conf.functions.conf.add`
 
 Read-Only:
 

@@ -41,6 +41,7 @@ type MappingRulesetResourceModel struct {
 	Active  types.Bool                  `tfsdk:"active"`
 	Conf    *tfTypes.MappingRulesetConf `tfsdk:"conf"`
 	ID      types.String                `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
+	Items   []tfTypes.MappingRuleset    `tfsdk:"items"`
 	Product types.String                `tfsdk:"product"`
 }
 
@@ -150,6 +151,78 @@ func (r *MappingRulesetResource) Schema(ctx context.Context, req resource.Schema
 				Required:    true,
 				Description: `The id of the mapping ruleset to get`,
 			},
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"active": schema.BoolAttribute{
+							Computed: true,
+						},
+						"conf": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"functions": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"conf": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"add": schema.ListNestedAttribute{
+														Computed: true,
+														NestedObject: schema.NestedAttributeObject{
+															Attributes: map[string]schema.Attribute{
+																"name": schema.StringAttribute{
+																	Computed:    true,
+																	Description: `Name of the field to add`,
+																},
+																"value": schema.StringAttribute{
+																	Computed:    true,
+																	Description: `Value to assign to the field`,
+																},
+															},
+														},
+														Description: `List of fields to add to the event`,
+													},
+												},
+											},
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Simple description of this step`,
+											},
+											"disabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `If true, data will not be pushed through this function`,
+											},
+											"filter": schema.StringAttribute{
+												Computed:    true,
+												Default:     stringdefault.StaticString(`true`),
+												Description: `Filter that selects data to be fed through this Function. Default: "true"`,
+											},
+											"final": schema.BoolAttribute{
+												Computed:    true,
+												Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
+											},
+											"group_id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Group ID`,
+											},
+											"id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Function ID`,
+											},
+										},
+									},
+									Description: `List of functions to pass data through`,
+								},
+							},
+						},
+						"id": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+			},
 			"product": schema.StringAttribute{
 				Required:    true,
 				Description: `Name of the Cribl product to create the mappings for. must be one of ["stream", "edge"]`,
@@ -239,6 +312,43 @@ func (r *MappingRulesetResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1, request1Diags := data.ToOperationsGetAdminProductsMappingsByProductAndIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.GetAdminProductsMappingsByProductAndID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -288,11 +398,11 @@ func (r *MappingRulesetResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedMappingRuleset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -343,6 +453,43 @@ func (r *MappingRulesetResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedMappingRuleset(ctx, &res.Object.Items[0])...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetAdminProductsMappingsByProductAndIDRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.GetAdminProductsMappingsByProductAndID(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
