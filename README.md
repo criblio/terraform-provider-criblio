@@ -1,4 +1,4 @@
-![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/e2e_checks.yaml/badge.svg) ![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/determinism.yaml/badge.svg) ![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/tf_provider_release.yaml/badge.svg)
+![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/determinism.yaml/badge.svg) ![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/tf_provider_release.yaml/badge.svg)
 
 
 # terraform-provider-criblio
