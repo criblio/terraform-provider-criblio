@@ -1,2 +1,3 @@
 internal/provider/routes_resource.go
 internal/provider/packroutes_resource.go
+internal/provider/pack_resource.go

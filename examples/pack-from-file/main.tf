@@ -4,7 +4,7 @@ resource "criblio_pack" "my_pack" {
   description  = "Pack from file"
   disabled     = true
   display_name = "Pack from file"
-  filename     = "cribl-palo-alto-networks-source-1.0.0.crbl"
+  filename     = "${abspath(path.module)}/cribl-palo-alto-networks-source-1.0.0.crbl"
   version      = "1.0.0"
 
 }
