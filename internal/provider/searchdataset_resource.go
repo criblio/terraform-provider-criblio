@@ -5279,11 +5279,11 @@ func (r *SearchDatasetResource) Create(ctx context.Context, req resource.CreateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGenericDataset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateDatasetResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -5430,11 +5430,11 @@ func (r *SearchDatasetResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGenericDataset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateDatasetByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

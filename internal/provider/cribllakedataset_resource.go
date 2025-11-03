@@ -207,11 +207,11 @@ func (r *CriblLakeDatasetResource) Create(ctx context.Context, req resource.Crea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCriblLakeDataset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateCriblLakeDatasetByLakeIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -271,11 +271,11 @@ func (r *CriblLakeDatasetResource) Read(ctx context.Context, req resource.ReadRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCriblLakeDataset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -321,11 +321,11 @@ func (r *CriblLakeDatasetResource) Update(ctx context.Context, req resource.Upda
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCriblLakeDataset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateCriblLakeDatasetByLakeIDAndIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -3,17 +3,17 @@ id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
   docChecksum: daccff4bd3bf45ee37a9000895daca3d
   docVersion: 4.14.0
-  speakeasyVersion: 1.636.3
-  generationVersion: 2.723.11
+  speakeasyVersion: 1.645.1
+  generationVersion: 2.735.1
   releaseVersion: 1.18.21
-  configChecksum: cb6af13a707b3143fa762ab3ed5e3eab
+  configChecksum: 94b20cc7ddfbec277d19cd65e6f0da37
   published: true
 features:
   terraform:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
     constsAndDefaults: 0.3.0
-    core: 3.45.3
+    core: 3.46.5
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.82.1
@@ -27,7 +27,7 @@ features:
     oauth2ClientCredentials: 0.3.0
     retries: 2.81.4
     serverIDs: 2.81.1
-    unions: 2.81.18
+    unions: 2.82.2
 generatedFiles:
   - .gitattributes
   - USAGE.md

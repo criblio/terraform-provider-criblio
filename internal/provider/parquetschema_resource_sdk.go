@@ -11,6 +11,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *ParquetSchemaResourceModel) RefreshFromOperationsCreateSchemaResponseBody(ctx context.Context, resp *operations.CreateSchemaResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.SchemaLibEntry{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.SchemaLibEntry
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Schema = types.StringValue(itemsItem.Schema)
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *ParquetSchemaResourceModel) RefreshFromOperationsGetSchemaByIDResponseBody(ctx context.Context, resp *operations.GetSchemaByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -20,8 +40,28 @@ func (r *ParquetSchemaResourceModel) RefreshFromOperationsGetSchemaByIDResponseB
 		for _, itemsItem := range resp.Items {
 			var items tfTypes.SchemaLibEntry
 
-			items.ID = types.StringValue(itemsItem.ID)
 			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Schema = types.StringValue(itemsItem.Schema)
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
+func (r *ParquetSchemaResourceModel) RefreshFromOperationsUpdateSchemaByIDResponseBody(ctx context.Context, resp *operations.UpdateSchemaByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.SchemaLibEntry{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.SchemaLibEntry
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.ID = types.StringValue(itemsItem.ID)
 			items.Schema = types.StringValue(itemsItem.Schema)
 
 			r.Items = append(r.Items, items)

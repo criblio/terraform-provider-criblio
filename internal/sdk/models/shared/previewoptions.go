@@ -42,17 +42,43 @@ func CreatePreviewOptionsEarliestNumber(number float64) PreviewOptionsEarliest {
 
 func (u *PreviewOptionsEarliest) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = PreviewOptionsEarliestTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PreviewOptionsEarliestTypeStr,
+			Value: &str,
+		})
 	}
 
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = PreviewOptionsEarliestTypeNumber
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PreviewOptionsEarliestTypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for PreviewOptionsEarliest", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for PreviewOptionsEarliest", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(PreviewOptionsEarliestType)
+	switch best.Type {
+	case PreviewOptionsEarliestTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case PreviewOptionsEarliestTypeNumber:
+		u.Number = best.Value.(*float64)
 		return nil
 	}
 
@@ -105,17 +131,43 @@ func CreatePreviewOptionsLatestNumber(number float64) PreviewOptionsLatest {
 
 func (u *PreviewOptionsLatest) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = PreviewOptionsLatestTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PreviewOptionsLatestTypeStr,
+			Value: &str,
+		})
 	}
 
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = PreviewOptionsLatestTypeNumber
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PreviewOptionsLatestTypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for PreviewOptionsLatest", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for PreviewOptionsLatest", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(PreviewOptionsLatestType)
+	switch best.Type {
+	case PreviewOptionsLatestTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case PreviewOptionsLatestTypeNumber:
+		u.Number = best.Value.(*float64)
 		return nil
 	}
 

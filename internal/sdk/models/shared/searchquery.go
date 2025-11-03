@@ -96,17 +96,43 @@ func CreateSearchQueryEarliestNumber(number float64) SearchQueryEarliest {
 
 func (u *SearchQueryEarliest) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = SearchQueryEarliestTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryEarliestTypeStr,
+			Value: &str,
+		})
 	}
 
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = SearchQueryEarliestTypeNumber
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryEarliestTypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(SearchQueryEarliestType)
+	switch best.Type {
+	case SearchQueryEarliestTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case SearchQueryEarliestTypeNumber:
+		u.Number = best.Value.(*float64)
 		return nil
 	}
 
@@ -159,17 +185,43 @@ func CreateSearchQueryLatestNumber(number float64) SearchQueryLatest {
 
 func (u *SearchQueryLatest) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = SearchQueryLatestTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryLatestTypeStr,
+			Value: &str,
+		})
 	}
 
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = SearchQueryLatestTypeNumber
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryLatestTypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(SearchQueryLatestType)
+	switch best.Type {
+	case SearchQueryLatestTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case SearchQueryLatestTypeNumber:
+		u.Number = best.Value.(*float64)
 		return nil
 	}
 
@@ -395,24 +447,54 @@ func CreateSearchQuerySearchQueryValues(searchQueryValues SearchQueryValues) Sea
 
 func (u *SearchQuery) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var searchQueryInline SearchQueryInline = SearchQueryInline{}
 	if err := utils.UnmarshalJSON(data, &searchQueryInline, "", true, nil); err == nil {
-		u.SearchQueryInline = &searchQueryInline
-		u.Type = SearchQueryTypeSearchQueryInline
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryTypeSearchQueryInline,
+			Value: &searchQueryInline,
+		})
 	}
 
 	var searchQuerySaved SearchQuerySaved = SearchQuerySaved{}
 	if err := utils.UnmarshalJSON(data, &searchQuerySaved, "", true, nil); err == nil {
-		u.SearchQuerySaved = &searchQuerySaved
-		u.Type = SearchQueryTypeSearchQuerySaved
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryTypeSearchQuerySaved,
+			Value: &searchQuerySaved,
+		})
 	}
 
 	var searchQueryValues SearchQueryValues = SearchQueryValues{}
 	if err := utils.UnmarshalJSON(data, &searchQueryValues, "", true, nil); err == nil {
-		u.SearchQueryValues = &searchQueryValues
-		u.Type = SearchQueryTypeSearchQueryValues
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryTypeSearchQueryValues,
+			Value: &searchQueryValues,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQuery", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQuery", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(SearchQueryType)
+	switch best.Type {
+	case SearchQueryTypeSearchQueryInline:
+		u.SearchQueryInline = best.Value.(*SearchQueryInline)
+		return nil
+	case SearchQueryTypeSearchQuerySaved:
+		u.SearchQuerySaved = best.Value.(*SearchQuerySaved)
+		return nil
+	case SearchQueryTypeSearchQueryValues:
+		u.SearchQueryValues = best.Value.(*SearchQueryValues)
 		return nil
 	}
 

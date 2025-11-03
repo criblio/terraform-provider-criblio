@@ -17,12 +17,12 @@ generation:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
     hoistGlobalSecurity: true
+  schemas:
+    allOfMergeStrategy: shallowMerge
   tests:
     generateTests: true
     generateNewTests: false
     skipResponseBodyAssertions: false
-  schemas:
-    allOfMergeStrategy: shallowMerge
 terraform:
   version: 1.18.21
   additionalDataSources: []
@@ -48,4 +48,6 @@ terraform:
       providerAttribute: workspace_id
     - env: CRIBL_CLOUD_DOMAIN
       providerAttribute: cloud_domain
+  includeEmptyObjects: false
   packageName: criblio
+  unionDeserializationStrategy: populated-fields

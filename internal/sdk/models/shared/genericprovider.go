@@ -1873,157 +1873,263 @@ func CreateGenericProviderGcsProvider(gcsProvider GcsProvider) GenericProvider {
 
 func (u *GenericProvider) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var apiAzureDataExplorerProvider APIAzureDataExplorerProvider = APIAzureDataExplorerProvider{}
 	if err := utils.UnmarshalJSON(data, &apiAzureDataExplorerProvider, "", true, nil); err == nil {
-		u.APIAzureDataExplorerProvider = &apiAzureDataExplorerProvider
-		u.Type = GenericProviderTypeAPIAzureDataExplorerProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIAzureDataExplorerProvider,
+			Value: &apiAzureDataExplorerProvider,
+		})
 	}
 
 	var snowflakeProvider SnowflakeProvider = SnowflakeProvider{}
 	if err := utils.UnmarshalJSON(data, &snowflakeProvider, "", true, nil); err == nil {
-		u.SnowflakeProvider = &snowflakeProvider
-		u.Type = GenericProviderTypeSnowflakeProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeSnowflakeProvider,
+			Value: &snowflakeProvider,
+		})
 	}
 
 	var apiOpenSearchProvider APIOpenSearchProvider = APIOpenSearchProvider{}
 	if err := utils.UnmarshalJSON(data, &apiOpenSearchProvider, "", true, nil); err == nil {
-		u.APIOpenSearchProvider = &apiOpenSearchProvider
-		u.Type = GenericProviderTypeAPIOpenSearchProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIOpenSearchProvider,
+			Value: &apiOpenSearchProvider,
+		})
 	}
 
 	var apiElasticSearchProvider APIElasticSearchProvider = APIElasticSearchProvider{}
 	if err := utils.UnmarshalJSON(data, &apiElasticSearchProvider, "", true, nil); err == nil {
-		u.APIElasticSearchProvider = &apiElasticSearchProvider
-		u.Type = GenericProviderTypeAPIElasticSearchProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIElasticSearchProvider,
+			Value: &apiElasticSearchProvider,
+		})
 	}
 
 	var clickHouseProvider ClickHouseProvider = ClickHouseProvider{}
 	if err := utils.UnmarshalJSON(data, &clickHouseProvider, "", true, nil); err == nil {
-		u.ClickHouseProvider = &clickHouseProvider
-		u.Type = GenericProviderTypeClickHouseProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeClickHouseProvider,
+			Value: &clickHouseProvider,
+		})
 	}
 
 	var apiHTTPProvider APIHTTPProvider = APIHTTPProvider{}
 	if err := utils.UnmarshalJSON(data, &apiHTTPProvider, "", true, nil); err == nil {
-		u.APIHTTPProvider = &apiHTTPProvider
-		u.Type = GenericProviderTypeAPIHTTPProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIHTTPProvider,
+			Value: &apiHTTPProvider,
+		})
 	}
 
 	var apiAwsProvider APIAwsProvider = APIAwsProvider{}
 	if err := utils.UnmarshalJSON(data, &apiAwsProvider, "", true, nil); err == nil {
-		u.APIAwsProvider = &apiAwsProvider
-		u.Type = GenericProviderTypeAPIAwsProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIAwsProvider,
+			Value: &apiAwsProvider,
+		})
 	}
 
 	var apiAzureProvider APIAzureProvider = APIAzureProvider{}
 	if err := utils.UnmarshalJSON(data, &apiAzureProvider, "", true, nil); err == nil {
-		u.APIAzureProvider = &apiAzureProvider
-		u.Type = GenericProviderTypeAPIAzureProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIAzureProvider,
+			Value: &apiAzureProvider,
+		})
 	}
 
 	var apiGcpProvider APIGcpProvider = APIGcpProvider{}
 	if err := utils.UnmarshalJSON(data, &apiGcpProvider, "", true, nil); err == nil {
-		u.APIGcpProvider = &apiGcpProvider
-		u.Type = GenericProviderTypeAPIGcpProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIGcpProvider,
+			Value: &apiGcpProvider,
+		})
 	}
 
 	var apiGoogleWorkspaceProvider APIGoogleWorkspaceProvider = APIGoogleWorkspaceProvider{}
 	if err := utils.UnmarshalJSON(data, &apiGoogleWorkspaceProvider, "", true, nil); err == nil {
-		u.APIGoogleWorkspaceProvider = &apiGoogleWorkspaceProvider
-		u.Type = GenericProviderTypeAPIGoogleWorkspaceProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIGoogleWorkspaceProvider,
+			Value: &apiGoogleWorkspaceProvider,
+		})
 	}
 
 	var apiMsGraphProvider APIMsGraphProvider = APIMsGraphProvider{}
 	if err := utils.UnmarshalJSON(data, &apiMsGraphProvider, "", true, nil); err == nil {
-		u.APIMsGraphProvider = &apiMsGraphProvider
-		u.Type = GenericProviderTypeAPIMsGraphProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIMsGraphProvider,
+			Value: &apiMsGraphProvider,
+		})
 	}
 
 	var apiOktaProvider APIOktaProvider = APIOktaProvider{}
 	if err := utils.UnmarshalJSON(data, &apiOktaProvider, "", true, nil); err == nil {
-		u.APIOktaProvider = &apiOktaProvider
-		u.Type = GenericProviderTypeAPIOktaProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIOktaProvider,
+			Value: &apiOktaProvider,
+		})
 	}
 
 	var apiTailscaleProvider APITailscaleProvider = APITailscaleProvider{}
 	if err := utils.UnmarshalJSON(data, &apiTailscaleProvider, "", true, nil); err == nil {
-		u.APITailscaleProvider = &apiTailscaleProvider
-		u.Type = GenericProviderTypeAPITailscaleProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPITailscaleProvider,
+			Value: &apiTailscaleProvider,
+		})
 	}
 
 	var apiZoomProvider APIZoomProvider = APIZoomProvider{}
 	if err := utils.UnmarshalJSON(data, &apiZoomProvider, "", true, nil); err == nil {
-		u.APIZoomProvider = &apiZoomProvider
-		u.Type = GenericProviderTypeAPIZoomProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAPIZoomProvider,
+			Value: &apiZoomProvider,
+		})
 	}
 
 	var prometheusProvider PrometheusProvider = PrometheusProvider{}
 	if err := utils.UnmarshalJSON(data, &prometheusProvider, "", true, nil); err == nil {
-		u.PrometheusProvider = &prometheusProvider
-		u.Type = GenericProviderTypePrometheusProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypePrometheusProvider,
+			Value: &prometheusProvider,
+		})
 	}
 
 	var s3Provider S3Provider = S3Provider{}
 	if err := utils.UnmarshalJSON(data, &s3Provider, "", true, nil); err == nil {
-		u.S3Provider = &s3Provider
-		u.Type = GenericProviderTypeS3Provider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeS3Provider,
+			Value: &s3Provider,
+		})
 	}
 
 	var azureBlobProvider AzureBlobProvider = AzureBlobProvider{}
 	if err := utils.UnmarshalJSON(data, &azureBlobProvider, "", true, nil); err == nil {
-		u.AzureBlobProvider = &azureBlobProvider
-		u.Type = GenericProviderTypeAzureBlobProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAzureBlobProvider,
+			Value: &azureBlobProvider,
+		})
 	}
 
 	var gcsProvider GcsProvider = GcsProvider{}
 	if err := utils.UnmarshalJSON(data, &gcsProvider, "", true, nil); err == nil {
-		u.GcsProvider = &gcsProvider
-		u.Type = GenericProviderTypeGcsProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeGcsProvider,
+			Value: &gcsProvider,
+		})
 	}
 
 	var awsSecurityLakeProvider AwsSecurityLakeProvider = AwsSecurityLakeProvider{}
 	if err := utils.UnmarshalJSON(data, &awsSecurityLakeProvider, "", true, nil); err == nil {
-		u.AwsSecurityLakeProvider = &awsSecurityLakeProvider
-		u.Type = GenericProviderTypeAwsSecurityLakeProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeAwsSecurityLakeProvider,
+			Value: &awsSecurityLakeProvider,
+		})
 	}
 
 	var criblLeaderProvider CriblLeaderProvider = CriblLeaderProvider{}
 	if err := utils.UnmarshalJSON(data, &criblLeaderProvider, "", true, nil); err == nil {
-		u.CriblLeaderProvider = &criblLeaderProvider
-		u.Type = GenericProviderTypeCriblLeaderProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeCriblLeaderProvider,
+			Value: &criblLeaderProvider,
+		})
 	}
 
 	var metaProvider MetaProvider = MetaProvider{}
 	if err := utils.UnmarshalJSON(data, &metaProvider, "", true, nil); err == nil {
-		u.MetaProvider = &metaProvider
-		u.Type = GenericProviderTypeMetaProvider
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeMetaProvider,
+			Value: &metaProvider,
+		})
 	}
 
 	var edgeProvider EdgeProvider = EdgeProvider{}
 	if err := utils.UnmarshalJSON(data, &edgeProvider, "", true, nil); err == nil {
-		u.EdgeProvider = &edgeProvider
-		u.Type = GenericProviderTypeEdgeProvider
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericProviderTypeEdgeProvider,
+			Value: &edgeProvider,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for GenericProvider", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for GenericProvider", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(GenericProviderType)
+	switch best.Type {
+	case GenericProviderTypeAPIAzureDataExplorerProvider:
+		u.APIAzureDataExplorerProvider = best.Value.(*APIAzureDataExplorerProvider)
+		return nil
+	case GenericProviderTypeSnowflakeProvider:
+		u.SnowflakeProvider = best.Value.(*SnowflakeProvider)
+		return nil
+	case GenericProviderTypeAPIOpenSearchProvider:
+		u.APIOpenSearchProvider = best.Value.(*APIOpenSearchProvider)
+		return nil
+	case GenericProviderTypeAPIElasticSearchProvider:
+		u.APIElasticSearchProvider = best.Value.(*APIElasticSearchProvider)
+		return nil
+	case GenericProviderTypeClickHouseProvider:
+		u.ClickHouseProvider = best.Value.(*ClickHouseProvider)
+		return nil
+	case GenericProviderTypeAPIHTTPProvider:
+		u.APIHTTPProvider = best.Value.(*APIHTTPProvider)
+		return nil
+	case GenericProviderTypeAPIAwsProvider:
+		u.APIAwsProvider = best.Value.(*APIAwsProvider)
+		return nil
+	case GenericProviderTypeAPIAzureProvider:
+		u.APIAzureProvider = best.Value.(*APIAzureProvider)
+		return nil
+	case GenericProviderTypeAPIGcpProvider:
+		u.APIGcpProvider = best.Value.(*APIGcpProvider)
+		return nil
+	case GenericProviderTypeAPIGoogleWorkspaceProvider:
+		u.APIGoogleWorkspaceProvider = best.Value.(*APIGoogleWorkspaceProvider)
+		return nil
+	case GenericProviderTypeAPIMsGraphProvider:
+		u.APIMsGraphProvider = best.Value.(*APIMsGraphProvider)
+		return nil
+	case GenericProviderTypeAPIOktaProvider:
+		u.APIOktaProvider = best.Value.(*APIOktaProvider)
+		return nil
+	case GenericProviderTypeAPITailscaleProvider:
+		u.APITailscaleProvider = best.Value.(*APITailscaleProvider)
+		return nil
+	case GenericProviderTypeAPIZoomProvider:
+		u.APIZoomProvider = best.Value.(*APIZoomProvider)
+		return nil
+	case GenericProviderTypePrometheusProvider:
+		u.PrometheusProvider = best.Value.(*PrometheusProvider)
+		return nil
+	case GenericProviderTypeS3Provider:
+		u.S3Provider = best.Value.(*S3Provider)
+		return nil
+	case GenericProviderTypeAzureBlobProvider:
+		u.AzureBlobProvider = best.Value.(*AzureBlobProvider)
+		return nil
+	case GenericProviderTypeGcsProvider:
+		u.GcsProvider = best.Value.(*GcsProvider)
+		return nil
+	case GenericProviderTypeAwsSecurityLakeProvider:
+		u.AwsSecurityLakeProvider = best.Value.(*AwsSecurityLakeProvider)
+		return nil
+	case GenericProviderTypeCriblLeaderProvider:
+		u.CriblLeaderProvider = best.Value.(*CriblLeaderProvider)
+		return nil
+	case GenericProviderTypeMetaProvider:
+		u.MetaProvider = best.Value.(*MetaProvider)
+		return nil
+	case GenericProviderTypeEdgeProvider:
+		u.EdgeProvider = best.Value.(*EdgeProvider)
 		return nil
 	}
 

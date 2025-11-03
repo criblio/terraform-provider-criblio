@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SearchSavedQueryResourceModel) RefreshFromOperationsGetSavedQueryByIDResponseBody(ctx context.Context, resp *operations.GetSavedQueryByIDResponseBody) diag.Diagnostics {
+func (r *SearchSavedQueryResourceModel) RefreshFromOperationsCreateSavedQueryResponseBody(ctx context.Context, resp *operations.CreateSavedQueryResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -20,12 +20,13 @@ func (r *SearchSavedQueryResourceModel) RefreshFromOperationsGetSavedQueryByIDRe
 		for _, itemsItem := range resp.Items {
 			var items tfTypes.SavedQuery
 
-			items.Name = types.StringValue(itemsItem.Name)
-			items.IsPrivate = types.BoolPointerValue(itemsItem.IsPrivate)
-			items.Query = types.StringValue(itemsItem.Query)
-			items.Earliest = types.StringPointerValue(itemsItem.Earliest)
-			items.Latest = types.StringPointerValue(itemsItem.Latest)
 			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.Earliest = types.StringPointerValue(itemsItem.Earliest)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.IsPrivate = types.BoolPointerValue(itemsItem.IsPrivate)
+			items.Latest = types.StringPointerValue(itemsItem.Latest)
+			items.Name = types.StringValue(itemsItem.Name)
+			items.Query = types.StringValue(itemsItem.Query)
 			if itemsItem.Schedule == nil {
 				items.Schedule = nil
 			} else {
@@ -36,7 +37,74 @@ func (r *SearchSavedQueryResourceModel) RefreshFromOperationsGetSavedQueryByIDRe
 				items.Schedule.Notifications.Disabled = types.BoolValue(itemsItem.Schedule.Notifications.Disabled)
 				items.Schedule.Tz = types.StringValue(itemsItem.Schedule.Tz)
 			}
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
+func (r *SearchSavedQueryResourceModel) RefreshFromOperationsGetSavedQueryByIDResponseBody(ctx context.Context, resp *operations.GetSavedQueryByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.SavedQuery{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.SavedQuery
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.Earliest = types.StringPointerValue(itemsItem.Earliest)
 			items.ID = types.StringValue(itemsItem.ID)
+			items.IsPrivate = types.BoolPointerValue(itemsItem.IsPrivate)
+			items.Latest = types.StringPointerValue(itemsItem.Latest)
+			items.Name = types.StringValue(itemsItem.Name)
+			items.Query = types.StringValue(itemsItem.Query)
+			if itemsItem.Schedule == nil {
+				items.Schedule = nil
+			} else {
+				items.Schedule = &tfTypes.SavedQuerySchedule{}
+				items.Schedule.CronSchedule = types.StringValue(itemsItem.Schedule.CronSchedule)
+				items.Schedule.Enabled = types.BoolValue(itemsItem.Schedule.Enabled)
+				items.Schedule.KeepLastN = types.Float64Value(itemsItem.Schedule.KeepLastN)
+				items.Schedule.Notifications.Disabled = types.BoolValue(itemsItem.Schedule.Notifications.Disabled)
+				items.Schedule.Tz = types.StringValue(itemsItem.Schedule.Tz)
+			}
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
+func (r *SearchSavedQueryResourceModel) RefreshFromOperationsUpdateSavedQueryByIDResponseBody(ctx context.Context, resp *operations.UpdateSavedQueryByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.SavedQuery{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.SavedQuery
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.Earliest = types.StringPointerValue(itemsItem.Earliest)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.IsPrivate = types.BoolPointerValue(itemsItem.IsPrivate)
+			items.Latest = types.StringPointerValue(itemsItem.Latest)
+			items.Name = types.StringValue(itemsItem.Name)
+			items.Query = types.StringValue(itemsItem.Query)
+			if itemsItem.Schedule == nil {
+				items.Schedule = nil
+			} else {
+				items.Schedule = &tfTypes.SavedQuerySchedule{}
+				items.Schedule.CronSchedule = types.StringValue(itemsItem.Schedule.CronSchedule)
+				items.Schedule.Enabled = types.BoolValue(itemsItem.Schedule.Enabled)
+				items.Schedule.KeepLastN = types.Float64Value(itemsItem.Schedule.KeepLastN)
+				items.Schedule.Notifications.Disabled = types.BoolValue(itemsItem.Schedule.Notifications.Disabled)
+				items.Schedule.Tz = types.StringValue(itemsItem.Schedule.Tz)
+			}
 
 			r.Items = append(r.Items, items)
 		}

@@ -23,9 +23,9 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 			var items tfTypes.Routes
 
 			itemsPriorData := items
+			items.ID = types.StringValue(itemsItem.ID)
 			items.Comments = itemsPriorData.Comments
 			items.Groups = itemsPriorData.Groups
-			items.ID = types.StringValue(itemsItem.ID)
 			items.Routes = itemsPriorData.Routes
 
 			r.Items = append(r.Items, items)

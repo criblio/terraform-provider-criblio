@@ -660,11 +660,11 @@ func (r *SearchDashboardResource) Create(ctx context.Context, req resource.Creat
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSearchDashboard(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateSearchDashboardResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -718,11 +718,11 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSearchDashboard(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchDashboardResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -768,11 +768,11 @@ func (r *SearchDashboardResource) Update(ctx context.Context, req resource.Updat
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSearchDashboard(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateSearchDashboardByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

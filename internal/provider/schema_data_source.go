@@ -124,11 +124,11 @@ func (r *SchemaDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSchemaLibEntry(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetLibSchemasByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

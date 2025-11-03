@@ -11,7 +11,25 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsCreateDatasetProviderResponseBody(ctx context.Context, resp *operations.CreateDatasetProviderResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
 func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsGetDatasetProviderByIDResponseBody(ctx context.Context, resp *operations.GetDatasetProviderByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
+func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsUpdateDatasetProviderByIDResponseBody(ctx context.Context, resp *operations.UpdateDatasetProviderByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {

@@ -11,6 +11,66 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *ProjectResourceModel) RefreshFromOperationsCreateProjectResponseBody(ctx context.Context, resp *operations.CreateProjectResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedProjectConfig(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *ProjectResourceModel) RefreshFromOperationsGetProjectByIDResponseBody(ctx context.Context, resp *operations.GetProjectByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedProjectConfig(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *ProjectResourceModel) RefreshFromOperationsUpdateProjectByIDResponseBody(ctx context.Context, resp *operations.UpdateProjectByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedProjectConfig(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *ProjectResourceModel) RefreshFromSharedProjectConfig(ctx context.Context, resp *shared.ProjectConfig) diag.Diagnostics {
 	var diags diag.Diagnostics
 

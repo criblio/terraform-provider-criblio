@@ -169,6 +169,28 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackWithI
 	return diags
 }
 
+func (r *PackPipelineResourceModel) RefreshFromOperationsUpdatePipelineByPackAndIDResponseBody(ctx context.Context, resp *operations.UpdatePipelineByPackAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Routes{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.Routes
+
+			itemsPriorData := items
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Comments = itemsPriorData.Comments
+			items.Groups = itemsPriorData.Groups
+			items.Routes = itemsPriorData.Routes
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
 	var diags diag.Diagnostics
 

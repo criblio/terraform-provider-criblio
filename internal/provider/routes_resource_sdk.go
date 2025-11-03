@@ -13,6 +13,46 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *RoutesResourceModel) RefreshFromOperationsCreateRoutesByGroupIDResponseBody(ctx context.Context, resp *operations.CreateRoutesByGroupIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedRoutes(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *RoutesResourceModel) RefreshFromOperationsGetRoutesByGroupIDResponseBody(ctx context.Context, resp *operations.GetRoutesByGroupIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedRoutes(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *RoutesResourceModel) RefreshFromSharedRoutes(ctx context.Context, resp *shared.Routes) diag.Diagnostics {
 	var diags diag.Diagnostics
 

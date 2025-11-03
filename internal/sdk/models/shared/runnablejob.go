@@ -53,24 +53,54 @@ func CreateRunnableJobRunnableJobScheduledSearch(runnableJobScheduledSearch Runn
 
 func (u *RunnableJob) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var runnableJobCollection RunnableJobCollection = RunnableJobCollection{}
 	if err := utils.UnmarshalJSON(data, &runnableJobCollection, "", true, nil); err == nil {
-		u.RunnableJobCollection = &runnableJobCollection
-		u.Type = RunnableJobTypeRunnableJobCollection
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  RunnableJobTypeRunnableJobCollection,
+			Value: &runnableJobCollection,
+		})
 	}
 
 	var runnableJobExecutor RunnableJobExecutor = RunnableJobExecutor{}
 	if err := utils.UnmarshalJSON(data, &runnableJobExecutor, "", true, nil); err == nil {
-		u.RunnableJobExecutor = &runnableJobExecutor
-		u.Type = RunnableJobTypeRunnableJobExecutor
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  RunnableJobTypeRunnableJobExecutor,
+			Value: &runnableJobExecutor,
+		})
 	}
 
 	var runnableJobScheduledSearch RunnableJobScheduledSearch = RunnableJobScheduledSearch{}
 	if err := utils.UnmarshalJSON(data, &runnableJobScheduledSearch, "", true, nil); err == nil {
-		u.RunnableJobScheduledSearch = &runnableJobScheduledSearch
-		u.Type = RunnableJobTypeRunnableJobScheduledSearch
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  RunnableJobTypeRunnableJobScheduledSearch,
+			Value: &runnableJobScheduledSearch,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for RunnableJob", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for RunnableJob", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(RunnableJobType)
+	switch best.Type {
+	case RunnableJobTypeRunnableJobCollection:
+		u.RunnableJobCollection = best.Value.(*RunnableJobCollection)
+		return nil
+	case RunnableJobTypeRunnableJobExecutor:
+		u.RunnableJobExecutor = best.Value.(*RunnableJobExecutor)
+		return nil
+	case RunnableJobTypeRunnableJobScheduledSearch:
+		u.RunnableJobScheduledSearch = best.Value.(*RunnableJobScheduledSearch)
 		return nil
 	}
 

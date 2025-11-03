@@ -1033,38 +1033,76 @@ func CreateNotificationTargetSMTPTarget(smtpTarget SMTPTarget) NotificationTarge
 
 func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var webhookTarget WebhookTarget = WebhookTarget{}
 	if err := utils.UnmarshalJSON(data, &webhookTarget, "", true, nil); err == nil {
-		u.WebhookTarget = &webhookTarget
-		u.Type = NotificationTargetTypeWebhookTarget
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  NotificationTargetTypeWebhookTarget,
+			Value: &webhookTarget,
+		})
 	}
 
 	var smtpTarget SMTPTarget = SMTPTarget{}
 	if err := utils.UnmarshalJSON(data, &smtpTarget, "", true, nil); err == nil {
-		u.SMTPTarget = &smtpTarget
-		u.Type = NotificationTargetTypeSMTPTarget
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  NotificationTargetTypeSMTPTarget,
+			Value: &smtpTarget,
+		})
 	}
 
 	var pagerDutyTarget PagerDutyTarget = PagerDutyTarget{}
 	if err := utils.UnmarshalJSON(data, &pagerDutyTarget, "", true, nil); err == nil {
-		u.PagerDutyTarget = &pagerDutyTarget
-		u.Type = NotificationTargetTypePagerDutyTarget
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  NotificationTargetTypePagerDutyTarget,
+			Value: &pagerDutyTarget,
+		})
 	}
 
 	var slackTarget SlackTarget = SlackTarget{}
 	if err := utils.UnmarshalJSON(data, &slackTarget, "", true, nil); err == nil {
-		u.SlackTarget = &slackTarget
-		u.Type = NotificationTargetTypeSlackTarget
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  NotificationTargetTypeSlackTarget,
+			Value: &slackTarget,
+		})
 	}
 
 	var snsTarget SnsTarget = SnsTarget{}
 	if err := utils.UnmarshalJSON(data, &snsTarget, "", true, nil); err == nil {
-		u.SnsTarget = &snsTarget
-		u.Type = NotificationTargetTypeSnsTarget
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  NotificationTargetTypeSnsTarget,
+			Value: &snsTarget,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for NotificationTarget", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for NotificationTarget", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(NotificationTargetType)
+	switch best.Type {
+	case NotificationTargetTypeWebhookTarget:
+		u.WebhookTarget = best.Value.(*WebhookTarget)
+		return nil
+	case NotificationTargetTypeSMTPTarget:
+		u.SMTPTarget = best.Value.(*SMTPTarget)
+		return nil
+	case NotificationTargetTypePagerDutyTarget:
+		u.PagerDutyTarget = best.Value.(*PagerDutyTarget)
+		return nil
+	case NotificationTargetTypeSlackTarget:
+		u.SlackTarget = best.Value.(*SlackTarget)
+		return nil
+	case NotificationTargetTypeSnsTarget:
+		u.SnsTarget = best.Value.(*SnsTarget)
 		return nil
 	}
 

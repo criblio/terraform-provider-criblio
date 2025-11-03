@@ -23,7 +23,6 @@ func (r *PackSourceResourceModel) RefreshFromOperationsCreateSystemInputsByPackR
 			var items tfTypes.Routes1
 
 			itemsPriorData := items
-			items.Comments = itemsPriorData.Comments
 			items.Conf.AsyncFuncTimeout = types.Int64PointerValue(itemsItem.Conf.AsyncFuncTimeout)
 			items.Conf.Description = types.StringPointerValue(itemsItem.Conf.Description)
 			items.Conf.Functions = []tfTypes.PipelineFunctionConf{}
@@ -63,8 +62,9 @@ func (r *PackSourceResourceModel) RefreshFromOperationsCreateSystemInputsByPackR
 			for _, v := range itemsItem.Conf.Streamtags {
 				items.Conf.Streamtags = append(items.Conf.Streamtags, types.StringValue(v))
 			}
-			items.Groups = itemsPriorData.Groups
 			items.ID = types.StringValue(itemsItem.ID)
+			items.Comments = itemsPriorData.Comments
+			items.Groups = itemsPriorData.Groups
 			items.Routes = itemsPriorData.Routes
 
 			r.Items = append(r.Items, items)
@@ -89,24 +89,23 @@ func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndI
 			for _, commentsItem := range itemsItem.Comments {
 				var comments tfTypes.Comment
 
-				comments.Comment = types.StringPointerValue(commentsItem.Comment)
 				if commentsItem.AdditionalProperties == nil {
 					comments.AdditionalProperties = jsontypes.NewNormalizedNull()
 				} else {
 					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
 					comments.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
 				}
+				comments.Comment = types.StringPointerValue(commentsItem.Comment)
 
 				items.Comments = append(items.Comments, comments)
 			}
-			items.Conf = itemsPriorData.Conf
 			if len(itemsItem.Groups) > 0 {
 				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
 				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
 					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
 					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
 					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
+					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
 
 					items.Groups[routesGroupsKey] = routesGroupsResult
 				}
@@ -117,12 +116,19 @@ func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndI
 			for _, routesItem := range itemsItem.Routes {
 				var routes tfTypes.RoutesRoute
 
+				if routesItem.AdditionalProperties == nil {
+					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
+				} else {
+					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
+					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
+				}
+				routes.Description = types.StringPointerValue(routesItem.Description)
+				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
+				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
+				routes.Filter = types.StringPointerValue(routesItem.Filter)
+				routes.Final = types.BoolPointerValue(routesItem.Final)
 				routes.ID = types.StringPointerValue(routesItem.ID)
 				routes.Name = types.StringValue(routesItem.Name)
-				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
-				routes.Filter = types.StringPointerValue(routesItem.Filter)
-				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
 				if routesItem.Output == nil {
 					routes.Output = jsontypes.NewNormalizedNull()
 				} else {
@@ -135,17 +141,11 @@ func (r *PackSourceResourceModel) RefreshFromOperationsGetSystemInputsByPackAndI
 					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
 					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
 				}
-				routes.Description = types.StringPointerValue(routesItem.Description)
-				routes.Final = types.BoolPointerValue(routesItem.Final)
-				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
-				}
+				routes.Pipeline = types.StringValue(routesItem.Pipeline)
 
 				items.Routes = append(items.Routes, routes)
 			}
+			items.Conf = itemsPriorData.Conf
 
 			r.Items = append(r.Items, items)
 		}
@@ -164,7 +164,6 @@ func (r *PackSourceResourceModel) RefreshFromOperationsUpdateSystemInputsByPackR
 			var items tfTypes.Routes1
 
 			itemsPriorData := items
-			items.Comments = itemsPriorData.Comments
 			items.Conf.AsyncFuncTimeout = types.Int64PointerValue(itemsItem.Conf.AsyncFuncTimeout)
 			items.Conf.Description = types.StringPointerValue(itemsItem.Conf.Description)
 			items.Conf.Functions = []tfTypes.PipelineFunctionConf{}
@@ -204,8 +203,9 @@ func (r *PackSourceResourceModel) RefreshFromOperationsUpdateSystemInputsByPackR
 			for _, v := range itemsItem.Conf.Streamtags {
 				items.Conf.Streamtags = append(items.Conf.Streamtags, types.StringValue(v))
 			}
-			items.Groups = itemsPriorData.Groups
 			items.ID = types.StringValue(itemsItem.ID)
+			items.Comments = itemsPriorData.Comments
+			items.Groups = itemsPriorData.Groups
 			items.Routes = itemsPriorData.Routes
 
 			r.Items = append(r.Items, items)

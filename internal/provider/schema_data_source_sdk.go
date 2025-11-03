@@ -10,6 +10,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *SchemaDataSourceModel) RefreshFromOperationsGetLibSchemasByIDResponseBody(ctx context.Context, resp *operations.GetLibSchemasByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSchemaLibEntry(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *SchemaDataSourceModel) RefreshFromSharedSchemaLibEntry(ctx context.Context, resp *shared.SchemaLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 

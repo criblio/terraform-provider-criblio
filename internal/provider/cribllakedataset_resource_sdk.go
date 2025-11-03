@@ -13,6 +13,66 @@ import (
 	"time"
 )
 
+func (r *CriblLakeDatasetResourceModel) RefreshFromOperationsCreateCriblLakeDatasetByLakeIDResponseBody(ctx context.Context, resp *operations.CreateCriblLakeDatasetByLakeIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCriblLakeDataset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *CriblLakeDatasetResourceModel) RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx context.Context, resp *operations.GetCriblLakeDatasetByLakeIDAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCriblLakeDataset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *CriblLakeDatasetResourceModel) RefreshFromOperationsUpdateCriblLakeDatasetByLakeIDAndIDResponseBody(ctx context.Context, resp *operations.UpdateCriblLakeDatasetByLakeIDAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCriblLakeDataset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *CriblLakeDatasetResourceModel) RefreshFromSharedCriblLakeDataset(ctx context.Context, resp *shared.CriblLakeDataset) diag.Diagnostics {
 	var diags diag.Diagnostics
 

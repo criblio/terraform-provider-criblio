@@ -2337,157 +2337,263 @@ func CreateGenericDatasetAwsSecurityLakeDataset(awsSecurityLakeDataset AwsSecuri
 
 func (u *GenericDataset) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var apiAzureDataExplorerDataset APIAzureDataExplorerDataset = APIAzureDataExplorerDataset{}
 	if err := utils.UnmarshalJSON(data, &apiAzureDataExplorerDataset, "", true, nil); err == nil {
-		u.APIAzureDataExplorerDataset = &apiAzureDataExplorerDataset
-		u.Type = GenericDatasetTypeAPIAzureDataExplorerDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIAzureDataExplorerDataset,
+			Value: &apiAzureDataExplorerDataset,
+		})
 	}
 
 	var apiAwsDataset APIAwsDataset = APIAwsDataset{}
 	if err := utils.UnmarshalJSON(data, &apiAwsDataset, "", true, nil); err == nil {
-		u.APIAwsDataset = &apiAwsDataset
-		u.Type = GenericDatasetTypeAPIAwsDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIAwsDataset,
+			Value: &apiAwsDataset,
+		})
 	}
 
 	var apiAzureDataset APIAzureDataset = APIAzureDataset{}
 	if err := utils.UnmarshalJSON(data, &apiAzureDataset, "", true, nil); err == nil {
-		u.APIAzureDataset = &apiAzureDataset
-		u.Type = GenericDatasetTypeAPIAzureDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIAzureDataset,
+			Value: &apiAzureDataset,
+		})
 	}
 
 	var apiElasticSearchDataset APIElasticSearchDataset = APIElasticSearchDataset{}
 	if err := utils.UnmarshalJSON(data, &apiElasticSearchDataset, "", true, nil); err == nil {
-		u.APIElasticSearchDataset = &apiElasticSearchDataset
-		u.Type = GenericDatasetTypeAPIElasticSearchDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIElasticSearchDataset,
+			Value: &apiElasticSearchDataset,
+		})
 	}
 
 	var apiHTTPDataset APIHTTPDataset = APIHTTPDataset{}
 	if err := utils.UnmarshalJSON(data, &apiHTTPDataset, "", true, nil); err == nil {
-		u.APIHTTPDataset = &apiHTTPDataset
-		u.Type = GenericDatasetTypeAPIHTTPDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIHTTPDataset,
+			Value: &apiHTTPDataset,
+		})
 	}
 
 	var apiGcpDataset APIGcpDataset = APIGcpDataset{}
 	if err := utils.UnmarshalJSON(data, &apiGcpDataset, "", true, nil); err == nil {
-		u.APIGcpDataset = &apiGcpDataset
-		u.Type = GenericDatasetTypeAPIGcpDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIGcpDataset,
+			Value: &apiGcpDataset,
+		})
 	}
 
 	var apiGoogleWorkspaceDataset APIGoogleWorkspaceDataset = APIGoogleWorkspaceDataset{}
 	if err := utils.UnmarshalJSON(data, &apiGoogleWorkspaceDataset, "", true, nil); err == nil {
-		u.APIGoogleWorkspaceDataset = &apiGoogleWorkspaceDataset
-		u.Type = GenericDatasetTypeAPIGoogleWorkspaceDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIGoogleWorkspaceDataset,
+			Value: &apiGoogleWorkspaceDataset,
+		})
 	}
 
 	var apiMsGraphDataset APIMsGraphDataset = APIMsGraphDataset{}
 	if err := utils.UnmarshalJSON(data, &apiMsGraphDataset, "", true, nil); err == nil {
-		u.APIMsGraphDataset = &apiMsGraphDataset
-		u.Type = GenericDatasetTypeAPIMsGraphDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIMsGraphDataset,
+			Value: &apiMsGraphDataset,
+		})
 	}
 
 	var apiOktaDataset APIOktaDataset = APIOktaDataset{}
 	if err := utils.UnmarshalJSON(data, &apiOktaDataset, "", true, nil); err == nil {
-		u.APIOktaDataset = &apiOktaDataset
-		u.Type = GenericDatasetTypeAPIOktaDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIOktaDataset,
+			Value: &apiOktaDataset,
+		})
 	}
 
 	var apiTailscaleDataset APITailscaleDataset = APITailscaleDataset{}
 	if err := utils.UnmarshalJSON(data, &apiTailscaleDataset, "", true, nil); err == nil {
-		u.APITailscaleDataset = &apiTailscaleDataset
-		u.Type = GenericDatasetTypeAPITailscaleDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPITailscaleDataset,
+			Value: &apiTailscaleDataset,
+		})
 	}
 
 	var apiZoomDataset APIZoomDataset = APIZoomDataset{}
 	if err := utils.UnmarshalJSON(data, &apiZoomDataset, "", true, nil); err == nil {
-		u.APIZoomDataset = &apiZoomDataset
-		u.Type = GenericDatasetTypeAPIZoomDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIZoomDataset,
+			Value: &apiZoomDataset,
+		})
 	}
 
 	var snowflakeDataset SnowflakeDataset = SnowflakeDataset{}
 	if err := utils.UnmarshalJSON(data, &snowflakeDataset, "", true, nil); err == nil {
-		u.SnowflakeDataset = &snowflakeDataset
-		u.Type = GenericDatasetTypeSnowflakeDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeSnowflakeDataset,
+			Value: &snowflakeDataset,
+		})
 	}
 
 	var clickHouseDataset ClickHouseDataset = ClickHouseDataset{}
 	if err := utils.UnmarshalJSON(data, &clickHouseDataset, "", true, nil); err == nil {
-		u.ClickHouseDataset = &clickHouseDataset
-		u.Type = GenericDatasetTypeClickHouseDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeClickHouseDataset,
+			Value: &clickHouseDataset,
+		})
 	}
 
 	var apiOpenSearchDataset APIOpenSearchDataset = APIOpenSearchDataset{}
 	if err := utils.UnmarshalJSON(data, &apiOpenSearchDataset, "", true, nil); err == nil {
-		u.APIOpenSearchDataset = &apiOpenSearchDataset
-		u.Type = GenericDatasetTypeAPIOpenSearchDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAPIOpenSearchDataset,
+			Value: &apiOpenSearchDataset,
+		})
 	}
 
 	var s3Dataset S3Dataset = S3Dataset{}
 	if err := utils.UnmarshalJSON(data, &s3Dataset, "", true, nil); err == nil {
-		u.S3Dataset = &s3Dataset
-		u.Type = GenericDatasetTypeS3Dataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeS3Dataset,
+			Value: &s3Dataset,
+		})
 	}
 
 	var criblLeaderDataset CriblLeaderDataset = CriblLeaderDataset{}
 	if err := utils.UnmarshalJSON(data, &criblLeaderDataset, "", true, nil); err == nil {
-		u.CriblLeaderDataset = &criblLeaderDataset
-		u.Type = GenericDatasetTypeCriblLeaderDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeCriblLeaderDataset,
+			Value: &criblLeaderDataset,
+		})
 	}
 
 	var metaDataset MetaDataset = MetaDataset{}
 	if err := utils.UnmarshalJSON(data, &metaDataset, "", true, nil); err == nil {
-		u.MetaDataset = &metaDataset
-		u.Type = GenericDatasetTypeMetaDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeMetaDataset,
+			Value: &metaDataset,
+		})
 	}
 
 	var edgeDataset EdgeDataset = EdgeDataset{}
 	if err := utils.UnmarshalJSON(data, &edgeDataset, "", true, nil); err == nil {
-		u.EdgeDataset = &edgeDataset
-		u.Type = GenericDatasetTypeEdgeDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeEdgeDataset,
+			Value: &edgeDataset,
+		})
 	}
 
 	var azureBlobDataset AzureBlobDataset = AzureBlobDataset{}
 	if err := utils.UnmarshalJSON(data, &azureBlobDataset, "", true, nil); err == nil {
-		u.AzureBlobDataset = &azureBlobDataset
-		u.Type = GenericDatasetTypeAzureBlobDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAzureBlobDataset,
+			Value: &azureBlobDataset,
+		})
 	}
 
 	var gcsDataset GcsDataset = GcsDataset{}
 	if err := utils.UnmarshalJSON(data, &gcsDataset, "", true, nil); err == nil {
-		u.GcsDataset = &gcsDataset
-		u.Type = GenericDatasetTypeGcsDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeGcsDataset,
+			Value: &gcsDataset,
+		})
 	}
 
 	var awsSecurityLakeDataset AwsSecurityLakeDataset = AwsSecurityLakeDataset{}
 	if err := utils.UnmarshalJSON(data, &awsSecurityLakeDataset, "", true, nil); err == nil {
-		u.AwsSecurityLakeDataset = &awsSecurityLakeDataset
-		u.Type = GenericDatasetTypeAwsSecurityLakeDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypeAwsSecurityLakeDataset,
+			Value: &awsSecurityLakeDataset,
+		})
 	}
 
 	var prometheusDataset PrometheusDataset = PrometheusDataset{}
 	if err := utils.UnmarshalJSON(data, &prometheusDataset, "", true, nil); err == nil {
-		u.PrometheusDataset = &prometheusDataset
-		u.Type = GenericDatasetTypePrometheusDataset
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  GenericDatasetTypePrometheusDataset,
+			Value: &prometheusDataset,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for GenericDataset", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for GenericDataset", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(GenericDatasetType)
+	switch best.Type {
+	case GenericDatasetTypeAPIAzureDataExplorerDataset:
+		u.APIAzureDataExplorerDataset = best.Value.(*APIAzureDataExplorerDataset)
+		return nil
+	case GenericDatasetTypeAPIAwsDataset:
+		u.APIAwsDataset = best.Value.(*APIAwsDataset)
+		return nil
+	case GenericDatasetTypeAPIAzureDataset:
+		u.APIAzureDataset = best.Value.(*APIAzureDataset)
+		return nil
+	case GenericDatasetTypeAPIElasticSearchDataset:
+		u.APIElasticSearchDataset = best.Value.(*APIElasticSearchDataset)
+		return nil
+	case GenericDatasetTypeAPIHTTPDataset:
+		u.APIHTTPDataset = best.Value.(*APIHTTPDataset)
+		return nil
+	case GenericDatasetTypeAPIGcpDataset:
+		u.APIGcpDataset = best.Value.(*APIGcpDataset)
+		return nil
+	case GenericDatasetTypeAPIGoogleWorkspaceDataset:
+		u.APIGoogleWorkspaceDataset = best.Value.(*APIGoogleWorkspaceDataset)
+		return nil
+	case GenericDatasetTypeAPIMsGraphDataset:
+		u.APIMsGraphDataset = best.Value.(*APIMsGraphDataset)
+		return nil
+	case GenericDatasetTypeAPIOktaDataset:
+		u.APIOktaDataset = best.Value.(*APIOktaDataset)
+		return nil
+	case GenericDatasetTypeAPITailscaleDataset:
+		u.APITailscaleDataset = best.Value.(*APITailscaleDataset)
+		return nil
+	case GenericDatasetTypeAPIZoomDataset:
+		u.APIZoomDataset = best.Value.(*APIZoomDataset)
+		return nil
+	case GenericDatasetTypeSnowflakeDataset:
+		u.SnowflakeDataset = best.Value.(*SnowflakeDataset)
+		return nil
+	case GenericDatasetTypeClickHouseDataset:
+		u.ClickHouseDataset = best.Value.(*ClickHouseDataset)
+		return nil
+	case GenericDatasetTypeAPIOpenSearchDataset:
+		u.APIOpenSearchDataset = best.Value.(*APIOpenSearchDataset)
+		return nil
+	case GenericDatasetTypeS3Dataset:
+		u.S3Dataset = best.Value.(*S3Dataset)
+		return nil
+	case GenericDatasetTypeCriblLeaderDataset:
+		u.CriblLeaderDataset = best.Value.(*CriblLeaderDataset)
+		return nil
+	case GenericDatasetTypeMetaDataset:
+		u.MetaDataset = best.Value.(*MetaDataset)
+		return nil
+	case GenericDatasetTypeEdgeDataset:
+		u.EdgeDataset = best.Value.(*EdgeDataset)
+		return nil
+	case GenericDatasetTypeAzureBlobDataset:
+		u.AzureBlobDataset = best.Value.(*AzureBlobDataset)
+		return nil
+	case GenericDatasetTypeGcsDataset:
+		u.GcsDataset = best.Value.(*GcsDataset)
+		return nil
+	case GenericDatasetTypeAwsSecurityLakeDataset:
+		u.AwsSecurityLakeDataset = best.Value.(*AwsSecurityLakeDataset)
+		return nil
+	case GenericDatasetTypePrometheusDataset:
+		u.PrometheusDataset = best.Value.(*PrometheusDataset)
 		return nil
 	}
 

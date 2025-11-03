@@ -713,444 +713,714 @@ func CreateOutputOutputDynatraceOtlp(outputDynatraceOtlp OutputDynatraceOtlp) Ou
 
 func (u *Output) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var outputAzureDataExplorer OutputAzureDataExplorer = OutputAzureDataExplorer{}
 	if err := utils.UnmarshalJSON(data, &outputAzureDataExplorer, "", true, nil); err == nil {
-		u.OutputAzureDataExplorer = &outputAzureDataExplorer
-		u.Type = OutputTypeOutputAzureDataExplorer
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputAzureDataExplorer,
+			Value: &outputAzureDataExplorer,
+		})
 	}
 
 	var outputSecurityLake OutputSecurityLake = OutputSecurityLake{}
 	if err := utils.UnmarshalJSON(data, &outputSecurityLake, "", true, nil); err == nil {
-		u.OutputSecurityLake = &outputSecurityLake
-		u.Type = OutputTypeOutputSecurityLake
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSecurityLake,
+			Value: &outputSecurityLake,
+		})
 	}
 
 	var outputSentinel OutputSentinel = OutputSentinel{}
 	if err := utils.UnmarshalJSON(data, &outputSentinel, "", true, nil); err == nil {
-		u.OutputSentinel = &outputSentinel
-		u.Type = OutputTypeOutputSentinel
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSentinel,
+			Value: &outputSentinel,
+		})
 	}
 
 	var outputGoogleCloudLogging OutputGoogleCloudLogging = OutputGoogleCloudLogging{}
 	if err := utils.UnmarshalJSON(data, &outputGoogleCloudLogging, "", true, nil); err == nil {
-		u.OutputGoogleCloudLogging = &outputGoogleCloudLogging
-		u.Type = OutputTypeOutputGoogleCloudLogging
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputGoogleCloudLogging,
+			Value: &outputGoogleCloudLogging,
+		})
 	}
 
 	var outputExabeam OutputExabeam = OutputExabeam{}
 	if err := utils.UnmarshalJSON(data, &outputExabeam, "", true, nil); err == nil {
-		u.OutputExabeam = &outputExabeam
-		u.Type = OutputTypeOutputExabeam
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputExabeam,
+			Value: &outputExabeam,
+		})
 	}
 
 	var outputMsk OutputMsk = OutputMsk{}
 	if err := utils.UnmarshalJSON(data, &outputMsk, "", true, nil); err == nil {
-		u.OutputMsk = &outputMsk
-		u.Type = OutputTypeOutputMsk
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputMsk,
+			Value: &outputMsk,
+		})
 	}
 
 	var outputCloudwatch OutputCloudwatch = OutputCloudwatch{}
 	if err := utils.UnmarshalJSON(data, &outputCloudwatch, "", true, nil); err == nil {
-		u.OutputCloudwatch = &outputCloudwatch
-		u.Type = OutputTypeOutputCloudwatch
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputCloudwatch,
+			Value: &outputCloudwatch,
+		})
 	}
 
 	var outputClickHouse OutputClickHouse = OutputClickHouse{}
 	if err := utils.UnmarshalJSON(data, &outputClickHouse, "", true, nil); err == nil {
-		u.OutputClickHouse = &outputClickHouse
-		u.Type = OutputTypeOutputClickHouse
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputClickHouse,
+			Value: &outputClickHouse,
+		})
 	}
 
 	var outputDefault OutputDefault = OutputDefault{}
 	if err := utils.UnmarshalJSON(data, &outputDefault, "", true, nil); err == nil {
-		u.OutputDefault = &outputDefault
-		u.Type = OutputTypeOutputDefault
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputDefault,
+			Value: &outputDefault,
+		})
 	}
 
 	var outputWebhook OutputWebhook = OutputWebhook{}
 	if err := utils.UnmarshalJSON(data, &outputWebhook, "", true, nil); err == nil {
-		u.OutputWebhook = &outputWebhook
-		u.Type = OutputTypeOutputWebhook
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputWebhook,
+			Value: &outputWebhook,
+		})
 	}
 
 	var outputDevnull OutputDevnull = OutputDevnull{}
 	if err := utils.UnmarshalJSON(data, &outputDevnull, "", true, nil); err == nil {
-		u.OutputDevnull = &outputDevnull
-		u.Type = OutputTypeOutputDevnull
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputDevnull,
+			Value: &outputDevnull,
+		})
 	}
 
 	var outputSyslog OutputSyslog = OutputSyslog{}
 	if err := utils.UnmarshalJSON(data, &outputSyslog, "", true, nil); err == nil {
-		u.OutputSyslog = &outputSyslog
-		u.Type = OutputTypeOutputSyslog
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSyslog,
+			Value: &outputSyslog,
+		})
 	}
 
 	var outputSplunkLb OutputSplunkLb = OutputSplunkLb{}
 	if err := utils.UnmarshalJSON(data, &outputSplunkLb, "", true, nil); err == nil {
-		u.OutputSplunkLb = &outputSplunkLb
-		u.Type = OutputTypeOutputSplunkLb
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSplunkLb,
+			Value: &outputSplunkLb,
+		})
 	}
 
 	var outputSplunkHec OutputSplunkHec = OutputSplunkHec{}
 	if err := utils.UnmarshalJSON(data, &outputSplunkHec, "", true, nil); err == nil {
-		u.OutputSplunkHec = &outputSplunkHec
-		u.Type = OutputTypeOutputSplunkHec
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSplunkHec,
+			Value: &outputSplunkHec,
+		})
 	}
 
 	var outputTcpjson OutputTcpjson = OutputTcpjson{}
 	if err := utils.UnmarshalJSON(data, &outputTcpjson, "", true, nil); err == nil {
-		u.OutputTcpjson = &outputTcpjson
-		u.Type = OutputTypeOutputTcpjson
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputTcpjson,
+			Value: &outputTcpjson,
+		})
 	}
 
 	var outputFilesystem OutputFilesystem = OutputFilesystem{}
 	if err := utils.UnmarshalJSON(data, &outputFilesystem, "", true, nil); err == nil {
-		u.OutputFilesystem = &outputFilesystem
-		u.Type = OutputTypeOutputFilesystem
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputFilesystem,
+			Value: &outputFilesystem,
+		})
 	}
 
 	var outputKinesis OutputKinesis = OutputKinesis{}
 	if err := utils.UnmarshalJSON(data, &outputKinesis, "", true, nil); err == nil {
-		u.OutputKinesis = &outputKinesis
-		u.Type = OutputTypeOutputKinesis
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputKinesis,
+			Value: &outputKinesis,
+		})
 	}
 
 	var outputHoneycomb OutputHoneycomb = OutputHoneycomb{}
 	if err := utils.UnmarshalJSON(data, &outputHoneycomb, "", true, nil); err == nil {
-		u.OutputHoneycomb = &outputHoneycomb
-		u.Type = OutputTypeOutputHoneycomb
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputHoneycomb,
+			Value: &outputHoneycomb,
+		})
 	}
 
 	var outputAzureEventhub OutputAzureEventhub = OutputAzureEventhub{}
 	if err := utils.UnmarshalJSON(data, &outputAzureEventhub, "", true, nil); err == nil {
-		u.OutputAzureEventhub = &outputAzureEventhub
-		u.Type = OutputTypeOutputAzureEventhub
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputAzureEventhub,
+			Value: &outputAzureEventhub,
+		})
 	}
 
 	var outputGoogleCloudStorage OutputGoogleCloudStorage = OutputGoogleCloudStorage{}
 	if err := utils.UnmarshalJSON(data, &outputGoogleCloudStorage, "", true, nil); err == nil {
-		u.OutputGoogleCloudStorage = &outputGoogleCloudStorage
-		u.Type = OutputTypeOutputGoogleCloudStorage
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputGoogleCloudStorage,
+			Value: &outputGoogleCloudStorage,
+		})
 	}
 
 	var outputGooglePubsub OutputGooglePubsub = OutputGooglePubsub{}
 	if err := utils.UnmarshalJSON(data, &outputGooglePubsub, "", true, nil); err == nil {
-		u.OutputGooglePubsub = &outputGooglePubsub
-		u.Type = OutputTypeOutputGooglePubsub
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputGooglePubsub,
+			Value: &outputGooglePubsub,
+		})
 	}
 
 	var outputKafka OutputKafka = OutputKafka{}
 	if err := utils.UnmarshalJSON(data, &outputKafka, "", true, nil); err == nil {
-		u.OutputKafka = &outputKafka
-		u.Type = OutputTypeOutputKafka
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputKafka,
+			Value: &outputKafka,
+		})
 	}
 
 	var outputConfluentCloud OutputConfluentCloud = OutputConfluentCloud{}
 	if err := utils.UnmarshalJSON(data, &outputConfluentCloud, "", true, nil); err == nil {
-		u.OutputConfluentCloud = &outputConfluentCloud
-		u.Type = OutputTypeOutputConfluentCloud
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputConfluentCloud,
+			Value: &outputConfluentCloud,
+		})
 	}
 
 	var outputElastic OutputElastic = OutputElastic{}
 	if err := utils.UnmarshalJSON(data, &outputElastic, "", true, nil); err == nil {
-		u.OutputElastic = &outputElastic
-		u.Type = OutputTypeOutputElastic
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputElastic,
+			Value: &outputElastic,
+		})
 	}
 
 	var outputElasticCloud OutputElasticCloud = OutputElasticCloud{}
 	if err := utils.UnmarshalJSON(data, &outputElasticCloud, "", true, nil); err == nil {
-		u.OutputElasticCloud = &outputElasticCloud
-		u.Type = OutputTypeOutputElasticCloud
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputElasticCloud,
+			Value: &outputElasticCloud,
+		})
 	}
 
 	var outputNewrelic OutputNewrelic = OutputNewrelic{}
 	if err := utils.UnmarshalJSON(data, &outputNewrelic, "", true, nil); err == nil {
-		u.OutputNewrelic = &outputNewrelic
-		u.Type = OutputTypeOutputNewrelic
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputNewrelic,
+			Value: &outputNewrelic,
+		})
 	}
 
 	var outputNewrelicEvents OutputNewrelicEvents = OutputNewrelicEvents{}
 	if err := utils.UnmarshalJSON(data, &outputNewrelicEvents, "", true, nil); err == nil {
-		u.OutputNewrelicEvents = &outputNewrelicEvents
-		u.Type = OutputTypeOutputNewrelicEvents
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputNewrelicEvents,
+			Value: &outputNewrelicEvents,
+		})
 	}
 
 	var outputInfluxdb OutputInfluxdb = OutputInfluxdb{}
 	if err := utils.UnmarshalJSON(data, &outputInfluxdb, "", true, nil); err == nil {
-		u.OutputInfluxdb = &outputInfluxdb
-		u.Type = OutputTypeOutputInfluxdb
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputInfluxdb,
+			Value: &outputInfluxdb,
+		})
 	}
 
 	var outputMinio OutputMinio = OutputMinio{}
 	if err := utils.UnmarshalJSON(data, &outputMinio, "", true, nil); err == nil {
-		u.OutputMinio = &outputMinio
-		u.Type = OutputTypeOutputMinio
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputMinio,
+			Value: &outputMinio,
+		})
 	}
 
 	var outputRouter OutputRouter = OutputRouter{}
 	if err := utils.UnmarshalJSON(data, &outputRouter, "", true, nil); err == nil {
-		u.OutputRouter = &outputRouter
-		u.Type = OutputTypeOutputRouter
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputRouter,
+			Value: &outputRouter,
+		})
 	}
 
 	var outputSns OutputSns = OutputSns{}
 	if err := utils.UnmarshalJSON(data, &outputSns, "", true, nil); err == nil {
-		u.OutputSns = &outputSns
-		u.Type = OutputTypeOutputSns
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSns,
+			Value: &outputSns,
+		})
 	}
 
 	var outputSnmp OutputSnmp = OutputSnmp{}
 	if err := utils.UnmarshalJSON(data, &outputSnmp, "", true, nil); err == nil {
-		u.OutputSnmp = &outputSnmp
-		u.Type = OutputTypeOutputSnmp
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSnmp,
+			Value: &outputSnmp,
+		})
 	}
 
 	var outputSumoLogic OutputSumoLogic = OutputSumoLogic{}
 	if err := utils.UnmarshalJSON(data, &outputSumoLogic, "", true, nil); err == nil {
-		u.OutputSumoLogic = &outputSumoLogic
-		u.Type = OutputTypeOutputSumoLogic
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSumoLogic,
+			Value: &outputSumoLogic,
+		})
 	}
 
 	var outputDatadog OutputDatadog = OutputDatadog{}
 	if err := utils.UnmarshalJSON(data, &outputDatadog, "", true, nil); err == nil {
-		u.OutputDatadog = &outputDatadog
-		u.Type = OutputTypeOutputDatadog
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputDatadog,
+			Value: &outputDatadog,
+		})
 	}
 
 	var outputLoki OutputLoki = OutputLoki{}
 	if err := utils.UnmarshalJSON(data, &outputLoki, "", true, nil); err == nil {
-		u.OutputLoki = &outputLoki
-		u.Type = OutputTypeOutputLoki
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputLoki,
+			Value: &outputLoki,
+		})
 	}
 
 	var outputPrometheus OutputPrometheus = OutputPrometheus{}
 	if err := utils.UnmarshalJSON(data, &outputPrometheus, "", true, nil); err == nil {
-		u.OutputPrometheus = &outputPrometheus
-		u.Type = OutputTypeOutputPrometheus
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputPrometheus,
+			Value: &outputPrometheus,
+		})
 	}
 
 	var outputRing OutputRing = OutputRing{}
 	if err := utils.UnmarshalJSON(data, &outputRing, "", true, nil); err == nil {
-		u.OutputRing = &outputRing
-		u.Type = OutputTypeOutputRing
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputRing,
+			Value: &outputRing,
+		})
 	}
 
 	var outputOpenTelemetry OutputOpenTelemetry = OutputOpenTelemetry{}
 	if err := utils.UnmarshalJSON(data, &outputOpenTelemetry, "", true, nil); err == nil {
-		u.OutputOpenTelemetry = &outputOpenTelemetry
-		u.Type = OutputTypeOutputOpenTelemetry
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputOpenTelemetry,
+			Value: &outputOpenTelemetry,
+		})
 	}
 
 	var outputDataset OutputDataset = OutputDataset{}
 	if err := utils.UnmarshalJSON(data, &outputDataset, "", true, nil); err == nil {
-		u.OutputDataset = &outputDataset
-		u.Type = OutputTypeOutputDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputDataset,
+			Value: &outputDataset,
+		})
 	}
 
 	var outputCriblTCP OutputCriblTCP = OutputCriblTCP{}
 	if err := utils.UnmarshalJSON(data, &outputCriblTCP, "", true, nil); err == nil {
-		u.OutputCriblTCP = &outputCriblTCP
-		u.Type = OutputTypeOutputCriblTCP
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputCriblTCP,
+			Value: &outputCriblTCP,
+		})
 	}
 
 	var outputCriblHTTP OutputCriblHTTP = OutputCriblHTTP{}
 	if err := utils.UnmarshalJSON(data, &outputCriblHTTP, "", true, nil); err == nil {
-		u.OutputCriblHTTP = &outputCriblHTTP
-		u.Type = OutputTypeOutputCriblHTTP
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputCriblHTTP,
+			Value: &outputCriblHTTP,
+		})
 	}
 
 	var outputCriblLake OutputCriblLake = OutputCriblLake{}
 	if err := utils.UnmarshalJSON(data, &outputCriblLake, "", true, nil); err == nil {
-		u.OutputCriblLake = &outputCriblLake
-		u.Type = OutputTypeOutputCriblLake
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputCriblLake,
+			Value: &outputCriblLake,
+		})
 	}
 
 	var outputDiskSpool OutputDiskSpool = OutputDiskSpool{}
 	if err := utils.UnmarshalJSON(data, &outputDiskSpool, "", true, nil); err == nil {
-		u.OutputDiskSpool = &outputDiskSpool
-		u.Type = OutputTypeOutputDiskSpool
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputDiskSpool,
+			Value: &outputDiskSpool,
+		})
 	}
 
 	var outputXsiam OutputXsiam = OutputXsiam{}
 	if err := utils.UnmarshalJSON(data, &outputXsiam, "", true, nil); err == nil {
-		u.OutputXsiam = &outputXsiam
-		u.Type = OutputTypeOutputXsiam
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputXsiam,
+			Value: &outputXsiam,
+		})
 	}
 
 	var outputNetflow OutputNetflow = OutputNetflow{}
 	if err := utils.UnmarshalJSON(data, &outputNetflow, "", true, nil); err == nil {
-		u.OutputNetflow = &outputNetflow
-		u.Type = OutputTypeOutputNetflow
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputNetflow,
+			Value: &outputNetflow,
+		})
 	}
 
 	var outputSplunk OutputSplunk = OutputSplunk{}
 	if err := utils.UnmarshalJSON(data, &outputSplunk, "", true, nil); err == nil {
-		u.OutputSplunk = &outputSplunk
-		u.Type = OutputTypeOutputSplunk
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSplunk,
+			Value: &outputSplunk,
+		})
 	}
 
 	var outputWavefront OutputWavefront = OutputWavefront{}
 	if err := utils.UnmarshalJSON(data, &outputWavefront, "", true, nil); err == nil {
-		u.OutputWavefront = &outputWavefront
-		u.Type = OutputTypeOutputWavefront
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputWavefront,
+			Value: &outputWavefront,
+		})
 	}
 
 	var outputSignalfx OutputSignalfx = OutputSignalfx{}
 	if err := utils.UnmarshalJSON(data, &outputSignalfx, "", true, nil); err == nil {
-		u.OutputSignalfx = &outputSignalfx
-		u.Type = OutputTypeOutputSignalfx
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSignalfx,
+			Value: &outputSignalfx,
+		})
 	}
 
 	var outputS3 OutputS3 = OutputS3{}
 	if err := utils.UnmarshalJSON(data, &outputS3, "", true, nil); err == nil {
-		u.OutputS3 = &outputS3
-		u.Type = OutputTypeOutputS3
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputS3,
+			Value: &outputS3,
+		})
 	}
 
 	var outputAzureBlob OutputAzureBlob = OutputAzureBlob{}
 	if err := utils.UnmarshalJSON(data, &outputAzureBlob, "", true, nil); err == nil {
-		u.OutputAzureBlob = &outputAzureBlob
-		u.Type = OutputTypeOutputAzureBlob
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputAzureBlob,
+			Value: &outputAzureBlob,
+		})
 	}
 
 	var outputAzureLogs OutputAzureLogs = OutputAzureLogs{}
 	if err := utils.UnmarshalJSON(data, &outputAzureLogs, "", true, nil); err == nil {
-		u.OutputAzureLogs = &outputAzureLogs
-		u.Type = OutputTypeOutputAzureLogs
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputAzureLogs,
+			Value: &outputAzureLogs,
+		})
 	}
 
 	var outputGoogleChronicle OutputGoogleChronicle = OutputGoogleChronicle{}
 	if err := utils.UnmarshalJSON(data, &outputGoogleChronicle, "", true, nil); err == nil {
-		u.OutputGoogleChronicle = &outputGoogleChronicle
-		u.Type = OutputTypeOutputGoogleChronicle
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputGoogleChronicle,
+			Value: &outputGoogleChronicle,
+		})
 	}
 
 	var outputStatsd OutputStatsd = OutputStatsd{}
 	if err := utils.UnmarshalJSON(data, &outputStatsd, "", true, nil); err == nil {
-		u.OutputStatsd = &outputStatsd
-		u.Type = OutputTypeOutputStatsd
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputStatsd,
+			Value: &outputStatsd,
+		})
 	}
 
 	var outputStatsdExt OutputStatsdExt = OutputStatsdExt{}
 	if err := utils.UnmarshalJSON(data, &outputStatsdExt, "", true, nil); err == nil {
-		u.OutputStatsdExt = &outputStatsdExt
-		u.Type = OutputTypeOutputStatsdExt
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputStatsdExt,
+			Value: &outputStatsdExt,
+		})
 	}
 
 	var outputGraphite OutputGraphite = OutputGraphite{}
 	if err := utils.UnmarshalJSON(data, &outputGraphite, "", true, nil); err == nil {
-		u.OutputGraphite = &outputGraphite
-		u.Type = OutputTypeOutputGraphite
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputGraphite,
+			Value: &outputGraphite,
+		})
 	}
 
 	var outputSqs OutputSqs = OutputSqs{}
 	if err := utils.UnmarshalJSON(data, &outputSqs, "", true, nil); err == nil {
-		u.OutputSqs = &outputSqs
-		u.Type = OutputTypeOutputSqs
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSqs,
+			Value: &outputSqs,
+		})
 	}
 
 	var outputServiceNow OutputServiceNow = OutputServiceNow{}
 	if err := utils.UnmarshalJSON(data, &outputServiceNow, "", true, nil); err == nil {
-		u.OutputServiceNow = &outputServiceNow
-		u.Type = OutputTypeOutputServiceNow
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputServiceNow,
+			Value: &outputServiceNow,
+		})
 	}
 
 	var outputCrowdstrikeNextGenSiem OutputCrowdstrikeNextGenSiem = OutputCrowdstrikeNextGenSiem{}
 	if err := utils.UnmarshalJSON(data, &outputCrowdstrikeNextGenSiem, "", true, nil); err == nil {
-		u.OutputCrowdstrikeNextGenSiem = &outputCrowdstrikeNextGenSiem
-		u.Type = OutputTypeOutputCrowdstrikeNextGenSiem
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputCrowdstrikeNextGenSiem,
+			Value: &outputCrowdstrikeNextGenSiem,
+		})
 	}
 
 	var outputDlS3 OutputDlS3 = OutputDlS3{}
 	if err := utils.UnmarshalJSON(data, &outputDlS3, "", true, nil); err == nil {
-		u.OutputDlS3 = &outputDlS3
-		u.Type = OutputTypeOutputDlS3
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputDlS3,
+			Value: &outputDlS3,
+		})
 	}
 
 	var outputDynatraceOtlp OutputDynatraceOtlp = OutputDynatraceOtlp{}
 	if err := utils.UnmarshalJSON(data, &outputDynatraceOtlp, "", true, nil); err == nil {
-		u.OutputDynatraceOtlp = &outputDynatraceOtlp
-		u.Type = OutputTypeOutputDynatraceOtlp
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputDynatraceOtlp,
+			Value: &outputDynatraceOtlp,
+		})
 	}
 
 	var outputGrafanaCloud OutputGrafanaCloud = OutputGrafanaCloud{}
 	if err := utils.UnmarshalJSON(data, &outputGrafanaCloud, "", true, nil); err == nil {
-		u.OutputGrafanaCloud = &outputGrafanaCloud
-		u.Type = OutputTypeOutputGrafanaCloud
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputGrafanaCloud,
+			Value: &outputGrafanaCloud,
+		})
 	}
 
 	var outputHumioHec OutputHumioHec = OutputHumioHec{}
 	if err := utils.UnmarshalJSON(data, &outputHumioHec, "", true, nil); err == nil {
-		u.OutputHumioHec = &outputHumioHec
-		u.Type = OutputTypeOutputHumioHec
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputHumioHec,
+			Value: &outputHumioHec,
+		})
 	}
 
 	var outputDynatraceHTTP OutputDynatraceHTTP = OutputDynatraceHTTP{}
 	if err := utils.UnmarshalJSON(data, &outputDynatraceHTTP, "", true, nil); err == nil {
-		u.OutputDynatraceHTTP = &outputDynatraceHTTP
-		u.Type = OutputTypeOutputDynatraceHTTP
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputDynatraceHTTP,
+			Value: &outputDynatraceHTTP,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Output", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Output", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(OutputType)
+	switch best.Type {
+	case OutputTypeOutputAzureDataExplorer:
+		u.OutputAzureDataExplorer = best.Value.(*OutputAzureDataExplorer)
+		return nil
+	case OutputTypeOutputSecurityLake:
+		u.OutputSecurityLake = best.Value.(*OutputSecurityLake)
+		return nil
+	case OutputTypeOutputSentinel:
+		u.OutputSentinel = best.Value.(*OutputSentinel)
+		return nil
+	case OutputTypeOutputGoogleCloudLogging:
+		u.OutputGoogleCloudLogging = best.Value.(*OutputGoogleCloudLogging)
+		return nil
+	case OutputTypeOutputExabeam:
+		u.OutputExabeam = best.Value.(*OutputExabeam)
+		return nil
+	case OutputTypeOutputMsk:
+		u.OutputMsk = best.Value.(*OutputMsk)
+		return nil
+	case OutputTypeOutputCloudwatch:
+		u.OutputCloudwatch = best.Value.(*OutputCloudwatch)
+		return nil
+	case OutputTypeOutputClickHouse:
+		u.OutputClickHouse = best.Value.(*OutputClickHouse)
+		return nil
+	case OutputTypeOutputDefault:
+		u.OutputDefault = best.Value.(*OutputDefault)
+		return nil
+	case OutputTypeOutputWebhook:
+		u.OutputWebhook = best.Value.(*OutputWebhook)
+		return nil
+	case OutputTypeOutputDevnull:
+		u.OutputDevnull = best.Value.(*OutputDevnull)
+		return nil
+	case OutputTypeOutputSyslog:
+		u.OutputSyslog = best.Value.(*OutputSyslog)
+		return nil
+	case OutputTypeOutputSplunkLb:
+		u.OutputSplunkLb = best.Value.(*OutputSplunkLb)
+		return nil
+	case OutputTypeOutputSplunkHec:
+		u.OutputSplunkHec = best.Value.(*OutputSplunkHec)
+		return nil
+	case OutputTypeOutputTcpjson:
+		u.OutputTcpjson = best.Value.(*OutputTcpjson)
+		return nil
+	case OutputTypeOutputFilesystem:
+		u.OutputFilesystem = best.Value.(*OutputFilesystem)
+		return nil
+	case OutputTypeOutputKinesis:
+		u.OutputKinesis = best.Value.(*OutputKinesis)
+		return nil
+	case OutputTypeOutputHoneycomb:
+		u.OutputHoneycomb = best.Value.(*OutputHoneycomb)
+		return nil
+	case OutputTypeOutputAzureEventhub:
+		u.OutputAzureEventhub = best.Value.(*OutputAzureEventhub)
+		return nil
+	case OutputTypeOutputGoogleCloudStorage:
+		u.OutputGoogleCloudStorage = best.Value.(*OutputGoogleCloudStorage)
+		return nil
+	case OutputTypeOutputGooglePubsub:
+		u.OutputGooglePubsub = best.Value.(*OutputGooglePubsub)
+		return nil
+	case OutputTypeOutputKafka:
+		u.OutputKafka = best.Value.(*OutputKafka)
+		return nil
+	case OutputTypeOutputConfluentCloud:
+		u.OutputConfluentCloud = best.Value.(*OutputConfluentCloud)
+		return nil
+	case OutputTypeOutputElastic:
+		u.OutputElastic = best.Value.(*OutputElastic)
+		return nil
+	case OutputTypeOutputElasticCloud:
+		u.OutputElasticCloud = best.Value.(*OutputElasticCloud)
+		return nil
+	case OutputTypeOutputNewrelic:
+		u.OutputNewrelic = best.Value.(*OutputNewrelic)
+		return nil
+	case OutputTypeOutputNewrelicEvents:
+		u.OutputNewrelicEvents = best.Value.(*OutputNewrelicEvents)
+		return nil
+	case OutputTypeOutputInfluxdb:
+		u.OutputInfluxdb = best.Value.(*OutputInfluxdb)
+		return nil
+	case OutputTypeOutputMinio:
+		u.OutputMinio = best.Value.(*OutputMinio)
+		return nil
+	case OutputTypeOutputRouter:
+		u.OutputRouter = best.Value.(*OutputRouter)
+		return nil
+	case OutputTypeOutputSns:
+		u.OutputSns = best.Value.(*OutputSns)
+		return nil
+	case OutputTypeOutputSnmp:
+		u.OutputSnmp = best.Value.(*OutputSnmp)
+		return nil
+	case OutputTypeOutputSumoLogic:
+		u.OutputSumoLogic = best.Value.(*OutputSumoLogic)
+		return nil
+	case OutputTypeOutputDatadog:
+		u.OutputDatadog = best.Value.(*OutputDatadog)
+		return nil
+	case OutputTypeOutputLoki:
+		u.OutputLoki = best.Value.(*OutputLoki)
+		return nil
+	case OutputTypeOutputPrometheus:
+		u.OutputPrometheus = best.Value.(*OutputPrometheus)
+		return nil
+	case OutputTypeOutputRing:
+		u.OutputRing = best.Value.(*OutputRing)
+		return nil
+	case OutputTypeOutputOpenTelemetry:
+		u.OutputOpenTelemetry = best.Value.(*OutputOpenTelemetry)
+		return nil
+	case OutputTypeOutputDataset:
+		u.OutputDataset = best.Value.(*OutputDataset)
+		return nil
+	case OutputTypeOutputCriblTCP:
+		u.OutputCriblTCP = best.Value.(*OutputCriblTCP)
+		return nil
+	case OutputTypeOutputCriblHTTP:
+		u.OutputCriblHTTP = best.Value.(*OutputCriblHTTP)
+		return nil
+	case OutputTypeOutputCriblLake:
+		u.OutputCriblLake = best.Value.(*OutputCriblLake)
+		return nil
+	case OutputTypeOutputDiskSpool:
+		u.OutputDiskSpool = best.Value.(*OutputDiskSpool)
+		return nil
+	case OutputTypeOutputXsiam:
+		u.OutputXsiam = best.Value.(*OutputXsiam)
+		return nil
+	case OutputTypeOutputNetflow:
+		u.OutputNetflow = best.Value.(*OutputNetflow)
+		return nil
+	case OutputTypeOutputSplunk:
+		u.OutputSplunk = best.Value.(*OutputSplunk)
+		return nil
+	case OutputTypeOutputWavefront:
+		u.OutputWavefront = best.Value.(*OutputWavefront)
+		return nil
+	case OutputTypeOutputSignalfx:
+		u.OutputSignalfx = best.Value.(*OutputSignalfx)
+		return nil
+	case OutputTypeOutputS3:
+		u.OutputS3 = best.Value.(*OutputS3)
+		return nil
+	case OutputTypeOutputAzureBlob:
+		u.OutputAzureBlob = best.Value.(*OutputAzureBlob)
+		return nil
+	case OutputTypeOutputAzureLogs:
+		u.OutputAzureLogs = best.Value.(*OutputAzureLogs)
+		return nil
+	case OutputTypeOutputGoogleChronicle:
+		u.OutputGoogleChronicle = best.Value.(*OutputGoogleChronicle)
+		return nil
+	case OutputTypeOutputStatsd:
+		u.OutputStatsd = best.Value.(*OutputStatsd)
+		return nil
+	case OutputTypeOutputStatsdExt:
+		u.OutputStatsdExt = best.Value.(*OutputStatsdExt)
+		return nil
+	case OutputTypeOutputGraphite:
+		u.OutputGraphite = best.Value.(*OutputGraphite)
+		return nil
+	case OutputTypeOutputSqs:
+		u.OutputSqs = best.Value.(*OutputSqs)
+		return nil
+	case OutputTypeOutputServiceNow:
+		u.OutputServiceNow = best.Value.(*OutputServiceNow)
+		return nil
+	case OutputTypeOutputCrowdstrikeNextGenSiem:
+		u.OutputCrowdstrikeNextGenSiem = best.Value.(*OutputCrowdstrikeNextGenSiem)
+		return nil
+	case OutputTypeOutputDlS3:
+		u.OutputDlS3 = best.Value.(*OutputDlS3)
+		return nil
+	case OutputTypeOutputDynatraceOtlp:
+		u.OutputDynatraceOtlp = best.Value.(*OutputDynatraceOtlp)
+		return nil
+	case OutputTypeOutputGrafanaCloud:
+		u.OutputGrafanaCloud = best.Value.(*OutputGrafanaCloud)
+		return nil
+	case OutputTypeOutputHumioHec:
+		u.OutputHumioHec = best.Value.(*OutputHumioHec)
+		return nil
+	case OutputTypeOutputDynatraceHTTP:
+		u.OutputDynatraceHTTP = best.Value.(*OutputDynatraceHTTP)
 		return nil
 	}
 

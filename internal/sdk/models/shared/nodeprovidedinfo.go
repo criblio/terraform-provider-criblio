@@ -261,17 +261,43 @@ func CreateOsNodeProvidedInfoOs2(nodeProvidedInfoOs2 NodeProvidedInfoOs2) Os {
 
 func (u *Os) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var nodeProvidedInfoOs1 NodeProvidedInfoOs1 = NodeProvidedInfoOs1{}
 	if err := utils.UnmarshalJSON(data, &nodeProvidedInfoOs1, "", true, nil); err == nil {
-		u.NodeProvidedInfoOs1 = &nodeProvidedInfoOs1
-		u.Type = OsTypeNodeProvidedInfoOs1
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OsTypeNodeProvidedInfoOs1,
+			Value: &nodeProvidedInfoOs1,
+		})
 	}
 
 	var nodeProvidedInfoOs2 NodeProvidedInfoOs2 = NodeProvidedInfoOs2{}
 	if err := utils.UnmarshalJSON(data, &nodeProvidedInfoOs2, "", true, nil); err == nil {
-		u.NodeProvidedInfoOs2 = &nodeProvidedInfoOs2
-		u.Type = OsTypeNodeProvidedInfoOs2
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OsTypeNodeProvidedInfoOs2,
+			Value: &nodeProvidedInfoOs2,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Os", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Os", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(OsType)
+	switch best.Type {
+	case OsTypeNodeProvidedInfoOs1:
+		u.NodeProvidedInfoOs1 = best.Value.(*NodeProvidedInfoOs1)
+		return nil
+	case OsTypeNodeProvidedInfoOs2:
+		u.NodeProvidedInfoOs2 = best.Value.(*NodeProvidedInfoOs2)
 		return nil
 	}
 
