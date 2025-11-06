@@ -55,6 +55,7 @@ func (r *GlobalVarResource) Schema(ctx context.Context, req resource.SchemaReque
 		MarkdownDescription: "GlobalVar Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Brief description of this variable. Optional.`,
 			},
@@ -76,9 +77,11 @@ func (r *GlobalVarResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"lib": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 			},
 			"tags": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `One or more tags related to this variable. Optional.`,
 			},
@@ -101,6 +104,7 @@ func (r *GlobalVarResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"value": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Value of variable`,
 			},
@@ -205,11 +209,11 @@ func (r *GlobalVarResource) Create(ctx context.Context, req resource.CreateReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.Object != nil) {
+	if !(res1.Object != nil && res1.Object.Items != nil && len(res1.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableByIDResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedGlobalVar(ctx, &res1.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -269,11 +273,11 @@ func (r *GlobalVarResource) Read(ctx context.Context, req resource.ReadRequest, 
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedGlobalVar(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -356,11 +360,11 @@ func (r *GlobalVarResource) Update(ctx context.Context, req resource.UpdateReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.Object != nil) {
+	if !(res1.Object != nil && res1.Object.Items != nil && len(res1.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableByIDResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedGlobalVar(ctx, &res1.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

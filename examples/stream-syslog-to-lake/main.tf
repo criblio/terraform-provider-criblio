@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+  cloud_domain    = "cribl-playground.cloud"
+}
+
 # Worker Group Configuration
 resource "criblio_group" "syslog_worker_group" {
   cloud = {
@@ -18,6 +32,19 @@ resource "criblio_group" "syslog_worker_group" {
   worker_remote_access = false
 }
 
+# Cribl Lake Destination Configuration
+resource "criblio_destination" "cribl_lake" {
+  id       = "cribl-lake-2"
+  group_id = criblio_group.syslog_worker_group.id
+
+  output_cribl_lake = {
+    id          = "cribl-lake-2"
+    type        = "cribl_lake"
+    description = "Cribl Lake destination for syslog data"
+    dest_path   = "default_logs"
+  }
+}
+
 # Syslog Source Configuration
 resource "criblio_source" "syslog_source" {
   id       = "syslog-input"
@@ -28,6 +55,8 @@ resource "criblio_source" "syslog_source" {
       allow_non_standard_app_name = false
       connections = [
         {
+          # Use resource reference to ensure proper dependency ordering
+          # This ensures destination is created before source, and source is deleted before destination
           output   = criblio_destination.cribl_lake.id
           pipeline = "palo_alto_traffic"
         }
@@ -82,27 +111,18 @@ resource "criblio_source" "syslog_source" {
       udp_socket_rx_buf_size = 262144
     }
   }
+
+  # Explicit dependency ensures:
+  # - Creation: destination is created before source
+  # - Deletion: source (dependent) is deleted before destination (required by API)
   depends_on = [criblio_destination.cribl_lake]
-}
-
-# Cribl Lake Destination Configuration
-resource "criblio_destination" "cribl_lake" {
-  id       = "cribl-lake-2"
-  group_id = criblio_group.syslog_worker_group.id
-
-  output_cribl_lake = {
-    id          = "cribl-lake-2"
-    type        = "cribl_lake"
-    description = "Cribl Lake destination for syslog data"
-    dest_path   = "default_logs"
-  }
 }
 
 # Pack Configuration
 resource "criblio_pack" "syslog_pack" {
   id           = "syslog-processing"
   group_id     = criblio_group.syslog_worker_group.id
-  filename     = "cribl-palo-alto-networks-source-1.0.0.crbl"
+  filename     = abspath("${path.module}/cribl-palo-alto-networks-source-1.0.0.crbl") # Use the absolute path to the pack file
   description  = "Pack for syslog processing"
   disabled     = false
   display_name = "Pack for syslog processing"

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: daccff4bd3bf45ee37a9000895daca3d
+  docChecksum: f4edfd3b946fc0e5697987d4bfcce859
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.18.21
-  configChecksum: cb6af13a707b3143fa762ab3ed5e3eab
+  releaseVersion: 1.18.22
+  configChecksum: 07d8a5059d0cf6e371db27b90e3c171c
   published: true
 features:
   terraform:
@@ -5297,7 +5297,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateGlobalVariableById:

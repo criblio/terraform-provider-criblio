@@ -5,10 +5,12 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 func (r *GlobalVarResourceModel) RefreshFromOperationsCreateGlobalVariableResponseBody(ctx context.Context, resp *operations.CreateGlobalVariableResponseBody) diag.Diagnostics {
@@ -35,16 +37,60 @@ func (r *GlobalVarResourceModel) RefreshFromOperationsCreateGlobalVariableRespon
 func (r *GlobalVarResourceModel) RefreshFromOperationsGetGlobalVariableByIDResponseBody(ctx context.Context, resp *operations.GetGlobalVariableByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
+	if resp != nil && len(resp.Items) > 0 {
+		// Extract the first item from the array (single variable response)
+		// Now it's a typed shared.GlobalVar struct thanks to the overlay fix!
+		gv := resp.Items[0]
+
+		// Populate individual fields from the typed struct
+		r.ID = types.StringValue(gv.ID)
+		if gv.Description != nil {
+			r.Description = types.StringValue(*gv.Description)
+		} else {
+			r.Description = types.StringNull()
+		}
+		if gv.Lib != nil {
+			r.Lib = types.StringValue(*gv.Lib)
+		} else {
+			r.Lib = types.StringNull()
+		}
+		if gv.Tags != nil {
+			r.Tags = types.StringValue(*gv.Tags)
+		} else {
+			r.Tags = types.StringNull()
+		}
+		if gv.Type != nil {
+			r.Type = types.StringValue(string(*gv.Type))
+		} else {
+			r.Type = types.StringValue("any") // Default per schema
+		}
+		if gv.Value != nil {
+			r.Value = types.StringValue(*gv.Value)
+		} else {
+			r.Value = types.StringNull()
+		}
+
+		// Also populate items (for backwards compatibility)
 		r.Items = nil
 		for _, itemsItem := range resp.Items {
 			var items map[string]jsontypes.Normalized
-			if len(itemsItem) > 0 {
-				items = make(map[string]jsontypes.Normalized, len(itemsItem))
-				for key, value := range itemsItem {
-					result, _ := json.Marshal(value)
-					items[key] = jsontypes.NewNormalizedValue(string(result))
-				}
+			// Convert typed struct to map for items field
+			items = make(map[string]jsontypes.Normalized)
+			items["id"] = jsontypes.NewNormalizedValue(fmt.Sprintf("%q", itemsItem.ID))
+			if itemsItem.Description != nil {
+				items["description"] = jsontypes.NewNormalizedValue(fmt.Sprintf("%q", *itemsItem.Description))
+			}
+			if itemsItem.Lib != nil {
+				items["lib"] = jsontypes.NewNormalizedValue(fmt.Sprintf("%q", *itemsItem.Lib))
+			}
+			if itemsItem.Tags != nil {
+				items["tags"] = jsontypes.NewNormalizedValue(fmt.Sprintf("%q", *itemsItem.Tags))
+			}
+			if itemsItem.Type != nil {
+				items["type"] = jsontypes.NewNormalizedValue(fmt.Sprintf("%q", string(*itemsItem.Type)))
+			}
+			if itemsItem.Value != nil {
+				items["value"] = jsontypes.NewNormalizedValue(fmt.Sprintf("%q", *itemsItem.Value))
 			}
 			r.Items = append(r.Items, items)
 		}
@@ -70,6 +116,23 @@ func (r *GlobalVarResourceModel) RefreshFromOperationsUpdateGlobalVariableByIDRe
 			r.Items = append(r.Items, items)
 		}
 	}
+
+	return diags
+}
+
+func (r *GlobalVarResourceModel) RefreshFromSharedGlobalVar(ctx context.Context, resp *shared.GlobalVar) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringPointerValue(resp.Lib)
+	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp.Type != nil {
+		r.Type = types.StringValue(string(*resp.Type))
+	} else {
+		r.Type = types.StringNull()
+	}
+	r.Value = types.StringPointerValue(resp.Value)
 
 	return diags
 }

@@ -254,3 +254,10 @@ actions:
   - target: "$.paths['/m/{groupId}/lib/grok/{id}'].get.responses['200'].content.application/json.schema"
     update:
       x-speakeasy-entity: Grok
+
+  # Force typed schema for GetGlobalVariableByID response items
+  # This makes Speakeasy generate Items []shared.GlobalVar instead of Items []map[string]any
+  - target: "$.paths['/m/{groupId}/lib/vars/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
+    update:
+      $ref: "#/components/schemas/GlobalVar"
+      x-speakeasy-entity: GlobalVar
