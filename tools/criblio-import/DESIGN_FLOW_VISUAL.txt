@@ -1,0 +1,282 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    CLI TOOL DESIGN FLOW - VISUAL DIAGRAM                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CODE GENERATION (Build Time)                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────┐
+    │ openapi.yml  │  Base OpenAPI Schema│
+    └──────┬───────┘
+           │
+           │
+    ┌──────▼──────────────────┐
+    │ entity-mapping-overlay   │  Schema Modifications
+    │ .yml                     │  (e.g., GlobalVar fix)
+    └──────┬───────────────────┘
+           │
+           │
+    ┌──────▼──────────────┐
+    │  Speakeasy Generator │  Code Generation Tool
+    │  (make build-speakeasy)│
+    └──────┬──────────────┘
+           │
+           ├──────────────────────┐
+           │                      │
+           │                      │
+    ┌──────▼──────┐      ┌───────▼──────────┐
+    │ internal/   │      │ internal/        │
+    │ sdk/        │      │ provider/        │
+    │             │      │                  │
+    │ • criblio.go│      │ • *_resource.go  │
+    │ • models/   │      │ • *_resource_   │
+    │   operations│      │   sdk.go         │
+    │ • models/   │      │ • *_data_source. │
+    │   shared    │      │   go             │
+    └─────────────┘      └──────────────────┘
+         │                      │
+         │                      │
+         └──────────┬───────────┘
+                    │
+                    │ Available for Import
+                    │
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CLI TOOL EXECUTION (Runtime)                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────┐
+    │                    USER INPUT                                │
+    │                                                              │
+    │  $ criblio-import --output ./configs \                      │
+    │      --include sources,destinations                          │
+    │                                                              │
+    │  Environment Variables:                                      │
+    │    CRIBL_BEARER_TOKEN="..."                                 │
+    │    CRIBL_WORKSPACE_ID="main"                                │
+    │    CRIBL_ORGANIZATION_ID="org"                              │
+    │                                                              │
+    │  Config File:                                                │
+    │    ~/.cribl/credentials.ini                                  │
+    └────────────────────┬────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────┐
+    │              criblio-import CLI                              │
+    │              (main.go - Cobra)                               │
+    │                                                              │
+    │  • Parse command and flags                                   │
+    │  • Initialize Viper for config                               │
+    └────────────────────┬────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────┐
+    │              Viper Config Manager                            │
+    │                                                              │
+    │  Priority Resolution:                                        │
+    │    1. Command-line flags (highest)                           │
+    │    2. Environment variables (CRIBL_*)                        │
+    │    3. Config file (~/.cribl/credentials)                     │
+    │    4. Defaults (lowest)                                      │
+    └────────────────────┬────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────┐
+    │              CriblTerraformHook                              │
+    │              (Automatic Authentication)                      │
+    │                                                              │
+    │  Auto-detects auth method:                                   │
+    │    • Bearer Token → Bearer auth                              │
+    │    • Client ID/Secret → OAuth flow                            │
+    │    • On-prem URL → Basic auth                                │
+    │    • Credentials file → Read profile                         │
+    └────────────────────┬────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────┐
+    │              SDK Client                                      │
+    │              (internal/sdk - Generated)                      │
+    │                                                              │
+    │  • Authenticated client ready                                │
+    │  • All API methods available                                 │
+    │  • client.System.Diag.GetDiagBundle()                        │
+    └────────────────────┬────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────┐
+    │              Cribl API                                         │
+    │              /bulk/diag/download                               │
+    │                                                                 │
+    │  GET /api/v1/system/diag/download                              │
+    └────────────────────┬────────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────────┐
+    │              Archive Download                                    │
+    │              (.tar.gz file)                                      │
+    │                                                                  │
+    │  • Receives archive bytes                                        │
+    │  • Extracts to temporary directory                               │
+    └────────────────────┬─────────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────────┐
+    │              YAML File Parsing                                   │
+    │                                                                  │
+    │  Extracted files:                                                │
+    │    • sources/*.yaml                                              │
+    │    • destinations/*.yaml                                         │
+    │    • pipelines/*.yaml                                            │
+    │    • routes/*.yaml                                               │
+    │    • packs/*.yaml                                                │
+    │    • ... (other resources)                                       │
+    └────────────────────┬─────────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────────┐
+    │              Resource Converters                                 │
+    │              (YAML → HCL)                                        │
+    │                                                                  │
+    │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+    │  │   Source    │  │ Destination  │  │  Pipeline   │          │
+    │  │  Converter  │  │  Converter   │  │  Converter  │          │
+    │  └──────────────┘  └──────────────┘  └──────────────┘          │
+    │                                                                  │
+    │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+    │  │   Routes    │  │    Pack      │  │  GlobalVar   │          │
+    │  │  Converter  │  │  Converter   │  │  Converter   │          │
+    │  └──────────────┘  └──────────────┘  └──────────────┘          │
+    │                                                                  │
+    │  Each converter:                                                 │
+    │    • Parses YAML structure                                       │
+    │    • Maps fields (camelCase → snake_case)                        │
+    │    • Converts types                                              │
+    │    • Validates against schema                                    │
+    │    • Generates HCL blocks                                        │
+    └────────────────────┬─────────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────────┐
+    │              HCL Generation                                       │
+    │              (hclwrite)                                           │
+    │                                                                  │
+    │  • Format with hclwrite                                          │
+    │  • Generate resource blocks                                      │
+    │  • Create module structure                                       │
+    └────────────────────┬─────────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────────┐
+    │              Terraform Files Output                               │
+    │                                                                  │
+    │  terraform-configs/                                              │
+    │  ├── main.tf              (Provider config)                     │
+    │  ├── variables.tf         (Sensitive vars, optional)             │
+    │  ├── README.md            (Generated docs)                       │
+    │  └── modules/                                                    │
+    │      ├── sources/                                                │
+    │      │   └── main.tf     (All source resources)                 │
+    │      ├── destinations/                                           │
+    │      │   └── main.tf     (All destination resources)            │
+    │      ├── pipelines/                                              │
+    │      │   └── main.tf     (All pipeline resources)               │
+    │      └── ... (other modules)                                    │
+    └────────────────────┬─────────────────────────────────────────────┘
+                         │
+                         │
+    ┌─────────────────────▼────────────────────────────────────────────┐
+    │              Optional: Auto-Import                                │
+    │              (if --auto-import flag)                              │
+    │                                                                  │
+    │  • terraform init                                                │
+    │  • terraform import (for each resource)                          │
+    │  • terraform refresh                                             │
+    └──────────────────────────────────────────────────────────────────┘
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         KEY INTEGRATION POINTS                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+    ┌─────────────────┐
+    │   CLI Tool      │
+    │  (main.go)      │
+    └────────┬────────┘
+             │
+             ├─── imports ───> ┌─────────────────┐
+             │                 │  internal/sdk   │  ← Generated by Speakeasy
+             │                 │                 │
+             │                 │  • criblio.go   │
+             │                 │  • models/      │
+             │                 │    operations/  │
+             │                 │  • models/      │
+             │                 │    shared/      │
+             │                 └─────────────────┘
+             │
+             ├─── references ─> ┌─────────────────┐
+             │                 │ internal/       │  ← Generated by Speakeasy
+             │                 │ provider/       │
+             │                 │                 │
+             │                 │  • *_resource.go│
+             │                 │  • *_resource_   │
+             │                 │    sdk.go       │
+             │                 │  • Schemas      │
+             │                 └─────────────────┘
+             │
+             ├─── uses ───────> ┌─────────────────┐
+             │                 │  External Libs  │
+             │                 │                 │
+             │                 │  • Cobra        │
+             │                 │  • Viper        │
+             │                 │  • hclwrite     │
+             │                 │  • yaml.v3      │
+             │                 └─────────────────┘
+             │
+             └─── calls ──────> ┌─────────────────┐
+                               │  Cribl API      │
+                               │                 │
+                               │  /bulk/diag/    │
+                               │  download       │
+                               └─────────────────┘
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         DATA FLOW SUMMARY                                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+    Input Sources:
+    ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+    │   Flags     │  │ Env Vars    │  │ Config File │
+    │ --output    │  │ CRIBL_*     │  │ ~/.cribl/  │
+    │ --include   │  │             │  │ credentials │
+    └──────┬──────┘  └──────┬──────┘  └──────┬──────┘
+           │                 │                 │
+           └─────────────────┼─────────────────┘
+                             │
+                    ┌────────▼────────┐
+                    │  Viper Config   │
+                    │  (Merged)       │
+                    └────────┬────────┘
+                             │
+                    ┌────────▼────────┐
+                    │  SDK Client     │
+                    │  (Authenticated)│
+                    └────────┬────────┘
+                             │
+                    ┌────────▼────────┐
+                    │  Cribl API      │
+                    │  (Archive)      │
+                    └────────┬────────┘
+                             │
+                    ┌────────▼────────┐
+                    │  YAML Files     │
+                    │  (Parsed)       │
+                    └────────┬────────┘
+                             │
+                    ┌────────▼────────┐
+                    │  HCL Files      │
+                    │  (Generated)     │
+                    └─────────────────┘
+
