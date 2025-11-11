@@ -46,7 +46,8 @@ type V1WorkspacesUpdateWorkspaceResponse struct {
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
-	RawResponse     *http.Response
+	RawResponse *http.Response
+	// Default error response
 	DefaultErrorDTO *shared.DefaultErrorDTO
 }
 

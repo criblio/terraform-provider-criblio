@@ -14,39 +14,39 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &HybridGroupSystemSettingsDataSource{}
-var _ datasource.DataSourceWithConfigure = &HybridGroupSystemSettingsDataSource{}
+var _ datasource.DataSource = &GroupSystemSettingsDataSource{}
+var _ datasource.DataSourceWithConfigure = &GroupSystemSettingsDataSource{}
 
-func NewHybridGroupSystemSettingsDataSource() datasource.DataSource {
-	return &HybridGroupSystemSettingsDataSource{}
+func NewGroupSystemSettingsDataSource() datasource.DataSource {
+	return &GroupSystemSettingsDataSource{}
 }
 
-// HybridGroupSystemSettingsDataSource is the data source implementation.
-type HybridGroupSystemSettingsDataSource struct {
+// GroupSystemSettingsDataSource is the data source implementation.
+type GroupSystemSettingsDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 
-// HybridGroupSystemSettingsDataSourceModel describes the data model.
-type HybridGroupSystemSettingsDataSourceModel struct {
+// GroupSystemSettingsDataSourceModel describes the data model.
+type GroupSystemSettingsDataSourceModel struct {
 	GroupID types.String                 `tfsdk:"group_id"`
 	Items   []tfTypes.SystemSettingsConf `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
-func (r *HybridGroupSystemSettingsDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_hybrid_group_system_settings"
+func (r *GroupSystemSettingsDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_group_system_settings"
 }
 
 // Schema defines the schema for the data source.
-func (r *HybridGroupSystemSettingsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (r *GroupSystemSettingsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "HybridGroupSystemSettings DataSource",
+		MarkdownDescription: "GroupSystemSettings DataSource",
 
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The hybrid worker group to which this instance belongs. Defaults to 'defaultHybrid'.`,
+				Description: `The hybrid worker group or edge fleet to which this instance belongs. Defaults to 'defaultHybrid'.`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -313,7 +313,7 @@ func (r *HybridGroupSystemSettingsDataSource) Schema(ctx context.Context, req da
 	}
 }
 
-func (r *HybridGroupSystemSettingsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (r *GroupSystemSettingsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -333,8 +333,8 @@ func (r *HybridGroupSystemSettingsDataSource) Configure(ctx context.Context, req
 	r.client = client
 }
 
-func (r *HybridGroupSystemSettingsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *HybridGroupSystemSettingsDataSourceModel
+func (r *GroupSystemSettingsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *GroupSystemSettingsDataSourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &item)...)

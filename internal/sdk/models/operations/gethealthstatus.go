@@ -3,6 +3,7 @@
 package operations
 
 import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
@@ -27,6 +28,8 @@ type GetHealthStatusResponse struct {
 	RawResponse *http.Response
 	// Health status
 	Object *GetHealthStatusResponseBody
+	// Default error response
+	DefaultErrorDTO *shared.DefaultErrorDTO
 }
 
 func (g *GetHealthStatusResponse) GetContentType() string {
@@ -55,4 +58,11 @@ func (g *GetHealthStatusResponse) GetObject() *GetHealthStatusResponseBody {
 		return nil
 	}
 	return g.Object
+}
+
+func (g *GetHealthStatusResponse) GetDefaultErrorDTO() *shared.DefaultErrorDTO {
+	if g == nil {
+		return nil
+	}
+	return g.DefaultErrorDTO
 }

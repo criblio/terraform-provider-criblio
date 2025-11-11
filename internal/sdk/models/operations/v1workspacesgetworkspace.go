@@ -41,6 +41,7 @@ type V1WorkspacesGetWorkspaceResponse struct {
 	RawResponse *http.Response
 	// The Workspace details have been retrieved
 	WorkspaceSchema *shared.WorkspaceSchema
+	// Default error response
 	DefaultErrorDTO *shared.DefaultErrorDTO
 }
 

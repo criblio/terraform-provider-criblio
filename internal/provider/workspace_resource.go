@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -37,7 +36,6 @@ type WorkspaceResource struct {
 type WorkspaceResourceModel struct {
 	Alias          types.String   `tfsdk:"alias"`
 	Description    types.String   `tfsdk:"description"`
-	LastUpdated    types.String   `tfsdk:"last_updated"`
 	LeaderFQDN     types.String   `tfsdk:"leader_fqdn"`
 	OrganizationID types.String   `tfsdk:"organization_id"`
 	Region         types.String   `tfsdk:"region"`
@@ -63,13 +61,6 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				Computed:    true,
 				Optional:    true,
 				Description: `Detailed description of the workspace`,
-			},
-			"last_updated": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the workspace was last updated`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"leader_fqdn": schema.StringAttribute{
 				Computed:    true,

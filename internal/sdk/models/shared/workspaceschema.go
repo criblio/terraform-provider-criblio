@@ -5,8 +5,6 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
-	"time"
 )
 
 // WorkspaceSchemaRegion - AWS region where the workspace is deployed
@@ -98,8 +96,6 @@ type WorkspaceSchema struct {
 	WorkspaceID string `json:"workspaceId"`
 	// AWS region where the workspace is deployed
 	Region WorkspaceSchemaRegion `json:"region"`
-	// Timestamp when the workspace was last updated
-	LastUpdated time.Time `json:"lastUpdated"`
 	// Fully Qualified Domain Name of the workspace leader
 	LeaderFQDN string `json:"leaderFQDN"`
 	// Current state of the workspace
@@ -110,17 +106,6 @@ type WorkspaceSchema struct {
 	Description *string `json:"description,omitempty"`
 	// Tags associated with the workspace
 	Tags []string `json:"tags,omitempty"`
-}
-
-func (w WorkspaceSchema) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(w, "", false)
-}
-
-func (w *WorkspaceSchema) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"workspaceId", "region", "lastUpdated", "leaderFQDN", "state"}); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (w *WorkspaceSchema) GetWorkspaceID() string {
@@ -135,13 +120,6 @@ func (w *WorkspaceSchema) GetRegion() WorkspaceSchemaRegion {
 		return WorkspaceSchemaRegion("")
 	}
 	return w.Region
-}
-
-func (w *WorkspaceSchema) GetLastUpdated() time.Time {
-	if w == nil {
-		return time.Time{}
-	}
-	return w.LastUpdated
 }
 
 func (w *WorkspaceSchema) GetLeaderFQDN() string {

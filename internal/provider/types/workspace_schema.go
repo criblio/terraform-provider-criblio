@@ -9,7 +9,6 @@ import (
 type WorkspaceSchema struct {
 	Alias       types.String   `tfsdk:"alias"`
 	Description types.String   `tfsdk:"description"`
-	LastUpdated types.String   `tfsdk:"last_updated"`
 	LeaderFQDN  types.String   `tfsdk:"leader_fqdn"`
 	Region      types.String   `tfsdk:"region"`
 	State       types.String   `tfsdk:"state"`

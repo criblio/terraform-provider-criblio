@@ -18,21 +18,21 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &HybridGroupSystemSettingsResource{}
-var _ resource.ResourceWithImportState = &HybridGroupSystemSettingsResource{}
+var _ resource.Resource = &GroupSystemSettingsResource{}
+var _ resource.ResourceWithImportState = &GroupSystemSettingsResource{}
 
-func NewHybridGroupSystemSettingsResource() resource.Resource {
-	return &HybridGroupSystemSettingsResource{}
+func NewGroupSystemSettingsResource() resource.Resource {
+	return &GroupSystemSettingsResource{}
 }
 
-// HybridGroupSystemSettingsResource defines the resource implementation.
-type HybridGroupSystemSettingsResource struct {
+// GroupSystemSettingsResource defines the resource implementation.
+type GroupSystemSettingsResource struct {
 	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 
-// HybridGroupSystemSettingsResourceModel describes the resource data model.
-type HybridGroupSystemSettingsResourceModel struct {
+// GroupSystemSettingsResourceModel describes the resource data model.
+type GroupSystemSettingsResourceModel struct {
 	API                  tfTypes.SystemSettingsConfAPI        `tfsdk:"api"`
 	Backups              tfTypes.SystemSettingsConfBackups    `tfsdk:"backups"`
 	CustomLogo           tfTypes.SystemSettingsConfCustomLogo `tfsdk:"custom_logo"`
@@ -51,13 +51,13 @@ type HybridGroupSystemSettingsResourceModel struct {
 	Workers              tfTypes.SystemSettingsConfWorkers    `tfsdk:"workers"`
 }
 
-func (r *HybridGroupSystemSettingsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_hybrid_group_system_settings"
+func (r *GroupSystemSettingsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_group_system_settings"
 }
 
-func (r *HybridGroupSystemSettingsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "HybridGroupSystemSettings Resource",
+		MarkdownDescription: "GroupSystemSettings Resource",
 		Attributes: map[string]schema.Attribute{
 			"api": schema.SingleNestedAttribute{
 				Required: true,
@@ -154,7 +154,7 @@ func (r *HybridGroupSystemSettingsResource) Schema(ctx context.Context, req reso
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The hybrid worker group to which this instance belongs. Defaults to 'defaultHybrid'.`,
+				Description: `The hybrid worker group or edge fleet to which this instance belongs. Defaults to 'defaultHybrid'.`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -976,7 +976,7 @@ func (r *HybridGroupSystemSettingsResource) Schema(ctx context.Context, req reso
 	}
 }
 
-func (r *HybridGroupSystemSettingsResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *GroupSystemSettingsResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -996,8 +996,8 @@ func (r *HybridGroupSystemSettingsResource) Configure(ctx context.Context, req r
 	r.client = client
 }
 
-func (r *HybridGroupSystemSettingsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *HybridGroupSystemSettingsResourceModel
+func (r *GroupSystemSettingsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *GroupSystemSettingsResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -1093,8 +1093,8 @@ func (r *HybridGroupSystemSettingsResource) Create(ctx context.Context, req reso
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *HybridGroupSystemSettingsResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *HybridGroupSystemSettingsResourceModel
+func (r *GroupSystemSettingsResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *GroupSystemSettingsResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -1151,8 +1151,8 @@ func (r *HybridGroupSystemSettingsResource) Read(ctx context.Context, req resour
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *HybridGroupSystemSettingsResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *HybridGroupSystemSettingsResourceModel
+func (r *GroupSystemSettingsResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *GroupSystemSettingsResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -1244,8 +1244,8 @@ func (r *HybridGroupSystemSettingsResource) Update(ctx context.Context, req reso
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *HybridGroupSystemSettingsResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *HybridGroupSystemSettingsResourceModel
+func (r *GroupSystemSettingsResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *GroupSystemSettingsResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -1287,6 +1287,6 @@ func (r *HybridGroupSystemSettingsResource) Delete(ctx context.Context, req reso
 
 }
 
-func (r *HybridGroupSystemSettingsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *GroupSystemSettingsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), req.ID)...)
 }

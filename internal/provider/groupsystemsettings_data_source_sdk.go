@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *HybridGroupSystemSettingsDataSourceModel) RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx context.Context, resp *operations.GetSystemSettingsConfResponseBody) diag.Diagnostics {
+func (r *GroupSystemSettingsDataSourceModel) RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx context.Context, resp *operations.GetSystemSettingsConfResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -104,7 +104,7 @@ func (r *HybridGroupSystemSettingsDataSourceModel) RefreshFromOperationsGetSyste
 	return diags
 }
 
-func (r *HybridGroupSystemSettingsDataSourceModel) ToOperationsGetSystemSettingsConfRequest(ctx context.Context) (*operations.GetSystemSettingsConfRequest, diag.Diagnostics) {
+func (r *GroupSystemSettingsDataSourceModel) ToOperationsGetSystemSettingsConfRequest(ctx context.Context) (*operations.GetSystemSettingsConfRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var groupID string

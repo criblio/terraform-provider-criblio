@@ -5,8 +5,6 @@ package shared
 type WorkspacesListResponseDTO struct {
 	// List of workspaces
 	Items []WorkspaceSchema `json:"items"`
-	// Total number of workspaces
-	Count float64 `json:"count"`
 }
 
 func (w *WorkspacesListResponseDTO) GetItems() []WorkspaceSchema {
@@ -14,11 +12,4 @@ func (w *WorkspacesListResponseDTO) GetItems() []WorkspaceSchema {
 		return []WorkspaceSchema{}
 	}
 	return w.Items
-}
-
-func (w *WorkspacesListResponseDTO) GetCount() float64 {
-	if w == nil {
-		return 0.0
-	}
-	return w.Count
 }

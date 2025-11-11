@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 526cb9df9a369c6ed37b4de9f42cae6d
+  docChecksum: 957c79cb5d072b166111ae3da547ec1a
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.18.25
-  configChecksum: 0f5e29543edc7fc4019943656cec0d1d
+  releaseVersion: 1.18.27
+  configChecksum: 7aabf9325d99802bd9a1c36042491373
   published: true
 features:
   terraform:
@@ -46,8 +46,8 @@ generatedFiles:
   - examples/data-sources/criblio_global_var/data-source.tf
   - examples/data-sources/criblio_grok/data-source.tf
   - examples/data-sources/criblio_group/data-source.tf
+  - examples/data-sources/criblio_group_system_settings/data-source.tf
   - examples/data-sources/criblio_hmac_function/data-source.tf
-  - examples/data-sources/criblio_hybrid_group_system_settings/data-source.tf
   - examples/data-sources/criblio_instance_settings/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
   - examples/data-sources/criblio_mapping_ruleset/data-source.tf
@@ -118,12 +118,12 @@ generatedFiles:
   - examples/resources/criblio_group/import-by-string-id.tf
   - examples/resources/criblio_group/import.sh
   - examples/resources/criblio_group/resource.tf
+  - examples/resources/criblio_group_system_settings/import-by-string-id.tf
+  - examples/resources/criblio_group_system_settings/import.sh
+  - examples/resources/criblio_group_system_settings/resource.tf
   - examples/resources/criblio_hmac_function/import-by-string-id.tf
   - examples/resources/criblio_hmac_function/import.sh
   - examples/resources/criblio_hmac_function/resource.tf
-  - examples/resources/criblio_hybrid_group_system_settings/import-by-string-id.tf
-  - examples/resources/criblio_hybrid_group_system_settings/import.sh
-  - examples/resources/criblio_hybrid_group_system_settings/resource.tf
   - examples/resources/criblio_lakehouse_dataset_connection/resource.tf
   - examples/resources/criblio_lookup_file/import-by-string-id.tf
   - examples/resources/criblio_lookup_file/import.sh
@@ -278,14 +278,14 @@ generatedFiles:
   - internal/provider/group_data_source_sdk.go
   - internal/provider/group_resource.go
   - internal/provider/group_resource_sdk.go
+  - internal/provider/groupsystemsettings_data_source.go
+  - internal/provider/groupsystemsettings_data_source_sdk.go
+  - internal/provider/groupsystemsettings_resource.go
+  - internal/provider/groupsystemsettings_resource_sdk.go
   - internal/provider/hmacfunction_data_source.go
   - internal/provider/hmacfunction_data_source_sdk.go
   - internal/provider/hmacfunction_resource.go
   - internal/provider/hmacfunction_resource_sdk.go
-  - internal/provider/hybridgroupsystemsettings_data_source.go
-  - internal/provider/hybridgroupsystemsettings_data_source_sdk.go
-  - internal/provider/hybridgroupsystemsettings_resource.go
-  - internal/provider/hybridgroupsystemsettings_resource_sdk.go
   - internal/provider/instancesettings_data_source.go
   - internal/provider/instancesettings_data_source_sdk.go
   - internal/provider/lakehousedatasetconnection_resource.go
@@ -7962,6 +7962,8 @@ examples:
       responses:
         "200":
           application/json: {"status": "OK"}
+        default:
+          application/json: {"statusCode": 1397.13, "message": "<value>"}
   v1.workspaces.createWorkspace:
     speakeasy-default-v1-workspaces-create-workspace:
       parameters:
@@ -7971,7 +7973,7 @@ examples:
         application/json: {"workspaceId": "main", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
       responses:
         "201":
-          application/json: {"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+          application/json: {"workspaceId": "main", "region": "us-west-2", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
         default:
           application/json: {"statusCode": 2135.91, "message": "<value>"}
   v1.workspaces.listWorkspaces:
@@ -7981,7 +7983,7 @@ examples:
           organizationId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Inactive", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}], "count": 5}
+          application/json: {"items": [{"workspaceId": "main", "region": "us-west-2", "leaderFQDN": "workspace-leader.example.com", "state": "Inactive", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}]}
         default:
           application/json: {"statusCode": 1171.44, "message": "<value>"}
   v1.workspaces.updateWorkspace:
@@ -8014,7 +8016,7 @@ examples:
           workspaceId: "<id>"
       responses:
         "200":
-          application/json: {"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+          application/json: {"workspaceId": "main", "region": "us-west-2", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
         default:
           application/json: {"statusCode": 8847.69, "message": "<value>"}
   createProductsMappingsByProduct:

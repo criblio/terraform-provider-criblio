@@ -13,8 +13,6 @@ resource "criblio_workspace" "my_workspace" {
   workspace_id = "testworkspace"
 }
 */
-
-
 data "criblio_workspaces" "my_workspaces" {
   organization_id = "beautiful-nguyen-y8y4azd"
 }

@@ -36,7 +36,6 @@ Read-Only:
 
 - `alias` (String) User-friendly alias for the workspace
 - `description` (String) Detailed description of the workspace
-- `last_updated` (String) Timestamp when the workspace was last updated
 - `leader_fqdn` (String) Fully Qualified Domain Name of the workspace leader
 - `region` (String) AWS region where the workspace is deployed
 - `state` (String) Current state of the workspace

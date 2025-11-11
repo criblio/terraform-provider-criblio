@@ -76372,13 +76372,13 @@ paths:
         - system
       summary: Get Cribl system settings
       description: Get Cribl system settings
-      x-speakeasy-entity-operation: HybridGroupSystemSettings#get
+      x-speakeasy-entity-operation: GroupSystemSettings#get
       deprecated: false
       parameters:
         - name: groupId
           in: path
           required: true
-          description: The hybrid worker group to which this instance belongs. Defaults to 'defaultHybrid'.
+          description: The hybrid worker group or edge fleet to which this instance belongs. Defaults to 'defaultHybrid'.
           schema:
             type: string
           example: "defaultHybrid"
@@ -76425,13 +76425,13 @@ paths:
         - system
       summary: Update Cribl system settings
       description: Update Cribl system settings
-      x-speakeasy-entity-operation: HybridGroupSystemSettings#create,update,delete
+      x-speakeasy-entity-operation: GroupSystemSettings#create,update,delete
       deprecated: false
       parameters:
         - name: groupId
           in: path
           required: true
-          description: The hybrid worker group to which this instance belongs. Defaults to 'defaultHybrid'.
+          description: The hybrid worker group or edge fleet to which this instance belongs. Defaults to 'defaultHybrid'.
           schema:
             type: string
           example: "defaultHybrid"

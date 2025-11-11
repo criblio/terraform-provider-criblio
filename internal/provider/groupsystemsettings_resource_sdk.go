@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *HybridGroupSystemSettingsResourceModel) RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx context.Context, resp *operations.GetSystemSettingsConfResponseBody) diag.Diagnostics {
+func (r *GroupSystemSettingsResourceModel) RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx context.Context, resp *operations.GetSystemSettingsConfResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -105,7 +105,7 @@ func (r *HybridGroupSystemSettingsResourceModel) RefreshFromOperationsGetSystemS
 	return diags
 }
 
-func (r *HybridGroupSystemSettingsResourceModel) RefreshFromOperationsUpdateSystemSettingsConfResponseBody(ctx context.Context, resp *operations.UpdateSystemSettingsConfResponseBody) diag.Diagnostics {
+func (r *GroupSystemSettingsResourceModel) RefreshFromOperationsUpdateSystemSettingsConfResponseBody(ctx context.Context, resp *operations.UpdateSystemSettingsConfResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -313,7 +313,7 @@ func (r *HybridGroupSystemSettingsResourceModel) RefreshFromOperationsUpdateSyst
 	return diags
 }
 
-func (r *HybridGroupSystemSettingsResourceModel) ToOperationsGetSystemSettingsConfRequest(ctx context.Context) (*operations.GetSystemSettingsConfRequest, diag.Diagnostics) {
+func (r *GroupSystemSettingsResourceModel) ToOperationsGetSystemSettingsConfRequest(ctx context.Context) (*operations.GetSystemSettingsConfRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var groupID string
@@ -326,7 +326,7 @@ func (r *HybridGroupSystemSettingsResourceModel) ToOperationsGetSystemSettingsCo
 	return &out, diags
 }
 
-func (r *HybridGroupSystemSettingsResourceModel) ToOperationsUpdateSystemSettingsConfRequest(ctx context.Context) (*operations.UpdateSystemSettingsConfRequest, diag.Diagnostics) {
+func (r *GroupSystemSettingsResourceModel) ToOperationsUpdateSystemSettingsConfRequest(ctx context.Context) (*operations.UpdateSystemSettingsConfRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var groupID string
@@ -347,7 +347,7 @@ func (r *HybridGroupSystemSettingsResourceModel) ToOperationsUpdateSystemSetting
 	return &out, diags
 }
 
-func (r *HybridGroupSystemSettingsResourceModel) ToSharedSystemSettingsConf(ctx context.Context) (*shared.SystemSettingsConf, diag.Diagnostics) {
+func (r *GroupSystemSettingsResourceModel) ToSharedSystemSettingsConf(ctx context.Context) (*shared.SystemSettingsConf, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	baseURL := new(string)

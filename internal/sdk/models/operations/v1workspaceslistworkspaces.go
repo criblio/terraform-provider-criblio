@@ -32,7 +32,8 @@ type V1WorkspacesListWorkspacesResponse struct {
 	RawResponse *http.Response
 	// List of Workspaces has been successfully retrieved
 	WorkspacesListResponseDTO *shared.WorkspacesListResponseDTO
-	DefaultErrorDTO           *shared.DefaultErrorDTO
+	// Default error response
+	DefaultErrorDTO *shared.DefaultErrorDTO
 }
 
 func (v *V1WorkspacesListWorkspacesResponse) GetContentType() string {

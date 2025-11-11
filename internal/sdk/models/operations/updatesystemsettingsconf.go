@@ -8,7 +8,7 @@ import (
 )
 
 type UpdateSystemSettingsConfRequest struct {
-	// The hybrid worker group to which this instance belongs. Defaults to 'defaultHybrid'.
+	// The hybrid worker group or edge fleet to which this instance belongs. Defaults to 'defaultHybrid'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// SystemSettingsConf object
 	SystemSettingsConf shared.SystemSettingsConf `request:"mediaType=application/json"`
