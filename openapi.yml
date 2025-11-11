@@ -61925,6 +61925,10 @@ components:
         estimatedIngestRate:
           type: number
           example: 250000
+        maxWorkerAge:
+          type: string
+          example: "1h"
+          description: This is only configurable for hybrid worker groups.
         name:
           type: string
           example: "edge-group-prod"
@@ -62019,9 +62023,11 @@ components:
         configVersion:
           type: string
           example: "v12"
+          x-speakeasy-terraform-ignore: true
         deployingWorkerCount:
           type: number
           example: 3
+          x-speakeasy-terraform-ignore: true
         description:
           type: string
           example: "Production Edge configuration group"
@@ -62030,6 +62036,7 @@ components:
           example: 500000
         git:
           type: object
+          x-speakeasy-terraform-ignore: true
           properties:
             commit:
               type: string
@@ -62057,17 +62064,21 @@ components:
         incompatibleWorkerCount:
           type: number
           example: 0
+          x-speakeasy-terraform-ignore: true
         inherits:
           type: string
           example: "base-config"
+          x-speakeasy-terraform-ignore: true
         isFleet:
           type: boolean
           example: false
         isSearch:
           type: boolean
           example: false
+          x-speakeasy-terraform-ignore: true
         lookupDeployments:
           type: array
+          x-speakeasy-terraform-ignore: true
           items:
             $ref: "#/components/schemas/ConfigGroupLookups"
           example:
@@ -62103,12 +62114,18 @@ components:
         upgradeVersion:
           type: string
           example: "6.0.1"
+          x-speakeasy-terraform-ignore: true
         workerCount:
           type: number
           example: 12
+          x-speakeasy-terraform-ignore: true
         workerRemoteAccess:
           type: boolean
           example: true
+        maxWorkerAge:
+          type: string
+          example: "1h"
+          description: This is only configurable for hybrid worker groups.
       required:
         - id
     TeamAccessControlList:
@@ -76348,14 +76365,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /system/settings/conf:
+  /m/{groupId}/system/settings/conf:
     get:
       operationId: getSystemSettingsConf
       tags:
         - system
       summary: Get Cribl system settings
       description: Get Cribl system settings
+      x-speakeasy-entity-operation: HybridGroupSystemSettings#get
       deprecated: false
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The hybrid worker group to which this instance belongs. Defaults to 'defaultHybrid'.
+          schema:
+            type: string
+          example: "defaultHybrid"
+          default: "defaultHybrid"
       responses:
         "200":
           description: a list of SystemSettingsConf objects
@@ -76398,7 +76425,17 @@ paths:
         - system
       summary: Update Cribl system settings
       description: Update Cribl system settings
+      x-speakeasy-entity-operation: HybridGroupSystemSettings#create,update,delete
       deprecated: false
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The hybrid worker group to which this instance belongs. Defaults to 'defaultHybrid'.
+          schema:
+            type: string
+          example: "defaultHybrid"
+          default: "defaultHybrid"
       responses:
         "200":
           description: a list of SystemSettings objects
@@ -79472,7 +79509,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Group"
+                      $ref: "#/components/schemas/ConfigGroup"
         "401":
           description: Unauthorized
         "500":
@@ -79521,7 +79558,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Group"
+                      $ref: "#/components/schemas/ConfigGroup"
               example:
                 count: 2
                 items:
@@ -79580,7 +79617,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Group"
+                      $ref: "#/components/schemas/ConfigGroup"
                     x-speakeasy-ignore: true
               example:
                 count: 1
@@ -79645,14 +79682,20 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Group'
-                    x-speakeasy-ignore: true
+                      $ref: '#/components/schemas/ConfigGroup'
               example:
                 count_total: 1
                 items:
                   - id: "workers-west"
                     workerRemoteAccess: false
                     streamtags: ["prod","west"]
+      requestBody:
+        description: ConfigGroup object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfigGroup"
     delete:
       operationId: deleteGroupsById
       tags:
@@ -79683,7 +79726,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Group"
+                      $ref: "#/components/schemas/ConfigGroup"
                     x-speakeasy-ignore: true
               example:
                 count: 1

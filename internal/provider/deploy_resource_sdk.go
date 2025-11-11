@@ -31,56 +31,11 @@ func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDRespons
 				}
 				items.Cloud.Region = types.StringValue(itemsItem.Cloud.Region)
 			}
-			items.ConfigVersion = types.StringPointerValue(itemsItem.ConfigVersion)
-			items.DeployingWorkerCount = types.Float64PointerValue(itemsItem.DeployingWorkerCount)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)
-			if itemsItem.Git == nil {
-				items.Git = nil
-			} else {
-				items.Git = &tfTypes.ConfigGroupGit{}
-				items.Git.Commit = types.StringPointerValue(itemsItem.Git.Commit)
-				items.Git.LocalChanges = types.Float64PointerValue(itemsItem.Git.LocalChanges)
-				items.Git.Log = []tfTypes.Commit{}
-
-				for _, logItem := range itemsItem.Git.Log {
-					var log tfTypes.Commit
-
-					log.AuthorEmail = types.StringPointerValue(logItem.AuthorEmail)
-					log.AuthorName = types.StringPointerValue(logItem.AuthorName)
-					log.Date = types.StringValue(logItem.Date)
-					log.Hash = types.StringValue(logItem.Hash)
-					log.Message = types.StringValue(logItem.Message)
-					log.Short = types.StringValue(logItem.Short)
-
-					items.Git.Log = append(items.Git.Log, log)
-				}
-			}
 			items.ID = types.StringValue(itemsItem.ID)
-			items.IncompatibleWorkerCount = types.Float64PointerValue(itemsItem.IncompatibleWorkerCount)
-			items.Inherits = types.StringPointerValue(itemsItem.Inherits)
 			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
-			items.IsSearch = types.BoolPointerValue(itemsItem.IsSearch)
-			items.LookupDeployments = []tfTypes.ConfigGroupLookups{}
-
-			for _, lookupDeploymentsItem := range itemsItem.LookupDeployments {
-				var lookupDeployments tfTypes.ConfigGroupLookups
-
-				lookupDeployments.Context = types.StringValue(lookupDeploymentsItem.Context)
-				lookupDeployments.Lookups = []tfTypes.Lookup{}
-
-				for _, lookupsItem := range lookupDeploymentsItem.Lookups {
-					var lookups tfTypes.Lookup
-
-					lookups.DeployedVersion = types.StringPointerValue(lookupsItem.DeployedVersion)
-					lookups.File = types.StringValue(lookupsItem.File)
-					lookups.Version = types.StringPointerValue(lookupsItem.Version)
-
-					lookupDeployments.Lookups = append(lookupDeployments.Lookups, lookups)
-				}
-
-				items.LookupDeployments = append(items.LookupDeployments, lookupDeployments)
-			}
+			items.MaxWorkerAge = types.StringPointerValue(itemsItem.MaxWorkerAge)
 			items.Name = types.StringPointerValue(itemsItem.Name)
 			items.OnPrem = types.BoolPointerValue(itemsItem.OnPrem)
 			items.Provisioned = types.BoolPointerValue(itemsItem.Provisioned)
@@ -94,8 +49,6 @@ func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDRespons
 			} else {
 				items.Type = types.StringNull()
 			}
-			items.UpgradeVersion = types.StringPointerValue(itemsItem.UpgradeVersion)
-			items.WorkerCount = types.Float64PointerValue(itemsItem.WorkerCount)
 			items.WorkerRemoteAccess = types.BoolPointerValue(itemsItem.WorkerRemoteAccess)
 
 			r.Items = append(r.Items, items)

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+type GetSystemSettingsConfRequest struct {
+	// The hybrid worker group to which this instance belongs. Defaults to 'defaultHybrid'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+}
+
+func (g *GetSystemSettingsConfRequest) GetGroupID() string {
+	if g == nil {
+		return ""
+	}
+	return g.GroupID
+}
+
 // GetSystemSettingsConfResponseBody - a list of SystemSettingsConf objects
 type GetSystemSettingsConfResponseBody struct {
 	Items []shared.SystemSettingsConf `json:"items,omitempty"`

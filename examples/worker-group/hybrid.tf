@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    criblio = {
+      source  = "criblio/criblio"
+      version = "0.1.0"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+  cloud_domain    = "cribl-playground.cloud"
+}
 
 locals {
   streamtags_hybrid = [

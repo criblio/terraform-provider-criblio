@@ -20,34 +20,37 @@ func (r *GroupResourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ctx 
 	return diags
 }
 
-func (r *GroupResourceModel) RefreshFromOperationsUpdateGroupsByIDResponseBody(ctx context.Context, resp *operations.UpdateGroupsByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *GroupResourceModel) RefreshFromSharedGroup(ctx context.Context, resp *shared.Group) diag.Diagnostics {
+func (r *GroupResourceModel) RefreshFromSharedConfigGroup(ctx context.Context, resp *shared.ConfigGroup) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp.Cloud == nil {
 		r.Cloud = nil
 	} else {
 		r.Cloud = &tfTypes.ConfigGroupCloud{}
-		r.Cloud.Provider = types.StringValue(string(resp.Cloud.Provider))
+		if resp.Cloud.Provider != nil {
+			r.Cloud.Provider = types.StringValue(string(*resp.Cloud.Provider))
+		} else {
+			r.Cloud.Provider = types.StringNull()
+		}
 		r.Cloud.Region = types.StringValue(resp.Cloud.Region)
 	}
+	r.Description = types.StringPointerValue(resp.Description)
 	r.EstimatedIngestRate = types.Float64PointerValue(resp.EstimatedIngestRate)
 	r.ID = types.StringValue(resp.ID)
 	r.IsFleet = types.BoolPointerValue(resp.IsFleet)
+	r.MaxWorkerAge = types.StringPointerValue(resp.MaxWorkerAge)
 	r.Name = types.StringPointerValue(resp.Name)
 	r.OnPrem = types.BoolPointerValue(resp.OnPrem)
-	r.Provisioned = types.BoolValue(resp.Provisioned)
+	r.Provisioned = types.BoolPointerValue(resp.Provisioned)
 	r.Streamtags = make([]types.String, 0, len(resp.Streamtags))
 	for _, v := range resp.Streamtags {
 		r.Streamtags = append(r.Streamtags, types.StringValue(v))
+	}
+	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp.Type != nil {
+		r.Type = types.StringValue(string(*resp.Type))
+	} else {
+		r.Type = types.StringNull()
 	}
 	r.WorkerRemoteAccess = types.BoolPointerValue(resp.WorkerRemoteAccess)
 
@@ -105,8 +108,16 @@ func (r *GroupResourceModel) ToOperationsUpdateGroupsByIDRequest(ctx context.Con
 	var id string
 	id = r.ID.ValueString()
 
+	configGroup, configGroupDiags := r.ToSharedConfigGroup(ctx)
+	diags.Append(configGroupDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := operations.UpdateGroupsByIDRequest{
-		ID: id,
+		ID:          id,
+		ConfigGroup: *configGroup,
 	}
 
 	return &out, diags
@@ -131,18 +142,6 @@ func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.C
 			Region:   region,
 		}
 	}
-	configVersion := new(string)
-	if !r.ConfigVersion.IsUnknown() && !r.ConfigVersion.IsNull() {
-		*configVersion = r.ConfigVersion.ValueString()
-	} else {
-		configVersion = nil
-	}
-	deployingWorkerCount := new(float64)
-	if !r.DeployingWorkerCount.IsUnknown() && !r.DeployingWorkerCount.IsNull() {
-		*deployingWorkerCount = r.DeployingWorkerCount.ValueFloat64()
-	} else {
-		deployingWorkerCount = nil
-	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
@@ -155,120 +154,14 @@ func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.C
 	} else {
 		estimatedIngestRate = nil
 	}
-	var git *shared.ConfigGroupGit
-	if r.Git != nil {
-		commit := new(string)
-		if !r.Git.Commit.IsUnknown() && !r.Git.Commit.IsNull() {
-			*commit = r.Git.Commit.ValueString()
-		} else {
-			commit = nil
-		}
-		localChanges := new(float64)
-		if !r.Git.LocalChanges.IsUnknown() && !r.Git.LocalChanges.IsNull() {
-			*localChanges = r.Git.LocalChanges.ValueFloat64()
-		} else {
-			localChanges = nil
-		}
-		log := make([]shared.Commit, 0, len(r.Git.Log))
-		for _, logItem := range r.Git.Log {
-			authorEmail := new(string)
-			if !logItem.AuthorEmail.IsUnknown() && !logItem.AuthorEmail.IsNull() {
-				*authorEmail = logItem.AuthorEmail.ValueString()
-			} else {
-				authorEmail = nil
-			}
-			authorName := new(string)
-			if !logItem.AuthorName.IsUnknown() && !logItem.AuthorName.IsNull() {
-				*authorName = logItem.AuthorName.ValueString()
-			} else {
-				authorName = nil
-			}
-			var date string
-			date = logItem.Date.ValueString()
-
-			var hash string
-			hash = logItem.Hash.ValueString()
-
-			var message string
-			message = logItem.Message.ValueString()
-
-			var short string
-			short = logItem.Short.ValueString()
-
-			log = append(log, shared.Commit{
-				AuthorEmail: authorEmail,
-				AuthorName:  authorName,
-				Date:        date,
-				Hash:        hash,
-				Message:     message,
-				Short:       short,
-			})
-		}
-		git = &shared.ConfigGroupGit{
-			Commit:       commit,
-			LocalChanges: localChanges,
-			Log:          log,
-		}
-	}
 	var id string
 	id = r.ID.ValueString()
 
-	incompatibleWorkerCount := new(float64)
-	if !r.IncompatibleWorkerCount.IsUnknown() && !r.IncompatibleWorkerCount.IsNull() {
-		*incompatibleWorkerCount = r.IncompatibleWorkerCount.ValueFloat64()
-	} else {
-		incompatibleWorkerCount = nil
-	}
-	inherits := new(string)
-	if !r.Inherits.IsUnknown() && !r.Inherits.IsNull() {
-		*inherits = r.Inherits.ValueString()
-	} else {
-		inherits = nil
-	}
 	isFleet := new(bool)
 	if !r.IsFleet.IsUnknown() && !r.IsFleet.IsNull() {
 		*isFleet = r.IsFleet.ValueBool()
 	} else {
 		isFleet = nil
-	}
-	isSearch := new(bool)
-	if !r.IsSearch.IsUnknown() && !r.IsSearch.IsNull() {
-		*isSearch = r.IsSearch.ValueBool()
-	} else {
-		isSearch = nil
-	}
-	lookupDeployments := make([]shared.ConfigGroupLookups, 0, len(r.LookupDeployments))
-	for _, lookupDeploymentsItem := range r.LookupDeployments {
-		var contextVar string
-		contextVar = lookupDeploymentsItem.Context.ValueString()
-
-		lookups := make([]shared.Lookup, 0, len(lookupDeploymentsItem.Lookups))
-		for _, lookupsItem := range lookupDeploymentsItem.Lookups {
-			deployedVersion := new(string)
-			if !lookupsItem.DeployedVersion.IsUnknown() && !lookupsItem.DeployedVersion.IsNull() {
-				*deployedVersion = lookupsItem.DeployedVersion.ValueString()
-			} else {
-				deployedVersion = nil
-			}
-			var file string
-			file = lookupsItem.File.ValueString()
-
-			version := new(string)
-			if !lookupsItem.Version.IsUnknown() && !lookupsItem.Version.IsNull() {
-				*version = lookupsItem.Version.ValueString()
-			} else {
-				version = nil
-			}
-			lookups = append(lookups, shared.Lookup{
-				DeployedVersion: deployedVersion,
-				File:            file,
-				Version:         version,
-			})
-		}
-		lookupDeployments = append(lookupDeployments, shared.ConfigGroupLookups{
-			Context: contextVar,
-			Lookups: lookups,
-		})
 	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
@@ -304,46 +197,32 @@ func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.C
 	} else {
 		typeVar = nil
 	}
-	upgradeVersion := new(string)
-	if !r.UpgradeVersion.IsUnknown() && !r.UpgradeVersion.IsNull() {
-		*upgradeVersion = r.UpgradeVersion.ValueString()
-	} else {
-		upgradeVersion = nil
-	}
-	workerCount := new(float64)
-	if !r.WorkerCount.IsUnknown() && !r.WorkerCount.IsNull() {
-		*workerCount = r.WorkerCount.ValueFloat64()
-	} else {
-		workerCount = nil
-	}
 	workerRemoteAccess := new(bool)
 	if !r.WorkerRemoteAccess.IsUnknown() && !r.WorkerRemoteAccess.IsNull() {
 		*workerRemoteAccess = r.WorkerRemoteAccess.ValueBool()
 	} else {
 		workerRemoteAccess = nil
 	}
+	maxWorkerAge := new(string)
+	if !r.MaxWorkerAge.IsUnknown() && !r.MaxWorkerAge.IsNull() {
+		*maxWorkerAge = r.MaxWorkerAge.ValueString()
+	} else {
+		maxWorkerAge = nil
+	}
 	out := shared.ConfigGroup{
-		Cloud:                   cloud,
-		ConfigVersion:           configVersion,
-		DeployingWorkerCount:    deployingWorkerCount,
-		Description:             description,
-		EstimatedIngestRate:     estimatedIngestRate,
-		Git:                     git,
-		ID:                      id,
-		IncompatibleWorkerCount: incompatibleWorkerCount,
-		Inherits:                inherits,
-		IsFleet:                 isFleet,
-		IsSearch:                isSearch,
-		LookupDeployments:       lookupDeployments,
-		Name:                    name,
-		OnPrem:                  onPrem,
-		Provisioned:             provisioned,
-		Streamtags:              streamtags,
-		Tags:                    tags,
-		Type:                    typeVar,
-		UpgradeVersion:          upgradeVersion,
-		WorkerCount:             workerCount,
-		WorkerRemoteAccess:      workerRemoteAccess,
+		Cloud:               cloud,
+		Description:         description,
+		EstimatedIngestRate: estimatedIngestRate,
+		ID:                  id,
+		IsFleet:             isFleet,
+		Name:                name,
+		OnPrem:              onPrem,
+		Provisioned:         provisioned,
+		Streamtags:          streamtags,
+		Tags:                tags,
+		Type:                typeVar,
+		WorkerRemoteAccess:  workerRemoteAccess,
+		MaxWorkerAge:        maxWorkerAge,
 	}
 
 	return &out, diags

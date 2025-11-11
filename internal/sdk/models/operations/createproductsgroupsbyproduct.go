@@ -59,10 +59,10 @@ func (c *CreateProductsGroupsByProductRequest) GetConfigGroup() shared.ConfigGro
 
 // CreateProductsGroupsByProductResponseBody - a list of ConfigGroup objects
 type CreateProductsGroupsByProductResponseBody struct {
-	Items []shared.Group `json:"items,omitempty"`
+	Items []shared.ConfigGroup `json:"items,omitempty"`
 }
 
-func (c *CreateProductsGroupsByProductResponseBody) GetItems() []shared.Group {
+func (c *CreateProductsGroupsByProductResponseBody) GetItems() []shared.ConfigGroup {
 	if c == nil {
 		return nil
 	}

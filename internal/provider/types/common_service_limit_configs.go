@@ -6,7 +6,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ConfigGroupLookups struct {
-	Context types.String `tfsdk:"context"`
-	Lookups []Lookup     `tfsdk:"lookups"`
+type CommonServiceLimitConfigs struct {
+	MemoryLimit types.String `tfsdk:"memory_limit"`
 }

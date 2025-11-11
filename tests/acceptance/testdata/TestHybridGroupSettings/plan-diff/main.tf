@@ -1,0 +1,1 @@
+../../../../../examples/hybrid-group-settings/main.tf
