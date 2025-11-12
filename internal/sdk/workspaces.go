@@ -225,7 +225,6 @@ func (s *Workspaces) V1WorkspacesCreateWorkspace(ctx context.Context, request op
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 500:
 	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -441,7 +440,6 @@ func (s *Workspaces) V1WorkspacesListWorkspaces(ctx context.Context, request ope
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 500:
 	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -644,7 +642,6 @@ func (s *Workspaces) V1WorkspacesUpdateWorkspace(ctx context.Context, request op
 
 	switch {
 	case httpRes.StatusCode == 204:
-	case httpRes.StatusCode == 500:
 	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -840,7 +837,6 @@ func (s *Workspaces) V1WorkspacesDeleteWorkspace(ctx context.Context, request op
 
 	switch {
 	case httpRes.StatusCode == 202:
-	case httpRes.StatusCode == 500:
 	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -1056,7 +1052,6 @@ func (s *Workspaces) V1WorkspacesGetWorkspace(ctx context.Context, request opera
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 500:
 	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):

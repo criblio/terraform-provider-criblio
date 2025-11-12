@@ -3,12 +3,15 @@
 package operations
 
 import (
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
 type UpdateGroupsByIDRequest struct {
 	// Group id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// ConfigGroup object
+	ConfigGroup shared.ConfigGroup `request:"mediaType=application/json"`
 }
 
 func (u *UpdateGroupsByIDRequest) GetID() string {
@@ -18,8 +21,23 @@ func (u *UpdateGroupsByIDRequest) GetID() string {
 	return u.ID
 }
 
+func (u *UpdateGroupsByIDRequest) GetConfigGroup() shared.ConfigGroup {
+	if u == nil {
+		return shared.ConfigGroup{}
+	}
+	return u.ConfigGroup
+}
+
 // UpdateGroupsByIDResponseBody - a list of ConfigGroup objects
 type UpdateGroupsByIDResponseBody struct {
+	Items []shared.ConfigGroup `json:"items,omitempty"`
+}
+
+func (u *UpdateGroupsByIDResponseBody) GetItems() []shared.ConfigGroup {
+	if u == nil {
+		return nil
+	}
+	return u.Items
 }
 
 type UpdateGroupsByIDResponse struct {

@@ -56,10 +56,6 @@ func (r *WorkspacesDataSource) Schema(ctx context.Context, req datasource.Schema
 							Computed:    true,
 							Description: `Detailed description of the workspace`,
 						},
-						"last_updated": schema.StringAttribute{
-							Computed:    true,
-							Description: `Timestamp when the workspace was last updated`,
-						},
 						"leader_fqdn": schema.StringAttribute{
 							Computed:    true,
 							Description: `Fully Qualified Domain Name of the workspace leader`,

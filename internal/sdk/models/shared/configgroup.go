@@ -79,6 +79,8 @@ type ConfigGroup struct {
 	UpgradeVersion          *string              `json:"upgradeVersion,omitempty"`
 	WorkerCount             *float64             `json:"workerCount,omitempty"`
 	WorkerRemoteAccess      *bool                `json:"workerRemoteAccess,omitempty"`
+	// This is only configurable for hybrid worker groups.
+	MaxWorkerAge *string `json:"maxWorkerAge,omitempty"`
 }
 
 func (c *ConfigGroup) GetCloud() *ConfigGroupCloud {
@@ -226,4 +228,11 @@ func (c *ConfigGroup) GetWorkerRemoteAccess() *bool {
 		return nil
 	}
 	return c.WorkerRemoteAccess
+}
+
+func (c *ConfigGroup) GetMaxWorkerAge() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MaxWorkerAge
 }

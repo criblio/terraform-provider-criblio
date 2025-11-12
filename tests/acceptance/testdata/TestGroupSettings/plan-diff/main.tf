@@ -1,0 +1,1 @@
+../../../../../examples/group-settings/main.tf

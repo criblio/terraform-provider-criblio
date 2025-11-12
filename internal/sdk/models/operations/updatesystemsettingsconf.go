@@ -7,6 +7,27 @@ import (
 	"net/http"
 )
 
+type UpdateSystemSettingsConfRequest struct {
+	// The hybrid worker group or edge fleet to which this instance belongs. Defaults to 'defaultHybrid'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// SystemSettingsConf object
+	SystemSettingsConf shared.SystemSettingsConf `request:"mediaType=application/json"`
+}
+
+func (u *UpdateSystemSettingsConfRequest) GetGroupID() string {
+	if u == nil {
+		return ""
+	}
+	return u.GroupID
+}
+
+func (u *UpdateSystemSettingsConfRequest) GetSystemSettingsConf() shared.SystemSettingsConf {
+	if u == nil {
+		return shared.SystemSettingsConf{}
+	}
+	return u.SystemSettingsConf
+}
+
 // UpdateSystemSettingsConfResponseBody - a list of SystemSettings objects
 type UpdateSystemSettingsConfResponseBody struct {
 	Items []shared.SystemSettings `json:"items,omitempty"`

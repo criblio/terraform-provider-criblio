@@ -102,7 +102,7 @@ resource "criblio_destination" "cribl_lake" {
 resource "criblio_pack" "syslog_pack" {
   id           = "syslog-processing"
   group_id     = criblio_group.syslog_worker_group.id
-  filename     = "cribl-palo-alto-networks-source-1.0.0.crbl"
+  filename     = "${abspath(path.module)}/cribl-palo-alto-networks-source-1.0.0.crbl"
   description  = "Pack for syslog processing"
   disabled     = false
   display_name = "Pack for syslog processing"

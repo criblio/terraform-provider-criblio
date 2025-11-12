@@ -41,7 +41,6 @@ resource "criblio_workspace" "my_workspace" {
 
 ### Read-Only
 
-- `last_updated` (String) Timestamp when the workspace was last updated
 - `leader_fqdn` (String) Fully Qualified Domain Name of the workspace leader
 - `region` (String) AWS region where the workspace is deployed. must be one of ["us-west-2", "us-east-1", "us-east-2", "eu-central-1", "eu-central-2", "eu-west-2", "ap-southeast-1", "ap-southeast-2", "ca-central-1"]
 - `state` (String) Current state of the workspace. must be one of ["Provisioning", "Active", "Inactive", "Failed", "Deprovisioning"]

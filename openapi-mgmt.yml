@@ -5,7 +5,7 @@ paths:
       operationId: getHealthStatus
       parameters: []
       responses:
-        "200":
+        '200':
           description: Health status
           content:
             application/json:
@@ -16,7 +16,11 @@ paths:
                     type: string
                     example: OK
         default:
-          description: Unexpected error
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorDTO'
       summary: Get the health status of the application
       tags:
         - health
@@ -33,8 +37,9 @@ paths:
         - name: organizationId
           required: true
           in: path
-          description: The <code>id</code> of the Organization where you want to create
-            the Workspace.
+          description: >-
+            The <code>id</code> of the Organization where you want to create the
+            Workspace.
           schema:
             type: string
       requestBody:
@@ -42,22 +47,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WorkspaceCreateRequestDTO"
+              $ref: '#/components/schemas/WorkspaceCreateRequestDTO'
       responses:
-        "201":
+        '201':
           description: The Workspace has been successfully created
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WorkspaceSchema"
-        "500":
-          description: Internal Server Error
+                $ref: '#/components/schemas/WorkspaceSchema'
         default:
-          description: ""
+          description: Default error response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DefaultErrorDTO"
+                $ref: '#/components/schemas/DefaultErrorDTO'
       summary: Create a Workspace in the specified Organization
       tags:
         - workspaces
@@ -69,24 +72,24 @@ paths:
         - name: organizationId
           required: true
           in: path
-          description: The <code>id</code> of the Organization that contains the Workspaces.
+          description: >-
+            The <code>id</code> of the Organization that contains the
+            Workspaces.
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: List of Workspaces has been successfully retrieved
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WorkspacesListResponseDTO"
-        "500":
-          description: Internal Server Error
+                $ref: '#/components/schemas/WorkspacesListResponseDTO'
         default:
-          description: ""
+          description: Default error response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DefaultErrorDTO"
+                $ref: '#/components/schemas/DefaultErrorDTO'
       summary: List all Workspaces for the specified Organization
       tags:
         - workspaces
@@ -115,18 +118,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WorkspacePatchRequestDTO"
+              $ref: '#/components/schemas/WorkspacePatchRequestDTO'
       responses:
-        "204":
+        '204':
           description: The Workspace has been successfully updated
-        "500":
-          description: Internal Server Error
         default:
-          description: ""
+          description: Default error response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DefaultErrorDTO"
+                $ref: '#/components/schemas/DefaultErrorDTO'
       summary: Update a Workspace
       tags:
         - workspaces
@@ -148,16 +149,14 @@ paths:
           schema:
             type: string
       responses:
-        "202":
+        '202':
           description: The Workspace deletion has been accepted
-        "500":
-          description: Internal Server Error
         default:
-          description: ""
+          description: Default error response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DefaultErrorDTO"
+                $ref: '#/components/schemas/DefaultErrorDTO'
       summary: Delete a Workspace
       tags:
         - workspaces
@@ -179,35 +178,23 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: The Workspace details have been retrieved
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WorkspaceSchema"
-        "500":
-          description: Internal Server Error
+                $ref: '#/components/schemas/WorkspaceSchema'
         default:
-          description: ""
+          description: Default error response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DefaultErrorDTO"
+                $ref: '#/components/schemas/DefaultErrorDTO'
       summary: Get a Workspace
       tags:
         - workspaces
 components:
   schemas:
-    DefaultErrorDTO:
-      type: object
-      properties:
-        statusCode:
-          type: number
-        message:
-          type: string
-      required:
-        - statusCode
-        - message
     AWSRegions:
       type: string
       enum:
@@ -246,12 +233,7 @@ components:
           description: AWS region where the workspace is deployed
           example: us-west-2
           allOf:
-            - $ref: "#/components/schemas/AWSRegions"
-        lastUpdated:
-          type: string
-          description: Timestamp when the workspace was last updated
-          format: date-time
-          example: 2023-01-01T12:00:00Z
+            - $ref: '#/components/schemas/AWSRegions'
         leaderFQDN:
           type: string
           description: Fully Qualified Domain Name of the workspace leader
@@ -260,7 +242,7 @@ components:
           description: Current state of the workspace
           example: Active
           allOf:
-            - $ref: "#/components/schemas/WorkspaceState"
+            - $ref: '#/components/schemas/WorkspaceState'
         alias:
           type: string
           description: User-friendly alias for the workspace
@@ -280,7 +262,6 @@ components:
       required:
         - workspaceId
         - region
-        - lastUpdated
         - leaderFQDN
         - state
     WorkspaceCreateRequestDTO:
@@ -337,15 +318,25 @@ components:
           description: List of workspaces
           type: array
           items:
-            $ref: "#/components/schemas/WorkspaceSchema"
+            $ref: '#/components/schemas/WorkspaceSchema'
         count:
           type: number
           description: Total number of workspaces
           example: 5
-          x-speakeasy-terraform-ignore: true
+          x-speakeasy-ignore: true
       required:
         - items
         - count
+    DefaultErrorDTO:
+      type: object
+      properties:
+        statusCode:
+          type: number
+        message:
+          type: string
+      required:
+        - statusCode
+        - message
 x-speakeasy-retries:
   strategy: backoff
   backoff:
@@ -354,7 +345,7 @@ x-speakeasy-retries:
     maxElapsedTime: 3600000
     exponent: 1.5
   statusCodes:
-    - "502"
-    - "503"
-    - "504"
+    - '502'
+    - '503'
+    - '504'
   retryConnectionErrors: true

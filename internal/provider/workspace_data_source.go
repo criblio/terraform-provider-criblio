@@ -33,7 +33,6 @@ type WorkspaceDataSource struct {
 type WorkspaceDataSourceModel struct {
 	Alias          types.String   `tfsdk:"alias"`
 	Description    types.String   `tfsdk:"description"`
-	LastUpdated    types.String   `tfsdk:"last_updated"`
 	LeaderFQDN     types.String   `tfsdk:"leader_fqdn"`
 	OrganizationID types.String   `tfsdk:"organization_id"`
 	Region         types.String   `tfsdk:"region"`
@@ -60,10 +59,6 @@ func (r *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: `Detailed description of the workspace`,
-			},
-			"last_updated": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the workspace was last updated`,
 			},
 			"leader_fqdn": schema.StringAttribute{
 				Computed:    true,

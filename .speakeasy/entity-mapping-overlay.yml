@@ -223,6 +223,10 @@ actions:
     update:
       x-speakeasy-entity: AccessControlSchema
 
+  - target: "$.components.schemas.MappingRuleset"
+    update:
+      x-speakeasy-entity: MappingRuleset
+
   - target: "$.paths['/m/default_search/search/datasets/{id}'].get.responses['200'].content.application/json.schema"
     update:
       x-speakeasy-entity: SearchDataset
@@ -254,3 +258,9 @@ actions:
   - target: "$.paths['/m/{groupId}/lib/grok/{id}'].get.responses['200'].content.application/json.schema"
     update:
       x-speakeasy-entity: Grok
+
+  - target: "$.paths['/master/groups/{id}'].get.responses['200'].content.application/json.schema"
+    update:
+      x-speakeasy-entity: Group
+  
+  

@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"github.com/criblio/terraform-provider-criblio/internal/provider/typeconvert"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -23,7 +22,6 @@ func (r *WorkspacesDataSourceModel) RefreshFromSharedWorkspacesListResponseDTO(c
 
 			items.Alias = types.StringPointerValue(itemsItem.Alias)
 			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.LastUpdated = types.StringValue(typeconvert.TimeToString(itemsItem.LastUpdated))
 			items.LeaderFQDN = types.StringValue(itemsItem.LeaderFQDN)
 			items.Region = types.StringValue(string(itemsItem.Region))
 			items.State = types.StringValue(string(itemsItem.State))

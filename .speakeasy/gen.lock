@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: daccff4bd3bf45ee37a9000895daca3d
+  docChecksum: 957c79cb5d072b166111ae3da547ec1a
   docVersion: 4.14.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 1.18.21
-  configChecksum: cb6af13a707b3143fa762ab3ed5e3eab
+  releaseVersion: 1.18.27
+  configChecksum: 7aabf9325d99802bd9a1c36042491373
   published: true
 features:
   terraform:
@@ -46,6 +46,7 @@ generatedFiles:
   - examples/data-sources/criblio_global_var/data-source.tf
   - examples/data-sources/criblio_grok/data-source.tf
   - examples/data-sources/criblio_group/data-source.tf
+  - examples/data-sources/criblio_group_system_settings/data-source.tf
   - examples/data-sources/criblio_hmac_function/data-source.tf
   - examples/data-sources/criblio_instance_settings/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
@@ -117,6 +118,9 @@ generatedFiles:
   - examples/resources/criblio_group/import-by-string-id.tf
   - examples/resources/criblio_group/import.sh
   - examples/resources/criblio_group/resource.tf
+  - examples/resources/criblio_group_system_settings/import-by-string-id.tf
+  - examples/resources/criblio_group_system_settings/import.sh
+  - examples/resources/criblio_group_system_settings/resource.tf
   - examples/resources/criblio_hmac_function/import-by-string-id.tf
   - examples/resources/criblio_hmac_function/import.sh
   - examples/resources/criblio_hmac_function/resource.tf
@@ -274,6 +278,10 @@ generatedFiles:
   - internal/provider/group_data_source_sdk.go
   - internal/provider/group_resource.go
   - internal/provider/group_resource_sdk.go
+  - internal/provider/groupsystemsettings_data_source.go
+  - internal/provider/groupsystemsettings_data_source_sdk.go
+  - internal/provider/groupsystemsettings_resource.go
+  - internal/provider/groupsystemsettings_resource_sdk.go
   - internal/provider/hmacfunction_data_source.go
   - internal/provider/hmacfunction_data_source_sdk.go
   - internal/provider/hmacfunction_resource.go
@@ -471,6 +479,7 @@ generatedFiles:
   - internal/provider/types/appscope_custom.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
+  - internal/provider/types/auth_config.go
   - internal/provider/types/auth_request_header.go
   - internal/provider/types/auth_request_param.go
   - internal/provider/types/author.go
@@ -492,13 +501,11 @@ generatedFiles:
   - internal/provider/types/collect_request_param.go
   - internal/provider/types/collectors.go
   - internal/provider/types/comment.go
-  - internal/provider/types/commit.go
+  - internal/provider/types/common_service_limit_configs.go
   - internal/provider/types/condition_specific_configs.go
   - internal/provider/types/config_bundles.go
   - internal/provider/types/config_group.go
   - internal/provider/types/config_group_cloud.go
-  - internal/provider/types/config_group_git.go
-  - internal/provider/types/config_group_lookups.go
   - internal/provider/types/consumers.go
   - internal/provider/types/create_lakehouse_dataset_connections_request_body.go
   - internal/provider/types/cribl_leader_dataset.go
@@ -511,6 +518,7 @@ generatedFiles:
   - internal/provider/types/discover_request_param.go
   - internal/provider/types/discovery_configuration.go
   - internal/provider/types/disks_and_file_systems.go
+  - internal/provider/types/distributed.go
   - internal/provider/types/dns.go
   - internal/provider/types/edge_dataset.go
   - internal/provider/types/edge_provider.go
@@ -536,6 +544,7 @@ generatedFiles:
   - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
+  - internal/provider/types/git_settings.go
   - internal/provider/types/google_workspace_account_config.go
   - internal/provider/types/grok_file.go
   - internal/provider/types/host_info.go
@@ -1000,8 +1009,11 @@ generatedFiles:
   - internal/provider/types/instance_settings_schema_union.go
   - internal/provider/types/interfaces.go
   - internal/provider/types/internal_scheduling.go
+  - internal/provider/types/job_settings.go
   - internal/provider/types/lake_dataset_search_config.go
   - internal/provider/types/lakehouse.go
+  - internal/provider/types/limits.go
+  - internal/provider/types/limits_samples.go
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
@@ -1009,7 +1021,6 @@ generatedFiles:
   - internal/provider/types/loki_auth_oauth_header2.go
   - internal/provider/types/loki_auth_oauth_param1.go
   - internal/provider/types/loki_auth_oauth_param2.go
-  - internal/provider/types/lookup.go
   - internal/provider/types/mapping_ruleset.go
   - internal/provider/types/mapping_ruleset_conf.go
   - internal/provider/types/mapping_ruleset_function_conf.go
@@ -1312,6 +1323,9 @@ generatedFiles:
   - internal/provider/types/prometheus_auth_oauth_param2.go
   - internal/provider/types/prometheus_dataset.go
   - internal/provider/types/prometheus_provider.go
+  - internal/provider/types/redis_cache_limits.go
+  - internal/provider/types/redis_connection_limits.go
+  - internal/provider/types/redis_limits.go
   - internal/provider/types/resource_type_label.go
   - internal/provider/types/retry_rules_configuration.go
   - internal/provider/types/routes.go
@@ -1335,7 +1349,9 @@ generatedFiles:
   - internal/provider/types/search_query_latest.go
   - internal/provider/types/search_query_saved.go
   - internal/provider/types/search_query_values.go
+  - internal/provider/types/search_settings.go
   - internal/provider/types/services.go
+  - internal/provider/types/services_limits.go
   - internal/provider/types/slack_target.go
   - internal/provider/types/smtp_target.go
   - internal/provider/types/snm_pv3_authentication.go
@@ -1345,14 +1361,48 @@ generatedFiles:
   - internal/provider/types/socks_proxy_opts.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
+  - internal/provider/types/system_settings.go
+  - internal/provider/types/system_settings_api.go
+  - internal/provider/types/system_settings_backups.go
+  - internal/provider/types/system_settings_conf.go
+  - internal/provider/types/system_settings_conf_api.go
+  - internal/provider/types/system_settings_conf_backups.go
+  - internal/provider/types/system_settings_conf_custom_logo.go
+  - internal/provider/types/system_settings_conf_headers.go
+  - internal/provider/types/system_settings_conf_pii.go
+  - internal/provider/types/system_settings_conf_proxy.go
+  - internal/provider/types/system_settings_conf_rollback.go
+  - internal/provider/types/system_settings_conf_shutdown.go
+  - internal/provider/types/system_settings_conf_sni.go
+  - internal/provider/types/system_settings_conf_sockets.go
+  - internal/provider/types/system_settings_conf_ssl.go
+  - internal/provider/types/system_settings_conf_system.go
+  - internal/provider/types/system_settings_conf_tls.go
+  - internal/provider/types/system_settings_conf_workers.go
+  - internal/provider/types/system_settings_custom_logo.go
+  - internal/provider/types/system_settings_headers.go
+  - internal/provider/types/system_settings_pii.go
+  - internal/provider/types/system_settings_proxy.go
+  - internal/provider/types/system_settings_rollback.go
+  - internal/provider/types/system_settings_shutdown.go
+  - internal/provider/types/system_settings_sni.go
+  - internal/provider/types/system_settings_sockets.go
+  - internal/provider/types/system_settings_ssl.go
+  - internal/provider/types/system_settings_system.go
+  - internal/provider/types/system_settings_tls.go
+  - internal/provider/types/system_settings_workers.go
   - internal/provider/types/tailscale_account_config.go
   - internal/provider/types/target.go
   - internal/provider/types/target_config.go
   - internal/provider/types/target_config_conf.go
   - internal/provider/types/tls_configuration.go
+  - internal/provider/types/upgrade_group_settings.go
+  - internal/provider/types/upgrade_package_urls.go
+  - internal/provider/types/upgrade_settings.go
   - internal/provider/types/usage_group.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
+  - internal/provider/types/warm_pool_size.go
   - internal/provider/types/webhook_target.go
   - internal/provider/types/workspace_schema.go
   - internal/provider/types/zoom_account_config.go
@@ -2057,7 +2107,6 @@ generatedFiles:
   - internal/sdk/models/shared/globalvar.go
   - internal/sdk/models/shared/googleworkspaceaccountconfig.go
   - internal/sdk/models/shared/grokfile.go
-  - internal/sdk/models/shared/group.go
   - internal/sdk/models/shared/hbcriblinfo.go
   - internal/sdk/models/shared/hbleaderinfo.go
   - internal/sdk/models/shared/healthstatus.go
@@ -6379,6 +6428,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   getSystemSettingsConf:
     speakeasy-default-get-system-settings-conf:
+      parameters:
+        path:
+          groupId: "defaultHybrid"
       responses:
         "200":
           application/json: {"items": [{"api": {"baseUrl": "https://leader.example.com:9000", "disableApiCache": false, "disabled": false, "headers": {}, "host": "leader.example.com", "idleSessionTTL": 3600, "listenOnPort": true, "loginRateLimit": "5/minute", "port": 9000, "protocol": "https", "scripts": false, "sensitiveFields": ["password", "apiKey", "secret"], "ssl": {"caPath": "/etc/ssl/certs/ca-bundle.crt", "certPath": "/etc/cribl/ssl/server.crt", "disabled": false, "passphrase": "changeit", "privKeyPath": "/etc/cribl/ssl/server.key"}, "ssoRateLimit": "10/minute", "workerRemoteAccess": false}, "backups": {"backupPersistence": "local", "backupsDirectory": "/var/cribl/backups"}, "customLogo": {"enabled": true, "logoDescription": "Acme Corp", "logoImage": "/opt/cribl/custom/logo.png"}, "pii": {"enablePiiDetection": true}, "proxy": {"useEnvVars": false}, "rollback": {"rollbackEnabled": true, "rollbackRetries": 3, "rollbackTimeout": 600}, "shutdown": {"drainTimeout": 30}, "sni": {"disableSNIRouting": false}, "sockets": {"directory": "/var/run/cribl"}, "system": {"intercom": false, "upgrade": "api"}, "tls": {"defaultCipherList": "HIGH:!aNULL:!MD5", "defaultEcdhCurve": "X25519:P-256", "maxVersion": "TLSv1.3", "minVersion": "TLSv1.2", "rejectUnauthorized": true}, "upgradeGroupSettings": {"isRolling": true, "quantity": 5, "retryCount": 3, "retryDelay": 60}, "upgradeSettings": {"automaticUpgradeCheckPeriod": "24h", "disableAutomaticUpgrade": false, "enableLegacyEdgeUpgrade": false, "packageUrls": [{"packageHashUrl": "https://downloads.example.com/cribl/6.0.0/cribl-6.0.0.sha256", "packageUrl": "https://downloads.example.com/cribl/6.0.0/cribl-6.0.0.tgz"}], "upgradeSource": "official"}, "workers": {"count": 4, "enableHeapSnapshots": false, "loadThrottlePerc": 85, "memory": 4096, "minimum": 2, "startupMaxConns": 1024, "startupThrottleTimeout": 10000, "v8SingleThread": false}}]}
@@ -6386,6 +6438,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   updateSystemSettingsConf:
     speakeasy-default-update-system-settings-conf:
+      parameters:
+        path:
+          groupId: "defaultHybrid"
       requestBody:
         application/json: {"api": {"baseUrl": "https://leader.example.com:9000", "disableApiCache": false, "disabled": false, "headers": {}, "host": "leader.example.com", "idleSessionTTL": 3600, "listenOnPort": true, "loginRateLimit": "5/minute", "port": 9000, "protocol": "https", "scripts": false, "sensitiveFields": ["password", "apiKey", "secret"], "ssl": {"caPath": "/etc/ssl/certs/ca-bundle.crt", "certPath": "/etc/cribl/ssl/server.crt", "disabled": false, "passphrase": "changeit", "privKeyPath": "/etc/cribl/ssl/server.key"}, "ssoRateLimit": "10/minute", "workerRemoteAccess": false}, "backups": {"backupPersistence": "local", "backupsDirectory": "/var/cribl/backups"}, "customLogo": {"enabled": true, "logoDescription": "Acme Corp", "logoImage": "/opt/cribl/custom/logo.png"}, "pii": {"enablePiiDetection": true}, "proxy": {"useEnvVars": false}, "rollback": {"rollbackEnabled": true, "rollbackRetries": 3, "rollbackTimeout": 600}, "shutdown": {"drainTimeout": 30}, "sni": {"disableSNIRouting": false}, "sockets": {"directory": "/var/run/cribl"}, "system": {"intercom": false, "upgrade": "api"}, "tls": {"defaultCipherList": "HIGH:!aNULL:!MD5", "defaultEcdhCurve": "X25519:P-256", "maxVersion": "TLSv1.3", "minVersion": "TLSv1.2", "rejectUnauthorized": true}, "upgradeGroupSettings": {"isRolling": true, "quantity": 5, "retryCount": 3, "retryDelay": 60}, "upgradeSettings": {"automaticUpgradeCheckPeriod": "24h", "disableAutomaticUpgrade": false, "enableLegacyEdgeUpgrade": false, "packageUrls": [{"packageHashUrl": "https://downloads.example.com/cribl/6.0.0/cribl-6.0.0.sha256", "packageUrl": "https://downloads.example.com/cribl/6.0.0/cribl-6.0.0.tgz"}], "upgradeSource": "official"}, "workers": {"count": 4, "enableHeapSnapshots": false, "loadThrottlePerc": 85, "memory": 4096, "minimum": 2, "startupMaxConns": 1024, "startupThrottleTimeout": 10000, "v8SingleThread": false}}
       responses:
@@ -7129,10 +7184,10 @@ examples:
         path:
           product: "stream"
       requestBody:
-        application/json: {"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "type": "lake_access", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true}
+        application/json: {"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "type": "lake_access", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true, "maxWorkerAge": "1h"}
       responses:
         "200":
-          application/json: {"items": [{"onPrem": false, "workerRemoteAccess": true, "streamtags": ["prod", "web"], "cloud": {"provider": "aws", "region": "us-east-1"}, "provisioned": true, "isFleet": false, "estimatedIngestRate": 250000, "name": "edge-group-prod", "id": "grp-prod-edge"}]}
+          application/json: {"items": [{"cloud": {"provider": "aws", "region": "us-east-1"}, "estimatedIngestRate": 250000, "id": "grp-prod-edge", "isFleet": false, "name": "edge-group-prod", "onPrem": false, "provisioned": true, "streamtags": ["prod", "web"], "workerRemoteAccess": true}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getProductsGroupsByProduct:
@@ -7143,7 +7198,7 @@ examples:
         query: {}
       responses:
         "200":
-          application/json: {"items": [{"onPrem": false, "workerRemoteAccess": true, "streamtags": ["prod", "web"], "cloud": {"provider": "aws", "region": "us-east-1"}, "provisioned": true, "isFleet": false, "estimatedIngestRate": 250000, "name": "edge-group-prod", "id": "grp-prod-edge"}]}
+          application/json: {"items": [{"cloud": {"provider": "aws", "region": "us-east-1"}, "estimatedIngestRate": 250000, "id": "grp-prod-edge", "isFleet": false, "name": "edge-group-prod", "onPrem": false, "provisioned": true, "streamtags": ["prod", "web"], "workerRemoteAccess": true}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateGroupsDeployById:
@@ -7185,9 +7240,11 @@ examples:
       parameters:
         path:
           id: "workers-west"
+      requestBody:
+        application/json: {"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "type": "lake_access", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true, "maxWorkerAge": "1h"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "type": "lake_access", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true, "maxWorkerAge": "1h"}]}
         "500":
           application/json: {}
   getSearchJobsResultsById:
@@ -7905,6 +7962,8 @@ examples:
       responses:
         "200":
           application/json: {"status": "OK"}
+        default:
+          application/json: {"statusCode": 1397.13, "message": "<value>"}
   v1.workspaces.createWorkspace:
     speakeasy-default-v1-workspaces-create-workspace:
       parameters:
@@ -7914,7 +7973,7 @@ examples:
         application/json: {"workspaceId": "main", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
       responses:
         "201":
-          application/json: {"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+          application/json: {"workspaceId": "main", "region": "us-west-2", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
         default:
           application/json: {"statusCode": 2135.91, "message": "<value>"}
   v1.workspaces.listWorkspaces:
@@ -7924,7 +7983,7 @@ examples:
           organizationId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Inactive", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}], "count": 5}
+          application/json: {"items": [{"workspaceId": "main", "region": "us-west-2", "leaderFQDN": "workspace-leader.example.com", "state": "Inactive", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}]}
         default:
           application/json: {"statusCode": 1171.44, "message": "<value>"}
   v1.workspaces.updateWorkspace:
@@ -7957,7 +8016,7 @@ examples:
           workspaceId: "<id>"
       responses:
         "200":
-          application/json: {"workspaceId": "main", "region": "us-west-2", "lastUpdated": "2023-01-01T12:00:00Z", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
+          application/json: {"workspaceId": "main", "region": "us-west-2", "leaderFQDN": "workspace-leader.example.com", "state": "Active", "alias": "Production Environment", "description": "Main production workspace for customer data processing", "tags": ["production", "customer-data"]}
         default:
           application/json: {"statusCode": 8847.69, "message": "<value>"}
   createProductsMappingsByProduct:

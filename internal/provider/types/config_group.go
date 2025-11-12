@@ -7,25 +7,17 @@ import (
 )
 
 type ConfigGroup struct {
-	Cloud                   *ConfigGroupCloud    `tfsdk:"cloud"`
-	ConfigVersion           types.String         `tfsdk:"config_version"`
-	DeployingWorkerCount    types.Float64        `tfsdk:"deploying_worker_count"`
-	Description             types.String         `tfsdk:"description"`
-	EstimatedIngestRate     types.Float64        `tfsdk:"estimated_ingest_rate"`
-	Git                     *ConfigGroupGit      `tfsdk:"git"`
-	ID                      types.String         `tfsdk:"id"`
-	IncompatibleWorkerCount types.Float64        `tfsdk:"incompatible_worker_count"`
-	Inherits                types.String         `tfsdk:"inherits"`
-	IsFleet                 types.Bool           `tfsdk:"is_fleet"`
-	IsSearch                types.Bool           `tfsdk:"is_search"`
-	LookupDeployments       []ConfigGroupLookups `tfsdk:"lookup_deployments"`
-	Name                    types.String         `tfsdk:"name"`
-	OnPrem                  types.Bool           `tfsdk:"on_prem"`
-	Provisioned             types.Bool           `tfsdk:"provisioned"`
-	Streamtags              []types.String       `tfsdk:"streamtags"`
-	Tags                    types.String         `tfsdk:"tags"`
-	Type                    types.String         `tfsdk:"type"`
-	UpgradeVersion          types.String         `tfsdk:"upgrade_version"`
-	WorkerCount             types.Float64        `tfsdk:"worker_count"`
-	WorkerRemoteAccess      types.Bool           `tfsdk:"worker_remote_access"`
+	Cloud               *ConfigGroupCloud `tfsdk:"cloud"`
+	Description         types.String      `tfsdk:"description"`
+	EstimatedIngestRate types.Float64     `tfsdk:"estimated_ingest_rate"`
+	ID                  types.String      `tfsdk:"id"`
+	IsFleet             types.Bool        `tfsdk:"is_fleet"`
+	MaxWorkerAge        types.String      `tfsdk:"max_worker_age"`
+	Name                types.String      `tfsdk:"name"`
+	OnPrem              types.Bool        `tfsdk:"on_prem"`
+	Provisioned         types.Bool        `tfsdk:"provisioned"`
+	Streamtags          []types.String    `tfsdk:"streamtags"`
+	Tags                types.String      `tfsdk:"tags"`
+	Type                types.String      `tfsdk:"type"`
+	WorkerRemoteAccess  types.Bool        `tfsdk:"worker_remote_access"`
 }

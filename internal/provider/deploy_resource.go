@@ -75,94 +75,21 @@ func (r *DeployResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 						},
-						"config_version": schema.StringAttribute{
-							Computed: true,
-						},
-						"deploying_worker_count": schema.Float64Attribute{
-							Computed: true,
-						},
 						"description": schema.StringAttribute{
 							Computed: true,
 						},
 						"estimated_ingest_rate": schema.Float64Attribute{
 							Computed: true,
 						},
-						"git": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"commit": schema.StringAttribute{
-									Computed: true,
-								},
-								"local_changes": schema.Float64Attribute{
-									Computed: true,
-								},
-								"log": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"author_email": schema.StringAttribute{
-												Computed: true,
-											},
-											"author_name": schema.StringAttribute{
-												Computed: true,
-											},
-											"date": schema.StringAttribute{
-												Computed: true,
-											},
-											"hash": schema.StringAttribute{
-												Computed: true,
-											},
-											"message": schema.StringAttribute{
-												Computed: true,
-											},
-											"short": schema.StringAttribute{
-												Computed: true,
-											},
-										},
-									},
-								},
-							},
-						},
 						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"incompatible_worker_count": schema.Float64Attribute{
-							Computed: true,
-						},
-						"inherits": schema.StringAttribute{
 							Computed: true,
 						},
 						"is_fleet": schema.BoolAttribute{
 							Computed: true,
 						},
-						"is_search": schema.BoolAttribute{
-							Computed: true,
-						},
-						"lookup_deployments": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"context": schema.StringAttribute{
-										Computed: true,
-									},
-									"lookups": schema.ListNestedAttribute{
-										Computed: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"deployed_version": schema.StringAttribute{
-													Computed: true,
-												},
-												"file": schema.StringAttribute{
-													Computed: true,
-												},
-												"version": schema.StringAttribute{
-													Computed: true,
-												},
-											},
-										},
-									},
-								},
-							},
+						"max_worker_age": schema.StringAttribute{
+							Computed:    true,
+							Description: `This is only configurable for hybrid worker groups.`,
 						},
 						"name": schema.StringAttribute{
 							Computed: true,
@@ -188,12 +115,6 @@ func (r *DeployResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"lake_access",
 								),
 							},
-						},
-						"upgrade_version": schema.StringAttribute{
-							Computed: true,
-						},
-						"worker_count": schema.Float64Attribute{
-							Computed: true,
 						},
 						"worker_remote_access": schema.BoolAttribute{
 							Computed: true,

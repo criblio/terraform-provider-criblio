@@ -40,6 +40,7 @@ type V1WorkspacesCreateWorkspaceResponse struct {
 	RawResponse *http.Response
 	// The Workspace has been successfully created
 	WorkspaceSchema *shared.WorkspaceSchema
+	// Default error response
 	DefaultErrorDTO *shared.DefaultErrorDTO
 }
 

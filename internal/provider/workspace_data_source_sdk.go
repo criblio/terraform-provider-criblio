@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"github.com/criblio/terraform-provider-criblio/internal/provider/typeconvert"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -17,7 +16,6 @@ func (r *WorkspaceDataSourceModel) RefreshFromSharedWorkspaceSchema(ctx context.
 	if resp != nil {
 		r.Alias = types.StringPointerValue(resp.Alias)
 		r.Description = types.StringPointerValue(resp.Description)
-		r.LastUpdated = types.StringValue(typeconvert.TimeToString(resp.LastUpdated))
 		r.LeaderFQDN = types.StringValue(resp.LeaderFQDN)
 		r.Region = types.StringValue(string(resp.Region))
 		r.State = types.StringValue(string(resp.State))

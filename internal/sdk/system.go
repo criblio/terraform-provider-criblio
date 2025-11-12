@@ -2191,7 +2191,7 @@ func (s *System) UpdateSystemSettingsAuth(ctx context.Context, opts ...operation
 
 // GetSystemSettingsConf - Get Cribl system settings
 // Get Cribl system settings
-func (s *System) GetSystemSettingsConf(ctx context.Context, opts ...operations.Option) (*operations.GetSystemSettingsConfResponse, error) {
+func (s *System) GetSystemSettingsConf(ctx context.Context, request operations.GetSystemSettingsConfRequest, opts ...operations.Option) (*operations.GetSystemSettingsConfResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -2210,7 +2210,7 @@ func (s *System) GetSystemSettingsConf(ctx context.Context, opts ...operations.O
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/system/settings/conf")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/settings/conf", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2414,7 +2414,7 @@ func (s *System) GetSystemSettingsConf(ctx context.Context, opts ...operations.O
 
 // UpdateSystemSettingsConf - Update Cribl system settings
 // Update Cribl system settings
-func (s *System) UpdateSystemSettingsConf(ctx context.Context, request shared.SystemSettingsConf, opts ...operations.Option) (*operations.UpdateSystemSettingsConfResponse, error) {
+func (s *System) UpdateSystemSettingsConf(ctx context.Context, request operations.UpdateSystemSettingsConfRequest, opts ...operations.Option) (*operations.UpdateSystemSettingsConfResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -2433,7 +2433,7 @@ func (s *System) UpdateSystemSettingsConf(ctx context.Context, request shared.Sy
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/system/settings/conf")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/settings/conf", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2447,7 +2447,7 @@ func (s *System) UpdateSystemSettingsConf(ctx context.Context, request shared.Sy
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "SystemSettingsConf", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
