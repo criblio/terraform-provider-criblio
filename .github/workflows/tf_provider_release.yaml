@@ -3,10 +3,15 @@ name: Release
 
 # This GitHub Action creates a release when a tag that matches the pattern
 # "v*" (e.g. v0.1.0) is created.
+# Also runs e2e tests on pull requests and specific branches for testing workflow changes.
 on:
   push:
     tags:
       - 'v*'
+    branches:
+      - 'fix_e2e_auth_issues_with_release'
+  pull_request:
+    types: [opened, synchronize]
   workflow_dispatch:
 
 # Releases need permission to read and write the repository contents.
@@ -17,9 +22,11 @@ permissions:
 jobs:
   e2e_test:
     uses: ./.github/workflows/e2e_checks.yaml
+    secrets: inherit
   goreleaser:
     needs: e2e_test
-    if: ${{ needs.e2e_test.result == 'success' }}
+    # Only run release on tag pushes or manual dispatch, NOT on pull requests or test branches
+    if: ${{ needs.e2e_test.result == 'success' && ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
