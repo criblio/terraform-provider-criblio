@@ -11,100 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *GroupSystemSettingsResourceModel) RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx context.Context, resp *operations.GetSystemSettingsConfResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Items = []tfTypes.SystemSettings{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.SystemSettings
-
-			items.API.BaseURL = types.StringPointerValue(itemsItem.API.BaseURL)
-			items.API.DisableAPICache = types.BoolPointerValue(itemsItem.API.DisableAPICache)
-			items.API.Disabled = types.BoolValue(itemsItem.API.Disabled)
-			if itemsItem.API.Headers == nil {
-				items.API.Headers = nil
-			} else {
-				items.API.Headers = &tfTypes.SystemSettingsHeaders{}
-			}
-			items.API.Host = types.StringValue(itemsItem.API.Host)
-			items.API.IdleSessionTTL = types.Float64PointerValue(itemsItem.API.IdleSessionTTL)
-			items.API.ListenOnPort = types.BoolPointerValue(itemsItem.API.ListenOnPort)
-			items.API.LoginRateLimit = types.StringPointerValue(itemsItem.API.LoginRateLimit)
-			items.API.Port = types.Float64Value(itemsItem.API.Port)
-			items.API.Protocol = types.StringValue(itemsItem.API.Protocol)
-			items.API.Scripts = types.BoolPointerValue(itemsItem.API.Scripts)
-			items.API.SensitiveFields = make([]types.String, 0, len(itemsItem.API.SensitiveFields))
-			for _, v := range itemsItem.API.SensitiveFields {
-				items.API.SensitiveFields = append(items.API.SensitiveFields, types.StringValue(v))
-			}
-			items.API.Ssl.CaPath = types.StringPointerValue(itemsItem.API.Ssl.CaPath)
-			items.API.Ssl.CertPath = types.StringValue(itemsItem.API.Ssl.CertPath)
-			items.API.Ssl.Disabled = types.BoolValue(itemsItem.API.Ssl.Disabled)
-			items.API.Ssl.Passphrase = types.StringValue(itemsItem.API.Ssl.Passphrase)
-			items.API.Ssl.PrivKeyPath = types.StringValue(itemsItem.API.Ssl.PrivKeyPath)
-			items.API.SsoRateLimit = types.StringPointerValue(itemsItem.API.SsoRateLimit)
-			items.API.WorkerRemoteAccess = types.BoolValue(itemsItem.API.WorkerRemoteAccess)
-			items.Backups.BackupPersistence = types.StringValue(itemsItem.Backups.BackupPersistence)
-			items.Backups.BackupsDirectory = types.StringValue(itemsItem.Backups.BackupsDirectory)
-			items.CustomLogo.Enabled = types.BoolValue(itemsItem.CustomLogo.Enabled)
-			items.CustomLogo.LogoDescription = types.StringValue(itemsItem.CustomLogo.LogoDescription)
-			items.CustomLogo.LogoImage = types.StringValue(itemsItem.CustomLogo.LogoImage)
-			items.Pii.EnablePiiDetection = types.BoolValue(itemsItem.Pii.EnablePiiDetection)
-			items.Proxy.UseEnvVars = types.BoolValue(itemsItem.Proxy.UseEnvVars)
-			items.Rollback.RollbackEnabled = types.BoolValue(itemsItem.Rollback.RollbackEnabled)
-			items.Rollback.RollbackRetries = types.Float64PointerValue(itemsItem.Rollback.RollbackRetries)
-			items.Rollback.RollbackTimeout = types.Float64PointerValue(itemsItem.Rollback.RollbackTimeout)
-			items.Shutdown.DrainTimeout = types.Float64Value(itemsItem.Shutdown.DrainTimeout)
-			items.Sni.DisableSNIRouting = types.BoolValue(itemsItem.Sni.DisableSNIRouting)
-			if itemsItem.Sockets == nil {
-				items.Sockets = nil
-			} else {
-				items.Sockets = &tfTypes.SystemSettingsSockets{}
-				items.Sockets.Directory = types.StringPointerValue(itemsItem.Sockets.Directory)
-			}
-			items.System.Intercom = types.BoolValue(itemsItem.System.Intercom)
-			items.System.Upgrade = types.StringValue(string(itemsItem.System.Upgrade))
-			items.TLS.DefaultCipherList = types.StringValue(itemsItem.TLS.DefaultCipherList)
-			items.TLS.DefaultEcdhCurve = types.StringValue(itemsItem.TLS.DefaultEcdhCurve)
-			items.TLS.MaxVersion = types.StringValue(itemsItem.TLS.MaxVersion)
-			items.TLS.MinVersion = types.StringValue(itemsItem.TLS.MinVersion)
-			items.TLS.RejectUnauthorized = types.BoolValue(itemsItem.TLS.RejectUnauthorized)
-			items.UpgradeGroupSettings.IsRolling = types.BoolPointerValue(itemsItem.UpgradeGroupSettings.IsRolling)
-			items.UpgradeGroupSettings.Quantity = types.Float64PointerValue(itemsItem.UpgradeGroupSettings.Quantity)
-			items.UpgradeGroupSettings.RetryCount = types.Float64PointerValue(itemsItem.UpgradeGroupSettings.RetryCount)
-			items.UpgradeGroupSettings.RetryDelay = types.Float64PointerValue(itemsItem.UpgradeGroupSettings.RetryDelay)
-			items.UpgradeSettings.AutomaticUpgradeCheckPeriod = types.StringPointerValue(itemsItem.UpgradeSettings.AutomaticUpgradeCheckPeriod)
-			items.UpgradeSettings.DisableAutomaticUpgrade = types.BoolValue(itemsItem.UpgradeSettings.DisableAutomaticUpgrade)
-			items.UpgradeSettings.EnableLegacyEdgeUpgrade = types.BoolValue(itemsItem.UpgradeSettings.EnableLegacyEdgeUpgrade)
-			items.UpgradeSettings.PackageUrls = []tfTypes.UpgradePackageUrls{}
-
-			for _, packageUrlsItem := range itemsItem.UpgradeSettings.PackageUrls {
-				var packageUrls tfTypes.UpgradePackageUrls
-
-				packageUrls.PackageHashURL = types.StringPointerValue(packageUrlsItem.PackageHashURL)
-				packageUrls.PackageURL = types.StringValue(packageUrlsItem.PackageURL)
-
-				items.UpgradeSettings.PackageUrls = append(items.UpgradeSettings.PackageUrls, packageUrls)
-			}
-			items.UpgradeSettings.UpgradeSource = types.StringValue(itemsItem.UpgradeSettings.UpgradeSource)
-			items.Workers.Count = types.Float64Value(itemsItem.Workers.Count)
-			items.Workers.EnableHeapSnapshots = types.BoolPointerValue(itemsItem.Workers.EnableHeapSnapshots)
-			items.Workers.LoadThrottlePerc = types.Float64PointerValue(itemsItem.Workers.LoadThrottlePerc)
-			items.Workers.Memory = types.Float64Value(itemsItem.Workers.Memory)
-			items.Workers.Minimum = types.Float64Value(itemsItem.Workers.Minimum)
-			items.Workers.StartupMaxConns = types.Float64PointerValue(itemsItem.Workers.StartupMaxConns)
-			items.Workers.StartupThrottleTimeout = types.Float64PointerValue(itemsItem.Workers.StartupThrottleTimeout)
-			items.Workers.V8SingleThread = types.BoolPointerValue(itemsItem.Workers.V8SingleThread)
-
-			r.Items = append(r.Items, items)
-		}
-	}
-
-	return diags
-}
-
 func (r *GroupSystemSettingsResourceModel) RefreshFromOperationsUpdateSystemSettingsConfResponseBody(ctx context.Context, resp *operations.UpdateSystemSettingsConfResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -309,6 +215,90 @@ func (r *GroupSystemSettingsResourceModel) RefreshFromOperationsUpdateSystemSett
 			r.Items = append(r.Items, items)
 		}
 	}
+
+	return diags
+}
+
+func (r *GroupSystemSettingsResourceModel) RefreshFromSharedSystemSettingsConf(ctx context.Context, resp *shared.SystemSettingsConf) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.API.BaseURL = types.StringPointerValue(resp.API.BaseURL)
+	r.API.DisableAPICache = types.BoolPointerValue(resp.API.DisableAPICache)
+	r.API.Disabled = types.BoolValue(resp.API.Disabled)
+	if resp.API.Headers == nil {
+		r.API.Headers = nil
+	} else {
+		r.API.Headers = &tfTypes.SystemSettingsConfHeaders{}
+	}
+	r.API.Host = types.StringValue(resp.API.Host)
+	r.API.IdleSessionTTL = types.Float64PointerValue(resp.API.IdleSessionTTL)
+	r.API.ListenOnPort = types.BoolPointerValue(resp.API.ListenOnPort)
+	r.API.LoginRateLimit = types.StringPointerValue(resp.API.LoginRateLimit)
+	r.API.Port = types.Float64Value(resp.API.Port)
+	r.API.Protocol = types.StringValue(resp.API.Protocol)
+	r.API.Scripts = types.BoolPointerValue(resp.API.Scripts)
+	r.API.SensitiveFields = make([]types.String, 0, len(resp.API.SensitiveFields))
+	for _, v := range resp.API.SensitiveFields {
+		r.API.SensitiveFields = append(r.API.SensitiveFields, types.StringValue(v))
+	}
+	r.API.Ssl.CaPath = types.StringPointerValue(resp.API.Ssl.CaPath)
+	r.API.Ssl.CertPath = types.StringValue(resp.API.Ssl.CertPath)
+	r.API.Ssl.Disabled = types.BoolValue(resp.API.Ssl.Disabled)
+	r.API.Ssl.Passphrase = types.StringValue(resp.API.Ssl.Passphrase)
+	r.API.Ssl.PrivKeyPath = types.StringValue(resp.API.Ssl.PrivKeyPath)
+	r.API.SsoRateLimit = types.StringPointerValue(resp.API.SsoRateLimit)
+	r.API.WorkerRemoteAccess = types.BoolValue(resp.API.WorkerRemoteAccess)
+	r.Backups.BackupPersistence = types.StringValue(resp.Backups.BackupPersistence)
+	r.Backups.BackupsDirectory = types.StringValue(resp.Backups.BackupsDirectory)
+	r.CustomLogo.Enabled = types.BoolValue(resp.CustomLogo.Enabled)
+	r.CustomLogo.LogoDescription = types.StringValue(resp.CustomLogo.LogoDescription)
+	r.CustomLogo.LogoImage = types.StringValue(resp.CustomLogo.LogoImage)
+	r.Pii.EnablePiiDetection = types.BoolValue(resp.Pii.EnablePiiDetection)
+	r.Proxy.UseEnvVars = types.BoolValue(resp.Proxy.UseEnvVars)
+	r.Rollback.RollbackEnabled = types.BoolValue(resp.Rollback.RollbackEnabled)
+	r.Rollback.RollbackRetries = types.Float64PointerValue(resp.Rollback.RollbackRetries)
+	r.Rollback.RollbackTimeout = types.Float64PointerValue(resp.Rollback.RollbackTimeout)
+	r.Shutdown.DrainTimeout = types.Float64Value(resp.Shutdown.DrainTimeout)
+	r.Sni.DisableSNIRouting = types.BoolValue(resp.Sni.DisableSNIRouting)
+	if resp.Sockets == nil {
+		r.Sockets = nil
+	} else {
+		r.Sockets = &tfTypes.SystemSettingsConfSockets{}
+		r.Sockets.Directory = types.StringPointerValue(resp.Sockets.Directory)
+	}
+	r.System.Intercom = types.BoolValue(resp.System.Intercom)
+	r.System.Upgrade = types.StringValue(string(resp.System.Upgrade))
+	r.TLS.DefaultCipherList = types.StringValue(resp.TLS.DefaultCipherList)
+	r.TLS.DefaultEcdhCurve = types.StringValue(resp.TLS.DefaultEcdhCurve)
+	r.TLS.MaxVersion = types.StringValue(resp.TLS.MaxVersion)
+	r.TLS.MinVersion = types.StringValue(resp.TLS.MinVersion)
+	r.TLS.RejectUnauthorized = types.BoolValue(resp.TLS.RejectUnauthorized)
+	r.UpgradeGroupSettings.IsRolling = types.BoolPointerValue(resp.UpgradeGroupSettings.IsRolling)
+	r.UpgradeGroupSettings.Quantity = types.Float64PointerValue(resp.UpgradeGroupSettings.Quantity)
+	r.UpgradeGroupSettings.RetryCount = types.Float64PointerValue(resp.UpgradeGroupSettings.RetryCount)
+	r.UpgradeGroupSettings.RetryDelay = types.Float64PointerValue(resp.UpgradeGroupSettings.RetryDelay)
+	r.UpgradeSettings.AutomaticUpgradeCheckPeriod = types.StringPointerValue(resp.UpgradeSettings.AutomaticUpgradeCheckPeriod)
+	r.UpgradeSettings.DisableAutomaticUpgrade = types.BoolValue(resp.UpgradeSettings.DisableAutomaticUpgrade)
+	r.UpgradeSettings.EnableLegacyEdgeUpgrade = types.BoolValue(resp.UpgradeSettings.EnableLegacyEdgeUpgrade)
+	r.UpgradeSettings.PackageUrls = []tfTypes.UpgradePackageUrls{}
+
+	for _, packageUrlsItem := range resp.UpgradeSettings.PackageUrls {
+		var packageUrls tfTypes.UpgradePackageUrls
+
+		packageUrls.PackageHashURL = types.StringPointerValue(packageUrlsItem.PackageHashURL)
+		packageUrls.PackageURL = types.StringValue(packageUrlsItem.PackageURL)
+
+		r.UpgradeSettings.PackageUrls = append(r.UpgradeSettings.PackageUrls, packageUrls)
+	}
+	r.UpgradeSettings.UpgradeSource = types.StringValue(resp.UpgradeSettings.UpgradeSource)
+	r.Workers.Count = types.Float64Value(resp.Workers.Count)
+	r.Workers.EnableHeapSnapshots = types.BoolPointerValue(resp.Workers.EnableHeapSnapshots)
+	r.Workers.LoadThrottlePerc = types.Float64PointerValue(resp.Workers.LoadThrottlePerc)
+	r.Workers.Memory = types.Float64Value(resp.Workers.Memory)
+	r.Workers.Minimum = types.Float64Value(resp.Workers.Minimum)
+	r.Workers.StartupMaxConns = types.Float64PointerValue(resp.Workers.StartupMaxConns)
+	r.Workers.StartupThrottleTimeout = types.Float64PointerValue(resp.Workers.StartupThrottleTimeout)
+	r.Workers.V8SingleThread = types.BoolPointerValue(resp.Workers.V8SingleThread)
 
 	return diags
 }

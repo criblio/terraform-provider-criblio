@@ -7,6 +7,8 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
+	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -63,27 +65,33 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"base_url": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"disable_api_cache": schema.BoolAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"disabled": schema.BoolAttribute{
 						Required: true,
 					},
 					"headers": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"host": schema.StringAttribute{
 						Required: true,
 					},
 					"idle_session_ttl": schema.Float64Attribute{
+						Computed: true,
 						Optional: true,
 					},
 					"listen_on_port": schema.BoolAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"login_rate_limit": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"port": schema.Float64Attribute{
@@ -93,9 +101,11 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 						Required: true,
 					},
 					"scripts": schema.BoolAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"sensitive_fields": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 					},
@@ -103,6 +113,7 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 						Required: true,
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
+								Computed: true,
 								Optional: true,
 							},
 							"cert_path": schema.StringAttribute{
@@ -120,6 +131,7 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 						},
 					},
 					"sso_rate_limit": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"worker_remote_access": schema.BoolAttribute{
@@ -827,9 +839,11 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 						Required: true,
 					},
 					"rollback_retries": schema.Float64Attribute{
+						Computed: true,
 						Optional: true,
 					},
 					"rollback_timeout": schema.Float64Attribute{
+						Computed: true,
 						Optional: true,
 					},
 				},
@@ -851,9 +865,11 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			"sockets": schema.SingleNestedAttribute{
+				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"directory": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
 					},
 				},
@@ -900,15 +916,19 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"is_rolling": schema.BoolAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"quantity": schema.Float64Attribute{
+						Computed: true,
 						Optional: true,
 					},
 					"retry_count": schema.Float64Attribute{
+						Computed: true,
 						Optional: true,
 					},
 					"retry_delay": schema.Float64Attribute{
+						Computed: true,
 						Optional: true,
 					},
 				},
@@ -917,6 +937,7 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"automatic_upgrade_check_period": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"disable_automatic_upgrade": schema.BoolAttribute{
@@ -926,14 +947,24 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 						Required: true,
 					},
 					"package_urls": schema.ListNestedAttribute{
+						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
 							Attributes: map[string]schema.Attribute{
 								"package_hash_url": schema.StringAttribute{
+									Computed: true,
 									Optional: true,
 								},
 								"package_url": schema.StringAttribute{
-									Required: true,
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
@@ -950,9 +981,11 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 						Required: true,
 					},
 					"enable_heap_snapshots": schema.BoolAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"load_throttle_perc": schema.Float64Attribute{
+						Computed: true,
 						Optional: true,
 					},
 					"memory": schema.Float64Attribute{
@@ -962,12 +995,15 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 						Required: true,
 					},
 					"startup_max_conns": schema.Float64Attribute{
+						Computed: true,
 						Optional: true,
 					},
 					"startup_throttle_timeout": schema.Float64Attribute{
+						Computed: true,
 						Optional: true,
 					},
 					"v8_single_thread": schema.BoolAttribute{
+						Computed: true,
 						Optional: true,
 					},
 				},
@@ -1073,11 +1109,11 @@ func (r *GroupSystemSettingsResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.Object != nil) {
+	if !(res1.Object != nil && res1.Object.Items != nil && len(res1.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSystemSettingsConf(ctx, &res1.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -1137,11 +1173,11 @@ func (r *GroupSystemSettingsResource) Read(ctx context.Context, req resource.Rea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSystemSettingsConf(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -1224,11 +1260,11 @@ func (r *GroupSystemSettingsResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.Object != nil) {
+	if !(res1.Object != nil && res1.Object.Items != nil && len(res1.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSystemSettingsConf(ctx, &res1.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

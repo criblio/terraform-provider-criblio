@@ -300,13 +300,10 @@ Optional:
 <a id="nestedatt--upgrade_settings--package_urls"></a>
 ### Nested Schema for `upgrade_settings.package_urls`
 
-Required:
-
-- `package_url` (String)
-
 Optional:
 
 - `package_hash_url` (String)
+- `package_url` (String) Not Null
 
 
 

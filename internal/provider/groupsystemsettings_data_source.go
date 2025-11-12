@@ -29,8 +29,21 @@ type GroupSystemSettingsDataSource struct {
 
 // GroupSystemSettingsDataSourceModel describes the data model.
 type GroupSystemSettingsDataSourceModel struct {
-	GroupID types.String                 `tfsdk:"group_id"`
-	Items   []tfTypes.SystemSettingsConf `tfsdk:"items"`
+	API                  tfTypes.SystemSettingsConfAPI        `tfsdk:"api"`
+	Backups              tfTypes.SystemSettingsConfBackups    `tfsdk:"backups"`
+	CustomLogo           tfTypes.SystemSettingsConfCustomLogo `tfsdk:"custom_logo"`
+	GroupID              types.String                         `tfsdk:"group_id"`
+	Pii                  tfTypes.SystemSettingsConfPii        `tfsdk:"pii"`
+	Proxy                tfTypes.SystemSettingsConfProxy      `tfsdk:"proxy"`
+	Rollback             tfTypes.SystemSettingsConfRollback   `tfsdk:"rollback"`
+	Shutdown             tfTypes.SystemSettingsConfShutdown   `tfsdk:"shutdown"`
+	Sni                  tfTypes.SystemSettingsConfSni        `tfsdk:"sni"`
+	Sockets              *tfTypes.SystemSettingsConfSockets   `tfsdk:"sockets"`
+	System               tfTypes.SystemSettingsConfSystem     `tfsdk:"system"`
+	TLS                  tfTypes.SystemSettingsConfTLS        `tfsdk:"tls"`
+	UpgradeGroupSettings tfTypes.UpgradeGroupSettings         `tfsdk:"upgrade_group_settings"`
+	UpgradeSettings      tfTypes.UpgradeSettings              `tfsdk:"upgrade_settings"`
+	Workers              tfTypes.SystemSettingsConfWorkers    `tfsdk:"workers"`
 }
 
 // Metadata returns the data source type name.
@@ -44,268 +57,261 @@ func (r *GroupSystemSettingsDataSource) Schema(ctx context.Context, req datasour
 		MarkdownDescription: "GroupSystemSettings DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"api": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"base_url": schema.StringAttribute{
+						Computed: true,
+					},
+					"disable_api_cache": schema.BoolAttribute{
+						Computed: true,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed: true,
+					},
+					"headers": schema.SingleNestedAttribute{
+						Computed: true,
+					},
+					"host": schema.StringAttribute{
+						Computed: true,
+					},
+					"idle_session_ttl": schema.Float64Attribute{
+						Computed: true,
+					},
+					"listen_on_port": schema.BoolAttribute{
+						Computed: true,
+					},
+					"login_rate_limit": schema.StringAttribute{
+						Computed: true,
+					},
+					"port": schema.Float64Attribute{
+						Computed: true,
+					},
+					"protocol": schema.StringAttribute{
+						Computed: true,
+					},
+					"scripts": schema.BoolAttribute{
+						Computed: true,
+					},
+					"sensitive_fields": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+					},
+					"ssl": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"ca_path": schema.StringAttribute{
+								Computed: true,
+							},
+							"cert_path": schema.StringAttribute{
+								Computed: true,
+							},
+							"disabled": schema.BoolAttribute{
+								Computed: true,
+							},
+							"passphrase": schema.StringAttribute{
+								Computed: true,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"sso_rate_limit": schema.StringAttribute{
+						Computed: true,
+					},
+					"worker_remote_access": schema.BoolAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"backups": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"backup_persistence": schema.StringAttribute{
+						Computed: true,
+					},
+					"backups_directory": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"custom_logo": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"enabled": schema.BoolAttribute{
+						Computed: true,
+					},
+					"logo_description": schema.StringAttribute{
+						Computed: true,
+					},
+					"logo_image": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The hybrid worker group or edge fleet to which this instance belongs. Defaults to 'defaultHybrid'.`,
 			},
-			"items": schema.ListNestedAttribute{
+			"pii": schema.SingleNestedAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"api": schema.SingleNestedAttribute{
-							Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"enable_pii_detection": schema.BoolAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"proxy": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"use_env_vars": schema.BoolAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"rollback": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"rollback_enabled": schema.BoolAttribute{
+						Computed: true,
+					},
+					"rollback_retries": schema.Float64Attribute{
+						Computed: true,
+					},
+					"rollback_timeout": schema.Float64Attribute{
+						Computed: true,
+					},
+				},
+			},
+			"shutdown": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"drain_timeout": schema.Float64Attribute{
+						Computed: true,
+					},
+				},
+			},
+			"sni": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"disable_sni_routing": schema.BoolAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"sockets": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"directory": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"system": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"intercom": schema.BoolAttribute{
+						Computed: true,
+					},
+					"upgrade": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"tls": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"default_cipher_list": schema.StringAttribute{
+						Computed: true,
+					},
+					"default_ecdh_curve": schema.StringAttribute{
+						Computed: true,
+					},
+					"max_version": schema.StringAttribute{
+						Computed: true,
+					},
+					"min_version": schema.StringAttribute{
+						Computed: true,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"upgrade_group_settings": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"is_rolling": schema.BoolAttribute{
+						Computed: true,
+					},
+					"quantity": schema.Float64Attribute{
+						Computed: true,
+					},
+					"retry_count": schema.Float64Attribute{
+						Computed: true,
+					},
+					"retry_delay": schema.Float64Attribute{
+						Computed: true,
+					},
+				},
+			},
+			"upgrade_settings": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"automatic_upgrade_check_period": schema.StringAttribute{
+						Computed: true,
+					},
+					"disable_automatic_upgrade": schema.BoolAttribute{
+						Computed: true,
+					},
+					"enable_legacy_edge_upgrade": schema.BoolAttribute{
+						Computed: true,
+					},
+					"package_urls": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"base_url": schema.StringAttribute{
+								"package_hash_url": schema.StringAttribute{
 									Computed: true,
 								},
-								"disable_api_cache": schema.BoolAttribute{
-									Computed: true,
-								},
-								"disabled": schema.BoolAttribute{
-									Computed: true,
-								},
-								"headers": schema.SingleNestedAttribute{
-									Computed: true,
-								},
-								"host": schema.StringAttribute{
-									Computed: true,
-								},
-								"idle_session_ttl": schema.Float64Attribute{
-									Computed: true,
-								},
-								"listen_on_port": schema.BoolAttribute{
-									Computed: true,
-								},
-								"login_rate_limit": schema.StringAttribute{
-									Computed: true,
-								},
-								"port": schema.Float64Attribute{
-									Computed: true,
-								},
-								"protocol": schema.StringAttribute{
-									Computed: true,
-								},
-								"scripts": schema.BoolAttribute{
-									Computed: true,
-								},
-								"sensitive_fields": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-								},
-								"ssl": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"ca_path": schema.StringAttribute{
-											Computed: true,
-										},
-										"cert_path": schema.StringAttribute{
-											Computed: true,
-										},
-										"disabled": schema.BoolAttribute{
-											Computed: true,
-										},
-										"passphrase": schema.StringAttribute{
-											Computed: true,
-										},
-										"priv_key_path": schema.StringAttribute{
-											Computed: true,
-										},
-									},
-								},
-								"sso_rate_limit": schema.StringAttribute{
-									Computed: true,
-								},
-								"worker_remote_access": schema.BoolAttribute{
+								"package_url": schema.StringAttribute{
 									Computed: true,
 								},
 							},
 						},
-						"backups": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"backup_persistence": schema.StringAttribute{
-									Computed: true,
-								},
-								"backups_directory": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"custom_logo": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"enabled": schema.BoolAttribute{
-									Computed: true,
-								},
-								"logo_description": schema.StringAttribute{
-									Computed: true,
-								},
-								"logo_image": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"pii": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"enable_pii_detection": schema.BoolAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"proxy": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"use_env_vars": schema.BoolAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"rollback": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"rollback_enabled": schema.BoolAttribute{
-									Computed: true,
-								},
-								"rollback_retries": schema.Float64Attribute{
-									Computed: true,
-								},
-								"rollback_timeout": schema.Float64Attribute{
-									Computed: true,
-								},
-							},
-						},
-						"shutdown": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"drain_timeout": schema.Float64Attribute{
-									Computed: true,
-								},
-							},
-						},
-						"sni": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"disable_sni_routing": schema.BoolAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"sockets": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"directory": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"system": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"intercom": schema.BoolAttribute{
-									Computed: true,
-								},
-								"upgrade": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"tls": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"default_cipher_list": schema.StringAttribute{
-									Computed: true,
-								},
-								"default_ecdh_curve": schema.StringAttribute{
-									Computed: true,
-								},
-								"max_version": schema.StringAttribute{
-									Computed: true,
-								},
-								"min_version": schema.StringAttribute{
-									Computed: true,
-								},
-								"reject_unauthorized": schema.BoolAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"upgrade_group_settings": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"is_rolling": schema.BoolAttribute{
-									Computed: true,
-								},
-								"quantity": schema.Float64Attribute{
-									Computed: true,
-								},
-								"retry_count": schema.Float64Attribute{
-									Computed: true,
-								},
-								"retry_delay": schema.Float64Attribute{
-									Computed: true,
-								},
-							},
-						},
-						"upgrade_settings": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"automatic_upgrade_check_period": schema.StringAttribute{
-									Computed: true,
-								},
-								"disable_automatic_upgrade": schema.BoolAttribute{
-									Computed: true,
-								},
-								"enable_legacy_edge_upgrade": schema.BoolAttribute{
-									Computed: true,
-								},
-								"package_urls": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"package_hash_url": schema.StringAttribute{
-												Computed: true,
-											},
-											"package_url": schema.StringAttribute{
-												Computed: true,
-											},
-										},
-									},
-								},
-								"upgrade_source": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"workers": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"count": schema.Float64Attribute{
-									Computed: true,
-								},
-								"enable_heap_snapshots": schema.BoolAttribute{
-									Computed: true,
-								},
-								"load_throttle_perc": schema.Float64Attribute{
-									Computed: true,
-								},
-								"memory": schema.Float64Attribute{
-									Computed: true,
-								},
-								"minimum": schema.Float64Attribute{
-									Computed: true,
-								},
-								"startup_max_conns": schema.Float64Attribute{
-									Computed: true,
-								},
-								"startup_throttle_timeout": schema.Float64Attribute{
-									Computed: true,
-								},
-								"v8_single_thread": schema.BoolAttribute{
-									Computed: true,
-								},
-							},
-						},
+					},
+					"upgrade_source": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"workers": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"count": schema.Float64Attribute{
+						Computed: true,
+					},
+					"enable_heap_snapshots": schema.BoolAttribute{
+						Computed: true,
+					},
+					"load_throttle_perc": schema.Float64Attribute{
+						Computed: true,
+					},
+					"memory": schema.Float64Attribute{
+						Computed: true,
+					},
+					"minimum": schema.Float64Attribute{
+						Computed: true,
+					},
+					"startup_max_conns": schema.Float64Attribute{
+						Computed: true,
+					},
+					"startup_throttle_timeout": schema.Float64Attribute{
+						Computed: true,
+					},
+					"v8_single_thread": schema.BoolAttribute{
+						Computed: true,
 					},
 				},
 			},
@@ -373,11 +379,11 @@ func (r *GroupSystemSettingsDataSource) Read(ctx context.Context, req datasource
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedSystemSettingsConf(ctx, &res.Object.Items[0])...)
 
 	if resp.Diagnostics.HasError() {
 		return

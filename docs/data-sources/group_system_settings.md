@@ -27,37 +27,30 @@ data "criblio_group_system_settings" "my_groupsystemsettings" {
 
 ### Read-Only
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+- `api` (Attributes) (see [below for nested schema](#nestedatt--api))
+- `backups` (Attributes) (see [below for nested schema](#nestedatt--backups))
+- `custom_logo` (Attributes) (see [below for nested schema](#nestedatt--custom_logo))
+- `pii` (Attributes) (see [below for nested schema](#nestedatt--pii))
+- `proxy` (Attributes) (see [below for nested schema](#nestedatt--proxy))
+- `rollback` (Attributes) (see [below for nested schema](#nestedatt--rollback))
+- `shutdown` (Attributes) (see [below for nested schema](#nestedatt--shutdown))
+- `sni` (Attributes) (see [below for nested schema](#nestedatt--sni))
+- `sockets` (Attributes) (see [below for nested schema](#nestedatt--sockets))
+- `system` (Attributes) (see [below for nested schema](#nestedatt--system))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--tls))
+- `upgrade_group_settings` (Attributes) (see [below for nested schema](#nestedatt--upgrade_group_settings))
+- `upgrade_settings` (Attributes) (see [below for nested schema](#nestedatt--upgrade_settings))
+- `workers` (Attributes) (see [below for nested schema](#nestedatt--workers))
 
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `api` (Attributes) (see [below for nested schema](#nestedatt--items--api))
-- `backups` (Attributes) (see [below for nested schema](#nestedatt--items--backups))
-- `custom_logo` (Attributes) (see [below for nested schema](#nestedatt--items--custom_logo))
-- `pii` (Attributes) (see [below for nested schema](#nestedatt--items--pii))
-- `proxy` (Attributes) (see [below for nested schema](#nestedatt--items--proxy))
-- `rollback` (Attributes) (see [below for nested schema](#nestedatt--items--rollback))
-- `shutdown` (Attributes) (see [below for nested schema](#nestedatt--items--shutdown))
-- `sni` (Attributes) (see [below for nested schema](#nestedatt--items--sni))
-- `sockets` (Attributes) (see [below for nested schema](#nestedatt--items--sockets))
-- `system` (Attributes) (see [below for nested schema](#nestedatt--items--system))
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--tls))
-- `upgrade_group_settings` (Attributes) (see [below for nested schema](#nestedatt--items--upgrade_group_settings))
-- `upgrade_settings` (Attributes) (see [below for nested schema](#nestedatt--items--upgrade_settings))
-- `workers` (Attributes) (see [below for nested schema](#nestedatt--items--workers))
-
-<a id="nestedatt--items--api"></a>
-### Nested Schema for `items.api`
+<a id="nestedatt--api"></a>
+### Nested Schema for `api`
 
 Read-Only:
 
 - `base_url` (String)
 - `disable_api_cache` (Boolean)
 - `disabled` (Boolean)
-- `headers` (Attributes) (see [below for nested schema](#nestedatt--items--api--headers))
+- `headers` (Attributes) (see [below for nested schema](#nestedatt--api--headers))
 - `host` (String)
 - `idle_session_ttl` (Number)
 - `listen_on_port` (Boolean)
@@ -66,16 +59,16 @@ Read-Only:
 - `protocol` (String)
 - `scripts` (Boolean)
 - `sensitive_fields` (List of String)
-- `ssl` (Attributes) (see [below for nested schema](#nestedatt--items--api--ssl))
+- `ssl` (Attributes) (see [below for nested schema](#nestedatt--api--ssl))
 - `sso_rate_limit` (String)
 - `worker_remote_access` (Boolean)
 
-<a id="nestedatt--items--api--headers"></a>
-### Nested Schema for `items.api.headers`
+<a id="nestedatt--api--headers"></a>
+### Nested Schema for `api.headers`
 
 
-<a id="nestedatt--items--api--ssl"></a>
-### Nested Schema for `items.api.ssl`
+<a id="nestedatt--api--ssl"></a>
+### Nested Schema for `api.ssl`
 
 Read-Only:
 
@@ -87,8 +80,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--items--backups"></a>
-### Nested Schema for `items.backups`
+<a id="nestedatt--backups"></a>
+### Nested Schema for `backups`
 
 Read-Only:
 
@@ -96,8 +89,8 @@ Read-Only:
 - `backups_directory` (String)
 
 
-<a id="nestedatt--items--custom_logo"></a>
-### Nested Schema for `items.custom_logo`
+<a id="nestedatt--custom_logo"></a>
+### Nested Schema for `custom_logo`
 
 Read-Only:
 
@@ -106,24 +99,24 @@ Read-Only:
 - `logo_image` (String)
 
 
-<a id="nestedatt--items--pii"></a>
-### Nested Schema for `items.pii`
+<a id="nestedatt--pii"></a>
+### Nested Schema for `pii`
 
 Read-Only:
 
 - `enable_pii_detection` (Boolean)
 
 
-<a id="nestedatt--items--proxy"></a>
-### Nested Schema for `items.proxy`
+<a id="nestedatt--proxy"></a>
+### Nested Schema for `proxy`
 
 Read-Only:
 
 - `use_env_vars` (Boolean)
 
 
-<a id="nestedatt--items--rollback"></a>
-### Nested Schema for `items.rollback`
+<a id="nestedatt--rollback"></a>
+### Nested Schema for `rollback`
 
 Read-Only:
 
@@ -132,32 +125,32 @@ Read-Only:
 - `rollback_timeout` (Number)
 
 
-<a id="nestedatt--items--shutdown"></a>
-### Nested Schema for `items.shutdown`
+<a id="nestedatt--shutdown"></a>
+### Nested Schema for `shutdown`
 
 Read-Only:
 
 - `drain_timeout` (Number)
 
 
-<a id="nestedatt--items--sni"></a>
-### Nested Schema for `items.sni`
+<a id="nestedatt--sni"></a>
+### Nested Schema for `sni`
 
 Read-Only:
 
 - `disable_sni_routing` (Boolean)
 
 
-<a id="nestedatt--items--sockets"></a>
-### Nested Schema for `items.sockets`
+<a id="nestedatt--sockets"></a>
+### Nested Schema for `sockets`
 
 Read-Only:
 
 - `directory` (String)
 
 
-<a id="nestedatt--items--system"></a>
-### Nested Schema for `items.system`
+<a id="nestedatt--system"></a>
+### Nested Schema for `system`
 
 Read-Only:
 
@@ -165,8 +158,8 @@ Read-Only:
 - `upgrade` (String)
 
 
-<a id="nestedatt--items--tls"></a>
-### Nested Schema for `items.tls`
+<a id="nestedatt--tls"></a>
+### Nested Schema for `tls`
 
 Read-Only:
 
@@ -177,8 +170,8 @@ Read-Only:
 - `reject_unauthorized` (Boolean)
 
 
-<a id="nestedatt--items--upgrade_group_settings"></a>
-### Nested Schema for `items.upgrade_group_settings`
+<a id="nestedatt--upgrade_group_settings"></a>
+### Nested Schema for `upgrade_group_settings`
 
 Read-Only:
 
@@ -188,19 +181,19 @@ Read-Only:
 - `retry_delay` (Number)
 
 
-<a id="nestedatt--items--upgrade_settings"></a>
-### Nested Schema for `items.upgrade_settings`
+<a id="nestedatt--upgrade_settings"></a>
+### Nested Schema for `upgrade_settings`
 
 Read-Only:
 
 - `automatic_upgrade_check_period` (String)
 - `disable_automatic_upgrade` (Boolean)
 - `enable_legacy_edge_upgrade` (Boolean)
-- `package_urls` (Attributes List) (see [below for nested schema](#nestedatt--items--upgrade_settings--package_urls))
+- `package_urls` (Attributes List) (see [below for nested schema](#nestedatt--upgrade_settings--package_urls))
 - `upgrade_source` (String)
 
-<a id="nestedatt--items--upgrade_settings--package_urls"></a>
-### Nested Schema for `items.upgrade_settings.package_urls`
+<a id="nestedatt--upgrade_settings--package_urls"></a>
+### Nested Schema for `upgrade_settings.package_urls`
 
 Read-Only:
 
@@ -209,8 +202,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--items--workers"></a>
-### Nested Schema for `items.workers`
+<a id="nestedatt--workers"></a>
+### Nested Schema for `workers`
 
 Read-Only:
 
