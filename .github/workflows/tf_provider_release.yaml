@@ -3,7 +3,6 @@ name: Release
 
 # This GitHub Action creates a release when a tag that matches the pattern
 # "v*" (e.g. v0.1.0) is created.
-# Also runs e2e tests on pull requests and specific branches for testing workflow changes.
 on:
   push:
     tags:
@@ -21,7 +20,6 @@ jobs:
     secrets: inherit
   goreleaser:
     needs: e2e_test
-    # Only run release on tag pushes or manual dispatch, NOT on pull requests or test branches
     if: ${{ needs.e2e_test.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
