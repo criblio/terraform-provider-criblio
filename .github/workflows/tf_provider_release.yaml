@@ -17,6 +17,7 @@ permissions:
 jobs:
   e2e_test:
     uses: ./.github/workflows/e2e_checks.yaml
+    secrets: inherit
   goreleaser:
     needs: e2e_test
     if: ${{ needs.e2e_test.result == 'success' }}
