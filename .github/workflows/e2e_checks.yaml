@@ -23,7 +23,11 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
 
       - name: Start Docker Compose services
-        run: docker compose -f tests/e2e/docker/docker-compose.yml up
+        run: docker compose -f tests/e2e/docker/docker-compose.yml up -d 
+
+      - name: Sleep - Let Cribl Spin Up
+        run: sleep 30s
+        shell: bash
 
       - name: Run e2e Tests [OnPrem]
         env:
