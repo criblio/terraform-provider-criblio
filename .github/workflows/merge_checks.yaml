@@ -91,9 +91,10 @@ jobs:
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
           TF_ACC: true 
+          DEPLOYMENT: "cloud"
         run: | 
           export CRIBL_ORGANIZATION_ID CRIBL_WORKSPACE_ID CRIBL_CLOUD_DOMAIN
-          export CRIBL_CLIENT_ID CRIBL_CLIENT_SECRET TF_ACC
+          export CRIBL_CLIENT_ID CRIBL_CLIENT_SECRET TF_ACC DEPLOYMENT
           make acceptance-test
 
   acceptance_test_onprem:
@@ -123,8 +124,10 @@ jobs:
           CRIBL_ONPREM_USERNAME: "admin"
           CRIBL_ONPREM_PASSWORD: "admin"
           TF_ACC: true
+          DEPLOYMENT: "onprem"
         run: |
-          export CRIBL_ONPREM_SERVER_URL CRIBL_ONPREM_USERNAME CRIBL_ONPREM_PASSWORD TF_ACC
+          export CRIBL_ONPREM_SERVER_URL CRIBL_ONPREM_USERNAME CRIBL_ONPREM_PASSWORD
+          export TF_ACC DEPLOYMENT
           make acceptance-test
 
       - name: Stop Docker Compose services
