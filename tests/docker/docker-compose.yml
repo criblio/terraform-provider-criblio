@@ -1,7 +1,6 @@
 services:
   leader:
     image: cribl/cribl:latest
-    user: 999:999
     environment:
       - CRIBL_VOLUME_DIR=/opt/cribl_data
       - CRIBL_DIST_TOKEN=IHeartCribl1
