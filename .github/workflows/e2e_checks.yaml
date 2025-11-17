@@ -1,15 +1,38 @@
 name: e2e Tests
 on:
   workflow_call:
+  push:
+    branches:
+      - "INFRA-7367/ktraister/e2e-on-prem-test"
 
 concurrency:
   group: tfprovider2
   cancel-in-progress: false
 
 jobs:
-  e2e_test:
-    runs-on: ubuntu-latest
-    steps:
+#  e2e_test_cloud:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4.2.2
+#
+#      - uses: actions/setup-go@v4.0.0
+#        with:
+#          go-version-file: 'go.mod'
+#          cache: true
+#
+#      - uses: hashicorp/setup-terraform@v3
+#
+#      - name: Run e2e Tests [Cloud]
+#        env:
+#          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
+#          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
+#          CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
+#          CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
+#          CRIBL_WORKSPACE_ID: "tfprovider2"
+#        run: | 
+#          make e2e-test
+
+  e2e_test_onprem:
       - uses: actions/checkout@v4.2.2
 
       - uses: actions/setup-go@v4.0.0
@@ -19,13 +42,17 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v3
 
-      - name: Run e2e Tests
+      - name: Start Docker Compose services
+        run: docker compose -f tests/e2e/docker/docker-compose.yml up
+
+      - name: Run e2e Tests [OnPrem]
         env:
-          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
-          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
-          CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
-          CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
-          CRIBL_WORKSPACE_ID: "tfprovider2"
+          CRIBL_ONPREM_SERVER_URL: "http://localhost:19000"
+          CRIBL_ONPREM_USERNAME: "admin"
+          CRIBL_ONPREM_PASSWORD: "admin"
         run: | 
           make e2e-test
 
+      - name: Stop Docker Compose services
+        if: always() 
+        run: docker compose -f tests/e2e/docker/docker-compose.yml down --rmi all
