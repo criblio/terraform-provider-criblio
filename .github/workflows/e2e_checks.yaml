@@ -10,6 +10,28 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+#  e2e_test_cloud:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4.2.2
+#
+#      - uses: actions/setup-go@v4.0.0
+#        with:
+#          go-version-file: 'go.mod'
+#          cache: true
+#
+#      - uses: hashicorp/setup-terraform@v3
+#
+#      - name: Run e2e Tests
+#        env:
+#          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
+#          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
+#          CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
+#          CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
+#          CRIBL_WORKSPACE_ID: "tfprovider2"
+#        run: | 
+#          make e2e-test
+
   e2e_test_onprem:
     runs-on: ubuntu-latest
     steps:
@@ -23,7 +45,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
 
       - name: Start Docker Compose services
-        run: docker compose -f tests/e2e/docker/docker-compose.yml up -d 
+        run: docker compose -f tests/docker/docker-compose.yml up -d 
 
       - name: Sleep - Let Cribl Spin Up
         run: sleep 30s
@@ -39,4 +61,4 @@ jobs:
 
       - name: Stop Docker Compose services
         if: always() 
-        run: docker compose -f tests/e2e/docker/docker-compose.yml down --rmi all
+        run: docker compose -f tests/docker/docker-compose.yml down --rmi all
