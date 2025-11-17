@@ -11,26 +11,26 @@ concurrency:
 
 jobs:
   e2e_test_onprem:
-      - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-go@v4.0.0
-        with:
-          go-version-file: 'go.mod'
-          cache: true
+    - uses: actions/setup-go@v4.0.0
+      with:
+        go-version-file: 'go.mod'
+        cache: true
 
-      - uses: hashicorp/setup-terraform@v3
+    - uses: hashicorp/setup-terraform@v3
 
-      - name: Start Docker Compose services
-        run: docker compose -f tests/e2e/docker/docker-compose.yml up
+    - name: Start Docker Compose services
+      run: docker compose -f tests/e2e/docker/docker-compose.yml up
 
-      - name: Run e2e Tests [OnPrem]
-        env:
-          CRIBL_ONPREM_SERVER_URL: "http://localhost:19000"
-          CRIBL_ONPREM_USERNAME: "admin"
-          CRIBL_ONPREM_PASSWORD: "admin"
-        run: | 
-          make e2e-test
+    - name: Run e2e Tests [OnPrem]
+      env:
+        CRIBL_ONPREM_SERVER_URL: "http://localhost:19000"
+        CRIBL_ONPREM_USERNAME: "admin"
+        CRIBL_ONPREM_PASSWORD: "admin"
+      run: | 
+        make e2e-test
 
-      - name: Stop Docker Compose services
-        if: always() 
-        run: docker compose -f tests/e2e/docker/docker-compose.yml down --rmi all
+    - name: Stop Docker Compose services
+      if: always() 
+      run: docker compose -f tests/e2e/docker/docker-compose.yml down --rmi all
