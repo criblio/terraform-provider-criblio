@@ -2,7 +2,7 @@ services:
   leader:
     image: cribl/cribl:latest
     environment:
-      - CRIBL_VOLUME_DIR=/opt/cribl_data
+      - CRIBL_VOLUME_DIR=/opt/cribl_data/failover
       - CRIBL_DIST_TOKEN=IHeartCribl1
       - CRIBL_DIST_MODE=leader
       - CRIBL_DIST_LEADER_URL=tcp://${CRIBL_DIST_TOKEN:-criblmaster}@0.0.0.0:4200
