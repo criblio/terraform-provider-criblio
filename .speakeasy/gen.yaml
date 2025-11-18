@@ -17,14 +17,15 @@ generation:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
     hoistGlobalSecurity: true
+  schemas:
+    allOfMergeStrategy: shallowMerge
+  requestBodyFieldName: ""
   tests:
     generateTests: true
     generateNewTests: false
     skipResponseBodyAssertions: false
-  schemas:
-    allOfMergeStrategy: shallowMerge
 terraform:
-  version: 1.18.27
+  version: 1.19.1
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
@@ -36,6 +37,9 @@ terraform:
   author: criblio
   baseErrorName: CriblIoError
   defaultErrorName: APIError
+  enableCustomCodeRegions: false
+  enableOperationSecurity: false
+  enableOperationServers: false
   enableTypeDeduplication: false
   environmentVariables:
     - env: CRIBL_CLIENT_ID
@@ -48,4 +52,7 @@ terraform:
       providerAttribute: workspace_id
     - env: CRIBL_CLOUD_DOMAIN
       providerAttribute: cloud_domain
+  excludeEmptyObjectSchemas: false
+  includeEmptyObjects: false
   packageName: criblio
+  unionDeserializationStrategy: populated-fields

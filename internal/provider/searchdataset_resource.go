@@ -83,7 +83,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 		MarkdownDescription: "SearchDataset Resource",
 		Attributes: map[string]schema.Attribute{
 			"api_aws_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -198,7 +197,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_azure_data_explorer_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"cluster": schema.StringAttribute{
@@ -347,7 +345,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_azure_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -463,7 +460,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_elastic_search_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -577,7 +573,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_gcp_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -702,7 +697,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_google_workspace_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -808,7 +802,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_ms_graph_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -914,7 +907,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_okta_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1020,7 +1012,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_open_search_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1134,7 +1125,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_tailscale_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1240,7 +1230,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"api_zoom_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1346,7 +1335,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"apihttp_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1451,7 +1439,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"aws_security_lake_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1594,7 +1581,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"azure_blob_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"container_name": schema.StringAttribute{
@@ -1769,7 +1755,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"click_house_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"database": schema.StringAttribute{
@@ -1889,7 +1874,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"cribl_leader_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -2037,7 +2021,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				Description: `Description of the dataset`,
 			},
 			"edge_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -2161,7 +2144,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"gcs_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"bucket": schema.StringAttribute{
@@ -2332,10 +2314,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Unique identifier for the dataset`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(512),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -2352,17 +2330,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `A list of the endpoints that are enabled in this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -2370,9 +2341,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -2382,9 +2350,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -2407,31 +2372,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
-							},
 						},
 						"api_azure_data_explorer_dataset": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2439,16 +2379,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"cluster": schema.StringAttribute{
 									Computed:    true,
 									Description: `Azure Data Explorer cluster name`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"database": schema.StringAttribute{
 									Computed:    true,
 									Description: `Azure Data Explorer database name`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -2457,17 +2391,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"location": schema.StringAttribute{
 									Computed:    true,
 									Description: `Location (region) of the Azure Data Explorer cluster`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -2475,9 +2402,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -2487,9 +2411,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -2505,54 +2426,20 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"table": schema.StringAttribute{
 									Computed:    true,
 									Description: `Name of the table to query. May be a simple name (Example: logs) or a Kusto query`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"timestamp_field": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional name of the field holding the timestamp of the event`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"timestamp_field_contents": schema.StringAttribute{
 									Computed:    true,
 									Default:     stringdefault.StaticString(`kusto_datetime`),
 									Description: `Type of the data stored in the timestamp field. Default: "kusto_datetime"`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"api_azure_dataset": schema.SingleNestedAttribute{
@@ -2566,17 +2453,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `A list of the endpoints that are enabled in this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -2584,9 +2464,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -2596,9 +2473,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -2615,39 +2489,11 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `A list of the subscription ids within the tenant to query with this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"api_elastic_search_dataset": schema.SingleNestedAttribute{
@@ -2660,17 +2506,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"index": schema.StringAttribute{
 									Computed:    true,
 									Description: `Name of the Elasticsearch index to search`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -2678,9 +2517,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -2690,9 +2526,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -2708,39 +2541,11 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"timestamp_field": schema.StringAttribute{
 									Computed:    true,
 									Description: `Name of the field holding the timestamp of the event`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"api_gcp_dataset": schema.SingleNestedAttribute{
@@ -2765,17 +2570,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										},
 									},
 									Description: `A list of the endpoint configurations that are enabled in this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -2783,9 +2581,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -2795,9 +2590,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -2814,31 +2606,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"api_google_workspace_dataset": schema.SingleNestedAttribute{
@@ -2852,17 +2619,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `A list of the endpoints that are enabled in this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -2870,9 +2630,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -2882,9 +2639,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -2901,31 +2655,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"api_ms_graph_dataset": schema.SingleNestedAttribute{
@@ -2939,17 +2668,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `A list of the endpoints that are enabled in this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -2957,9 +2679,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -2969,9 +2688,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -2988,31 +2704,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"api_okta_dataset": schema.SingleNestedAttribute{
@@ -3026,17 +2717,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `A list of the endpoints that are enabled in this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3044,9 +2728,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3056,9 +2737,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3076,31 +2754,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
-							},
 						},
 						"api_open_search_dataset": schema.SingleNestedAttribute{
 							Computed: true,
@@ -3112,17 +2765,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"index": schema.StringAttribute{
 									Computed:    true,
 									Description: `Name of the OpenSearch index to search`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3130,9 +2776,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3142,9 +2785,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3161,39 +2801,11 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Default:     stringdefault.StaticString(`@timestamp`),
 									Description: `Name of the field holding the timestamp of the event. Default: "@timestamp"`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"api_tailscale_dataset": schema.SingleNestedAttribute{
@@ -3207,17 +2819,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `A list of the endpoints that are enabled in this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3225,9 +2830,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3237,9 +2839,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3256,31 +2855,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"api_zoom_dataset": schema.SingleNestedAttribute{
@@ -3294,17 +2868,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `A list of the endpoints that are enabled in this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3312,9 +2879,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3324,9 +2888,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3343,31 +2904,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"apihttp_dataset": schema.SingleNestedAttribute{
@@ -3385,10 +2921,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3396,9 +2928,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3408,9 +2937,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3427,31 +2953,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"aws_security_lake_dataset": schema.SingleNestedAttribute{
@@ -3465,17 +2966,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Default:     stringdefault.StaticString(`true`),
 									Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3483,9 +2977,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3495,9 +2986,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3510,9 +2998,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Default:     stringdefault.StaticString(`${vendor}/${sourceLocation}/${pathVersion}/region=${region}/accountId=${accountId}/eventDay=${_time:%Y%m%d}/`),
 									Description: `The templated path under which to look for data, in each folder. Default: "${vendor}/${sourceLocation}/${pathVersion}/region=${region}/accountId=${accountId}/eventDay=${_time:%Y%m%d}/"`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"provider_id": schema.StringAttribute{
 									Computed:    true,
@@ -3525,9 +3010,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 											"name": schema.StringAttribute{
 												Computed:    true,
 												Description: `S3 bucket name`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"region": schema.StringAttribute{
 												Computed:    true,
@@ -3536,39 +3018,11 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										},
 									},
 									Description: `A list of the buckets that should be searched by this dataset`,
-									Validators: []validator.List{
-										listvalidator.UniqueValues(),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-								}...),
 							},
 						},
 						"azure_blob_dataset": schema.SingleNestedAttribute{
@@ -3577,9 +3031,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"container_name": schema.StringAttribute{
 									Computed:    true,
 									Description: `Azure Blob Storage container name`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -3592,24 +3043,15 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 											"container_name": schema.StringAttribute{
 												Computed:    true,
 												Description: `Name of the additional container`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"filter": schema.StringAttribute{
 												Computed:    true,
 												Default:     stringdefault.StaticString(`true`),
 												Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"path": schema.StringAttribute{
 												Computed:    true,
 												Description: `Path inside the additional container`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 										},
 									},
@@ -3619,17 +3061,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Default:     stringdefault.StaticString(`true`),
 									Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3637,9 +3072,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3649,9 +3081,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3663,9 +3092,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"path": schema.StringAttribute{
 									Computed:    true,
 									Description: `The templated path under which to look for data`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"provider_id": schema.StringAttribute{
 									Computed:    true,
@@ -3679,40 +3105,11 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Storage classes to include in the search`,
-									Validators: []validator.List{
-										listvalidator.SizeAtLeast(1),
-										listvalidator.UniqueValues(),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"click_house_dataset": schema.SingleNestedAttribute{
@@ -3720,9 +3117,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 							Attributes: map[string]schema.Attribute{
 								"database": schema.StringAttribute{
 									Computed: true,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -3731,10 +3125,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3742,9 +3132,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3754,9 +3141,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3772,46 +3156,15 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"table": schema.StringAttribute{
 									Computed:    true,
 									Description: `May be a simple name (Example: logs) or a SQL query (Example: select * from logs). Results will be limited to 100K for tables without sorting keys and queries.`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"timestamp_field": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional name of the column holding the timestamp of the event to query`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"cribl_leader_dataset": schema.SingleNestedAttribute{
@@ -3829,16 +3182,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 												Computed:    true,
 												Default:     stringdefault.StaticString(`true`),
 												Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"path": schema.StringAttribute{
 												Computed:    true,
 												Description: `The directory from which to collect data`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 										},
 									},
@@ -3848,17 +3195,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Default:     stringdefault.StaticString(`true`),
 									Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3866,9 +3206,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3878,9 +3215,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3892,9 +3226,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"path": schema.StringAttribute{
 									Computed:    true,
 									Description: `The directory from which to collect data`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"provider_id": schema.StringAttribute{
 									Computed:    true,
@@ -3904,31 +3235,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"edge_dataset": schema.SingleNestedAttribute{
@@ -3942,26 +3248,16 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Default:     stringdefault.StaticString(`true`),
 									Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"fleets": schema.ListAttribute{
 									Computed:    true,
 									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 									ElementType: types.StringType,
 									Description: `Fleets to query. '*' for all. Default: []`,
-									Validators: []validator.List{
-										listvalidator.SizeAtLeast(1),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3969,9 +3265,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -3981,9 +3274,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -3995,9 +3285,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"path": schema.StringAttribute{
 									Computed:    true,
 									Description: `The directory where data will be collected. Environment variables and templating are supported.`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"provider_id": schema.StringAttribute{
 									Computed:    true,
@@ -4008,31 +3295,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
-							},
 						},
 						"gcs_dataset": schema.SingleNestedAttribute{
 							Computed: true,
@@ -4040,9 +3302,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"bucket": schema.StringAttribute{
 									Computed:    true,
 									Description: `Google Cloud Storage bucket path. Templating is supported.`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -4055,17 +3314,11 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 											"bucket": schema.StringAttribute{
 												Computed:    true,
 												Description: `Google Cloud Storage bucket path`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"filter": schema.StringAttribute{
 												Computed:    true,
 												Default:     stringdefault.StaticString(`true`),
 												Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"region": schema.StringAttribute{
 												Computed:    true,
@@ -4079,17 +3332,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Default:     stringdefault.StaticString(`true`),
 									Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -4097,9 +3343,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -4109,9 +3352,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -4136,40 +3376,11 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Storage classes to include in the search`,
-									Validators: []validator.List{
-										listvalidator.SizeAtLeast(1),
-										listvalidator.UniqueValues(),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"meta_dataset": schema.SingleNestedAttribute{
@@ -4187,10 +3398,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -4198,9 +3405,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -4210,9 +3414,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -4230,31 +3431,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
-							},
 						},
 						"prometheus_dataset": schema.SingleNestedAttribute{
 							Computed: true,
@@ -4267,17 +3443,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Default:     float64default.StaticFloat64(250),
 									Description: `Number of data points you want in each result set. Defaults to 250. Can be overridden on the query with a 'step' predicate. Default: 250`,
-									Validators: []validator.Float64{
-										float64validator.Between(1, 11000),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -4285,9 +3454,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -4297,9 +3463,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -4319,43 +3482,12 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"step_mode": schema.StringAttribute{
 									Computed:    true,
 									Default:     stringdefault.StaticString(`exact`),
-									Description: `How to calculate the "step," or time range increment per data point, for the Prometheus query request. Default: "exact"; must be one of ["exact", "nearest_unit"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"exact",
-											"nearest_unit",
-										),
-									},
+									Description: `How to calculate the "step," or time range increment per data point, for the Prometheus query request. Default: "exact"`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"s3_dataset": schema.SingleNestedAttribute{
@@ -4368,9 +3500,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"bucket": schema.StringAttribute{
 									Computed:    true,
 									Description: `S3 bucket name`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -4387,24 +3516,15 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 											"bucket": schema.StringAttribute{
 												Computed:    true,
 												Description: `S3 bucket name`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"filter": schema.StringAttribute{
 												Computed:    true,
 												Default:     stringdefault.StaticString(`true`),
 												Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"path": schema.StringAttribute{
 												Computed:    true,
 												Description: `The templated path under which to look for data`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"region": schema.StringAttribute{
 												Computed:    true,
@@ -4418,17 +3538,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									Default:     stringdefault.StaticString(`true`),
 									Description: `A JavaScript filter expression to be evaluated against the provided path. Default: "true"`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -4436,9 +3549,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -4448,9 +3558,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -4462,9 +3569,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"path": schema.StringAttribute{
 									Computed:    true,
 									Description: `The templated path under which to look for data`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"provider_id": schema.StringAttribute{
 									Computed:    true,
@@ -4482,40 +3586,11 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Storage classes to include in the search`,
-									Validators: []validator.List{
-										listvalidator.SizeAtLeast(1),
-										listvalidator.UniqueValues(),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Dataset provider type, set automatically from the dataset provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("snowflake_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 						"snowflake_dataset": schema.SingleNestedAttribute{
@@ -4523,9 +3598,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 							Attributes: map[string]schema.Attribute{
 								"database": schema.StringAttribute{
 									Computed: true,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -4534,10 +3606,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Unique identifier for the dataset`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(512),
-										stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-									},
 								},
 								"metadata": schema.SingleNestedAttribute{
 									Computed: true,
@@ -4545,9 +3613,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"created": schema.StringAttribute{
 											Computed:    true,
 											Description: `Creation timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"enable_acceleration": schema.BoolAttribute{
 											Computed:    true,
@@ -4557,9 +3622,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 										"modified": schema.StringAttribute{
 											Computed:    true,
 											Description: `Last modification timestamp`,
-											Validators: []validator.String{
-												validators.IsRFC3339(),
-											},
 										},
 										"tags": schema.ListAttribute{
 											Computed:    true,
@@ -4575,30 +3637,18 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"role": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional Snowflake role to use when executing the statement`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"schema": schema.StringAttribute{
 									Computed:    true,
 									Description: `The schema in the database that contains the table(s) to query`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"table": schema.StringAttribute{
 									Computed:    true,
 									Description: `May be a simple name (Example: logs) or a SQL query (Example: select * from logs)`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"timestamp_field": schema.StringAttribute{
 									Computed:    true,
 									Description: `Optional name of the column holding the timestamp of the event to query`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -4607,42 +3657,13 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 								"warehouse": schema.StringAttribute{
 									Computed:    true,
 									Description: `If not set, uses DEFAULT_WAREHOUSE`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_aws_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_dataset"),
-									path.MatchRelative().AtParent().AtName("api_gcp_dataset"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_dataset"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_dataset"),
-									path.MatchRelative().AtParent().AtName("api_okta_dataset"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_dataset"),
-									path.MatchRelative().AtParent().AtName("api_zoom_dataset"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_dataset"),
-									path.MatchRelative().AtParent().AtName("click_house_dataset"),
-									path.MatchRelative().AtParent().AtName("prometheus_dataset"),
-									path.MatchRelative().AtParent().AtName("api_open_search_dataset"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_dataset"),
-									path.MatchRelative().AtParent().AtName("s3_dataset"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_dataset"),
-									path.MatchRelative().AtParent().AtName("meta_dataset"),
-									path.MatchRelative().AtParent().AtName("edge_dataset"),
-									path.MatchRelative().AtParent().AtName("azure_blob_dataset"),
-									path.MatchRelative().AtParent().AtName("gcs_dataset"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_dataset"),
-								}...),
 							},
 						},
 					},
 				},
 			},
 			"meta_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"datasets": schema.ListAttribute{
@@ -4747,7 +3768,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"prometheus_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -4873,7 +3893,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				Description: `Dataset provider ID`,
 			},
 			"s3_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auto_detect_region": schema.BoolAttribute{
@@ -5068,7 +4087,6 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"snowflake_dataset": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"database": schema.StringAttribute{
@@ -5279,11 +4297,11 @@ func (r *SearchDatasetResource) Create(ctx context.Context, req resource.CreateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGenericDataset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateDatasetResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -5430,11 +4448,11 @@ func (r *SearchDatasetResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGenericDataset(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateDatasetByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

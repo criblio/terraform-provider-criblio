@@ -66,17 +66,43 @@ func CreateWarmPoolSizeWarmPoolSizeEnum(warmPoolSizeEnum WarmPoolSizeEnum) WarmP
 
 func (u *WarmPoolSize) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = WarmPoolSizeTypeNumber
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  WarmPoolSizeTypeNumber,
+			Value: &number,
+		})
 	}
 
 	var warmPoolSizeEnum WarmPoolSizeEnum = WarmPoolSizeEnum("")
 	if err := utils.UnmarshalJSON(data, &warmPoolSizeEnum, "", true, nil); err == nil {
-		u.WarmPoolSizeEnum = &warmPoolSizeEnum
-		u.Type = WarmPoolSizeTypeWarmPoolSizeEnum
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  WarmPoolSizeTypeWarmPoolSizeEnum,
+			Value: &warmPoolSizeEnum,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for WarmPoolSize", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for WarmPoolSize", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(WarmPoolSizeType)
+	switch best.Type {
+	case WarmPoolSizeTypeNumber:
+		u.Number = best.Value.(*float64)
+		return nil
+	case WarmPoolSizeTypeWarmPoolSizeEnum:
+		u.WarmPoolSizeEnum = best.Value.(*WarmPoolSizeEnum)
 		return nil
 	}
 

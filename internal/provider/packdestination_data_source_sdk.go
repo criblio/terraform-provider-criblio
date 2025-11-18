@@ -8,15 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *PackDestinationDataSourceModel) RefreshFromOperationsGetPackOutputByIDResponseBody(ctx context.Context, resp *operations.GetPackOutputByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *PackDestinationDataSourceModel) ToOperationsGetPackOutputByIDRequest(ctx context.Context) (*operations.GetPackOutputByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

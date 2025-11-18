@@ -701,7 +701,7 @@ Read-Only:
 
 Read-Only:
 
-- `authentication_method` (String) The authentication method for API calls. Default: "none"; must be one of ["none", "basic", "login", "oauth"]
+- `authentication_method` (String) The authentication method for API calls. Default: "none"
 - `available_endpoints` (Attributes List) A list of the available endpoints for this provider (see [below for nested schema](#nestedatt--items--apihttp_provider--available_endpoints))
 - `description` (String) Description of the provider
 - `id` (String) Unique identifier for the provider
@@ -714,7 +714,7 @@ Read-Only:
 
 - `data_field` (String) Within the response JSON, name of the field or array element to pull results from
 - `headers` (Attributes List) Optional headers for the endpoint (see [below for nested schema](#nestedatt--items--apihttp_provider--available_endpoints--headers))
-- `method` (String) Method for the endpoint. Default: "GET"; must be one of ["GET", "POST"]
+- `method` (String) Method for the endpoint. Default: "GET"
 - `name` (String)
 - `url` (String) The URL for this endpoint
 
@@ -744,7 +744,7 @@ Read-Only:
 
 Read-Only:
 
-- `authentication_method` (String) Azure Storage authentication method. Default: "connection_string"; must be one of ["connection_string", "blob_sas_url", "client_secret"]
+- `authentication_method` (String) Azure Storage authentication method. Default: "connection_string"
 - `client_id` (String) Azure AD application client ID
 - `client_secret` (String) Azure AD application client secret
 - `connection_string` (String) Storage account connection string
@@ -826,7 +826,7 @@ Read-Only:
 
 Read-Only:
 
-- `auth_type` (String) Default: "none"; must be one of ["none", "basic", "token"]
+- `auth_type` (String) Default: "none"
 - `description` (String) Description of the provider
 - `endpoint` (String) Prometheus API endpoint URL. Example: https://prometheus.goats.biz
 - `id` (String) Unique identifier for the provider
@@ -845,7 +845,7 @@ Read-Only:
 - `assume_role_arn` (String) ARN of the role to assume
 - `assume_role_external_id` (String) External ID for role assumption
 - `aws_api_key` (String) AWS access key
-- `aws_authentication_method` (String) AWS authentication method. must be one of ["auto", "manual"]
+- `aws_authentication_method` (String) AWS authentication method
 - `aws_secret_key` (String) AWS secret key
 - `bucket` (String) S3 bucket name
 - `bucket_path_suggestion` (String) Suggested bucket path
@@ -858,7 +858,7 @@ Read-Only:
 - `reject_unauthorized` (Boolean) Whether to reject unauthorized requests
 - `reuse_connections` (Boolean) Reuse existing S3 connections
 - `session_token` (String) AWS session token
-- `signature_version` (String) AWS signature version. must be one of ["v2", "v4"]
+- `signature_version` (String) AWS signature version
 - `type` (String) Type of the provider
 
 

@@ -29,10 +29,10 @@ func (r *MappingsDataSourceModel) RefreshFromOperationsGetAdminProductsMappingsB
 				for _, functionsItem := range itemsItem.Conf.Functions {
 					var functions tfTypes.MappingRulesetFunctionConf
 
-					functions.Conf.Add = []tfTypes.Add{}
+					functions.Conf.Add = []tfTypes.MappingRulesetFunctionConfAdd{}
 
 					for _, addItem := range functionsItem.Conf.Add {
-						var add tfTypes.Add
+						var add tfTypes.MappingRulesetFunctionConfAdd
 
 						add.Name = types.StringValue(addItem.Name)
 						add.Value = types.StringValue(addItem.Value)

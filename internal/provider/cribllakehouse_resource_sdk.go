@@ -11,6 +11,31 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *CriblLakeHouseResourceModel) RefreshFromOperationsCreateDefaultLakeLakehouseResponseBody(ctx context.Context, resp *operations.CreateDefaultLakeLakehouseResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Lakehouse{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.Lakehouse
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Status = types.StringPointerValue(itemsItem.Status)
+			if itemsItem.TierSize != nil {
+				items.TierSize = types.StringValue(string(*itemsItem.TierSize))
+			} else {
+				items.TierSize = types.StringNull()
+			}
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
 func (r *CriblLakeHouseResourceModel) RefreshFromOperationsGetDefaultLakeLakehouseByIDResponseBody(ctx context.Context, resp *operations.GetDefaultLakeLakehouseByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -20,8 +45,33 @@ func (r *CriblLakeHouseResourceModel) RefreshFromOperationsGetDefaultLakeLakehou
 		for _, itemsItem := range resp.Items {
 			var items tfTypes.Lakehouse
 
-			items.ID = types.StringValue(itemsItem.ID)
 			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.ID = types.StringValue(itemsItem.ID)
+			items.Status = types.StringPointerValue(itemsItem.Status)
+			if itemsItem.TierSize != nil {
+				items.TierSize = types.StringValue(string(*itemsItem.TierSize))
+			} else {
+				items.TierSize = types.StringNull()
+			}
+
+			r.Items = append(r.Items, items)
+		}
+	}
+
+	return diags
+}
+
+func (r *CriblLakeHouseResourceModel) RefreshFromOperationsUpdateDefaultLakeLakehouseByIDResponseBody(ctx context.Context, resp *operations.UpdateDefaultLakeLakehouseByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Items = []tfTypes.Lakehouse{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.Lakehouse
+
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.ID = types.StringValue(itemsItem.ID)
 			items.Status = types.StringPointerValue(itemsItem.Status)
 			if itemsItem.TierSize != nil {
 				items.TierSize = types.StringValue(string(*itemsItem.TierSize))

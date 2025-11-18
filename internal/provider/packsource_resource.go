@@ -9,12 +9,10 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -24911,9 +24909,6 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"async_func_timeout": schema.Int64Attribute{
 									Computed:    true,
 									Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
-									Validators: []validator.Int64{
-										int64validator.AtMost(10000),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed: true,
@@ -24922,11 +24917,35 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
-											"conf": schema.MapAttribute{
-												Computed:    true,
-												ElementType: jsontypes.NormalizedType{},
-												Validators: []validator.Map{
-													mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+											"conf": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"add": schema.ListNestedAttribute{
+														Computed: true,
+														NestedObject: schema.NestedAttributeObject{
+															Attributes: map[string]schema.Attribute{
+																"disabled": schema.BoolAttribute{
+																	Computed:    true,
+																	Default:     booldefault.StaticBool(false),
+																	Description: `Whether this field addition is disabled. Default: false`,
+																},
+																"name": schema.StringAttribute{
+																	Computed:    true,
+																	Description: `Name of the field to add`,
+																},
+																"value": schema.StringAttribute{
+																	Computed:    true,
+																	Description: `Value to assign to the field`,
+																},
+															},
+														},
+														Description: `List of fields to add to the event`,
+													},
+													"remove": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+														Description: `List of field names to remove from the event`,
+													},
 												},
 											},
 											"description": schema.StringAttribute{

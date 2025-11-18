@@ -102,7 +102,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 					},
 					Attributes: map[string]schema.Attribute{
 						"element": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
@@ -184,7 +183,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"search_query_inline": schema.SingleNestedAttribute{
-											Computed: true,
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"earliest": schema.SingleNestedAttribute{
@@ -192,7 +190,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													Optional: true,
 													Attributes: map[string]schema.Attribute{
 														"number": schema.Float64Attribute{
-															Computed: true,
 															Optional: true,
 															Validators: []validator.Float64{
 																float64validator.ConflictsWith(path.Expressions{
@@ -201,7 +198,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 															},
 														},
 														"str": schema.StringAttribute{
-															Computed: true,
 															Optional: true,
 															Validators: []validator.String{
 																stringvalidator.ConflictsWith(path.Expressions{
@@ -216,7 +212,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													Optional: true,
 													Attributes: map[string]schema.Attribute{
 														"number": schema.Float64Attribute{
-															Computed: true,
 															Optional: true,
 															Validators: []validator.Float64{
 																float64validator.ConflictsWith(path.Expressions{
@@ -225,7 +220,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 															},
 														},
 														"str": schema.StringAttribute{
-															Computed: true,
 															Optional: true,
 															Validators: []validator.String{
 																stringvalidator.ConflictsWith(path.Expressions{
@@ -269,7 +263,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 											},
 										},
 										"search_query_saved": schema.SingleNestedAttribute{
-											Computed: true,
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"query": schema.StringAttribute{
@@ -313,7 +306,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 											},
 										},
 										"search_query_values": schema.SingleNestedAttribute{
-											Computed: true,
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"type": schema.StringAttribute{
@@ -406,7 +398,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 							},
 						},
 						"element_markdown": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
@@ -660,11 +651,11 @@ func (r *SearchDashboardResource) Create(ctx context.Context, req resource.Creat
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSearchDashboard(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateSearchDashboardResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -718,11 +709,11 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSearchDashboard(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchDashboardResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -768,11 +759,11 @@ func (r *SearchDashboardResource) Update(ctx context.Context, req resource.Updat
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedSearchDashboard(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateSearchDashboardByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

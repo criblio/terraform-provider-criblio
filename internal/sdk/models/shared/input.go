@@ -658,409 +658,659 @@ func CreateInputInputZscalerHec(inputZscalerHec InputZscalerHec) Input {
 
 func (u *Input) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var inputMsk InputMsk = InputMsk{}
 	if err := utils.UnmarshalJSON(data, &inputMsk, "", true, nil); err == nil {
-		u.InputMsk = &inputMsk
-		u.Type = InputTypeInputMsk
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputMsk,
+			Value: &inputMsk,
+		})
 	}
 
 	var inputAzureBlob InputAzureBlob = InputAzureBlob{}
 	if err := utils.UnmarshalJSON(data, &inputAzureBlob, "", true, nil); err == nil {
-		u.InputAzureBlob = &inputAzureBlob
-		u.Type = InputTypeInputAzureBlob
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputAzureBlob,
+			Value: &inputAzureBlob,
+		})
 	}
 
 	var inputOffice365Mgmt InputOffice365Mgmt = InputOffice365Mgmt{}
 	if err := utils.UnmarshalJSON(data, &inputOffice365Mgmt, "", true, nil); err == nil {
-		u.InputOffice365Mgmt = &inputOffice365Mgmt
-		u.Type = InputTypeInputOffice365Mgmt
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputOffice365Mgmt,
+			Value: &inputOffice365Mgmt,
+		})
 	}
 
 	var inputOffice365Service InputOffice365Service = InputOffice365Service{}
 	if err := utils.UnmarshalJSON(data, &inputOffice365Service, "", true, nil); err == nil {
-		u.InputOffice365Service = &inputOffice365Service
-		u.Type = InputTypeInputOffice365Service
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputOffice365Service,
+			Value: &inputOffice365Service,
+		})
 	}
 
 	var inputExec InputExec = InputExec{}
 	if err := utils.UnmarshalJSON(data, &inputExec, "", true, nil); err == nil {
-		u.InputExec = &inputExec
-		u.Type = InputTypeInputExec
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputExec,
+			Value: &inputExec,
+		})
 	}
 
 	var inputGooglePubsub InputGooglePubsub = InputGooglePubsub{}
 	if err := utils.UnmarshalJSON(data, &inputGooglePubsub, "", true, nil); err == nil {
-		u.InputGooglePubsub = &inputGooglePubsub
-		u.Type = InputTypeInputGooglePubsub
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputGooglePubsub,
+			Value: &inputGooglePubsub,
+		})
 	}
 
 	var inputCribl InputCribl = InputCribl{}
 	if err := utils.UnmarshalJSON(data, &inputCribl, "", true, nil); err == nil {
-		u.InputCribl = &inputCribl
-		u.Type = InputTypeInputCribl
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputCribl,
+			Value: &inputCribl,
+		})
 	}
 
 	var inputSystemMetrics InputSystemMetrics = InputSystemMetrics{}
 	if err := utils.UnmarshalJSON(data, &inputSystemMetrics, "", true, nil); err == nil {
-		u.InputSystemMetrics = &inputSystemMetrics
-		u.Type = InputTypeInputSystemMetrics
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSystemMetrics,
+			Value: &inputSystemMetrics,
+		})
 	}
 
 	var inputSystemState InputSystemState = InputSystemState{}
 	if err := utils.UnmarshalJSON(data, &inputSystemState, "", true, nil); err == nil {
-		u.InputSystemState = &inputSystemState
-		u.Type = InputTypeInputSystemState
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSystemState,
+			Value: &inputSystemState,
+		})
 	}
 
 	var inputKubeMetrics InputKubeMetrics = InputKubeMetrics{}
 	if err := utils.UnmarshalJSON(data, &inputKubeMetrics, "", true, nil); err == nil {
-		u.InputKubeMetrics = &inputKubeMetrics
-		u.Type = InputTypeInputKubeMetrics
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputKubeMetrics,
+			Value: &inputKubeMetrics,
+		})
 	}
 
 	var inputKubeLogs InputKubeLogs = InputKubeLogs{}
 	if err := utils.UnmarshalJSON(data, &inputKubeLogs, "", true, nil); err == nil {
-		u.InputKubeLogs = &inputKubeLogs
-		u.Type = InputTypeInputKubeLogs
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputKubeLogs,
+			Value: &inputKubeLogs,
+		})
 	}
 
 	var inputKubeEvents InputKubeEvents = InputKubeEvents{}
 	if err := utils.UnmarshalJSON(data, &inputKubeEvents, "", true, nil); err == nil {
-		u.InputKubeEvents = &inputKubeEvents
-		u.Type = InputTypeInputKubeEvents
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputKubeEvents,
+			Value: &inputKubeEvents,
+		})
 	}
 
 	var inputWindowsMetrics InputWindowsMetrics = InputWindowsMetrics{}
 	if err := utils.UnmarshalJSON(data, &inputWindowsMetrics, "", true, nil); err == nil {
-		u.InputWindowsMetrics = &inputWindowsMetrics
-		u.Type = InputTypeInputWindowsMetrics
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputWindowsMetrics,
+			Value: &inputWindowsMetrics,
+		})
 	}
 
 	var inputCrowdstrike InputCrowdstrike = InputCrowdstrike{}
 	if err := utils.UnmarshalJSON(data, &inputCrowdstrike, "", true, nil); err == nil {
-		u.InputCrowdstrike = &inputCrowdstrike
-		u.Type = InputTypeInputCrowdstrike
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputCrowdstrike,
+			Value: &inputCrowdstrike,
+		})
 	}
 
 	var inputDatagen InputDatagen = InputDatagen{}
 	if err := utils.UnmarshalJSON(data, &inputDatagen, "", true, nil); err == nil {
-		u.InputDatagen = &inputDatagen
-		u.Type = InputTypeInputDatagen
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputDatagen,
+			Value: &inputDatagen,
+		})
 	}
 
 	var inputKinesis InputKinesis = InputKinesis{}
 	if err := utils.UnmarshalJSON(data, &inputKinesis, "", true, nil); err == nil {
-		u.InputKinesis = &inputKinesis
-		u.Type = InputTypeInputKinesis
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputKinesis,
+			Value: &inputKinesis,
+		})
 	}
 
 	var inputCriblmetrics InputCriblmetrics = InputCriblmetrics{}
 	if err := utils.UnmarshalJSON(data, &inputCriblmetrics, "", true, nil); err == nil {
-		u.InputCriblmetrics = &inputCriblmetrics
-		u.Type = InputTypeInputCriblmetrics
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputCriblmetrics,
+			Value: &inputCriblmetrics,
+		})
 	}
 
 	var inputS3 InputS3 = InputS3{}
 	if err := utils.UnmarshalJSON(data, &inputS3, "", true, nil); err == nil {
-		u.InputS3 = &inputS3
-		u.Type = InputTypeInputS3
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputS3,
+			Value: &inputS3,
+		})
 	}
 
 	var inputS3Inventory InputS3Inventory = InputS3Inventory{}
 	if err := utils.UnmarshalJSON(data, &inputS3Inventory, "", true, nil); err == nil {
-		u.InputS3Inventory = &inputS3Inventory
-		u.Type = InputTypeInputS3Inventory
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputS3Inventory,
+			Value: &inputS3Inventory,
+		})
 	}
 
 	var inputFile InputFile = InputFile{}
 	if err := utils.UnmarshalJSON(data, &inputFile, "", true, nil); err == nil {
-		u.InputFile = &inputFile
-		u.Type = InputTypeInputFile
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputFile,
+			Value: &inputFile,
+		})
 	}
 
 	var inputAppscope InputAppscope = InputAppscope{}
 	if err := utils.UnmarshalJSON(data, &inputAppscope, "", true, nil); err == nil {
-		u.InputAppscope = &inputAppscope
-		u.Type = InputTypeInputAppscope
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputAppscope,
+			Value: &inputAppscope,
+		})
 	}
 
 	var inputWiz InputWiz = InputWiz{}
 	if err := utils.UnmarshalJSON(data, &inputWiz, "", true, nil); err == nil {
-		u.InputWiz = &inputWiz
-		u.Type = InputTypeInputWiz
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputWiz,
+			Value: &inputWiz,
+		})
 	}
 
 	var inputSecurityLake InputSecurityLake = InputSecurityLake{}
 	if err := utils.UnmarshalJSON(data, &inputSecurityLake, "", true, nil); err == nil {
-		u.InputSecurityLake = &inputSecurityLake
-		u.Type = InputTypeInputSecurityLake
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSecurityLake,
+			Value: &inputSecurityLake,
+		})
 	}
 
 	var inputCollection InputCollection = InputCollection{}
 	if err := utils.UnmarshalJSON(data, &inputCollection, "", true, nil); err == nil {
-		u.InputCollection = &inputCollection
-		u.Type = InputTypeInputCollection
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputCollection,
+			Value: &inputCollection,
+		})
 	}
 
 	var inputKafka InputKafka = InputKafka{}
 	if err := utils.UnmarshalJSON(data, &inputKafka, "", true, nil); err == nil {
-		u.InputKafka = &inputKafka
-		u.Type = InputTypeInputKafka
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputKafka,
+			Value: &inputKafka,
+		})
 	}
 
 	var inputHTTP InputHTTP = InputHTTP{}
 	if err := utils.UnmarshalJSON(data, &inputHTTP, "", true, nil); err == nil {
-		u.InputHTTP = &inputHTTP
-		u.Type = InputTypeInputHTTP
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputHTTP,
+			Value: &inputHTTP,
+		})
 	}
 
 	var inputSplunk InputSplunk = InputSplunk{}
 	if err := utils.UnmarshalJSON(data, &inputSplunk, "", true, nil); err == nil {
-		u.InputSplunk = &inputSplunk
-		u.Type = InputTypeInputSplunk
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSplunk,
+			Value: &inputSplunk,
+		})
 	}
 
 	var inputSplunkSearch InputSplunkSearch = InputSplunkSearch{}
 	if err := utils.UnmarshalJSON(data, &inputSplunkSearch, "", true, nil); err == nil {
-		u.InputSplunkSearch = &inputSplunkSearch
-		u.Type = InputTypeInputSplunkSearch
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSplunkSearch,
+			Value: &inputSplunkSearch,
+		})
 	}
 
 	var inputSplunkHec InputSplunkHec = InputSplunkHec{}
 	if err := utils.UnmarshalJSON(data, &inputSplunkHec, "", true, nil); err == nil {
-		u.InputSplunkHec = &inputSplunkHec
-		u.Type = InputTypeInputSplunkHec
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSplunkHec,
+			Value: &inputSplunkHec,
+		})
 	}
 
 	var inputElastic InputElastic = InputElastic{}
 	if err := utils.UnmarshalJSON(data, &inputElastic, "", true, nil); err == nil {
-		u.InputElastic = &inputElastic
-		u.Type = InputTypeInputElastic
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputElastic,
+			Value: &inputElastic,
+		})
 	}
 
 	var inputConfluentCloud InputConfluentCloud = InputConfluentCloud{}
 	if err := utils.UnmarshalJSON(data, &inputConfluentCloud, "", true, nil); err == nil {
-		u.InputConfluentCloud = &inputConfluentCloud
-		u.Type = InputTypeInputConfluentCloud
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputConfluentCloud,
+			Value: &inputConfluentCloud,
+		})
 	}
 
 	var inputLoki InputLoki = InputLoki{}
 	if err := utils.UnmarshalJSON(data, &inputLoki, "", true, nil); err == nil {
-		u.InputLoki = &inputLoki
-		u.Type = InputTypeInputLoki
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputLoki,
+			Value: &inputLoki,
+		})
 	}
 
 	var inputPrometheusRw InputPrometheusRw = InputPrometheusRw{}
 	if err := utils.UnmarshalJSON(data, &inputPrometheusRw, "", true, nil); err == nil {
-		u.InputPrometheusRw = &inputPrometheusRw
-		u.Type = InputTypeInputPrometheusRw
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputPrometheusRw,
+			Value: &inputPrometheusRw,
+		})
 	}
 
 	var inputEventhub InputEventhub = InputEventhub{}
 	if err := utils.UnmarshalJSON(data, &inputEventhub, "", true, nil); err == nil {
-		u.InputEventhub = &inputEventhub
-		u.Type = InputTypeInputEventhub
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputEventhub,
+			Value: &inputEventhub,
+		})
 	}
 
 	var inputFirehose InputFirehose = InputFirehose{}
 	if err := utils.UnmarshalJSON(data, &inputFirehose, "", true, nil); err == nil {
-		u.InputFirehose = &inputFirehose
-		u.Type = InputTypeInputFirehose
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputFirehose,
+			Value: &inputFirehose,
+		})
 	}
 
 	var inputCriblTCP InputCriblTCP = InputCriblTCP{}
 	if err := utils.UnmarshalJSON(data, &inputCriblTCP, "", true, nil); err == nil {
-		u.InputCriblTCP = &inputCriblTCP
-		u.Type = InputTypeInputCriblTCP
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputCriblTCP,
+			Value: &inputCriblTCP,
+		})
 	}
 
 	var inputCriblHTTP InputCriblHTTP = InputCriblHTTP{}
 	if err := utils.UnmarshalJSON(data, &inputCriblHTTP, "", true, nil); err == nil {
-		u.InputCriblHTTP = &inputCriblHTTP
-		u.Type = InputTypeInputCriblHTTP
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputCriblHTTP,
+			Value: &inputCriblHTTP,
+		})
 	}
 
 	var inputCriblLakeHTTP InputCriblLakeHTTP = InputCriblLakeHTTP{}
 	if err := utils.UnmarshalJSON(data, &inputCriblLakeHTTP, "", true, nil); err == nil {
-		u.InputCriblLakeHTTP = &inputCriblLakeHTTP
-		u.Type = InputTypeInputCriblLakeHTTP
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputCriblLakeHTTP,
+			Value: &inputCriblLakeHTTP,
+		})
 	}
 
 	var inputTcpjson InputTcpjson = InputTcpjson{}
 	if err := utils.UnmarshalJSON(data, &inputTcpjson, "", true, nil); err == nil {
-		u.InputTcpjson = &inputTcpjson
-		u.Type = InputTypeInputTcpjson
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputTcpjson,
+			Value: &inputTcpjson,
+		})
 	}
 
 	var inputDatadogAgent InputDatadogAgent = InputDatadogAgent{}
 	if err := utils.UnmarshalJSON(data, &inputDatadogAgent, "", true, nil); err == nil {
-		u.InputDatadogAgent = &inputDatadogAgent
-		u.Type = InputTypeInputDatadogAgent
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputDatadogAgent,
+			Value: &inputDatadogAgent,
+		})
 	}
 
 	var inputHTTPRaw InputHTTPRaw = InputHTTPRaw{}
 	if err := utils.UnmarshalJSON(data, &inputHTTPRaw, "", true, nil); err == nil {
-		u.InputHTTPRaw = &inputHTTPRaw
-		u.Type = InputTypeInputHTTPRaw
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputHTTPRaw,
+			Value: &inputHTTPRaw,
+		})
 	}
 
 	var inputMetrics InputMetrics = InputMetrics{}
 	if err := utils.UnmarshalJSON(data, &inputMetrics, "", true, nil); err == nil {
-		u.InputMetrics = &inputMetrics
-		u.Type = InputTypeInputMetrics
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputMetrics,
+			Value: &inputMetrics,
+		})
 	}
 
 	var inputSqs InputSqs = InputSqs{}
 	if err := utils.UnmarshalJSON(data, &inputSqs, "", true, nil); err == nil {
-		u.InputSqs = &inputSqs
-		u.Type = InputTypeInputSqs
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSqs,
+			Value: &inputSqs,
+		})
 	}
 
 	var inputTCP InputTCP = InputTCP{}
 	if err := utils.UnmarshalJSON(data, &inputTCP, "", true, nil); err == nil {
-		u.InputTCP = &inputTCP
-		u.Type = InputTypeInputTCP
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputTCP,
+			Value: &inputTCP,
+		})
 	}
 
 	var inputWef InputWef = InputWef{}
 	if err := utils.UnmarshalJSON(data, &inputWef, "", true, nil); err == nil {
-		u.InputWef = &inputWef
-		u.Type = InputTypeInputWef
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputWef,
+			Value: &inputWef,
+		})
 	}
 
 	var inputWinEventLogs InputWinEventLogs = InputWinEventLogs{}
 	if err := utils.UnmarshalJSON(data, &inputWinEventLogs, "", true, nil); err == nil {
-		u.InputWinEventLogs = &inputWinEventLogs
-		u.Type = InputTypeInputWinEventLogs
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputWinEventLogs,
+			Value: &inputWinEventLogs,
+		})
 	}
 
 	var inputRawUDP InputRawUDP = InputRawUDP{}
 	if err := utils.UnmarshalJSON(data, &inputRawUDP, "", true, nil); err == nil {
-		u.InputRawUDP = &inputRawUDP
-		u.Type = InputTypeInputRawUDP
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputRawUDP,
+			Value: &inputRawUDP,
+		})
 	}
 
 	var inputJournalFiles InputJournalFiles = InputJournalFiles{}
 	if err := utils.UnmarshalJSON(data, &inputJournalFiles, "", true, nil); err == nil {
-		u.InputJournalFiles = &inputJournalFiles
-		u.Type = InputTypeInputJournalFiles
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputJournalFiles,
+			Value: &inputJournalFiles,
+		})
 	}
 
 	var inputZscalerHec InputZscalerHec = InputZscalerHec{}
 	if err := utils.UnmarshalJSON(data, &inputZscalerHec, "", true, nil); err == nil {
-		u.InputZscalerHec = &inputZscalerHec
-		u.Type = InputTypeInputZscalerHec
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputZscalerHec,
+			Value: &inputZscalerHec,
+		})
 	}
 
 	var inputGrafana InputGrafana = InputGrafana{}
 	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
-		u.InputGrafana = &inputGrafana
-		u.Type = InputTypeInputGrafana
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputGrafana,
+			Value: &inputGrafana,
+		})
 	}
 
 	var inputPrometheus InputPrometheus = InputPrometheus{}
 	if err := utils.UnmarshalJSON(data, &inputPrometheus, "", true, nil); err == nil {
-		u.InputPrometheus = &inputPrometheus
-		u.Type = InputTypeInputPrometheus
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputPrometheus,
+			Value: &inputPrometheus,
+		})
 	}
 
 	var inputEdgePrometheus InputEdgePrometheus = InputEdgePrometheus{}
 	if err := utils.UnmarshalJSON(data, &inputEdgePrometheus, "", true, nil); err == nil {
-		u.InputEdgePrometheus = &inputEdgePrometheus
-		u.Type = InputTypeInputEdgePrometheus
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputEdgePrometheus,
+			Value: &inputEdgePrometheus,
+		})
 	}
 
 	var inputOffice365MsgTrace InputOffice365MsgTrace = InputOffice365MsgTrace{}
 	if err := utils.UnmarshalJSON(data, &inputOffice365MsgTrace, "", true, nil); err == nil {
-		u.InputOffice365MsgTrace = &inputOffice365MsgTrace
-		u.Type = InputTypeInputOffice365MsgTrace
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputOffice365MsgTrace,
+			Value: &inputOffice365MsgTrace,
+		})
 	}
 
 	var inputSnmp InputSnmp = InputSnmp{}
 	if err := utils.UnmarshalJSON(data, &inputSnmp, "", true, nil); err == nil {
-		u.InputSnmp = &inputSnmp
-		u.Type = InputTypeInputSnmp
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSnmp,
+			Value: &inputSnmp,
+		})
 	}
 
 	var inputOpenTelemetry InputOpenTelemetry = InputOpenTelemetry{}
 	if err := utils.UnmarshalJSON(data, &inputOpenTelemetry, "", true, nil); err == nil {
-		u.InputOpenTelemetry = &inputOpenTelemetry
-		u.Type = InputTypeInputOpenTelemetry
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputOpenTelemetry,
+			Value: &inputOpenTelemetry,
+		})
 	}
 
 	var inputModelDrivenTelemetry InputModelDrivenTelemetry = InputModelDrivenTelemetry{}
 	if err := utils.UnmarshalJSON(data, &inputModelDrivenTelemetry, "", true, nil); err == nil {
-		u.InputModelDrivenTelemetry = &inputModelDrivenTelemetry
-		u.Type = InputTypeInputModelDrivenTelemetry
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputModelDrivenTelemetry,
+			Value: &inputModelDrivenTelemetry,
+		})
 	}
 
 	var inputSyslog InputSyslog = InputSyslog{}
 	if err := utils.UnmarshalJSON(data, &inputSyslog, "", true, nil); err == nil {
-		u.InputSyslog = &inputSyslog
-		u.Type = InputTypeInputSyslog
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSyslog,
+			Value: &inputSyslog,
+		})
 	}
 
 	var inputNetflow InputNetflow = InputNetflow{}
 	if err := utils.UnmarshalJSON(data, &inputNetflow, "", true, nil); err == nil {
-		u.InputNetflow = &inputNetflow
-		u.Type = InputTypeInputNetflow
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputNetflow,
+			Value: &inputNetflow,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Input", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Input", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(InputType)
+	switch best.Type {
+	case InputTypeInputMsk:
+		u.InputMsk = best.Value.(*InputMsk)
+		return nil
+	case InputTypeInputAzureBlob:
+		u.InputAzureBlob = best.Value.(*InputAzureBlob)
+		return nil
+	case InputTypeInputOffice365Mgmt:
+		u.InputOffice365Mgmt = best.Value.(*InputOffice365Mgmt)
+		return nil
+	case InputTypeInputOffice365Service:
+		u.InputOffice365Service = best.Value.(*InputOffice365Service)
+		return nil
+	case InputTypeInputExec:
+		u.InputExec = best.Value.(*InputExec)
+		return nil
+	case InputTypeInputGooglePubsub:
+		u.InputGooglePubsub = best.Value.(*InputGooglePubsub)
+		return nil
+	case InputTypeInputCribl:
+		u.InputCribl = best.Value.(*InputCribl)
+		return nil
+	case InputTypeInputSystemMetrics:
+		u.InputSystemMetrics = best.Value.(*InputSystemMetrics)
+		return nil
+	case InputTypeInputSystemState:
+		u.InputSystemState = best.Value.(*InputSystemState)
+		return nil
+	case InputTypeInputKubeMetrics:
+		u.InputKubeMetrics = best.Value.(*InputKubeMetrics)
+		return nil
+	case InputTypeInputKubeLogs:
+		u.InputKubeLogs = best.Value.(*InputKubeLogs)
+		return nil
+	case InputTypeInputKubeEvents:
+		u.InputKubeEvents = best.Value.(*InputKubeEvents)
+		return nil
+	case InputTypeInputWindowsMetrics:
+		u.InputWindowsMetrics = best.Value.(*InputWindowsMetrics)
+		return nil
+	case InputTypeInputCrowdstrike:
+		u.InputCrowdstrike = best.Value.(*InputCrowdstrike)
+		return nil
+	case InputTypeInputDatagen:
+		u.InputDatagen = best.Value.(*InputDatagen)
+		return nil
+	case InputTypeInputKinesis:
+		u.InputKinesis = best.Value.(*InputKinesis)
+		return nil
+	case InputTypeInputCriblmetrics:
+		u.InputCriblmetrics = best.Value.(*InputCriblmetrics)
+		return nil
+	case InputTypeInputS3:
+		u.InputS3 = best.Value.(*InputS3)
+		return nil
+	case InputTypeInputS3Inventory:
+		u.InputS3Inventory = best.Value.(*InputS3Inventory)
+		return nil
+	case InputTypeInputFile:
+		u.InputFile = best.Value.(*InputFile)
+		return nil
+	case InputTypeInputAppscope:
+		u.InputAppscope = best.Value.(*InputAppscope)
+		return nil
+	case InputTypeInputWiz:
+		u.InputWiz = best.Value.(*InputWiz)
+		return nil
+	case InputTypeInputSecurityLake:
+		u.InputSecurityLake = best.Value.(*InputSecurityLake)
+		return nil
+	case InputTypeInputCollection:
+		u.InputCollection = best.Value.(*InputCollection)
+		return nil
+	case InputTypeInputKafka:
+		u.InputKafka = best.Value.(*InputKafka)
+		return nil
+	case InputTypeInputHTTP:
+		u.InputHTTP = best.Value.(*InputHTTP)
+		return nil
+	case InputTypeInputSplunk:
+		u.InputSplunk = best.Value.(*InputSplunk)
+		return nil
+	case InputTypeInputSplunkSearch:
+		u.InputSplunkSearch = best.Value.(*InputSplunkSearch)
+		return nil
+	case InputTypeInputSplunkHec:
+		u.InputSplunkHec = best.Value.(*InputSplunkHec)
+		return nil
+	case InputTypeInputElastic:
+		u.InputElastic = best.Value.(*InputElastic)
+		return nil
+	case InputTypeInputConfluentCloud:
+		u.InputConfluentCloud = best.Value.(*InputConfluentCloud)
+		return nil
+	case InputTypeInputLoki:
+		u.InputLoki = best.Value.(*InputLoki)
+		return nil
+	case InputTypeInputPrometheusRw:
+		u.InputPrometheusRw = best.Value.(*InputPrometheusRw)
+		return nil
+	case InputTypeInputEventhub:
+		u.InputEventhub = best.Value.(*InputEventhub)
+		return nil
+	case InputTypeInputFirehose:
+		u.InputFirehose = best.Value.(*InputFirehose)
+		return nil
+	case InputTypeInputCriblTCP:
+		u.InputCriblTCP = best.Value.(*InputCriblTCP)
+		return nil
+	case InputTypeInputCriblHTTP:
+		u.InputCriblHTTP = best.Value.(*InputCriblHTTP)
+		return nil
+	case InputTypeInputCriblLakeHTTP:
+		u.InputCriblLakeHTTP = best.Value.(*InputCriblLakeHTTP)
+		return nil
+	case InputTypeInputTcpjson:
+		u.InputTcpjson = best.Value.(*InputTcpjson)
+		return nil
+	case InputTypeInputDatadogAgent:
+		u.InputDatadogAgent = best.Value.(*InputDatadogAgent)
+		return nil
+	case InputTypeInputHTTPRaw:
+		u.InputHTTPRaw = best.Value.(*InputHTTPRaw)
+		return nil
+	case InputTypeInputMetrics:
+		u.InputMetrics = best.Value.(*InputMetrics)
+		return nil
+	case InputTypeInputSqs:
+		u.InputSqs = best.Value.(*InputSqs)
+		return nil
+	case InputTypeInputTCP:
+		u.InputTCP = best.Value.(*InputTCP)
+		return nil
+	case InputTypeInputWef:
+		u.InputWef = best.Value.(*InputWef)
+		return nil
+	case InputTypeInputWinEventLogs:
+		u.InputWinEventLogs = best.Value.(*InputWinEventLogs)
+		return nil
+	case InputTypeInputRawUDP:
+		u.InputRawUDP = best.Value.(*InputRawUDP)
+		return nil
+	case InputTypeInputJournalFiles:
+		u.InputJournalFiles = best.Value.(*InputJournalFiles)
+		return nil
+	case InputTypeInputZscalerHec:
+		u.InputZscalerHec = best.Value.(*InputZscalerHec)
+		return nil
+	case InputTypeInputGrafana:
+		u.InputGrafana = best.Value.(*InputGrafana)
+		return nil
+	case InputTypeInputPrometheus:
+		u.InputPrometheus = best.Value.(*InputPrometheus)
+		return nil
+	case InputTypeInputEdgePrometheus:
+		u.InputEdgePrometheus = best.Value.(*InputEdgePrometheus)
+		return nil
+	case InputTypeInputOffice365MsgTrace:
+		u.InputOffice365MsgTrace = best.Value.(*InputOffice365MsgTrace)
+		return nil
+	case InputTypeInputSnmp:
+		u.InputSnmp = best.Value.(*InputSnmp)
+		return nil
+	case InputTypeInputOpenTelemetry:
+		u.InputOpenTelemetry = best.Value.(*InputOpenTelemetry)
+		return nil
+	case InputTypeInputModelDrivenTelemetry:
+		u.InputModelDrivenTelemetry = best.Value.(*InputModelDrivenTelemetry)
+		return nil
+	case InputTypeInputSyslog:
+		u.InputSyslog = best.Value.(*InputSyslog)
+		return nil
+	case InputTypeInputNetflow:
+		u.InputNetflow = best.Value.(*InputNetflow)
 		return nil
 	}
 

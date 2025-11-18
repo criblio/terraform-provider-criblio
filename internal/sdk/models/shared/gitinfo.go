@@ -42,17 +42,43 @@ func CreateRemoteBoolean(boolean bool) Remote {
 
 func (u *Remote) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = RemoteTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  RemoteTypeStr,
+			Value: &str,
+		})
 	}
 
 	var boolean bool = false
 	if err := utils.UnmarshalJSON(data, &boolean, "", true, nil); err == nil {
-		u.Boolean = &boolean
-		u.Type = RemoteTypeBoolean
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  RemoteTypeBoolean,
+			Value: &boolean,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Remote", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Remote", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(RemoteType)
+	switch best.Type {
+	case RemoteTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case RemoteTypeBoolean:
+		u.Boolean = best.Value.(*bool)
 		return nil
 	}
 

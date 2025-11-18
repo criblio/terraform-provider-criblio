@@ -42,17 +42,43 @@ func CreateActionArrayOfStr(arrayOfStr []string) Action {
 
 func (u *Action) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = ActionTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ActionTypeStr,
+			Value: &str,
+		})
 	}
 
 	var arrayOfStr []string = []string{}
 	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, nil); err == nil {
-		u.ArrayOfStr = arrayOfStr
-		u.Type = ActionTypeArrayOfStr
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ActionTypeArrayOfStr,
+			Value: arrayOfStr,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Action", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Action", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(ActionType)
+	switch best.Type {
+	case ActionTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case ActionTypeArrayOfStr:
+		u.ArrayOfStr = best.Value.([]string)
 		return nil
 	}
 

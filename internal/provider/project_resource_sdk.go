@@ -11,6 +11,66 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *ProjectResourceModel) RefreshFromOperationsCreateProjectResponseBody(ctx context.Context, resp *operations.CreateProjectResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedProjectConfig(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *ProjectResourceModel) RefreshFromOperationsGetProjectByIDResponseBody(ctx context.Context, resp *operations.GetProjectByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedProjectConfig(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *ProjectResourceModel) RefreshFromOperationsUpdateProjectByIDResponseBody(ctx context.Context, resp *operations.UpdateProjectByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedProjectConfig(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *ProjectResourceModel) RefreshFromSharedProjectConfig(ctx context.Context, resp *shared.ProjectConfig) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -127,15 +187,15 @@ func (r *ProjectResourceModel) ToSharedProjectConfig(ctx context.Context) (*shar
 		description = nil
 	}
 	destinations := make([]string, 0, len(r.Destinations))
-	for _, destinationsItem := range r.Destinations {
-		destinations = append(destinations, destinationsItem.ValueString())
+	for destinationsIndex := range r.Destinations {
+		destinations = append(destinations, r.Destinations[destinationsIndex].ValueString())
 	}
 	var id string
 	id = r.ID.ValueString()
 
 	subscriptions := make([]string, 0, len(r.Subscriptions))
-	for _, subscriptionsItem := range r.Subscriptions {
-		subscriptions = append(subscriptions, subscriptionsItem.ValueString())
+	for subscriptionsIndex := range r.Subscriptions {
+		subscriptions = append(subscriptions, r.Subscriptions[subscriptionsIndex].ValueString())
 	}
 	out := shared.ProjectConfig{
 		Consumers:     consumers,

@@ -9,33 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *LookupFileResourceModel) RefreshFromOperationsCreateLookupFileResponseBody(ctx context.Context, resp *operations.CreateLookupFileResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *LookupFileResourceModel) RefreshFromOperationsListLookupFileResponseBody(ctx context.Context, resp *operations.ListLookupFileResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *LookupFileResourceModel) RefreshFromOperationsUpdateLookupFileByIDResponseBody(ctx context.Context, resp *operations.UpdateLookupFileByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *LookupFileResourceModel) ToOperationsCreateLookupFileRequest(ctx context.Context) (*operations.CreateLookupFileRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

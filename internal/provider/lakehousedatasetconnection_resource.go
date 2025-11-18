@@ -121,11 +121,6 @@ func (r *LakehouseDatasetConnectionResource) Create(ctx context.Context, req res
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreateLakehouseDatasetConnectionsResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
@@ -199,11 +194,6 @@ func (r *LakehouseDatasetConnectionResource) Update(ctx context.Context, req res
 	}
 	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateLakehouseDatasetConnectionsResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
 		return
 	}
 

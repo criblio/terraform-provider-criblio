@@ -76,7 +76,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 		MarkdownDescription: "SearchDatasetProvider Resource",
 		Attributes: map[string]schema.Attribute{
 			"api_aws_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -171,7 +170,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_azure_data_explorer_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"client_id": schema.StringAttribute{
@@ -250,7 +248,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_azure_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -352,7 +349,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_elastic_search_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -431,7 +427,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_gcp_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -514,7 +509,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_google_workspace_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -606,7 +600,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_ms_graph_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -705,7 +698,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_okta_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -796,7 +788,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_open_search_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -875,7 +866,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_tailscale_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -966,7 +956,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"api_zoom_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -1065,7 +1054,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"apihttp_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"authentication_method": schema.StringAttribute{
@@ -1207,7 +1195,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"aws_security_lake_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1259,7 +1246,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"azure_blob_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"authentication_method": schema.StringAttribute{
@@ -1391,7 +1377,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"click_house_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1469,7 +1454,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"cribl_leader_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1525,7 +1509,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				Description: `Description of the provider`,
 			},
 			"edge_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1577,7 +1560,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"gcs_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -1694,31 +1676,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"api_azure_data_explorer_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -1726,16 +1683,10 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"client_id": schema.StringAttribute{
 									Computed:    true,
 									Description: `The Client ID (also known as Secret ID) of the authorized application`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `The Client Secret of the authorized application`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -1748,39 +1699,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
 									Description: `The Tenant ID of the authorized application`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Type of the provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
 							},
 						},
 						"api_azure_provider": schema.SingleNestedAttribute{
@@ -1793,16 +1716,10 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 											"client_id": schema.StringAttribute{
 												Computed:    true,
 												Description: `The clientId of the service principal`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"client_secret": schema.StringAttribute{
 												Computed:    true,
 												Description: `The client secret of the service principal`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"name": schema.StringAttribute{
 												Computed:    true,
@@ -1811,9 +1728,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 											"tenant_id": schema.StringAttribute{
 												Computed:    true,
 												Description: `The ID of your Azure tenant`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 										},
 									},
@@ -1832,31 +1746,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"api_elastic_search_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -1868,9 +1757,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
 									Description: `Elasticsearch API endpoint URL`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -1879,9 +1765,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"password": schema.StringAttribute{
 									Computed:    true,
 									Description: `Elasticsearch password for authentication`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1890,35 +1773,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"username": schema.StringAttribute{
 									Computed:    true,
 									Description: `Elasticsearch username for authentication`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
 							},
 						},
 						"api_gcp_provider": schema.SingleNestedAttribute{
@@ -1953,31 +1808,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"api_google_workspace_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -1992,9 +1822,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 											"service_account_credentials": schema.StringAttribute{
 												Computed:    true,
 												Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
-												Validators: []validator.String{
-													stringvalidator.UTF8LengthAtLeast(1),
-												},
 											},
 											"subject": schema.StringAttribute{
 												Computed:    true,
@@ -2016,31 +1843,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Computed:    true,
 									Description: `Type of the provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
 							},
 						},
 						"api_ms_graph_provider": schema.SingleNestedAttribute{
@@ -2080,31 +1882,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"api_okta_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2142,31 +1919,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"api_open_search_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2178,9 +1930,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
 									Description: `OpenSearch API endpoint URL. Example: https://opensearch.mycompany.com`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -2189,9 +1938,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"password": schema.StringAttribute{
 									Computed:    true,
 									Description: `OpenSearch password for authentication`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2200,35 +1946,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"username": schema.StringAttribute{
 									Computed:    true,
 									Description: `OpenSearch username for authentication`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
 							},
 						},
 						"api_tailscale_provider": schema.SingleNestedAttribute{
@@ -2266,31 +1984,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Computed:    true,
 									Description: `Type of the provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
 							},
 						},
 						"api_zoom_provider": schema.SingleNestedAttribute{
@@ -2333,31 +2026,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"apihttp_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2365,15 +2033,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"authentication_method": schema.StringAttribute{
 									Computed:    true,
 									Default:     stringdefault.StaticString(`none`),
-									Description: `The authentication method for API calls. Default: "none"; must be one of ["none", "basic", "login", "oauth"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"none",
-											"basic",
-											"login",
-											"oauth",
-										),
-									},
+									Description: `The authentication method for API calls. Default: "none"`,
 								},
 								"available_endpoints": schema.ListNestedAttribute{
 									Computed: true,
@@ -2402,13 +2062,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 											"method": schema.StringAttribute{
 												Computed:    true,
 												Default:     stringdefault.StaticString(`GET`),
-												Description: `Method for the endpoint. Default: "GET"; must be one of ["GET", "POST"]`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"GET",
-														"POST",
-													),
-												},
+												Description: `Method for the endpoint. Default: "GET"`,
 											},
 											"name": schema.StringAttribute{
 												Computed: true,
@@ -2434,31 +2088,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"aws_security_lake_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2476,31 +2105,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"azure_blob_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2508,14 +2112,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"authentication_method": schema.StringAttribute{
 									Computed:    true,
 									Default:     stringdefault.StaticString(`connection_string`),
-									Description: `Azure Storage authentication method. Default: "connection_string"; must be one of ["connection_string", "blob_sas_url", "client_secret"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"connection_string",
-											"blob_sas_url",
-											"client_secret",
-										),
-									},
+									Description: `Azure Storage authentication method. Default: "connection_string"`,
 								},
 								"client_id": schema.StringAttribute{
 									Computed:    true,
@@ -2524,16 +2121,10 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"client_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Azure AD application client secret`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"connection_string": schema.StringAttribute{
 									Computed:    true,
 									Description: `Storage account connection string`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -2576,31 +2167,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"click_house_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2612,9 +2178,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
 									Description: `URL to ClickHouse server with HTTP interface enabled. Ideally should be HTTPS over port 8443.`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -2623,9 +2186,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"password": schema.StringAttribute{
 									Computed:    true,
 									Description: `The ClickHouse user password for authentication`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -2634,35 +2194,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"username": schema.StringAttribute{
 									Computed:    true,
 									Description: `The ClickHouse username for authentication`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
 							},
 						},
 						"cribl_leader_provider": schema.SingleNestedAttribute{
@@ -2681,31 +2213,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"edge_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2722,31 +2229,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Computed:    true,
 									Description: `Type of the provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
 							},
 						},
 						"gcs_provider": schema.SingleNestedAttribute{
@@ -2767,39 +2249,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"service_account_credentials": schema.StringAttribute{
 									Computed:    true,
 									Description: `Contents of Google Cloud service account credentials (JSON keys) file`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Type of the provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-								}...),
 							},
 						},
 						"meta_provider": schema.SingleNestedAttribute{
@@ -2818,31 +2272,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Type of the provider`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"prometheus_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2850,14 +2279,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
 									Default:     stringdefault.StaticString(`none`),
-									Description: `Default: "none"; must be one of ["none", "basic", "token"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"none",
-											"basic",
-											"token",
-										),
-									},
+									Description: `Default: "none"`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -2866,9 +2288,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"endpoint": schema.StringAttribute{
 									Computed:    true,
 									Description: `Prometheus API endpoint URL. Example: https://prometheus.goats.biz`,
-									Validators: []validator.String{
-										stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.+`), "must match pattern "+regexp.MustCompile(`^https?://.+`).String()),
-									},
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -2896,31 +2315,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 									Description: `Basic auth username`,
 								},
 							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
-							},
 						},
 						"s3_provider": schema.SingleNestedAttribute{
 							Computed: true,
@@ -2939,13 +2333,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
-									Description: `AWS authentication method. must be one of ["auto", "manual"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"auto",
-											"manual",
-										),
-									},
+									Description: `AWS authentication method`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed:    true,
@@ -2997,40 +2385,12 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								},
 								"signature_version": schema.StringAttribute{
 									Computed:    true,
-									Description: `AWS signature version. must be one of ["v2", "v4"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf("v2", "v4"),
-									},
+									Description: `AWS signature version`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Type of the provider`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("snowflake_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
 							},
 						},
 						"snowflake_provider": schema.SingleNestedAttribute{
@@ -3039,9 +2399,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"account_identifier": schema.StringAttribute{
 									Computed:    true,
 									Description: `The Snowflake account identifier, in the format <orgname>-<account_name>`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
@@ -3066,9 +2423,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"priv_key": schema.StringAttribute{
 									Computed:    true,
 									Description: `The private key string out of the key file, from the pair of keys generated for authentication`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -3077,42 +2431,13 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 								"username": schema.StringAttribute{
 									Computed:    true,
 									Description: `The Snowflake user for key pair authentication`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtLeast(1),
-									},
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("apihttp_provider"),
-									path.MatchRelative().AtParent().AtName("api_aws_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_provider"),
-									path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-									path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-									path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-									path.MatchRelative().AtParent().AtName("api_okta_provider"),
-									path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-									path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-									path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-									path.MatchRelative().AtParent().AtName("click_house_provider"),
-									path.MatchRelative().AtParent().AtName("prometheus_provider"),
-									path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-									path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-									path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-									path.MatchRelative().AtParent().AtName("s3_provider"),
-									path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
-									path.MatchRelative().AtParent().AtName("meta_provider"),
-									path.MatchRelative().AtParent().AtName("edge_provider"),
-									path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-									path.MatchRelative().AtParent().AtName("gcs_provider"),
-								}...),
 							},
 						},
 					},
 				},
 			},
 			"meta_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -3164,7 +2489,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"prometheus_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_type": schema.StringAttribute{
@@ -3259,7 +2583,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"s3_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
@@ -3396,7 +2719,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"snowflake_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_identifier": schema.StringAttribute{
@@ -3557,11 +2879,11 @@ func (r *SearchDatasetProviderResource) Create(ctx context.Context, req resource
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGenericProvider(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateDatasetProviderResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -3708,11 +3030,11 @@ func (r *SearchDatasetProviderResource) Update(ctx context.Context, req resource
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGenericProvider(ctx, &res.Object.Items[0])...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateDatasetProviderByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

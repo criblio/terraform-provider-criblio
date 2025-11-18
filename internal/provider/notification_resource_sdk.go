@@ -11,6 +11,66 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *NotificationResourceModel) RefreshFromOperationsCreateNotificationResponseBody(ctx context.Context, resp *operations.CreateNotificationResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedNotification(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *NotificationResourceModel) RefreshFromOperationsGetNotificationByIDResponseBody(ctx context.Context, resp *operations.GetNotificationByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedNotification(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *NotificationResourceModel) RefreshFromOperationsUpdateNotificationByIDResponseBody(ctx context.Context, resp *operations.UpdateNotificationByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedNotification(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *NotificationResourceModel) RefreshFromSharedNotification(ctx context.Context, resp *shared.Notification) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -119,25 +179,25 @@ func (r *NotificationResourceModel) ToSharedNotification(ctx context.Context) (*
 	condition = r.Condition.ValueString()
 
 	targets := make([]string, 0, len(r.Targets))
-	for _, targetsItem := range r.Targets {
-		targets = append(targets, targetsItem.ValueString())
+	for targetsIndex := range r.Targets {
+		targets = append(targets, r.Targets[targetsIndex].ValueString())
 	}
 	targetConfigs := make([]shared.TargetConfig, 0, len(r.TargetConfigs))
-	for _, targetConfigsItem := range r.TargetConfigs {
+	for targetConfigsIndex := range r.TargetConfigs {
 		var id1 string
-		id1 = targetConfigsItem.ID.ValueString()
+		id1 = r.TargetConfigs[targetConfigsIndex].ID.ValueString()
 
 		var conf *shared.TargetConfigConf
-		if targetConfigsItem.Conf != nil {
+		if r.TargetConfigs[targetConfigsIndex].Conf != nil {
 			includeResults := new(bool)
-			if !targetConfigsItem.Conf.IncludeResults.IsUnknown() && !targetConfigsItem.Conf.IncludeResults.IsNull() {
-				*includeResults = targetConfigsItem.Conf.IncludeResults.ValueBool()
+			if !r.TargetConfigs[targetConfigsIndex].Conf.IncludeResults.IsUnknown() && !r.TargetConfigs[targetConfigsIndex].Conf.IncludeResults.IsNull() {
+				*includeResults = r.TargetConfigs[targetConfigsIndex].Conf.IncludeResults.ValueBool()
 			} else {
 				includeResults = nil
 			}
 			attachmentType := new(shared.AttachmentType)
-			if !targetConfigsItem.Conf.AttachmentType.IsUnknown() && !targetConfigsItem.Conf.AttachmentType.IsNull() {
-				*attachmentType = shared.AttachmentType(targetConfigsItem.Conf.AttachmentType.ValueString())
+			if !r.TargetConfigs[targetConfigsIndex].Conf.AttachmentType.IsUnknown() && !r.TargetConfigs[targetConfigsIndex].Conf.AttachmentType.IsNull() {
+				*attachmentType = shared.AttachmentType(r.TargetConfigs[targetConfigsIndex].Conf.AttachmentType.ValueString())
 			} else {
 				attachmentType = nil
 			}

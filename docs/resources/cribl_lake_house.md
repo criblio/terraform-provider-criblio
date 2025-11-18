@@ -46,7 +46,7 @@ Read-Only:
 - `description` (String) Description of the lakehouse
 - `id` (String) Unique identifier for the lakehouse
 - `status` (String) Status of the lakehouse
-- `tier_size` (String) Size of the lakehouse tier. Default: "small"; must be one of ["small", "medium", "large", "xlarge", "2xlarge", "3xlarge", "6xlarge"]
+- `tier_size` (String) Size of the lakehouse tier. Default: "small"
 
 ## Import
 

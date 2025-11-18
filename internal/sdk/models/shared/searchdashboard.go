@@ -301,17 +301,43 @@ func CreateElementUnionElementMarkdown(elementMarkdown ElementMarkdown) ElementU
 
 func (u *ElementUnion) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var element Element = Element{}
 	if err := utils.UnmarshalJSON(data, &element, "", true, nil); err == nil {
-		u.Element = &element
-		u.Type = ElementUnionTypeElement
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ElementUnionTypeElement,
+			Value: &element,
+		})
 	}
 
 	var elementMarkdown ElementMarkdown = ElementMarkdown{}
 	if err := utils.UnmarshalJSON(data, &elementMarkdown, "", true, nil); err == nil {
-		u.ElementMarkdown = &elementMarkdown
-		u.Type = ElementUnionTypeElementMarkdown
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ElementUnionTypeElementMarkdown,
+			Value: &elementMarkdown,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for ElementUnion", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for ElementUnion", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(ElementUnionType)
+	switch best.Type {
+	case ElementUnionTypeElement:
+		u.Element = best.Value.(*Element)
+		return nil
+	case ElementUnionTypeElementMarkdown:
+		u.ElementMarkdown = best.Value.(*ElementMarkdown)
 		return nil
 	}
 

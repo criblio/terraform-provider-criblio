@@ -6,6 +6,68 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
+type PipelineFunctionConfAdd struct {
+	// Name of the field to add
+	Name string `json:"name"`
+	// Value to assign to the field
+	Value string `json:"value"`
+	// Whether this field addition is disabled
+	Disabled *bool `default:"false" json:"disabled"`
+}
+
+func (p PipelineFunctionConfAdd) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PipelineFunctionConfAdd) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"name", "value"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PipelineFunctionConfAdd) GetName() string {
+	if p == nil {
+		return ""
+	}
+	return p.Name
+}
+
+func (p *PipelineFunctionConfAdd) GetValue() string {
+	if p == nil {
+		return ""
+	}
+	return p.Value
+}
+
+func (p *PipelineFunctionConfAdd) GetDisabled() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Disabled
+}
+
+type PipelineFunctionConfFunctionSpecificConfigs struct {
+	// List of fields to add to the event
+	Add []PipelineFunctionConfAdd `json:"add,omitempty"`
+	// List of field names to remove from the event
+	Remove []string `json:"remove,omitempty"`
+}
+
+func (p *PipelineFunctionConfFunctionSpecificConfigs) GetAdd() []PipelineFunctionConfAdd {
+	if p == nil {
+		return nil
+	}
+	return p.Add
+}
+
+func (p *PipelineFunctionConfFunctionSpecificConfigs) GetRemove() []string {
+	if p == nil {
+		return nil
+	}
+	return p.Remove
+}
+
 type PipelineFunctionConf struct {
 	// Filter that selects data to be fed through this Function
 	Filter *string `default:"true" json:"filter"`
@@ -16,8 +78,8 @@ type PipelineFunctionConf struct {
 	// If true, data will not be pushed through this function
 	Disabled *bool `json:"disabled,omitempty"`
 	// If enabled, stops the results of this Function from being passed to the downstream Functions
-	Final *bool          `json:"final,omitempty"`
-	Conf  map[string]any `json:"conf"`
+	Final *bool                                       `json:"final,omitempty"`
+	Conf  PipelineFunctionConfFunctionSpecificConfigs `json:"conf"`
 	// Group ID
 	GroupID *string `json:"groupId,omitempty"`
 }
@@ -68,9 +130,9 @@ func (p *PipelineFunctionConf) GetFinal() *bool {
 	return p.Final
 }
 
-func (p *PipelineFunctionConf) GetConf() map[string]any {
+func (p *PipelineFunctionConf) GetConf() PipelineFunctionConfFunctionSpecificConfigs {
 	if p == nil {
-		return map[string]any{}
+		return PipelineFunctionConfFunctionSpecificConfigs{}
 	}
 	return p.Conf
 }

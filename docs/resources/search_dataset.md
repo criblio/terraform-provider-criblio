@@ -1283,7 +1283,7 @@ Read-Only:
 - `metadata` (Attributes) (see [below for nested schema](#nestedatt--items--prometheus_dataset--metadata))
 - `metric_name_pattern` (String) Optional regular expression used to filter metric names. When defined, only metrics whose name matches this pattern will be searched.
 - `provider_id` (String) Dataset provider ID
-- `step_mode` (String) How to calculate the "step," or time range increment per data point, for the Prometheus query request. Default: "exact"; must be one of ["exact", "nearest_unit"]
+- `step_mode` (String) How to calculate the "step," or time range increment per data point, for the Prometheus query request. Default: "exact"
 - `type` (String) Dataset provider type, set automatically from the dataset provider
 
 <a id="nestedatt--items--prometheus_dataset--metadata"></a>

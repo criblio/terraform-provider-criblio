@@ -13,7 +13,25 @@ import (
 	"time"
 )
 
+func (r *SearchDatasetResourceModel) RefreshFromOperationsCreateDatasetResponseBody(ctx context.Context, resp *operations.CreateDatasetResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
 func (r *SearchDatasetResourceModel) RefreshFromOperationsGetDatasetByIDResponseBody(ctx context.Context, resp *operations.GetDatasetByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+	}
+
+	return diags
+}
+
+func (r *SearchDatasetResourceModel) RefreshFromOperationsUpdateDatasetByIDResponseBody(ctx context.Context, resp *operations.UpdateDatasetByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -789,8 +807,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified = nil
 			}
 			tags := make([]string, 0, len(r.APIHTTPDataset.Metadata.Tags))
-			for _, tagsItem := range r.APIHTTPDataset.Metadata.Tags {
-				tags = append(tags, tagsItem.ValueString())
+			for tagsIndex := range r.APIHTTPDataset.Metadata.Tags {
+				tags = append(tags, r.APIHTTPDataset.Metadata.Tags[tagsIndex].ValueString())
 			}
 			enableAcceleration := new(bool)
 			if !r.APIHTTPDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIHTTPDataset.Metadata.EnableAcceleration.IsNull() {
@@ -806,8 +824,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		enabledEndpoints := make([]string, 0, len(r.APIHTTPDataset.EnabledEndpoints))
-		for _, enabledEndpointsItem := range r.APIHTTPDataset.EnabledEndpoints {
-			enabledEndpoints = append(enabledEndpoints, enabledEndpointsItem.ValueString())
+		for enabledEndpointsIndex := range r.APIHTTPDataset.EnabledEndpoints {
+			enabledEndpoints = append(enabledEndpoints, r.APIHTTPDataset.EnabledEndpoints[enabledEndpointsIndex].ValueString())
 		}
 		apiHTTPDataset = &shared.APIHTTPDataset{
 			ID:               id,
@@ -855,8 +873,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified1 = nil
 			}
 			tags1 := make([]string, 0, len(r.APIAwsDataset.Metadata.Tags))
-			for _, tagsItem1 := range r.APIAwsDataset.Metadata.Tags {
-				tags1 = append(tags1, tagsItem1.ValueString())
+			for tagsIndex1 := range r.APIAwsDataset.Metadata.Tags {
+				tags1 = append(tags1, r.APIAwsDataset.Metadata.Tags[tagsIndex1].ValueString())
 			}
 			enableAcceleration1 := new(bool)
 			if !r.APIAwsDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIAwsDataset.Metadata.EnableAcceleration.IsNull() {
@@ -872,12 +890,12 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		enabledEndpoints1 := make([]string, 0, len(r.APIAwsDataset.EnabledEndpoints))
-		for _, enabledEndpointsItem1 := range r.APIAwsDataset.EnabledEndpoints {
-			enabledEndpoints1 = append(enabledEndpoints1, enabledEndpointsItem1.ValueString())
+		for enabledEndpointsIndex1 := range r.APIAwsDataset.EnabledEndpoints {
+			enabledEndpoints1 = append(enabledEndpoints1, r.APIAwsDataset.EnabledEndpoints[enabledEndpointsIndex1].ValueString())
 		}
 		regions := make([]string, 0, len(r.APIAwsDataset.Regions))
-		for _, regionsItem := range r.APIAwsDataset.Regions {
-			regions = append(regions, regionsItem.ValueString())
+		for regionsIndex := range r.APIAwsDataset.Regions {
+			regions = append(regions, r.APIAwsDataset.Regions[regionsIndex].ValueString())
 		}
 		apiAwsDataset = &shared.APIAwsDataset{
 			ID:               id1,
@@ -926,8 +944,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified2 = nil
 			}
 			tags2 := make([]string, 0, len(r.APIAzureDataset.Metadata.Tags))
-			for _, tagsItem2 := range r.APIAzureDataset.Metadata.Tags {
-				tags2 = append(tags2, tagsItem2.ValueString())
+			for tagsIndex2 := range r.APIAzureDataset.Metadata.Tags {
+				tags2 = append(tags2, r.APIAzureDataset.Metadata.Tags[tagsIndex2].ValueString())
 			}
 			enableAcceleration2 := new(bool)
 			if !r.APIAzureDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIAzureDataset.Metadata.EnableAcceleration.IsNull() {
@@ -943,12 +961,12 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		enabledEndpoints2 := make([]string, 0, len(r.APIAzureDataset.EnabledEndpoints))
-		for _, enabledEndpointsItem2 := range r.APIAzureDataset.EnabledEndpoints {
-			enabledEndpoints2 = append(enabledEndpoints2, enabledEndpointsItem2.ValueString())
+		for enabledEndpointsIndex2 := range r.APIAzureDataset.EnabledEndpoints {
+			enabledEndpoints2 = append(enabledEndpoints2, r.APIAzureDataset.EnabledEndpoints[enabledEndpointsIndex2].ValueString())
 		}
 		subscriptionIds := make([]string, 0, len(r.APIAzureDataset.SubscriptionIds))
-		for _, subscriptionIdsItem := range r.APIAzureDataset.SubscriptionIds {
-			subscriptionIds = append(subscriptionIds, subscriptionIdsItem.ValueString())
+		for subscriptionIdsIndex := range r.APIAzureDataset.SubscriptionIds {
+			subscriptionIds = append(subscriptionIds, r.APIAzureDataset.SubscriptionIds[subscriptionIdsIndex].ValueString())
 		}
 		apiAzureDataset = &shared.APIAzureDataset{
 			ID:               id2,
@@ -997,8 +1015,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified3 = nil
 			}
 			tags3 := make([]string, 0, len(r.APIGcpDataset.Metadata.Tags))
-			for _, tagsItem3 := range r.APIGcpDataset.Metadata.Tags {
-				tags3 = append(tags3, tagsItem3.ValueString())
+			for tagsIndex3 := range r.APIGcpDataset.Metadata.Tags {
+				tags3 = append(tags3, r.APIGcpDataset.Metadata.Tags[tagsIndex3].ValueString())
 			}
 			enableAcceleration3 := new(bool)
 			if !r.APIGcpDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIGcpDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1014,13 +1032,13 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		endpointConfigs := make([]shared.GcpEndpointConfig, 0, len(r.APIGcpDataset.EndpointConfigs))
-		for _, endpointConfigsItem := range r.APIGcpDataset.EndpointConfigs {
+		for endpointConfigsIndex := range r.APIGcpDataset.EndpointConfigs {
 			var endpointName string
-			endpointName = endpointConfigsItem.EndpointName.ValueString()
+			endpointName = r.APIGcpDataset.EndpointConfigs[endpointConfigsIndex].EndpointName.ValueString()
 
 			region := new(string)
-			if !endpointConfigsItem.Region.IsUnknown() && !endpointConfigsItem.Region.IsNull() {
-				*region = endpointConfigsItem.Region.ValueString()
+			if !r.APIGcpDataset.EndpointConfigs[endpointConfigsIndex].Region.IsUnknown() && !r.APIGcpDataset.EndpointConfigs[endpointConfigsIndex].Region.IsNull() {
+				*region = r.APIGcpDataset.EndpointConfigs[endpointConfigsIndex].Region.ValueString()
 			} else {
 				region = nil
 			}
@@ -1075,8 +1093,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified4 = nil
 			}
 			tags4 := make([]string, 0, len(r.APIGoogleWorkspaceDataset.Metadata.Tags))
-			for _, tagsItem4 := range r.APIGoogleWorkspaceDataset.Metadata.Tags {
-				tags4 = append(tags4, tagsItem4.ValueString())
+			for tagsIndex4 := range r.APIGoogleWorkspaceDataset.Metadata.Tags {
+				tags4 = append(tags4, r.APIGoogleWorkspaceDataset.Metadata.Tags[tagsIndex4].ValueString())
 			}
 			enableAcceleration4 := new(bool)
 			if !r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIGoogleWorkspaceDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1092,8 +1110,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		enabledEndpoints3 := make([]string, 0, len(r.APIGoogleWorkspaceDataset.EnabledEndpoints))
-		for _, enabledEndpointsItem3 := range r.APIGoogleWorkspaceDataset.EnabledEndpoints {
-			enabledEndpoints3 = append(enabledEndpoints3, enabledEndpointsItem3.ValueString())
+		for enabledEndpointsIndex3 := range r.APIGoogleWorkspaceDataset.EnabledEndpoints {
+			enabledEndpoints3 = append(enabledEndpoints3, r.APIGoogleWorkspaceDataset.EnabledEndpoints[enabledEndpointsIndex3].ValueString())
 		}
 		apiGoogleWorkspaceDataset = &shared.APIGoogleWorkspaceDataset{
 			ID:               id4,
@@ -1141,8 +1159,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified5 = nil
 			}
 			tags5 := make([]string, 0, len(r.APIMsGraphDataset.Metadata.Tags))
-			for _, tagsItem5 := range r.APIMsGraphDataset.Metadata.Tags {
-				tags5 = append(tags5, tagsItem5.ValueString())
+			for tagsIndex5 := range r.APIMsGraphDataset.Metadata.Tags {
+				tags5 = append(tags5, r.APIMsGraphDataset.Metadata.Tags[tagsIndex5].ValueString())
 			}
 			enableAcceleration5 := new(bool)
 			if !r.APIMsGraphDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIMsGraphDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1158,8 +1176,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		enabledEndpoints4 := make([]string, 0, len(r.APIMsGraphDataset.EnabledEndpoints))
-		for _, enabledEndpointsItem4 := range r.APIMsGraphDataset.EnabledEndpoints {
-			enabledEndpoints4 = append(enabledEndpoints4, enabledEndpointsItem4.ValueString())
+		for enabledEndpointsIndex4 := range r.APIMsGraphDataset.EnabledEndpoints {
+			enabledEndpoints4 = append(enabledEndpoints4, r.APIMsGraphDataset.EnabledEndpoints[enabledEndpointsIndex4].ValueString())
 		}
 		apiMsGraphDataset = &shared.APIMsGraphDataset{
 			ID:               id5,
@@ -1207,8 +1225,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified6 = nil
 			}
 			tags6 := make([]string, 0, len(r.APIOktaDataset.Metadata.Tags))
-			for _, tagsItem6 := range r.APIOktaDataset.Metadata.Tags {
-				tags6 = append(tags6, tagsItem6.ValueString())
+			for tagsIndex6 := range r.APIOktaDataset.Metadata.Tags {
+				tags6 = append(tags6, r.APIOktaDataset.Metadata.Tags[tagsIndex6].ValueString())
 			}
 			enableAcceleration6 := new(bool)
 			if !r.APIOktaDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIOktaDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1224,8 +1242,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		enabledEndpoints5 := make([]string, 0, len(r.APIOktaDataset.EnabledEndpoints))
-		for _, enabledEndpointsItem5 := range r.APIOktaDataset.EnabledEndpoints {
-			enabledEndpoints5 = append(enabledEndpoints5, enabledEndpointsItem5.ValueString())
+		for enabledEndpointsIndex5 := range r.APIOktaDataset.EnabledEndpoints {
+			enabledEndpoints5 = append(enabledEndpoints5, r.APIOktaDataset.EnabledEndpoints[enabledEndpointsIndex5].ValueString())
 		}
 		apiOktaDataset = &shared.APIOktaDataset{
 			ID:               id6,
@@ -1273,8 +1291,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified7 = nil
 			}
 			tags7 := make([]string, 0, len(r.APITailscaleDataset.Metadata.Tags))
-			for _, tagsItem7 := range r.APITailscaleDataset.Metadata.Tags {
-				tags7 = append(tags7, tagsItem7.ValueString())
+			for tagsIndex7 := range r.APITailscaleDataset.Metadata.Tags {
+				tags7 = append(tags7, r.APITailscaleDataset.Metadata.Tags[tagsIndex7].ValueString())
 			}
 			enableAcceleration7 := new(bool)
 			if !r.APITailscaleDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APITailscaleDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1290,8 +1308,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		enabledEndpoints6 := make([]string, 0, len(r.APITailscaleDataset.EnabledEndpoints))
-		for _, enabledEndpointsItem6 := range r.APITailscaleDataset.EnabledEndpoints {
-			enabledEndpoints6 = append(enabledEndpoints6, enabledEndpointsItem6.ValueString())
+		for enabledEndpointsIndex6 := range r.APITailscaleDataset.EnabledEndpoints {
+			enabledEndpoints6 = append(enabledEndpoints6, r.APITailscaleDataset.EnabledEndpoints[enabledEndpointsIndex6].ValueString())
 		}
 		apiTailscaleDataset = &shared.APITailscaleDataset{
 			ID:               id7,
@@ -1339,8 +1357,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified8 = nil
 			}
 			tags8 := make([]string, 0, len(r.APIZoomDataset.Metadata.Tags))
-			for _, tagsItem8 := range r.APIZoomDataset.Metadata.Tags {
-				tags8 = append(tags8, tagsItem8.ValueString())
+			for tagsIndex8 := range r.APIZoomDataset.Metadata.Tags {
+				tags8 = append(tags8, r.APIZoomDataset.Metadata.Tags[tagsIndex8].ValueString())
 			}
 			enableAcceleration8 := new(bool)
 			if !r.APIZoomDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIZoomDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1356,8 +1374,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		enabledEndpoints7 := make([]string, 0, len(r.APIZoomDataset.EnabledEndpoints))
-		for _, enabledEndpointsItem7 := range r.APIZoomDataset.EnabledEndpoints {
-			enabledEndpoints7 = append(enabledEndpoints7, enabledEndpointsItem7.ValueString())
+		for enabledEndpointsIndex7 := range r.APIZoomDataset.EnabledEndpoints {
+			enabledEndpoints7 = append(enabledEndpoints7, r.APIZoomDataset.EnabledEndpoints[enabledEndpointsIndex7].ValueString())
 		}
 		apiZoomDataset = &shared.APIZoomDataset{
 			ID:               id8,
@@ -1405,8 +1423,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified9 = nil
 			}
 			tags9 := make([]string, 0, len(r.APIAzureDataExplorerDataset.Metadata.Tags))
-			for _, tagsItem9 := range r.APIAzureDataExplorerDataset.Metadata.Tags {
-				tags9 = append(tags9, tagsItem9.ValueString())
+			for tagsIndex9 := range r.APIAzureDataExplorerDataset.Metadata.Tags {
+				tags9 = append(tags9, r.APIAzureDataExplorerDataset.Metadata.Tags[tagsIndex9].ValueString())
 			}
 			enableAcceleration9 := new(bool)
 			if !r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIAzureDataExplorerDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1496,8 +1514,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified10 = nil
 			}
 			tags10 := make([]string, 0, len(r.SnowflakeDataset.Metadata.Tags))
-			for _, tagsItem10 := range r.SnowflakeDataset.Metadata.Tags {
-				tags10 = append(tags10, tagsItem10.ValueString())
+			for tagsIndex10 := range r.SnowflakeDataset.Metadata.Tags {
+				tags10 = append(tags10, r.SnowflakeDataset.Metadata.Tags[tagsIndex10].ValueString())
 			}
 			enableAcceleration10 := new(bool)
 			if !r.SnowflakeDataset.Metadata.EnableAcceleration.IsUnknown() && !r.SnowflakeDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1596,8 +1614,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified11 = nil
 			}
 			tags11 := make([]string, 0, len(r.ClickHouseDataset.Metadata.Tags))
-			for _, tagsItem11 := range r.ClickHouseDataset.Metadata.Tags {
-				tags11 = append(tags11, tagsItem11.ValueString())
+			for tagsIndex11 := range r.ClickHouseDataset.Metadata.Tags {
+				tags11 = append(tags11, r.ClickHouseDataset.Metadata.Tags[tagsIndex11].ValueString())
 			}
 			enableAcceleration11 := new(bool)
 			if !r.ClickHouseDataset.Metadata.EnableAcceleration.IsUnknown() && !r.ClickHouseDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1675,8 +1693,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified12 = nil
 			}
 			tags12 := make([]string, 0, len(r.PrometheusDataset.Metadata.Tags))
-			for _, tagsItem12 := range r.PrometheusDataset.Metadata.Tags {
-				tags12 = append(tags12, tagsItem12.ValueString())
+			for tagsIndex12 := range r.PrometheusDataset.Metadata.Tags {
+				tags12 = append(tags12, r.PrometheusDataset.Metadata.Tags[tagsIndex12].ValueString())
 			}
 			enableAcceleration12 := new(bool)
 			if !r.PrometheusDataset.Metadata.EnableAcceleration.IsUnknown() && !r.PrometheusDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1757,8 +1775,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified13 = nil
 			}
 			tags13 := make([]string, 0, len(r.APIOpenSearchDataset.Metadata.Tags))
-			for _, tagsItem13 := range r.APIOpenSearchDataset.Metadata.Tags {
-				tags13 = append(tags13, tagsItem13.ValueString())
+			for tagsIndex13 := range r.APIOpenSearchDataset.Metadata.Tags {
+				tags13 = append(tags13, r.APIOpenSearchDataset.Metadata.Tags[tagsIndex13].ValueString())
 			}
 			enableAcceleration13 := new(bool)
 			if !r.APIOpenSearchDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIOpenSearchDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1829,8 +1847,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified14 = nil
 			}
 			tags14 := make([]string, 0, len(r.APIElasticSearchDataset.Metadata.Tags))
-			for _, tagsItem14 := range r.APIElasticSearchDataset.Metadata.Tags {
-				tags14 = append(tags14, tagsItem14.ValueString())
+			for tagsIndex14 := range r.APIElasticSearchDataset.Metadata.Tags {
+				tags14 = append(tags14, r.APIElasticSearchDataset.Metadata.Tags[tagsIndex14].ValueString())
 			}
 			enableAcceleration14 := new(bool)
 			if !r.APIElasticSearchDataset.Metadata.EnableAcceleration.IsUnknown() && !r.APIElasticSearchDataset.Metadata.EnableAcceleration.IsNull() {
@@ -1898,8 +1916,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified15 = nil
 			}
 			tags15 := make([]string, 0, len(r.S3Dataset.Metadata.Tags))
-			for _, tagsItem15 := range r.S3Dataset.Metadata.Tags {
-				tags15 = append(tags15, tagsItem15.ValueString())
+			for tagsIndex15 := range r.S3Dataset.Metadata.Tags {
+				tags15 = append(tags15, r.S3Dataset.Metadata.Tags[tagsIndex15].ValueString())
 			}
 			enableAcceleration15 := new(bool)
 			if !r.S3Dataset.Metadata.EnableAcceleration.IsUnknown() && !r.S3Dataset.Metadata.EnableAcceleration.IsNull() {
@@ -1942,31 +1960,31 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			autoDetectRegion = nil
 		}
 		extraPaths := make([]shared.S3DatasetExtraPath, 0, len(r.S3Dataset.ExtraPaths))
-		for _, extraPathsItem := range r.S3Dataset.ExtraPaths {
+		for extraPathsIndex := range r.S3Dataset.ExtraPaths {
 			var bucket1 string
-			bucket1 = extraPathsItem.Bucket.ValueString()
+			bucket1 = r.S3Dataset.ExtraPaths[extraPathsIndex].Bucket.ValueString()
 
 			path1 := new(string)
-			if !extraPathsItem.Path.IsUnknown() && !extraPathsItem.Path.IsNull() {
-				*path1 = extraPathsItem.Path.ValueString()
+			if !r.S3Dataset.ExtraPaths[extraPathsIndex].Path.IsUnknown() && !r.S3Dataset.ExtraPaths[extraPathsIndex].Path.IsNull() {
+				*path1 = r.S3Dataset.ExtraPaths[extraPathsIndex].Path.ValueString()
 			} else {
 				path1 = nil
 			}
 			filter1 := new(string)
-			if !extraPathsItem.Filter.IsUnknown() && !extraPathsItem.Filter.IsNull() {
-				*filter1 = extraPathsItem.Filter.ValueString()
+			if !r.S3Dataset.ExtraPaths[extraPathsIndex].Filter.IsUnknown() && !r.S3Dataset.ExtraPaths[extraPathsIndex].Filter.IsNull() {
+				*filter1 = r.S3Dataset.ExtraPaths[extraPathsIndex].Filter.ValueString()
 			} else {
 				filter1 = nil
 			}
 			region2 := new(string)
-			if !extraPathsItem.Region.IsUnknown() && !extraPathsItem.Region.IsNull() {
-				*region2 = extraPathsItem.Region.ValueString()
+			if !r.S3Dataset.ExtraPaths[extraPathsIndex].Region.IsUnknown() && !r.S3Dataset.ExtraPaths[extraPathsIndex].Region.IsNull() {
+				*region2 = r.S3Dataset.ExtraPaths[extraPathsIndex].Region.ValueString()
 			} else {
 				region2 = nil
 			}
 			autoDetectRegion1 := new(bool)
-			if !extraPathsItem.AutoDetectRegion.IsUnknown() && !extraPathsItem.AutoDetectRegion.IsNull() {
-				*autoDetectRegion1 = extraPathsItem.AutoDetectRegion.ValueBool()
+			if !r.S3Dataset.ExtraPaths[extraPathsIndex].AutoDetectRegion.IsUnknown() && !r.S3Dataset.ExtraPaths[extraPathsIndex].AutoDetectRegion.IsNull() {
+				*autoDetectRegion1 = r.S3Dataset.ExtraPaths[extraPathsIndex].AutoDetectRegion.ValueBool()
 			} else {
 				autoDetectRegion1 = nil
 			}
@@ -1979,8 +1997,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			})
 		}
 		storageClasses := make([]string, 0, len(r.S3Dataset.StorageClasses))
-		for _, storageClassesItem := range r.S3Dataset.StorageClasses {
-			storageClasses = append(storageClasses, storageClassesItem.ValueString())
+		for storageClassesIndex := range r.S3Dataset.StorageClasses {
+			storageClasses = append(storageClasses, r.S3Dataset.StorageClasses[storageClassesIndex].ValueString())
 		}
 		skipEventTimeFilter := new(bool)
 		if !r.S3Dataset.SkipEventTimeFilter.IsUnknown() && !r.S3Dataset.SkipEventTimeFilter.IsNull() {
@@ -2041,8 +2059,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified16 = nil
 			}
 			tags16 := make([]string, 0, len(r.CriblLeaderDataset.Metadata.Tags))
-			for _, tagsItem16 := range r.CriblLeaderDataset.Metadata.Tags {
-				tags16 = append(tags16, tagsItem16.ValueString())
+			for tagsIndex16 := range r.CriblLeaderDataset.Metadata.Tags {
+				tags16 = append(tags16, r.CriblLeaderDataset.Metadata.Tags[tagsIndex16].ValueString())
 			}
 			enableAcceleration16 := new(bool)
 			if !r.CriblLeaderDataset.Metadata.EnableAcceleration.IsUnknown() && !r.CriblLeaderDataset.Metadata.EnableAcceleration.IsNull() {
@@ -2067,13 +2085,13 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			filter2 = nil
 		}
 		extraPaths1 := make([]shared.CriblLeaderDatasetExtraPath, 0, len(r.CriblLeaderDataset.ExtraPaths))
-		for _, extraPathsItem1 := range r.CriblLeaderDataset.ExtraPaths {
+		for extraPathsIndex1 := range r.CriblLeaderDataset.ExtraPaths {
 			var path3 string
-			path3 = extraPathsItem1.Path.ValueString()
+			path3 = r.CriblLeaderDataset.ExtraPaths[extraPathsIndex1].Path.ValueString()
 
 			filter3 := new(string)
-			if !extraPathsItem1.Filter.IsUnknown() && !extraPathsItem1.Filter.IsNull() {
-				*filter3 = extraPathsItem1.Filter.ValueString()
+			if !r.CriblLeaderDataset.ExtraPaths[extraPathsIndex1].Filter.IsUnknown() && !r.CriblLeaderDataset.ExtraPaths[extraPathsIndex1].Filter.IsNull() {
+				*filter3 = r.CriblLeaderDataset.ExtraPaths[extraPathsIndex1].Filter.ValueString()
 			} else {
 				filter3 = nil
 			}
@@ -2130,8 +2148,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified17 = nil
 			}
 			tags17 := make([]string, 0, len(r.MetaDataset.Metadata.Tags))
-			for _, tagsItem17 := range r.MetaDataset.Metadata.Tags {
-				tags17 = append(tags17, tagsItem17.ValueString())
+			for tagsIndex17 := range r.MetaDataset.Metadata.Tags {
+				tags17 = append(tags17, r.MetaDataset.Metadata.Tags[tagsIndex17].ValueString())
 			}
 			enableAcceleration17 := new(bool)
 			if !r.MetaDataset.Metadata.EnableAcceleration.IsUnknown() && !r.MetaDataset.Metadata.EnableAcceleration.IsNull() {
@@ -2147,8 +2165,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		datasets := make([]string, 0, len(r.MetaDataset.Datasets))
-		for _, datasetsItem := range r.MetaDataset.Datasets {
-			datasets = append(datasets, datasetsItem.ValueString())
+		for datasetsIndex := range r.MetaDataset.Datasets {
+			datasets = append(datasets, r.MetaDataset.Datasets[datasetsIndex].ValueString())
 		}
 		metaDataset = &shared.MetaDataset{
 			ID:          id17,
@@ -2196,8 +2214,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified18 = nil
 			}
 			tags18 := make([]string, 0, len(r.EdgeDataset.Metadata.Tags))
-			for _, tagsItem18 := range r.EdgeDataset.Metadata.Tags {
-				tags18 = append(tags18, tagsItem18.ValueString())
+			for tagsIndex18 := range r.EdgeDataset.Metadata.Tags {
+				tags18 = append(tags18, r.EdgeDataset.Metadata.Tags[tagsIndex18].ValueString())
 			}
 			enableAcceleration18 := new(bool)
 			if !r.EdgeDataset.Metadata.EnableAcceleration.IsUnknown() && !r.EdgeDataset.Metadata.EnableAcceleration.IsNull() {
@@ -2213,8 +2231,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			}
 		}
 		fleets := make([]string, 0, len(r.EdgeDataset.Fleets))
-		for _, fleetsItem := range r.EdgeDataset.Fleets {
-			fleets = append(fleets, fleetsItem.ValueString())
+		for fleetsIndex := range r.EdgeDataset.Fleets {
+			fleets = append(fleets, r.EdgeDataset.Fleets[fleetsIndex].ValueString())
 		}
 		var path4 string
 		path4 = r.EdgeDataset.Path.ValueString()
@@ -2273,8 +2291,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified19 = nil
 			}
 			tags19 := make([]string, 0, len(r.AzureBlobDataset.Metadata.Tags))
-			for _, tagsItem19 := range r.AzureBlobDataset.Metadata.Tags {
-				tags19 = append(tags19, tagsItem19.ValueString())
+			for tagsIndex19 := range r.AzureBlobDataset.Metadata.Tags {
+				tags19 = append(tags19, r.AzureBlobDataset.Metadata.Tags[tagsIndex19].ValueString())
 			}
 			enableAcceleration19 := new(bool)
 			if !r.AzureBlobDataset.Metadata.EnableAcceleration.IsUnknown() && !r.AzureBlobDataset.Metadata.EnableAcceleration.IsNull() {
@@ -2305,19 +2323,19 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			filter5 = nil
 		}
 		extraPaths2 := make([]shared.AzureBlobDatasetExtraPath, 0, len(r.AzureBlobDataset.ExtraPaths))
-		for _, extraPathsItem2 := range r.AzureBlobDataset.ExtraPaths {
+		for extraPathsIndex2 := range r.AzureBlobDataset.ExtraPaths {
 			var containerName1 string
-			containerName1 = extraPathsItem2.ContainerName.ValueString()
+			containerName1 = r.AzureBlobDataset.ExtraPaths[extraPathsIndex2].ContainerName.ValueString()
 
 			path6 := new(string)
-			if !extraPathsItem2.Path.IsUnknown() && !extraPathsItem2.Path.IsNull() {
-				*path6 = extraPathsItem2.Path.ValueString()
+			if !r.AzureBlobDataset.ExtraPaths[extraPathsIndex2].Path.IsUnknown() && !r.AzureBlobDataset.ExtraPaths[extraPathsIndex2].Path.IsNull() {
+				*path6 = r.AzureBlobDataset.ExtraPaths[extraPathsIndex2].Path.ValueString()
 			} else {
 				path6 = nil
 			}
 			filter6 := new(string)
-			if !extraPathsItem2.Filter.IsUnknown() && !extraPathsItem2.Filter.IsNull() {
-				*filter6 = extraPathsItem2.Filter.ValueString()
+			if !r.AzureBlobDataset.ExtraPaths[extraPathsIndex2].Filter.IsUnknown() && !r.AzureBlobDataset.ExtraPaths[extraPathsIndex2].Filter.IsNull() {
+				*filter6 = r.AzureBlobDataset.ExtraPaths[extraPathsIndex2].Filter.ValueString()
 			} else {
 				filter6 = nil
 			}
@@ -2328,8 +2346,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			})
 		}
 		storageClasses1 := make([]string, 0, len(r.AzureBlobDataset.StorageClasses))
-		for _, storageClassesItem1 := range r.AzureBlobDataset.StorageClasses {
-			storageClasses1 = append(storageClasses1, storageClassesItem1.ValueString())
+		for storageClassesIndex1 := range r.AzureBlobDataset.StorageClasses {
+			storageClasses1 = append(storageClasses1, r.AzureBlobDataset.StorageClasses[storageClassesIndex1].ValueString())
 		}
 		skipEventTimeFilter1 := new(bool)
 		if !r.AzureBlobDataset.SkipEventTimeFilter.IsUnknown() && !r.AzureBlobDataset.SkipEventTimeFilter.IsNull() {
@@ -2388,8 +2406,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified20 = nil
 			}
 			tags20 := make([]string, 0, len(r.GcsDataset.Metadata.Tags))
-			for _, tagsItem20 := range r.GcsDataset.Metadata.Tags {
-				tags20 = append(tags20, tagsItem20.ValueString())
+			for tagsIndex20 := range r.GcsDataset.Metadata.Tags {
+				tags20 = append(tags20, r.GcsDataset.Metadata.Tags[tagsIndex20].ValueString())
 			}
 			enableAcceleration20 := new(bool)
 			if !r.GcsDataset.Metadata.EnableAcceleration.IsUnknown() && !r.GcsDataset.Metadata.EnableAcceleration.IsNull() {
@@ -2420,19 +2438,19 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			region3 = nil
 		}
 		extraPaths3 := make([]shared.GcsDatasetExtraPath, 0, len(r.GcsDataset.ExtraPaths))
-		for _, extraPathsItem3 := range r.GcsDataset.ExtraPaths {
+		for extraPathsIndex3 := range r.GcsDataset.ExtraPaths {
 			var bucket3 string
-			bucket3 = extraPathsItem3.Bucket.ValueString()
+			bucket3 = r.GcsDataset.ExtraPaths[extraPathsIndex3].Bucket.ValueString()
 
 			filter8 := new(string)
-			if !extraPathsItem3.Filter.IsUnknown() && !extraPathsItem3.Filter.IsNull() {
-				*filter8 = extraPathsItem3.Filter.ValueString()
+			if !r.GcsDataset.ExtraPaths[extraPathsIndex3].Filter.IsUnknown() && !r.GcsDataset.ExtraPaths[extraPathsIndex3].Filter.IsNull() {
+				*filter8 = r.GcsDataset.ExtraPaths[extraPathsIndex3].Filter.ValueString()
 			} else {
 				filter8 = nil
 			}
 			region4 := new(string)
-			if !extraPathsItem3.Region.IsUnknown() && !extraPathsItem3.Region.IsNull() {
-				*region4 = extraPathsItem3.Region.ValueString()
+			if !r.GcsDataset.ExtraPaths[extraPathsIndex3].Region.IsUnknown() && !r.GcsDataset.ExtraPaths[extraPathsIndex3].Region.IsNull() {
+				*region4 = r.GcsDataset.ExtraPaths[extraPathsIndex3].Region.ValueString()
 			} else {
 				region4 = nil
 			}
@@ -2443,8 +2461,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			})
 		}
 		storageClasses2 := make([]string, 0, len(r.GcsDataset.StorageClasses))
-		for _, storageClassesItem2 := range r.GcsDataset.StorageClasses {
-			storageClasses2 = append(storageClasses2, storageClassesItem2.ValueString())
+		for storageClassesIndex2 := range r.GcsDataset.StorageClasses {
+			storageClasses2 = append(storageClasses2, r.GcsDataset.StorageClasses[storageClassesIndex2].ValueString())
 		}
 		skipEventTimeFilter2 := new(bool)
 		if !r.GcsDataset.SkipEventTimeFilter.IsUnknown() && !r.GcsDataset.SkipEventTimeFilter.IsNull() {
@@ -2503,8 +2521,8 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 				modified21 = nil
 			}
 			tags21 := make([]string, 0, len(r.AwsSecurityLakeDataset.Metadata.Tags))
-			for _, tagsItem21 := range r.AwsSecurityLakeDataset.Metadata.Tags {
-				tags21 = append(tags21, tagsItem21.ValueString())
+			for tagsIndex21 := range r.AwsSecurityLakeDataset.Metadata.Tags {
+				tags21 = append(tags21, r.AwsSecurityLakeDataset.Metadata.Tags[tagsIndex21].ValueString())
 			}
 			enableAcceleration21 := new(bool)
 			if !r.AwsSecurityLakeDataset.Metadata.EnableAcceleration.IsUnknown() && !r.AwsSecurityLakeDataset.Metadata.EnableAcceleration.IsNull() {
@@ -2532,16 +2550,16 @@ func (r *SearchDatasetResourceModel) ToSharedGenericDataset(ctx context.Context)
 			filter9 = nil
 		}
 		selectedBuckets := make([]shared.S3Bucket, 0, len(r.AwsSecurityLakeDataset.SelectedBuckets))
-		for _, selectedBucketsItem := range r.AwsSecurityLakeDataset.SelectedBuckets {
+		for selectedBucketsIndex := range r.AwsSecurityLakeDataset.SelectedBuckets {
 			name := new(string)
-			if !selectedBucketsItem.Name.IsUnknown() && !selectedBucketsItem.Name.IsNull() {
-				*name = selectedBucketsItem.Name.ValueString()
+			if !r.AwsSecurityLakeDataset.SelectedBuckets[selectedBucketsIndex].Name.IsUnknown() && !r.AwsSecurityLakeDataset.SelectedBuckets[selectedBucketsIndex].Name.IsNull() {
+				*name = r.AwsSecurityLakeDataset.SelectedBuckets[selectedBucketsIndex].Name.ValueString()
 			} else {
 				name = nil
 			}
 			region5 := new(string)
-			if !selectedBucketsItem.Region.IsUnknown() && !selectedBucketsItem.Region.IsNull() {
-				*region5 = selectedBucketsItem.Region.ValueString()
+			if !r.AwsSecurityLakeDataset.SelectedBuckets[selectedBucketsIndex].Region.IsUnknown() && !r.AwsSecurityLakeDataset.SelectedBuckets[selectedBucketsIndex].Region.IsNull() {
+				*region5 = r.AwsSecurityLakeDataset.SelectedBuckets[selectedBucketsIndex].Region.ValueString()
 			} else {
 				region5 = nil
 			}

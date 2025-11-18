@@ -128,8 +128,8 @@ func (r *WorkspaceResourceModel) ToSharedWorkspaceCreateRequestDTO(ctx context.C
 		description = nil
 	}
 	tags := make([]string, 0, len(r.Tags))
-	for _, tagsItem := range r.Tags {
-		tags = append(tags, tagsItem.ValueString())
+	for tagsIndex := range r.Tags {
+		tags = append(tags, r.Tags[tagsIndex].ValueString())
 	}
 	out := shared.WorkspaceCreateRequestDTO{
 		WorkspaceID: workspaceID,
@@ -157,8 +157,8 @@ func (r *WorkspaceResourceModel) ToSharedWorkspacePatchRequestDTO(ctx context.Co
 		description = nil
 	}
 	tags := make([]string, 0, len(r.Tags))
-	for _, tagsItem := range r.Tags {
-		tags = append(tags, tagsItem.ValueString())
+	for tagsIndex := range r.Tags {
+		tags = append(tags, r.Tags[tagsIndex].ValueString())
 	}
 	out := shared.WorkspacePatchRequestDTO{
 		Alias:       alias,
