@@ -47,13 +47,13 @@ actions:
     update:
       x-speakeasy-entity: SearchUsageGroup
 
-  - target: "$.components.schemas.SearchDatasetProvider"
-    update:
-      x-speakeasy-entity: SearchDatasetProvider
-
-  - target: "$.components.schemas.SearchDataset"
+  - target: "$.components.schemas.GenericDataset"
     update:
       x-speakeasy-entity: SearchDataset
+
+  - target: "$.components.schemas.GenericProvider"
+    update:
+      x-speakeasy-entity: SearchDatasetProvider
 
   - target: "$.components.schemas.AppscopeLibEntry"
     update:
@@ -226,14 +226,6 @@ actions:
   - target: "$.components.schemas.MappingRuleset"
     update:
       x-speakeasy-entity: MappingRuleset
-
-  - target: "$.paths['/m/default_search/search/datasets/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
-    update:
-      x-speakeasy-entity: SearchDataset
-
-  - target: "$.paths['/m/default_search/search/dataset-providers/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
-    update:
-      x-speakeasy-entity: SearchDatasetProvider
 
   - target: "$.paths['/m/default_search/search/usage-groups'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
