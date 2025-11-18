@@ -72,33 +72,11 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"region": schema.StringAttribute{
 				Computed:    true,
-				Description: `AWS region where the workspace is deployed. must be one of ["us-west-2", "us-east-1", "us-east-2", "eu-central-1", "eu-central-2", "eu-west-2", "ap-southeast-1", "ap-southeast-2", "ca-central-1"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"us-west-2",
-						"us-east-1",
-						"us-east-2",
-						"eu-central-1",
-						"eu-central-2",
-						"eu-west-2",
-						"ap-southeast-1",
-						"ap-southeast-2",
-						"ca-central-1",
-					),
-				},
+				Description: `AWS region where the workspace is deployed`,
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,
-				Description: `Current state of the workspace. must be one of ["Provisioning", "Active", "Inactive", "Failed", "Deprovisioning"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"Provisioning",
-						"Active",
-						"Inactive",
-						"Failed",
-						"Deprovisioning",
-					),
-				},
+				Description: `Current state of the workspace`,
 			},
 			"tags": schema.ListAttribute{
 				Computed:    true,

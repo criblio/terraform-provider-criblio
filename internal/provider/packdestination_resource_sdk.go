@@ -10,33 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *PackDestinationResourceModel) RefreshFromOperationsCreatePackOutputResponseBody(ctx context.Context, resp *operations.CreatePackOutputResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *PackDestinationResourceModel) RefreshFromOperationsGetPackOutputByIDResponseBody(ctx context.Context, resp *operations.GetPackOutputByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *PackDestinationResourceModel) RefreshFromOperationsUpdatePackOutputByIDResponseBody(ctx context.Context, resp *operations.UpdatePackOutputByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *PackDestinationResourceModel) ToOperationsCreatePackOutputRequest(ctx context.Context) (*operations.CreatePackOutputRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -157,8 +130,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline = nil
 		}
 		systemFields := make([]string, 0, len(r.OutputDefault.SystemFields))
-		for _, systemFieldsItem := range r.OutputDefault.SystemFields {
-			systemFields = append(systemFields, systemFieldsItem.ValueString())
+		for systemFieldsIndex := range r.OutputDefault.SystemFields {
+			systemFields = append(systemFields, r.OutputDefault.SystemFields[systemFieldsIndex].ValueString())
 		}
 		environment := new(string)
 		if !r.OutputDefault.Environment.IsUnknown() && !r.OutputDefault.Environment.IsNull() {
@@ -167,8 +140,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment = nil
 		}
 		streamtags := make([]string, 0, len(r.OutputDefault.Streamtags))
-		for _, streamtagsItem := range r.OutputDefault.Streamtags {
-			streamtags = append(streamtags, streamtagsItem.ValueString())
+		for streamtagsIndex := range r.OutputDefault.Streamtags {
+			streamtags = append(streamtags, r.OutputDefault.Streamtags[streamtagsIndex].ValueString())
 		}
 		var defaultID string
 		defaultID = r.OutputDefault.DefaultID.ValueString()
@@ -201,8 +174,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline1 = nil
 		}
 		systemFields1 := make([]string, 0, len(r.OutputWebhook.SystemFields))
-		for _, systemFieldsItem1 := range r.OutputWebhook.SystemFields {
-			systemFields1 = append(systemFields1, systemFieldsItem1.ValueString())
+		for systemFieldsIndex1 := range r.OutputWebhook.SystemFields {
+			systemFields1 = append(systemFields1, r.OutputWebhook.SystemFields[systemFieldsIndex1].ValueString())
 		}
 		environment1 := new(string)
 		if !r.OutputWebhook.Environment.IsUnknown() && !r.OutputWebhook.Environment.IsNull() {
@@ -211,8 +184,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment1 = nil
 		}
 		streamtags1 := make([]string, 0, len(r.OutputWebhook.Streamtags))
-		for _, streamtagsItem1 := range r.OutputWebhook.Streamtags {
-			streamtags1 = append(streamtags1, streamtagsItem1.ValueString())
+		for streamtagsIndex1 := range r.OutputWebhook.Streamtags {
+			streamtags1 = append(streamtags1, r.OutputWebhook.Streamtags[streamtagsIndex1].ValueString())
 		}
 		method := new(shared.OutputWebhookMethod)
 		if !r.OutputWebhook.Method.IsUnknown() && !r.OutputWebhook.Method.IsNull() {
@@ -275,15 +248,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec = nil
 		}
 		extraHTTPHeaders := make([]shared.OutputWebhookExtraHTTPHeader, 0, len(r.OutputWebhook.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem := range r.OutputWebhook.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex := range r.OutputWebhook.ExtraHTTPHeaders {
 			name := new(string)
-			if !extraHTTPHeadersItem.Name.IsUnknown() && !extraHTTPHeadersItem.Name.IsNull() {
-				*name = extraHTTPHeadersItem.Name.ValueString()
+			if !r.OutputWebhook.ExtraHTTPHeaders[extraHTTPHeadersIndex].Name.IsUnknown() && !r.OutputWebhook.ExtraHTTPHeaders[extraHTTPHeadersIndex].Name.IsNull() {
+				*name = r.OutputWebhook.ExtraHTTPHeaders[extraHTTPHeadersIndex].Name.ValueString()
 			} else {
 				name = nil
 			}
 			var value string
-			value = extraHTTPHeadersItem.Value.ValueString()
+			value = r.OutputWebhook.ExtraHTTPHeaders[extraHTTPHeadersIndex].Value.ValueString()
 
 			extraHTTPHeaders = append(extraHTTPHeaders, shared.OutputWebhookExtraHTTPHeader{
 				Name:  name,
@@ -303,29 +276,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode = nil
 		}
 		safeHeaders := make([]string, 0, len(r.OutputWebhook.SafeHeaders))
-		for _, safeHeadersItem := range r.OutputWebhook.SafeHeaders {
-			safeHeaders = append(safeHeaders, safeHeadersItem.ValueString())
+		for safeHeadersIndex := range r.OutputWebhook.SafeHeaders {
+			safeHeaders = append(safeHeaders, r.OutputWebhook.SafeHeaders[safeHeadersIndex].ValueString())
 		}
 		responseRetrySettings := make([]shared.OutputWebhookResponseRetrySetting, 0, len(r.OutputWebhook.ResponseRetrySettings))
-		for _, responseRetrySettingsItem := range r.OutputWebhook.ResponseRetrySettings {
+		for responseRetrySettingsIndex := range r.OutputWebhook.ResponseRetrySettings {
 			var httpStatus float64
-			httpStatus = responseRetrySettingsItem.HTTPStatus.ValueFloat64()
+			httpStatus = r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].HTTPStatus.ValueFloat64()
 
 			initialBackoff := new(float64)
-			if !responseRetrySettingsItem.InitialBackoff.IsUnknown() && !responseRetrySettingsItem.InitialBackoff.IsNull() {
-				*initialBackoff = responseRetrySettingsItem.InitialBackoff.ValueFloat64()
+			if !r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].InitialBackoff.IsUnknown() && !r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].InitialBackoff.IsNull() {
+				*initialBackoff = r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff = nil
 			}
 			backoffRate := new(float64)
-			if !responseRetrySettingsItem.BackoffRate.IsUnknown() && !responseRetrySettingsItem.BackoffRate.IsNull() {
-				*backoffRate = responseRetrySettingsItem.BackoffRate.ValueFloat64()
+			if !r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].BackoffRate.IsUnknown() && !r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].BackoffRate.IsNull() {
+				*backoffRate = r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate = nil
 			}
 			maxBackoff := new(float64)
-			if !responseRetrySettingsItem.MaxBackoff.IsUnknown() && !responseRetrySettingsItem.MaxBackoff.IsNull() {
-				*maxBackoff = responseRetrySettingsItem.MaxBackoff.ValueFloat64()
+			if !r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].MaxBackoff.IsUnknown() && !r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].MaxBackoff.IsNull() {
+				*maxBackoff = r.OutputWebhook.ResponseRetrySettings[responseRetrySettingsIndex].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff = nil
 			}
@@ -628,12 +601,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			tokenTimeoutSecs = nil
 		}
 		oauthParams := make([]shared.OutputWebhookOauthParam, 0, len(r.OutputWebhook.OauthParams))
-		for _, oauthParamsItem := range r.OutputWebhook.OauthParams {
+		for oauthParamsIndex := range r.OutputWebhook.OauthParams {
 			var name1 string
-			name1 = oauthParamsItem.Name.ValueString()
+			name1 = r.OutputWebhook.OauthParams[oauthParamsIndex].Name.ValueString()
 
 			var value1 string
-			value1 = oauthParamsItem.Value.ValueString()
+			value1 = r.OutputWebhook.OauthParams[oauthParamsIndex].Value.ValueString()
 
 			oauthParams = append(oauthParams, shared.OutputWebhookOauthParam{
 				Name:  name1,
@@ -641,12 +614,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		oauthHeaders := make([]shared.OutputWebhookOauthHeader, 0, len(r.OutputWebhook.OauthHeaders))
-		for _, oauthHeadersItem := range r.OutputWebhook.OauthHeaders {
+		for oauthHeadersIndex := range r.OutputWebhook.OauthHeaders {
 			var name2 string
-			name2 = oauthHeadersItem.Name.ValueString()
+			name2 = r.OutputWebhook.OauthHeaders[oauthHeadersIndex].Name.ValueString()
 
 			var value2 string
-			value2 = oauthHeadersItem.Value.ValueString()
+			value2 = r.OutputWebhook.OauthHeaders[oauthHeadersIndex].Value.ValueString()
 
 			oauthHeaders = append(oauthHeaders, shared.OutputWebhookOauthHeader{
 				Name:  name2,
@@ -666,13 +639,13 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			excludeSelf = nil
 		}
 		urls := make([]shared.OutputWebhookURL, 0, len(r.OutputWebhook.Urls))
-		for _, urlsItem := range r.OutputWebhook.Urls {
+		for urlsIndex := range r.OutputWebhook.Urls {
 			var url1 string
-			url1 = urlsItem.URL.ValueString()
+			url1 = r.OutputWebhook.Urls[urlsIndex].URL.ValueString()
 
 			weight := new(float64)
-			if !urlsItem.Weight.IsUnknown() && !urlsItem.Weight.IsNull() {
-				*weight = urlsItem.Weight.ValueFloat64()
+			if !r.OutputWebhook.Urls[urlsIndex].Weight.IsUnknown() && !r.OutputWebhook.Urls[urlsIndex].Weight.IsNull() {
+				*weight = r.OutputWebhook.Urls[urlsIndex].Weight.ValueFloat64()
 			} else {
 				weight = nil
 			}
@@ -784,8 +757,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline2 = nil
 		}
 		systemFields2 := make([]string, 0, len(r.OutputSentinel.SystemFields))
-		for _, systemFieldsItem2 := range r.OutputSentinel.SystemFields {
-			systemFields2 = append(systemFields2, systemFieldsItem2.ValueString())
+		for systemFieldsIndex2 := range r.OutputSentinel.SystemFields {
+			systemFields2 = append(systemFields2, r.OutputSentinel.SystemFields[systemFieldsIndex2].ValueString())
 		}
 		environment2 := new(string)
 		if !r.OutputSentinel.Environment.IsUnknown() && !r.OutputSentinel.Environment.IsNull() {
@@ -794,8 +767,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment2 = nil
 		}
 		streamtags2 := make([]string, 0, len(r.OutputSentinel.Streamtags))
-		for _, streamtagsItem2 := range r.OutputSentinel.Streamtags {
-			streamtags2 = append(streamtags2, streamtagsItem2.ValueString())
+		for streamtagsIndex2 := range r.OutputSentinel.Streamtags {
+			streamtags2 = append(streamtags2, r.OutputSentinel.Streamtags[streamtagsIndex2].ValueString())
 		}
 		keepAlive1 := new(bool)
 		if !r.OutputSentinel.KeepAlive.IsUnknown() && !r.OutputSentinel.KeepAlive.IsNull() {
@@ -846,15 +819,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec1 = nil
 		}
 		extraHTTPHeaders1 := make([]shared.OutputSentinelExtraHTTPHeader, 0, len(r.OutputSentinel.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem1 := range r.OutputSentinel.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex1 := range r.OutputSentinel.ExtraHTTPHeaders {
 			name3 := new(string)
-			if !extraHTTPHeadersItem1.Name.IsUnknown() && !extraHTTPHeadersItem1.Name.IsNull() {
-				*name3 = extraHTTPHeadersItem1.Name.ValueString()
+			if !r.OutputSentinel.ExtraHTTPHeaders[extraHTTPHeadersIndex1].Name.IsUnknown() && !r.OutputSentinel.ExtraHTTPHeaders[extraHTTPHeadersIndex1].Name.IsNull() {
+				*name3 = r.OutputSentinel.ExtraHTTPHeaders[extraHTTPHeadersIndex1].Name.ValueString()
 			} else {
 				name3 = nil
 			}
 			var value3 string
-			value3 = extraHTTPHeadersItem1.Value.ValueString()
+			value3 = r.OutputSentinel.ExtraHTTPHeaders[extraHTTPHeadersIndex1].Value.ValueString()
 
 			extraHTTPHeaders1 = append(extraHTTPHeaders1, shared.OutputSentinelExtraHTTPHeader{
 				Name:  name3,
@@ -874,29 +847,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode1 = nil
 		}
 		safeHeaders1 := make([]string, 0, len(r.OutputSentinel.SafeHeaders))
-		for _, safeHeadersItem1 := range r.OutputSentinel.SafeHeaders {
-			safeHeaders1 = append(safeHeaders1, safeHeadersItem1.ValueString())
+		for safeHeadersIndex1 := range r.OutputSentinel.SafeHeaders {
+			safeHeaders1 = append(safeHeaders1, r.OutputSentinel.SafeHeaders[safeHeadersIndex1].ValueString())
 		}
 		responseRetrySettings1 := make([]shared.OutputSentinelResponseRetrySetting, 0, len(r.OutputSentinel.ResponseRetrySettings))
-		for _, responseRetrySettingsItem1 := range r.OutputSentinel.ResponseRetrySettings {
+		for responseRetrySettingsIndex1 := range r.OutputSentinel.ResponseRetrySettings {
 			var httpStatus1 float64
-			httpStatus1 = responseRetrySettingsItem1.HTTPStatus.ValueFloat64()
+			httpStatus1 = r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].HTTPStatus.ValueFloat64()
 
 			initialBackoff2 := new(float64)
-			if !responseRetrySettingsItem1.InitialBackoff.IsUnknown() && !responseRetrySettingsItem1.InitialBackoff.IsNull() {
-				*initialBackoff2 = responseRetrySettingsItem1.InitialBackoff.ValueFloat64()
+			if !r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].InitialBackoff.IsUnknown() && !r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].InitialBackoff.IsNull() {
+				*initialBackoff2 = r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff2 = nil
 			}
 			backoffRate2 := new(float64)
-			if !responseRetrySettingsItem1.BackoffRate.IsUnknown() && !responseRetrySettingsItem1.BackoffRate.IsNull() {
-				*backoffRate2 = responseRetrySettingsItem1.BackoffRate.ValueFloat64()
+			if !r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].BackoffRate.IsUnknown() && !r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].BackoffRate.IsNull() {
+				*backoffRate2 = r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate2 = nil
 			}
 			maxBackoff2 := new(float64)
-			if !responseRetrySettingsItem1.MaxBackoff.IsUnknown() && !responseRetrySettingsItem1.MaxBackoff.IsNull() {
-				*maxBackoff2 = responseRetrySettingsItem1.MaxBackoff.ValueFloat64()
+			if !r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].MaxBackoff.IsUnknown() && !r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].MaxBackoff.IsNull() {
+				*maxBackoff2 = r.OutputSentinel.ResponseRetrySettings[responseRetrySettingsIndex1].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff2 = nil
 			}
@@ -1180,8 +1153,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline3 = nil
 		}
 		systemFields3 := make([]string, 0, len(r.OutputDevnull.SystemFields))
-		for _, systemFieldsItem3 := range r.OutputDevnull.SystemFields {
-			systemFields3 = append(systemFields3, systemFieldsItem3.ValueString())
+		for systemFieldsIndex3 := range r.OutputDevnull.SystemFields {
+			systemFields3 = append(systemFields3, r.OutputDevnull.SystemFields[systemFieldsIndex3].ValueString())
 		}
 		environment3 := new(string)
 		if !r.OutputDevnull.Environment.IsUnknown() && !r.OutputDevnull.Environment.IsNull() {
@@ -1190,8 +1163,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment3 = nil
 		}
 		streamtags3 := make([]string, 0, len(r.OutputDevnull.Streamtags))
-		for _, streamtagsItem3 := range r.OutputDevnull.Streamtags {
-			streamtags3 = append(streamtags3, streamtagsItem3.ValueString())
+		for streamtagsIndex3 := range r.OutputDevnull.Streamtags {
+			streamtags3 = append(streamtags3, r.OutputDevnull.Streamtags[streamtagsIndex3].ValueString())
 		}
 		outputDevnull = &shared.OutputDevnull{
 			ID:           id3,
@@ -1220,8 +1193,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline4 = nil
 		}
 		systemFields4 := make([]string, 0, len(r.OutputSyslog.SystemFields))
-		for _, systemFieldsItem4 := range r.OutputSyslog.SystemFields {
-			systemFields4 = append(systemFields4, systemFieldsItem4.ValueString())
+		for systemFieldsIndex4 := range r.OutputSyslog.SystemFields {
+			systemFields4 = append(systemFields4, r.OutputSyslog.SystemFields[systemFieldsIndex4].ValueString())
 		}
 		environment4 := new(string)
 		if !r.OutputSyslog.Environment.IsUnknown() && !r.OutputSyslog.Environment.IsNull() {
@@ -1230,8 +1203,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment4 = nil
 		}
 		streamtags4 := make([]string, 0, len(r.OutputSyslog.Streamtags))
-		for _, streamtagsItem4 := range r.OutputSyslog.Streamtags {
-			streamtags4 = append(streamtags4, streamtagsItem4.ValueString())
+		for streamtagsIndex4 := range r.OutputSyslog.Streamtags {
+			streamtags4 = append(streamtags4, r.OutputSyslog.Streamtags[streamtagsIndex4].ValueString())
 		}
 		protocol := new(shared.OutputSyslogProtocol)
 		if !r.OutputSyslog.Protocol.IsUnknown() && !r.OutputSyslog.Protocol.IsNull() {
@@ -1517,8 +1490,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline5 = nil
 		}
 		systemFields5 := make([]string, 0, len(r.OutputSplunk.SystemFields))
-		for _, systemFieldsItem5 := range r.OutputSplunk.SystemFields {
-			systemFields5 = append(systemFields5, systemFieldsItem5.ValueString())
+		for systemFieldsIndex5 := range r.OutputSplunk.SystemFields {
+			systemFields5 = append(systemFields5, r.OutputSplunk.SystemFields[systemFieldsIndex5].ValueString())
 		}
 		environment5 := new(string)
 		if !r.OutputSplunk.Environment.IsUnknown() && !r.OutputSplunk.Environment.IsNull() {
@@ -1527,8 +1500,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment5 = nil
 		}
 		streamtags5 := make([]string, 0, len(r.OutputSplunk.Streamtags))
-		for _, streamtagsItem5 := range r.OutputSplunk.Streamtags {
-			streamtags5 = append(streamtags5, streamtagsItem5.ValueString())
+		for streamtagsIndex5 := range r.OutputSplunk.Streamtags {
+			streamtags5 = append(streamtags5, r.OutputSplunk.Streamtags[streamtagsIndex5].ValueString())
 		}
 		var host1 string
 		host1 = r.OutputSplunk.Host.ValueString()
@@ -1799,8 +1772,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline6 = nil
 		}
 		systemFields6 := make([]string, 0, len(r.OutputSplunkLb.SystemFields))
-		for _, systemFieldsItem6 := range r.OutputSplunkLb.SystemFields {
-			systemFields6 = append(systemFields6, systemFieldsItem6.ValueString())
+		for systemFieldsIndex6 := range r.OutputSplunkLb.SystemFields {
+			systemFields6 = append(systemFields6, r.OutputSplunkLb.SystemFields[systemFieldsIndex6].ValueString())
 		}
 		environment6 := new(string)
 		if !r.OutputSplunkLb.Environment.IsUnknown() && !r.OutputSplunkLb.Environment.IsNull() {
@@ -1809,8 +1782,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment6 = nil
 		}
 		streamtags6 := make([]string, 0, len(r.OutputSplunkLb.Streamtags))
-		for _, streamtagsItem6 := range r.OutputSplunkLb.Streamtags {
-			streamtags6 = append(streamtags6, streamtagsItem6.ValueString())
+		for streamtagsIndex6 := range r.OutputSplunkLb.Streamtags {
+			streamtags6 = append(streamtags6, r.OutputSplunkLb.Streamtags[streamtagsIndex6].ValueString())
 		}
 		dnsResolvePeriodSec1 := new(float64)
 		if !r.OutputSplunkLb.DNSResolvePeriodSec.IsUnknown() && !r.OutputSplunkLb.DNSResolvePeriodSec.IsNull() {
@@ -2019,10 +1992,10 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				rejectUnauthorized5 = nil
 			}
 			authTokens := make([]shared.OutputSplunkLbAuthToken, 0, len(r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens))
-			for _, authTokensItem := range r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens {
+			for authTokensIndex := range r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens {
 				authType4 := new(shared.IndexerDiscoveryConfigsAuthTokenAuthenticationMethod)
-				if !authTokensItem.AuthType.IsUnknown() && !authTokensItem.AuthType.IsNull() {
-					*authType4 = shared.IndexerDiscoveryConfigsAuthTokenAuthenticationMethod(authTokensItem.AuthType.ValueString())
+				if !r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens[authTokensIndex].AuthType.IsUnknown() && !r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens[authTokensIndex].AuthType.IsNull() {
+					*authType4 = shared.IndexerDiscoveryConfigsAuthTokenAuthenticationMethod(r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens[authTokensIndex].AuthType.ValueString())
 				} else {
 					authType4 = nil
 				}
@@ -2066,31 +2039,31 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			excludeSelf1 = nil
 		}
 		hosts := make([]shared.OutputSplunkLbHost, 0, len(r.OutputSplunkLb.Hosts))
-		for _, hostsItem := range r.OutputSplunkLb.Hosts {
+		for hostsIndex := range r.OutputSplunkLb.Hosts {
 			var host2 string
-			host2 = hostsItem.Host.ValueString()
+			host2 = r.OutputSplunkLb.Hosts[hostsIndex].Host.ValueString()
 
 			port2 := new(float64)
-			if !hostsItem.Port.IsUnknown() && !hostsItem.Port.IsNull() {
-				*port2 = hostsItem.Port.ValueFloat64()
+			if !r.OutputSplunkLb.Hosts[hostsIndex].Port.IsUnknown() && !r.OutputSplunkLb.Hosts[hostsIndex].Port.IsNull() {
+				*port2 = r.OutputSplunkLb.Hosts[hostsIndex].Port.ValueFloat64()
 			} else {
 				port2 = nil
 			}
 			tls4 := new(shared.OutputSplunkLbTLS)
-			if !hostsItem.TLS.IsUnknown() && !hostsItem.TLS.IsNull() {
-				*tls4 = shared.OutputSplunkLbTLS(hostsItem.TLS.ValueString())
+			if !r.OutputSplunkLb.Hosts[hostsIndex].TLS.IsUnknown() && !r.OutputSplunkLb.Hosts[hostsIndex].TLS.IsNull() {
+				*tls4 = shared.OutputSplunkLbTLS(r.OutputSplunkLb.Hosts[hostsIndex].TLS.ValueString())
 			} else {
 				tls4 = nil
 			}
 			servername4 := new(string)
-			if !hostsItem.Servername.IsUnknown() && !hostsItem.Servername.IsNull() {
-				*servername4 = hostsItem.Servername.ValueString()
+			if !r.OutputSplunkLb.Hosts[hostsIndex].Servername.IsUnknown() && !r.OutputSplunkLb.Hosts[hostsIndex].Servername.IsNull() {
+				*servername4 = r.OutputSplunkLb.Hosts[hostsIndex].Servername.ValueString()
 			} else {
 				servername4 = nil
 			}
 			weight1 := new(float64)
-			if !hostsItem.Weight.IsUnknown() && !hostsItem.Weight.IsNull() {
-				*weight1 = hostsItem.Weight.ValueFloat64()
+			if !r.OutputSplunkLb.Hosts[hostsIndex].Weight.IsUnknown() && !r.OutputSplunkLb.Hosts[hostsIndex].Weight.IsNull() {
+				*weight1 = r.OutputSplunkLb.Hosts[hostsIndex].Weight.ValueFloat64()
 			} else {
 				weight1 = nil
 			}
@@ -2212,8 +2185,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline7 = nil
 		}
 		systemFields7 := make([]string, 0, len(r.OutputSplunkHec.SystemFields))
-		for _, systemFieldsItem7 := range r.OutputSplunkHec.SystemFields {
-			systemFields7 = append(systemFields7, systemFieldsItem7.ValueString())
+		for systemFieldsIndex7 := range r.OutputSplunkHec.SystemFields {
+			systemFields7 = append(systemFields7, r.OutputSplunkHec.SystemFields[systemFieldsIndex7].ValueString())
 		}
 		environment7 := new(string)
 		if !r.OutputSplunkHec.Environment.IsUnknown() && !r.OutputSplunkHec.Environment.IsNull() {
@@ -2222,8 +2195,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment7 = nil
 		}
 		streamtags7 := make([]string, 0, len(r.OutputSplunkHec.Streamtags))
-		for _, streamtagsItem7 := range r.OutputSplunkHec.Streamtags {
-			streamtags7 = append(streamtags7, streamtagsItem7.ValueString())
+		for streamtagsIndex7 := range r.OutputSplunkHec.Streamtags {
+			streamtags7 = append(streamtags7, r.OutputSplunkHec.Streamtags[streamtagsIndex7].ValueString())
 		}
 		loadBalanced2 := new(bool)
 		if !r.OutputSplunkHec.LoadBalanced.IsUnknown() && !r.OutputSplunkHec.LoadBalanced.IsNull() {
@@ -2286,15 +2259,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec2 = nil
 		}
 		extraHTTPHeaders2 := make([]shared.OutputSplunkHecExtraHTTPHeader, 0, len(r.OutputSplunkHec.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem2 := range r.OutputSplunkHec.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex2 := range r.OutputSplunkHec.ExtraHTTPHeaders {
 			name4 := new(string)
-			if !extraHTTPHeadersItem2.Name.IsUnknown() && !extraHTTPHeadersItem2.Name.IsNull() {
-				*name4 = extraHTTPHeadersItem2.Name.ValueString()
+			if !r.OutputSplunkHec.ExtraHTTPHeaders[extraHTTPHeadersIndex2].Name.IsUnknown() && !r.OutputSplunkHec.ExtraHTTPHeaders[extraHTTPHeadersIndex2].Name.IsNull() {
+				*name4 = r.OutputSplunkHec.ExtraHTTPHeaders[extraHTTPHeadersIndex2].Name.ValueString()
 			} else {
 				name4 = nil
 			}
 			var value4 string
-			value4 = extraHTTPHeadersItem2.Value.ValueString()
+			value4 = r.OutputSplunkHec.ExtraHTTPHeaders[extraHTTPHeadersIndex2].Value.ValueString()
 
 			extraHTTPHeaders2 = append(extraHTTPHeaders2, shared.OutputSplunkHecExtraHTTPHeader{
 				Name:  name4,
@@ -2308,8 +2281,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode2 = nil
 		}
 		safeHeaders2 := make([]string, 0, len(r.OutputSplunkHec.SafeHeaders))
-		for _, safeHeadersItem2 := range r.OutputSplunkHec.SafeHeaders {
-			safeHeaders2 = append(safeHeaders2, safeHeadersItem2.ValueString())
+		for safeHeadersIndex2 := range r.OutputSplunkHec.SafeHeaders {
+			safeHeaders2 = append(safeHeaders2, r.OutputSplunkHec.SafeHeaders[safeHeadersIndex2].ValueString())
 		}
 		enableMultiMetrics2 := new(bool)
 		if !r.OutputSplunkHec.EnableMultiMetrics.IsUnknown() && !r.OutputSplunkHec.EnableMultiMetrics.IsNull() {
@@ -2324,25 +2297,25 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			authType6 = nil
 		}
 		responseRetrySettings2 := make([]shared.OutputSplunkHecResponseRetrySetting, 0, len(r.OutputSplunkHec.ResponseRetrySettings))
-		for _, responseRetrySettingsItem2 := range r.OutputSplunkHec.ResponseRetrySettings {
+		for responseRetrySettingsIndex2 := range r.OutputSplunkHec.ResponseRetrySettings {
 			var httpStatus2 float64
-			httpStatus2 = responseRetrySettingsItem2.HTTPStatus.ValueFloat64()
+			httpStatus2 = r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].HTTPStatus.ValueFloat64()
 
 			initialBackoff4 := new(float64)
-			if !responseRetrySettingsItem2.InitialBackoff.IsUnknown() && !responseRetrySettingsItem2.InitialBackoff.IsNull() {
-				*initialBackoff4 = responseRetrySettingsItem2.InitialBackoff.ValueFloat64()
+			if !r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].InitialBackoff.IsUnknown() && !r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].InitialBackoff.IsNull() {
+				*initialBackoff4 = r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff4 = nil
 			}
 			backoffRate4 := new(float64)
-			if !responseRetrySettingsItem2.BackoffRate.IsUnknown() && !responseRetrySettingsItem2.BackoffRate.IsNull() {
-				*backoffRate4 = responseRetrySettingsItem2.BackoffRate.ValueFloat64()
+			if !r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].BackoffRate.IsUnknown() && !r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].BackoffRate.IsNull() {
+				*backoffRate4 = r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate4 = nil
 			}
 			maxBackoff4 := new(float64)
-			if !responseRetrySettingsItem2.MaxBackoff.IsUnknown() && !responseRetrySettingsItem2.MaxBackoff.IsNull() {
-				*maxBackoff4 = responseRetrySettingsItem2.MaxBackoff.ValueFloat64()
+			if !r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].MaxBackoff.IsUnknown() && !r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].MaxBackoff.IsNull() {
+				*maxBackoff4 = r.OutputSplunkHec.ResponseRetrySettings[responseRetrySettingsIndex2].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff4 = nil
 			}
@@ -2423,16 +2396,16 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			excludeSelf2 = nil
 		}
 		urls1 := make([]shared.OutputSplunkHecURL, 0, len(r.OutputSplunkHec.Urls))
-		for _, urlsItem1 := range r.OutputSplunkHec.Urls {
+		for urlsIndex1 := range r.OutputSplunkHec.Urls {
 			url4 := new(string)
-			if !urlsItem1.URL.IsUnknown() && !urlsItem1.URL.IsNull() {
-				*url4 = urlsItem1.URL.ValueString()
+			if !r.OutputSplunkHec.Urls[urlsIndex1].URL.IsUnknown() && !r.OutputSplunkHec.Urls[urlsIndex1].URL.IsNull() {
+				*url4 = r.OutputSplunkHec.Urls[urlsIndex1].URL.ValueString()
 			} else {
 				url4 = nil
 			}
 			weight2 := new(float64)
-			if !urlsItem1.Weight.IsUnknown() && !urlsItem1.Weight.IsNull() {
-				*weight2 = urlsItem1.Weight.ValueFloat64()
+			if !r.OutputSplunkHec.Urls[urlsIndex1].Weight.IsUnknown() && !r.OutputSplunkHec.Urls[urlsIndex1].Weight.IsNull() {
+				*weight2 = r.OutputSplunkHec.Urls[urlsIndex1].Weight.ValueFloat64()
 			} else {
 				weight2 = nil
 			}
@@ -2567,8 +2540,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline8 = nil
 		}
 		systemFields8 := make([]string, 0, len(r.OutputTcpjson.SystemFields))
-		for _, systemFieldsItem8 := range r.OutputTcpjson.SystemFields {
-			systemFields8 = append(systemFields8, systemFieldsItem8.ValueString())
+		for systemFieldsIndex8 := range r.OutputTcpjson.SystemFields {
+			systemFields8 = append(systemFields8, r.OutputTcpjson.SystemFields[systemFieldsIndex8].ValueString())
 		}
 		environment8 := new(string)
 		if !r.OutputTcpjson.Environment.IsUnknown() && !r.OutputTcpjson.Environment.IsNull() {
@@ -2577,8 +2550,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment8 = nil
 		}
 		streamtags8 := make([]string, 0, len(r.OutputTcpjson.Streamtags))
-		for _, streamtagsItem8 := range r.OutputTcpjson.Streamtags {
-			streamtags8 = append(streamtags8, streamtagsItem8.ValueString())
+		for streamtagsIndex8 := range r.OutputTcpjson.Streamtags {
+			streamtags8 = append(streamtags8, r.OutputTcpjson.Streamtags[streamtagsIndex8].ValueString())
 		}
 		loadBalanced3 := new(bool)
 		if !r.OutputTcpjson.LoadBalanced.IsUnknown() && !r.OutputTcpjson.LoadBalanced.IsNull() {
@@ -2740,28 +2713,28 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			excludeSelf3 = nil
 		}
 		hosts1 := make([]shared.OutputTcpjsonHost, 0, len(r.OutputTcpjson.Hosts))
-		for _, hostsItem1 := range r.OutputTcpjson.Hosts {
+		for hostsIndex1 := range r.OutputTcpjson.Hosts {
 			var host4 string
-			host4 = hostsItem1.Host.ValueString()
+			host4 = r.OutputTcpjson.Hosts[hostsIndex1].Host.ValueString()
 
 			var port4 float64
-			port4 = hostsItem1.Port.ValueFloat64()
+			port4 = r.OutputTcpjson.Hosts[hostsIndex1].Port.ValueFloat64()
 
 			tls6 := new(shared.OutputTcpjsonTLS)
-			if !hostsItem1.TLS.IsUnknown() && !hostsItem1.TLS.IsNull() {
-				*tls6 = shared.OutputTcpjsonTLS(hostsItem1.TLS.ValueString())
+			if !r.OutputTcpjson.Hosts[hostsIndex1].TLS.IsUnknown() && !r.OutputTcpjson.Hosts[hostsIndex1].TLS.IsNull() {
+				*tls6 = shared.OutputTcpjsonTLS(r.OutputTcpjson.Hosts[hostsIndex1].TLS.ValueString())
 			} else {
 				tls6 = nil
 			}
 			servername6 := new(string)
-			if !hostsItem1.Servername.IsUnknown() && !hostsItem1.Servername.IsNull() {
-				*servername6 = hostsItem1.Servername.ValueString()
+			if !r.OutputTcpjson.Hosts[hostsIndex1].Servername.IsUnknown() && !r.OutputTcpjson.Hosts[hostsIndex1].Servername.IsNull() {
+				*servername6 = r.OutputTcpjson.Hosts[hostsIndex1].Servername.ValueString()
 			} else {
 				servername6 = nil
 			}
 			weight3 := new(float64)
-			if !hostsItem1.Weight.IsUnknown() && !hostsItem1.Weight.IsNull() {
-				*weight3 = hostsItem1.Weight.ValueFloat64()
+			if !r.OutputTcpjson.Hosts[hostsIndex1].Weight.IsUnknown() && !r.OutputTcpjson.Hosts[hostsIndex1].Weight.IsNull() {
+				*weight3 = r.OutputTcpjson.Hosts[hostsIndex1].Weight.ValueFloat64()
 			} else {
 				weight3 = nil
 			}
@@ -2901,8 +2874,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline9 = nil
 		}
 		systemFields9 := make([]string, 0, len(r.OutputWavefront.SystemFields))
-		for _, systemFieldsItem9 := range r.OutputWavefront.SystemFields {
-			systemFields9 = append(systemFields9, systemFieldsItem9.ValueString())
+		for systemFieldsIndex9 := range r.OutputWavefront.SystemFields {
+			systemFields9 = append(systemFields9, r.OutputWavefront.SystemFields[systemFieldsIndex9].ValueString())
 		}
 		environment9 := new(string)
 		if !r.OutputWavefront.Environment.IsUnknown() && !r.OutputWavefront.Environment.IsNull() {
@@ -2911,8 +2884,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment9 = nil
 		}
 		streamtags9 := make([]string, 0, len(r.OutputWavefront.Streamtags))
-		for _, streamtagsItem9 := range r.OutputWavefront.Streamtags {
-			streamtags9 = append(streamtags9, streamtagsItem9.ValueString())
+		for streamtagsIndex9 := range r.OutputWavefront.Streamtags {
+			streamtags9 = append(streamtags9, r.OutputWavefront.Streamtags[streamtagsIndex9].ValueString())
 		}
 		authType8 := new(shared.OutputWavefrontAuthenticationMethod)
 		if !r.OutputWavefront.AuthType.IsUnknown() && !r.OutputWavefront.AuthType.IsNull() {
@@ -2969,15 +2942,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec3 = nil
 		}
 		extraHTTPHeaders3 := make([]shared.OutputWavefrontExtraHTTPHeader, 0, len(r.OutputWavefront.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem3 := range r.OutputWavefront.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex3 := range r.OutputWavefront.ExtraHTTPHeaders {
 			name5 := new(string)
-			if !extraHTTPHeadersItem3.Name.IsUnknown() && !extraHTTPHeadersItem3.Name.IsNull() {
-				*name5 = extraHTTPHeadersItem3.Name.ValueString()
+			if !r.OutputWavefront.ExtraHTTPHeaders[extraHTTPHeadersIndex3].Name.IsUnknown() && !r.OutputWavefront.ExtraHTTPHeaders[extraHTTPHeadersIndex3].Name.IsNull() {
+				*name5 = r.OutputWavefront.ExtraHTTPHeaders[extraHTTPHeadersIndex3].Name.ValueString()
 			} else {
 				name5 = nil
 			}
 			var value5 string
-			value5 = extraHTTPHeadersItem3.Value.ValueString()
+			value5 = r.OutputWavefront.ExtraHTTPHeaders[extraHTTPHeadersIndex3].Value.ValueString()
 
 			extraHTTPHeaders3 = append(extraHTTPHeaders3, shared.OutputWavefrontExtraHTTPHeader{
 				Name:  name5,
@@ -2997,29 +2970,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode3 = nil
 		}
 		safeHeaders3 := make([]string, 0, len(r.OutputWavefront.SafeHeaders))
-		for _, safeHeadersItem3 := range r.OutputWavefront.SafeHeaders {
-			safeHeaders3 = append(safeHeaders3, safeHeadersItem3.ValueString())
+		for safeHeadersIndex3 := range r.OutputWavefront.SafeHeaders {
+			safeHeaders3 = append(safeHeaders3, r.OutputWavefront.SafeHeaders[safeHeadersIndex3].ValueString())
 		}
 		responseRetrySettings3 := make([]shared.OutputWavefrontResponseRetrySetting, 0, len(r.OutputWavefront.ResponseRetrySettings))
-		for _, responseRetrySettingsItem3 := range r.OutputWavefront.ResponseRetrySettings {
+		for responseRetrySettingsIndex3 := range r.OutputWavefront.ResponseRetrySettings {
 			var httpStatus3 float64
-			httpStatus3 = responseRetrySettingsItem3.HTTPStatus.ValueFloat64()
+			httpStatus3 = r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].HTTPStatus.ValueFloat64()
 
 			initialBackoff6 := new(float64)
-			if !responseRetrySettingsItem3.InitialBackoff.IsUnknown() && !responseRetrySettingsItem3.InitialBackoff.IsNull() {
-				*initialBackoff6 = responseRetrySettingsItem3.InitialBackoff.ValueFloat64()
+			if !r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].InitialBackoff.IsUnknown() && !r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].InitialBackoff.IsNull() {
+				*initialBackoff6 = r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff6 = nil
 			}
 			backoffRate6 := new(float64)
-			if !responseRetrySettingsItem3.BackoffRate.IsUnknown() && !responseRetrySettingsItem3.BackoffRate.IsNull() {
-				*backoffRate6 = responseRetrySettingsItem3.BackoffRate.ValueFloat64()
+			if !r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].BackoffRate.IsUnknown() && !r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].BackoffRate.IsNull() {
+				*backoffRate6 = r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate6 = nil
 			}
 			maxBackoff6 := new(float64)
-			if !responseRetrySettingsItem3.MaxBackoff.IsUnknown() && !responseRetrySettingsItem3.MaxBackoff.IsNull() {
-				*maxBackoff6 = responseRetrySettingsItem3.MaxBackoff.ValueFloat64()
+			if !r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].MaxBackoff.IsUnknown() && !r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].MaxBackoff.IsNull() {
+				*maxBackoff6 = r.OutputWavefront.ResponseRetrySettings[responseRetrySettingsIndex3].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff6 = nil
 			}
@@ -3190,8 +3163,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline10 = nil
 		}
 		systemFields10 := make([]string, 0, len(r.OutputSignalfx.SystemFields))
-		for _, systemFieldsItem10 := range r.OutputSignalfx.SystemFields {
-			systemFields10 = append(systemFields10, systemFieldsItem10.ValueString())
+		for systemFieldsIndex10 := range r.OutputSignalfx.SystemFields {
+			systemFields10 = append(systemFields10, r.OutputSignalfx.SystemFields[systemFieldsIndex10].ValueString())
 		}
 		environment10 := new(string)
 		if !r.OutputSignalfx.Environment.IsUnknown() && !r.OutputSignalfx.Environment.IsNull() {
@@ -3200,8 +3173,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment10 = nil
 		}
 		streamtags10 := make([]string, 0, len(r.OutputSignalfx.Streamtags))
-		for _, streamtagsItem10 := range r.OutputSignalfx.Streamtags {
-			streamtags10 = append(streamtags10, streamtagsItem10.ValueString())
+		for streamtagsIndex10 := range r.OutputSignalfx.Streamtags {
+			streamtags10 = append(streamtags10, r.OutputSignalfx.Streamtags[streamtagsIndex10].ValueString())
 		}
 		authType9 := new(shared.OutputSignalfxAuthenticationMethod)
 		if !r.OutputSignalfx.AuthType.IsUnknown() && !r.OutputSignalfx.AuthType.IsNull() {
@@ -3258,15 +3231,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec4 = nil
 		}
 		extraHTTPHeaders4 := make([]shared.OutputSignalfxExtraHTTPHeader, 0, len(r.OutputSignalfx.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem4 := range r.OutputSignalfx.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex4 := range r.OutputSignalfx.ExtraHTTPHeaders {
 			name6 := new(string)
-			if !extraHTTPHeadersItem4.Name.IsUnknown() && !extraHTTPHeadersItem4.Name.IsNull() {
-				*name6 = extraHTTPHeadersItem4.Name.ValueString()
+			if !r.OutputSignalfx.ExtraHTTPHeaders[extraHTTPHeadersIndex4].Name.IsUnknown() && !r.OutputSignalfx.ExtraHTTPHeaders[extraHTTPHeadersIndex4].Name.IsNull() {
+				*name6 = r.OutputSignalfx.ExtraHTTPHeaders[extraHTTPHeadersIndex4].Name.ValueString()
 			} else {
 				name6 = nil
 			}
 			var value6 string
-			value6 = extraHTTPHeadersItem4.Value.ValueString()
+			value6 = r.OutputSignalfx.ExtraHTTPHeaders[extraHTTPHeadersIndex4].Value.ValueString()
 
 			extraHTTPHeaders4 = append(extraHTTPHeaders4, shared.OutputSignalfxExtraHTTPHeader{
 				Name:  name6,
@@ -3286,29 +3259,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode4 = nil
 		}
 		safeHeaders4 := make([]string, 0, len(r.OutputSignalfx.SafeHeaders))
-		for _, safeHeadersItem4 := range r.OutputSignalfx.SafeHeaders {
-			safeHeaders4 = append(safeHeaders4, safeHeadersItem4.ValueString())
+		for safeHeadersIndex4 := range r.OutputSignalfx.SafeHeaders {
+			safeHeaders4 = append(safeHeaders4, r.OutputSignalfx.SafeHeaders[safeHeadersIndex4].ValueString())
 		}
 		responseRetrySettings4 := make([]shared.OutputSignalfxResponseRetrySetting, 0, len(r.OutputSignalfx.ResponseRetrySettings))
-		for _, responseRetrySettingsItem4 := range r.OutputSignalfx.ResponseRetrySettings {
+		for responseRetrySettingsIndex4 := range r.OutputSignalfx.ResponseRetrySettings {
 			var httpStatus4 float64
-			httpStatus4 = responseRetrySettingsItem4.HTTPStatus.ValueFloat64()
+			httpStatus4 = r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].HTTPStatus.ValueFloat64()
 
 			initialBackoff8 := new(float64)
-			if !responseRetrySettingsItem4.InitialBackoff.IsUnknown() && !responseRetrySettingsItem4.InitialBackoff.IsNull() {
-				*initialBackoff8 = responseRetrySettingsItem4.InitialBackoff.ValueFloat64()
+			if !r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].InitialBackoff.IsUnknown() && !r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].InitialBackoff.IsNull() {
+				*initialBackoff8 = r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff8 = nil
 			}
 			backoffRate8 := new(float64)
-			if !responseRetrySettingsItem4.BackoffRate.IsUnknown() && !responseRetrySettingsItem4.BackoffRate.IsNull() {
-				*backoffRate8 = responseRetrySettingsItem4.BackoffRate.ValueFloat64()
+			if !r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].BackoffRate.IsUnknown() && !r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].BackoffRate.IsNull() {
+				*backoffRate8 = r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate8 = nil
 			}
 			maxBackoff8 := new(float64)
-			if !responseRetrySettingsItem4.MaxBackoff.IsUnknown() && !responseRetrySettingsItem4.MaxBackoff.IsNull() {
-				*maxBackoff8 = responseRetrySettingsItem4.MaxBackoff.ValueFloat64()
+			if !r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].MaxBackoff.IsUnknown() && !r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].MaxBackoff.IsNull() {
+				*maxBackoff8 = r.OutputSignalfx.ResponseRetrySettings[responseRetrySettingsIndex4].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff8 = nil
 			}
@@ -3479,8 +3452,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline11 = nil
 		}
 		systemFields11 := make([]string, 0, len(r.OutputFilesystem.SystemFields))
-		for _, systemFieldsItem11 := range r.OutputFilesystem.SystemFields {
-			systemFields11 = append(systemFields11, systemFieldsItem11.ValueString())
+		for systemFieldsIndex11 := range r.OutputFilesystem.SystemFields {
+			systemFields11 = append(systemFields11, r.OutputFilesystem.SystemFields[systemFieldsIndex11].ValueString())
 		}
 		environment11 := new(string)
 		if !r.OutputFilesystem.Environment.IsUnknown() && !r.OutputFilesystem.Environment.IsNull() {
@@ -3489,8 +3462,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment11 = nil
 		}
 		streamtags11 := make([]string, 0, len(r.OutputFilesystem.Streamtags))
-		for _, streamtagsItem11 := range r.OutputFilesystem.Streamtags {
-			streamtags11 = append(streamtags11, streamtagsItem11.ValueString())
+		for streamtagsIndex11 := range r.OutputFilesystem.Streamtags {
+			streamtags11 = append(streamtags11, r.OutputFilesystem.Streamtags[streamtagsIndex11].ValueString())
 		}
 		var destPath string
 		destPath = r.OutputFilesystem.DestPath.ValueString()
@@ -3646,15 +3619,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			shouldLogInvalidRows = nil
 		}
 		keyValueMetadata := make([]shared.OutputFilesystemKeyValueMetadatum, 0, len(r.OutputFilesystem.KeyValueMetadata))
-		for _, keyValueMetadataItem := range r.OutputFilesystem.KeyValueMetadata {
+		for keyValueMetadataIndex := range r.OutputFilesystem.KeyValueMetadata {
 			key := new(string)
-			if !keyValueMetadataItem.Key.IsUnknown() && !keyValueMetadataItem.Key.IsNull() {
-				*key = keyValueMetadataItem.Key.ValueString()
+			if !r.OutputFilesystem.KeyValueMetadata[keyValueMetadataIndex].Key.IsUnknown() && !r.OutputFilesystem.KeyValueMetadata[keyValueMetadataIndex].Key.IsNull() {
+				*key = r.OutputFilesystem.KeyValueMetadata[keyValueMetadataIndex].Key.ValueString()
 			} else {
 				key = nil
 			}
 			var value7 string
-			value7 = keyValueMetadataItem.Value.ValueString()
+			value7 = r.OutputFilesystem.KeyValueMetadata[keyValueMetadataIndex].Value.ValueString()
 
 			keyValueMetadata = append(keyValueMetadata, shared.OutputFilesystemKeyValueMetadatum{
 				Key:   key,
@@ -3765,8 +3738,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline12 = nil
 		}
 		systemFields12 := make([]string, 0, len(r.OutputS3.SystemFields))
-		for _, systemFieldsItem12 := range r.OutputS3.SystemFields {
-			systemFields12 = append(systemFields12, systemFieldsItem12.ValueString())
+		for systemFieldsIndex12 := range r.OutputS3.SystemFields {
+			systemFields12 = append(systemFields12, r.OutputS3.SystemFields[systemFieldsIndex12].ValueString())
 		}
 		environment12 := new(string)
 		if !r.OutputS3.Environment.IsUnknown() && !r.OutputS3.Environment.IsNull() {
@@ -3775,8 +3748,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment12 = nil
 		}
 		streamtags12 := make([]string, 0, len(r.OutputS3.Streamtags))
-		for _, streamtagsItem12 := range r.OutputS3.Streamtags {
-			streamtags12 = append(streamtags12, streamtagsItem12.ValueString())
+		for streamtagsIndex12 := range r.OutputS3.Streamtags {
+			streamtags12 = append(streamtags12, r.OutputS3.Streamtags[streamtagsIndex12].ValueString())
 		}
 		var bucket string
 		bucket = r.OutputS3.Bucket.ValueString()
@@ -4058,15 +4031,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			shouldLogInvalidRows1 = nil
 		}
 		keyValueMetadata1 := make([]shared.OutputS3KeyValueMetadatum, 0, len(r.OutputS3.KeyValueMetadata))
-		for _, keyValueMetadataItem1 := range r.OutputS3.KeyValueMetadata {
+		for keyValueMetadataIndex1 := range r.OutputS3.KeyValueMetadata {
 			key1 := new(string)
-			if !keyValueMetadataItem1.Key.IsUnknown() && !keyValueMetadataItem1.Key.IsNull() {
-				*key1 = keyValueMetadataItem1.Key.ValueString()
+			if !r.OutputS3.KeyValueMetadata[keyValueMetadataIndex1].Key.IsUnknown() && !r.OutputS3.KeyValueMetadata[keyValueMetadataIndex1].Key.IsNull() {
+				*key1 = r.OutputS3.KeyValueMetadata[keyValueMetadataIndex1].Key.ValueString()
 			} else {
 				key1 = nil
 			}
 			var value8 string
-			value8 = keyValueMetadataItem1.Value.ValueString()
+			value8 = r.OutputS3.KeyValueMetadata[keyValueMetadataIndex1].Value.ValueString()
 
 			keyValueMetadata1 = append(keyValueMetadata1, shared.OutputS3KeyValueMetadatum{
 				Key:   key1,
@@ -4198,8 +4171,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline13 = nil
 		}
 		systemFields13 := make([]string, 0, len(r.OutputAzureBlob.SystemFields))
-		for _, systemFieldsItem13 := range r.OutputAzureBlob.SystemFields {
-			systemFields13 = append(systemFields13, systemFieldsItem13.ValueString())
+		for systemFieldsIndex13 := range r.OutputAzureBlob.SystemFields {
+			systemFields13 = append(systemFields13, r.OutputAzureBlob.SystemFields[systemFieldsIndex13].ValueString())
 		}
 		environment13 := new(string)
 		if !r.OutputAzureBlob.Environment.IsUnknown() && !r.OutputAzureBlob.Environment.IsNull() {
@@ -4208,8 +4181,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment13 = nil
 		}
 		streamtags13 := make([]string, 0, len(r.OutputAzureBlob.Streamtags))
-		for _, streamtagsItem13 := range r.OutputAzureBlob.Streamtags {
-			streamtags13 = append(streamtags13, streamtagsItem13.ValueString())
+		for streamtagsIndex13 := range r.OutputAzureBlob.Streamtags {
+			streamtags13 = append(streamtags13, r.OutputAzureBlob.Streamtags[streamtagsIndex13].ValueString())
 		}
 		var containerName string
 		containerName = r.OutputAzureBlob.ContainerName.ValueString()
@@ -4395,15 +4368,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			shouldLogInvalidRows2 = nil
 		}
 		keyValueMetadata2 := make([]shared.OutputAzureBlobKeyValueMetadatum, 0, len(r.OutputAzureBlob.KeyValueMetadata))
-		for _, keyValueMetadataItem2 := range r.OutputAzureBlob.KeyValueMetadata {
+		for keyValueMetadataIndex2 := range r.OutputAzureBlob.KeyValueMetadata {
 			key2 := new(string)
-			if !keyValueMetadataItem2.Key.IsUnknown() && !keyValueMetadataItem2.Key.IsNull() {
-				*key2 = keyValueMetadataItem2.Key.ValueString()
+			if !r.OutputAzureBlob.KeyValueMetadata[keyValueMetadataIndex2].Key.IsUnknown() && !r.OutputAzureBlob.KeyValueMetadata[keyValueMetadataIndex2].Key.IsNull() {
+				*key2 = r.OutputAzureBlob.KeyValueMetadata[keyValueMetadataIndex2].Key.ValueString()
 			} else {
 				key2 = nil
 			}
 			var value9 string
-			value9 = keyValueMetadataItem2.Value.ValueString()
+			value9 = r.OutputAzureBlob.KeyValueMetadata[keyValueMetadataIndex2].Value.ValueString()
 
 			keyValueMetadata2 = append(keyValueMetadata2, shared.OutputAzureBlobKeyValueMetadatum{
 				Key:   key2,
@@ -4585,8 +4558,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline14 = nil
 		}
 		systemFields14 := make([]string, 0, len(r.OutputAzureDataExplorer.SystemFields))
-		for _, systemFieldsItem14 := range r.OutputAzureDataExplorer.SystemFields {
-			systemFields14 = append(systemFields14, systemFieldsItem14.ValueString())
+		for systemFieldsIndex14 := range r.OutputAzureDataExplorer.SystemFields {
+			systemFields14 = append(systemFields14, r.OutputAzureDataExplorer.SystemFields[systemFieldsIndex14].ValueString())
 		}
 		environment14 := new(string)
 		if !r.OutputAzureDataExplorer.Environment.IsUnknown() && !r.OutputAzureDataExplorer.Environment.IsNull() {
@@ -4595,8 +4568,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment14 = nil
 		}
 		streamtags14 := make([]string, 0, len(r.OutputAzureDataExplorer.Streamtags))
-		for _, streamtagsItem14 := range r.OutputAzureDataExplorer.Streamtags {
-			streamtags14 = append(streamtags14, streamtagsItem14.ValueString())
+		for streamtagsIndex14 := range r.OutputAzureDataExplorer.Streamtags {
+			streamtags14 = append(streamtags14, r.OutputAzureDataExplorer.Streamtags[streamtagsIndex14].ValueString())
 		}
 		var clusterURL string
 		clusterURL = r.OutputAzureDataExplorer.ClusterURL.ValueString()
@@ -4779,15 +4752,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			retainBlobOnSuccess = nil
 		}
 		extentTags := make([]shared.ExtentTag, 0, len(r.OutputAzureDataExplorer.ExtentTags))
-		for _, extentTagsItem := range r.OutputAzureDataExplorer.ExtentTags {
+		for extentTagsIndex := range r.OutputAzureDataExplorer.ExtentTags {
 			prefix := new(shared.PrefixOptional)
-			if !extentTagsItem.Prefix.IsUnknown() && !extentTagsItem.Prefix.IsNull() {
-				*prefix = shared.PrefixOptional(extentTagsItem.Prefix.ValueString())
+			if !r.OutputAzureDataExplorer.ExtentTags[extentTagsIndex].Prefix.IsUnknown() && !r.OutputAzureDataExplorer.ExtentTags[extentTagsIndex].Prefix.IsNull() {
+				*prefix = shared.PrefixOptional(r.OutputAzureDataExplorer.ExtentTags[extentTagsIndex].Prefix.ValueString())
 			} else {
 				prefix = nil
 			}
 			var value10 string
-			value10 = extentTagsItem.Value.ValueString()
+			value10 = r.OutputAzureDataExplorer.ExtentTags[extentTagsIndex].Value.ValueString()
 
 			extentTags = append(extentTags, shared.ExtentTag{
 				Prefix: prefix,
@@ -4795,9 +4768,9 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		ingestIfNotExists := make([]shared.IngestIfNotExist, 0, len(r.OutputAzureDataExplorer.IngestIfNotExists))
-		for _, ingestIfNotExistsItem := range r.OutputAzureDataExplorer.IngestIfNotExists {
+		for ingestIfNotExistsIndex := range r.OutputAzureDataExplorer.IngestIfNotExists {
 			var value11 string
-			value11 = ingestIfNotExistsItem.Value.ValueString()
+			value11 = r.OutputAzureDataExplorer.IngestIfNotExists[ingestIfNotExistsIndex].Value.ValueString()
 
 			ingestIfNotExists = append(ingestIfNotExists, shared.IngestIfNotExist{
 				Value: value11,
@@ -4816,12 +4789,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			reportMethod = nil
 		}
 		additionalProperties := make([]shared.AdditionalProperty, 0, len(r.OutputAzureDataExplorer.AdditionalProperties))
-		for _, additionalPropertiesItem := range r.OutputAzureDataExplorer.AdditionalProperties {
+		for additionalPropertiesIndex := range r.OutputAzureDataExplorer.AdditionalProperties {
 			var key3 string
-			key3 = additionalPropertiesItem.Key.ValueString()
+			key3 = r.OutputAzureDataExplorer.AdditionalProperties[additionalPropertiesIndex].Key.ValueString()
 
 			var value12 string
-			value12 = additionalPropertiesItem.Value.ValueString()
+			value12 = r.OutputAzureDataExplorer.AdditionalProperties[additionalPropertiesIndex].Value.ValueString()
 
 			additionalProperties = append(additionalProperties, shared.AdditionalProperty{
 				Key:   key3,
@@ -4829,25 +4802,25 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		responseRetrySettings5 := make([]shared.OutputAzureDataExplorerResponseRetrySetting, 0, len(r.OutputAzureDataExplorer.ResponseRetrySettings))
-		for _, responseRetrySettingsItem5 := range r.OutputAzureDataExplorer.ResponseRetrySettings {
+		for responseRetrySettingsIndex5 := range r.OutputAzureDataExplorer.ResponseRetrySettings {
 			var httpStatus5 float64
-			httpStatus5 = responseRetrySettingsItem5.HTTPStatus.ValueFloat64()
+			httpStatus5 = r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].HTTPStatus.ValueFloat64()
 
 			initialBackoff10 := new(float64)
-			if !responseRetrySettingsItem5.InitialBackoff.IsUnknown() && !responseRetrySettingsItem5.InitialBackoff.IsNull() {
-				*initialBackoff10 = responseRetrySettingsItem5.InitialBackoff.ValueFloat64()
+			if !r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].InitialBackoff.IsUnknown() && !r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].InitialBackoff.IsNull() {
+				*initialBackoff10 = r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff10 = nil
 			}
 			backoffRate10 := new(float64)
-			if !responseRetrySettingsItem5.BackoffRate.IsUnknown() && !responseRetrySettingsItem5.BackoffRate.IsNull() {
-				*backoffRate10 = responseRetrySettingsItem5.BackoffRate.ValueFloat64()
+			if !r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].BackoffRate.IsUnknown() && !r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].BackoffRate.IsNull() {
+				*backoffRate10 = r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate10 = nil
 			}
 			maxBackoff10 := new(float64)
-			if !responseRetrySettingsItem5.MaxBackoff.IsUnknown() && !responseRetrySettingsItem5.MaxBackoff.IsNull() {
-				*maxBackoff10 = responseRetrySettingsItem5.MaxBackoff.ValueFloat64()
+			if !r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].MaxBackoff.IsUnknown() && !r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].MaxBackoff.IsNull() {
+				*maxBackoff10 = r.OutputAzureDataExplorer.ResponseRetrySettings[responseRetrySettingsIndex5].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff10 = nil
 			}
@@ -5077,8 +5050,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline15 = nil
 		}
 		systemFields15 := make([]string, 0, len(r.OutputAzureLogs.SystemFields))
-		for _, systemFieldsItem15 := range r.OutputAzureLogs.SystemFields {
-			systemFields15 = append(systemFields15, systemFieldsItem15.ValueString())
+		for systemFieldsIndex15 := range r.OutputAzureLogs.SystemFields {
+			systemFields15 = append(systemFields15, r.OutputAzureLogs.SystemFields[systemFieldsIndex15].ValueString())
 		}
 		environment15 := new(string)
 		if !r.OutputAzureLogs.Environment.IsUnknown() && !r.OutputAzureLogs.Environment.IsNull() {
@@ -5087,8 +5060,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment15 = nil
 		}
 		streamtags15 := make([]string, 0, len(r.OutputAzureLogs.Streamtags))
-		for _, streamtagsItem15 := range r.OutputAzureLogs.Streamtags {
-			streamtags15 = append(streamtags15, streamtagsItem15.ValueString())
+		for streamtagsIndex15 := range r.OutputAzureLogs.Streamtags {
+			streamtags15 = append(streamtags15, r.OutputAzureLogs.Streamtags[streamtagsIndex15].ValueString())
 		}
 		logType := new(string)
 		if !r.OutputAzureLogs.LogType.IsUnknown() && !r.OutputAzureLogs.LogType.IsNull() {
@@ -5145,15 +5118,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec6 = nil
 		}
 		extraHTTPHeaders5 := make([]shared.OutputAzureLogsExtraHTTPHeader, 0, len(r.OutputAzureLogs.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem5 := range r.OutputAzureLogs.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex5 := range r.OutputAzureLogs.ExtraHTTPHeaders {
 			name7 := new(string)
-			if !extraHTTPHeadersItem5.Name.IsUnknown() && !extraHTTPHeadersItem5.Name.IsNull() {
-				*name7 = extraHTTPHeadersItem5.Name.ValueString()
+			if !r.OutputAzureLogs.ExtraHTTPHeaders[extraHTTPHeadersIndex5].Name.IsUnknown() && !r.OutputAzureLogs.ExtraHTTPHeaders[extraHTTPHeadersIndex5].Name.IsNull() {
+				*name7 = r.OutputAzureLogs.ExtraHTTPHeaders[extraHTTPHeadersIndex5].Name.ValueString()
 			} else {
 				name7 = nil
 			}
 			var value13 string
-			value13 = extraHTTPHeadersItem5.Value.ValueString()
+			value13 = r.OutputAzureLogs.ExtraHTTPHeaders[extraHTTPHeadersIndex5].Value.ValueString()
 
 			extraHTTPHeaders5 = append(extraHTTPHeaders5, shared.OutputAzureLogsExtraHTTPHeader{
 				Name:  name7,
@@ -5173,8 +5146,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode5 = nil
 		}
 		safeHeaders5 := make([]string, 0, len(r.OutputAzureLogs.SafeHeaders))
-		for _, safeHeadersItem5 := range r.OutputAzureLogs.SafeHeaders {
-			safeHeaders5 = append(safeHeaders5, safeHeadersItem5.ValueString())
+		for safeHeadersIndex5 := range r.OutputAzureLogs.SafeHeaders {
+			safeHeaders5 = append(safeHeaders5, r.OutputAzureLogs.SafeHeaders[safeHeadersIndex5].ValueString())
 		}
 		apiURL := new(string)
 		if !r.OutputAzureLogs.APIURL.IsUnknown() && !r.OutputAzureLogs.APIURL.IsNull() {
@@ -5183,25 +5156,25 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			apiURL = nil
 		}
 		responseRetrySettings6 := make([]shared.OutputAzureLogsResponseRetrySetting, 0, len(r.OutputAzureLogs.ResponseRetrySettings))
-		for _, responseRetrySettingsItem6 := range r.OutputAzureLogs.ResponseRetrySettings {
+		for responseRetrySettingsIndex6 := range r.OutputAzureLogs.ResponseRetrySettings {
 			var httpStatus6 float64
-			httpStatus6 = responseRetrySettingsItem6.HTTPStatus.ValueFloat64()
+			httpStatus6 = r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].HTTPStatus.ValueFloat64()
 
 			initialBackoff12 := new(float64)
-			if !responseRetrySettingsItem6.InitialBackoff.IsUnknown() && !responseRetrySettingsItem6.InitialBackoff.IsNull() {
-				*initialBackoff12 = responseRetrySettingsItem6.InitialBackoff.ValueFloat64()
+			if !r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].InitialBackoff.IsUnknown() && !r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].InitialBackoff.IsNull() {
+				*initialBackoff12 = r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff12 = nil
 			}
 			backoffRate12 := new(float64)
-			if !responseRetrySettingsItem6.BackoffRate.IsUnknown() && !responseRetrySettingsItem6.BackoffRate.IsNull() {
-				*backoffRate12 = responseRetrySettingsItem6.BackoffRate.ValueFloat64()
+			if !r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].BackoffRate.IsUnknown() && !r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].BackoffRate.IsNull() {
+				*backoffRate12 = r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate12 = nil
 			}
 			maxBackoff12 := new(float64)
-			if !responseRetrySettingsItem6.MaxBackoff.IsUnknown() && !responseRetrySettingsItem6.MaxBackoff.IsNull() {
-				*maxBackoff12 = responseRetrySettingsItem6.MaxBackoff.ValueFloat64()
+			if !r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].MaxBackoff.IsUnknown() && !r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].MaxBackoff.IsNull() {
+				*maxBackoff12 = r.OutputAzureLogs.ResponseRetrySettings[responseRetrySettingsIndex6].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff12 = nil
 			}
@@ -5392,8 +5365,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline16 = nil
 		}
 		systemFields16 := make([]string, 0, len(r.OutputKinesis.SystemFields))
-		for _, systemFieldsItem16 := range r.OutputKinesis.SystemFields {
-			systemFields16 = append(systemFields16, systemFieldsItem16.ValueString())
+		for systemFieldsIndex16 := range r.OutputKinesis.SystemFields {
+			systemFields16 = append(systemFields16, r.OutputKinesis.SystemFields[systemFieldsIndex16].ValueString())
 		}
 		environment16 := new(string)
 		if !r.OutputKinesis.Environment.IsUnknown() && !r.OutputKinesis.Environment.IsNull() {
@@ -5402,8 +5375,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment16 = nil
 		}
 		streamtags16 := make([]string, 0, len(r.OutputKinesis.Streamtags))
-		for _, streamtagsItem16 := range r.OutputKinesis.Streamtags {
-			streamtags16 = append(streamtags16, streamtagsItem16.ValueString())
+		for streamtagsIndex16 := range r.OutputKinesis.Streamtags {
+			streamtags16 = append(streamtags16, r.OutputKinesis.Streamtags[streamtagsIndex16].ValueString())
 		}
 		var streamName1 string
 		streamName1 = r.OutputKinesis.StreamName.ValueString()
@@ -5630,8 +5603,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline17 = nil
 		}
 		systemFields17 := make([]string, 0, len(r.OutputHoneycomb.SystemFields))
-		for _, systemFieldsItem17 := range r.OutputHoneycomb.SystemFields {
-			systemFields17 = append(systemFields17, systemFieldsItem17.ValueString())
+		for systemFieldsIndex17 := range r.OutputHoneycomb.SystemFields {
+			systemFields17 = append(systemFields17, r.OutputHoneycomb.SystemFields[systemFieldsIndex17].ValueString())
 		}
 		environment17 := new(string)
 		if !r.OutputHoneycomb.Environment.IsUnknown() && !r.OutputHoneycomb.Environment.IsNull() {
@@ -5640,8 +5613,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment17 = nil
 		}
 		streamtags17 := make([]string, 0, len(r.OutputHoneycomb.Streamtags))
-		for _, streamtagsItem17 := range r.OutputHoneycomb.Streamtags {
-			streamtags17 = append(streamtags17, streamtagsItem17.ValueString())
+		for streamtagsIndex17 := range r.OutputHoneycomb.Streamtags {
+			streamtags17 = append(streamtags17, r.OutputHoneycomb.Streamtags[streamtagsIndex17].ValueString())
 		}
 		var dataset string
 		dataset = r.OutputHoneycomb.Dataset.ValueString()
@@ -5689,15 +5662,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec8 = nil
 		}
 		extraHTTPHeaders6 := make([]shared.OutputHoneycombExtraHTTPHeader, 0, len(r.OutputHoneycomb.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem6 := range r.OutputHoneycomb.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex6 := range r.OutputHoneycomb.ExtraHTTPHeaders {
 			name8 := new(string)
-			if !extraHTTPHeadersItem6.Name.IsUnknown() && !extraHTTPHeadersItem6.Name.IsNull() {
-				*name8 = extraHTTPHeadersItem6.Name.ValueString()
+			if !r.OutputHoneycomb.ExtraHTTPHeaders[extraHTTPHeadersIndex6].Name.IsUnknown() && !r.OutputHoneycomb.ExtraHTTPHeaders[extraHTTPHeadersIndex6].Name.IsNull() {
+				*name8 = r.OutputHoneycomb.ExtraHTTPHeaders[extraHTTPHeadersIndex6].Name.ValueString()
 			} else {
 				name8 = nil
 			}
 			var value14 string
-			value14 = extraHTTPHeadersItem6.Value.ValueString()
+			value14 = r.OutputHoneycomb.ExtraHTTPHeaders[extraHTTPHeadersIndex6].Value.ValueString()
 
 			extraHTTPHeaders6 = append(extraHTTPHeaders6, shared.OutputHoneycombExtraHTTPHeader{
 				Name:  name8,
@@ -5717,29 +5690,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode6 = nil
 		}
 		safeHeaders6 := make([]string, 0, len(r.OutputHoneycomb.SafeHeaders))
-		for _, safeHeadersItem6 := range r.OutputHoneycomb.SafeHeaders {
-			safeHeaders6 = append(safeHeaders6, safeHeadersItem6.ValueString())
+		for safeHeadersIndex6 := range r.OutputHoneycomb.SafeHeaders {
+			safeHeaders6 = append(safeHeaders6, r.OutputHoneycomb.SafeHeaders[safeHeadersIndex6].ValueString())
 		}
 		responseRetrySettings7 := make([]shared.OutputHoneycombResponseRetrySetting, 0, len(r.OutputHoneycomb.ResponseRetrySettings))
-		for _, responseRetrySettingsItem7 := range r.OutputHoneycomb.ResponseRetrySettings {
+		for responseRetrySettingsIndex7 := range r.OutputHoneycomb.ResponseRetrySettings {
 			var httpStatus7 float64
-			httpStatus7 = responseRetrySettingsItem7.HTTPStatus.ValueFloat64()
+			httpStatus7 = r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].HTTPStatus.ValueFloat64()
 
 			initialBackoff14 := new(float64)
-			if !responseRetrySettingsItem7.InitialBackoff.IsUnknown() && !responseRetrySettingsItem7.InitialBackoff.IsNull() {
-				*initialBackoff14 = responseRetrySettingsItem7.InitialBackoff.ValueFloat64()
+			if !r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].InitialBackoff.IsUnknown() && !r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].InitialBackoff.IsNull() {
+				*initialBackoff14 = r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff14 = nil
 			}
 			backoffRate14 := new(float64)
-			if !responseRetrySettingsItem7.BackoffRate.IsUnknown() && !responseRetrySettingsItem7.BackoffRate.IsNull() {
-				*backoffRate14 = responseRetrySettingsItem7.BackoffRate.ValueFloat64()
+			if !r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].BackoffRate.IsUnknown() && !r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].BackoffRate.IsNull() {
+				*backoffRate14 = r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate14 = nil
 			}
 			maxBackoff14 := new(float64)
-			if !responseRetrySettingsItem7.MaxBackoff.IsUnknown() && !responseRetrySettingsItem7.MaxBackoff.IsNull() {
-				*maxBackoff14 = responseRetrySettingsItem7.MaxBackoff.ValueFloat64()
+			if !r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].MaxBackoff.IsUnknown() && !r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].MaxBackoff.IsNull() {
+				*maxBackoff14 = r.OutputHoneycomb.ResponseRetrySettings[responseRetrySettingsIndex7].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff14 = nil
 			}
@@ -5921,8 +5894,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline18 = nil
 		}
 		systemFields18 := make([]string, 0, len(r.OutputAzureEventhub.SystemFields))
-		for _, systemFieldsItem18 := range r.OutputAzureEventhub.SystemFields {
-			systemFields18 = append(systemFields18, systemFieldsItem18.ValueString())
+		for systemFieldsIndex18 := range r.OutputAzureEventhub.SystemFields {
+			systemFields18 = append(systemFields18, r.OutputAzureEventhub.SystemFields[systemFieldsIndex18].ValueString())
 		}
 		environment18 := new(string)
 		if !r.OutputAzureEventhub.Environment.IsUnknown() && !r.OutputAzureEventhub.Environment.IsNull() {
@@ -5931,12 +5904,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment18 = nil
 		}
 		streamtags18 := make([]string, 0, len(r.OutputAzureEventhub.Streamtags))
-		for _, streamtagsItem18 := range r.OutputAzureEventhub.Streamtags {
-			streamtags18 = append(streamtags18, streamtagsItem18.ValueString())
+		for streamtagsIndex18 := range r.OutputAzureEventhub.Streamtags {
+			streamtags18 = append(streamtags18, r.OutputAzureEventhub.Streamtags[streamtagsIndex18].ValueString())
 		}
 		brokers := make([]string, 0, len(r.OutputAzureEventhub.Brokers))
-		for _, brokersItem := range r.OutputAzureEventhub.Brokers {
-			brokers = append(brokers, brokersItem.ValueString())
+		for brokersIndex := range r.OutputAzureEventhub.Brokers {
+			brokers = append(brokers, r.OutputAzureEventhub.Brokers[brokersIndex].ValueString())
 		}
 		var topic string
 		topic = r.OutputAzureEventhub.Topic.ValueString()
@@ -6165,8 +6138,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline19 = nil
 		}
 		systemFields19 := make([]string, 0, len(r.OutputGoogleChronicle.SystemFields))
-		for _, systemFieldsItem19 := range r.OutputGoogleChronicle.SystemFields {
-			systemFields19 = append(systemFields19, systemFieldsItem19.ValueString())
+		for systemFieldsIndex19 := range r.OutputGoogleChronicle.SystemFields {
+			systemFields19 = append(systemFields19, r.OutputGoogleChronicle.SystemFields[systemFieldsIndex19].ValueString())
 		}
 		environment19 := new(string)
 		if !r.OutputGoogleChronicle.Environment.IsUnknown() && !r.OutputGoogleChronicle.Environment.IsNull() {
@@ -6175,8 +6148,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment19 = nil
 		}
 		streamtags19 := make([]string, 0, len(r.OutputGoogleChronicle.Streamtags))
-		for _, streamtagsItem19 := range r.OutputGoogleChronicle.Streamtags {
-			streamtags19 = append(streamtags19, streamtagsItem19.ValueString())
+		for streamtagsIndex19 := range r.OutputGoogleChronicle.Streamtags {
+			streamtags19 = append(streamtags19, r.OutputGoogleChronicle.Streamtags[streamtagsIndex19].ValueString())
 		}
 		apiVersion := new(shared.OutputGoogleChronicleAPIVersion)
 		if !r.OutputGoogleChronicle.APIVersion.IsUnknown() && !r.OutputGoogleChronicle.APIVersion.IsNull() {
@@ -6191,25 +6164,25 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			authenticationMethod = nil
 		}
 		responseRetrySettings8 := make([]shared.OutputGoogleChronicleResponseRetrySetting, 0, len(r.OutputGoogleChronicle.ResponseRetrySettings))
-		for _, responseRetrySettingsItem8 := range r.OutputGoogleChronicle.ResponseRetrySettings {
+		for responseRetrySettingsIndex8 := range r.OutputGoogleChronicle.ResponseRetrySettings {
 			var httpStatus8 float64
-			httpStatus8 = responseRetrySettingsItem8.HTTPStatus.ValueFloat64()
+			httpStatus8 = r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].HTTPStatus.ValueFloat64()
 
 			initialBackoff17 := new(float64)
-			if !responseRetrySettingsItem8.InitialBackoff.IsUnknown() && !responseRetrySettingsItem8.InitialBackoff.IsNull() {
-				*initialBackoff17 = responseRetrySettingsItem8.InitialBackoff.ValueFloat64()
+			if !r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].InitialBackoff.IsUnknown() && !r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].InitialBackoff.IsNull() {
+				*initialBackoff17 = r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff17 = nil
 			}
 			backoffRate17 := new(float64)
-			if !responseRetrySettingsItem8.BackoffRate.IsUnknown() && !responseRetrySettingsItem8.BackoffRate.IsNull() {
-				*backoffRate17 = responseRetrySettingsItem8.BackoffRate.ValueFloat64()
+			if !r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].BackoffRate.IsUnknown() && !r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].BackoffRate.IsNull() {
+				*backoffRate17 = r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate17 = nil
 			}
 			maxBackoff16 := new(float64)
-			if !responseRetrySettingsItem8.MaxBackoff.IsUnknown() && !responseRetrySettingsItem8.MaxBackoff.IsNull() {
-				*maxBackoff16 = responseRetrySettingsItem8.MaxBackoff.ValueFloat64()
+			if !r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].MaxBackoff.IsUnknown() && !r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].MaxBackoff.IsNull() {
+				*maxBackoff16 = r.OutputGoogleChronicle.ResponseRetrySettings[responseRetrySettingsIndex8].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff16 = nil
 			}
@@ -6314,15 +6287,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec10 = nil
 		}
 		extraHTTPHeaders7 := make([]shared.OutputGoogleChronicleExtraHTTPHeader, 0, len(r.OutputGoogleChronicle.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem7 := range r.OutputGoogleChronicle.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex7 := range r.OutputGoogleChronicle.ExtraHTTPHeaders {
 			name9 := new(string)
-			if !extraHTTPHeadersItem7.Name.IsUnknown() && !extraHTTPHeadersItem7.Name.IsNull() {
-				*name9 = extraHTTPHeadersItem7.Name.ValueString()
+			if !r.OutputGoogleChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex7].Name.IsUnknown() && !r.OutputGoogleChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex7].Name.IsNull() {
+				*name9 = r.OutputGoogleChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex7].Name.ValueString()
 			} else {
 				name9 = nil
 			}
 			var value15 string
-			value15 = extraHTTPHeadersItem7.Value.ValueString()
+			value15 = r.OutputGoogleChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex7].Value.ValueString()
 
 			extraHTTPHeaders7 = append(extraHTTPHeaders7, shared.OutputGoogleChronicleExtraHTTPHeader{
 				Name:  name9,
@@ -6336,8 +6309,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode7 = nil
 		}
 		safeHeaders7 := make([]string, 0, len(r.OutputGoogleChronicle.SafeHeaders))
-		for _, safeHeadersItem7 := range r.OutputGoogleChronicle.SafeHeaders {
-			safeHeaders7 = append(safeHeaders7, safeHeadersItem7.ValueString())
+		for safeHeadersIndex7 := range r.OutputGoogleChronicle.SafeHeaders {
+			safeHeaders7 = append(safeHeaders7, r.OutputGoogleChronicle.SafeHeaders[safeHeadersIndex7].ValueString())
 		}
 		useRoundRobinDns8 := new(bool)
 		if !r.OutputGoogleChronicle.UseRoundRobinDNS.IsUnknown() && !r.OutputGoogleChronicle.UseRoundRobinDNS.IsNull() {
@@ -6364,13 +6337,13 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			description17 = nil
 		}
 		extraLogTypes := make([]shared.ExtraLogType, 0, len(r.OutputGoogleChronicle.ExtraLogTypes))
-		for _, extraLogTypesItem := range r.OutputGoogleChronicle.ExtraLogTypes {
+		for extraLogTypesIndex := range r.OutputGoogleChronicle.ExtraLogTypes {
 			var logType1 string
-			logType1 = extraLogTypesItem.LogType.ValueString()
+			logType1 = r.OutputGoogleChronicle.ExtraLogTypes[extraLogTypesIndex].LogType.ValueString()
 
 			description18 := new(string)
-			if !extraLogTypesItem.Description.IsUnknown() && !extraLogTypesItem.Description.IsNull() {
-				*description18 = extraLogTypesItem.Description.ValueString()
+			if !r.OutputGoogleChronicle.ExtraLogTypes[extraLogTypesIndex].Description.IsUnknown() && !r.OutputGoogleChronicle.ExtraLogTypes[extraLogTypesIndex].Description.IsNull() {
+				*description18 = r.OutputGoogleChronicle.ExtraLogTypes[extraLogTypesIndex].Description.ValueString()
 			} else {
 				description18 = nil
 			}
@@ -6404,12 +6377,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			namespace = nil
 		}
 		customLabels := make([]shared.CustomLabel, 0, len(r.OutputGoogleChronicle.CustomLabels))
-		for _, customLabelsItem := range r.OutputGoogleChronicle.CustomLabels {
+		for customLabelsIndex := range r.OutputGoogleChronicle.CustomLabels {
 			var key4 string
-			key4 = customLabelsItem.Key.ValueString()
+			key4 = r.OutputGoogleChronicle.CustomLabels[customLabelsIndex].Key.ValueString()
 
 			var value16 string
-			value16 = customLabelsItem.Value.ValueString()
+			value16 = r.OutputGoogleChronicle.CustomLabels[customLabelsIndex].Value.ValueString()
 
 			customLabels = append(customLabels, shared.CustomLabel{
 				Key:   key4,
@@ -6553,8 +6526,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline20 = nil
 		}
 		systemFields20 := make([]string, 0, len(r.OutputGoogleCloudStorage.SystemFields))
-		for _, systemFieldsItem20 := range r.OutputGoogleCloudStorage.SystemFields {
-			systemFields20 = append(systemFields20, systemFieldsItem20.ValueString())
+		for systemFieldsIndex20 := range r.OutputGoogleCloudStorage.SystemFields {
+			systemFields20 = append(systemFields20, r.OutputGoogleCloudStorage.SystemFields[systemFieldsIndex20].ValueString())
 		}
 		environment20 := new(string)
 		if !r.OutputGoogleCloudStorage.Environment.IsUnknown() && !r.OutputGoogleCloudStorage.Environment.IsNull() {
@@ -6563,8 +6536,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment20 = nil
 		}
 		streamtags20 := make([]string, 0, len(r.OutputGoogleCloudStorage.Streamtags))
-		for _, streamtagsItem20 := range r.OutputGoogleCloudStorage.Streamtags {
-			streamtags20 = append(streamtags20, streamtagsItem20.ValueString())
+		for streamtagsIndex20 := range r.OutputGoogleCloudStorage.Streamtags {
+			streamtags20 = append(streamtags20, r.OutputGoogleCloudStorage.Streamtags[streamtagsIndex20].ValueString())
 		}
 		var bucket1 string
 		bucket1 = r.OutputGoogleCloudStorage.Bucket.ValueString()
@@ -6777,15 +6750,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			shouldLogInvalidRows3 = nil
 		}
 		keyValueMetadata3 := make([]shared.OutputGoogleCloudStorageKeyValueMetadatum, 0, len(r.OutputGoogleCloudStorage.KeyValueMetadata))
-		for _, keyValueMetadataItem3 := range r.OutputGoogleCloudStorage.KeyValueMetadata {
+		for keyValueMetadataIndex3 := range r.OutputGoogleCloudStorage.KeyValueMetadata {
 			key5 := new(string)
-			if !keyValueMetadataItem3.Key.IsUnknown() && !keyValueMetadataItem3.Key.IsNull() {
-				*key5 = keyValueMetadataItem3.Key.ValueString()
+			if !r.OutputGoogleCloudStorage.KeyValueMetadata[keyValueMetadataIndex3].Key.IsUnknown() && !r.OutputGoogleCloudStorage.KeyValueMetadata[keyValueMetadataIndex3].Key.IsNull() {
+				*key5 = r.OutputGoogleCloudStorage.KeyValueMetadata[keyValueMetadataIndex3].Key.ValueString()
 			} else {
 				key5 = nil
 			}
 			var value17 string
-			value17 = keyValueMetadataItem3.Value.ValueString()
+			value17 = r.OutputGoogleCloudStorage.KeyValueMetadata[keyValueMetadataIndex3].Value.ValueString()
 
 			keyValueMetadata3 = append(keyValueMetadata3, shared.OutputGoogleCloudStorageKeyValueMetadatum{
 				Key:   key5,
@@ -6927,8 +6900,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline21 = nil
 		}
 		systemFields21 := make([]string, 0, len(r.OutputGoogleCloudLogging.SystemFields))
-		for _, systemFieldsItem21 := range r.OutputGoogleCloudLogging.SystemFields {
-			systemFields21 = append(systemFields21, systemFieldsItem21.ValueString())
+		for systemFieldsIndex21 := range r.OutputGoogleCloudLogging.SystemFields {
+			systemFields21 = append(systemFields21, r.OutputGoogleCloudLogging.SystemFields[systemFieldsIndex21].ValueString())
 		}
 		environment21 := new(string)
 		if !r.OutputGoogleCloudLogging.Environment.IsUnknown() && !r.OutputGoogleCloudLogging.Environment.IsNull() {
@@ -6937,8 +6910,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment21 = nil
 		}
 		streamtags21 := make([]string, 0, len(r.OutputGoogleCloudLogging.Streamtags))
-		for _, streamtagsItem21 := range r.OutputGoogleCloudLogging.Streamtags {
-			streamtags21 = append(streamtags21, streamtagsItem21.ValueString())
+		for streamtagsIndex21 := range r.OutputGoogleCloudLogging.Streamtags {
+			streamtags21 = append(streamtags21, r.OutputGoogleCloudLogging.Streamtags[streamtagsIndex21].ValueString())
 		}
 		logLocationType := shared.LogLocationType(r.OutputGoogleCloudLogging.LogLocationType.ValueString())
 		var logNameExpression string
@@ -6951,12 +6924,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			payloadFormat = nil
 		}
 		logLabels := make([]shared.LogLabel, 0, len(r.OutputGoogleCloudLogging.LogLabels))
-		for _, logLabelsItem := range r.OutputGoogleCloudLogging.LogLabels {
+		for logLabelsIndex := range r.OutputGoogleCloudLogging.LogLabels {
 			var label string
-			label = logLabelsItem.Label.ValueString()
+			label = r.OutputGoogleCloudLogging.LogLabels[logLabelsIndex].Label.ValueString()
 
 			var valueExpression string
-			valueExpression = logLabelsItem.ValueExpression.ValueString()
+			valueExpression = r.OutputGoogleCloudLogging.LogLabels[logLabelsIndex].ValueExpression.ValueString()
 
 			logLabels = append(logLabels, shared.LogLabel{
 				Label:           label,
@@ -6970,12 +6943,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			resourceTypeExpression = nil
 		}
 		resourceTypeLabels := make([]shared.ResourceTypeLabel, 0, len(r.OutputGoogleCloudLogging.ResourceTypeLabels))
-		for _, resourceTypeLabelsItem := range r.OutputGoogleCloudLogging.ResourceTypeLabels {
+		for resourceTypeLabelsIndex := range r.OutputGoogleCloudLogging.ResourceTypeLabels {
 			var label1 string
-			label1 = resourceTypeLabelsItem.Label.ValueString()
+			label1 = r.OutputGoogleCloudLogging.ResourceTypeLabels[resourceTypeLabelsIndex].Label.ValueString()
 
 			var valueExpression1 string
-			valueExpression1 = resourceTypeLabelsItem.ValueExpression.ValueString()
+			valueExpression1 = r.OutputGoogleCloudLogging.ResourceTypeLabels[resourceTypeLabelsIndex].ValueExpression.ValueString()
 
 			resourceTypeLabels = append(resourceTypeLabels, shared.ResourceTypeLabel{
 				Label:           label1,
@@ -7377,8 +7350,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline22 = nil
 		}
 		systemFields22 := make([]string, 0, len(r.OutputGooglePubsub.SystemFields))
-		for _, systemFieldsItem22 := range r.OutputGooglePubsub.SystemFields {
-			systemFields22 = append(systemFields22, systemFieldsItem22.ValueString())
+		for systemFieldsIndex22 := range r.OutputGooglePubsub.SystemFields {
+			systemFields22 = append(systemFields22, r.OutputGooglePubsub.SystemFields[systemFieldsIndex22].ValueString())
 		}
 		environment22 := new(string)
 		if !r.OutputGooglePubsub.Environment.IsUnknown() && !r.OutputGooglePubsub.Environment.IsNull() {
@@ -7387,8 +7360,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment22 = nil
 		}
 		streamtags22 := make([]string, 0, len(r.OutputGooglePubsub.Streamtags))
-		for _, streamtagsItem22 := range r.OutputGooglePubsub.Streamtags {
-			streamtags22 = append(streamtags22, streamtagsItem22.ValueString())
+		for streamtagsIndex22 := range r.OutputGooglePubsub.Streamtags {
+			streamtags22 = append(streamtags22, r.OutputGooglePubsub.Streamtags[streamtagsIndex22].ValueString())
 		}
 		var topicName string
 		topicName = r.OutputGooglePubsub.TopicName.ValueString()
@@ -7574,8 +7547,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline23 = nil
 		}
 		systemFields23 := make([]string, 0, len(r.OutputExabeam.SystemFields))
-		for _, systemFieldsItem23 := range r.OutputExabeam.SystemFields {
-			systemFields23 = append(systemFields23, systemFieldsItem23.ValueString())
+		for systemFieldsIndex23 := range r.OutputExabeam.SystemFields {
+			systemFields23 = append(systemFields23, r.OutputExabeam.SystemFields[systemFieldsIndex23].ValueString())
 		}
 		environment23 := new(string)
 		if !r.OutputExabeam.Environment.IsUnknown() && !r.OutputExabeam.Environment.IsNull() {
@@ -7584,8 +7557,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment23 = nil
 		}
 		streamtags23 := make([]string, 0, len(r.OutputExabeam.Streamtags))
-		for _, streamtagsItem23 := range r.OutputExabeam.Streamtags {
-			streamtags23 = append(streamtags23, streamtagsItem23.ValueString())
+		for streamtagsIndex23 := range r.OutputExabeam.Streamtags {
+			streamtags23 = append(streamtags23, r.OutputExabeam.Streamtags[streamtagsIndex23].ValueString())
 		}
 		var bucket2 string
 		bucket2 = r.OutputExabeam.Bucket.ValueString()
@@ -7816,8 +7789,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline24 = nil
 		}
 		systemFields24 := make([]string, 0, len(r.OutputKafka.SystemFields))
-		for _, systemFieldsItem24 := range r.OutputKafka.SystemFields {
-			systemFields24 = append(systemFields24, systemFieldsItem24.ValueString())
+		for systemFieldsIndex24 := range r.OutputKafka.SystemFields {
+			systemFields24 = append(systemFields24, r.OutputKafka.SystemFields[systemFieldsIndex24].ValueString())
 		}
 		environment24 := new(string)
 		if !r.OutputKafka.Environment.IsUnknown() && !r.OutputKafka.Environment.IsNull() {
@@ -7826,12 +7799,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment24 = nil
 		}
 		streamtags24 := make([]string, 0, len(r.OutputKafka.Streamtags))
-		for _, streamtagsItem24 := range r.OutputKafka.Streamtags {
-			streamtags24 = append(streamtags24, streamtagsItem24.ValueString())
+		for streamtagsIndex24 := range r.OutputKafka.Streamtags {
+			streamtags24 = append(streamtags24, r.OutputKafka.Streamtags[streamtagsIndex24].ValueString())
 		}
 		brokers1 := make([]string, 0, len(r.OutputKafka.Brokers))
-		for _, brokersItem1 := range r.OutputKafka.Brokers {
-			brokers1 = append(brokers1, brokersItem1.ValueString())
+		for brokersIndex1 := range r.OutputKafka.Brokers {
+			brokers1 = append(brokers1, r.OutputKafka.Brokers[brokersIndex1].ValueString())
 		}
 		var topic1 string
 		topic1 = r.OutputKafka.Topic.ValueString()
@@ -8286,8 +8259,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline25 = nil
 		}
 		systemFields25 := make([]string, 0, len(r.OutputConfluentCloud.SystemFields))
-		for _, systemFieldsItem25 := range r.OutputConfluentCloud.SystemFields {
-			systemFields25 = append(systemFields25, systemFieldsItem25.ValueString())
+		for systemFieldsIndex25 := range r.OutputConfluentCloud.SystemFields {
+			systemFields25 = append(systemFields25, r.OutputConfluentCloud.SystemFields[systemFieldsIndex25].ValueString())
 		}
 		environment25 := new(string)
 		if !r.OutputConfluentCloud.Environment.IsUnknown() && !r.OutputConfluentCloud.Environment.IsNull() {
@@ -8296,12 +8269,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment25 = nil
 		}
 		streamtags25 := make([]string, 0, len(r.OutputConfluentCloud.Streamtags))
-		for _, streamtagsItem25 := range r.OutputConfluentCloud.Streamtags {
-			streamtags25 = append(streamtags25, streamtagsItem25.ValueString())
+		for streamtagsIndex25 := range r.OutputConfluentCloud.Streamtags {
+			streamtags25 = append(streamtags25, r.OutputConfluentCloud.Streamtags[streamtagsIndex25].ValueString())
 		}
 		brokers2 := make([]string, 0, len(r.OutputConfluentCloud.Brokers))
-		for _, brokersItem2 := range r.OutputConfluentCloud.Brokers {
-			brokers2 = append(brokers2, brokersItem2.ValueString())
+		for brokersIndex2 := range r.OutputConfluentCloud.Brokers {
+			brokers2 = append(brokers2, r.OutputConfluentCloud.Brokers[brokersIndex2].ValueString())
 		}
 		var tls10 *shared.OutputConfluentCloudTLSSettingsClientSide
 		if r.OutputConfluentCloud.TLS != nil {
@@ -8756,8 +8729,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline26 = nil
 		}
 		systemFields26 := make([]string, 0, len(r.OutputMsk.SystemFields))
-		for _, systemFieldsItem26 := range r.OutputMsk.SystemFields {
-			systemFields26 = append(systemFields26, systemFieldsItem26.ValueString())
+		for systemFieldsIndex26 := range r.OutputMsk.SystemFields {
+			systemFields26 = append(systemFields26, r.OutputMsk.SystemFields[systemFieldsIndex26].ValueString())
 		}
 		environment26 := new(string)
 		if !r.OutputMsk.Environment.IsUnknown() && !r.OutputMsk.Environment.IsNull() {
@@ -8766,12 +8739,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment26 = nil
 		}
 		streamtags26 := make([]string, 0, len(r.OutputMsk.Streamtags))
-		for _, streamtagsItem26 := range r.OutputMsk.Streamtags {
-			streamtags26 = append(streamtags26, streamtagsItem26.ValueString())
+		for streamtagsIndex26 := range r.OutputMsk.Streamtags {
+			streamtags26 = append(streamtags26, r.OutputMsk.Streamtags[streamtagsIndex26].ValueString())
 		}
 		brokers3 := make([]string, 0, len(r.OutputMsk.Brokers))
-		for _, brokersItem3 := range r.OutputMsk.Brokers {
-			brokers3 = append(brokers3, brokersItem3.ValueString())
+		for brokersIndex3 := range r.OutputMsk.Brokers {
+			brokers3 = append(brokers3, r.OutputMsk.Brokers[brokersIndex3].ValueString())
 		}
 		var topic3 string
 		topic3 = r.OutputMsk.Topic.ValueString()
@@ -9289,8 +9262,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline27 = nil
 		}
 		systemFields27 := make([]string, 0, len(r.OutputElastic.SystemFields))
-		for _, systemFieldsItem27 := range r.OutputElastic.SystemFields {
-			systemFields27 = append(systemFields27, systemFieldsItem27.ValueString())
+		for systemFieldsIndex27 := range r.OutputElastic.SystemFields {
+			systemFields27 = append(systemFields27, r.OutputElastic.SystemFields[systemFieldsIndex27].ValueString())
 		}
 		environment27 := new(string)
 		if !r.OutputElastic.Environment.IsUnknown() && !r.OutputElastic.Environment.IsNull() {
@@ -9299,8 +9272,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment27 = nil
 		}
 		streamtags27 := make([]string, 0, len(r.OutputElastic.Streamtags))
-		for _, streamtagsItem27 := range r.OutputElastic.Streamtags {
-			streamtags27 = append(streamtags27, streamtagsItem27.ValueString())
+		for streamtagsIndex27 := range r.OutputElastic.Streamtags {
+			streamtags27 = append(streamtags27, r.OutputElastic.Streamtags[streamtagsIndex27].ValueString())
 		}
 		loadBalanced4 := new(bool)
 		if !r.OutputElastic.LoadBalanced.IsUnknown() && !r.OutputElastic.LoadBalanced.IsNull() {
@@ -9360,15 +9333,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec16 = nil
 		}
 		extraHTTPHeaders8 := make([]shared.OutputElasticExtraHTTPHeader, 0, len(r.OutputElastic.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem8 := range r.OutputElastic.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex8 := range r.OutputElastic.ExtraHTTPHeaders {
 			name10 := new(string)
-			if !extraHTTPHeadersItem8.Name.IsUnknown() && !extraHTTPHeadersItem8.Name.IsNull() {
-				*name10 = extraHTTPHeadersItem8.Name.ValueString()
+			if !r.OutputElastic.ExtraHTTPHeaders[extraHTTPHeadersIndex8].Name.IsUnknown() && !r.OutputElastic.ExtraHTTPHeaders[extraHTTPHeadersIndex8].Name.IsNull() {
+				*name10 = r.OutputElastic.ExtraHTTPHeaders[extraHTTPHeadersIndex8].Name.ValueString()
 			} else {
 				name10 = nil
 			}
 			var value18 string
-			value18 = extraHTTPHeadersItem8.Value.ValueString()
+			value18 = r.OutputElastic.ExtraHTTPHeaders[extraHTTPHeadersIndex8].Value.ValueString()
 
 			extraHTTPHeaders8 = append(extraHTTPHeaders8, shared.OutputElasticExtraHTTPHeader{
 				Name:  name10,
@@ -9382,29 +9355,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode8 = nil
 		}
 		safeHeaders8 := make([]string, 0, len(r.OutputElastic.SafeHeaders))
-		for _, safeHeadersItem8 := range r.OutputElastic.SafeHeaders {
-			safeHeaders8 = append(safeHeaders8, safeHeadersItem8.ValueString())
+		for safeHeadersIndex8 := range r.OutputElastic.SafeHeaders {
+			safeHeaders8 = append(safeHeaders8, r.OutputElastic.SafeHeaders[safeHeadersIndex8].ValueString())
 		}
 		responseRetrySettings9 := make([]shared.OutputElasticResponseRetrySetting, 0, len(r.OutputElastic.ResponseRetrySettings))
-		for _, responseRetrySettingsItem9 := range r.OutputElastic.ResponseRetrySettings {
+		for responseRetrySettingsIndex9 := range r.OutputElastic.ResponseRetrySettings {
 			var httpStatus9 float64
-			httpStatus9 = responseRetrySettingsItem9.HTTPStatus.ValueFloat64()
+			httpStatus9 = r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].HTTPStatus.ValueFloat64()
 
 			initialBackoff22 := new(float64)
-			if !responseRetrySettingsItem9.InitialBackoff.IsUnknown() && !responseRetrySettingsItem9.InitialBackoff.IsNull() {
-				*initialBackoff22 = responseRetrySettingsItem9.InitialBackoff.ValueFloat64()
+			if !r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].InitialBackoff.IsUnknown() && !r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].InitialBackoff.IsNull() {
+				*initialBackoff22 = r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff22 = nil
 			}
 			backoffRate22 := new(float64)
-			if !responseRetrySettingsItem9.BackoffRate.IsUnknown() && !responseRetrySettingsItem9.BackoffRate.IsNull() {
-				*backoffRate22 = responseRetrySettingsItem9.BackoffRate.ValueFloat64()
+			if !r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].BackoffRate.IsUnknown() && !r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].BackoffRate.IsNull() {
+				*backoffRate22 = r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate22 = nil
 			}
 			maxBackoff18 := new(float64)
-			if !responseRetrySettingsItem9.MaxBackoff.IsUnknown() && !responseRetrySettingsItem9.MaxBackoff.IsNull() {
-				*maxBackoff18 = responseRetrySettingsItem9.MaxBackoff.ValueFloat64()
+			if !r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].MaxBackoff.IsUnknown() && !r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].MaxBackoff.IsNull() {
+				*maxBackoff18 = r.OutputElastic.ResponseRetrySettings[responseRetrySettingsIndex9].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff18 = nil
 			}
@@ -9455,12 +9428,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			responseHonorRetryAfterHeader9 = nil
 		}
 		extraParams := make([]shared.OutputElasticExtraParam, 0, len(r.OutputElastic.ExtraParams))
-		for _, extraParamsItem := range r.OutputElastic.ExtraParams {
+		for extraParamsIndex := range r.OutputElastic.ExtraParams {
 			var name11 string
-			name11 = extraParamsItem.Name.ValueString()
+			name11 = r.OutputElastic.ExtraParams[extraParamsIndex].Name.ValueString()
 
 			var value19 string
-			value19 = extraParamsItem.Value.ValueString()
+			value19 = r.OutputElastic.ExtraParams[extraParamsIndex].Value.ValueString()
 
 			extraParams = append(extraParams, shared.OutputElasticExtraParam{
 				Name:  name11,
@@ -9547,13 +9520,13 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			excludeSelf4 = nil
 		}
 		urls2 := make([]shared.OutputElasticURL, 0, len(r.OutputElastic.Urls))
-		for _, urlsItem2 := range r.OutputElastic.Urls {
+		for urlsIndex2 := range r.OutputElastic.Urls {
 			var url6 string
-			url6 = urlsItem2.URL.ValueString()
+			url6 = r.OutputElastic.Urls[urlsIndex2].URL.ValueString()
 
 			weight4 := new(float64)
-			if !urlsItem2.Weight.IsUnknown() && !urlsItem2.Weight.IsNull() {
-				*weight4 = urlsItem2.Weight.ValueFloat64()
+			if !r.OutputElastic.Urls[urlsIndex2].Weight.IsUnknown() && !r.OutputElastic.Urls[urlsIndex2].Weight.IsNull() {
+				*weight4 = r.OutputElastic.Urls[urlsIndex2].Weight.ValueFloat64()
 			} else {
 				weight4 = nil
 			}
@@ -9687,8 +9660,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline28 = nil
 		}
 		systemFields28 := make([]string, 0, len(r.OutputElasticCloud.SystemFields))
-		for _, systemFieldsItem28 := range r.OutputElasticCloud.SystemFields {
-			systemFields28 = append(systemFields28, systemFieldsItem28.ValueString())
+		for systemFieldsIndex28 := range r.OutputElasticCloud.SystemFields {
+			systemFields28 = append(systemFields28, r.OutputElasticCloud.SystemFields[systemFieldsIndex28].ValueString())
 		}
 		environment28 := new(string)
 		if !r.OutputElasticCloud.Environment.IsUnknown() && !r.OutputElasticCloud.Environment.IsNull() {
@@ -9697,8 +9670,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment28 = nil
 		}
 		streamtags28 := make([]string, 0, len(r.OutputElasticCloud.Streamtags))
-		for _, streamtagsItem28 := range r.OutputElasticCloud.Streamtags {
-			streamtags28 = append(streamtags28, streamtagsItem28.ValueString())
+		for streamtagsIndex28 := range r.OutputElasticCloud.Streamtags {
+			streamtags28 = append(streamtags28, r.OutputElasticCloud.Streamtags[streamtagsIndex28].ValueString())
 		}
 		var url7 string
 		url7 = r.OutputElasticCloud.URL.ValueString()
@@ -9749,15 +9722,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec17 = nil
 		}
 		extraHTTPHeaders9 := make([]shared.OutputElasticCloudExtraHTTPHeader, 0, len(r.OutputElasticCloud.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem9 := range r.OutputElasticCloud.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex9 := range r.OutputElasticCloud.ExtraHTTPHeaders {
 			name12 := new(string)
-			if !extraHTTPHeadersItem9.Name.IsUnknown() && !extraHTTPHeadersItem9.Name.IsNull() {
-				*name12 = extraHTTPHeadersItem9.Name.ValueString()
+			if !r.OutputElasticCloud.ExtraHTTPHeaders[extraHTTPHeadersIndex9].Name.IsUnknown() && !r.OutputElasticCloud.ExtraHTTPHeaders[extraHTTPHeadersIndex9].Name.IsNull() {
+				*name12 = r.OutputElasticCloud.ExtraHTTPHeaders[extraHTTPHeadersIndex9].Name.ValueString()
 			} else {
 				name12 = nil
 			}
 			var value20 string
-			value20 = extraHTTPHeadersItem9.Value.ValueString()
+			value20 = r.OutputElasticCloud.ExtraHTTPHeaders[extraHTTPHeadersIndex9].Value.ValueString()
 
 			extraHTTPHeaders9 = append(extraHTTPHeaders9, shared.OutputElasticCloudExtraHTTPHeader{
 				Name:  name12,
@@ -9771,16 +9744,16 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode9 = nil
 		}
 		safeHeaders9 := make([]string, 0, len(r.OutputElasticCloud.SafeHeaders))
-		for _, safeHeadersItem9 := range r.OutputElasticCloud.SafeHeaders {
-			safeHeaders9 = append(safeHeaders9, safeHeadersItem9.ValueString())
+		for safeHeadersIndex9 := range r.OutputElasticCloud.SafeHeaders {
+			safeHeaders9 = append(safeHeaders9, r.OutputElasticCloud.SafeHeaders[safeHeadersIndex9].ValueString())
 		}
 		extraParams1 := make([]shared.OutputElasticCloudExtraParam, 0, len(r.OutputElasticCloud.ExtraParams))
-		for _, extraParamsItem1 := range r.OutputElasticCloud.ExtraParams {
+		for extraParamsIndex1 := range r.OutputElasticCloud.ExtraParams {
 			var name13 string
-			name13 = extraParamsItem1.Name.ValueString()
+			name13 = r.OutputElasticCloud.ExtraParams[extraParamsIndex1].Name.ValueString()
 
 			var value21 string
-			value21 = extraParamsItem1.Value.ValueString()
+			value21 = r.OutputElasticCloud.ExtraParams[extraParamsIndex1].Value.ValueString()
 
 			extraParams1 = append(extraParams1, shared.OutputElasticCloudExtraParam{
 				Name:  name13,
@@ -9819,25 +9792,25 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			includeDocId1 = nil
 		}
 		responseRetrySettings10 := make([]shared.OutputElasticCloudResponseRetrySetting, 0, len(r.OutputElasticCloud.ResponseRetrySettings))
-		for _, responseRetrySettingsItem10 := range r.OutputElasticCloud.ResponseRetrySettings {
+		for responseRetrySettingsIndex10 := range r.OutputElasticCloud.ResponseRetrySettings {
 			var httpStatus10 float64
-			httpStatus10 = responseRetrySettingsItem10.HTTPStatus.ValueFloat64()
+			httpStatus10 = r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].HTTPStatus.ValueFloat64()
 
 			initialBackoff24 := new(float64)
-			if !responseRetrySettingsItem10.InitialBackoff.IsUnknown() && !responseRetrySettingsItem10.InitialBackoff.IsNull() {
-				*initialBackoff24 = responseRetrySettingsItem10.InitialBackoff.ValueFloat64()
+			if !r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].InitialBackoff.IsUnknown() && !r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].InitialBackoff.IsNull() {
+				*initialBackoff24 = r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff24 = nil
 			}
 			backoffRate24 := new(float64)
-			if !responseRetrySettingsItem10.BackoffRate.IsUnknown() && !responseRetrySettingsItem10.BackoffRate.IsNull() {
-				*backoffRate24 = responseRetrySettingsItem10.BackoffRate.ValueFloat64()
+			if !r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].BackoffRate.IsUnknown() && !r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].BackoffRate.IsNull() {
+				*backoffRate24 = r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate24 = nil
 			}
 			maxBackoff20 := new(float64)
-			if !responseRetrySettingsItem10.MaxBackoff.IsUnknown() && !responseRetrySettingsItem10.MaxBackoff.IsNull() {
-				*maxBackoff20 = responseRetrySettingsItem10.MaxBackoff.ValueFloat64()
+			if !r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].MaxBackoff.IsUnknown() && !r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].MaxBackoff.IsNull() {
+				*maxBackoff20 = r.OutputElasticCloud.ResponseRetrySettings[responseRetrySettingsIndex10].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff20 = nil
 			}
@@ -9994,8 +9967,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline29 = nil
 		}
 		systemFields29 := make([]string, 0, len(r.OutputNewrelic.SystemFields))
-		for _, systemFieldsItem29 := range r.OutputNewrelic.SystemFields {
-			systemFields29 = append(systemFields29, systemFieldsItem29.ValueString())
+		for systemFieldsIndex29 := range r.OutputNewrelic.SystemFields {
+			systemFields29 = append(systemFields29, r.OutputNewrelic.SystemFields[systemFieldsIndex29].ValueString())
 		}
 		environment29 := new(string)
 		if !r.OutputNewrelic.Environment.IsUnknown() && !r.OutputNewrelic.Environment.IsNull() {
@@ -10004,8 +9977,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment29 = nil
 		}
 		streamtags29 := make([]string, 0, len(r.OutputNewrelic.Streamtags))
-		for _, streamtagsItem29 := range r.OutputNewrelic.Streamtags {
-			streamtags29 = append(streamtags29, streamtagsItem29.ValueString())
+		for streamtagsIndex29 := range r.OutputNewrelic.Streamtags {
+			streamtags29 = append(streamtags29, r.OutputNewrelic.Streamtags[streamtagsIndex29].ValueString())
 		}
 		region7 := new(shared.OutputNewrelicRegion)
 		if !r.OutputNewrelic.Region.IsUnknown() && !r.OutputNewrelic.Region.IsNull() {
@@ -10026,10 +9999,10 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			messageField = nil
 		}
 		metadata := make([]shared.OutputNewrelicMetadatum, 0, len(r.OutputNewrelic.Metadata))
-		for _, metadataItem := range r.OutputNewrelic.Metadata {
-			name14 := shared.FieldName(metadataItem.Name.ValueString())
+		for metadataIndex := range r.OutputNewrelic.Metadata {
+			name14 := shared.FieldName(r.OutputNewrelic.Metadata[metadataIndex].Name.ValueString())
 			var value22 string
-			value22 = metadataItem.Value.ValueString()
+			value22 = r.OutputNewrelic.Metadata[metadataIndex].Value.ValueString()
 
 			metadata = append(metadata, shared.OutputNewrelicMetadatum{
 				Name:  name14,
@@ -10079,15 +10052,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec18 = nil
 		}
 		extraHTTPHeaders10 := make([]shared.OutputNewrelicExtraHTTPHeader, 0, len(r.OutputNewrelic.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem10 := range r.OutputNewrelic.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex10 := range r.OutputNewrelic.ExtraHTTPHeaders {
 			name15 := new(string)
-			if !extraHTTPHeadersItem10.Name.IsUnknown() && !extraHTTPHeadersItem10.Name.IsNull() {
-				*name15 = extraHTTPHeadersItem10.Name.ValueString()
+			if !r.OutputNewrelic.ExtraHTTPHeaders[extraHTTPHeadersIndex10].Name.IsUnknown() && !r.OutputNewrelic.ExtraHTTPHeaders[extraHTTPHeadersIndex10].Name.IsNull() {
+				*name15 = r.OutputNewrelic.ExtraHTTPHeaders[extraHTTPHeadersIndex10].Name.ValueString()
 			} else {
 				name15 = nil
 			}
 			var value23 string
-			value23 = extraHTTPHeadersItem10.Value.ValueString()
+			value23 = r.OutputNewrelic.ExtraHTTPHeaders[extraHTTPHeadersIndex10].Value.ValueString()
 
 			extraHTTPHeaders10 = append(extraHTTPHeaders10, shared.OutputNewrelicExtraHTTPHeader{
 				Name:  name15,
@@ -10107,29 +10080,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode10 = nil
 		}
 		safeHeaders10 := make([]string, 0, len(r.OutputNewrelic.SafeHeaders))
-		for _, safeHeadersItem10 := range r.OutputNewrelic.SafeHeaders {
-			safeHeaders10 = append(safeHeaders10, safeHeadersItem10.ValueString())
+		for safeHeadersIndex10 := range r.OutputNewrelic.SafeHeaders {
+			safeHeaders10 = append(safeHeaders10, r.OutputNewrelic.SafeHeaders[safeHeadersIndex10].ValueString())
 		}
 		responseRetrySettings11 := make([]shared.OutputNewrelicResponseRetrySetting, 0, len(r.OutputNewrelic.ResponseRetrySettings))
-		for _, responseRetrySettingsItem11 := range r.OutputNewrelic.ResponseRetrySettings {
+		for responseRetrySettingsIndex11 := range r.OutputNewrelic.ResponseRetrySettings {
 			var httpStatus11 float64
-			httpStatus11 = responseRetrySettingsItem11.HTTPStatus.ValueFloat64()
+			httpStatus11 = r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].HTTPStatus.ValueFloat64()
 
 			initialBackoff26 := new(float64)
-			if !responseRetrySettingsItem11.InitialBackoff.IsUnknown() && !responseRetrySettingsItem11.InitialBackoff.IsNull() {
-				*initialBackoff26 = responseRetrySettingsItem11.InitialBackoff.ValueFloat64()
+			if !r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].InitialBackoff.IsUnknown() && !r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].InitialBackoff.IsNull() {
+				*initialBackoff26 = r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff26 = nil
 			}
 			backoffRate26 := new(float64)
-			if !responseRetrySettingsItem11.BackoffRate.IsUnknown() && !responseRetrySettingsItem11.BackoffRate.IsNull() {
-				*backoffRate26 = responseRetrySettingsItem11.BackoffRate.ValueFloat64()
+			if !r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].BackoffRate.IsUnknown() && !r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].BackoffRate.IsNull() {
+				*backoffRate26 = r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate26 = nil
 			}
 			maxBackoff22 := new(float64)
-			if !responseRetrySettingsItem11.MaxBackoff.IsUnknown() && !responseRetrySettingsItem11.MaxBackoff.IsNull() {
-				*maxBackoff22 = responseRetrySettingsItem11.MaxBackoff.ValueFloat64()
+			if !r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].MaxBackoff.IsUnknown() && !r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].MaxBackoff.IsNull() {
+				*maxBackoff22 = r.OutputNewrelic.ResponseRetrySettings[responseRetrySettingsIndex11].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff22 = nil
 			}
@@ -10328,8 +10301,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline30 = nil
 		}
 		systemFields30 := make([]string, 0, len(r.OutputNewrelicEvents.SystemFields))
-		for _, systemFieldsItem30 := range r.OutputNewrelicEvents.SystemFields {
-			systemFields30 = append(systemFields30, systemFieldsItem30.ValueString())
+		for systemFieldsIndex30 := range r.OutputNewrelicEvents.SystemFields {
+			systemFields30 = append(systemFields30, r.OutputNewrelicEvents.SystemFields[systemFieldsIndex30].ValueString())
 		}
 		environment30 := new(string)
 		if !r.OutputNewrelicEvents.Environment.IsUnknown() && !r.OutputNewrelicEvents.Environment.IsNull() {
@@ -10338,8 +10311,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment30 = nil
 		}
 		streamtags30 := make([]string, 0, len(r.OutputNewrelicEvents.Streamtags))
-		for _, streamtagsItem30 := range r.OutputNewrelicEvents.Streamtags {
-			streamtags30 = append(streamtags30, streamtagsItem30.ValueString())
+		for streamtagsIndex30 := range r.OutputNewrelicEvents.Streamtags {
+			streamtags30 = append(streamtags30, r.OutputNewrelicEvents.Streamtags[streamtagsIndex30].ValueString())
 		}
 		region8 := new(shared.OutputNewrelicEventsRegion)
 		if !r.OutputNewrelicEvents.Region.IsUnknown() && !r.OutputNewrelicEvents.Region.IsNull() {
@@ -10396,15 +10369,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec19 = nil
 		}
 		extraHTTPHeaders11 := make([]shared.OutputNewrelicEventsExtraHTTPHeader, 0, len(r.OutputNewrelicEvents.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem11 := range r.OutputNewrelicEvents.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex11 := range r.OutputNewrelicEvents.ExtraHTTPHeaders {
 			name16 := new(string)
-			if !extraHTTPHeadersItem11.Name.IsUnknown() && !extraHTTPHeadersItem11.Name.IsNull() {
-				*name16 = extraHTTPHeadersItem11.Name.ValueString()
+			if !r.OutputNewrelicEvents.ExtraHTTPHeaders[extraHTTPHeadersIndex11].Name.IsUnknown() && !r.OutputNewrelicEvents.ExtraHTTPHeaders[extraHTTPHeadersIndex11].Name.IsNull() {
+				*name16 = r.OutputNewrelicEvents.ExtraHTTPHeaders[extraHTTPHeadersIndex11].Name.ValueString()
 			} else {
 				name16 = nil
 			}
 			var value24 string
-			value24 = extraHTTPHeadersItem11.Value.ValueString()
+			value24 = r.OutputNewrelicEvents.ExtraHTTPHeaders[extraHTTPHeadersIndex11].Value.ValueString()
 
 			extraHTTPHeaders11 = append(extraHTTPHeaders11, shared.OutputNewrelicEventsExtraHTTPHeader{
 				Name:  name16,
@@ -10424,29 +10397,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode11 = nil
 		}
 		safeHeaders11 := make([]string, 0, len(r.OutputNewrelicEvents.SafeHeaders))
-		for _, safeHeadersItem11 := range r.OutputNewrelicEvents.SafeHeaders {
-			safeHeaders11 = append(safeHeaders11, safeHeadersItem11.ValueString())
+		for safeHeadersIndex11 := range r.OutputNewrelicEvents.SafeHeaders {
+			safeHeaders11 = append(safeHeaders11, r.OutputNewrelicEvents.SafeHeaders[safeHeadersIndex11].ValueString())
 		}
 		responseRetrySettings12 := make([]shared.OutputNewrelicEventsResponseRetrySetting, 0, len(r.OutputNewrelicEvents.ResponseRetrySettings))
-		for _, responseRetrySettingsItem12 := range r.OutputNewrelicEvents.ResponseRetrySettings {
+		for responseRetrySettingsIndex12 := range r.OutputNewrelicEvents.ResponseRetrySettings {
 			var httpStatus12 float64
-			httpStatus12 = responseRetrySettingsItem12.HTTPStatus.ValueFloat64()
+			httpStatus12 = r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].HTTPStatus.ValueFloat64()
 
 			initialBackoff28 := new(float64)
-			if !responseRetrySettingsItem12.InitialBackoff.IsUnknown() && !responseRetrySettingsItem12.InitialBackoff.IsNull() {
-				*initialBackoff28 = responseRetrySettingsItem12.InitialBackoff.ValueFloat64()
+			if !r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].InitialBackoff.IsUnknown() && !r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].InitialBackoff.IsNull() {
+				*initialBackoff28 = r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff28 = nil
 			}
 			backoffRate28 := new(float64)
-			if !responseRetrySettingsItem12.BackoffRate.IsUnknown() && !responseRetrySettingsItem12.BackoffRate.IsNull() {
-				*backoffRate28 = responseRetrySettingsItem12.BackoffRate.ValueFloat64()
+			if !r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].BackoffRate.IsUnknown() && !r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].BackoffRate.IsNull() {
+				*backoffRate28 = r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate28 = nil
 			}
 			maxBackoff24 := new(float64)
-			if !responseRetrySettingsItem12.MaxBackoff.IsUnknown() && !responseRetrySettingsItem12.MaxBackoff.IsNull() {
-				*maxBackoff24 = responseRetrySettingsItem12.MaxBackoff.ValueFloat64()
+			if !r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].MaxBackoff.IsUnknown() && !r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].MaxBackoff.IsNull() {
+				*maxBackoff24 = r.OutputNewrelicEvents.ResponseRetrySettings[responseRetrySettingsIndex12].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff24 = nil
 			}
@@ -10632,8 +10605,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline31 = nil
 		}
 		systemFields31 := make([]string, 0, len(r.OutputInfluxdb.SystemFields))
-		for _, systemFieldsItem31 := range r.OutputInfluxdb.SystemFields {
-			systemFields31 = append(systemFields31, systemFieldsItem31.ValueString())
+		for systemFieldsIndex31 := range r.OutputInfluxdb.SystemFields {
+			systemFields31 = append(systemFields31, r.OutputInfluxdb.SystemFields[systemFieldsIndex31].ValueString())
 		}
 		environment31 := new(string)
 		if !r.OutputInfluxdb.Environment.IsUnknown() && !r.OutputInfluxdb.Environment.IsNull() {
@@ -10642,8 +10615,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment31 = nil
 		}
 		streamtags31 := make([]string, 0, len(r.OutputInfluxdb.Streamtags))
-		for _, streamtagsItem31 := range r.OutputInfluxdb.Streamtags {
-			streamtags31 = append(streamtags31, streamtagsItem31.ValueString())
+		for streamtagsIndex31 := range r.OutputInfluxdb.Streamtags {
+			streamtags31 = append(streamtags31, r.OutputInfluxdb.Streamtags[streamtagsIndex31].ValueString())
 		}
 		var url8 string
 		url8 = r.OutputInfluxdb.URL.ValueString()
@@ -10715,15 +10688,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec20 = nil
 		}
 		extraHTTPHeaders12 := make([]shared.OutputInfluxdbExtraHTTPHeader, 0, len(r.OutputInfluxdb.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem12 := range r.OutputInfluxdb.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex12 := range r.OutputInfluxdb.ExtraHTTPHeaders {
 			name17 := new(string)
-			if !extraHTTPHeadersItem12.Name.IsUnknown() && !extraHTTPHeadersItem12.Name.IsNull() {
-				*name17 = extraHTTPHeadersItem12.Name.ValueString()
+			if !r.OutputInfluxdb.ExtraHTTPHeaders[extraHTTPHeadersIndex12].Name.IsUnknown() && !r.OutputInfluxdb.ExtraHTTPHeaders[extraHTTPHeadersIndex12].Name.IsNull() {
+				*name17 = r.OutputInfluxdb.ExtraHTTPHeaders[extraHTTPHeadersIndex12].Name.ValueString()
 			} else {
 				name17 = nil
 			}
 			var value25 string
-			value25 = extraHTTPHeadersItem12.Value.ValueString()
+			value25 = r.OutputInfluxdb.ExtraHTTPHeaders[extraHTTPHeadersIndex12].Value.ValueString()
 
 			extraHTTPHeaders12 = append(extraHTTPHeaders12, shared.OutputInfluxdbExtraHTTPHeader{
 				Name:  name17,
@@ -10743,29 +10716,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode12 = nil
 		}
 		safeHeaders12 := make([]string, 0, len(r.OutputInfluxdb.SafeHeaders))
-		for _, safeHeadersItem12 := range r.OutputInfluxdb.SafeHeaders {
-			safeHeaders12 = append(safeHeaders12, safeHeadersItem12.ValueString())
+		for safeHeadersIndex12 := range r.OutputInfluxdb.SafeHeaders {
+			safeHeaders12 = append(safeHeaders12, r.OutputInfluxdb.SafeHeaders[safeHeadersIndex12].ValueString())
 		}
 		responseRetrySettings13 := make([]shared.OutputInfluxdbResponseRetrySetting, 0, len(r.OutputInfluxdb.ResponseRetrySettings))
-		for _, responseRetrySettingsItem13 := range r.OutputInfluxdb.ResponseRetrySettings {
+		for responseRetrySettingsIndex13 := range r.OutputInfluxdb.ResponseRetrySettings {
 			var httpStatus13 float64
-			httpStatus13 = responseRetrySettingsItem13.HTTPStatus.ValueFloat64()
+			httpStatus13 = r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].HTTPStatus.ValueFloat64()
 
 			initialBackoff30 := new(float64)
-			if !responseRetrySettingsItem13.InitialBackoff.IsUnknown() && !responseRetrySettingsItem13.InitialBackoff.IsNull() {
-				*initialBackoff30 = responseRetrySettingsItem13.InitialBackoff.ValueFloat64()
+			if !r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].InitialBackoff.IsUnknown() && !r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].InitialBackoff.IsNull() {
+				*initialBackoff30 = r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff30 = nil
 			}
 			backoffRate30 := new(float64)
-			if !responseRetrySettingsItem13.BackoffRate.IsUnknown() && !responseRetrySettingsItem13.BackoffRate.IsNull() {
-				*backoffRate30 = responseRetrySettingsItem13.BackoffRate.ValueFloat64()
+			if !r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].BackoffRate.IsUnknown() && !r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].BackoffRate.IsNull() {
+				*backoffRate30 = r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate30 = nil
 			}
 			maxBackoff26 := new(float64)
-			if !responseRetrySettingsItem13.MaxBackoff.IsUnknown() && !responseRetrySettingsItem13.MaxBackoff.IsNull() {
-				*maxBackoff26 = responseRetrySettingsItem13.MaxBackoff.ValueFloat64()
+			if !r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].MaxBackoff.IsUnknown() && !r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].MaxBackoff.IsNull() {
+				*maxBackoff26 = r.OutputInfluxdb.ResponseRetrySettings[responseRetrySettingsIndex13].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff26 = nil
 			}
@@ -10958,12 +10931,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			tokenTimeoutSecs1 = nil
 		}
 		oauthParams1 := make([]shared.OutputInfluxdbOauthParam, 0, len(r.OutputInfluxdb.OauthParams))
-		for _, oauthParamsItem1 := range r.OutputInfluxdb.OauthParams {
+		for oauthParamsIndex1 := range r.OutputInfluxdb.OauthParams {
 			var name18 string
-			name18 = oauthParamsItem1.Name.ValueString()
+			name18 = r.OutputInfluxdb.OauthParams[oauthParamsIndex1].Name.ValueString()
 
 			var value26 string
-			value26 = oauthParamsItem1.Value.ValueString()
+			value26 = r.OutputInfluxdb.OauthParams[oauthParamsIndex1].Value.ValueString()
 
 			oauthParams1 = append(oauthParams1, shared.OutputInfluxdbOauthParam{
 				Name:  name18,
@@ -10971,12 +10944,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		oauthHeaders1 := make([]shared.OutputInfluxdbOauthHeader, 0, len(r.OutputInfluxdb.OauthHeaders))
-		for _, oauthHeadersItem1 := range r.OutputInfluxdb.OauthHeaders {
+		for oauthHeadersIndex1 := range r.OutputInfluxdb.OauthHeaders {
 			var name19 string
-			name19 = oauthHeadersItem1.Name.ValueString()
+			name19 = r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Name.ValueString()
 
 			var value27 string
-			value27 = oauthHeadersItem1.Value.ValueString()
+			value27 = r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Value.ValueString()
 
 			oauthHeaders1 = append(oauthHeaders1, shared.OutputInfluxdbOauthHeader{
 				Name:  name19,
@@ -11063,8 +11036,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline32 = nil
 		}
 		systemFields32 := make([]string, 0, len(r.OutputCloudwatch.SystemFields))
-		for _, systemFieldsItem32 := range r.OutputCloudwatch.SystemFields {
-			systemFields32 = append(systemFields32, systemFieldsItem32.ValueString())
+		for systemFieldsIndex32 := range r.OutputCloudwatch.SystemFields {
+			systemFields32 = append(systemFields32, r.OutputCloudwatch.SystemFields[systemFieldsIndex32].ValueString())
 		}
 		environment32 := new(string)
 		if !r.OutputCloudwatch.Environment.IsUnknown() && !r.OutputCloudwatch.Environment.IsNull() {
@@ -11073,8 +11046,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment32 = nil
 		}
 		streamtags32 := make([]string, 0, len(r.OutputCloudwatch.Streamtags))
-		for _, streamtagsItem32 := range r.OutputCloudwatch.Streamtags {
-			streamtags32 = append(streamtags32, streamtagsItem32.ValueString())
+		for streamtagsIndex32 := range r.OutputCloudwatch.Streamtags {
+			streamtags32 = append(streamtags32, r.OutputCloudwatch.Streamtags[streamtagsIndex32].ValueString())
 		}
 		var logGroupName string
 		logGroupName = r.OutputCloudwatch.LogGroupName.ValueString()
@@ -11282,8 +11255,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline33 = nil
 		}
 		systemFields33 := make([]string, 0, len(r.OutputMinio.SystemFields))
-		for _, systemFieldsItem33 := range r.OutputMinio.SystemFields {
-			systemFields33 = append(systemFields33, systemFieldsItem33.ValueString())
+		for systemFieldsIndex33 := range r.OutputMinio.SystemFields {
+			systemFields33 = append(systemFields33, r.OutputMinio.SystemFields[systemFieldsIndex33].ValueString())
 		}
 		environment33 := new(string)
 		if !r.OutputMinio.Environment.IsUnknown() && !r.OutputMinio.Environment.IsNull() {
@@ -11292,8 +11265,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment33 = nil
 		}
 		streamtags33 := make([]string, 0, len(r.OutputMinio.Streamtags))
-		for _, streamtagsItem33 := range r.OutputMinio.Streamtags {
-			streamtags33 = append(streamtags33, streamtagsItem33.ValueString())
+		for streamtagsIndex33 := range r.OutputMinio.Streamtags {
+			streamtags33 = append(streamtags33, r.OutputMinio.Streamtags[streamtagsIndex33].ValueString())
 		}
 		var endpoint6 string
 		endpoint6 = r.OutputMinio.Endpoint.ValueString()
@@ -11536,15 +11509,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			shouldLogInvalidRows4 = nil
 		}
 		keyValueMetadata4 := make([]shared.OutputMinioKeyValueMetadatum, 0, len(r.OutputMinio.KeyValueMetadata))
-		for _, keyValueMetadataItem4 := range r.OutputMinio.KeyValueMetadata {
+		for keyValueMetadataIndex4 := range r.OutputMinio.KeyValueMetadata {
 			key6 := new(string)
-			if !keyValueMetadataItem4.Key.IsUnknown() && !keyValueMetadataItem4.Key.IsNull() {
-				*key6 = keyValueMetadataItem4.Key.ValueString()
+			if !r.OutputMinio.KeyValueMetadata[keyValueMetadataIndex4].Key.IsUnknown() && !r.OutputMinio.KeyValueMetadata[keyValueMetadataIndex4].Key.IsNull() {
+				*key6 = r.OutputMinio.KeyValueMetadata[keyValueMetadataIndex4].Key.ValueString()
 			} else {
 				key6 = nil
 			}
 			var value28 string
-			value28 = keyValueMetadataItem4.Value.ValueString()
+			value28 = r.OutputMinio.KeyValueMetadata[keyValueMetadataIndex4].Value.ValueString()
 
 			keyValueMetadata4 = append(keyValueMetadata4, shared.OutputMinioKeyValueMetadatum{
 				Key:   key6,
@@ -11670,8 +11643,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline34 = nil
 		}
 		systemFields34 := make([]string, 0, len(r.OutputStatsd.SystemFields))
-		for _, systemFieldsItem34 := range r.OutputStatsd.SystemFields {
-			systemFields34 = append(systemFields34, systemFieldsItem34.ValueString())
+		for systemFieldsIndex34 := range r.OutputStatsd.SystemFields {
+			systemFields34 = append(systemFields34, r.OutputStatsd.SystemFields[systemFieldsIndex34].ValueString())
 		}
 		environment34 := new(string)
 		if !r.OutputStatsd.Environment.IsUnknown() && !r.OutputStatsd.Environment.IsNull() {
@@ -11680,8 +11653,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment34 = nil
 		}
 		streamtags34 := make([]string, 0, len(r.OutputStatsd.Streamtags))
-		for _, streamtagsItem34 := range r.OutputStatsd.Streamtags {
-			streamtags34 = append(streamtags34, streamtagsItem34.ValueString())
+		for streamtagsIndex34 := range r.OutputStatsd.Streamtags {
+			streamtags34 = append(streamtags34, r.OutputStatsd.Streamtags[streamtagsIndex34].ValueString())
 		}
 		protocol1 := new(shared.OutputStatsdDestinationProtocol)
 		if !r.OutputStatsd.Protocol.IsUnknown() && !r.OutputStatsd.Protocol.IsNull() {
@@ -11839,8 +11812,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline35 = nil
 		}
 		systemFields35 := make([]string, 0, len(r.OutputStatsdExt.SystemFields))
-		for _, systemFieldsItem35 := range r.OutputStatsdExt.SystemFields {
-			systemFields35 = append(systemFields35, systemFieldsItem35.ValueString())
+		for systemFieldsIndex35 := range r.OutputStatsdExt.SystemFields {
+			systemFields35 = append(systemFields35, r.OutputStatsdExt.SystemFields[systemFieldsIndex35].ValueString())
 		}
 		environment35 := new(string)
 		if !r.OutputStatsdExt.Environment.IsUnknown() && !r.OutputStatsdExt.Environment.IsNull() {
@@ -11849,8 +11822,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment35 = nil
 		}
 		streamtags35 := make([]string, 0, len(r.OutputStatsdExt.Streamtags))
-		for _, streamtagsItem35 := range r.OutputStatsdExt.Streamtags {
-			streamtags35 = append(streamtags35, streamtagsItem35.ValueString())
+		for streamtagsIndex35 := range r.OutputStatsdExt.Streamtags {
+			streamtags35 = append(streamtags35, r.OutputStatsdExt.Streamtags[streamtagsIndex35].ValueString())
 		}
 		protocol2 := new(shared.OutputStatsdExtDestinationProtocol)
 		if !r.OutputStatsdExt.Protocol.IsUnknown() && !r.OutputStatsdExt.Protocol.IsNull() {
@@ -12008,8 +11981,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline36 = nil
 		}
 		systemFields36 := make([]string, 0, len(r.OutputGraphite.SystemFields))
-		for _, systemFieldsItem36 := range r.OutputGraphite.SystemFields {
-			systemFields36 = append(systemFields36, systemFieldsItem36.ValueString())
+		for systemFieldsIndex36 := range r.OutputGraphite.SystemFields {
+			systemFields36 = append(systemFields36, r.OutputGraphite.SystemFields[systemFieldsIndex36].ValueString())
 		}
 		environment36 := new(string)
 		if !r.OutputGraphite.Environment.IsUnknown() && !r.OutputGraphite.Environment.IsNull() {
@@ -12018,8 +11991,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment36 = nil
 		}
 		streamtags36 := make([]string, 0, len(r.OutputGraphite.Streamtags))
-		for _, streamtagsItem36 := range r.OutputGraphite.Streamtags {
-			streamtags36 = append(streamtags36, streamtagsItem36.ValueString())
+		for streamtagsIndex36 := range r.OutputGraphite.Streamtags {
+			streamtags36 = append(streamtags36, r.OutputGraphite.Streamtags[streamtagsIndex36].ValueString())
 		}
 		protocol3 := new(shared.OutputGraphiteDestinationProtocol)
 		if !r.OutputGraphite.Protocol.IsUnknown() && !r.OutputGraphite.Protocol.IsNull() {
@@ -12172,8 +12145,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline37 = nil
 		}
 		systemFields37 := make([]string, 0, len(r.OutputRouter.SystemFields))
-		for _, systemFieldsItem37 := range r.OutputRouter.SystemFields {
-			systemFields37 = append(systemFields37, systemFieldsItem37.ValueString())
+		for systemFieldsIndex37 := range r.OutputRouter.SystemFields {
+			systemFields37 = append(systemFields37, r.OutputRouter.SystemFields[systemFieldsIndex37].ValueString())
 		}
 		environment37 := new(string)
 		if !r.OutputRouter.Environment.IsUnknown() && !r.OutputRouter.Environment.IsNull() {
@@ -12182,26 +12155,26 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment37 = nil
 		}
 		streamtags37 := make([]string, 0, len(r.OutputRouter.Streamtags))
-		for _, streamtagsItem37 := range r.OutputRouter.Streamtags {
-			streamtags37 = append(streamtags37, streamtagsItem37.ValueString())
+		for streamtagsIndex37 := range r.OutputRouter.Streamtags {
+			streamtags37 = append(streamtags37, r.OutputRouter.Streamtags[streamtagsIndex37].ValueString())
 		}
 		rules := make([]shared.OutputRouterRule, 0, len(r.OutputRouter.Rules))
-		for _, rulesItem := range r.OutputRouter.Rules {
+		for rulesIndex := range r.OutputRouter.Rules {
 			var filter string
-			filter = rulesItem.Filter.ValueString()
+			filter = r.OutputRouter.Rules[rulesIndex].Filter.ValueString()
 
 			var output string
-			output = rulesItem.Output.ValueString()
+			output = r.OutputRouter.Rules[rulesIndex].Output.ValueString()
 
 			description36 := new(string)
-			if !rulesItem.Description.IsUnknown() && !rulesItem.Description.IsNull() {
-				*description36 = rulesItem.Description.ValueString()
+			if !r.OutputRouter.Rules[rulesIndex].Description.IsUnknown() && !r.OutputRouter.Rules[rulesIndex].Description.IsNull() {
+				*description36 = r.OutputRouter.Rules[rulesIndex].Description.ValueString()
 			} else {
 				description36 = nil
 			}
 			final := new(bool)
-			if !rulesItem.Final.IsUnknown() && !rulesItem.Final.IsNull() {
-				*final = rulesItem.Final.ValueBool()
+			if !r.OutputRouter.Rules[rulesIndex].Final.IsUnknown() && !r.OutputRouter.Rules[rulesIndex].Final.IsNull() {
+				*final = r.OutputRouter.Rules[rulesIndex].Final.ValueBool()
 			} else {
 				final = nil
 			}
@@ -12255,8 +12228,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline38 = nil
 		}
 		systemFields38 := make([]string, 0, len(r.OutputSns.SystemFields))
-		for _, systemFieldsItem38 := range r.OutputSns.SystemFields {
-			systemFields38 = append(systemFields38, systemFieldsItem38.ValueString())
+		for systemFieldsIndex38 := range r.OutputSns.SystemFields {
+			systemFields38 = append(systemFields38, r.OutputSns.SystemFields[systemFieldsIndex38].ValueString())
 		}
 		environment38 := new(string)
 		if !r.OutputSns.Environment.IsUnknown() && !r.OutputSns.Environment.IsNull() {
@@ -12265,8 +12238,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment38 = nil
 		}
 		streamtags38 := make([]string, 0, len(r.OutputSns.Streamtags))
-		for _, streamtagsItem38 := range r.OutputSns.Streamtags {
-			streamtags38 = append(streamtags38, streamtagsItem38.ValueString())
+		for streamtagsIndex38 := range r.OutputSns.Streamtags {
+			streamtags38 = append(streamtags38, r.OutputSns.Streamtags[streamtagsIndex38].ValueString())
 		}
 		var topicArn string
 		topicArn = r.OutputSns.TopicArn.ValueString()
@@ -12470,8 +12443,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline39 = nil
 		}
 		systemFields39 := make([]string, 0, len(r.OutputSqs.SystemFields))
-		for _, systemFieldsItem39 := range r.OutputSqs.SystemFields {
-			systemFields39 = append(systemFields39, systemFieldsItem39.ValueString())
+		for systemFieldsIndex39 := range r.OutputSqs.SystemFields {
+			systemFields39 = append(systemFields39, r.OutputSqs.SystemFields[systemFieldsIndex39].ValueString())
 		}
 		environment39 := new(string)
 		if !r.OutputSqs.Environment.IsUnknown() && !r.OutputSqs.Environment.IsNull() {
@@ -12480,8 +12453,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment39 = nil
 		}
 		streamtags39 := make([]string, 0, len(r.OutputSqs.Streamtags))
-		for _, streamtagsItem39 := range r.OutputSqs.Streamtags {
-			streamtags39 = append(streamtags39, streamtagsItem39.ValueString())
+		for streamtagsIndex39 := range r.OutputSqs.Streamtags {
+			streamtags39 = append(streamtags39, r.OutputSqs.Streamtags[streamtagsIndex39].ValueString())
 		}
 		var queueName string
 		queueName = r.OutputSqs.QueueName.ValueString()
@@ -12725,8 +12698,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline40 = nil
 		}
 		systemFields40 := make([]string, 0, len(r.OutputSnmp.SystemFields))
-		for _, systemFieldsItem40 := range r.OutputSnmp.SystemFields {
-			systemFields40 = append(systemFields40, systemFieldsItem40.ValueString())
+		for systemFieldsIndex40 := range r.OutputSnmp.SystemFields {
+			systemFields40 = append(systemFields40, r.OutputSnmp.SystemFields[systemFieldsIndex40].ValueString())
 		}
 		environment40 := new(string)
 		if !r.OutputSnmp.Environment.IsUnknown() && !r.OutputSnmp.Environment.IsNull() {
@@ -12735,17 +12708,17 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment40 = nil
 		}
 		streamtags40 := make([]string, 0, len(r.OutputSnmp.Streamtags))
-		for _, streamtagsItem40 := range r.OutputSnmp.Streamtags {
-			streamtags40 = append(streamtags40, streamtagsItem40.ValueString())
+		for streamtagsIndex40 := range r.OutputSnmp.Streamtags {
+			streamtags40 = append(streamtags40, r.OutputSnmp.Streamtags[streamtagsIndex40].ValueString())
 		}
 		hosts2 := make([]shared.OutputSnmpHost, 0, len(r.OutputSnmp.Hosts))
-		for _, hostsItem2 := range r.OutputSnmp.Hosts {
+		for hostsIndex2 := range r.OutputSnmp.Hosts {
 			var host8 string
-			host8 = hostsItem2.Host.ValueString()
+			host8 = r.OutputSnmp.Hosts[hostsIndex2].Host.ValueString()
 
 			port8 := new(float64)
-			if !hostsItem2.Port.IsUnknown() && !hostsItem2.Port.IsNull() {
-				*port8 = hostsItem2.Port.ValueFloat64()
+			if !r.OutputSnmp.Hosts[hostsIndex2].Port.IsUnknown() && !r.OutputSnmp.Hosts[hostsIndex2].Port.IsNull() {
+				*port8 = r.OutputSnmp.Hosts[hostsIndex2].Port.ValueFloat64()
 			} else {
 				port8 = nil
 			}
@@ -12799,8 +12772,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline41 = nil
 		}
 		systemFields41 := make([]string, 0, len(r.OutputSumoLogic.SystemFields))
-		for _, systemFieldsItem41 := range r.OutputSumoLogic.SystemFields {
-			systemFields41 = append(systemFields41, systemFieldsItem41.ValueString())
+		for systemFieldsIndex41 := range r.OutputSumoLogic.SystemFields {
+			systemFields41 = append(systemFields41, r.OutputSumoLogic.SystemFields[systemFieldsIndex41].ValueString())
 		}
 		environment41 := new(string)
 		if !r.OutputSumoLogic.Environment.IsUnknown() && !r.OutputSumoLogic.Environment.IsNull() {
@@ -12809,8 +12782,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment41 = nil
 		}
 		streamtags41 := make([]string, 0, len(r.OutputSumoLogic.Streamtags))
-		for _, streamtagsItem41 := range r.OutputSumoLogic.Streamtags {
-			streamtags41 = append(streamtags41, streamtagsItem41.ValueString())
+		for streamtagsIndex41 := range r.OutputSumoLogic.Streamtags {
+			streamtags41 = append(streamtags41, r.OutputSumoLogic.Streamtags[streamtagsIndex41].ValueString())
 		}
 		var url9 string
 		url9 = r.OutputSumoLogic.URL.ValueString()
@@ -12876,15 +12849,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec26 = nil
 		}
 		extraHTTPHeaders13 := make([]shared.OutputSumoLogicExtraHTTPHeader, 0, len(r.OutputSumoLogic.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem13 := range r.OutputSumoLogic.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex13 := range r.OutputSumoLogic.ExtraHTTPHeaders {
 			name20 := new(string)
-			if !extraHTTPHeadersItem13.Name.IsUnknown() && !extraHTTPHeadersItem13.Name.IsNull() {
-				*name20 = extraHTTPHeadersItem13.Name.ValueString()
+			if !r.OutputSumoLogic.ExtraHTTPHeaders[extraHTTPHeadersIndex13].Name.IsUnknown() && !r.OutputSumoLogic.ExtraHTTPHeaders[extraHTTPHeadersIndex13].Name.IsNull() {
+				*name20 = r.OutputSumoLogic.ExtraHTTPHeaders[extraHTTPHeadersIndex13].Name.ValueString()
 			} else {
 				name20 = nil
 			}
 			var value29 string
-			value29 = extraHTTPHeadersItem13.Value.ValueString()
+			value29 = r.OutputSumoLogic.ExtraHTTPHeaders[extraHTTPHeadersIndex13].Value.ValueString()
 
 			extraHTTPHeaders13 = append(extraHTTPHeaders13, shared.OutputSumoLogicExtraHTTPHeader{
 				Name:  name20,
@@ -12904,29 +12877,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode13 = nil
 		}
 		safeHeaders13 := make([]string, 0, len(r.OutputSumoLogic.SafeHeaders))
-		for _, safeHeadersItem13 := range r.OutputSumoLogic.SafeHeaders {
-			safeHeaders13 = append(safeHeaders13, safeHeadersItem13.ValueString())
+		for safeHeadersIndex13 := range r.OutputSumoLogic.SafeHeaders {
+			safeHeaders13 = append(safeHeaders13, r.OutputSumoLogic.SafeHeaders[safeHeadersIndex13].ValueString())
 		}
 		responseRetrySettings14 := make([]shared.OutputSumoLogicResponseRetrySetting, 0, len(r.OutputSumoLogic.ResponseRetrySettings))
-		for _, responseRetrySettingsItem14 := range r.OutputSumoLogic.ResponseRetrySettings {
+		for responseRetrySettingsIndex14 := range r.OutputSumoLogic.ResponseRetrySettings {
 			var httpStatus14 float64
-			httpStatus14 = responseRetrySettingsItem14.HTTPStatus.ValueFloat64()
+			httpStatus14 = r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].HTTPStatus.ValueFloat64()
 
 			initialBackoff32 := new(float64)
-			if !responseRetrySettingsItem14.InitialBackoff.IsUnknown() && !responseRetrySettingsItem14.InitialBackoff.IsNull() {
-				*initialBackoff32 = responseRetrySettingsItem14.InitialBackoff.ValueFloat64()
+			if !r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].InitialBackoff.IsUnknown() && !r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].InitialBackoff.IsNull() {
+				*initialBackoff32 = r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff32 = nil
 			}
 			backoffRate32 := new(float64)
-			if !responseRetrySettingsItem14.BackoffRate.IsUnknown() && !responseRetrySettingsItem14.BackoffRate.IsNull() {
-				*backoffRate32 = responseRetrySettingsItem14.BackoffRate.ValueFloat64()
+			if !r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].BackoffRate.IsUnknown() && !r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].BackoffRate.IsNull() {
+				*backoffRate32 = r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate32 = nil
 			}
 			maxBackoff28 := new(float64)
-			if !responseRetrySettingsItem14.MaxBackoff.IsUnknown() && !responseRetrySettingsItem14.MaxBackoff.IsNull() {
-				*maxBackoff28 = responseRetrySettingsItem14.MaxBackoff.ValueFloat64()
+			if !r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].MaxBackoff.IsUnknown() && !r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].MaxBackoff.IsNull() {
+				*maxBackoff28 = r.OutputSumoLogic.ResponseRetrySettings[responseRetrySettingsIndex14].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff28 = nil
 			}
@@ -13089,8 +13062,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline42 = nil
 		}
 		systemFields42 := make([]string, 0, len(r.OutputDatadog.SystemFields))
-		for _, systemFieldsItem42 := range r.OutputDatadog.SystemFields {
-			systemFields42 = append(systemFields42, systemFieldsItem42.ValueString())
+		for systemFieldsIndex42 := range r.OutputDatadog.SystemFields {
+			systemFields42 = append(systemFields42, r.OutputDatadog.SystemFields[systemFieldsIndex42].ValueString())
 		}
 		environment42 := new(string)
 		if !r.OutputDatadog.Environment.IsUnknown() && !r.OutputDatadog.Environment.IsNull() {
@@ -13099,8 +13072,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment42 = nil
 		}
 		streamtags42 := make([]string, 0, len(r.OutputDatadog.Streamtags))
-		for _, streamtagsItem42 := range r.OutputDatadog.Streamtags {
-			streamtags42 = append(streamtags42, streamtagsItem42.ValueString())
+		for streamtagsIndex42 := range r.OutputDatadog.Streamtags {
+			streamtags42 = append(streamtags42, r.OutputDatadog.Streamtags[streamtagsIndex42].ValueString())
 		}
 		contentType := new(shared.SendLogsAs)
 		if !r.OutputDatadog.ContentType.IsUnknown() && !r.OutputDatadog.ContentType.IsNull() {
@@ -13133,8 +13106,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			service = nil
 		}
 		tags := make([]string, 0, len(r.OutputDatadog.Tags))
-		for _, tagsItem := range r.OutputDatadog.Tags {
-			tags = append(tags, tagsItem.ValueString())
+		for tagsIndex := range r.OutputDatadog.Tags {
+			tags = append(tags, r.OutputDatadog.Tags[tagsIndex].ValueString())
 		}
 		batchByTags := new(bool)
 		if !r.OutputDatadog.BatchByTags.IsUnknown() && !r.OutputDatadog.BatchByTags.IsNull() {
@@ -13209,15 +13182,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec27 = nil
 		}
 		extraHTTPHeaders14 := make([]shared.OutputDatadogExtraHTTPHeader, 0, len(r.OutputDatadog.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem14 := range r.OutputDatadog.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex14 := range r.OutputDatadog.ExtraHTTPHeaders {
 			name21 := new(string)
-			if !extraHTTPHeadersItem14.Name.IsUnknown() && !extraHTTPHeadersItem14.Name.IsNull() {
-				*name21 = extraHTTPHeadersItem14.Name.ValueString()
+			if !r.OutputDatadog.ExtraHTTPHeaders[extraHTTPHeadersIndex14].Name.IsUnknown() && !r.OutputDatadog.ExtraHTTPHeaders[extraHTTPHeadersIndex14].Name.IsNull() {
+				*name21 = r.OutputDatadog.ExtraHTTPHeaders[extraHTTPHeadersIndex14].Name.ValueString()
 			} else {
 				name21 = nil
 			}
 			var value30 string
-			value30 = extraHTTPHeadersItem14.Value.ValueString()
+			value30 = r.OutputDatadog.ExtraHTTPHeaders[extraHTTPHeadersIndex14].Value.ValueString()
 
 			extraHTTPHeaders14 = append(extraHTTPHeaders14, shared.OutputDatadogExtraHTTPHeader{
 				Name:  name21,
@@ -13237,29 +13210,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode14 = nil
 		}
 		safeHeaders14 := make([]string, 0, len(r.OutputDatadog.SafeHeaders))
-		for _, safeHeadersItem14 := range r.OutputDatadog.SafeHeaders {
-			safeHeaders14 = append(safeHeaders14, safeHeadersItem14.ValueString())
+		for safeHeadersIndex14 := range r.OutputDatadog.SafeHeaders {
+			safeHeaders14 = append(safeHeaders14, r.OutputDatadog.SafeHeaders[safeHeadersIndex14].ValueString())
 		}
 		responseRetrySettings15 := make([]shared.OutputDatadogResponseRetrySetting, 0, len(r.OutputDatadog.ResponseRetrySettings))
-		for _, responseRetrySettingsItem15 := range r.OutputDatadog.ResponseRetrySettings {
+		for responseRetrySettingsIndex15 := range r.OutputDatadog.ResponseRetrySettings {
 			var httpStatus15 float64
-			httpStatus15 = responseRetrySettingsItem15.HTTPStatus.ValueFloat64()
+			httpStatus15 = r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].HTTPStatus.ValueFloat64()
 
 			initialBackoff34 := new(float64)
-			if !responseRetrySettingsItem15.InitialBackoff.IsUnknown() && !responseRetrySettingsItem15.InitialBackoff.IsNull() {
-				*initialBackoff34 = responseRetrySettingsItem15.InitialBackoff.ValueFloat64()
+			if !r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].InitialBackoff.IsUnknown() && !r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].InitialBackoff.IsNull() {
+				*initialBackoff34 = r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff34 = nil
 			}
 			backoffRate34 := new(float64)
-			if !responseRetrySettingsItem15.BackoffRate.IsUnknown() && !responseRetrySettingsItem15.BackoffRate.IsNull() {
-				*backoffRate34 = responseRetrySettingsItem15.BackoffRate.ValueFloat64()
+			if !r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].BackoffRate.IsUnknown() && !r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].BackoffRate.IsNull() {
+				*backoffRate34 = r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate34 = nil
 			}
 			maxBackoff30 := new(float64)
-			if !responseRetrySettingsItem15.MaxBackoff.IsUnknown() && !responseRetrySettingsItem15.MaxBackoff.IsNull() {
-				*maxBackoff30 = responseRetrySettingsItem15.MaxBackoff.ValueFloat64()
+			if !r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].MaxBackoff.IsUnknown() && !r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].MaxBackoff.IsNull() {
+				*maxBackoff30 = r.OutputDatadog.ResponseRetrySettings[responseRetrySettingsIndex15].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff30 = nil
 			}
@@ -13459,8 +13432,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				pipeline43 = nil
 			}
 			systemFields43 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields))
-			for _, systemFieldsItem43 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields {
-				systemFields43 = append(systemFields43, systemFieldsItem43.ValueString())
+			for systemFieldsIndex43 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields {
+				systemFields43 = append(systemFields43, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields[systemFieldsIndex43].ValueString())
 			}
 			environment43 := new(string)
 			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Environment.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Environment.IsNull() {
@@ -13469,8 +13442,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				environment43 = nil
 			}
 			streamtags43 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags))
-			for _, streamtagsItem43 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags {
-				streamtags43 = append(streamtags43, streamtagsItem43.ValueString())
+			for streamtagsIndex43 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags {
+				streamtags43 = append(streamtags43, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags[streamtagsIndex43].ValueString())
 			}
 			var lokiURL string
 			lokiURL = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiURL.ValueString()
@@ -13494,15 +13467,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				messageFormat1 = nil
 			}
 			labels := make([]shared.OutputGrafanaCloudLabel1, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels))
-			for _, labelsItem := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels {
+			for labelsIndex := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels {
 				name22 := new(string)
-				if !labelsItem.Name.IsUnknown() && !labelsItem.Name.IsNull() {
-					*name22 = labelsItem.Name.ValueString()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels[labelsIndex].Name.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels[labelsIndex].Name.IsNull() {
+					*name22 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels[labelsIndex].Name.ValueString()
 				} else {
 					name22 = nil
 				}
 				var value31 string
-				value31 = labelsItem.Value.ValueString()
+				value31 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels[labelsIndex].Value.ValueString()
 
 				labels = append(labels, shared.OutputGrafanaCloudLabel1{
 					Name:  name22,
@@ -13646,15 +13619,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				flushPeriodSec28 = nil
 			}
 			extraHTTPHeaders15 := make([]shared.OutputGrafanaCloudExtraHTTPHeader1, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders))
-			for _, extraHTTPHeadersItem15 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders {
+			for extraHTTPHeadersIndex15 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders {
 				name23 := new(string)
-				if !extraHTTPHeadersItem15.Name.IsUnknown() && !extraHTTPHeadersItem15.Name.IsNull() {
-					*name23 = extraHTTPHeadersItem15.Name.ValueString()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders[extraHTTPHeadersIndex15].Name.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders[extraHTTPHeadersIndex15].Name.IsNull() {
+					*name23 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders[extraHTTPHeadersIndex15].Name.ValueString()
 				} else {
 					name23 = nil
 				}
 				var value32 string
-				value32 = extraHTTPHeadersItem15.Value.ValueString()
+				value32 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders[extraHTTPHeadersIndex15].Value.ValueString()
 
 				extraHTTPHeaders15 = append(extraHTTPHeaders15, shared.OutputGrafanaCloudExtraHTTPHeader1{
 					Name:  name23,
@@ -13674,29 +13647,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				failedRequestLoggingMode15 = nil
 			}
 			safeHeaders15 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders))
-			for _, safeHeadersItem15 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders {
-				safeHeaders15 = append(safeHeaders15, safeHeadersItem15.ValueString())
+			for safeHeadersIndex15 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders {
+				safeHeaders15 = append(safeHeaders15, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders[safeHeadersIndex15].ValueString())
 			}
 			responseRetrySettings16 := make([]shared.OutputGrafanaCloudResponseRetrySetting1, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings))
-			for _, responseRetrySettingsItem16 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings {
+			for responseRetrySettingsIndex16 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings {
 				var httpStatus16 float64
-				httpStatus16 = responseRetrySettingsItem16.HTTPStatus.ValueFloat64()
+				httpStatus16 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].HTTPStatus.ValueFloat64()
 
 				initialBackoff36 := new(float64)
-				if !responseRetrySettingsItem16.InitialBackoff.IsUnknown() && !responseRetrySettingsItem16.InitialBackoff.IsNull() {
-					*initialBackoff36 = responseRetrySettingsItem16.InitialBackoff.ValueFloat64()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].InitialBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].InitialBackoff.IsNull() {
+					*initialBackoff36 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].InitialBackoff.ValueFloat64()
 				} else {
 					initialBackoff36 = nil
 				}
 				backoffRate36 := new(float64)
-				if !responseRetrySettingsItem16.BackoffRate.IsUnknown() && !responseRetrySettingsItem16.BackoffRate.IsNull() {
-					*backoffRate36 = responseRetrySettingsItem16.BackoffRate.ValueFloat64()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].BackoffRate.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].BackoffRate.IsNull() {
+					*backoffRate36 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].BackoffRate.ValueFloat64()
 				} else {
 					backoffRate36 = nil
 				}
 				maxBackoff32 := new(float64)
-				if !responseRetrySettingsItem16.MaxBackoff.IsUnknown() && !responseRetrySettingsItem16.MaxBackoff.IsNull() {
-					*maxBackoff32 = responseRetrySettingsItem16.MaxBackoff.ValueFloat64()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].MaxBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].MaxBackoff.IsNull() {
+					*maxBackoff32 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex16].MaxBackoff.ValueFloat64()
 				} else {
 					maxBackoff32 = nil
 				}
@@ -13862,8 +13835,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				pipeline44 = nil
 			}
 			systemFields44 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields))
-			for _, systemFieldsItem44 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields {
-				systemFields44 = append(systemFields44, systemFieldsItem44.ValueString())
+			for systemFieldsIndex44 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields {
+				systemFields44 = append(systemFields44, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields[systemFieldsIndex44].ValueString())
 			}
 			environment44 := new(string)
 			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Environment.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Environment.IsNull() {
@@ -13872,8 +13845,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				environment44 = nil
 			}
 			streamtags44 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags))
-			for _, streamtagsItem44 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags {
-				streamtags44 = append(streamtags44, streamtagsItem44.ValueString())
+			for streamtagsIndex44 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags {
+				streamtags44 = append(streamtags44, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags[streamtagsIndex44].ValueString())
 			}
 			lokiUrl1 := new(string)
 			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiURL.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiURL.IsNull() {
@@ -13897,15 +13870,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				messageFormat2 = nil
 			}
 			labels1 := make([]shared.OutputGrafanaCloudLabel2, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels))
-			for _, labelsItem1 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels {
+			for labelsIndex1 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels {
 				name24 := new(string)
-				if !labelsItem1.Name.IsUnknown() && !labelsItem1.Name.IsNull() {
-					*name24 = labelsItem1.Name.ValueString()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels[labelsIndex1].Name.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels[labelsIndex1].Name.IsNull() {
+					*name24 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels[labelsIndex1].Name.ValueString()
 				} else {
 					name24 = nil
 				}
 				var value33 string
-				value33 = labelsItem1.Value.ValueString()
+				value33 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels[labelsIndex1].Value.ValueString()
 
 				labels1 = append(labels1, shared.OutputGrafanaCloudLabel2{
 					Name:  name24,
@@ -14049,15 +14022,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				flushPeriodSec29 = nil
 			}
 			extraHTTPHeaders16 := make([]shared.OutputGrafanaCloudExtraHTTPHeader2, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders))
-			for _, extraHTTPHeadersItem16 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders {
+			for extraHTTPHeadersIndex16 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders {
 				name25 := new(string)
-				if !extraHTTPHeadersItem16.Name.IsUnknown() && !extraHTTPHeadersItem16.Name.IsNull() {
-					*name25 = extraHTTPHeadersItem16.Name.ValueString()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Name.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Name.IsNull() {
+					*name25 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Name.ValueString()
 				} else {
 					name25 = nil
 				}
 				var value34 string
-				value34 = extraHTTPHeadersItem16.Value.ValueString()
+				value34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Value.ValueString()
 
 				extraHTTPHeaders16 = append(extraHTTPHeaders16, shared.OutputGrafanaCloudExtraHTTPHeader2{
 					Name:  name25,
@@ -14077,29 +14050,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 				failedRequestLoggingMode16 = nil
 			}
 			safeHeaders16 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders))
-			for _, safeHeadersItem16 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders {
-				safeHeaders16 = append(safeHeaders16, safeHeadersItem16.ValueString())
+			for safeHeadersIndex16 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders {
+				safeHeaders16 = append(safeHeaders16, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders[safeHeadersIndex16].ValueString())
 			}
 			responseRetrySettings17 := make([]shared.OutputGrafanaCloudResponseRetrySetting2, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings))
-			for _, responseRetrySettingsItem17 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings {
+			for responseRetrySettingsIndex17 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings {
 				var httpStatus17 float64
-				httpStatus17 = responseRetrySettingsItem17.HTTPStatus.ValueFloat64()
+				httpStatus17 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].HTTPStatus.ValueFloat64()
 
 				initialBackoff38 := new(float64)
-				if !responseRetrySettingsItem17.InitialBackoff.IsUnknown() && !responseRetrySettingsItem17.InitialBackoff.IsNull() {
-					*initialBackoff38 = responseRetrySettingsItem17.InitialBackoff.ValueFloat64()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].InitialBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].InitialBackoff.IsNull() {
+					*initialBackoff38 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].InitialBackoff.ValueFloat64()
 				} else {
 					initialBackoff38 = nil
 				}
 				backoffRate38 := new(float64)
-				if !responseRetrySettingsItem17.BackoffRate.IsUnknown() && !responseRetrySettingsItem17.BackoffRate.IsNull() {
-					*backoffRate38 = responseRetrySettingsItem17.BackoffRate.ValueFloat64()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].BackoffRate.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].BackoffRate.IsNull() {
+					*backoffRate38 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].BackoffRate.ValueFloat64()
 				} else {
 					backoffRate38 = nil
 				}
 				maxBackoff34 := new(float64)
-				if !responseRetrySettingsItem17.MaxBackoff.IsUnknown() && !responseRetrySettingsItem17.MaxBackoff.IsNull() {
-					*maxBackoff34 = responseRetrySettingsItem17.MaxBackoff.ValueFloat64()
+				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].MaxBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].MaxBackoff.IsNull() {
+					*maxBackoff34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex17].MaxBackoff.ValueFloat64()
 				} else {
 					maxBackoff34 = nil
 				}
@@ -14274,8 +14247,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline45 = nil
 		}
 		systemFields45 := make([]string, 0, len(r.OutputLoki.SystemFields))
-		for _, systemFieldsItem45 := range r.OutputLoki.SystemFields {
-			systemFields45 = append(systemFields45, systemFieldsItem45.ValueString())
+		for systemFieldsIndex45 := range r.OutputLoki.SystemFields {
+			systemFields45 = append(systemFields45, r.OutputLoki.SystemFields[systemFieldsIndex45].ValueString())
 		}
 		environment45 := new(string)
 		if !r.OutputLoki.Environment.IsUnknown() && !r.OutputLoki.Environment.IsNull() {
@@ -14284,8 +14257,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment45 = nil
 		}
 		streamtags45 := make([]string, 0, len(r.OutputLoki.Streamtags))
-		for _, streamtagsItem45 := range r.OutputLoki.Streamtags {
-			streamtags45 = append(streamtags45, streamtagsItem45.ValueString())
+		for streamtagsIndex45 := range r.OutputLoki.Streamtags {
+			streamtags45 = append(streamtags45, r.OutputLoki.Streamtags[streamtagsIndex45].ValueString())
 		}
 		var url10 string
 		url10 = r.OutputLoki.URL.ValueString()
@@ -14303,15 +14276,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			messageFormat3 = nil
 		}
 		labels2 := make([]shared.OutputLokiLabel, 0, len(r.OutputLoki.Labels))
-		for _, labelsItem2 := range r.OutputLoki.Labels {
+		for labelsIndex2 := range r.OutputLoki.Labels {
 			name26 := new(string)
-			if !labelsItem2.Name.IsUnknown() && !labelsItem2.Name.IsNull() {
-				*name26 = labelsItem2.Name.ValueString()
+			if !r.OutputLoki.Labels[labelsIndex2].Name.IsUnknown() && !r.OutputLoki.Labels[labelsIndex2].Name.IsNull() {
+				*name26 = r.OutputLoki.Labels[labelsIndex2].Name.ValueString()
 			} else {
 				name26 = nil
 			}
 			var value35 string
-			value35 = labelsItem2.Value.ValueString()
+			value35 = r.OutputLoki.Labels[labelsIndex2].Value.ValueString()
 
 			labels2 = append(labels2, shared.OutputLokiLabel{
 				Name:  name26,
@@ -14361,15 +14334,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec30 = nil
 		}
 		extraHTTPHeaders17 := make([]shared.OutputLokiExtraHTTPHeader, 0, len(r.OutputLoki.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem17 := range r.OutputLoki.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex17 := range r.OutputLoki.ExtraHTTPHeaders {
 			name27 := new(string)
-			if !extraHTTPHeadersItem17.Name.IsUnknown() && !extraHTTPHeadersItem17.Name.IsNull() {
-				*name27 = extraHTTPHeadersItem17.Name.ValueString()
+			if !r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Name.IsUnknown() && !r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Name.IsNull() {
+				*name27 = r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Name.ValueString()
 			} else {
 				name27 = nil
 			}
 			var value36 string
-			value36 = extraHTTPHeadersItem17.Value.ValueString()
+			value36 = r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Value.ValueString()
 
 			extraHTTPHeaders17 = append(extraHTTPHeaders17, shared.OutputLokiExtraHTTPHeader{
 				Name:  name27,
@@ -14389,29 +14362,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode17 = nil
 		}
 		safeHeaders17 := make([]string, 0, len(r.OutputLoki.SafeHeaders))
-		for _, safeHeadersItem17 := range r.OutputLoki.SafeHeaders {
-			safeHeaders17 = append(safeHeaders17, safeHeadersItem17.ValueString())
+		for safeHeadersIndex17 := range r.OutputLoki.SafeHeaders {
+			safeHeaders17 = append(safeHeaders17, r.OutputLoki.SafeHeaders[safeHeadersIndex17].ValueString())
 		}
 		responseRetrySettings18 := make([]shared.OutputLokiResponseRetrySetting, 0, len(r.OutputLoki.ResponseRetrySettings))
-		for _, responseRetrySettingsItem18 := range r.OutputLoki.ResponseRetrySettings {
+		for responseRetrySettingsIndex18 := range r.OutputLoki.ResponseRetrySettings {
 			var httpStatus18 float64
-			httpStatus18 = responseRetrySettingsItem18.HTTPStatus.ValueFloat64()
+			httpStatus18 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].HTTPStatus.ValueFloat64()
 
 			initialBackoff40 := new(float64)
-			if !responseRetrySettingsItem18.InitialBackoff.IsUnknown() && !responseRetrySettingsItem18.InitialBackoff.IsNull() {
-				*initialBackoff40 = responseRetrySettingsItem18.InitialBackoff.ValueFloat64()
+			if !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].InitialBackoff.IsUnknown() && !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].InitialBackoff.IsNull() {
+				*initialBackoff40 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff40 = nil
 			}
 			backoffRate40 := new(float64)
-			if !responseRetrySettingsItem18.BackoffRate.IsUnknown() && !responseRetrySettingsItem18.BackoffRate.IsNull() {
-				*backoffRate40 = responseRetrySettingsItem18.BackoffRate.ValueFloat64()
+			if !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].BackoffRate.IsUnknown() && !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].BackoffRate.IsNull() {
+				*backoffRate40 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate40 = nil
 			}
 			maxBackoff36 := new(float64)
-			if !responseRetrySettingsItem18.MaxBackoff.IsUnknown() && !responseRetrySettingsItem18.MaxBackoff.IsNull() {
-				*maxBackoff36 = responseRetrySettingsItem18.MaxBackoff.ValueFloat64()
+			if !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].MaxBackoff.IsUnknown() && !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].MaxBackoff.IsNull() {
+				*maxBackoff36 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff36 = nil
 			}
@@ -14619,8 +14592,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline46 = nil
 		}
 		systemFields46 := make([]string, 0, len(r.OutputPrometheus.SystemFields))
-		for _, systemFieldsItem46 := range r.OutputPrometheus.SystemFields {
-			systemFields46 = append(systemFields46, systemFieldsItem46.ValueString())
+		for systemFieldsIndex46 := range r.OutputPrometheus.SystemFields {
+			systemFields46 = append(systemFields46, r.OutputPrometheus.SystemFields[systemFieldsIndex46].ValueString())
 		}
 		environment46 := new(string)
 		if !r.OutputPrometheus.Environment.IsUnknown() && !r.OutputPrometheus.Environment.IsNull() {
@@ -14629,8 +14602,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment46 = nil
 		}
 		streamtags46 := make([]string, 0, len(r.OutputPrometheus.Streamtags))
-		for _, streamtagsItem46 := range r.OutputPrometheus.Streamtags {
-			streamtags46 = append(streamtags46, streamtagsItem46.ValueString())
+		for streamtagsIndex46 := range r.OutputPrometheus.Streamtags {
+			streamtags46 = append(streamtags46, r.OutputPrometheus.Streamtags[streamtagsIndex46].ValueString())
 		}
 		var url11 string
 		url11 = r.OutputPrometheus.URL.ValueString()
@@ -14684,15 +14657,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec31 = nil
 		}
 		extraHTTPHeaders18 := make([]shared.OutputPrometheusExtraHTTPHeader, 0, len(r.OutputPrometheus.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem18 := range r.OutputPrometheus.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex18 := range r.OutputPrometheus.ExtraHTTPHeaders {
 			name28 := new(string)
-			if !extraHTTPHeadersItem18.Name.IsUnknown() && !extraHTTPHeadersItem18.Name.IsNull() {
-				*name28 = extraHTTPHeadersItem18.Name.ValueString()
+			if !r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Name.IsUnknown() && !r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Name.IsNull() {
+				*name28 = r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Name.ValueString()
 			} else {
 				name28 = nil
 			}
 			var value37 string
-			value37 = extraHTTPHeadersItem18.Value.ValueString()
+			value37 = r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Value.ValueString()
 
 			extraHTTPHeaders18 = append(extraHTTPHeaders18, shared.OutputPrometheusExtraHTTPHeader{
 				Name:  name28,
@@ -14712,29 +14685,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode18 = nil
 		}
 		safeHeaders18 := make([]string, 0, len(r.OutputPrometheus.SafeHeaders))
-		for _, safeHeadersItem18 := range r.OutputPrometheus.SafeHeaders {
-			safeHeaders18 = append(safeHeaders18, safeHeadersItem18.ValueString())
+		for safeHeadersIndex18 := range r.OutputPrometheus.SafeHeaders {
+			safeHeaders18 = append(safeHeaders18, r.OutputPrometheus.SafeHeaders[safeHeadersIndex18].ValueString())
 		}
 		responseRetrySettings19 := make([]shared.OutputPrometheusResponseRetrySetting, 0, len(r.OutputPrometheus.ResponseRetrySettings))
-		for _, responseRetrySettingsItem19 := range r.OutputPrometheus.ResponseRetrySettings {
+		for responseRetrySettingsIndex19 := range r.OutputPrometheus.ResponseRetrySettings {
 			var httpStatus19 float64
-			httpStatus19 = responseRetrySettingsItem19.HTTPStatus.ValueFloat64()
+			httpStatus19 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].HTTPStatus.ValueFloat64()
 
 			initialBackoff42 := new(float64)
-			if !responseRetrySettingsItem19.InitialBackoff.IsUnknown() && !responseRetrySettingsItem19.InitialBackoff.IsNull() {
-				*initialBackoff42 = responseRetrySettingsItem19.InitialBackoff.ValueFloat64()
+			if !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].InitialBackoff.IsUnknown() && !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].InitialBackoff.IsNull() {
+				*initialBackoff42 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff42 = nil
 			}
 			backoffRate42 := new(float64)
-			if !responseRetrySettingsItem19.BackoffRate.IsUnknown() && !responseRetrySettingsItem19.BackoffRate.IsNull() {
-				*backoffRate42 = responseRetrySettingsItem19.BackoffRate.ValueFloat64()
+			if !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].BackoffRate.IsUnknown() && !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].BackoffRate.IsNull() {
+				*backoffRate42 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate42 = nil
 			}
 			maxBackoff38 := new(float64)
-			if !responseRetrySettingsItem19.MaxBackoff.IsUnknown() && !responseRetrySettingsItem19.MaxBackoff.IsNull() {
-				*maxBackoff38 = responseRetrySettingsItem19.MaxBackoff.ValueFloat64()
+			if !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].MaxBackoff.IsUnknown() && !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].MaxBackoff.IsNull() {
+				*maxBackoff38 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff38 = nil
 			}
@@ -14915,12 +14888,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			tokenTimeoutSecs2 = nil
 		}
 		oauthParams2 := make([]shared.OutputPrometheusOauthParam, 0, len(r.OutputPrometheus.OauthParams))
-		for _, oauthParamsItem2 := range r.OutputPrometheus.OauthParams {
+		for oauthParamsIndex2 := range r.OutputPrometheus.OauthParams {
 			var name29 string
-			name29 = oauthParamsItem2.Name.ValueString()
+			name29 = r.OutputPrometheus.OauthParams[oauthParamsIndex2].Name.ValueString()
 
 			var value38 string
-			value38 = oauthParamsItem2.Value.ValueString()
+			value38 = r.OutputPrometheus.OauthParams[oauthParamsIndex2].Value.ValueString()
 
 			oauthParams2 = append(oauthParams2, shared.OutputPrometheusOauthParam{
 				Name:  name29,
@@ -14928,12 +14901,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		oauthHeaders2 := make([]shared.OutputPrometheusOauthHeader, 0, len(r.OutputPrometheus.OauthHeaders))
-		for _, oauthHeadersItem2 := range r.OutputPrometheus.OauthHeaders {
+		for oauthHeadersIndex2 := range r.OutputPrometheus.OauthHeaders {
 			var name30 string
-			name30 = oauthHeadersItem2.Name.ValueString()
+			name30 = r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.ValueString()
 
 			var value39 string
-			value39 = oauthHeadersItem2.Value.ValueString()
+			value39 = r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.ValueString()
 
 			oauthHeaders2 = append(oauthHeaders2, shared.OutputPrometheusOauthHeader{
 				Name:  name30,
@@ -15007,8 +14980,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline47 = nil
 		}
 		systemFields47 := make([]string, 0, len(r.OutputRing.SystemFields))
-		for _, systemFieldsItem47 := range r.OutputRing.SystemFields {
-			systemFields47 = append(systemFields47, systemFieldsItem47.ValueString())
+		for systemFieldsIndex47 := range r.OutputRing.SystemFields {
+			systemFields47 = append(systemFields47, r.OutputRing.SystemFields[systemFieldsIndex47].ValueString())
 		}
 		environment47 := new(string)
 		if !r.OutputRing.Environment.IsUnknown() && !r.OutputRing.Environment.IsNull() {
@@ -15017,8 +14990,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment47 = nil
 		}
 		streamtags47 := make([]string, 0, len(r.OutputRing.Streamtags))
-		for _, streamtagsItem47 := range r.OutputRing.Streamtags {
-			streamtags47 = append(streamtags47, streamtagsItem47.ValueString())
+		for streamtagsIndex47 := range r.OutputRing.Streamtags {
+			streamtags47 = append(streamtags47, r.OutputRing.Streamtags[streamtagsIndex47].ValueString())
 		}
 		format13 := new(shared.OutputRingDataFormat)
 		if !r.OutputRing.Format.IsUnknown() && !r.OutputRing.Format.IsNull() {
@@ -15106,8 +15079,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline48 = nil
 		}
 		systemFields48 := make([]string, 0, len(r.OutputOpenTelemetry.SystemFields))
-		for _, systemFieldsItem48 := range r.OutputOpenTelemetry.SystemFields {
-			systemFields48 = append(systemFields48, systemFieldsItem48.ValueString())
+		for systemFieldsIndex48 := range r.OutputOpenTelemetry.SystemFields {
+			systemFields48 = append(systemFields48, r.OutputOpenTelemetry.SystemFields[systemFieldsIndex48].ValueString())
 		}
 		environment48 := new(string)
 		if !r.OutputOpenTelemetry.Environment.IsUnknown() && !r.OutputOpenTelemetry.Environment.IsNull() {
@@ -15116,8 +15089,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment48 = nil
 		}
 		streamtags48 := make([]string, 0, len(r.OutputOpenTelemetry.Streamtags))
-		for _, streamtagsItem48 := range r.OutputOpenTelemetry.Streamtags {
-			streamtags48 = append(streamtags48, streamtagsItem48.ValueString())
+		for streamtagsIndex48 := range r.OutputOpenTelemetry.Streamtags {
+			streamtags48 = append(streamtags48, r.OutputOpenTelemetry.Streamtags[streamtagsIndex48].ValueString())
 		}
 		protocol4 := new(shared.OutputOpenTelemetryProtocol)
 		if !r.OutputOpenTelemetry.Protocol.IsUnknown() && !r.OutputOpenTelemetry.Protocol.IsNull() {
@@ -15171,15 +15144,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			httpLogsEndpointOverride = nil
 		}
 		metadata1 := make([]shared.OutputOpenTelemetryMetadatum, 0, len(r.OutputOpenTelemetry.Metadata))
-		for _, metadataItem1 := range r.OutputOpenTelemetry.Metadata {
+		for metadataIndex1 := range r.OutputOpenTelemetry.Metadata {
 			key7 := new(string)
-			if !metadataItem1.Key.IsUnknown() && !metadataItem1.Key.IsNull() {
-				*key7 = metadataItem1.Key.ValueString()
+			if !r.OutputOpenTelemetry.Metadata[metadataIndex1].Key.IsUnknown() && !r.OutputOpenTelemetry.Metadata[metadataIndex1].Key.IsNull() {
+				*key7 = r.OutputOpenTelemetry.Metadata[metadataIndex1].Key.ValueString()
 			} else {
 				key7 = nil
 			}
 			var value40 string
-			value40 = metadataItem1.Value.ValueString()
+			value40 = r.OutputOpenTelemetry.Metadata[metadataIndex1].Value.ValueString()
 
 			metadata1 = append(metadata1, shared.OutputOpenTelemetryMetadatum{
 				Key:   key7,
@@ -15313,12 +15286,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			tokenTimeoutSecs3 = nil
 		}
 		oauthParams3 := make([]shared.OutputOpenTelemetryOauthParam, 0, len(r.OutputOpenTelemetry.OauthParams))
-		for _, oauthParamsItem3 := range r.OutputOpenTelemetry.OauthParams {
+		for oauthParamsIndex3 := range r.OutputOpenTelemetry.OauthParams {
 			var name31 string
-			name31 = oauthParamsItem3.Name.ValueString()
+			name31 = r.OutputOpenTelemetry.OauthParams[oauthParamsIndex3].Name.ValueString()
 
 			var value41 string
-			value41 = oauthParamsItem3.Value.ValueString()
+			value41 = r.OutputOpenTelemetry.OauthParams[oauthParamsIndex3].Value.ValueString()
 
 			oauthParams3 = append(oauthParams3, shared.OutputOpenTelemetryOauthParam{
 				Name:  name31,
@@ -15326,12 +15299,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		oauthHeaders3 := make([]shared.OutputOpenTelemetryOauthHeader, 0, len(r.OutputOpenTelemetry.OauthHeaders))
-		for _, oauthHeadersItem3 := range r.OutputOpenTelemetry.OauthHeaders {
+		for oauthHeadersIndex3 := range r.OutputOpenTelemetry.OauthHeaders {
 			var name32 string
-			name32 = oauthHeadersItem3.Name.ValueString()
+			name32 = r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.ValueString()
 
 			var value42 string
-			value42 = oauthHeadersItem3.Value.ValueString()
+			value42 = r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.ValueString()
 
 			oauthHeaders3 = append(oauthHeaders3, shared.OutputOpenTelemetryOauthHeader{
 				Name:  name32,
@@ -15351,15 +15324,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			useRoundRobinDns19 = nil
 		}
 		extraHTTPHeaders19 := make([]shared.OutputOpenTelemetryExtraHTTPHeader, 0, len(r.OutputOpenTelemetry.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem19 := range r.OutputOpenTelemetry.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex19 := range r.OutputOpenTelemetry.ExtraHTTPHeaders {
 			name33 := new(string)
-			if !extraHTTPHeadersItem19.Name.IsUnknown() && !extraHTTPHeadersItem19.Name.IsNull() {
-				*name33 = extraHTTPHeadersItem19.Name.ValueString()
+			if !r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Name.IsUnknown() && !r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Name.IsNull() {
+				*name33 = r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Name.ValueString()
 			} else {
 				name33 = nil
 			}
 			var value43 string
-			value43 = extraHTTPHeadersItem19.Value.ValueString()
+			value43 = r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Value.ValueString()
 
 			extraHTTPHeaders19 = append(extraHTTPHeaders19, shared.OutputOpenTelemetryExtraHTTPHeader{
 				Name:  name33,
@@ -15367,29 +15340,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		safeHeaders19 := make([]string, 0, len(r.OutputOpenTelemetry.SafeHeaders))
-		for _, safeHeadersItem19 := range r.OutputOpenTelemetry.SafeHeaders {
-			safeHeaders19 = append(safeHeaders19, safeHeadersItem19.ValueString())
+		for safeHeadersIndex19 := range r.OutputOpenTelemetry.SafeHeaders {
+			safeHeaders19 = append(safeHeaders19, r.OutputOpenTelemetry.SafeHeaders[safeHeadersIndex19].ValueString())
 		}
 		responseRetrySettings20 := make([]shared.OutputOpenTelemetryResponseRetrySetting, 0, len(r.OutputOpenTelemetry.ResponseRetrySettings))
-		for _, responseRetrySettingsItem20 := range r.OutputOpenTelemetry.ResponseRetrySettings {
+		for responseRetrySettingsIndex20 := range r.OutputOpenTelemetry.ResponseRetrySettings {
 			var httpStatus20 float64
-			httpStatus20 = responseRetrySettingsItem20.HTTPStatus.ValueFloat64()
+			httpStatus20 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].HTTPStatus.ValueFloat64()
 
 			initialBackoff44 := new(float64)
-			if !responseRetrySettingsItem20.InitialBackoff.IsUnknown() && !responseRetrySettingsItem20.InitialBackoff.IsNull() {
-				*initialBackoff44 = responseRetrySettingsItem20.InitialBackoff.ValueFloat64()
+			if !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].InitialBackoff.IsUnknown() && !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].InitialBackoff.IsNull() {
+				*initialBackoff44 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff44 = nil
 			}
 			backoffRate44 := new(float64)
-			if !responseRetrySettingsItem20.BackoffRate.IsUnknown() && !responseRetrySettingsItem20.BackoffRate.IsNull() {
-				*backoffRate44 = responseRetrySettingsItem20.BackoffRate.ValueFloat64()
+			if !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].BackoffRate.IsUnknown() && !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].BackoffRate.IsNull() {
+				*backoffRate44 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate44 = nil
 			}
 			maxBackoff40 := new(float64)
-			if !responseRetrySettingsItem20.MaxBackoff.IsUnknown() && !responseRetrySettingsItem20.MaxBackoff.IsNull() {
-				*maxBackoff40 = responseRetrySettingsItem20.MaxBackoff.ValueFloat64()
+			if !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].MaxBackoff.IsUnknown() && !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].MaxBackoff.IsNull() {
+				*maxBackoff40 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff40 = nil
 			}
@@ -15630,8 +15603,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline49 = nil
 		}
 		systemFields49 := make([]string, 0, len(r.OutputServiceNow.SystemFields))
-		for _, systemFieldsItem49 := range r.OutputServiceNow.SystemFields {
-			systemFields49 = append(systemFields49, systemFieldsItem49.ValueString())
+		for systemFieldsIndex49 := range r.OutputServiceNow.SystemFields {
+			systemFields49 = append(systemFields49, r.OutputServiceNow.SystemFields[systemFieldsIndex49].ValueString())
 		}
 		environment49 := new(string)
 		if !r.OutputServiceNow.Environment.IsUnknown() && !r.OutputServiceNow.Environment.IsNull() {
@@ -15640,8 +15613,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment49 = nil
 		}
 		streamtags49 := make([]string, 0, len(r.OutputServiceNow.Streamtags))
-		for _, streamtagsItem49 := range r.OutputServiceNow.Streamtags {
-			streamtags49 = append(streamtags49, streamtagsItem49.ValueString())
+		for streamtagsIndex49 := range r.OutputServiceNow.Streamtags {
+			streamtags49 = append(streamtags49, r.OutputServiceNow.Streamtags[streamtagsIndex49].ValueString())
 		}
 		endpoint10 := new(string)
 		if !r.OutputServiceNow.Endpoint.IsUnknown() && !r.OutputServiceNow.Endpoint.IsNull() {
@@ -15707,15 +15680,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			httpLogsEndpointOverride1 = nil
 		}
 		metadata2 := make([]shared.OutputServiceNowMetadatum, 0, len(r.OutputServiceNow.Metadata))
-		for _, metadataItem2 := range r.OutputServiceNow.Metadata {
+		for metadataIndex2 := range r.OutputServiceNow.Metadata {
 			key8 := new(string)
-			if !metadataItem2.Key.IsUnknown() && !metadataItem2.Key.IsNull() {
-				*key8 = metadataItem2.Key.ValueString()
+			if !r.OutputServiceNow.Metadata[metadataIndex2].Key.IsUnknown() && !r.OutputServiceNow.Metadata[metadataIndex2].Key.IsNull() {
+				*key8 = r.OutputServiceNow.Metadata[metadataIndex2].Key.ValueString()
 			} else {
 				key8 = nil
 			}
 			var value44 string
-			value44 = metadataItem2.Value.ValueString()
+			value44 = r.OutputServiceNow.Metadata[metadataIndex2].Value.ValueString()
 
 			metadata2 = append(metadata2, shared.OutputServiceNowMetadatum{
 				Key:   key8,
@@ -15789,15 +15762,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			useRoundRobinDns20 = nil
 		}
 		extraHTTPHeaders20 := make([]shared.OutputServiceNowExtraHTTPHeader, 0, len(r.OutputServiceNow.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem20 := range r.OutputServiceNow.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex20 := range r.OutputServiceNow.ExtraHTTPHeaders {
 			name34 := new(string)
-			if !extraHTTPHeadersItem20.Name.IsUnknown() && !extraHTTPHeadersItem20.Name.IsNull() {
-				*name34 = extraHTTPHeadersItem20.Name.ValueString()
+			if !r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Name.IsUnknown() && !r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Name.IsNull() {
+				*name34 = r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Name.ValueString()
 			} else {
 				name34 = nil
 			}
 			var value45 string
-			value45 = extraHTTPHeadersItem20.Value.ValueString()
+			value45 = r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Value.ValueString()
 
 			extraHTTPHeaders20 = append(extraHTTPHeaders20, shared.OutputServiceNowExtraHTTPHeader{
 				Name:  name34,
@@ -15805,29 +15778,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		safeHeaders20 := make([]string, 0, len(r.OutputServiceNow.SafeHeaders))
-		for _, safeHeadersItem20 := range r.OutputServiceNow.SafeHeaders {
-			safeHeaders20 = append(safeHeaders20, safeHeadersItem20.ValueString())
+		for safeHeadersIndex20 := range r.OutputServiceNow.SafeHeaders {
+			safeHeaders20 = append(safeHeaders20, r.OutputServiceNow.SafeHeaders[safeHeadersIndex20].ValueString())
 		}
 		responseRetrySettings21 := make([]shared.OutputServiceNowResponseRetrySetting, 0, len(r.OutputServiceNow.ResponseRetrySettings))
-		for _, responseRetrySettingsItem21 := range r.OutputServiceNow.ResponseRetrySettings {
+		for responseRetrySettingsIndex21 := range r.OutputServiceNow.ResponseRetrySettings {
 			var httpStatus21 float64
-			httpStatus21 = responseRetrySettingsItem21.HTTPStatus.ValueFloat64()
+			httpStatus21 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].HTTPStatus.ValueFloat64()
 
 			initialBackoff46 := new(float64)
-			if !responseRetrySettingsItem21.InitialBackoff.IsUnknown() && !responseRetrySettingsItem21.InitialBackoff.IsNull() {
-				*initialBackoff46 = responseRetrySettingsItem21.InitialBackoff.ValueFloat64()
+			if !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].InitialBackoff.IsUnknown() && !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].InitialBackoff.IsNull() {
+				*initialBackoff46 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff46 = nil
 			}
 			backoffRate46 := new(float64)
-			if !responseRetrySettingsItem21.BackoffRate.IsUnknown() && !responseRetrySettingsItem21.BackoffRate.IsNull() {
-				*backoffRate46 = responseRetrySettingsItem21.BackoffRate.ValueFloat64()
+			if !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].BackoffRate.IsUnknown() && !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].BackoffRate.IsNull() {
+				*backoffRate46 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate46 = nil
 			}
 			maxBackoff42 := new(float64)
-			if !responseRetrySettingsItem21.MaxBackoff.IsUnknown() && !responseRetrySettingsItem21.MaxBackoff.IsNull() {
-				*maxBackoff42 = responseRetrySettingsItem21.MaxBackoff.ValueFloat64()
+			if !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].MaxBackoff.IsUnknown() && !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].MaxBackoff.IsNull() {
+				*maxBackoff42 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff42 = nil
 			}
@@ -16048,8 +16021,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline50 = nil
 		}
 		systemFields50 := make([]string, 0, len(r.OutputDataset.SystemFields))
-		for _, systemFieldsItem50 := range r.OutputDataset.SystemFields {
-			systemFields50 = append(systemFields50, systemFieldsItem50.ValueString())
+		for systemFieldsIndex50 := range r.OutputDataset.SystemFields {
+			systemFields50 = append(systemFields50, r.OutputDataset.SystemFields[systemFieldsIndex50].ValueString())
 		}
 		environment50 := new(string)
 		if !r.OutputDataset.Environment.IsUnknown() && !r.OutputDataset.Environment.IsNull() {
@@ -16058,8 +16031,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment50 = nil
 		}
 		streamtags50 := make([]string, 0, len(r.OutputDataset.Streamtags))
-		for _, streamtagsItem50 := range r.OutputDataset.Streamtags {
-			streamtags50 = append(streamtags50, streamtagsItem50.ValueString())
+		for streamtagsIndex50 := range r.OutputDataset.Streamtags {
+			streamtags50 = append(streamtags50, r.OutputDataset.Streamtags[streamtagsIndex50].ValueString())
 		}
 		messageField1 := new(string)
 		if !r.OutputDataset.MessageField.IsUnknown() && !r.OutputDataset.MessageField.IsNull() {
@@ -16068,8 +16041,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			messageField1 = nil
 		}
 		excludeFields := make([]string, 0, len(r.OutputDataset.ExcludeFields))
-		for _, excludeFieldsItem := range r.OutputDataset.ExcludeFields {
-			excludeFields = append(excludeFields, excludeFieldsItem.ValueString())
+		for excludeFieldsIndex := range r.OutputDataset.ExcludeFields {
+			excludeFields = append(excludeFields, r.OutputDataset.ExcludeFields[excludeFieldsIndex].ValueString())
 		}
 		serverHostField := new(string)
 		if !r.OutputDataset.ServerHostField.IsUnknown() && !r.OutputDataset.ServerHostField.IsNull() {
@@ -16090,25 +16063,25 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			defaultSeverity = nil
 		}
 		responseRetrySettings22 := make([]shared.OutputDatasetResponseRetrySetting, 0, len(r.OutputDataset.ResponseRetrySettings))
-		for _, responseRetrySettingsItem22 := range r.OutputDataset.ResponseRetrySettings {
+		for responseRetrySettingsIndex22 := range r.OutputDataset.ResponseRetrySettings {
 			var httpStatus22 float64
-			httpStatus22 = responseRetrySettingsItem22.HTTPStatus.ValueFloat64()
+			httpStatus22 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].HTTPStatus.ValueFloat64()
 
 			initialBackoff48 := new(float64)
-			if !responseRetrySettingsItem22.InitialBackoff.IsUnknown() && !responseRetrySettingsItem22.InitialBackoff.IsNull() {
-				*initialBackoff48 = responseRetrySettingsItem22.InitialBackoff.ValueFloat64()
+			if !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].InitialBackoff.IsUnknown() && !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].InitialBackoff.IsNull() {
+				*initialBackoff48 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff48 = nil
 			}
 			backoffRate48 := new(float64)
-			if !responseRetrySettingsItem22.BackoffRate.IsUnknown() && !responseRetrySettingsItem22.BackoffRate.IsNull() {
-				*backoffRate48 = responseRetrySettingsItem22.BackoffRate.ValueFloat64()
+			if !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].BackoffRate.IsUnknown() && !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].BackoffRate.IsNull() {
+				*backoffRate48 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate48 = nil
 			}
 			maxBackoff44 := new(float64)
-			if !responseRetrySettingsItem22.MaxBackoff.IsUnknown() && !responseRetrySettingsItem22.MaxBackoff.IsNull() {
-				*maxBackoff44 = responseRetrySettingsItem22.MaxBackoff.ValueFloat64()
+			if !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].MaxBackoff.IsUnknown() && !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].MaxBackoff.IsNull() {
+				*maxBackoff44 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff44 = nil
 			}
@@ -16207,15 +16180,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec34 = nil
 		}
 		extraHTTPHeaders21 := make([]shared.OutputDatasetExtraHTTPHeader, 0, len(r.OutputDataset.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem21 := range r.OutputDataset.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex21 := range r.OutputDataset.ExtraHTTPHeaders {
 			name35 := new(string)
-			if !extraHTTPHeadersItem21.Name.IsUnknown() && !extraHTTPHeadersItem21.Name.IsNull() {
-				*name35 = extraHTTPHeadersItem21.Name.ValueString()
+			if !r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Name.IsUnknown() && !r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Name.IsNull() {
+				*name35 = r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Name.ValueString()
 			} else {
 				name35 = nil
 			}
 			var value46 string
-			value46 = extraHTTPHeadersItem21.Value.ValueString()
+			value46 = r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Value.ValueString()
 
 			extraHTTPHeaders21 = append(extraHTTPHeaders21, shared.OutputDatasetExtraHTTPHeader{
 				Name:  name35,
@@ -16235,8 +16208,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode21 = nil
 		}
 		safeHeaders21 := make([]string, 0, len(r.OutputDataset.SafeHeaders))
-		for _, safeHeadersItem21 := range r.OutputDataset.SafeHeaders {
-			safeHeaders21 = append(safeHeaders21, safeHeadersItem21.ValueString())
+		for safeHeadersIndex21 := range r.OutputDataset.SafeHeaders {
+			safeHeaders21 = append(safeHeaders21, r.OutputDataset.SafeHeaders[safeHeadersIndex21].ValueString())
 		}
 		onBackpressure46 := new(shared.OutputDatasetBackpressureBehavior)
 		if !r.OutputDataset.OnBackpressure.IsUnknown() && !r.OutputDataset.OnBackpressure.IsNull() {
@@ -16381,8 +16354,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline51 = nil
 		}
 		systemFields51 := make([]string, 0, len(r.OutputCriblTCP.SystemFields))
-		for _, systemFieldsItem51 := range r.OutputCriblTCP.SystemFields {
-			systemFields51 = append(systemFields51, systemFieldsItem51.ValueString())
+		for systemFieldsIndex51 := range r.OutputCriblTCP.SystemFields {
+			systemFields51 = append(systemFields51, r.OutputCriblTCP.SystemFields[systemFieldsIndex51].ValueString())
 		}
 		environment51 := new(string)
 		if !r.OutputCriblTCP.Environment.IsUnknown() && !r.OutputCriblTCP.Environment.IsNull() {
@@ -16391,8 +16364,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment51 = nil
 		}
 		streamtags51 := make([]string, 0, len(r.OutputCriblTCP.Streamtags))
-		for _, streamtagsItem51 := range r.OutputCriblTCP.Streamtags {
-			streamtags51 = append(streamtags51, streamtagsItem51.ValueString())
+		for streamtagsIndex51 := range r.OutputCriblTCP.Streamtags {
+			streamtags51 = append(streamtags51, r.OutputCriblTCP.Streamtags[streamtagsIndex51].ValueString())
 		}
 		loadBalanced5 := new(bool)
 		if !r.OutputCriblTCP.LoadBalanced.IsUnknown() && !r.OutputCriblTCP.LoadBalanced.IsNull() {
@@ -16512,8 +16485,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			tokenTTLMinutes1 = nil
 		}
 		excludeFields1 := make([]string, 0, len(r.OutputCriblTCP.ExcludeFields))
-		for _, excludeFieldsItem1 := range r.OutputCriblTCP.ExcludeFields {
-			excludeFields1 = append(excludeFields1, excludeFieldsItem1.ValueString())
+		for excludeFieldsIndex1 := range r.OutputCriblTCP.ExcludeFields {
+			excludeFields1 = append(excludeFields1, r.OutputCriblTCP.ExcludeFields[excludeFieldsIndex1].ValueString())
 		}
 		onBackpressure47 := new(shared.OutputCriblTCPBackpressureBehavior)
 		if !r.OutputCriblTCP.OnBackpressure.IsUnknown() && !r.OutputCriblTCP.OnBackpressure.IsNull() {
@@ -16546,31 +16519,31 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			excludeSelf5 = nil
 		}
 		hosts3 := make([]shared.OutputCriblTCPHost, 0, len(r.OutputCriblTCP.Hosts))
-		for _, hostsItem3 := range r.OutputCriblTCP.Hosts {
+		for hostsIndex3 := range r.OutputCriblTCP.Hosts {
 			var host11 string
-			host11 = hostsItem3.Host.ValueString()
+			host11 = r.OutputCriblTCP.Hosts[hostsIndex3].Host.ValueString()
 
 			port10 := new(float64)
-			if !hostsItem3.Port.IsUnknown() && !hostsItem3.Port.IsNull() {
-				*port10 = hostsItem3.Port.ValueFloat64()
+			if !r.OutputCriblTCP.Hosts[hostsIndex3].Port.IsUnknown() && !r.OutputCriblTCP.Hosts[hostsIndex3].Port.IsNull() {
+				*port10 = r.OutputCriblTCP.Hosts[hostsIndex3].Port.ValueFloat64()
 			} else {
 				port10 = nil
 			}
 			tls17 := new(shared.OutputCriblTCPTLS)
-			if !hostsItem3.TLS.IsUnknown() && !hostsItem3.TLS.IsNull() {
-				*tls17 = shared.OutputCriblTCPTLS(hostsItem3.TLS.ValueString())
+			if !r.OutputCriblTCP.Hosts[hostsIndex3].TLS.IsUnknown() && !r.OutputCriblTCP.Hosts[hostsIndex3].TLS.IsNull() {
+				*tls17 = shared.OutputCriblTCPTLS(r.OutputCriblTCP.Hosts[hostsIndex3].TLS.ValueString())
 			} else {
 				tls17 = nil
 			}
 			servername14 := new(string)
-			if !hostsItem3.Servername.IsUnknown() && !hostsItem3.Servername.IsNull() {
-				*servername14 = hostsItem3.Servername.ValueString()
+			if !r.OutputCriblTCP.Hosts[hostsIndex3].Servername.IsUnknown() && !r.OutputCriblTCP.Hosts[hostsIndex3].Servername.IsNull() {
+				*servername14 = r.OutputCriblTCP.Hosts[hostsIndex3].Servername.ValueString()
 			} else {
 				servername14 = nil
 			}
 			weight5 := new(float64)
-			if !hostsItem3.Weight.IsUnknown() && !hostsItem3.Weight.IsNull() {
-				*weight5 = hostsItem3.Weight.ValueFloat64()
+			if !r.OutputCriblTCP.Hosts[hostsIndex3].Weight.IsUnknown() && !r.OutputCriblTCP.Hosts[hostsIndex3].Weight.IsNull() {
+				*weight5 = r.OutputCriblTCP.Hosts[hostsIndex3].Weight.ValueFloat64()
 			} else {
 				weight5 = nil
 			}
@@ -16692,8 +16665,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline52 = nil
 		}
 		systemFields52 := make([]string, 0, len(r.OutputCriblHTTP.SystemFields))
-		for _, systemFieldsItem52 := range r.OutputCriblHTTP.SystemFields {
-			systemFields52 = append(systemFields52, systemFieldsItem52.ValueString())
+		for systemFieldsIndex52 := range r.OutputCriblHTTP.SystemFields {
+			systemFields52 = append(systemFields52, r.OutputCriblHTTP.SystemFields[systemFieldsIndex52].ValueString())
 		}
 		environment52 := new(string)
 		if !r.OutputCriblHTTP.Environment.IsUnknown() && !r.OutputCriblHTTP.Environment.IsNull() {
@@ -16702,8 +16675,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment52 = nil
 		}
 		streamtags52 := make([]string, 0, len(r.OutputCriblHTTP.Streamtags))
-		for _, streamtagsItem52 := range r.OutputCriblHTTP.Streamtags {
-			streamtags52 = append(streamtags52, streamtagsItem52.ValueString())
+		for streamtagsIndex52 := range r.OutputCriblHTTP.Streamtags {
+			streamtags52 = append(streamtags52, r.OutputCriblHTTP.Streamtags[streamtagsIndex52].ValueString())
 		}
 		loadBalanced6 := new(bool)
 		if !r.OutputCriblHTTP.LoadBalanced.IsUnknown() && !r.OutputCriblHTTP.LoadBalanced.IsNull() {
@@ -16793,8 +16766,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			tokenTTLMinutes2 = nil
 		}
 		excludeFields2 := make([]string, 0, len(r.OutputCriblHTTP.ExcludeFields))
-		for _, excludeFieldsItem2 := range r.OutputCriblHTTP.ExcludeFields {
-			excludeFields2 = append(excludeFields2, excludeFieldsItem2.ValueString())
+		for excludeFieldsIndex2 := range r.OutputCriblHTTP.ExcludeFields {
+			excludeFields2 = append(excludeFields2, r.OutputCriblHTTP.ExcludeFields[excludeFieldsIndex2].ValueString())
 		}
 		compression6 := new(shared.OutputCriblHTTPCompression)
 		if !r.OutputCriblHTTP.Compression.IsUnknown() && !r.OutputCriblHTTP.Compression.IsNull() {
@@ -16839,15 +16812,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec35 = nil
 		}
 		extraHTTPHeaders22 := make([]shared.OutputCriblHTTPExtraHTTPHeader, 0, len(r.OutputCriblHTTP.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem22 := range r.OutputCriblHTTP.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex22 := range r.OutputCriblHTTP.ExtraHTTPHeaders {
 			name36 := new(string)
-			if !extraHTTPHeadersItem22.Name.IsUnknown() && !extraHTTPHeadersItem22.Name.IsNull() {
-				*name36 = extraHTTPHeadersItem22.Name.ValueString()
+			if !r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Name.IsUnknown() && !r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Name.IsNull() {
+				*name36 = r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Name.ValueString()
 			} else {
 				name36 = nil
 			}
 			var value47 string
-			value47 = extraHTTPHeadersItem22.Value.ValueString()
+			value47 = r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Value.ValueString()
 
 			extraHTTPHeaders22 = append(extraHTTPHeaders22, shared.OutputCriblHTTPExtraHTTPHeader{
 				Name:  name36,
@@ -16861,29 +16834,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode22 = nil
 		}
 		safeHeaders22 := make([]string, 0, len(r.OutputCriblHTTP.SafeHeaders))
-		for _, safeHeadersItem22 := range r.OutputCriblHTTP.SafeHeaders {
-			safeHeaders22 = append(safeHeaders22, safeHeadersItem22.ValueString())
+		for safeHeadersIndex22 := range r.OutputCriblHTTP.SafeHeaders {
+			safeHeaders22 = append(safeHeaders22, r.OutputCriblHTTP.SafeHeaders[safeHeadersIndex22].ValueString())
 		}
 		responseRetrySettings23 := make([]shared.OutputCriblHTTPResponseRetrySetting, 0, len(r.OutputCriblHTTP.ResponseRetrySettings))
-		for _, responseRetrySettingsItem23 := range r.OutputCriblHTTP.ResponseRetrySettings {
+		for responseRetrySettingsIndex23 := range r.OutputCriblHTTP.ResponseRetrySettings {
 			var httpStatus23 float64
-			httpStatus23 = responseRetrySettingsItem23.HTTPStatus.ValueFloat64()
+			httpStatus23 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].HTTPStatus.ValueFloat64()
 
 			initialBackoff50 := new(float64)
-			if !responseRetrySettingsItem23.InitialBackoff.IsUnknown() && !responseRetrySettingsItem23.InitialBackoff.IsNull() {
-				*initialBackoff50 = responseRetrySettingsItem23.InitialBackoff.ValueFloat64()
+			if !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].InitialBackoff.IsUnknown() && !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].InitialBackoff.IsNull() {
+				*initialBackoff50 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff50 = nil
 			}
 			backoffRate50 := new(float64)
-			if !responseRetrySettingsItem23.BackoffRate.IsUnknown() && !responseRetrySettingsItem23.BackoffRate.IsNull() {
-				*backoffRate50 = responseRetrySettingsItem23.BackoffRate.ValueFloat64()
+			if !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].BackoffRate.IsUnknown() && !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].BackoffRate.IsNull() {
+				*backoffRate50 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate50 = nil
 			}
 			maxBackoff46 := new(float64)
-			if !responseRetrySettingsItem23.MaxBackoff.IsUnknown() && !responseRetrySettingsItem23.MaxBackoff.IsNull() {
-				*maxBackoff46 = responseRetrySettingsItem23.MaxBackoff.ValueFloat64()
+			if !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].MaxBackoff.IsUnknown() && !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].MaxBackoff.IsNull() {
+				*maxBackoff46 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff46 = nil
 			}
@@ -16964,13 +16937,13 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			excludeSelf6 = nil
 		}
 		urls3 := make([]shared.OutputCriblHTTPURL, 0, len(r.OutputCriblHTTP.Urls))
-		for _, urlsItem3 := range r.OutputCriblHTTP.Urls {
+		for urlsIndex3 := range r.OutputCriblHTTP.Urls {
 			var url13 string
-			url13 = urlsItem3.URL.ValueString()
+			url13 = r.OutputCriblHTTP.Urls[urlsIndex3].URL.ValueString()
 
 			weight6 := new(float64)
-			if !urlsItem3.Weight.IsUnknown() && !urlsItem3.Weight.IsNull() {
-				*weight6 = urlsItem3.Weight.ValueFloat64()
+			if !r.OutputCriblHTTP.Urls[urlsIndex3].Weight.IsUnknown() && !r.OutputCriblHTTP.Urls[urlsIndex3].Weight.IsNull() {
+				*weight6 = r.OutputCriblHTTP.Urls[urlsIndex3].Weight.ValueFloat64()
 			} else {
 				weight6 = nil
 			}
@@ -17098,8 +17071,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline53 = nil
 		}
 		systemFields53 := make([]string, 0, len(r.OutputHumioHec.SystemFields))
-		for _, systemFieldsItem53 := range r.OutputHumioHec.SystemFields {
-			systemFields53 = append(systemFields53, systemFieldsItem53.ValueString())
+		for systemFieldsIndex53 := range r.OutputHumioHec.SystemFields {
+			systemFields53 = append(systemFields53, r.OutputHumioHec.SystemFields[systemFieldsIndex53].ValueString())
 		}
 		environment53 := new(string)
 		if !r.OutputHumioHec.Environment.IsUnknown() && !r.OutputHumioHec.Environment.IsNull() {
@@ -17108,8 +17081,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment53 = nil
 		}
 		streamtags53 := make([]string, 0, len(r.OutputHumioHec.Streamtags))
-		for _, streamtagsItem53 := range r.OutputHumioHec.Streamtags {
-			streamtags53 = append(streamtags53, streamtagsItem53.ValueString())
+		for streamtagsIndex53 := range r.OutputHumioHec.Streamtags {
+			streamtags53 = append(streamtags53, r.OutputHumioHec.Streamtags[streamtagsIndex53].ValueString())
 		}
 		url14 := new(string)
 		if !r.OutputHumioHec.URL.IsUnknown() && !r.OutputHumioHec.URL.IsNull() {
@@ -17160,15 +17133,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec36 = nil
 		}
 		extraHTTPHeaders23 := make([]shared.OutputHumioHecExtraHTTPHeader, 0, len(r.OutputHumioHec.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem23 := range r.OutputHumioHec.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex23 := range r.OutputHumioHec.ExtraHTTPHeaders {
 			name37 := new(string)
-			if !extraHTTPHeadersItem23.Name.IsUnknown() && !extraHTTPHeadersItem23.Name.IsNull() {
-				*name37 = extraHTTPHeadersItem23.Name.ValueString()
+			if !r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Name.IsUnknown() && !r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Name.IsNull() {
+				*name37 = r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Name.ValueString()
 			} else {
 				name37 = nil
 			}
 			var value48 string
-			value48 = extraHTTPHeadersItem23.Value.ValueString()
+			value48 = r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Value.ValueString()
 
 			extraHTTPHeaders23 = append(extraHTTPHeaders23, shared.OutputHumioHecExtraHTTPHeader{
 				Name:  name37,
@@ -17188,8 +17161,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode23 = nil
 		}
 		safeHeaders23 := make([]string, 0, len(r.OutputHumioHec.SafeHeaders))
-		for _, safeHeadersItem23 := range r.OutputHumioHec.SafeHeaders {
-			safeHeaders23 = append(safeHeaders23, safeHeadersItem23.ValueString())
+		for safeHeadersIndex23 := range r.OutputHumioHec.SafeHeaders {
+			safeHeaders23 = append(safeHeaders23, r.OutputHumioHec.SafeHeaders[safeHeadersIndex23].ValueString())
 		}
 		format14 := new(shared.OutputHumioHecRequestFormat)
 		if !r.OutputHumioHec.Format.IsUnknown() && !r.OutputHumioHec.Format.IsNull() {
@@ -17204,25 +17177,25 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			authType27 = nil
 		}
 		responseRetrySettings24 := make([]shared.OutputHumioHecResponseRetrySetting, 0, len(r.OutputHumioHec.ResponseRetrySettings))
-		for _, responseRetrySettingsItem24 := range r.OutputHumioHec.ResponseRetrySettings {
+		for responseRetrySettingsIndex24 := range r.OutputHumioHec.ResponseRetrySettings {
 			var httpStatus24 float64
-			httpStatus24 = responseRetrySettingsItem24.HTTPStatus.ValueFloat64()
+			httpStatus24 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].HTTPStatus.ValueFloat64()
 
 			initialBackoff52 := new(float64)
-			if !responseRetrySettingsItem24.InitialBackoff.IsUnknown() && !responseRetrySettingsItem24.InitialBackoff.IsNull() {
-				*initialBackoff52 = responseRetrySettingsItem24.InitialBackoff.ValueFloat64()
+			if !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].InitialBackoff.IsUnknown() && !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].InitialBackoff.IsNull() {
+				*initialBackoff52 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff52 = nil
 			}
 			backoffRate52 := new(float64)
-			if !responseRetrySettingsItem24.BackoffRate.IsUnknown() && !responseRetrySettingsItem24.BackoffRate.IsNull() {
-				*backoffRate52 = responseRetrySettingsItem24.BackoffRate.ValueFloat64()
+			if !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].BackoffRate.IsUnknown() && !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].BackoffRate.IsNull() {
+				*backoffRate52 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate52 = nil
 			}
 			maxBackoff48 := new(float64)
-			if !responseRetrySettingsItem24.MaxBackoff.IsUnknown() && !responseRetrySettingsItem24.MaxBackoff.IsNull() {
-				*maxBackoff48 = responseRetrySettingsItem24.MaxBackoff.ValueFloat64()
+			if !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].MaxBackoff.IsUnknown() && !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].MaxBackoff.IsNull() {
+				*maxBackoff48 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex24].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff48 = nil
 			}
@@ -17399,8 +17372,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline54 = nil
 		}
 		systemFields54 := make([]string, 0, len(r.OutputCrowdstrikeNextGenSiem.SystemFields))
-		for _, systemFieldsItem54 := range r.OutputCrowdstrikeNextGenSiem.SystemFields {
-			systemFields54 = append(systemFields54, systemFieldsItem54.ValueString())
+		for systemFieldsIndex54 := range r.OutputCrowdstrikeNextGenSiem.SystemFields {
+			systemFields54 = append(systemFields54, r.OutputCrowdstrikeNextGenSiem.SystemFields[systemFieldsIndex54].ValueString())
 		}
 		environment54 := new(string)
 		if !r.OutputCrowdstrikeNextGenSiem.Environment.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Environment.IsNull() {
@@ -17409,8 +17382,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment54 = nil
 		}
 		streamtags54 := make([]string, 0, len(r.OutputCrowdstrikeNextGenSiem.Streamtags))
-		for _, streamtagsItem54 := range r.OutputCrowdstrikeNextGenSiem.Streamtags {
-			streamtags54 = append(streamtags54, streamtagsItem54.ValueString())
+		for streamtagsIndex54 := range r.OutputCrowdstrikeNextGenSiem.Streamtags {
+			streamtags54 = append(streamtags54, r.OutputCrowdstrikeNextGenSiem.Streamtags[streamtagsIndex54].ValueString())
 		}
 		var url15 string
 		url15 = r.OutputCrowdstrikeNextGenSiem.URL.ValueString()
@@ -17458,15 +17431,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec37 = nil
 		}
 		extraHTTPHeaders24 := make([]shared.OutputCrowdstrikeNextGenSiemExtraHTTPHeader, 0, len(r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem24 := range r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex24 := range r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders {
 			name38 := new(string)
-			if !extraHTTPHeadersItem24.Name.IsUnknown() && !extraHTTPHeadersItem24.Name.IsNull() {
-				*name38 = extraHTTPHeadersItem24.Name.ValueString()
+			if !r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Name.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Name.IsNull() {
+				*name38 = r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Name.ValueString()
 			} else {
 				name38 = nil
 			}
 			var value49 string
-			value49 = extraHTTPHeadersItem24.Value.ValueString()
+			value49 = r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Value.ValueString()
 
 			extraHTTPHeaders24 = append(extraHTTPHeaders24, shared.OutputCrowdstrikeNextGenSiemExtraHTTPHeader{
 				Name:  name38,
@@ -17486,8 +17459,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode24 = nil
 		}
 		safeHeaders24 := make([]string, 0, len(r.OutputCrowdstrikeNextGenSiem.SafeHeaders))
-		for _, safeHeadersItem24 := range r.OutputCrowdstrikeNextGenSiem.SafeHeaders {
-			safeHeaders24 = append(safeHeaders24, safeHeadersItem24.ValueString())
+		for safeHeadersIndex24 := range r.OutputCrowdstrikeNextGenSiem.SafeHeaders {
+			safeHeaders24 = append(safeHeaders24, r.OutputCrowdstrikeNextGenSiem.SafeHeaders[safeHeadersIndex24].ValueString())
 		}
 		format15 := new(shared.OutputCrowdstrikeNextGenSiemRequestFormat)
 		if !r.OutputCrowdstrikeNextGenSiem.Format.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Format.IsNull() {
@@ -17502,25 +17475,25 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			authType28 = nil
 		}
 		responseRetrySettings25 := make([]shared.OutputCrowdstrikeNextGenSiemResponseRetrySetting, 0, len(r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings))
-		for _, responseRetrySettingsItem25 := range r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings {
+		for responseRetrySettingsIndex25 := range r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings {
 			var httpStatus25 float64
-			httpStatus25 = responseRetrySettingsItem25.HTTPStatus.ValueFloat64()
+			httpStatus25 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].HTTPStatus.ValueFloat64()
 
 			initialBackoff54 := new(float64)
-			if !responseRetrySettingsItem25.InitialBackoff.IsUnknown() && !responseRetrySettingsItem25.InitialBackoff.IsNull() {
-				*initialBackoff54 = responseRetrySettingsItem25.InitialBackoff.ValueFloat64()
+			if !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].InitialBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].InitialBackoff.IsNull() {
+				*initialBackoff54 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff54 = nil
 			}
 			backoffRate54 := new(float64)
-			if !responseRetrySettingsItem25.BackoffRate.IsUnknown() && !responseRetrySettingsItem25.BackoffRate.IsNull() {
-				*backoffRate54 = responseRetrySettingsItem25.BackoffRate.ValueFloat64()
+			if !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].BackoffRate.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].BackoffRate.IsNull() {
+				*backoffRate54 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate54 = nil
 			}
 			maxBackoff50 := new(float64)
-			if !responseRetrySettingsItem25.MaxBackoff.IsUnknown() && !responseRetrySettingsItem25.MaxBackoff.IsNull() {
-				*maxBackoff50 = responseRetrySettingsItem25.MaxBackoff.ValueFloat64()
+			if !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].MaxBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].MaxBackoff.IsNull() {
+				*maxBackoff50 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex25].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff50 = nil
 			}
@@ -17697,8 +17670,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline55 = nil
 		}
 		systemFields55 := make([]string, 0, len(r.OutputDlS3.SystemFields))
-		for _, systemFieldsItem55 := range r.OutputDlS3.SystemFields {
-			systemFields55 = append(systemFields55, systemFieldsItem55.ValueString())
+		for systemFieldsIndex55 := range r.OutputDlS3.SystemFields {
+			systemFields55 = append(systemFields55, r.OutputDlS3.SystemFields[systemFieldsIndex55].ValueString())
 		}
 		environment55 := new(string)
 		if !r.OutputDlS3.Environment.IsUnknown() && !r.OutputDlS3.Environment.IsNull() {
@@ -17707,8 +17680,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment55 = nil
 		}
 		streamtags55 := make([]string, 0, len(r.OutputDlS3.Streamtags))
-		for _, streamtagsItem55 := range r.OutputDlS3.Streamtags {
-			streamtags55 = append(streamtags55, streamtagsItem55.ValueString())
+		for streamtagsIndex55 := range r.OutputDlS3.Streamtags {
+			streamtags55 = append(streamtags55, r.OutputDlS3.Streamtags[streamtagsIndex55].ValueString())
 		}
 		var bucket5 string
 		bucket5 = r.OutputDlS3.Bucket.ValueString()
@@ -17912,8 +17885,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			maxClosingFilesToBackpressure1 = nil
 		}
 		partitioningFields := make([]string, 0, len(r.OutputDlS3.PartitioningFields))
-		for _, partitioningFieldsItem := range r.OutputDlS3.PartitioningFields {
-			partitioningFields = append(partitioningFields, partitioningFieldsItem.ValueString())
+		for partitioningFieldsIndex := range r.OutputDlS3.PartitioningFields {
+			partitioningFields = append(partitioningFields, r.OutputDlS3.PartitioningFields[partitioningFieldsIndex].ValueString())
 		}
 		description55 := new(string)
 		if !r.OutputDlS3.Description.IsUnknown() && !r.OutputDlS3.Description.IsNull() {
@@ -17982,15 +17955,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			shouldLogInvalidRows5 = nil
 		}
 		keyValueMetadata5 := make([]shared.OutputDlS3KeyValueMetadatum, 0, len(r.OutputDlS3.KeyValueMetadata))
-		for _, keyValueMetadataItem5 := range r.OutputDlS3.KeyValueMetadata {
+		for keyValueMetadataIndex5 := range r.OutputDlS3.KeyValueMetadata {
 			key9 := new(string)
-			if !keyValueMetadataItem5.Key.IsUnknown() && !keyValueMetadataItem5.Key.IsNull() {
-				*key9 = keyValueMetadataItem5.Key.ValueString()
+			if !r.OutputDlS3.KeyValueMetadata[keyValueMetadataIndex5].Key.IsUnknown() && !r.OutputDlS3.KeyValueMetadata[keyValueMetadataIndex5].Key.IsNull() {
+				*key9 = r.OutputDlS3.KeyValueMetadata[keyValueMetadataIndex5].Key.ValueString()
 			} else {
 				key9 = nil
 			}
 			var value50 string
-			value50 = keyValueMetadataItem5.Value.ValueString()
+			value50 = r.OutputDlS3.KeyValueMetadata[keyValueMetadataIndex5].Value.ValueString()
 
 			keyValueMetadata5 = append(keyValueMetadata5, shared.OutputDlS3KeyValueMetadatum{
 				Key:   key9,
@@ -18121,8 +18094,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline56 = nil
 		}
 		systemFields56 := make([]string, 0, len(r.OutputSecurityLake.SystemFields))
-		for _, systemFieldsItem56 := range r.OutputSecurityLake.SystemFields {
-			systemFields56 = append(systemFields56, systemFieldsItem56.ValueString())
+		for systemFieldsIndex56 := range r.OutputSecurityLake.SystemFields {
+			systemFields56 = append(systemFields56, r.OutputSecurityLake.SystemFields[systemFieldsIndex56].ValueString())
 		}
 		environment56 := new(string)
 		if !r.OutputSecurityLake.Environment.IsUnknown() && !r.OutputSecurityLake.Environment.IsNull() {
@@ -18131,8 +18104,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment56 = nil
 		}
 		streamtags56 := make([]string, 0, len(r.OutputSecurityLake.Streamtags))
-		for _, streamtagsItem56 := range r.OutputSecurityLake.Streamtags {
-			streamtags56 = append(streamtags56, streamtagsItem56.ValueString())
+		for streamtagsIndex56 := range r.OutputSecurityLake.Streamtags {
+			streamtags56 = append(streamtags56, r.OutputSecurityLake.Streamtags[streamtagsIndex56].ValueString())
 		}
 		var bucket6 string
 		bucket6 = r.OutputSecurityLake.Bucket.ValueString()
@@ -18360,15 +18333,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			shouldLogInvalidRows6 = nil
 		}
 		keyValueMetadata6 := make([]shared.OutputSecurityLakeKeyValueMetadatum, 0, len(r.OutputSecurityLake.KeyValueMetadata))
-		for _, keyValueMetadataItem6 := range r.OutputSecurityLake.KeyValueMetadata {
+		for keyValueMetadataIndex6 := range r.OutputSecurityLake.KeyValueMetadata {
 			key10 := new(string)
-			if !keyValueMetadataItem6.Key.IsUnknown() && !keyValueMetadataItem6.Key.IsNull() {
-				*key10 = keyValueMetadataItem6.Key.ValueString()
+			if !r.OutputSecurityLake.KeyValueMetadata[keyValueMetadataIndex6].Key.IsUnknown() && !r.OutputSecurityLake.KeyValueMetadata[keyValueMetadataIndex6].Key.IsNull() {
+				*key10 = r.OutputSecurityLake.KeyValueMetadata[keyValueMetadataIndex6].Key.ValueString()
 			} else {
 				key10 = nil
 			}
 			var value51 string
-			value51 = keyValueMetadataItem6.Value.ValueString()
+			value51 = r.OutputSecurityLake.KeyValueMetadata[keyValueMetadataIndex6].Value.ValueString()
 
 			keyValueMetadata6 = append(keyValueMetadata6, shared.OutputSecurityLakeKeyValueMetadatum{
 				Key:   key10,
@@ -18543,8 +18516,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline57 = nil
 		}
 		systemFields57 := make([]string, 0, len(r.OutputDiskSpool.SystemFields))
-		for _, systemFieldsItem57 := range r.OutputDiskSpool.SystemFields {
-			systemFields57 = append(systemFields57, systemFieldsItem57.ValueString())
+		for systemFieldsIndex57 := range r.OutputDiskSpool.SystemFields {
+			systemFields57 = append(systemFields57, r.OutputDiskSpool.SystemFields[systemFieldsIndex57].ValueString())
 		}
 		environment57 := new(string)
 		if !r.OutputDiskSpool.Environment.IsUnknown() && !r.OutputDiskSpool.Environment.IsNull() {
@@ -18553,8 +18526,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment57 = nil
 		}
 		streamtags57 := make([]string, 0, len(r.OutputDiskSpool.Streamtags))
-		for _, streamtagsItem57 := range r.OutputDiskSpool.Streamtags {
-			streamtags57 = append(streamtags57, streamtagsItem57.ValueString())
+		for streamtagsIndex57 := range r.OutputDiskSpool.Streamtags {
+			streamtags57 = append(streamtags57, r.OutputDiskSpool.Streamtags[streamtagsIndex57].ValueString())
 		}
 		timeWindow := new(string)
 		if !r.OutputDiskSpool.TimeWindow.IsUnknown() && !r.OutputDiskSpool.TimeWindow.IsNull() {
@@ -18633,8 +18606,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline58 = nil
 		}
 		systemFields58 := make([]string, 0, len(r.OutputClickHouse.SystemFields))
-		for _, systemFieldsItem58 := range r.OutputClickHouse.SystemFields {
-			systemFields58 = append(systemFields58, systemFieldsItem58.ValueString())
+		for systemFieldsIndex58 := range r.OutputClickHouse.SystemFields {
+			systemFields58 = append(systemFields58, r.OutputClickHouse.SystemFields[systemFieldsIndex58].ValueString())
 		}
 		environment58 := new(string)
 		if !r.OutputClickHouse.Environment.IsUnknown() && !r.OutputClickHouse.Environment.IsNull() {
@@ -18643,8 +18616,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment58 = nil
 		}
 		streamtags58 := make([]string, 0, len(r.OutputClickHouse.Streamtags))
-		for _, streamtagsItem58 := range r.OutputClickHouse.Streamtags {
-			streamtags58 = append(streamtags58, streamtagsItem58.ValueString())
+		for streamtagsIndex58 := range r.OutputClickHouse.Streamtags {
+			streamtags58 = append(streamtags58, r.OutputClickHouse.Streamtags[streamtagsIndex58].ValueString())
 		}
 		var url16 string
 		url16 = r.OutputClickHouse.URL.ValueString()
@@ -18790,15 +18763,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec38 = nil
 		}
 		extraHTTPHeaders25 := make([]shared.OutputClickHouseExtraHTTPHeader, 0, len(r.OutputClickHouse.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem25 := range r.OutputClickHouse.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex25 := range r.OutputClickHouse.ExtraHTTPHeaders {
 			name39 := new(string)
-			if !extraHTTPHeadersItem25.Name.IsUnknown() && !extraHTTPHeadersItem25.Name.IsNull() {
-				*name39 = extraHTTPHeadersItem25.Name.ValueString()
+			if !r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Name.IsUnknown() && !r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Name.IsNull() {
+				*name39 = r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Name.ValueString()
 			} else {
 				name39 = nil
 			}
 			var value52 string
-			value52 = extraHTTPHeadersItem25.Value.ValueString()
+			value52 = r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Value.ValueString()
 
 			extraHTTPHeaders25 = append(extraHTTPHeaders25, shared.OutputClickHouseExtraHTTPHeader{
 				Name:  name39,
@@ -18818,29 +18791,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode25 = nil
 		}
 		safeHeaders25 := make([]string, 0, len(r.OutputClickHouse.SafeHeaders))
-		for _, safeHeadersItem25 := range r.OutputClickHouse.SafeHeaders {
-			safeHeaders25 = append(safeHeaders25, safeHeadersItem25.ValueString())
+		for safeHeadersIndex25 := range r.OutputClickHouse.SafeHeaders {
+			safeHeaders25 = append(safeHeaders25, r.OutputClickHouse.SafeHeaders[safeHeadersIndex25].ValueString())
 		}
 		responseRetrySettings26 := make([]shared.OutputClickHouseResponseRetrySetting, 0, len(r.OutputClickHouse.ResponseRetrySettings))
-		for _, responseRetrySettingsItem26 := range r.OutputClickHouse.ResponseRetrySettings {
+		for responseRetrySettingsIndex26 := range r.OutputClickHouse.ResponseRetrySettings {
 			var httpStatus26 float64
-			httpStatus26 = responseRetrySettingsItem26.HTTPStatus.ValueFloat64()
+			httpStatus26 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].HTTPStatus.ValueFloat64()
 
 			initialBackoff56 := new(float64)
-			if !responseRetrySettingsItem26.InitialBackoff.IsUnknown() && !responseRetrySettingsItem26.InitialBackoff.IsNull() {
-				*initialBackoff56 = responseRetrySettingsItem26.InitialBackoff.ValueFloat64()
+			if !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].InitialBackoff.IsUnknown() && !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].InitialBackoff.IsNull() {
+				*initialBackoff56 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff56 = nil
 			}
 			backoffRate56 := new(float64)
-			if !responseRetrySettingsItem26.BackoffRate.IsUnknown() && !responseRetrySettingsItem26.BackoffRate.IsNull() {
-				*backoffRate56 = responseRetrySettingsItem26.BackoffRate.ValueFloat64()
+			if !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].BackoffRate.IsUnknown() && !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].BackoffRate.IsNull() {
+				*backoffRate56 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate56 = nil
 			}
 			maxBackoff52 := new(float64)
-			if !responseRetrySettingsItem26.MaxBackoff.IsUnknown() && !responseRetrySettingsItem26.MaxBackoff.IsNull() {
-				*maxBackoff52 = responseRetrySettingsItem26.MaxBackoff.ValueFloat64()
+			if !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].MaxBackoff.IsUnknown() && !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].MaxBackoff.IsNull() {
+				*maxBackoff52 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex26].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff52 = nil
 			}
@@ -18975,12 +18948,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			tokenTimeoutSecs4 = nil
 		}
 		oauthParams4 := make([]shared.OutputClickHouseOauthParam, 0, len(r.OutputClickHouse.OauthParams))
-		for _, oauthParamsItem4 := range r.OutputClickHouse.OauthParams {
+		for oauthParamsIndex4 := range r.OutputClickHouse.OauthParams {
 			var name40 string
-			name40 = oauthParamsItem4.Name.ValueString()
+			name40 = r.OutputClickHouse.OauthParams[oauthParamsIndex4].Name.ValueString()
 
 			var value53 string
-			value53 = oauthParamsItem4.Value.ValueString()
+			value53 = r.OutputClickHouse.OauthParams[oauthParamsIndex4].Value.ValueString()
 
 			oauthParams4 = append(oauthParams4, shared.OutputClickHouseOauthParam{
 				Name:  name40,
@@ -18988,12 +18961,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		oauthHeaders4 := make([]shared.OutputClickHouseOauthHeader, 0, len(r.OutputClickHouse.OauthHeaders))
-		for _, oauthHeadersItem4 := range r.OutputClickHouse.OauthHeaders {
+		for oauthHeadersIndex4 := range r.OutputClickHouse.OauthHeaders {
 			var name41 string
-			name41 = oauthHeadersItem4.Name.ValueString()
+			name41 = r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.ValueString()
 
 			var value54 string
-			value54 = oauthHeadersItem4.Value.ValueString()
+			value54 = r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.ValueString()
 
 			oauthHeaders4 = append(oauthHeaders4, shared.OutputClickHouseOauthHeader{
 				Name:  name41,
@@ -19013,8 +18986,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			waitForAsyncInserts = nil
 		}
 		excludeMappingFields := make([]string, 0, len(r.OutputClickHouse.ExcludeMappingFields))
-		for _, excludeMappingFieldsItem := range r.OutputClickHouse.ExcludeMappingFields {
-			excludeMappingFields = append(excludeMappingFields, excludeMappingFieldsItem.ValueString())
+		for excludeMappingFieldsIndex := range r.OutputClickHouse.ExcludeMappingFields {
+			excludeMappingFields = append(excludeMappingFields, r.OutputClickHouse.ExcludeMappingFields[excludeMappingFieldsIndex].ValueString())
 		}
 		describeTable := new(string)
 		if !r.OutputClickHouse.DescribeTable.IsUnknown() && !r.OutputClickHouse.DescribeTable.IsNull() {
@@ -19023,18 +18996,18 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			describeTable = nil
 		}
 		columnMappings := make([]shared.OutputClickHouseColumnMapping, 0, len(r.OutputClickHouse.ColumnMappings))
-		for _, columnMappingsItem := range r.OutputClickHouse.ColumnMappings {
+		for columnMappingsIndex := range r.OutputClickHouse.ColumnMappings {
 			var columnName string
-			columnName = columnMappingsItem.ColumnName.ValueString()
+			columnName = r.OutputClickHouse.ColumnMappings[columnMappingsIndex].ColumnName.ValueString()
 
 			columnType := new(string)
-			if !columnMappingsItem.ColumnType.IsUnknown() && !columnMappingsItem.ColumnType.IsNull() {
-				*columnType = columnMappingsItem.ColumnType.ValueString()
+			if !r.OutputClickHouse.ColumnMappings[columnMappingsIndex].ColumnType.IsUnknown() && !r.OutputClickHouse.ColumnMappings[columnMappingsIndex].ColumnType.IsNull() {
+				*columnType = r.OutputClickHouse.ColumnMappings[columnMappingsIndex].ColumnType.ValueString()
 			} else {
 				columnType = nil
 			}
 			var columnValueExpression string
-			columnValueExpression = columnMappingsItem.ColumnValueExpression.ValueString()
+			columnValueExpression = r.OutputClickHouse.ColumnMappings[columnMappingsIndex].ColumnValueExpression.ValueString()
 
 			columnMappings = append(columnMappings, shared.OutputClickHouseColumnMapping{
 				ColumnName:            columnName,
@@ -19159,8 +19132,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline59 = nil
 		}
 		systemFields59 := make([]string, 0, len(r.OutputXsiam.SystemFields))
-		for _, systemFieldsItem59 := range r.OutputXsiam.SystemFields {
-			systemFields59 = append(systemFields59, systemFieldsItem59.ValueString())
+		for systemFieldsIndex59 := range r.OutputXsiam.SystemFields {
+			systemFields59 = append(systemFields59, r.OutputXsiam.SystemFields[systemFieldsIndex59].ValueString())
 		}
 		environment59 := new(string)
 		if !r.OutputXsiam.Environment.IsUnknown() && !r.OutputXsiam.Environment.IsNull() {
@@ -19169,8 +19142,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment59 = nil
 		}
 		streamtags59 := make([]string, 0, len(r.OutputXsiam.Streamtags))
-		for _, streamtagsItem59 := range r.OutputXsiam.Streamtags {
-			streamtags59 = append(streamtags59, streamtagsItem59.ValueString())
+		for streamtagsIndex59 := range r.OutputXsiam.Streamtags {
+			streamtags59 = append(streamtags59, r.OutputXsiam.Streamtags[streamtagsIndex59].ValueString())
 		}
 		loadBalanced7 := new(bool)
 		if !r.OutputXsiam.LoadBalanced.IsUnknown() && !r.OutputXsiam.LoadBalanced.IsNull() {
@@ -19215,15 +19188,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec39 = nil
 		}
 		extraHTTPHeaders26 := make([]shared.OutputXsiamExtraHTTPHeader, 0, len(r.OutputXsiam.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem26 := range r.OutputXsiam.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex26 := range r.OutputXsiam.ExtraHTTPHeaders {
 			name42 := new(string)
-			if !extraHTTPHeadersItem26.Name.IsUnknown() && !extraHTTPHeadersItem26.Name.IsNull() {
-				*name42 = extraHTTPHeadersItem26.Name.ValueString()
+			if !r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Name.IsUnknown() && !r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Name.IsNull() {
+				*name42 = r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Name.ValueString()
 			} else {
 				name42 = nil
 			}
 			var value55 string
-			value55 = extraHTTPHeadersItem26.Value.ValueString()
+			value55 = r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Value.ValueString()
 
 			extraHTTPHeaders26 = append(extraHTTPHeaders26, shared.OutputXsiamExtraHTTPHeader{
 				Name:  name42,
@@ -19237,8 +19210,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode26 = nil
 		}
 		safeHeaders26 := make([]string, 0, len(r.OutputXsiam.SafeHeaders))
-		for _, safeHeadersItem26 := range r.OutputXsiam.SafeHeaders {
-			safeHeaders26 = append(safeHeaders26, safeHeadersItem26.ValueString())
+		for safeHeadersIndex26 := range r.OutputXsiam.SafeHeaders {
+			safeHeaders26 = append(safeHeaders26, r.OutputXsiam.SafeHeaders[safeHeadersIndex26].ValueString())
 		}
 		authType30 := new(shared.OutputXsiamAuthenticationMethod)
 		if !r.OutputXsiam.AuthType.IsUnknown() && !r.OutputXsiam.AuthType.IsNull() {
@@ -19247,25 +19220,25 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			authType30 = nil
 		}
 		responseRetrySettings27 := make([]shared.OutputXsiamResponseRetrySetting, 0, len(r.OutputXsiam.ResponseRetrySettings))
-		for _, responseRetrySettingsItem27 := range r.OutputXsiam.ResponseRetrySettings {
+		for responseRetrySettingsIndex27 := range r.OutputXsiam.ResponseRetrySettings {
 			var httpStatus27 float64
-			httpStatus27 = responseRetrySettingsItem27.HTTPStatus.ValueFloat64()
+			httpStatus27 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].HTTPStatus.ValueFloat64()
 
 			initialBackoff58 := new(float64)
-			if !responseRetrySettingsItem27.InitialBackoff.IsUnknown() && !responseRetrySettingsItem27.InitialBackoff.IsNull() {
-				*initialBackoff58 = responseRetrySettingsItem27.InitialBackoff.ValueFloat64()
+			if !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].InitialBackoff.IsUnknown() && !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].InitialBackoff.IsNull() {
+				*initialBackoff58 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff58 = nil
 			}
 			backoffRate58 := new(float64)
-			if !responseRetrySettingsItem27.BackoffRate.IsUnknown() && !responseRetrySettingsItem27.BackoffRate.IsNull() {
-				*backoffRate58 = responseRetrySettingsItem27.BackoffRate.ValueFloat64()
+			if !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].BackoffRate.IsUnknown() && !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].BackoffRate.IsNull() {
+				*backoffRate58 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate58 = nil
 			}
 			maxBackoff54 := new(float64)
-			if !responseRetrySettingsItem27.MaxBackoff.IsUnknown() && !responseRetrySettingsItem27.MaxBackoff.IsNull() {
-				*maxBackoff54 = responseRetrySettingsItem27.MaxBackoff.ValueFloat64()
+			if !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].MaxBackoff.IsUnknown() && !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].MaxBackoff.IsNull() {
+				*maxBackoff54 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex27].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff54 = nil
 			}
@@ -19358,12 +19331,12 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			excludeSelf7 = nil
 		}
 		urls4 := make([]shared.OutputXsiamURL, 0, len(r.OutputXsiam.Urls))
-		for _, urlsItem4 := range r.OutputXsiam.Urls {
+		for urlsIndex4 := range r.OutputXsiam.Urls {
 			var url18 interface{}
-			_ = json.Unmarshal([]byte(urlsItem4.URL.ValueString()), &url18)
+			_ = json.Unmarshal([]byte(r.OutputXsiam.Urls[urlsIndex4].URL.ValueString()), &url18)
 			weight7 := new(float64)
-			if !urlsItem4.Weight.IsUnknown() && !urlsItem4.Weight.IsNull() {
-				*weight7 = urlsItem4.Weight.ValueFloat64()
+			if !r.OutputXsiam.Urls[urlsIndex4].Weight.IsUnknown() && !r.OutputXsiam.Urls[urlsIndex4].Weight.IsNull() {
+				*weight7 = r.OutputXsiam.Urls[urlsIndex4].Weight.ValueFloat64()
 			} else {
 				weight7 = nil
 			}
@@ -19499,8 +19472,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline60 = nil
 		}
 		systemFields60 := make([]string, 0, len(r.OutputNetflow.SystemFields))
-		for _, systemFieldsItem60 := range r.OutputNetflow.SystemFields {
-			systemFields60 = append(systemFields60, systemFieldsItem60.ValueString())
+		for systemFieldsIndex60 := range r.OutputNetflow.SystemFields {
+			systemFields60 = append(systemFields60, r.OutputNetflow.SystemFields[systemFieldsIndex60].ValueString())
 		}
 		environment60 := new(string)
 		if !r.OutputNetflow.Environment.IsUnknown() && !r.OutputNetflow.Environment.IsNull() {
@@ -19509,17 +19482,17 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment60 = nil
 		}
 		streamtags60 := make([]string, 0, len(r.OutputNetflow.Streamtags))
-		for _, streamtagsItem60 := range r.OutputNetflow.Streamtags {
-			streamtags60 = append(streamtags60, streamtagsItem60.ValueString())
+		for streamtagsIndex60 := range r.OutputNetflow.Streamtags {
+			streamtags60 = append(streamtags60, r.OutputNetflow.Streamtags[streamtagsIndex60].ValueString())
 		}
 		hosts4 := make([]shared.OutputNetflowHost, 0, len(r.OutputNetflow.Hosts))
-		for _, hostsItem4 := range r.OutputNetflow.Hosts {
+		for hostsIndex4 := range r.OutputNetflow.Hosts {
 			var host12 string
-			host12 = hostsItem4.Host.ValueString()
+			host12 = r.OutputNetflow.Hosts[hostsIndex4].Host.ValueString()
 
 			port11 := new(float64)
-			if !hostsItem4.Port.IsUnknown() && !hostsItem4.Port.IsNull() {
-				*port11 = hostsItem4.Port.ValueFloat64()
+			if !r.OutputNetflow.Hosts[hostsIndex4].Port.IsUnknown() && !r.OutputNetflow.Hosts[hostsIndex4].Port.IsNull() {
+				*port11 = r.OutputNetflow.Hosts[hostsIndex4].Port.ValueFloat64()
 			} else {
 				port11 = nil
 			}
@@ -19578,8 +19551,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline61 = nil
 		}
 		systemFields61 := make([]string, 0, len(r.OutputDynatraceHTTP.SystemFields))
-		for _, systemFieldsItem61 := range r.OutputDynatraceHTTP.SystemFields {
-			systemFields61 = append(systemFields61, systemFieldsItem61.ValueString())
+		for systemFieldsIndex61 := range r.OutputDynatraceHTTP.SystemFields {
+			systemFields61 = append(systemFields61, r.OutputDynatraceHTTP.SystemFields[systemFieldsIndex61].ValueString())
 		}
 		environment61 := new(string)
 		if !r.OutputDynatraceHTTP.Environment.IsUnknown() && !r.OutputDynatraceHTTP.Environment.IsNull() {
@@ -19588,8 +19561,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment61 = nil
 		}
 		streamtags61 := make([]string, 0, len(r.OutputDynatraceHTTP.Streamtags))
-		for _, streamtagsItem61 := range r.OutputDynatraceHTTP.Streamtags {
-			streamtags61 = append(streamtags61, streamtagsItem61.ValueString())
+		for streamtagsIndex61 := range r.OutputDynatraceHTTP.Streamtags {
+			streamtags61 = append(streamtags61, r.OutputDynatraceHTTP.Streamtags[streamtagsIndex61].ValueString())
 		}
 		method1 := new(shared.OutputDynatraceHTTPMethod)
 		if !r.OutputDynatraceHTTP.Method.IsUnknown() && !r.OutputDynatraceHTTP.Method.IsNull() {
@@ -19646,15 +19619,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			flushPeriodSec40 = nil
 		}
 		extraHTTPHeaders27 := make([]shared.OutputDynatraceHTTPExtraHTTPHeader, 0, len(r.OutputDynatraceHTTP.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem27 := range r.OutputDynatraceHTTP.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex27 := range r.OutputDynatraceHTTP.ExtraHTTPHeaders {
 			name43 := new(string)
-			if !extraHTTPHeadersItem27.Name.IsUnknown() && !extraHTTPHeadersItem27.Name.IsNull() {
-				*name43 = extraHTTPHeadersItem27.Name.ValueString()
+			if !r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Name.IsUnknown() && !r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Name.IsNull() {
+				*name43 = r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Name.ValueString()
 			} else {
 				name43 = nil
 			}
 			var value56 string
-			value56 = extraHTTPHeadersItem27.Value.ValueString()
+			value56 = r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Value.ValueString()
 
 			extraHTTPHeaders27 = append(extraHTTPHeaders27, shared.OutputDynatraceHTTPExtraHTTPHeader{
 				Name:  name43,
@@ -19674,29 +19647,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			failedRequestLoggingMode27 = nil
 		}
 		safeHeaders27 := make([]string, 0, len(r.OutputDynatraceHTTP.SafeHeaders))
-		for _, safeHeadersItem27 := range r.OutputDynatraceHTTP.SafeHeaders {
-			safeHeaders27 = append(safeHeaders27, safeHeadersItem27.ValueString())
+		for safeHeadersIndex27 := range r.OutputDynatraceHTTP.SafeHeaders {
+			safeHeaders27 = append(safeHeaders27, r.OutputDynatraceHTTP.SafeHeaders[safeHeadersIndex27].ValueString())
 		}
 		responseRetrySettings28 := make([]shared.OutputDynatraceHTTPResponseRetrySetting, 0, len(r.OutputDynatraceHTTP.ResponseRetrySettings))
-		for _, responseRetrySettingsItem28 := range r.OutputDynatraceHTTP.ResponseRetrySettings {
+		for responseRetrySettingsIndex28 := range r.OutputDynatraceHTTP.ResponseRetrySettings {
 			var httpStatus28 float64
-			httpStatus28 = responseRetrySettingsItem28.HTTPStatus.ValueFloat64()
+			httpStatus28 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].HTTPStatus.ValueFloat64()
 
 			initialBackoff60 := new(float64)
-			if !responseRetrySettingsItem28.InitialBackoff.IsUnknown() && !responseRetrySettingsItem28.InitialBackoff.IsNull() {
-				*initialBackoff60 = responseRetrySettingsItem28.InitialBackoff.ValueFloat64()
+			if !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].InitialBackoff.IsUnknown() && !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].InitialBackoff.IsNull() {
+				*initialBackoff60 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff60 = nil
 			}
 			backoffRate60 := new(float64)
-			if !responseRetrySettingsItem28.BackoffRate.IsUnknown() && !responseRetrySettingsItem28.BackoffRate.IsNull() {
-				*backoffRate60 = responseRetrySettingsItem28.BackoffRate.ValueFloat64()
+			if !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].BackoffRate.IsUnknown() && !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].BackoffRate.IsNull() {
+				*backoffRate60 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate60 = nil
 			}
 			maxBackoff56 := new(float64)
-			if !responseRetrySettingsItem28.MaxBackoff.IsUnknown() && !responseRetrySettingsItem28.MaxBackoff.IsNull() {
-				*maxBackoff56 = responseRetrySettingsItem28.MaxBackoff.ValueFloat64()
+			if !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].MaxBackoff.IsUnknown() && !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].MaxBackoff.IsNull() {
+				*maxBackoff56 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex28].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff56 = nil
 			}
@@ -19928,8 +19901,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			pipeline62 = nil
 		}
 		systemFields62 := make([]string, 0, len(r.OutputDynatraceOtlp.SystemFields))
-		for _, systemFieldsItem62 := range r.OutputDynatraceOtlp.SystemFields {
-			systemFields62 = append(systemFields62, systemFieldsItem62.ValueString())
+		for systemFieldsIndex62 := range r.OutputDynatraceOtlp.SystemFields {
+			systemFields62 = append(systemFields62, r.OutputDynatraceOtlp.SystemFields[systemFieldsIndex62].ValueString())
 		}
 		environment62 := new(string)
 		if !r.OutputDynatraceOtlp.Environment.IsUnknown() && !r.OutputDynatraceOtlp.Environment.IsNull() {
@@ -19938,8 +19911,8 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			environment62 = nil
 		}
 		streamtags62 := make([]string, 0, len(r.OutputDynatraceOtlp.Streamtags))
-		for _, streamtagsItem62 := range r.OutputDynatraceOtlp.Streamtags {
-			streamtags62 = append(streamtags62, streamtagsItem62.ValueString())
+		for streamtagsIndex62 := range r.OutputDynatraceOtlp.Streamtags {
+			streamtags62 = append(streamtags62, r.OutputDynatraceOtlp.Streamtags[streamtagsIndex62].ValueString())
 		}
 		protocol6 := new(shared.OutputDynatraceOtlpProtocol)
 		if !r.OutputDynatraceOtlp.Protocol.IsUnknown() && !r.OutputDynatraceOtlp.Protocol.IsNull() {
@@ -19990,15 +19963,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			httpLogsEndpointOverride2 = nil
 		}
 		metadata3 := make([]shared.OutputDynatraceOtlpMetadatum, 0, len(r.OutputDynatraceOtlp.Metadata))
-		for _, metadataItem3 := range r.OutputDynatraceOtlp.Metadata {
+		for metadataIndex3 := range r.OutputDynatraceOtlp.Metadata {
 			key11 := new(string)
-			if !metadataItem3.Key.IsUnknown() && !metadataItem3.Key.IsNull() {
-				*key11 = metadataItem3.Key.ValueString()
+			if !r.OutputDynatraceOtlp.Metadata[metadataIndex3].Key.IsUnknown() && !r.OutputDynatraceOtlp.Metadata[metadataIndex3].Key.IsNull() {
+				*key11 = r.OutputDynatraceOtlp.Metadata[metadataIndex3].Key.ValueString()
 			} else {
 				key11 = nil
 			}
 			var value57 string
-			value57 = metadataItem3.Value.ValueString()
+			value57 = r.OutputDynatraceOtlp.Metadata[metadataIndex3].Value.ValueString()
 
 			metadata3 = append(metadata3, shared.OutputDynatraceOtlpMetadatum{
 				Key:   key11,
@@ -20093,15 +20066,15 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			useRoundRobinDns28 = nil
 		}
 		extraHTTPHeaders28 := make([]shared.OutputDynatraceOtlpExtraHTTPHeader, 0, len(r.OutputDynatraceOtlp.ExtraHTTPHeaders))
-		for _, extraHTTPHeadersItem28 := range r.OutputDynatraceOtlp.ExtraHTTPHeaders {
+		for extraHTTPHeadersIndex28 := range r.OutputDynatraceOtlp.ExtraHTTPHeaders {
 			name44 := new(string)
-			if !extraHTTPHeadersItem28.Name.IsUnknown() && !extraHTTPHeadersItem28.Name.IsNull() {
-				*name44 = extraHTTPHeadersItem28.Name.ValueString()
+			if !r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Name.IsUnknown() && !r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Name.IsNull() {
+				*name44 = r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Name.ValueString()
 			} else {
 				name44 = nil
 			}
 			var value58 string
-			value58 = extraHTTPHeadersItem28.Value.ValueString()
+			value58 = r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Value.ValueString()
 
 			extraHTTPHeaders28 = append(extraHTTPHeaders28, shared.OutputDynatraceOtlpExtraHTTPHeader{
 				Name:  name44,
@@ -20109,29 +20082,29 @@ func (r *PackDestinationResourceModel) ToSharedOutput(ctx context.Context) (*sha
 			})
 		}
 		safeHeaders28 := make([]string, 0, len(r.OutputDynatraceOtlp.SafeHeaders))
-		for _, safeHeadersItem28 := range r.OutputDynatraceOtlp.SafeHeaders {
-			safeHeaders28 = append(safeHeaders28, safeHeadersItem28.ValueString())
+		for safeHeadersIndex28 := range r.OutputDynatraceOtlp.SafeHeaders {
+			safeHeaders28 = append(safeHeaders28, r.OutputDynatraceOtlp.SafeHeaders[safeHeadersIndex28].ValueString())
 		}
 		responseRetrySettings29 := make([]shared.OutputDynatraceOtlpResponseRetrySetting, 0, len(r.OutputDynatraceOtlp.ResponseRetrySettings))
-		for _, responseRetrySettingsItem29 := range r.OutputDynatraceOtlp.ResponseRetrySettings {
+		for responseRetrySettingsIndex29 := range r.OutputDynatraceOtlp.ResponseRetrySettings {
 			var httpStatus29 float64
-			httpStatus29 = responseRetrySettingsItem29.HTTPStatus.ValueFloat64()
+			httpStatus29 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].HTTPStatus.ValueFloat64()
 
 			initialBackoff62 := new(float64)
-			if !responseRetrySettingsItem29.InitialBackoff.IsUnknown() && !responseRetrySettingsItem29.InitialBackoff.IsNull() {
-				*initialBackoff62 = responseRetrySettingsItem29.InitialBackoff.ValueFloat64()
+			if !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].InitialBackoff.IsUnknown() && !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].InitialBackoff.IsNull() {
+				*initialBackoff62 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff62 = nil
 			}
 			backoffRate62 := new(float64)
-			if !responseRetrySettingsItem29.BackoffRate.IsUnknown() && !responseRetrySettingsItem29.BackoffRate.IsNull() {
-				*backoffRate62 = responseRetrySettingsItem29.BackoffRate.ValueFloat64()
+			if !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].BackoffRate.IsUnknown() && !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].BackoffRate.IsNull() {
+				*backoffRate62 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate62 = nil
 			}
 			maxBackoff58 := new(float64)
-			if !responseRetrySettingsItem29.MaxBackoff.IsUnknown() && !responseRetrySettingsItem29.MaxBackoff.IsNull() {
-				*maxBackoff58 = responseRetrySettingsItem29.MaxBackoff.ValueFloat64()
+			if !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].MaxBackoff.IsUnknown() && !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].MaxBackoff.IsNull() {
+				*maxBackoff58 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex29].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff58 = nil
 			}

@@ -183,8 +183,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			ignoreGroupJobsLimit = nil
 		}
 		removeFields := make([]string, 0, len(r.InputCollectorSplunk.RemoveFields))
-		for _, removeFieldsItem := range r.InputCollectorSplunk.RemoveFields {
-			removeFields = append(removeFields, removeFieldsItem.ValueString())
+		for removeFieldsIndex := range r.InputCollectorSplunk.RemoveFields {
+			removeFields = append(removeFields, r.InputCollectorSplunk.RemoveFields[removeFieldsIndex].ValueString())
 		}
 		resumeOnBoot := new(bool)
 		if !r.InputCollectorSplunk.ResumeOnBoot.IsUnknown() && !r.InputCollectorSplunk.ResumeOnBoot.IsNull() {
@@ -358,8 +358,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 		}
 		streamtags := make([]string, 0, len(r.InputCollectorSplunk.Streamtags))
-		for _, streamtagsItem := range r.InputCollectorSplunk.Streamtags {
-			streamtags = append(streamtags, streamtagsItem.ValueString())
+		for streamtagsIndex := range r.InputCollectorSplunk.Streamtags {
+			streamtags = append(streamtags, r.InputCollectorSplunk.Streamtags[streamtagsIndex].ValueString())
 		}
 		workerAffinity := new(bool)
 		if !r.InputCollectorSplunk.WorkerAffinity.IsUnknown() && !r.InputCollectorSplunk.WorkerAffinity.IsNull() {
@@ -376,8 +376,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				typeVar = nil
 			}
 			breakerRulesets := make([]string, 0, len(r.InputCollectorSplunk.Input.BreakerRulesets))
-			for _, breakerRulesetsItem := range r.InputCollectorSplunk.Input.BreakerRulesets {
-				breakerRulesets = append(breakerRulesets, breakerRulesetsItem.ValueString())
+			for breakerRulesetsIndex := range r.InputCollectorSplunk.Input.BreakerRulesets {
+				breakerRulesets = append(breakerRulesets, r.InputCollectorSplunk.Input.BreakerRulesets[breakerRulesetsIndex].ValueString())
 			}
 			staleChannelFlushMs := new(float64)
 			if !r.InputCollectorSplunk.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorSplunk.Input.StaleChannelFlushMs.IsNull() {
@@ -406,8 +406,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					command = nil
 				}
 				args := make([]string, 0, len(r.InputCollectorSplunk.Input.Preprocess.Args))
-				for _, argsItem := range r.InputCollectorSplunk.Input.Preprocess.Args {
-					args = append(args, argsItem.ValueString())
+				for argsIndex := range r.InputCollectorSplunk.Input.Preprocess.Args {
+					args = append(args, r.InputCollectorSplunk.Input.Preprocess.Args[argsIndex].ValueString())
 				}
 				preprocess = &shared.InputCollectorSplunkPreprocess{
 					Disabled: disabled,
@@ -422,12 +422,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				throttleRatePerSec = nil
 			}
 			metadata := make([]shared.InputCollectorSplunkMetadatum, 0, len(r.InputCollectorSplunk.Input.Metadata))
-			for _, metadataItem := range r.InputCollectorSplunk.Input.Metadata {
+			for metadataIndex := range r.InputCollectorSplunk.Input.Metadata {
 				var name string
-				name = metadataItem.Name.ValueString()
+				name = r.InputCollectorSplunk.Input.Metadata[metadataIndex].Name.ValueString()
 
 				var value string
-				value = metadataItem.Value.ValueString()
+				value = r.InputCollectorSplunk.Input.Metadata[metadataIndex].Value.ValueString()
 
 				metadata = append(metadata, shared.InputCollectorSplunkMetadatum{
 					Name:  name,
@@ -628,8 +628,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			ignoreGroupJobsLimit1 = nil
 		}
 		removeFields1 := make([]string, 0, len(r.InputCollectorRest.RemoveFields))
-		for _, removeFieldsItem1 := range r.InputCollectorRest.RemoveFields {
-			removeFields1 = append(removeFields1, removeFieldsItem1.ValueString())
+		for removeFieldsIndex1 := range r.InputCollectorRest.RemoveFields {
+			removeFields1 = append(removeFields1, r.InputCollectorRest.RemoveFields[removeFieldsIndex1].ValueString())
 		}
 		resumeOnBoot1 := new(bool)
 		if !r.InputCollectorRest.ResumeOnBoot.IsUnknown() && !r.InputCollectorRest.ResumeOnBoot.IsNull() {
@@ -803,8 +803,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 		}
 		streamtags1 := make([]string, 0, len(r.InputCollectorRest.Streamtags))
-		for _, streamtagsItem1 := range r.InputCollectorRest.Streamtags {
-			streamtags1 = append(streamtags1, streamtagsItem1.ValueString())
+		for streamtagsIndex1 := range r.InputCollectorRest.Streamtags {
+			streamtags1 = append(streamtags1, r.InputCollectorRest.Streamtags[streamtagsIndex1].ValueString())
 		}
 		workerAffinity1 := new(bool)
 		if !r.InputCollectorRest.WorkerAffinity.IsUnknown() && !r.InputCollectorRest.WorkerAffinity.IsNull() {
@@ -821,8 +821,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				typeVar2 = nil
 			}
 			breakerRulesets1 := make([]string, 0, len(r.InputCollectorRest.Input.BreakerRulesets))
-			for _, breakerRulesetsItem1 := range r.InputCollectorRest.Input.BreakerRulesets {
-				breakerRulesets1 = append(breakerRulesets1, breakerRulesetsItem1.ValueString())
+			for breakerRulesetsIndex1 := range r.InputCollectorRest.Input.BreakerRulesets {
+				breakerRulesets1 = append(breakerRulesets1, r.InputCollectorRest.Input.BreakerRulesets[breakerRulesetsIndex1].ValueString())
 			}
 			staleChannelFlushMs1 := new(float64)
 			if !r.InputCollectorRest.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorRest.Input.StaleChannelFlushMs.IsNull() {
@@ -851,8 +851,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					command1 = nil
 				}
 				args1 := make([]string, 0, len(r.InputCollectorRest.Input.Preprocess.Args))
-				for _, argsItem1 := range r.InputCollectorRest.Input.Preprocess.Args {
-					args1 = append(args1, argsItem1.ValueString())
+				for argsIndex1 := range r.InputCollectorRest.Input.Preprocess.Args {
+					args1 = append(args1, r.InputCollectorRest.Input.Preprocess.Args[argsIndex1].ValueString())
 				}
 				preprocess1 = &shared.InputCollectorRestPreprocess{
 					Disabled: disabled1,
@@ -867,12 +867,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				throttleRatePerSec1 = nil
 			}
 			metadata1 := make([]shared.InputCollectorRestMetadatum, 0, len(r.InputCollectorRest.Input.Metadata))
-			for _, metadataItem1 := range r.InputCollectorRest.Input.Metadata {
+			for metadataIndex1 := range r.InputCollectorRest.Input.Metadata {
 				var name1 string
-				name1 = metadataItem1.Name.ValueString()
+				name1 = r.InputCollectorRest.Input.Metadata[metadataIndex1].Name.ValueString()
 
 				var value1 string
-				value1 = metadataItem1.Value.ValueString()
+				value1 = r.InputCollectorRest.Input.Metadata[metadataIndex1].Value.ValueString()
 
 				metadata1 = append(metadata1, shared.InputCollectorRestMetadatum{
 					Name:  name1,
@@ -973,16 +973,16 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				clientSecretParamName = nil
 			}
 			authRequestParams := make([]shared.AuthRequestParam, 0, len(r.InputCollectorRest.Collector.Conf.AuthRequestParams))
-			for _, authRequestParamsItem := range r.InputCollectorRest.Collector.Conf.AuthRequestParams {
+			for authRequestParamsIndex := range r.InputCollectorRest.Collector.Conf.AuthRequestParams {
 				name2 := new(string)
-				if !authRequestParamsItem.Name.IsUnknown() && !authRequestParamsItem.Name.IsNull() {
-					*name2 = authRequestParamsItem.Name.ValueString()
+				if !r.InputCollectorRest.Collector.Conf.AuthRequestParams[authRequestParamsIndex].Name.IsUnknown() && !r.InputCollectorRest.Collector.Conf.AuthRequestParams[authRequestParamsIndex].Name.IsNull() {
+					*name2 = r.InputCollectorRest.Collector.Conf.AuthRequestParams[authRequestParamsIndex].Name.ValueString()
 				} else {
 					name2 = nil
 				}
 				value2 := new(string)
-				if !authRequestParamsItem.Value.IsUnknown() && !authRequestParamsItem.Value.IsNull() {
-					*value2 = authRequestParamsItem.Value.ValueString()
+				if !r.InputCollectorRest.Collector.Conf.AuthRequestParams[authRequestParamsIndex].Value.IsUnknown() && !r.InputCollectorRest.Collector.Conf.AuthRequestParams[authRequestParamsIndex].Value.IsNull() {
+					*value2 = r.InputCollectorRest.Collector.Conf.AuthRequestParams[authRequestParamsIndex].Value.ValueString()
 				} else {
 					value2 = nil
 				}
@@ -998,16 +998,16 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				tokenRespAttribute = nil
 			}
 			authRequestHeaders := make([]shared.AuthRequestHeader, 0, len(r.InputCollectorRest.Collector.Conf.AuthRequestHeaders))
-			for _, authRequestHeadersItem := range r.InputCollectorRest.Collector.Conf.AuthRequestHeaders {
+			for authRequestHeadersIndex := range r.InputCollectorRest.Collector.Conf.AuthRequestHeaders {
 				name3 := new(string)
-				if !authRequestHeadersItem.Name.IsUnknown() && !authRequestHeadersItem.Name.IsNull() {
-					*name3 = authRequestHeadersItem.Name.ValueString()
+				if !r.InputCollectorRest.Collector.Conf.AuthRequestHeaders[authRequestHeadersIndex].Name.IsUnknown() && !r.InputCollectorRest.Collector.Conf.AuthRequestHeaders[authRequestHeadersIndex].Name.IsNull() {
+					*name3 = r.InputCollectorRest.Collector.Conf.AuthRequestHeaders[authRequestHeadersIndex].Name.ValueString()
 				} else {
 					name3 = nil
 				}
 				value3 := new(string)
-				if !authRequestHeadersItem.Value.IsUnknown() && !authRequestHeadersItem.Value.IsNull() {
-					*value3 = authRequestHeadersItem.Value.ValueString()
+				if !r.InputCollectorRest.Collector.Conf.AuthRequestHeaders[authRequestHeadersIndex].Value.IsUnknown() && !r.InputCollectorRest.Collector.Conf.AuthRequestHeaders[authRequestHeadersIndex].Value.IsNull() {
+					*value3 = r.InputCollectorRest.Collector.Conf.AuthRequestHeaders[authRequestHeadersIndex].Value.ValueString()
 				} else {
 					value3 = nil
 				}
@@ -1029,16 +1029,16 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				collectMethod = nil
 			}
 			collectRequestHeaders := make([]shared.CollectRequestHeader, 0, len(r.InputCollectorRest.Collector.Conf.CollectRequestHeaders))
-			for _, collectRequestHeadersItem := range r.InputCollectorRest.Collector.Conf.CollectRequestHeaders {
+			for collectRequestHeadersIndex := range r.InputCollectorRest.Collector.Conf.CollectRequestHeaders {
 				name4 := new(string)
-				if !collectRequestHeadersItem.Name.IsUnknown() && !collectRequestHeadersItem.Name.IsNull() {
-					*name4 = collectRequestHeadersItem.Name.ValueString()
+				if !r.InputCollectorRest.Collector.Conf.CollectRequestHeaders[collectRequestHeadersIndex].Name.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CollectRequestHeaders[collectRequestHeadersIndex].Name.IsNull() {
+					*name4 = r.InputCollectorRest.Collector.Conf.CollectRequestHeaders[collectRequestHeadersIndex].Name.ValueString()
 				} else {
 					name4 = nil
 				}
 				value4 := new(string)
-				if !collectRequestHeadersItem.Value.IsUnknown() && !collectRequestHeadersItem.Value.IsNull() {
-					*value4 = collectRequestHeadersItem.Value.ValueString()
+				if !r.InputCollectorRest.Collector.Conf.CollectRequestHeaders[collectRequestHeadersIndex].Value.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CollectRequestHeaders[collectRequestHeadersIndex].Value.IsNull() {
+					*value4 = r.InputCollectorRest.Collector.Conf.CollectRequestHeaders[collectRequestHeadersIndex].Value.ValueString()
 				} else {
 					value4 = nil
 				}
@@ -1048,16 +1048,16 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				})
 			}
 			collectRequestParams := make([]shared.CollectRequestParam, 0, len(r.InputCollectorRest.Collector.Conf.CollectRequestParams))
-			for _, collectRequestParamsItem := range r.InputCollectorRest.Collector.Conf.CollectRequestParams {
+			for collectRequestParamsIndex := range r.InputCollectorRest.Collector.Conf.CollectRequestParams {
 				name5 := new(string)
-				if !collectRequestParamsItem.Name.IsUnknown() && !collectRequestParamsItem.Name.IsNull() {
-					*name5 = collectRequestParamsItem.Name.ValueString()
+				if !r.InputCollectorRest.Collector.Conf.CollectRequestParams[collectRequestParamsIndex].Name.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CollectRequestParams[collectRequestParamsIndex].Name.IsNull() {
+					*name5 = r.InputCollectorRest.Collector.Conf.CollectRequestParams[collectRequestParamsIndex].Name.ValueString()
 				} else {
 					name5 = nil
 				}
 				value5 := new(string)
-				if !collectRequestParamsItem.Value.IsUnknown() && !collectRequestParamsItem.Value.IsNull() {
-					*value5 = collectRequestParamsItem.Value.ValueString()
+				if !r.InputCollectorRest.Collector.Conf.CollectRequestParams[collectRequestParamsIndex].Value.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CollectRequestParams[collectRequestParamsIndex].Value.IsNull() {
+					*value5 = r.InputCollectorRest.Collector.Conf.CollectRequestParams[collectRequestParamsIndex].Value.ValueString()
 				} else {
 					value5 = nil
 				}
@@ -1103,8 +1103,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				captureHeaders = nil
 			}
 			safeHeaders := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.SafeHeaders))
-			for _, safeHeadersItem := range r.InputCollectorRest.Collector.Conf.SafeHeaders {
-				safeHeaders = append(safeHeaders, safeHeadersItem.ValueString())
+			for safeHeadersIndex := range r.InputCollectorRest.Collector.Conf.SafeHeaders {
+				safeHeaders = append(safeHeaders, r.InputCollectorRest.Collector.Conf.SafeHeaders[safeHeadersIndex].ValueString())
 			}
 			var discovery *shared.DiscoveryConfiguration
 			if r.InputCollectorRest.Collector.Conf.Discovery != nil {
@@ -1177,8 +1177,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 						size = nil
 					}
 					attribute := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute))
-					for _, attributeItem := range r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute {
-						attribute = append(attribute, attributeItem.ValueString())
+					for attributeIndex := range r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute {
+						attribute = append(attribute, r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute[attributeIndex].ValueString())
 					}
 					lastPageExpr := new(string)
 					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.IsNull() {
@@ -1221,8 +1221,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					enableDiscoverCode = nil
 				}
 				itemList := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.ItemList))
-				for _, itemListItem := range r.InputCollectorRest.Collector.Conf.Discovery.ItemList {
-					itemList = append(itemList, itemListItem.ValueString())
+				for itemListIndex := range r.InputCollectorRest.Collector.Conf.Discovery.ItemList {
+					itemList = append(itemList, r.InputCollectorRest.Collector.Conf.Discovery.ItemList[itemListIndex].ValueString())
 				}
 				discoverURL := new(string)
 				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.IsNull() {
@@ -1231,16 +1231,16 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					discoverURL = nil
 				}
 				discoverRequestHeaders := make([]shared.DiscoverRequestHeader, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders))
-				for _, discoverRequestHeadersItem := range r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders {
+				for discoverRequestHeadersIndex := range r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders {
 					name6 := new(string)
-					if !discoverRequestHeadersItem.Name.IsUnknown() && !discoverRequestHeadersItem.Name.IsNull() {
-						*name6 = discoverRequestHeadersItem.Name.ValueString()
+					if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Name.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Name.IsNull() {
+						*name6 = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Name.ValueString()
 					} else {
 						name6 = nil
 					}
 					value6 := new(string)
-					if !discoverRequestHeadersItem.Value.IsUnknown() && !discoverRequestHeadersItem.Value.IsNull() {
-						*value6 = discoverRequestHeadersItem.Value.ValueString()
+					if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Value.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Value.IsNull() {
+						*value6 = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Value.ValueString()
 					} else {
 						value6 = nil
 					}
@@ -1339,8 +1339,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					size1 = nil
 				}
 				attribute1 := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Pagination.Attribute))
-				for _, attributeItem1 := range r.InputCollectorRest.Collector.Conf.Pagination.Attribute {
-					attribute1 = append(attribute1, attributeItem1.ValueString())
+				for attributeIndex1 := range r.InputCollectorRest.Collector.Conf.Pagination.Attribute {
+					attribute1 = append(attribute1, r.InputCollectorRest.Collector.Conf.Pagination.Attribute[attributeIndex1].ValueString())
 				}
 				lastPageExpr1 := new(string)
 				if !r.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr.IsNull() {
@@ -1409,8 +1409,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					maxIntervalMs = nil
 				}
 				codes := make([]int64, 0, len(r.InputCollectorRest.Collector.Conf.RetryRules.Codes))
-				for _, codesItem := range r.InputCollectorRest.Collector.Conf.RetryRules.Codes {
-					codes = append(codes, codesItem.ValueInt64())
+				for codesIndex := range r.InputCollectorRest.Collector.Conf.RetryRules.Codes {
+					codes = append(codes, r.InputCollectorRest.Collector.Conf.RetryRules.Codes[codesIndex].ValueInt64())
 				}
 				enableHeader := new(bool)
 				if !r.InputCollectorRest.Collector.Conf.RetryRules.EnableHeader.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.EnableHeader.IsNull() {
@@ -1536,8 +1536,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			ignoreGroupJobsLimit2 = nil
 		}
 		removeFields2 := make([]string, 0, len(r.InputCollectorS3.RemoveFields))
-		for _, removeFieldsItem2 := range r.InputCollectorS3.RemoveFields {
-			removeFields2 = append(removeFields2, removeFieldsItem2.ValueString())
+		for removeFieldsIndex2 := range r.InputCollectorS3.RemoveFields {
+			removeFields2 = append(removeFields2, r.InputCollectorS3.RemoveFields[removeFieldsIndex2].ValueString())
 		}
 		resumeOnBoot2 := new(bool)
 		if !r.InputCollectorS3.ResumeOnBoot.IsUnknown() && !r.InputCollectorS3.ResumeOnBoot.IsNull() {
@@ -1711,8 +1711,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 		}
 		streamtags2 := make([]string, 0, len(r.InputCollectorS3.Streamtags))
-		for _, streamtagsItem2 := range r.InputCollectorS3.Streamtags {
-			streamtags2 = append(streamtags2, streamtagsItem2.ValueString())
+		for streamtagsIndex2 := range r.InputCollectorS3.Streamtags {
+			streamtags2 = append(streamtags2, r.InputCollectorS3.Streamtags[streamtagsIndex2].ValueString())
 		}
 		workerAffinity2 := new(bool)
 		if !r.InputCollectorS3.WorkerAffinity.IsUnknown() && !r.InputCollectorS3.WorkerAffinity.IsNull() {
@@ -1729,8 +1729,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				typeVar7 = nil
 			}
 			breakerRulesets2 := make([]string, 0, len(r.InputCollectorS3.Input.BreakerRulesets))
-			for _, breakerRulesetsItem2 := range r.InputCollectorS3.Input.BreakerRulesets {
-				breakerRulesets2 = append(breakerRulesets2, breakerRulesetsItem2.ValueString())
+			for breakerRulesetsIndex2 := range r.InputCollectorS3.Input.BreakerRulesets {
+				breakerRulesets2 = append(breakerRulesets2, r.InputCollectorS3.Input.BreakerRulesets[breakerRulesetsIndex2].ValueString())
 			}
 			staleChannelFlushMs2 := new(float64)
 			if !r.InputCollectorS3.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorS3.Input.StaleChannelFlushMs.IsNull() {
@@ -1759,8 +1759,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					command2 = nil
 				}
 				args2 := make([]string, 0, len(r.InputCollectorS3.Input.Preprocess.Args))
-				for _, argsItem2 := range r.InputCollectorS3.Input.Preprocess.Args {
-					args2 = append(args2, argsItem2.ValueString())
+				for argsIndex2 := range r.InputCollectorS3.Input.Preprocess.Args {
+					args2 = append(args2, r.InputCollectorS3.Input.Preprocess.Args[argsIndex2].ValueString())
 				}
 				preprocess2 = &shared.InputCollectorS3Preprocess{
 					Disabled: disabled2,
@@ -1775,12 +1775,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				throttleRatePerSec2 = nil
 			}
 			metadata2 := make([]shared.InputCollectorS3Metadatum, 0, len(r.InputCollectorS3.Input.Metadata))
-			for _, metadataItem2 := range r.InputCollectorS3.Input.Metadata {
+			for metadataIndex2 := range r.InputCollectorS3.Input.Metadata {
 				var name7 string
-				name7 = metadataItem2.Name.ValueString()
+				name7 = r.InputCollectorS3.Input.Metadata[metadataIndex2].Name.ValueString()
 
 				var value7 string
-				value7 = metadataItem2.Value.ValueString()
+				value7 = r.InputCollectorS3.Input.Metadata[metadataIndex2].Value.ValueString()
 
 				metadata2 = append(metadata2, shared.InputCollectorS3Metadatum{
 					Name:  name7,
@@ -1927,8 +1927,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			ignoreGroupJobsLimit3 = nil
 		}
 		removeFields3 := make([]string, 0, len(r.InputCollectorAzureBlob.RemoveFields))
-		for _, removeFieldsItem3 := range r.InputCollectorAzureBlob.RemoveFields {
-			removeFields3 = append(removeFields3, removeFieldsItem3.ValueString())
+		for removeFieldsIndex3 := range r.InputCollectorAzureBlob.RemoveFields {
+			removeFields3 = append(removeFields3, r.InputCollectorAzureBlob.RemoveFields[removeFieldsIndex3].ValueString())
 		}
 		resumeOnBoot3 := new(bool)
 		if !r.InputCollectorAzureBlob.ResumeOnBoot.IsUnknown() && !r.InputCollectorAzureBlob.ResumeOnBoot.IsNull() {
@@ -2102,8 +2102,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 		}
 		streamtags3 := make([]string, 0, len(r.InputCollectorAzureBlob.Streamtags))
-		for _, streamtagsItem3 := range r.InputCollectorAzureBlob.Streamtags {
-			streamtags3 = append(streamtags3, streamtagsItem3.ValueString())
+		for streamtagsIndex3 := range r.InputCollectorAzureBlob.Streamtags {
+			streamtags3 = append(streamtags3, r.InputCollectorAzureBlob.Streamtags[streamtagsIndex3].ValueString())
 		}
 		workerAffinity3 := new(bool)
 		if !r.InputCollectorAzureBlob.WorkerAffinity.IsUnknown() && !r.InputCollectorAzureBlob.WorkerAffinity.IsNull() {
@@ -2120,8 +2120,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				typeVar9 = nil
 			}
 			breakerRulesets3 := make([]string, 0, len(r.InputCollectorAzureBlob.Input.BreakerRulesets))
-			for _, breakerRulesetsItem3 := range r.InputCollectorAzureBlob.Input.BreakerRulesets {
-				breakerRulesets3 = append(breakerRulesets3, breakerRulesetsItem3.ValueString())
+			for breakerRulesetsIndex3 := range r.InputCollectorAzureBlob.Input.BreakerRulesets {
+				breakerRulesets3 = append(breakerRulesets3, r.InputCollectorAzureBlob.Input.BreakerRulesets[breakerRulesetsIndex3].ValueString())
 			}
 			staleChannelFlushMs3 := new(float64)
 			if !r.InputCollectorAzureBlob.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorAzureBlob.Input.StaleChannelFlushMs.IsNull() {
@@ -2150,8 +2150,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					command3 = nil
 				}
 				args3 := make([]string, 0, len(r.InputCollectorAzureBlob.Input.Preprocess.Args))
-				for _, argsItem3 := range r.InputCollectorAzureBlob.Input.Preprocess.Args {
-					args3 = append(args3, argsItem3.ValueString())
+				for argsIndex3 := range r.InputCollectorAzureBlob.Input.Preprocess.Args {
+					args3 = append(args3, r.InputCollectorAzureBlob.Input.Preprocess.Args[argsIndex3].ValueString())
 				}
 				preprocess3 = &shared.InputCollectorAzureBlobPreprocess{
 					Disabled: disabled3,
@@ -2166,12 +2166,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				throttleRatePerSec3 = nil
 			}
 			metadata3 := make([]shared.InputCollectorAzureBlobMetadatum, 0, len(r.InputCollectorAzureBlob.Input.Metadata))
-			for _, metadataItem3 := range r.InputCollectorAzureBlob.Input.Metadata {
+			for metadataIndex3 := range r.InputCollectorAzureBlob.Input.Metadata {
 				var name8 string
-				name8 = metadataItem3.Name.ValueString()
+				name8 = r.InputCollectorAzureBlob.Input.Metadata[metadataIndex3].Name.ValueString()
 
 				var value8 string
-				value8 = metadataItem3.Value.ValueString()
+				value8 = r.InputCollectorAzureBlob.Input.Metadata[metadataIndex3].Value.ValueString()
 
 				metadata3 = append(metadata3, shared.InputCollectorAzureBlobMetadatum{
 					Name:  name8,
@@ -2304,8 +2304,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			ignoreGroupJobsLimit4 = nil
 		}
 		removeFields4 := make([]string, 0, len(r.InputCollectorCriblLake.RemoveFields))
-		for _, removeFieldsItem4 := range r.InputCollectorCriblLake.RemoveFields {
-			removeFields4 = append(removeFields4, removeFieldsItem4.ValueString())
+		for removeFieldsIndex4 := range r.InputCollectorCriblLake.RemoveFields {
+			removeFields4 = append(removeFields4, r.InputCollectorCriblLake.RemoveFields[removeFieldsIndex4].ValueString())
 		}
 		resumeOnBoot4 := new(bool)
 		if !r.InputCollectorCriblLake.ResumeOnBoot.IsUnknown() && !r.InputCollectorCriblLake.ResumeOnBoot.IsNull() {
@@ -2479,8 +2479,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 		}
 		streamtags4 := make([]string, 0, len(r.InputCollectorCriblLake.Streamtags))
-		for _, streamtagsItem4 := range r.InputCollectorCriblLake.Streamtags {
-			streamtags4 = append(streamtags4, streamtagsItem4.ValueString())
+		for streamtagsIndex4 := range r.InputCollectorCriblLake.Streamtags {
+			streamtags4 = append(streamtags4, r.InputCollectorCriblLake.Streamtags[streamtagsIndex4].ValueString())
 		}
 		workerAffinity4 := new(bool)
 		if !r.InputCollectorCriblLake.WorkerAffinity.IsUnknown() && !r.InputCollectorCriblLake.WorkerAffinity.IsNull() {
@@ -2497,8 +2497,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				typeVar11 = nil
 			}
 			breakerRulesets4 := make([]string, 0, len(r.InputCollectorCriblLake.Input.BreakerRulesets))
-			for _, breakerRulesetsItem4 := range r.InputCollectorCriblLake.Input.BreakerRulesets {
-				breakerRulesets4 = append(breakerRulesets4, breakerRulesetsItem4.ValueString())
+			for breakerRulesetsIndex4 := range r.InputCollectorCriblLake.Input.BreakerRulesets {
+				breakerRulesets4 = append(breakerRulesets4, r.InputCollectorCriblLake.Input.BreakerRulesets[breakerRulesetsIndex4].ValueString())
 			}
 			staleChannelFlushMs4 := new(float64)
 			if !r.InputCollectorCriblLake.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorCriblLake.Input.StaleChannelFlushMs.IsNull() {
@@ -2527,8 +2527,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					command4 = nil
 				}
 				args4 := make([]string, 0, len(r.InputCollectorCriblLake.Input.Preprocess.Args))
-				for _, argsItem4 := range r.InputCollectorCriblLake.Input.Preprocess.Args {
-					args4 = append(args4, argsItem4.ValueString())
+				for argsIndex4 := range r.InputCollectorCriblLake.Input.Preprocess.Args {
+					args4 = append(args4, r.InputCollectorCriblLake.Input.Preprocess.Args[argsIndex4].ValueString())
 				}
 				preprocess4 = &shared.InputCollectorCriblLakePreprocess{
 					Disabled: disabled4,
@@ -2543,12 +2543,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				throttleRatePerSec4 = nil
 			}
 			metadata4 := make([]shared.InputCollectorCriblLakeMetadatum, 0, len(r.InputCollectorCriblLake.Input.Metadata))
-			for _, metadataItem4 := range r.InputCollectorCriblLake.Input.Metadata {
+			for metadataIndex4 := range r.InputCollectorCriblLake.Input.Metadata {
 				var name9 string
-				name9 = metadataItem4.Name.ValueString()
+				name9 = r.InputCollectorCriblLake.Input.Metadata[metadataIndex4].Name.ValueString()
 
 				var value9 string
-				value9 = metadataItem4.Value.ValueString()
+				value9 = r.InputCollectorCriblLake.Input.Metadata[metadataIndex4].Value.ValueString()
 
 				metadata4 = append(metadata4, shared.InputCollectorCriblLakeMetadatum{
 					Name:  name9,
@@ -2637,8 +2637,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			ignoreGroupJobsLimit5 = nil
 		}
 		removeFields5 := make([]string, 0, len(r.InputCollectorDatabase.RemoveFields))
-		for _, removeFieldsItem5 := range r.InputCollectorDatabase.RemoveFields {
-			removeFields5 = append(removeFields5, removeFieldsItem5.ValueString())
+		for removeFieldsIndex5 := range r.InputCollectorDatabase.RemoveFields {
+			removeFields5 = append(removeFields5, r.InputCollectorDatabase.RemoveFields[removeFieldsIndex5].ValueString())
 		}
 		resumeOnBoot5 := new(bool)
 		if !r.InputCollectorDatabase.ResumeOnBoot.IsUnknown() && !r.InputCollectorDatabase.ResumeOnBoot.IsNull() {
@@ -2812,8 +2812,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 		}
 		streamtags5 := make([]string, 0, len(r.InputCollectorDatabase.Streamtags))
-		for _, streamtagsItem5 := range r.InputCollectorDatabase.Streamtags {
-			streamtags5 = append(streamtags5, streamtagsItem5.ValueString())
+		for streamtagsIndex5 := range r.InputCollectorDatabase.Streamtags {
+			streamtags5 = append(streamtags5, r.InputCollectorDatabase.Streamtags[streamtagsIndex5].ValueString())
 		}
 		workerAffinity5 := new(bool)
 		if !r.InputCollectorDatabase.WorkerAffinity.IsUnknown() && !r.InputCollectorDatabase.WorkerAffinity.IsNull() {
@@ -2830,8 +2830,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				typeVar13 = nil
 			}
 			breakerRulesets5 := make([]string, 0, len(r.InputCollectorDatabase.Input.BreakerRulesets))
-			for _, breakerRulesetsItem5 := range r.InputCollectorDatabase.Input.BreakerRulesets {
-				breakerRulesets5 = append(breakerRulesets5, breakerRulesetsItem5.ValueString())
+			for breakerRulesetsIndex5 := range r.InputCollectorDatabase.Input.BreakerRulesets {
+				breakerRulesets5 = append(breakerRulesets5, r.InputCollectorDatabase.Input.BreakerRulesets[breakerRulesetsIndex5].ValueString())
 			}
 			staleChannelFlushMs5 := new(float64)
 			if !r.InputCollectorDatabase.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorDatabase.Input.StaleChannelFlushMs.IsNull() {
@@ -2860,8 +2860,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					command5 = nil
 				}
 				args5 := make([]string, 0, len(r.InputCollectorDatabase.Input.Preprocess.Args))
-				for _, argsItem5 := range r.InputCollectorDatabase.Input.Preprocess.Args {
-					args5 = append(args5, argsItem5.ValueString())
+				for argsIndex5 := range r.InputCollectorDatabase.Input.Preprocess.Args {
+					args5 = append(args5, r.InputCollectorDatabase.Input.Preprocess.Args[argsIndex5].ValueString())
 				}
 				preprocess5 = &shared.InputCollectorDatabasePreprocess{
 					Disabled: disabled5,
@@ -2876,12 +2876,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				throttleRatePerSec5 = nil
 			}
 			metadata5 := make([]shared.InputCollectorDatabaseMetadatum, 0, len(r.InputCollectorDatabase.Input.Metadata))
-			for _, metadataItem5 := range r.InputCollectorDatabase.Input.Metadata {
+			for metadataIndex5 := range r.InputCollectorDatabase.Input.Metadata {
 				var name10 string
-				name10 = metadataItem5.Name.ValueString()
+				name10 = r.InputCollectorDatabase.Input.Metadata[metadataIndex5].Name.ValueString()
 
 				var value10 string
-				value10 = metadataItem5.Value.ValueString()
+				value10 = r.InputCollectorDatabase.Input.Metadata[metadataIndex5].Value.ValueString()
 
 				metadata5 = append(metadata5, shared.InputCollectorDatabaseMetadatum{
 					Name:  name10,
@@ -2984,8 +2984,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			ignoreGroupJobsLimit6 = nil
 		}
 		removeFields6 := make([]string, 0, len(r.InputCollectorGCS.RemoveFields))
-		for _, removeFieldsItem6 := range r.InputCollectorGCS.RemoveFields {
-			removeFields6 = append(removeFields6, removeFieldsItem6.ValueString())
+		for removeFieldsIndex6 := range r.InputCollectorGCS.RemoveFields {
+			removeFields6 = append(removeFields6, r.InputCollectorGCS.RemoveFields[removeFieldsIndex6].ValueString())
 		}
 		resumeOnBoot6 := new(bool)
 		if !r.InputCollectorGCS.ResumeOnBoot.IsUnknown() && !r.InputCollectorGCS.ResumeOnBoot.IsNull() {
@@ -3159,8 +3159,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 		}
 		streamtags6 := make([]string, 0, len(r.InputCollectorGCS.Streamtags))
-		for _, streamtagsItem6 := range r.InputCollectorGCS.Streamtags {
-			streamtags6 = append(streamtags6, streamtagsItem6.ValueString())
+		for streamtagsIndex6 := range r.InputCollectorGCS.Streamtags {
+			streamtags6 = append(streamtags6, r.InputCollectorGCS.Streamtags[streamtagsIndex6].ValueString())
 		}
 		workerAffinity6 := new(bool)
 		if !r.InputCollectorGCS.WorkerAffinity.IsUnknown() && !r.InputCollectorGCS.WorkerAffinity.IsNull() {
@@ -3177,8 +3177,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				typeVar15 = nil
 			}
 			breakerRulesets6 := make([]string, 0, len(r.InputCollectorGCS.Input.BreakerRulesets))
-			for _, breakerRulesetsItem6 := range r.InputCollectorGCS.Input.BreakerRulesets {
-				breakerRulesets6 = append(breakerRulesets6, breakerRulesetsItem6.ValueString())
+			for breakerRulesetsIndex6 := range r.InputCollectorGCS.Input.BreakerRulesets {
+				breakerRulesets6 = append(breakerRulesets6, r.InputCollectorGCS.Input.BreakerRulesets[breakerRulesetsIndex6].ValueString())
 			}
 			staleChannelFlushMs6 := new(float64)
 			if !r.InputCollectorGCS.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorGCS.Input.StaleChannelFlushMs.IsNull() {
@@ -3207,8 +3207,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					command6 = nil
 				}
 				args6 := make([]string, 0, len(r.InputCollectorGCS.Input.Preprocess.Args))
-				for _, argsItem6 := range r.InputCollectorGCS.Input.Preprocess.Args {
-					args6 = append(args6, argsItem6.ValueString())
+				for argsIndex6 := range r.InputCollectorGCS.Input.Preprocess.Args {
+					args6 = append(args6, r.InputCollectorGCS.Input.Preprocess.Args[argsIndex6].ValueString())
 				}
 				preprocess6 = &shared.InputCollectorGCSPreprocess{
 					Disabled: disabled6,
@@ -3223,12 +3223,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				throttleRatePerSec6 = nil
 			}
 			metadata6 := make([]shared.InputCollectorGCSMetadatum, 0, len(r.InputCollectorGCS.Input.Metadata))
-			for _, metadataItem6 := range r.InputCollectorGCS.Input.Metadata {
+			for metadataIndex6 := range r.InputCollectorGCS.Input.Metadata {
 				var name11 string
-				name11 = metadataItem6.Name.ValueString()
+				name11 = r.InputCollectorGCS.Input.Metadata[metadataIndex6].Name.ValueString()
 
 				var value11 string
-				value11 = metadataItem6.Value.ValueString()
+				value11 = r.InputCollectorGCS.Input.Metadata[metadataIndex6].Value.ValueString()
 
 				metadata6 = append(metadata6, shared.InputCollectorGCSMetadatum{
 					Name:  name11,
@@ -3354,8 +3354,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			ignoreGroupJobsLimit7 = nil
 		}
 		removeFields7 := make([]string, 0, len(r.InputCollectorHealthCheck.RemoveFields))
-		for _, removeFieldsItem7 := range r.InputCollectorHealthCheck.RemoveFields {
-			removeFields7 = append(removeFields7, removeFieldsItem7.ValueString())
+		for removeFieldsIndex7 := range r.InputCollectorHealthCheck.RemoveFields {
+			removeFields7 = append(removeFields7, r.InputCollectorHealthCheck.RemoveFields[removeFieldsIndex7].ValueString())
 		}
 		resumeOnBoot7 := new(bool)
 		if !r.InputCollectorHealthCheck.ResumeOnBoot.IsUnknown() && !r.InputCollectorHealthCheck.ResumeOnBoot.IsNull() {
@@ -3529,8 +3529,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 		}
 		streamtags7 := make([]string, 0, len(r.InputCollectorHealthCheck.Streamtags))
-		for _, streamtagsItem7 := range r.InputCollectorHealthCheck.Streamtags {
-			streamtags7 = append(streamtags7, streamtagsItem7.ValueString())
+		for streamtagsIndex7 := range r.InputCollectorHealthCheck.Streamtags {
+			streamtags7 = append(streamtags7, r.InputCollectorHealthCheck.Streamtags[streamtagsIndex7].ValueString())
 		}
 		workerAffinity7 := new(bool)
 		if !r.InputCollectorHealthCheck.WorkerAffinity.IsUnknown() && !r.InputCollectorHealthCheck.WorkerAffinity.IsNull() {
@@ -3547,8 +3547,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				typeVar17 = nil
 			}
 			breakerRulesets7 := make([]string, 0, len(r.InputCollectorHealthCheck.Input.BreakerRulesets))
-			for _, breakerRulesetsItem7 := range r.InputCollectorHealthCheck.Input.BreakerRulesets {
-				breakerRulesets7 = append(breakerRulesets7, breakerRulesetsItem7.ValueString())
+			for breakerRulesetsIndex7 := range r.InputCollectorHealthCheck.Input.BreakerRulesets {
+				breakerRulesets7 = append(breakerRulesets7, r.InputCollectorHealthCheck.Input.BreakerRulesets[breakerRulesetsIndex7].ValueString())
 			}
 			staleChannelFlushMs7 := new(float64)
 			if !r.InputCollectorHealthCheck.Input.StaleChannelFlushMs.IsUnknown() && !r.InputCollectorHealthCheck.Input.StaleChannelFlushMs.IsNull() {
@@ -3577,8 +3577,8 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					command7 = nil
 				}
 				args7 := make([]string, 0, len(r.InputCollectorHealthCheck.Input.Preprocess.Args))
-				for _, argsItem7 := range r.InputCollectorHealthCheck.Input.Preprocess.Args {
-					args7 = append(args7, argsItem7.ValueString())
+				for argsIndex7 := range r.InputCollectorHealthCheck.Input.Preprocess.Args {
+					args7 = append(args7, r.InputCollectorHealthCheck.Input.Preprocess.Args[argsIndex7].ValueString())
 				}
 				preprocess7 = &shared.InputCollectorHealthCheckPreprocess{
 					Disabled: disabled7,
@@ -3593,12 +3593,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				throttleRatePerSec7 = nil
 			}
 			metadata7 := make([]shared.InputCollectorHealthCheckMetadatum, 0, len(r.InputCollectorHealthCheck.Input.Metadata))
-			for _, metadataItem7 := range r.InputCollectorHealthCheck.Input.Metadata {
+			for metadataIndex7 := range r.InputCollectorHealthCheck.Input.Metadata {
 				var name12 string
-				name12 = metadataItem7.Name.ValueString()
+				name12 = r.InputCollectorHealthCheck.Input.Metadata[metadataIndex7].Name.ValueString()
 
 				var value12 string
-				value12 = metadataItem7.Value.ValueString()
+				value12 = r.InputCollectorHealthCheck.Input.Metadata[metadataIndex7].Value.ValueString()
 
 				metadata7 = append(metadata7, shared.InputCollectorHealthCheckMetadatum{
 					Name:  name12,

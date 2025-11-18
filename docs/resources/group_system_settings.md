@@ -415,7 +415,7 @@ Read-Only:
 - `host` (String)
 - `port` (Number)
 - `ssl` (Boolean)
-- `type` (String) must be one of ["ldap", "splunk", "local", "saas", "saml", "openid"]
+- `type` (String)
 
 
 <a id="nestedatt--items--backups"></a>
@@ -442,7 +442,7 @@ Read-Only:
 
 Read-Only:
 
-- `mode` (String) must be one of ["single", "master", "worker", "edge", "managed-edge", "outpost"]
+- `mode` (String)
 
 
 <a id="nestedatt--items--git"></a>
@@ -458,7 +458,7 @@ Read-Only:
 - `commit_deploy_single_action` (Boolean)
 - `copilot_auto_git_commit_messages` (Boolean)
 - `default_commit_message` (String)
-- `git_ops` (String) must be one of ["none", "pull", "push"]
+- `git_ops` (String)
 - `password` (String)
 - `remote` (String)
 - `ssh_key` (String)
@@ -498,7 +498,7 @@ Read-Only:
 
 - `cpu_profile_ttl` (String)
 - `edge_metrics_custom_expression` (String)
-- `edge_metrics_mode` (String) must be one of ["minimal", "basic", "all", "custom"]
+- `edge_metrics_mode` (String)
 - `edge_nodes_count` (Number)
 - `enable_metrics_persistence` (Boolean)
 - `events_metadata_sources` (List of String)
@@ -604,7 +604,7 @@ Read-Only:
 Read-Only:
 
 - `number` (Number)
-- `warm_pool_size_enum` (String) must be "auto"
+- `warm_pool_size_enum` (String)
 
 
 
@@ -672,7 +672,7 @@ Read-Only:
 Read-Only:
 
 - `intercom` (Boolean)
-- `upgrade` (String) must be one of ["false", "api"]
+- `upgrade` (String)
 
 
 <a id="nestedatt--items--tls"></a>

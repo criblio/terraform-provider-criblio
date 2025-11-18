@@ -23,9 +23,24 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 			var items tfTypes.Routes
 
 			itemsPriorData := items
+			itemsPriorData1 := items
+			if len(itemsItem.Conf.Groups) > 0 {
+				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Conf.Groups))
+				for routesGroupsKey, routesGroupsValue := range itemsItem.Conf.Groups {
+					var routesGroupsResult tfTypes.RoutesGroups
+					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
+					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
+					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
+
+					items.Groups[routesGroupsKey] = routesGroupsResult
+				}
+			}
+			items.Comments = itemsPriorData1.Comments
+			items.ID = itemsPriorData1.ID
+			items.Routes = itemsPriorData1.Routes
+			items.ID = types.StringValue(itemsItem.ID)
 			items.Comments = itemsPriorData.Comments
 			items.Groups = itemsPriorData.Groups
-			items.ID = types.StringValue(itemsItem.ID)
 			items.Routes = itemsPriorData.Routes
 
 			r.Items = append(r.Items, items)

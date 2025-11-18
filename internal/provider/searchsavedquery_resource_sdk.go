@@ -11,35 +11,61 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *SearchSavedQueryResourceModel) RefreshFromOperationsCreateSavedQueryResponseBody(ctx context.Context, resp *operations.CreateSavedQueryResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSavedQuery(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *SearchSavedQueryResourceModel) RefreshFromOperationsGetSavedQueryByIDResponseBody(ctx context.Context, resp *operations.GetSavedQueryByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.SavedQuery{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.SavedQuery
-
-			items.Name = types.StringValue(itemsItem.Name)
-			items.IsPrivate = types.BoolPointerValue(itemsItem.IsPrivate)
-			items.Query = types.StringValue(itemsItem.Query)
-			items.Earliest = types.StringPointerValue(itemsItem.Earliest)
-			items.Latest = types.StringPointerValue(itemsItem.Latest)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			if itemsItem.Schedule == nil {
-				items.Schedule = nil
-			} else {
-				items.Schedule = &tfTypes.SavedQuerySchedule{}
-				items.Schedule.CronSchedule = types.StringValue(itemsItem.Schedule.CronSchedule)
-				items.Schedule.Enabled = types.BoolValue(itemsItem.Schedule.Enabled)
-				items.Schedule.KeepLastN = types.Float64Value(itemsItem.Schedule.KeepLastN)
-				items.Schedule.Notifications.Disabled = types.BoolValue(itemsItem.Schedule.Notifications.Disabled)
-				items.Schedule.Tz = types.StringValue(itemsItem.Schedule.Tz)
-			}
-			items.ID = types.StringValue(itemsItem.ID)
-
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedSavedQuery(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *SearchSavedQueryResourceModel) RefreshFromOperationsUpdateSavedQueryByIDResponseBody(ctx context.Context, resp *operations.UpdateSavedQueryByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSavedQuery(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags

@@ -612,31 +612,65 @@ func CreateParserUnionParserKvp(parserKvp ParserKvp) ParserUnion {
 
 func (u *ParserUnion) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var parser Parser = Parser{}
 	if err := utils.UnmarshalJSON(data, &parser, "", true, nil); err == nil {
-		u.Parser = &parser
-		u.Type = ParserUnionTypeParser
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ParserUnionTypeParser,
+			Value: &parser,
+		})
 	}
 
 	var parserGrok ParserGrok = ParserGrok{}
 	if err := utils.UnmarshalJSON(data, &parserGrok, "", true, nil); err == nil {
-		u.ParserGrok = &parserGrok
-		u.Type = ParserUnionTypeParserGrok
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ParserUnionTypeParserGrok,
+			Value: &parserGrok,
+		})
 	}
 
 	var parserJSON ParserJSON = ParserJSON{}
 	if err := utils.UnmarshalJSON(data, &parserJSON, "", true, nil); err == nil {
-		u.ParserJSON = &parserJSON
-		u.Type = ParserUnionTypeParserJSON
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ParserUnionTypeParserJSON,
+			Value: &parserJSON,
+		})
 	}
 
 	var parserKvp ParserKvp = ParserKvp{}
 	if err := utils.UnmarshalJSON(data, &parserKvp, "", true, nil); err == nil {
-		u.ParserKvp = &parserKvp
-		u.Type = ParserUnionTypeParserKvp
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ParserUnionTypeParserKvp,
+			Value: &parserKvp,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for ParserUnion", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for ParserUnion", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(ParserUnionType)
+	switch best.Type {
+	case ParserUnionTypeParser:
+		u.Parser = best.Value.(*Parser)
+		return nil
+	case ParserUnionTypeParserGrok:
+		u.ParserGrok = best.Value.(*ParserGrok)
+		return nil
+	case ParserUnionTypeParserJSON:
+		u.ParserJSON = best.Value.(*ParserJSON)
+		return nil
+	case ParserUnionTypeParserKvp:
+		u.ParserKvp = best.Value.(*ParserKvp)
 		return nil
 	}
 
@@ -791,17 +825,43 @@ func CreateTimestampTimezoneUnionTimestampTimezone(timestampTimezone TimestampTi
 
 func (u *TimestampTimezoneUnion) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var timestampTimezone TimestampTimezone = TimestampTimezone{}
 	if err := utils.UnmarshalJSON(data, &timestampTimezone, "", true, nil); err == nil {
-		u.TimestampTimezone = &timestampTimezone
-		u.Type = TimestampTimezoneUnionTypeTimestampTimezone
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  TimestampTimezoneUnionTypeTimestampTimezone,
+			Value: &timestampTimezone,
+		})
 	}
 
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = TimestampTimezoneUnionTypeStr
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  TimestampTimezoneUnionTypeStr,
+			Value: &str,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for TimestampTimezoneUnion", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for TimestampTimezoneUnion", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(TimestampTimezoneUnionType)
+	switch best.Type {
+	case TimestampTimezoneUnionTypeTimestampTimezone:
+		u.TimestampTimezone = best.Value.(*TimestampTimezone)
+		return nil
+	case TimestampTimezoneUnionTypeStr:
+		u.Str = best.Value.(*string)
 		return nil
 	}
 

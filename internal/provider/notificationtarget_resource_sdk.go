@@ -153,8 +153,8 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 
 		typeVar := shared.NotificationTargetTypeWebhook(r.WebhookTarget.Type.ValueString())
 		systemFields := make([]string, 0, len(r.WebhookTarget.SystemFields))
-		for _, systemFieldsItem := range r.WebhookTarget.SystemFields {
-			systemFields = append(systemFields, systemFieldsItem.ValueString())
+		for systemFieldsIndex := range r.WebhookTarget.SystemFields {
+			systemFields = append(systemFields, r.WebhookTarget.SystemFields[systemFieldsIndex].ValueString())
 		}
 		var url string
 		url = r.WebhookTarget.URL.ValueString()
@@ -210,8 +210,8 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 
 		typeVar1 := shared.TypePagerDuty(r.PagerDutyTarget.Type.ValueString())
 		systemFields1 := make([]string, 0, len(r.PagerDutyTarget.SystemFields))
-		for _, systemFieldsItem1 := range r.PagerDutyTarget.SystemFields {
-			systemFields1 = append(systemFields1, systemFieldsItem1.ValueString())
+		for systemFieldsIndex1 := range r.PagerDutyTarget.SystemFields {
+			systemFields1 = append(systemFields1, r.PagerDutyTarget.SystemFields[systemFieldsIndex1].ValueString())
 		}
 		var routingKey string
 		routingKey = r.PagerDutyTarget.RoutingKey.ValueString()
@@ -263,8 +263,8 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 
 		typeVar2 := shared.TypeSlack(r.SlackTarget.Type.ValueString())
 		systemFields2 := make([]string, 0, len(r.SlackTarget.SystemFields))
-		for _, systemFieldsItem2 := range r.SlackTarget.SystemFields {
-			systemFields2 = append(systemFields2, systemFieldsItem2.ValueString())
+		for systemFieldsIndex2 := range r.SlackTarget.SystemFields {
+			systemFields2 = append(systemFields2, r.SlackTarget.SystemFields[systemFieldsIndex2].ValueString())
 		}
 		var url1 string
 		url1 = r.SlackTarget.URL.ValueString()
@@ -288,8 +288,8 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 
 		typeVar3 := shared.NotificationTargetTypeSns(r.SnsTarget.Type.ValueString())
 		systemFields3 := make([]string, 0, len(r.SnsTarget.SystemFields))
-		for _, systemFieldsItem3 := range r.SnsTarget.SystemFields {
-			systemFields3 = append(systemFields3, systemFieldsItem3.ValueString())
+		for systemFieldsIndex3 := range r.SnsTarget.SystemFields {
+			systemFields3 = append(systemFields3, r.SnsTarget.SystemFields[systemFieldsIndex3].ValueString())
 		}
 		awsAuthenticationMethod := new(shared.NotificationTargetAuthenticationMethod)
 		if !r.SnsTarget.AwsAuthenticationMethod.IsUnknown() && !r.SnsTarget.AwsAuthenticationMethod.IsNull() {
@@ -331,8 +331,8 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 			endpoint = nil
 		}
 		allowlist := make([]string, 0, len(r.SnsTarget.Allowlist))
-		for _, allowlistItem := range r.SnsTarget.Allowlist {
-			allowlist = append(allowlist, allowlistItem.ValueString())
+		for allowlistIndex := range r.SnsTarget.Allowlist {
+			allowlist = append(allowlist, r.SnsTarget.Allowlist[allowlistIndex].ValueString())
 		}
 		destinationType := new(shared.DestinationType)
 		if !r.SnsTarget.DestinationType.IsUnknown() && !r.SnsTarget.DestinationType.IsNull() {
@@ -395,8 +395,8 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 
 		typeVar4 := shared.TypeSMTP(r.SMTPTarget.Type.ValueString())
 		systemFields4 := make([]string, 0, len(r.SMTPTarget.SystemFields))
-		for _, systemFieldsItem4 := range r.SMTPTarget.SystemFields {
-			systemFields4 = append(systemFields4, systemFieldsItem4.ValueString())
+		for systemFieldsIndex4 := range r.SMTPTarget.SystemFields {
+			systemFields4 = append(systemFields4, r.SMTPTarget.SystemFields[systemFieldsIndex4].ValueString())
 		}
 		var host string
 		host = r.SMTPTarget.Host.ValueString()

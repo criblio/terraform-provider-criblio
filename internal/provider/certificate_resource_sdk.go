@@ -10,6 +10,66 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *CertificateResourceModel) RefreshFromOperationsCreateCertificateResponseBody(ctx context.Context, resp *operations.CreateCertificateResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCertificate(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *CertificateResourceModel) RefreshFromOperationsGetCertificateByIDResponseBody(ctx context.Context, resp *operations.GetCertificateByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCertificate(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *CertificateResourceModel) RefreshFromOperationsUpdateCertificateByIDResponseBody(ctx context.Context, resp *operations.UpdateCertificateByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCertificate(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *CertificateResourceModel) RefreshFromSharedCertificate(ctx context.Context, resp *shared.Certificate) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -105,8 +165,8 @@ func (r *CertificateResourceModel) ToSharedCertificate(ctx context.Context) (*sh
 		ca = nil
 	}
 	inUse := make([]string, 0, len(r.InUse))
-	for _, inUseItem := range r.InUse {
-		inUse = append(inUse, inUseItem.ValueString())
+	for inUseIndex := range r.InUse {
+		inUse = append(inUse, r.InUse[inUseIndex].ValueString())
 	}
 	out := shared.Certificate{
 		ID:          id,

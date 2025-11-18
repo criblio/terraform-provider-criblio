@@ -244,10 +244,13 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"source": schema.StringAttribute{
-				Optional:    true,
-				Description: `body string required Pack source`,
+		"source": schema.StringAttribute{
+			Optional: true,
+			PlanModifiers: []planmodifier.String{
+				stringplanmodifier.RequiresReplaceIfConfigured(),
 			},
+			Description: `body string required Pack source. Requires replacement if changed.`,
+		},
 			"spec": schema.StringAttribute{
 				Optional:    true,
 				Description: `body string optional Specify a branch, tag or a semver spec`,

@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -29,9 +28,10 @@ type GrokDataSource struct {
 
 // GrokDataSourceModel describes the data model.
 type GrokDataSourceModel struct {
-	GroupID types.String       `tfsdk:"group_id"`
-	ID      types.String       `tfsdk:"id"`
-	Items   []tfTypes.GrokFile `tfsdk:"items"`
+	Content types.String `tfsdk:"content"`
+	GroupID types.String `tfsdk:"group_id"`
+	ID      types.String `tfsdk:"id"`
+	Tags    types.String `tfsdk:"tags"`
 }
 
 // Metadata returns the data source type name.
@@ -45,6 +45,9 @@ func (r *GrokDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 		MarkdownDescription: "Grok DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"content": schema.StringAttribute{
+				Computed: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
@@ -53,21 +56,8 @@ func (r *GrokDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"items": schema.ListNestedAttribute{
+			"tags": schema.StringAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"content": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"tags": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
 			},
 		},
 	}

@@ -8,15 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *LookupFileDataSourceModel) RefreshFromOperationsListLookupFileResponseBody(ctx context.Context, resp *operations.ListLookupFileResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *LookupFileDataSourceModel) ToOperationsListLookupFileRequest(ctx context.Context) (*operations.ListLookupFileRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

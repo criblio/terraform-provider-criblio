@@ -42,17 +42,43 @@ func CreateDimKeyFilterArrayOfStr(arrayOfStr []string) DimKeyFilter {
 
 func (u *DimKeyFilter) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = DimKeyFilterTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  DimKeyFilterTypeStr,
+			Value: &str,
+		})
 	}
 
 	var arrayOfStr []string = []string{}
 	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, nil); err == nil {
-		u.ArrayOfStr = arrayOfStr
-		u.Type = DimKeyFilterTypeArrayOfStr
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  DimKeyFilterTypeArrayOfStr,
+			Value: arrayOfStr,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DimKeyFilter", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DimKeyFilter", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(DimKeyFilterType)
+	switch best.Type {
+	case DimKeyFilterTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case DimKeyFilterTypeArrayOfStr:
+		u.ArrayOfStr = best.Value.([]string)
 		return nil
 	}
 
@@ -105,17 +131,43 @@ func CreateDimValueFilterArrayOfStr(arrayOfStr []string) DimValueFilter {
 
 func (u *DimValueFilter) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = DimValueFilterTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  DimValueFilterTypeStr,
+			Value: &str,
+		})
 	}
 
 	var arrayOfStr []string = []string{}
 	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, nil); err == nil {
-		u.ArrayOfStr = arrayOfStr
-		u.Type = DimValueFilterTypeArrayOfStr
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  DimValueFilterTypeArrayOfStr,
+			Value: arrayOfStr,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DimValueFilter", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DimValueFilter", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(DimValueFilterType)
+	switch best.Type {
+	case DimValueFilterTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case DimValueFilterTypeArrayOfStr:
+		u.ArrayOfStr = best.Value.([]string)
 		return nil
 	}
 
@@ -168,17 +220,43 @@ func CreateMetricNameFilterArrayOfStr(arrayOfStr []string) MetricNameFilter {
 
 func (u *MetricNameFilter) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = MetricNameFilterTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  MetricNameFilterTypeStr,
+			Value: &str,
+		})
 	}
 
 	var arrayOfStr []string = []string{}
 	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, nil); err == nil {
-		u.ArrayOfStr = arrayOfStr
-		u.Type = MetricNameFilterTypeArrayOfStr
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  MetricNameFilterTypeArrayOfStr,
+			Value: arrayOfStr,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for MetricNameFilter", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for MetricNameFilter", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(MetricNameFilterType)
+	switch best.Type {
+	case MetricNameFilterTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case MetricNameFilterTypeArrayOfStr:
+		u.ArrayOfStr = best.Value.([]string)
 		return nil
 	}
 

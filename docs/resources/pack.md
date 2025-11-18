@@ -73,7 +73,7 @@ resource "criblio_pack" "my_pack" {
 - `is_disabled` (Boolean) Requires replacement if changed.
 - `min_log_stream_version` (String) Requires replacement if changed.
 - `outputs` (Number) Requires replacement if changed.
-- `source` (String) body string required Pack source
+- `source` (String) body string required Pack source. Requires replacement if changed.
 - `spec` (String) body string optional Specify a branch, tag or a semver spec
 - `tags` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--tags))
 - `version` (String) Requires replacement if changed.

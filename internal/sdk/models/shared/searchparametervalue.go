@@ -53,24 +53,54 @@ func CreateSearchParameterValueBoolean(boolean bool) SearchParameterValue {
 
 func (u *SearchParameterValue) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = SearchParameterValueTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchParameterValueTypeStr,
+			Value: &str,
+		})
 	}
 
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = SearchParameterValueTypeNumber
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchParameterValueTypeNumber,
+			Value: &number,
+		})
 	}
 
 	var boolean bool = false
 	if err := utils.UnmarshalJSON(data, &boolean, "", true, nil); err == nil {
-		u.Boolean = &boolean
-		u.Type = SearchParameterValueTypeBoolean
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchParameterValueTypeBoolean,
+			Value: &boolean,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchParameterValue", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchParameterValue", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(SearchParameterValueType)
+	switch best.Type {
+	case SearchParameterValueTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case SearchParameterValueTypeNumber:
+		u.Number = best.Value.(*float64)
+		return nil
+	case SearchParameterValueTypeBoolean:
+		u.Boolean = best.Value.(*bool)
 		return nil
 	}
 

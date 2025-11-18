@@ -47,13 +47,13 @@ actions:
     update:
       x-speakeasy-entity: SearchUsageGroup
 
-  - target: "$.components.schemas.SearchDatasetProvider"
-    update:
-      x-speakeasy-entity: SearchDatasetProvider
-
-  - target: "$.components.schemas.SearchDataset"
+  - target: "$.components.schemas.GenericDataset"
     update:
       x-speakeasy-entity: SearchDataset
+
+  - target: "$.components.schemas.GenericProvider"
+    update:
+      x-speakeasy-entity: SearchDatasetProvider
 
   - target: "$.components.schemas.AppscopeLibEntry"
     update:
@@ -227,39 +227,31 @@ actions:
     update:
       x-speakeasy-entity: MappingRuleset
 
-  - target: "$.paths['/m/default_search/search/datasets/{id}'].get.responses['200'].content.application/json.schema"
-    update:
-      x-speakeasy-entity: SearchDataset
-
-  - target: "$.paths['/m/default_search/search/dataset-providers/{id}'].get.responses['200'].content.application/json.schema"
-    update:
-      x-speakeasy-entity: SearchDatasetProvider
-
-  - target: "$.paths['/m/default_search/search/usage-groups'].get.responses['200'].content.application/json.schema"
+  - target: "$.paths['/m/default_search/search/usage-groups'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
       x-speakeasy-entity: SearchUsageGroup
 
-  - target: "$.paths['/m/{groupId}/lib/parquet-schemas/{id}'].get.responses['200'].content.application/json.schema"
+  - target: "$.paths['/m/{groupId}/lib/parquet-schemas/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
       x-speakeasy-entity: ParquetSchema
 
-  - target: "$.paths['/products/lake/lakes/default/lakehouses/{id}'].get.responses['200'].content.application/json.schema"
+  - target: "$.paths['/products/lake/lakes/default/lakehouses/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
       x-speakeasy-entity: CriblLakeHouse
 
-  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars'].get.responses['200'].content.application/json.schema"
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
       x-speakeasy-entity: PackVars
 
-  - target: "$.paths['/m/default_search/search/saved/{id}'].get.responses['200'].content.application/json.schema"
-    update:
-      x-speakeasy-entity: SearchSavedQuery
-
-  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].get.responses['200'].content.application/json.schema"
+  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
       x-speakeasy-entity: Grok
 
-  - target: "$.paths['/master/groups/{id}'].get.responses['200'].content.application/json.schema"
+  - target: "$.paths['/m/default_search/search/saved/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
+    update:
+      x-speakeasy-entity: SearchSavedQuery
+
+  - target: "$.paths['/master/groups/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
       x-speakeasy-entity: Group
   

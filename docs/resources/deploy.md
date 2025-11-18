@@ -47,7 +47,7 @@ Read-Only:
 - `provisioned` (Boolean)
 - `streamtags` (List of String)
 - `tags` (String)
-- `type` (String) must be "lake_access"
+- `type` (String)
 - `worker_remote_access` (Boolean)
 
 <a id="nestedatt--items--cloud"></a>
@@ -55,5 +55,5 @@ Read-Only:
 
 Read-Only:
 
-- `provider` (String) must be one of ["aws", "azure"]
+- `provider` (String)
 - `region` (String)

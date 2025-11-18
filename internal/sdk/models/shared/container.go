@@ -43,17 +43,43 @@ func CreateCommandArrayOfStr(arrayOfStr []string) Command {
 
 func (u *Command) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = CommandTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  CommandTypeStr,
+			Value: &str,
+		})
 	}
 
 	var arrayOfStr []string = []string{}
 	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, nil); err == nil {
-		u.ArrayOfStr = arrayOfStr
-		u.Type = CommandTypeArrayOfStr
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  CommandTypeArrayOfStr,
+			Value: arrayOfStr,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Command", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Command", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(CommandType)
+	switch best.Type {
+	case CommandTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case CommandTypeArrayOfStr:
+		u.ArrayOfStr = best.Value.([]string)
 		return nil
 	}
 

@@ -43,17 +43,43 @@ func CreateSearchJobStageConfigEarliestNumber(number float64) SearchJobStageConf
 
 func (u *SearchJobStageConfigEarliest) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = SearchJobStageConfigEarliestTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchJobStageConfigEarliestTypeStr,
+			Value: &str,
+		})
 	}
 
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = SearchJobStageConfigEarliestTypeNumber
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchJobStageConfigEarliestTypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchJobStageConfigEarliest", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchJobStageConfigEarliest", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(SearchJobStageConfigEarliestType)
+	switch best.Type {
+	case SearchJobStageConfigEarliestTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case SearchJobStageConfigEarliestTypeNumber:
+		u.Number = best.Value.(*float64)
 		return nil
 	}
 
@@ -106,17 +132,43 @@ func CreateSearchJobStageConfigLatestNumber(number float64) SearchJobStageConfig
 
 func (u *SearchJobStageConfigLatest) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = SearchJobStageConfigLatestTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchJobStageConfigLatestTypeStr,
+			Value: &str,
+		})
 	}
 
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = SearchJobStageConfigLatestTypeNumber
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchJobStageConfigLatestTypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchJobStageConfigLatest", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchJobStageConfigLatest", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(SearchJobStageConfigLatestType)
+	switch best.Type {
+	case SearchJobStageConfigLatestTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case SearchJobStageConfigLatestTypeNumber:
+		u.Number = best.Value.(*float64)
 		return nil
 	}
 

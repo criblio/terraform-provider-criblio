@@ -53,24 +53,54 @@ func CreateSavedJobSavedJobScheduledSearch(savedJobScheduledSearch SavedJobSched
 
 func (u *SavedJob) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var savedJobCollection SavedJobCollection = SavedJobCollection{}
 	if err := utils.UnmarshalJSON(data, &savedJobCollection, "", true, nil); err == nil {
-		u.SavedJobCollection = &savedJobCollection
-		u.Type = SavedJobTypeSavedJobCollection
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SavedJobTypeSavedJobCollection,
+			Value: &savedJobCollection,
+		})
 	}
 
 	var savedJobExecutor SavedJobExecutor = SavedJobExecutor{}
 	if err := utils.UnmarshalJSON(data, &savedJobExecutor, "", true, nil); err == nil {
-		u.SavedJobExecutor = &savedJobExecutor
-		u.Type = SavedJobTypeSavedJobExecutor
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SavedJobTypeSavedJobExecutor,
+			Value: &savedJobExecutor,
+		})
 	}
 
 	var savedJobScheduledSearch SavedJobScheduledSearch = SavedJobScheduledSearch{}
 	if err := utils.UnmarshalJSON(data, &savedJobScheduledSearch, "", true, nil); err == nil {
-		u.SavedJobScheduledSearch = &savedJobScheduledSearch
-		u.Type = SavedJobTypeSavedJobScheduledSearch
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SavedJobTypeSavedJobScheduledSearch,
+			Value: &savedJobScheduledSearch,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SavedJob", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SavedJob", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(SavedJobType)
+	switch best.Type {
+	case SavedJobTypeSavedJobCollection:
+		u.SavedJobCollection = best.Value.(*SavedJobCollection)
+		return nil
+	case SavedJobTypeSavedJobExecutor:
+		u.SavedJobExecutor = best.Value.(*SavedJobExecutor)
+		return nil
+	case SavedJobTypeSavedJobScheduledSearch:
+		u.SavedJobScheduledSearch = best.Value.(*SavedJobScheduledSearch)
 		return nil
 	}
 

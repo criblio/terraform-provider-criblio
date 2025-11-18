@@ -403,8 +403,8 @@ func (r *GroupSystemSettingsResourceModel) ToSharedSystemSettingsConf(ctx contex
 		scripts = nil
 	}
 	sensitiveFields := make([]string, 0, len(r.API.SensitiveFields))
-	for _, sensitiveFieldsItem := range r.API.SensitiveFields {
-		sensitiveFields = append(sensitiveFields, sensitiveFieldsItem.ValueString())
+	for sensitiveFieldsIndex := range r.API.SensitiveFields {
+		sensitiveFields = append(sensitiveFields, r.API.SensitiveFields[sensitiveFieldsIndex].ValueString())
 	}
 	caPath := new(string)
 	if !r.API.Ssl.CaPath.IsUnknown() && !r.API.Ssl.CaPath.IsNull() {
@@ -610,15 +610,15 @@ func (r *GroupSystemSettingsResourceModel) ToSharedSystemSettingsConf(ctx contex
 	enableLegacyEdgeUpgrade = r.UpgradeSettings.EnableLegacyEdgeUpgrade.ValueBool()
 
 	packageUrls := make([]shared.UpgradePackageUrls, 0, len(r.UpgradeSettings.PackageUrls))
-	for _, packageUrlsItem := range r.UpgradeSettings.PackageUrls {
+	for packageUrlsIndex := range r.UpgradeSettings.PackageUrls {
 		packageHashURL := new(string)
-		if !packageUrlsItem.PackageHashURL.IsUnknown() && !packageUrlsItem.PackageHashURL.IsNull() {
-			*packageHashURL = packageUrlsItem.PackageHashURL.ValueString()
+		if !r.UpgradeSettings.PackageUrls[packageUrlsIndex].PackageHashURL.IsUnknown() && !r.UpgradeSettings.PackageUrls[packageUrlsIndex].PackageHashURL.IsNull() {
+			*packageHashURL = r.UpgradeSettings.PackageUrls[packageUrlsIndex].PackageHashURL.ValueString()
 		} else {
 			packageHashURL = nil
 		}
 		var packageURL string
-		packageURL = packageUrlsItem.PackageURL.ValueString()
+		packageURL = r.UpgradeSettings.PackageUrls[packageUrlsIndex].PackageURL.ValueString()
 
 		packageUrls = append(packageUrls, shared.UpgradePackageUrls{
 			PackageHashURL: packageHashURL,

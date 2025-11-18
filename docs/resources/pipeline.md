@@ -20,7 +20,16 @@ resource "criblio_pipeline" "my_pipeline" {
     functions = [
       {
         conf = {
-          key = jsonencode("value")
+          add = [
+            {
+              disabled = true
+              name     = "...my_name..."
+              value    = "...my_value..."
+            }
+          ]
+          remove = [
+            "..."
+          ]
         }
         description = "Parse and enrich fields"
         disabled    = false
@@ -74,13 +83,32 @@ Optional:
 
 Optional:
 
-- `conf` (Map of String) Not Null
+- `conf` (Attributes) Not Null (see [below for nested schema](#nestedatt--conf--functions--conf))
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
 - `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
 - `group_id` (String) Group ID
 - `id` (String) Function ID. Not Null
+
+<a id="nestedatt--conf--functions--conf"></a>
+### Nested Schema for `conf.functions.conf`
+
+Optional:
+
+- `add` (Attributes List) List of fields to add to the event (see [below for nested schema](#nestedatt--conf--functions--conf--add))
+- `remove` (List of String) List of field names to remove from the event
+
+<a id="nestedatt--conf--functions--conf--add"></a>
+### Nested Schema for `conf.functions.conf.add`
+
+Optional:
+
+- `disabled` (Boolean) Whether this field addition is disabled. Default: false
+- `name` (String) Name of the field to add. Not Null
+- `value` (String) Value to assign to the field. Not Null
+
+
 
 
 <a id="nestedatt--conf--groups"></a>

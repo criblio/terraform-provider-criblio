@@ -3,16 +3,15 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type PipelineFunctionConf struct {
-	Conf        map[string]jsontypes.Normalized `tfsdk:"conf"`
-	Description types.String                    `tfsdk:"description"`
-	Disabled    types.Bool                      `tfsdk:"disabled"`
-	Filter      types.String                    `tfsdk:"filter"`
-	Final       types.Bool                      `tfsdk:"final"`
-	GroupID     types.String                    `tfsdk:"group_id"`
-	ID          types.String                    `tfsdk:"id"`
+	Conf        PipelineFunctionConfFunctionSpecificConfigs `tfsdk:"conf"`
+	Description types.String                                `tfsdk:"description"`
+	Disabled    types.Bool                                  `tfsdk:"disabled"`
+	Filter      types.String                                `tfsdk:"filter"`
+	Final       types.Bool                                  `tfsdk:"final"`
+	GroupID     types.String                                `tfsdk:"group_id"`
+	ID          types.String                                `tfsdk:"id"`
 }

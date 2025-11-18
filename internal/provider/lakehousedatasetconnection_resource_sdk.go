@@ -8,24 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *LakehouseDatasetConnectionResourceModel) RefreshFromOperationsCreateLakehouseDatasetConnectionsResponseBody(ctx context.Context, resp *operations.CreateLakehouseDatasetConnectionsResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
-func (r *LakehouseDatasetConnectionResourceModel) RefreshFromOperationsUpdateLakehouseDatasetConnectionsResponseBody(ctx context.Context, resp *operations.UpdateLakehouseDatasetConnectionsResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *LakehouseDatasetConnectionResourceModel) ToOperationsCreateLakehouseDatasetConnectionsRequest(ctx context.Context) (*operations.CreateLakehouseDatasetConnectionsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

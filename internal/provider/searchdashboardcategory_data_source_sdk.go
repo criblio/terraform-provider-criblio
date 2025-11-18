@@ -10,6 +10,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *SearchDashboardCategoryDataSourceModel) RefreshFromOperationsGetDashboardCategoryByIDResponseBody(ctx context.Context, resp *operations.GetDashboardCategoryByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedDashboardCategory(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *SearchDashboardCategoryDataSourceModel) RefreshFromSharedDashboardCategory(ctx context.Context, resp *shared.DashboardCategory) diag.Diagnostics {
 	var diags diag.Diagnostics
 
