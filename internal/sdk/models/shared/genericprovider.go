@@ -1676,6 +1676,9 @@ type GenericProvider struct {
 func CreateGenericProviderAPIHTTPProvider(apiHTTPProvider APIHTTPProvider) GenericProvider {
 	typ := GenericProviderTypeAPIHTTPProvider
 
+	typStr := string(typ)
+	apiHTTPProvider.Type = typStr
+
 	return GenericProvider{
 		APIHTTPProvider: &apiHTTPProvider,
 		Type:            typ,
@@ -1684,6 +1687,9 @@ func CreateGenericProviderAPIHTTPProvider(apiHTTPProvider APIHTTPProvider) Gener
 
 func CreateGenericProviderAPIAwsProvider(apiAwsProvider APIAwsProvider) GenericProvider {
 	typ := GenericProviderTypeAPIAwsProvider
+
+	typStr := string(typ)
+	apiAwsProvider.Type = typStr
 
 	return GenericProvider{
 		APIAwsProvider: &apiAwsProvider,
@@ -1694,6 +1700,9 @@ func CreateGenericProviderAPIAwsProvider(apiAwsProvider APIAwsProvider) GenericP
 func CreateGenericProviderAPIAzureProvider(apiAzureProvider APIAzureProvider) GenericProvider {
 	typ := GenericProviderTypeAPIAzureProvider
 
+	typStr := string(typ)
+	apiAzureProvider.Type = typStr
+
 	return GenericProvider{
 		APIAzureProvider: &apiAzureProvider,
 		Type:             typ,
@@ -1702,6 +1711,9 @@ func CreateGenericProviderAPIAzureProvider(apiAzureProvider APIAzureProvider) Ge
 
 func CreateGenericProviderAPIGcpProvider(apiGcpProvider APIGcpProvider) GenericProvider {
 	typ := GenericProviderTypeAPIGcpProvider
+
+	typStr := string(typ)
+	apiGcpProvider.Type = typStr
 
 	return GenericProvider{
 		APIGcpProvider: &apiGcpProvider,
@@ -1712,6 +1724,9 @@ func CreateGenericProviderAPIGcpProvider(apiGcpProvider APIGcpProvider) GenericP
 func CreateGenericProviderAPIGoogleWorkspaceProvider(apiGoogleWorkspaceProvider APIGoogleWorkspaceProvider) GenericProvider {
 	typ := GenericProviderTypeAPIGoogleWorkspaceProvider
 
+	typStr := string(typ)
+	apiGoogleWorkspaceProvider.Type = typStr
+
 	return GenericProvider{
 		APIGoogleWorkspaceProvider: &apiGoogleWorkspaceProvider,
 		Type:                       typ,
@@ -1720,6 +1735,9 @@ func CreateGenericProviderAPIGoogleWorkspaceProvider(apiGoogleWorkspaceProvider 
 
 func CreateGenericProviderAPIMsGraphProvider(apiMsGraphProvider APIMsGraphProvider) GenericProvider {
 	typ := GenericProviderTypeAPIMsGraphProvider
+
+	typStr := string(typ)
+	apiMsGraphProvider.Type = typStr
 
 	return GenericProvider{
 		APIMsGraphProvider: &apiMsGraphProvider,
@@ -1730,6 +1748,9 @@ func CreateGenericProviderAPIMsGraphProvider(apiMsGraphProvider APIMsGraphProvid
 func CreateGenericProviderAPIOktaProvider(apiOktaProvider APIOktaProvider) GenericProvider {
 	typ := GenericProviderTypeAPIOktaProvider
 
+	typStr := string(typ)
+	apiOktaProvider.Type = typStr
+
 	return GenericProvider{
 		APIOktaProvider: &apiOktaProvider,
 		Type:            typ,
@@ -1738,6 +1759,9 @@ func CreateGenericProviderAPIOktaProvider(apiOktaProvider APIOktaProvider) Gener
 
 func CreateGenericProviderAPITailscaleProvider(apiTailscaleProvider APITailscaleProvider) GenericProvider {
 	typ := GenericProviderTypeAPITailscaleProvider
+
+	typStr := string(typ)
+	apiTailscaleProvider.Type = typStr
 
 	return GenericProvider{
 		APITailscaleProvider: &apiTailscaleProvider,
@@ -1748,6 +1772,9 @@ func CreateGenericProviderAPITailscaleProvider(apiTailscaleProvider APITailscale
 func CreateGenericProviderAPIZoomProvider(apiZoomProvider APIZoomProvider) GenericProvider {
 	typ := GenericProviderTypeAPIZoomProvider
 
+	typStr := string(typ)
+	apiZoomProvider.Type = typStr
+
 	return GenericProvider{
 		APIZoomProvider: &apiZoomProvider,
 		Type:            typ,
@@ -1756,6 +1783,9 @@ func CreateGenericProviderAPIZoomProvider(apiZoomProvider APIZoomProvider) Gener
 
 func CreateGenericProviderAPIAzureDataExplorerProvider(apiAzureDataExplorerProvider APIAzureDataExplorerProvider) GenericProvider {
 	typ := GenericProviderTypeAPIAzureDataExplorerProvider
+
+	typStr := string(typ)
+	apiAzureDataExplorerProvider.Type = typStr
 
 	return GenericProvider{
 		APIAzureDataExplorerProvider: &apiAzureDataExplorerProvider,
@@ -1766,6 +1796,9 @@ func CreateGenericProviderAPIAzureDataExplorerProvider(apiAzureDataExplorerProvi
 func CreateGenericProviderSnowflakeProvider(snowflakeProvider SnowflakeProvider) GenericProvider {
 	typ := GenericProviderTypeSnowflakeProvider
 
+	typStr := string(typ)
+	snowflakeProvider.Type = typStr
+
 	return GenericProvider{
 		SnowflakeProvider: &snowflakeProvider,
 		Type:              typ,
@@ -1774,6 +1807,9 @@ func CreateGenericProviderSnowflakeProvider(snowflakeProvider SnowflakeProvider)
 
 func CreateGenericProviderClickHouseProvider(clickHouseProvider ClickHouseProvider) GenericProvider {
 	typ := GenericProviderTypeClickHouseProvider
+
+	typStr := string(typ)
+	clickHouseProvider.Type = typStr
 
 	return GenericProvider{
 		ClickHouseProvider: &clickHouseProvider,
@@ -1784,6 +1820,9 @@ func CreateGenericProviderClickHouseProvider(clickHouseProvider ClickHouseProvid
 func CreateGenericProviderPrometheusProvider(prometheusProvider PrometheusProvider) GenericProvider {
 	typ := GenericProviderTypePrometheusProvider
 
+	typStr := string(typ)
+	prometheusProvider.Type = typStr
+
 	return GenericProvider{
 		PrometheusProvider: &prometheusProvider,
 		Type:               typ,
@@ -1792,6 +1831,9 @@ func CreateGenericProviderPrometheusProvider(prometheusProvider PrometheusProvid
 
 func CreateGenericProviderAPIOpenSearchProvider(apiOpenSearchProvider APIOpenSearchProvider) GenericProvider {
 	typ := GenericProviderTypeAPIOpenSearchProvider
+
+	typStr := string(typ)
+	apiOpenSearchProvider.Type = typStr
 
 	return GenericProvider{
 		APIOpenSearchProvider: &apiOpenSearchProvider,
@@ -1802,6 +1844,9 @@ func CreateGenericProviderAPIOpenSearchProvider(apiOpenSearchProvider APIOpenSea
 func CreateGenericProviderAPIElasticSearchProvider(apiElasticSearchProvider APIElasticSearchProvider) GenericProvider {
 	typ := GenericProviderTypeAPIElasticSearchProvider
 
+	typStr := string(typ)
+	apiElasticSearchProvider.Type = typStr
+
 	return GenericProvider{
 		APIElasticSearchProvider: &apiElasticSearchProvider,
 		Type:                     typ,
@@ -1810,6 +1855,9 @@ func CreateGenericProviderAPIElasticSearchProvider(apiElasticSearchProvider APIE
 
 func CreateGenericProviderAwsSecurityLakeProvider(awsSecurityLakeProvider AwsSecurityLakeProvider) GenericProvider {
 	typ := GenericProviderTypeAwsSecurityLakeProvider
+
+	typStr := string(typ)
+	awsSecurityLakeProvider.Type = typStr
 
 	return GenericProvider{
 		AwsSecurityLakeProvider: &awsSecurityLakeProvider,
@@ -1820,6 +1868,9 @@ func CreateGenericProviderAwsSecurityLakeProvider(awsSecurityLakeProvider AwsSec
 func CreateGenericProviderS3Provider(s3Provider S3Provider) GenericProvider {
 	typ := GenericProviderTypeS3Provider
 
+	typStr := string(typ)
+	s3Provider.Type = typStr
+
 	return GenericProvider{
 		S3Provider: &s3Provider,
 		Type:       typ,
@@ -1828,6 +1879,9 @@ func CreateGenericProviderS3Provider(s3Provider S3Provider) GenericProvider {
 
 func CreateGenericProviderCriblLeaderProvider(criblLeaderProvider CriblLeaderProvider) GenericProvider {
 	typ := GenericProviderTypeCriblLeaderProvider
+
+	typStr := string(typ)
+	criblLeaderProvider.Type = typStr
 
 	return GenericProvider{
 		CriblLeaderProvider: &criblLeaderProvider,
@@ -1838,6 +1892,9 @@ func CreateGenericProviderCriblLeaderProvider(criblLeaderProvider CriblLeaderPro
 func CreateGenericProviderMetaProvider(metaProvider MetaProvider) GenericProvider {
 	typ := GenericProviderTypeMetaProvider
 
+	typStr := string(typ)
+	metaProvider.Type = typStr
+
 	return GenericProvider{
 		MetaProvider: &metaProvider,
 		Type:         typ,
@@ -1846,6 +1903,9 @@ func CreateGenericProviderMetaProvider(metaProvider MetaProvider) GenericProvide
 
 func CreateGenericProviderEdgeProvider(edgeProvider EdgeProvider) GenericProvider {
 	typ := GenericProviderTypeEdgeProvider
+
+	typStr := string(typ)
+	edgeProvider.Type = typStr
 
 	return GenericProvider{
 		EdgeProvider: &edgeProvider,
@@ -1856,6 +1916,9 @@ func CreateGenericProviderEdgeProvider(edgeProvider EdgeProvider) GenericProvide
 func CreateGenericProviderAzureBlobProvider(azureBlobProvider AzureBlobProvider) GenericProvider {
 	typ := GenericProviderTypeAzureBlobProvider
 
+	typStr := string(typ)
+	azureBlobProvider.Type = typStr
+
 	return GenericProvider{
 		AzureBlobProvider: &azureBlobProvider,
 		Type:              typ,
@@ -1865,6 +1928,9 @@ func CreateGenericProviderAzureBlobProvider(azureBlobProvider AzureBlobProvider)
 func CreateGenericProviderGcsProvider(gcsProvider GcsProvider) GenericProvider {
 	typ := GenericProviderTypeGcsProvider
 
+	typStr := string(typ)
+	gcsProvider.Type = typStr
+
 	return GenericProvider{
 		GcsProvider: &gcsProvider,
 		Type:        typ,
@@ -1873,263 +1939,213 @@ func CreateGenericProviderGcsProvider(gcsProvider GcsProvider) GenericProvider {
 
 func (u *GenericProvider) UnmarshalJSON(data []byte) error {
 
-	var candidates []utils.UnionCandidate
-
-	// Collect all valid candidates
-	var apiAzureDataExplorerProvider APIAzureDataExplorerProvider = APIAzureDataExplorerProvider{}
-	if err := utils.UnmarshalJSON(data, &apiAzureDataExplorerProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIAzureDataExplorerProvider,
-			Value: &apiAzureDataExplorerProvider,
-		})
+	type discriminator struct {
+		Type string `json:"type"`
 	}
 
-	var snowflakeProvider SnowflakeProvider = SnowflakeProvider{}
-	if err := utils.UnmarshalJSON(data, &snowflakeProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeSnowflakeProvider,
-			Value: &snowflakeProvider,
-		})
+	dis := new(discriminator)
+	if err := json.Unmarshal(data, &dis); err != nil {
+		return fmt.Errorf("could not unmarshal discriminator: %w", err)
 	}
 
-	var apiOpenSearchProvider APIOpenSearchProvider = APIOpenSearchProvider{}
-	if err := utils.UnmarshalJSON(data, &apiOpenSearchProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIOpenSearchProvider,
-			Value: &apiOpenSearchProvider,
-		})
-	}
+	switch dis.Type {
+	case "ApiHttpProvider":
+		apiHTTPProvider := new(APIHTTPProvider)
+		if err := utils.UnmarshalJSON(data, &apiHTTPProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiHttpProvider) type APIHTTPProvider within GenericProvider: %w", string(data), err)
+		}
 
-	var apiElasticSearchProvider APIElasticSearchProvider = APIElasticSearchProvider{}
-	if err := utils.UnmarshalJSON(data, &apiElasticSearchProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIElasticSearchProvider,
-			Value: &apiElasticSearchProvider,
-		})
-	}
-
-	var clickHouseProvider ClickHouseProvider = ClickHouseProvider{}
-	if err := utils.UnmarshalJSON(data, &clickHouseProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeClickHouseProvider,
-			Value: &clickHouseProvider,
-		})
-	}
-
-	var apiHTTPProvider APIHTTPProvider = APIHTTPProvider{}
-	if err := utils.UnmarshalJSON(data, &apiHTTPProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIHTTPProvider,
-			Value: &apiHTTPProvider,
-		})
-	}
-
-	var apiAwsProvider APIAwsProvider = APIAwsProvider{}
-	if err := utils.UnmarshalJSON(data, &apiAwsProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIAwsProvider,
-			Value: &apiAwsProvider,
-		})
-	}
-
-	var apiAzureProvider APIAzureProvider = APIAzureProvider{}
-	if err := utils.UnmarshalJSON(data, &apiAzureProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIAzureProvider,
-			Value: &apiAzureProvider,
-		})
-	}
-
-	var apiGcpProvider APIGcpProvider = APIGcpProvider{}
-	if err := utils.UnmarshalJSON(data, &apiGcpProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIGcpProvider,
-			Value: &apiGcpProvider,
-		})
-	}
-
-	var apiGoogleWorkspaceProvider APIGoogleWorkspaceProvider = APIGoogleWorkspaceProvider{}
-	if err := utils.UnmarshalJSON(data, &apiGoogleWorkspaceProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIGoogleWorkspaceProvider,
-			Value: &apiGoogleWorkspaceProvider,
-		})
-	}
-
-	var apiMsGraphProvider APIMsGraphProvider = APIMsGraphProvider{}
-	if err := utils.UnmarshalJSON(data, &apiMsGraphProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIMsGraphProvider,
-			Value: &apiMsGraphProvider,
-		})
-	}
-
-	var apiOktaProvider APIOktaProvider = APIOktaProvider{}
-	if err := utils.UnmarshalJSON(data, &apiOktaProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIOktaProvider,
-			Value: &apiOktaProvider,
-		})
-	}
-
-	var apiTailscaleProvider APITailscaleProvider = APITailscaleProvider{}
-	if err := utils.UnmarshalJSON(data, &apiTailscaleProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPITailscaleProvider,
-			Value: &apiTailscaleProvider,
-		})
-	}
-
-	var apiZoomProvider APIZoomProvider = APIZoomProvider{}
-	if err := utils.UnmarshalJSON(data, &apiZoomProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAPIZoomProvider,
-			Value: &apiZoomProvider,
-		})
-	}
-
-	var prometheusProvider PrometheusProvider = PrometheusProvider{}
-	if err := utils.UnmarshalJSON(data, &prometheusProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypePrometheusProvider,
-			Value: &prometheusProvider,
-		})
-	}
-
-	var s3Provider S3Provider = S3Provider{}
-	if err := utils.UnmarshalJSON(data, &s3Provider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeS3Provider,
-			Value: &s3Provider,
-		})
-	}
-
-	var azureBlobProvider AzureBlobProvider = AzureBlobProvider{}
-	if err := utils.UnmarshalJSON(data, &azureBlobProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAzureBlobProvider,
-			Value: &azureBlobProvider,
-		})
-	}
-
-	var gcsProvider GcsProvider = GcsProvider{}
-	if err := utils.UnmarshalJSON(data, &gcsProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeGcsProvider,
-			Value: &gcsProvider,
-		})
-	}
-
-	var awsSecurityLakeProvider AwsSecurityLakeProvider = AwsSecurityLakeProvider{}
-	if err := utils.UnmarshalJSON(data, &awsSecurityLakeProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeAwsSecurityLakeProvider,
-			Value: &awsSecurityLakeProvider,
-		})
-	}
-
-	var criblLeaderProvider CriblLeaderProvider = CriblLeaderProvider{}
-	if err := utils.UnmarshalJSON(data, &criblLeaderProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeCriblLeaderProvider,
-			Value: &criblLeaderProvider,
-		})
-	}
-
-	var metaProvider MetaProvider = MetaProvider{}
-	if err := utils.UnmarshalJSON(data, &metaProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeMetaProvider,
-			Value: &metaProvider,
-		})
-	}
-
-	var edgeProvider EdgeProvider = EdgeProvider{}
-	if err := utils.UnmarshalJSON(data, &edgeProvider, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericProviderTypeEdgeProvider,
-			Value: &edgeProvider,
-		})
-	}
-
-	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for GenericProvider", string(data))
-	}
-
-	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
-	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for GenericProvider", string(data))
-	}
-
-	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(GenericProviderType)
-	switch best.Type {
-	case GenericProviderTypeAPIAzureDataExplorerProvider:
-		u.APIAzureDataExplorerProvider = best.Value.(*APIAzureDataExplorerProvider)
+		u.APIHTTPProvider = apiHTTPProvider
+		u.Type = GenericProviderTypeAPIHTTPProvider
 		return nil
-	case GenericProviderTypeSnowflakeProvider:
-		u.SnowflakeProvider = best.Value.(*SnowflakeProvider)
+	case "ApiAwsProvider":
+		apiAwsProvider := new(APIAwsProvider)
+		if err := utils.UnmarshalJSON(data, &apiAwsProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAwsProvider) type APIAwsProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIAwsProvider = apiAwsProvider
+		u.Type = GenericProviderTypeAPIAwsProvider
 		return nil
-	case GenericProviderTypeAPIOpenSearchProvider:
-		u.APIOpenSearchProvider = best.Value.(*APIOpenSearchProvider)
+	case "ApiAzureProvider":
+		apiAzureProvider := new(APIAzureProvider)
+		if err := utils.UnmarshalJSON(data, &apiAzureProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAzureProvider) type APIAzureProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIAzureProvider = apiAzureProvider
+		u.Type = GenericProviderTypeAPIAzureProvider
 		return nil
-	case GenericProviderTypeAPIElasticSearchProvider:
-		u.APIElasticSearchProvider = best.Value.(*APIElasticSearchProvider)
+	case "ApiGcpProvider":
+		apiGcpProvider := new(APIGcpProvider)
+		if err := utils.UnmarshalJSON(data, &apiGcpProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiGcpProvider) type APIGcpProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIGcpProvider = apiGcpProvider
+		u.Type = GenericProviderTypeAPIGcpProvider
 		return nil
-	case GenericProviderTypeClickHouseProvider:
-		u.ClickHouseProvider = best.Value.(*ClickHouseProvider)
+	case "ApiGoogleWorkspaceProvider":
+		apiGoogleWorkspaceProvider := new(APIGoogleWorkspaceProvider)
+		if err := utils.UnmarshalJSON(data, &apiGoogleWorkspaceProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiGoogleWorkspaceProvider) type APIGoogleWorkspaceProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIGoogleWorkspaceProvider = apiGoogleWorkspaceProvider
+		u.Type = GenericProviderTypeAPIGoogleWorkspaceProvider
 		return nil
-	case GenericProviderTypeAPIHTTPProvider:
-		u.APIHTTPProvider = best.Value.(*APIHTTPProvider)
+	case "ApiMsGraphProvider":
+		apiMsGraphProvider := new(APIMsGraphProvider)
+		if err := utils.UnmarshalJSON(data, &apiMsGraphProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiMsGraphProvider) type APIMsGraphProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIMsGraphProvider = apiMsGraphProvider
+		u.Type = GenericProviderTypeAPIMsGraphProvider
 		return nil
-	case GenericProviderTypeAPIAwsProvider:
-		u.APIAwsProvider = best.Value.(*APIAwsProvider)
+	case "ApiOktaProvider":
+		apiOktaProvider := new(APIOktaProvider)
+		if err := utils.UnmarshalJSON(data, &apiOktaProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiOktaProvider) type APIOktaProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIOktaProvider = apiOktaProvider
+		u.Type = GenericProviderTypeAPIOktaProvider
 		return nil
-	case GenericProviderTypeAPIAzureProvider:
-		u.APIAzureProvider = best.Value.(*APIAzureProvider)
+	case "ApiTailscaleProvider":
+		apiTailscaleProvider := new(APITailscaleProvider)
+		if err := utils.UnmarshalJSON(data, &apiTailscaleProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiTailscaleProvider) type APITailscaleProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APITailscaleProvider = apiTailscaleProvider
+		u.Type = GenericProviderTypeAPITailscaleProvider
 		return nil
-	case GenericProviderTypeAPIGcpProvider:
-		u.APIGcpProvider = best.Value.(*APIGcpProvider)
+	case "ApiZoomProvider":
+		apiZoomProvider := new(APIZoomProvider)
+		if err := utils.UnmarshalJSON(data, &apiZoomProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiZoomProvider) type APIZoomProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIZoomProvider = apiZoomProvider
+		u.Type = GenericProviderTypeAPIZoomProvider
 		return nil
-	case GenericProviderTypeAPIGoogleWorkspaceProvider:
-		u.APIGoogleWorkspaceProvider = best.Value.(*APIGoogleWorkspaceProvider)
+	case "ApiAzureDataExplorerProvider":
+		apiAzureDataExplorerProvider := new(APIAzureDataExplorerProvider)
+		if err := utils.UnmarshalJSON(data, &apiAzureDataExplorerProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAzureDataExplorerProvider) type APIAzureDataExplorerProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIAzureDataExplorerProvider = apiAzureDataExplorerProvider
+		u.Type = GenericProviderTypeAPIAzureDataExplorerProvider
 		return nil
-	case GenericProviderTypeAPIMsGraphProvider:
-		u.APIMsGraphProvider = best.Value.(*APIMsGraphProvider)
+	case "SnowflakeProvider":
+		snowflakeProvider := new(SnowflakeProvider)
+		if err := utils.UnmarshalJSON(data, &snowflakeProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == SnowflakeProvider) type SnowflakeProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.SnowflakeProvider = snowflakeProvider
+		u.Type = GenericProviderTypeSnowflakeProvider
 		return nil
-	case GenericProviderTypeAPIOktaProvider:
-		u.APIOktaProvider = best.Value.(*APIOktaProvider)
+	case "ClickHouseProvider":
+		clickHouseProvider := new(ClickHouseProvider)
+		if err := utils.UnmarshalJSON(data, &clickHouseProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ClickHouseProvider) type ClickHouseProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.ClickHouseProvider = clickHouseProvider
+		u.Type = GenericProviderTypeClickHouseProvider
 		return nil
-	case GenericProviderTypeAPITailscaleProvider:
-		u.APITailscaleProvider = best.Value.(*APITailscaleProvider)
+	case "PrometheusProvider":
+		prometheusProvider := new(PrometheusProvider)
+		if err := utils.UnmarshalJSON(data, &prometheusProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == PrometheusProvider) type PrometheusProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.PrometheusProvider = prometheusProvider
+		u.Type = GenericProviderTypePrometheusProvider
 		return nil
-	case GenericProviderTypeAPIZoomProvider:
-		u.APIZoomProvider = best.Value.(*APIZoomProvider)
+	case "ApiOpenSearchProvider":
+		apiOpenSearchProvider := new(APIOpenSearchProvider)
+		if err := utils.UnmarshalJSON(data, &apiOpenSearchProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiOpenSearchProvider) type APIOpenSearchProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIOpenSearchProvider = apiOpenSearchProvider
+		u.Type = GenericProviderTypeAPIOpenSearchProvider
 		return nil
-	case GenericProviderTypePrometheusProvider:
-		u.PrometheusProvider = best.Value.(*PrometheusProvider)
+	case "ApiElasticSearchProvider":
+		apiElasticSearchProvider := new(APIElasticSearchProvider)
+		if err := utils.UnmarshalJSON(data, &apiElasticSearchProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiElasticSearchProvider) type APIElasticSearchProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.APIElasticSearchProvider = apiElasticSearchProvider
+		u.Type = GenericProviderTypeAPIElasticSearchProvider
 		return nil
-	case GenericProviderTypeS3Provider:
-		u.S3Provider = best.Value.(*S3Provider)
+	case "AwsSecurityLakeProvider":
+		awsSecurityLakeProvider := new(AwsSecurityLakeProvider)
+		if err := utils.UnmarshalJSON(data, &awsSecurityLakeProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == AwsSecurityLakeProvider) type AwsSecurityLakeProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.AwsSecurityLakeProvider = awsSecurityLakeProvider
+		u.Type = GenericProviderTypeAwsSecurityLakeProvider
 		return nil
-	case GenericProviderTypeAzureBlobProvider:
-		u.AzureBlobProvider = best.Value.(*AzureBlobProvider)
+	case "S3Provider":
+		s3Provider := new(S3Provider)
+		if err := utils.UnmarshalJSON(data, &s3Provider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == S3Provider) type S3Provider within GenericProvider: %w", string(data), err)
+		}
+
+		u.S3Provider = s3Provider
+		u.Type = GenericProviderTypeS3Provider
 		return nil
-	case GenericProviderTypeGcsProvider:
-		u.GcsProvider = best.Value.(*GcsProvider)
+	case "CriblLeaderProvider":
+		criblLeaderProvider := new(CriblLeaderProvider)
+		if err := utils.UnmarshalJSON(data, &criblLeaderProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == CriblLeaderProvider) type CriblLeaderProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.CriblLeaderProvider = criblLeaderProvider
+		u.Type = GenericProviderTypeCriblLeaderProvider
 		return nil
-	case GenericProviderTypeAwsSecurityLakeProvider:
-		u.AwsSecurityLakeProvider = best.Value.(*AwsSecurityLakeProvider)
+	case "MetaProvider":
+		metaProvider := new(MetaProvider)
+		if err := utils.UnmarshalJSON(data, &metaProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == MetaProvider) type MetaProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.MetaProvider = metaProvider
+		u.Type = GenericProviderTypeMetaProvider
 		return nil
-	case GenericProviderTypeCriblLeaderProvider:
-		u.CriblLeaderProvider = best.Value.(*CriblLeaderProvider)
+	case "EdgeProvider":
+		edgeProvider := new(EdgeProvider)
+		if err := utils.UnmarshalJSON(data, &edgeProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == EdgeProvider) type EdgeProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.EdgeProvider = edgeProvider
+		u.Type = GenericProviderTypeEdgeProvider
 		return nil
-	case GenericProviderTypeMetaProvider:
-		u.MetaProvider = best.Value.(*MetaProvider)
+	case "AzureBlobProvider":
+		azureBlobProvider := new(AzureBlobProvider)
+		if err := utils.UnmarshalJSON(data, &azureBlobProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == AzureBlobProvider) type AzureBlobProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.AzureBlobProvider = azureBlobProvider
+		u.Type = GenericProviderTypeAzureBlobProvider
 		return nil
-	case GenericProviderTypeEdgeProvider:
-		u.EdgeProvider = best.Value.(*EdgeProvider)
+	case "GcsProvider":
+		gcsProvider := new(GcsProvider)
+		if err := utils.UnmarshalJSON(data, &gcsProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == GcsProvider) type GcsProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.GcsProvider = gcsProvider
+		u.Type = GenericProviderTypeGcsProvider
 		return nil
 	}
 

@@ -3215,6 +3215,8 @@ components:
             enableAcceleration: true
             fieldList: ["field1", "field2"]
             scanMode: "detailed"
+      discriminator:
+        propertyName: type
       oneOf:
         - $ref: '#/components/schemas/ApiHttpDataset'
         - $ref: '#/components/schemas/ApiAwsDataset'
@@ -3256,6 +3258,8 @@ components:
           type: string
           description: Description of the provider
           example: "my generic provider description"
+      discriminator:
+        propertyName: type
       oneOf:
         - $ref: '#/components/schemas/ApiHttpProvider'
         - $ref: '#/components/schemas/ApiAwsProvider'

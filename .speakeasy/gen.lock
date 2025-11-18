@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: d270504c576f205528a7c42ce69e632a
+  docChecksum: 6e682ec37e51706484db06576b9d9c34
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.4
-  configChecksum: 7e7e08a88ab1f8859f8e4ecbcbe2855b
+  releaseVersion: 1.20.6
+  configChecksum: bd38cc87d4467875d89873f2497692fc
   published: true
 features:
   terraform:
@@ -4366,7 +4366,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "availableEndpoints": [{"name": "getUsers", "method": "GET", "url": "https://api.example.com/users"}], "authenticationMethod": "basic"}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "ApiHttpProvider", "availableEndpoints": [{"name": "getUsers", "method": "GET", "url": "https://api.example.com/users"}], "authenticationMethod": "basic"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDatasetProvider:
@@ -4375,10 +4375,10 @@ examples:
         path:
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "amazon_security_lake", "type": "<value>", "accountConfigs": []}
+        application/json: {"id": "myUniqueGenericProviderId", "type": "ApiTailscaleProvider", "accountConfigs": [{"name": "tailscale-account-1", "clientId": "tailscale-client-id-123", "clientSecret": "tailscale-client-secret-abc"}]}
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "accountConfigs": [{"name": "tailscale-account-1", "clientId": "tailscale-client-id-123", "clientSecret": "tailscale-client-secret-abc"}]}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "ApiMsGraphProvider", "accountConfigs": [{"name": "msgraph-account-1", "tenantId": "tenant-123", "clientId": "client-456", "clientSecret": "secret-789"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetProviderById:
@@ -4389,7 +4389,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "serviceAccountCredentials": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-gcp-project\",\n  \"private_key_id\": \"abcd1234efgh5678ijkl90\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9...==\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"my-service-account@my-gcp-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789012345678901\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\",\n  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/my-service-account%40my-gcp-project.iam.gserviceaccount.com\"\n}\n", "endpoint": "https://storage.googleapis.com"}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "GcsProvider", "serviceAccountCredentials": "***REDACTED***"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateDatasetProviderById:
@@ -4399,10 +4399,10 @@ examples:
           id: "provider-s3-main"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "api_elasticsearch", "type": "<value>", "endpoint": "<value>", "authType": "none", "maxConcurrency": 3}
+        application/json: {"id": "myUniqueGenericProviderId", "type": "CriblLeaderProvider"}
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description"}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "AwsSecurityLakeProvider"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteDatasetProviderById:
@@ -4413,7 +4413,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "username": "click_user", "password": "click_password", "endpoint": "https://clickhouse.example.com:8443"}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "ClickHouseProvider", "username": "click_user", "endpoint": "https://clickhouse.example.com:8443"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listDataset:
@@ -4423,7 +4423,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "enabledEndpoints": ["login", "admin"]}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiGoogleWorkspaceDataset", "enabledEndpoints": ["login", "admin"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDataset:
@@ -4432,10 +4432,10 @@ examples:
         path:
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "provider": "<value>", "type": "<value>", "enabledEndpoints": []}
+        application/json: {"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiAzureDataExplorerDataset", "cluster": "myadxcluster", "location": "eastus2", "database": "logsdb", "table": "logs", "timestampFieldContents": "kusto_datetime"}
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "cluster": "myadxcluster", "location": "eastus2", "database": "logsdb", "table": "logs", "timestampField": "event_time", "timestampFieldContents": "kusto_datetime"}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiHttpDataset", "enabledEndpoints": ["getUsers", "getEvents"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetById:
@@ -4446,7 +4446,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "index": "metrics-*", "timestampField": "@timestamp"}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiElasticSearchDataset", "index": "metrics-*", "timestampField": "@timestamp"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateDatasetById:
@@ -4456,10 +4456,10 @@ examples:
           id: "web-logs"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "provider": "<value>", "type": "<value>", "table": "<value>"}
+        application/json: {"id": "myGenericDatasetId", "provider": "myProviderId", "type": "S3Dataset", "bucket": "<value>", "filter": "true"}
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "bucket": "<value>", "filter": "true"}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiAzureDataset", "enabledEndpoints": ["ActivityLogs", "SignInLogs"], "subscriptionIds": ["sub-12345", "sub-67890"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteDatasetById:
@@ -4470,7 +4470,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "enabledEndpoints": ["users", "meetings", "recordings"]}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiZoomDataset", "enabledEndpoints": ["users", "meetings", "recordings"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetAclById:

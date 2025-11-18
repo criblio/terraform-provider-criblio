@@ -28,6 +28,94 @@ func (u *UpdateDatasetByIDRequest) GetGenericDataset() shared.GenericDataset {
 	return u.GenericDataset
 }
 
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIHTTPDataset() *shared.APIHTTPDataset {
+	return u.GetGenericDataset().APIHTTPDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIAwsDataset() *shared.APIAwsDataset {
+	return u.GetGenericDataset().APIAwsDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIAzureDataset() *shared.APIAzureDataset {
+	return u.GetGenericDataset().APIAzureDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIGcpDataset() *shared.APIGcpDataset {
+	return u.GetGenericDataset().APIGcpDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIGoogleWorkspaceDataset() *shared.APIGoogleWorkspaceDataset {
+	return u.GetGenericDataset().APIGoogleWorkspaceDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIMsGraphDataset() *shared.APIMsGraphDataset {
+	return u.GetGenericDataset().APIMsGraphDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIOktaDataset() *shared.APIOktaDataset {
+	return u.GetGenericDataset().APIOktaDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPITailscaleDataset() *shared.APITailscaleDataset {
+	return u.GetGenericDataset().APITailscaleDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIZoomDataset() *shared.APIZoomDataset {
+	return u.GetGenericDataset().APIZoomDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIAzureDataExplorerDataset() *shared.APIAzureDataExplorerDataset {
+	return u.GetGenericDataset().APIAzureDataExplorerDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetSnowflakeDataset() *shared.SnowflakeDataset {
+	return u.GetGenericDataset().SnowflakeDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetClickHouseDataset() *shared.ClickHouseDataset {
+	return u.GetGenericDataset().ClickHouseDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetPrometheusDataset() *shared.PrometheusDataset {
+	return u.GetGenericDataset().PrometheusDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIOpenSearchDataset() *shared.APIOpenSearchDataset {
+	return u.GetGenericDataset().APIOpenSearchDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAPIElasticSearchDataset() *shared.APIElasticSearchDataset {
+	return u.GetGenericDataset().APIElasticSearchDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetS3Dataset() *shared.S3Dataset {
+	return u.GetGenericDataset().S3Dataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetCriblLeaderDataset() *shared.CriblLeaderDataset {
+	return u.GetGenericDataset().CriblLeaderDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetMetaDataset() *shared.MetaDataset {
+	return u.GetGenericDataset().MetaDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetEdgeDataset() *shared.EdgeDataset {
+	return u.GetGenericDataset().EdgeDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAzureBlobDataset() *shared.AzureBlobDataset {
+	return u.GetGenericDataset().AzureBlobDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetGcsDataset() *shared.GcsDataset {
+	return u.GetGenericDataset().GcsDataset
+}
+
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetAwsSecurityLakeDataset() *shared.AwsSecurityLakeDataset {
+	return u.GetGenericDataset().AwsSecurityLakeDataset
+}
+
 // UpdateDatasetByIDResponseBody - a list of Dataset objects
 type UpdateDatasetByIDResponseBody struct {
 	Items []shared.GenericDataset `json:"items,omitempty"`

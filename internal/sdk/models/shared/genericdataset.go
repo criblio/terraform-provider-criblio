@@ -2140,6 +2140,9 @@ type GenericDataset struct {
 func CreateGenericDatasetAPIHTTPDataset(apiHTTPDataset APIHTTPDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIHTTPDataset
 
+	typStr := string(typ)
+	apiHTTPDataset.Type = typStr
+
 	return GenericDataset{
 		APIHTTPDataset: &apiHTTPDataset,
 		Type:           typ,
@@ -2148,6 +2151,9 @@ func CreateGenericDatasetAPIHTTPDataset(apiHTTPDataset APIHTTPDataset) GenericDa
 
 func CreateGenericDatasetAPIAwsDataset(apiAwsDataset APIAwsDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIAwsDataset
+
+	typStr := string(typ)
+	apiAwsDataset.Type = typStr
 
 	return GenericDataset{
 		APIAwsDataset: &apiAwsDataset,
@@ -2158,6 +2164,9 @@ func CreateGenericDatasetAPIAwsDataset(apiAwsDataset APIAwsDataset) GenericDatas
 func CreateGenericDatasetAPIAzureDataset(apiAzureDataset APIAzureDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIAzureDataset
 
+	typStr := string(typ)
+	apiAzureDataset.Type = typStr
+
 	return GenericDataset{
 		APIAzureDataset: &apiAzureDataset,
 		Type:            typ,
@@ -2166,6 +2175,9 @@ func CreateGenericDatasetAPIAzureDataset(apiAzureDataset APIAzureDataset) Generi
 
 func CreateGenericDatasetAPIGcpDataset(apiGcpDataset APIGcpDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIGcpDataset
+
+	typStr := string(typ)
+	apiGcpDataset.Type = typStr
 
 	return GenericDataset{
 		APIGcpDataset: &apiGcpDataset,
@@ -2176,6 +2188,9 @@ func CreateGenericDatasetAPIGcpDataset(apiGcpDataset APIGcpDataset) GenericDatas
 func CreateGenericDatasetAPIGoogleWorkspaceDataset(apiGoogleWorkspaceDataset APIGoogleWorkspaceDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIGoogleWorkspaceDataset
 
+	typStr := string(typ)
+	apiGoogleWorkspaceDataset.Type = typStr
+
 	return GenericDataset{
 		APIGoogleWorkspaceDataset: &apiGoogleWorkspaceDataset,
 		Type:                      typ,
@@ -2184,6 +2199,9 @@ func CreateGenericDatasetAPIGoogleWorkspaceDataset(apiGoogleWorkspaceDataset API
 
 func CreateGenericDatasetAPIMsGraphDataset(apiMsGraphDataset APIMsGraphDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIMsGraphDataset
+
+	typStr := string(typ)
+	apiMsGraphDataset.Type = typStr
 
 	return GenericDataset{
 		APIMsGraphDataset: &apiMsGraphDataset,
@@ -2194,6 +2212,9 @@ func CreateGenericDatasetAPIMsGraphDataset(apiMsGraphDataset APIMsGraphDataset) 
 func CreateGenericDatasetAPIOktaDataset(apiOktaDataset APIOktaDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIOktaDataset
 
+	typStr := string(typ)
+	apiOktaDataset.Type = typStr
+
 	return GenericDataset{
 		APIOktaDataset: &apiOktaDataset,
 		Type:           typ,
@@ -2202,6 +2223,9 @@ func CreateGenericDatasetAPIOktaDataset(apiOktaDataset APIOktaDataset) GenericDa
 
 func CreateGenericDatasetAPITailscaleDataset(apiTailscaleDataset APITailscaleDataset) GenericDataset {
 	typ := GenericDatasetTypeAPITailscaleDataset
+
+	typStr := string(typ)
+	apiTailscaleDataset.Type = typStr
 
 	return GenericDataset{
 		APITailscaleDataset: &apiTailscaleDataset,
@@ -2212,6 +2236,9 @@ func CreateGenericDatasetAPITailscaleDataset(apiTailscaleDataset APITailscaleDat
 func CreateGenericDatasetAPIZoomDataset(apiZoomDataset APIZoomDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIZoomDataset
 
+	typStr := string(typ)
+	apiZoomDataset.Type = typStr
+
 	return GenericDataset{
 		APIZoomDataset: &apiZoomDataset,
 		Type:           typ,
@@ -2220,6 +2247,9 @@ func CreateGenericDatasetAPIZoomDataset(apiZoomDataset APIZoomDataset) GenericDa
 
 func CreateGenericDatasetAPIAzureDataExplorerDataset(apiAzureDataExplorerDataset APIAzureDataExplorerDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIAzureDataExplorerDataset
+
+	typStr := string(typ)
+	apiAzureDataExplorerDataset.Type = typStr
 
 	return GenericDataset{
 		APIAzureDataExplorerDataset: &apiAzureDataExplorerDataset,
@@ -2230,6 +2260,9 @@ func CreateGenericDatasetAPIAzureDataExplorerDataset(apiAzureDataExplorerDataset
 func CreateGenericDatasetSnowflakeDataset(snowflakeDataset SnowflakeDataset) GenericDataset {
 	typ := GenericDatasetTypeSnowflakeDataset
 
+	typStr := string(typ)
+	snowflakeDataset.Type = typStr
+
 	return GenericDataset{
 		SnowflakeDataset: &snowflakeDataset,
 		Type:             typ,
@@ -2238,6 +2271,9 @@ func CreateGenericDatasetSnowflakeDataset(snowflakeDataset SnowflakeDataset) Gen
 
 func CreateGenericDatasetClickHouseDataset(clickHouseDataset ClickHouseDataset) GenericDataset {
 	typ := GenericDatasetTypeClickHouseDataset
+
+	typStr := string(typ)
+	clickHouseDataset.Type = typStr
 
 	return GenericDataset{
 		ClickHouseDataset: &clickHouseDataset,
@@ -2248,6 +2284,9 @@ func CreateGenericDatasetClickHouseDataset(clickHouseDataset ClickHouseDataset) 
 func CreateGenericDatasetPrometheusDataset(prometheusDataset PrometheusDataset) GenericDataset {
 	typ := GenericDatasetTypePrometheusDataset
 
+	typStr := string(typ)
+	prometheusDataset.Type = typStr
+
 	return GenericDataset{
 		PrometheusDataset: &prometheusDataset,
 		Type:              typ,
@@ -2256,6 +2295,9 @@ func CreateGenericDatasetPrometheusDataset(prometheusDataset PrometheusDataset) 
 
 func CreateGenericDatasetAPIOpenSearchDataset(apiOpenSearchDataset APIOpenSearchDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIOpenSearchDataset
+
+	typStr := string(typ)
+	apiOpenSearchDataset.Type = typStr
 
 	return GenericDataset{
 		APIOpenSearchDataset: &apiOpenSearchDataset,
@@ -2266,6 +2308,9 @@ func CreateGenericDatasetAPIOpenSearchDataset(apiOpenSearchDataset APIOpenSearch
 func CreateGenericDatasetAPIElasticSearchDataset(apiElasticSearchDataset APIElasticSearchDataset) GenericDataset {
 	typ := GenericDatasetTypeAPIElasticSearchDataset
 
+	typStr := string(typ)
+	apiElasticSearchDataset.Type = typStr
+
 	return GenericDataset{
 		APIElasticSearchDataset: &apiElasticSearchDataset,
 		Type:                    typ,
@@ -2274,6 +2319,9 @@ func CreateGenericDatasetAPIElasticSearchDataset(apiElasticSearchDataset APIElas
 
 func CreateGenericDatasetS3Dataset(s3Dataset S3Dataset) GenericDataset {
 	typ := GenericDatasetTypeS3Dataset
+
+	typStr := string(typ)
+	s3Dataset.Type = typStr
 
 	return GenericDataset{
 		S3Dataset: &s3Dataset,
@@ -2284,6 +2332,9 @@ func CreateGenericDatasetS3Dataset(s3Dataset S3Dataset) GenericDataset {
 func CreateGenericDatasetCriblLeaderDataset(criblLeaderDataset CriblLeaderDataset) GenericDataset {
 	typ := GenericDatasetTypeCriblLeaderDataset
 
+	typStr := string(typ)
+	criblLeaderDataset.Type = typStr
+
 	return GenericDataset{
 		CriblLeaderDataset: &criblLeaderDataset,
 		Type:               typ,
@@ -2292,6 +2343,9 @@ func CreateGenericDatasetCriblLeaderDataset(criblLeaderDataset CriblLeaderDatase
 
 func CreateGenericDatasetMetaDataset(metaDataset MetaDataset) GenericDataset {
 	typ := GenericDatasetTypeMetaDataset
+
+	typStr := string(typ)
+	metaDataset.Type = typStr
 
 	return GenericDataset{
 		MetaDataset: &metaDataset,
@@ -2302,6 +2356,9 @@ func CreateGenericDatasetMetaDataset(metaDataset MetaDataset) GenericDataset {
 func CreateGenericDatasetEdgeDataset(edgeDataset EdgeDataset) GenericDataset {
 	typ := GenericDatasetTypeEdgeDataset
 
+	typStr := string(typ)
+	edgeDataset.Type = typStr
+
 	return GenericDataset{
 		EdgeDataset: &edgeDataset,
 		Type:        typ,
@@ -2310,6 +2367,9 @@ func CreateGenericDatasetEdgeDataset(edgeDataset EdgeDataset) GenericDataset {
 
 func CreateGenericDatasetAzureBlobDataset(azureBlobDataset AzureBlobDataset) GenericDataset {
 	typ := GenericDatasetTypeAzureBlobDataset
+
+	typStr := string(typ)
+	azureBlobDataset.Type = typStr
 
 	return GenericDataset{
 		AzureBlobDataset: &azureBlobDataset,
@@ -2320,6 +2380,9 @@ func CreateGenericDatasetAzureBlobDataset(azureBlobDataset AzureBlobDataset) Gen
 func CreateGenericDatasetGcsDataset(gcsDataset GcsDataset) GenericDataset {
 	typ := GenericDatasetTypeGcsDataset
 
+	typStr := string(typ)
+	gcsDataset.Type = typStr
+
 	return GenericDataset{
 		GcsDataset: &gcsDataset,
 		Type:       typ,
@@ -2329,6 +2392,9 @@ func CreateGenericDatasetGcsDataset(gcsDataset GcsDataset) GenericDataset {
 func CreateGenericDatasetAwsSecurityLakeDataset(awsSecurityLakeDataset AwsSecurityLakeDataset) GenericDataset {
 	typ := GenericDatasetTypeAwsSecurityLakeDataset
 
+	typStr := string(typ)
+	awsSecurityLakeDataset.Type = typStr
+
 	return GenericDataset{
 		AwsSecurityLakeDataset: &awsSecurityLakeDataset,
 		Type:                   typ,
@@ -2337,263 +2403,213 @@ func CreateGenericDatasetAwsSecurityLakeDataset(awsSecurityLakeDataset AwsSecuri
 
 func (u *GenericDataset) UnmarshalJSON(data []byte) error {
 
-	var candidates []utils.UnionCandidate
-
-	// Collect all valid candidates
-	var apiAzureDataExplorerDataset APIAzureDataExplorerDataset = APIAzureDataExplorerDataset{}
-	if err := utils.UnmarshalJSON(data, &apiAzureDataExplorerDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIAzureDataExplorerDataset,
-			Value: &apiAzureDataExplorerDataset,
-		})
+	type discriminator struct {
+		Type string `json:"type"`
 	}
 
-	var apiAwsDataset APIAwsDataset = APIAwsDataset{}
-	if err := utils.UnmarshalJSON(data, &apiAwsDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIAwsDataset,
-			Value: &apiAwsDataset,
-		})
+	dis := new(discriminator)
+	if err := json.Unmarshal(data, &dis); err != nil {
+		return fmt.Errorf("could not unmarshal discriminator: %w", err)
 	}
 
-	var apiAzureDataset APIAzureDataset = APIAzureDataset{}
-	if err := utils.UnmarshalJSON(data, &apiAzureDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIAzureDataset,
-			Value: &apiAzureDataset,
-		})
-	}
+	switch dis.Type {
+	case "ApiHttpDataset":
+		apiHTTPDataset := new(APIHTTPDataset)
+		if err := utils.UnmarshalJSON(data, &apiHTTPDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiHttpDataset) type APIHTTPDataset within GenericDataset: %w", string(data), err)
+		}
 
-	var apiElasticSearchDataset APIElasticSearchDataset = APIElasticSearchDataset{}
-	if err := utils.UnmarshalJSON(data, &apiElasticSearchDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIElasticSearchDataset,
-			Value: &apiElasticSearchDataset,
-		})
-	}
-
-	var apiHTTPDataset APIHTTPDataset = APIHTTPDataset{}
-	if err := utils.UnmarshalJSON(data, &apiHTTPDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIHTTPDataset,
-			Value: &apiHTTPDataset,
-		})
-	}
-
-	var apiGcpDataset APIGcpDataset = APIGcpDataset{}
-	if err := utils.UnmarshalJSON(data, &apiGcpDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIGcpDataset,
-			Value: &apiGcpDataset,
-		})
-	}
-
-	var apiGoogleWorkspaceDataset APIGoogleWorkspaceDataset = APIGoogleWorkspaceDataset{}
-	if err := utils.UnmarshalJSON(data, &apiGoogleWorkspaceDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIGoogleWorkspaceDataset,
-			Value: &apiGoogleWorkspaceDataset,
-		})
-	}
-
-	var apiMsGraphDataset APIMsGraphDataset = APIMsGraphDataset{}
-	if err := utils.UnmarshalJSON(data, &apiMsGraphDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIMsGraphDataset,
-			Value: &apiMsGraphDataset,
-		})
-	}
-
-	var apiOktaDataset APIOktaDataset = APIOktaDataset{}
-	if err := utils.UnmarshalJSON(data, &apiOktaDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIOktaDataset,
-			Value: &apiOktaDataset,
-		})
-	}
-
-	var apiTailscaleDataset APITailscaleDataset = APITailscaleDataset{}
-	if err := utils.UnmarshalJSON(data, &apiTailscaleDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPITailscaleDataset,
-			Value: &apiTailscaleDataset,
-		})
-	}
-
-	var apiZoomDataset APIZoomDataset = APIZoomDataset{}
-	if err := utils.UnmarshalJSON(data, &apiZoomDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIZoomDataset,
-			Value: &apiZoomDataset,
-		})
-	}
-
-	var snowflakeDataset SnowflakeDataset = SnowflakeDataset{}
-	if err := utils.UnmarshalJSON(data, &snowflakeDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeSnowflakeDataset,
-			Value: &snowflakeDataset,
-		})
-	}
-
-	var clickHouseDataset ClickHouseDataset = ClickHouseDataset{}
-	if err := utils.UnmarshalJSON(data, &clickHouseDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeClickHouseDataset,
-			Value: &clickHouseDataset,
-		})
-	}
-
-	var apiOpenSearchDataset APIOpenSearchDataset = APIOpenSearchDataset{}
-	if err := utils.UnmarshalJSON(data, &apiOpenSearchDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAPIOpenSearchDataset,
-			Value: &apiOpenSearchDataset,
-		})
-	}
-
-	var s3Dataset S3Dataset = S3Dataset{}
-	if err := utils.UnmarshalJSON(data, &s3Dataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeS3Dataset,
-			Value: &s3Dataset,
-		})
-	}
-
-	var criblLeaderDataset CriblLeaderDataset = CriblLeaderDataset{}
-	if err := utils.UnmarshalJSON(data, &criblLeaderDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeCriblLeaderDataset,
-			Value: &criblLeaderDataset,
-		})
-	}
-
-	var metaDataset MetaDataset = MetaDataset{}
-	if err := utils.UnmarshalJSON(data, &metaDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeMetaDataset,
-			Value: &metaDataset,
-		})
-	}
-
-	var edgeDataset EdgeDataset = EdgeDataset{}
-	if err := utils.UnmarshalJSON(data, &edgeDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeEdgeDataset,
-			Value: &edgeDataset,
-		})
-	}
-
-	var azureBlobDataset AzureBlobDataset = AzureBlobDataset{}
-	if err := utils.UnmarshalJSON(data, &azureBlobDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAzureBlobDataset,
-			Value: &azureBlobDataset,
-		})
-	}
-
-	var gcsDataset GcsDataset = GcsDataset{}
-	if err := utils.UnmarshalJSON(data, &gcsDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeGcsDataset,
-			Value: &gcsDataset,
-		})
-	}
-
-	var awsSecurityLakeDataset AwsSecurityLakeDataset = AwsSecurityLakeDataset{}
-	if err := utils.UnmarshalJSON(data, &awsSecurityLakeDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypeAwsSecurityLakeDataset,
-			Value: &awsSecurityLakeDataset,
-		})
-	}
-
-	var prometheusDataset PrometheusDataset = PrometheusDataset{}
-	if err := utils.UnmarshalJSON(data, &prometheusDataset, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  GenericDatasetTypePrometheusDataset,
-			Value: &prometheusDataset,
-		})
-	}
-
-	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for GenericDataset", string(data))
-	}
-
-	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
-	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for GenericDataset", string(data))
-	}
-
-	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(GenericDatasetType)
-	switch best.Type {
-	case GenericDatasetTypeAPIAzureDataExplorerDataset:
-		u.APIAzureDataExplorerDataset = best.Value.(*APIAzureDataExplorerDataset)
+		u.APIHTTPDataset = apiHTTPDataset
+		u.Type = GenericDatasetTypeAPIHTTPDataset
 		return nil
-	case GenericDatasetTypeAPIAwsDataset:
-		u.APIAwsDataset = best.Value.(*APIAwsDataset)
+	case "ApiAwsDataset":
+		apiAwsDataset := new(APIAwsDataset)
+		if err := utils.UnmarshalJSON(data, &apiAwsDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAwsDataset) type APIAwsDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIAwsDataset = apiAwsDataset
+		u.Type = GenericDatasetTypeAPIAwsDataset
 		return nil
-	case GenericDatasetTypeAPIAzureDataset:
-		u.APIAzureDataset = best.Value.(*APIAzureDataset)
+	case "ApiAzureDataset":
+		apiAzureDataset := new(APIAzureDataset)
+		if err := utils.UnmarshalJSON(data, &apiAzureDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAzureDataset) type APIAzureDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIAzureDataset = apiAzureDataset
+		u.Type = GenericDatasetTypeAPIAzureDataset
 		return nil
-	case GenericDatasetTypeAPIElasticSearchDataset:
-		u.APIElasticSearchDataset = best.Value.(*APIElasticSearchDataset)
+	case "ApiGcpDataset":
+		apiGcpDataset := new(APIGcpDataset)
+		if err := utils.UnmarshalJSON(data, &apiGcpDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiGcpDataset) type APIGcpDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIGcpDataset = apiGcpDataset
+		u.Type = GenericDatasetTypeAPIGcpDataset
 		return nil
-	case GenericDatasetTypeAPIHTTPDataset:
-		u.APIHTTPDataset = best.Value.(*APIHTTPDataset)
+	case "ApiGoogleWorkspaceDataset":
+		apiGoogleWorkspaceDataset := new(APIGoogleWorkspaceDataset)
+		if err := utils.UnmarshalJSON(data, &apiGoogleWorkspaceDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiGoogleWorkspaceDataset) type APIGoogleWorkspaceDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIGoogleWorkspaceDataset = apiGoogleWorkspaceDataset
+		u.Type = GenericDatasetTypeAPIGoogleWorkspaceDataset
 		return nil
-	case GenericDatasetTypeAPIGcpDataset:
-		u.APIGcpDataset = best.Value.(*APIGcpDataset)
+	case "ApiMsGraphDataset":
+		apiMsGraphDataset := new(APIMsGraphDataset)
+		if err := utils.UnmarshalJSON(data, &apiMsGraphDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiMsGraphDataset) type APIMsGraphDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIMsGraphDataset = apiMsGraphDataset
+		u.Type = GenericDatasetTypeAPIMsGraphDataset
 		return nil
-	case GenericDatasetTypeAPIGoogleWorkspaceDataset:
-		u.APIGoogleWorkspaceDataset = best.Value.(*APIGoogleWorkspaceDataset)
+	case "ApiOktaDataset":
+		apiOktaDataset := new(APIOktaDataset)
+		if err := utils.UnmarshalJSON(data, &apiOktaDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiOktaDataset) type APIOktaDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIOktaDataset = apiOktaDataset
+		u.Type = GenericDatasetTypeAPIOktaDataset
 		return nil
-	case GenericDatasetTypeAPIMsGraphDataset:
-		u.APIMsGraphDataset = best.Value.(*APIMsGraphDataset)
+	case "ApiTailscaleDataset":
+		apiTailscaleDataset := new(APITailscaleDataset)
+		if err := utils.UnmarshalJSON(data, &apiTailscaleDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiTailscaleDataset) type APITailscaleDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APITailscaleDataset = apiTailscaleDataset
+		u.Type = GenericDatasetTypeAPITailscaleDataset
 		return nil
-	case GenericDatasetTypeAPIOktaDataset:
-		u.APIOktaDataset = best.Value.(*APIOktaDataset)
+	case "ApiZoomDataset":
+		apiZoomDataset := new(APIZoomDataset)
+		if err := utils.UnmarshalJSON(data, &apiZoomDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiZoomDataset) type APIZoomDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIZoomDataset = apiZoomDataset
+		u.Type = GenericDatasetTypeAPIZoomDataset
 		return nil
-	case GenericDatasetTypeAPITailscaleDataset:
-		u.APITailscaleDataset = best.Value.(*APITailscaleDataset)
+	case "ApiAzureDataExplorerDataset":
+		apiAzureDataExplorerDataset := new(APIAzureDataExplorerDataset)
+		if err := utils.UnmarshalJSON(data, &apiAzureDataExplorerDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAzureDataExplorerDataset) type APIAzureDataExplorerDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIAzureDataExplorerDataset = apiAzureDataExplorerDataset
+		u.Type = GenericDatasetTypeAPIAzureDataExplorerDataset
 		return nil
-	case GenericDatasetTypeAPIZoomDataset:
-		u.APIZoomDataset = best.Value.(*APIZoomDataset)
+	case "SnowflakeDataset":
+		snowflakeDataset := new(SnowflakeDataset)
+		if err := utils.UnmarshalJSON(data, &snowflakeDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == SnowflakeDataset) type SnowflakeDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.SnowflakeDataset = snowflakeDataset
+		u.Type = GenericDatasetTypeSnowflakeDataset
 		return nil
-	case GenericDatasetTypeSnowflakeDataset:
-		u.SnowflakeDataset = best.Value.(*SnowflakeDataset)
+	case "ClickHouseDataset":
+		clickHouseDataset := new(ClickHouseDataset)
+		if err := utils.UnmarshalJSON(data, &clickHouseDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ClickHouseDataset) type ClickHouseDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.ClickHouseDataset = clickHouseDataset
+		u.Type = GenericDatasetTypeClickHouseDataset
 		return nil
-	case GenericDatasetTypeClickHouseDataset:
-		u.ClickHouseDataset = best.Value.(*ClickHouseDataset)
+	case "PrometheusDataset":
+		prometheusDataset := new(PrometheusDataset)
+		if err := utils.UnmarshalJSON(data, &prometheusDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == PrometheusDataset) type PrometheusDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.PrometheusDataset = prometheusDataset
+		u.Type = GenericDatasetTypePrometheusDataset
 		return nil
-	case GenericDatasetTypeAPIOpenSearchDataset:
-		u.APIOpenSearchDataset = best.Value.(*APIOpenSearchDataset)
+	case "ApiOpenSearchDataset":
+		apiOpenSearchDataset := new(APIOpenSearchDataset)
+		if err := utils.UnmarshalJSON(data, &apiOpenSearchDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiOpenSearchDataset) type APIOpenSearchDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIOpenSearchDataset = apiOpenSearchDataset
+		u.Type = GenericDatasetTypeAPIOpenSearchDataset
 		return nil
-	case GenericDatasetTypeS3Dataset:
-		u.S3Dataset = best.Value.(*S3Dataset)
+	case "ApiElasticSearchDataset":
+		apiElasticSearchDataset := new(APIElasticSearchDataset)
+		if err := utils.UnmarshalJSON(data, &apiElasticSearchDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiElasticSearchDataset) type APIElasticSearchDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.APIElasticSearchDataset = apiElasticSearchDataset
+		u.Type = GenericDatasetTypeAPIElasticSearchDataset
 		return nil
-	case GenericDatasetTypeCriblLeaderDataset:
-		u.CriblLeaderDataset = best.Value.(*CriblLeaderDataset)
+	case "S3Dataset":
+		s3Dataset := new(S3Dataset)
+		if err := utils.UnmarshalJSON(data, &s3Dataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == S3Dataset) type S3Dataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.S3Dataset = s3Dataset
+		u.Type = GenericDatasetTypeS3Dataset
 		return nil
-	case GenericDatasetTypeMetaDataset:
-		u.MetaDataset = best.Value.(*MetaDataset)
+	case "CriblLeaderDataset":
+		criblLeaderDataset := new(CriblLeaderDataset)
+		if err := utils.UnmarshalJSON(data, &criblLeaderDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == CriblLeaderDataset) type CriblLeaderDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.CriblLeaderDataset = criblLeaderDataset
+		u.Type = GenericDatasetTypeCriblLeaderDataset
 		return nil
-	case GenericDatasetTypeEdgeDataset:
-		u.EdgeDataset = best.Value.(*EdgeDataset)
+	case "MetaDataset":
+		metaDataset := new(MetaDataset)
+		if err := utils.UnmarshalJSON(data, &metaDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == MetaDataset) type MetaDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.MetaDataset = metaDataset
+		u.Type = GenericDatasetTypeMetaDataset
 		return nil
-	case GenericDatasetTypeAzureBlobDataset:
-		u.AzureBlobDataset = best.Value.(*AzureBlobDataset)
+	case "EdgeDataset":
+		edgeDataset := new(EdgeDataset)
+		if err := utils.UnmarshalJSON(data, &edgeDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == EdgeDataset) type EdgeDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.EdgeDataset = edgeDataset
+		u.Type = GenericDatasetTypeEdgeDataset
 		return nil
-	case GenericDatasetTypeGcsDataset:
-		u.GcsDataset = best.Value.(*GcsDataset)
+	case "AzureBlobDataset":
+		azureBlobDataset := new(AzureBlobDataset)
+		if err := utils.UnmarshalJSON(data, &azureBlobDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == AzureBlobDataset) type AzureBlobDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.AzureBlobDataset = azureBlobDataset
+		u.Type = GenericDatasetTypeAzureBlobDataset
 		return nil
-	case GenericDatasetTypeAwsSecurityLakeDataset:
-		u.AwsSecurityLakeDataset = best.Value.(*AwsSecurityLakeDataset)
+	case "GcsDataset":
+		gcsDataset := new(GcsDataset)
+		if err := utils.UnmarshalJSON(data, &gcsDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == GcsDataset) type GcsDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.GcsDataset = gcsDataset
+		u.Type = GenericDatasetTypeGcsDataset
 		return nil
-	case GenericDatasetTypePrometheusDataset:
-		u.PrometheusDataset = best.Value.(*PrometheusDataset)
+	case "AwsSecurityLakeDataset":
+		awsSecurityLakeDataset := new(AwsSecurityLakeDataset)
+		if err := utils.UnmarshalJSON(data, &awsSecurityLakeDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == AwsSecurityLakeDataset) type AwsSecurityLakeDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.AwsSecurityLakeDataset = awsSecurityLakeDataset
+		u.Type = GenericDatasetTypeAwsSecurityLakeDataset
 		return nil
 	}
 
