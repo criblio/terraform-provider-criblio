@@ -15,5 +15,9 @@ resource "criblio_project" "my_project" {
 }
 
 output "project" {
-  value = criblio_project.my_project[0]
+  //fancy logic required for cribl internal testing
+  //fancy logic is not required for most customer implementations
+  value = length(criblio_project.my_project) > 0 ? criblio_project.my_project[0] : null
+
+  //value = criblio_project.my_project[0]
 }

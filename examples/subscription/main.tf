@@ -25,5 +25,9 @@ resource "criblio_subscription" "my_subscription_with_enabled" {
 }
 
 output "subscription" {
-  value = criblio_subscription.my_subscription[0]
+  //fancy logic required for cribl internal testing
+  //fancy logic is not required for most customer implementations
+  value = length(criblio_subscription.my_subscription) > 0 ? criblio_subscription.my_subscription[0] : null
+
+  //value = criblio_subscription.my_subscription[0]
 }
