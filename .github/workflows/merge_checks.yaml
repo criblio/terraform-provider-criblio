@@ -125,9 +125,10 @@ jobs:
           CRIBL_ONPREM_PASSWORD: "admin"
           TF_ACC: true
           DEPLOYMENT: "onprem"
+          GOMAXPROCS: 1
         run: |
           export CRIBL_ONPREM_SERVER_URL CRIBL_ONPREM_USERNAME CRIBL_ONPREM_PASSWORD
-          export TF_ACC DEPLOYMENT
+          export TF_ACC DEPLOYMENT GOMAXPROCS
           make acceptance-test
 
       - name: Stop Docker Compose services

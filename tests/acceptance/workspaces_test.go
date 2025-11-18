@@ -9,7 +9,6 @@ import (
 
 func TestWorkspaces(t *testing.T) {
 	t.Skip("Skipping workspaces test due to gateway endpoint inconsistency and schema changes")
-
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories:  providerFactory,

@@ -10,7 +10,7 @@ e2e-test:
 	./tests/e2e/scripts/e2e.sh 
 
 acceptance-test:
-	go test -v ./tests/acceptance
+	go test -v ./tests/acceptance -parallel 1
 
 test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
