@@ -100,13 +100,26 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.Type = r.APIAzureProvider.Type
 	}
 	if resp.APIElasticSearchProvider != nil {
+		// Preserve existing password if it exists, as API returns masked value
+		existingPassword := types.StringNull()
+		if r.APIElasticSearchProvider != nil {
+			existingPassword = r.APIElasticSearchProvider.Password
+		}
+		
 		r.APIElasticSearchProvider = &tfTypes.APIElasticSearchProvider{}
 		r.APIElasticSearchProvider.Description = types.StringPointerValue(resp.APIElasticSearchProvider.Description)
 		r.Description = r.APIElasticSearchProvider.Description
 		r.APIElasticSearchProvider.Endpoint = types.StringValue(resp.APIElasticSearchProvider.Endpoint)
 		r.APIElasticSearchProvider.ID = types.StringValue(resp.APIElasticSearchProvider.ID)
 		r.ID = r.APIElasticSearchProvider.ID
-		r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
+		// Only update password if it's not masked (contains asterisks)
+		if resp.APIElasticSearchProvider.Password != "" && resp.APIElasticSearchProvider.Password[0] != '*' {
+			r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
+		} else if !existingPassword.IsNull() {
+			r.APIElasticSearchProvider.Password = existingPassword
+		} else {
+			r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
+		}
 		r.APIElasticSearchProvider.Type = types.StringValue(resp.APIElasticSearchProvider.Type)
 		r.Type = r.APIElasticSearchProvider.Type
 		r.APIElasticSearchProvider.Username = types.StringValue(resp.APIElasticSearchProvider.Username)
@@ -374,6 +387,14 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.Type = r.MetaProvider.Type
 	}
 	if resp.PrometheusProvider != nil {
+		// Preserve existing password and token if they exist, as API returns masked values
+		existingPassword := types.StringNull()
+		existingToken := types.StringNull()
+		if r.PrometheusProvider != nil {
+			existingPassword = r.PrometheusProvider.Password
+			existingToken = r.PrometheusProvider.Token
+		}
+		
 		r.PrometheusProvider = &tfTypes.PrometheusProvider{}
 		if resp.PrometheusProvider.AuthType != nil {
 			r.PrometheusProvider.AuthType = types.StringValue(string(*resp.PrometheusProvider.AuthType))
@@ -386,13 +407,33 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.PrometheusProvider.ID = types.StringValue(resp.PrometheusProvider.ID)
 		r.ID = r.PrometheusProvider.ID
 		r.PrometheusProvider.MaxConcurrency = types.Float64PointerValue(resp.PrometheusProvider.MaxConcurrency)
-		r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
-		r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
+		// Only update password if it's not masked
+		if resp.PrometheusProvider.Password != nil && *resp.PrometheusProvider.Password != "" && (*resp.PrometheusProvider.Password)[0] != '*' {
+			r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
+		} else if !existingPassword.IsNull() {
+			r.PrometheusProvider.Password = existingPassword
+		} else {
+			r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
+		}
+		// Only update token if it's not masked
+		if resp.PrometheusProvider.Token != nil && *resp.PrometheusProvider.Token != "" && (*resp.PrometheusProvider.Token)[0] != '*' {
+			r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
+		} else if !existingToken.IsNull() {
+			r.PrometheusProvider.Token = existingToken
+		} else {
+			r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
+		}
 		r.PrometheusProvider.Type = types.StringValue(resp.PrometheusProvider.Type)
 		r.Type = r.PrometheusProvider.Type
 		r.PrometheusProvider.Username = types.StringPointerValue(resp.PrometheusProvider.Username)
 	}
 	if resp.S3Provider != nil {
+		// Preserve existing aws_secret_key if it exists, as API returns masked value
+		existingAwsSecretKey := types.StringNull()
+		if r.S3Provider != nil {
+			existingAwsSecretKey = r.S3Provider.AwsSecretKey
+		}
+		
 		r.S3Provider = &tfTypes.S3Provider{}
 		r.S3Provider.AssumeRoleArn = types.StringPointerValue(resp.S3Provider.AssumeRoleArn)
 		r.S3Provider.AssumeRoleExternalID = types.StringPointerValue(resp.S3Provider.AssumeRoleExternalID)
@@ -402,7 +443,14 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		} else {
 			r.S3Provider.AwsAuthenticationMethod = types.StringNull()
 		}
-		r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
+		// Only update aws_secret_key if it's not masked (contains asterisks)
+		if resp.S3Provider.AwsSecretKey != nil && *resp.S3Provider.AwsSecretKey != "" && (*resp.S3Provider.AwsSecretKey)[0] != '*' {
+			r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
+		} else if !existingAwsSecretKey.IsNull() {
+			r.S3Provider.AwsSecretKey = existingAwsSecretKey
+		} else {
+			r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
+		}
 		r.S3Provider.Bucket = types.StringPointerValue(resp.S3Provider.Bucket)
 		r.S3Provider.BucketPathSuggestion = types.StringPointerValue(resp.S3Provider.BucketPathSuggestion)
 		r.S3Provider.Description = types.StringPointerValue(resp.S3Provider.Description)
