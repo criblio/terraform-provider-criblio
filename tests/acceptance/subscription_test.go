@@ -19,10 +19,10 @@ func TestSubscription(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "id", "my_subscription"),
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "description", "test subscription"),
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "filter", "test"),
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription[0]", "id", "my_subscription"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription[0]", "description", "test subscription"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription[0]", "filter", "test"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription[0]", "group_id", "default"),
 					),
 				},
 			},

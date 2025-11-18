@@ -1,18 +1,18 @@
 package tests
 
 import (
+	"os"
 	"testing"
 	"time"
-	"os"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestCollector(t *testing.T) {
-        if os.Getenv("DEPLOYMENT") == "onprem" {
-                time.Sleep(2 * time.Second)
-        }
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		time.Sleep(2 * time.Second)
+	}
 
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
