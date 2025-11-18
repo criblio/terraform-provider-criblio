@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 475f0b85916621c4fd760df4beb3d596
+  docChecksum: 0b92344a0a71f430fe5443f3df6181c9
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.2
-  configChecksum: 1eda236d4a2d9e3fe87321f9eb4acad5
+  releaseVersion: 1.20.3
+  configChecksum: 8d062a6997566474d191b38362b1693c
   published: true
 features:
   terraform:
@@ -537,8 +537,6 @@ generatedFiles:
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
-  - internal/provider/types/generic_dataset.go
-  - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
   - internal/provider/types/git_settings.go
@@ -1007,7 +1005,6 @@ generatedFiles:
   - internal/provider/types/internal_scheduling.go
   - internal/provider/types/job_settings.go
   - internal/provider/types/lake_dataset_search_config.go
-  - internal/provider/types/lakehouse.go
   - internal/provider/types/limits.go
   - internal/provider/types/limits_samples.go
   - internal/provider/types/listening_ports.go
@@ -1341,7 +1338,6 @@ generatedFiles:
   - internal/provider/types/sas_config.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
-  - internal/provider/types/schema_lib_entry.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
