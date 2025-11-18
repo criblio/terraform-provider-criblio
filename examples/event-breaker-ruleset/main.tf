@@ -1,8 +1,4 @@
 resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
-  //count required for cribl internal testing
-  //count is not required for most customer implementations
-  count = var.onprem == false ? 1 : 0
-
   description    = "test"
   group_id       = "default"
   id             = "test_eventbreakerruleset"
