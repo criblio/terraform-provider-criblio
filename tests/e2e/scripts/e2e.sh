@@ -5,6 +5,11 @@ if [[ ! $(echo "$PWD" | rev | cut -d '/' -f 1 | rev) == terraform-provider-cribl
     exit 1
 fi
 
+flags=""
+if [[ -z $CRIBL_CLOUD_DOMAIN ]]; then
+    flags='-var=onprem=true -parallelism=1'
+fi
+
 cd tests/e2e
 
 exitCode=0
@@ -22,7 +27,7 @@ for i in {0..2}; do
     terraform providers mirror ./local-plugins || true
     terraform init -plugin-dir ./local-plugins
 
-    terraform apply -auto-approve
+    terraform apply -auto-approve $flags
     tfApply=$?
 
     #remove our state files to test if we can import everything into a fresh state
@@ -35,10 +40,10 @@ for i in {0..2}; do
     ./scripts/import.sh
 
     #make sure we didn't break something
-    terraform refresh
+    terraform refresh $flags
     tfRefresh=$?
 
-    terraform destroy -auto-approve
+    terraform destroy -auto-approve $flags
     tfDestroy=$?
     if [[ $tfApply -ne 0 ]] || [[ $tfRefresh -ne 0 ]] || [[ $tfDestroy -ne 0 ]]; then
         echo echo "***FAILURE IN TERRAFORM OPS***"

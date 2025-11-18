@@ -1,4 +1,8 @@
 resource "criblio_project" "my_project" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   consumers = {
   }
   description = "test project"
