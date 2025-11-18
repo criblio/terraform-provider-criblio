@@ -4,14 +4,32 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
+
+func (r *PipelineDataSourceModel) RefreshFromOperationsGetPipelineByIDResponseBody(ctx context.Context, resp *operations.GetPipelineByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedPipeline(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
 
 func (r *PipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
 	var diags diag.Diagnostics
@@ -23,12 +41,20 @@ func (r *PipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context,
 	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
 
-		if len(functionsItem.Conf) > 0 {
-			functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
-			for key, value := range functionsItem.Conf {
-				result, _ := json.Marshal(value)
-				functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
-			}
+		functions.Conf.Add = []tfTypes.PipelineFunctionConfAdd{}
+
+		for _, addItem := range functionsItem.Conf.Add {
+			var add tfTypes.PipelineFunctionConfAdd
+
+			add.Disabled = types.BoolPointerValue(addItem.Disabled)
+			add.Name = types.StringValue(addItem.Name)
+			add.Value = types.StringValue(addItem.Value)
+
+			functions.Conf.Add = append(functions.Conf.Add, add)
+		}
+		functions.Conf.Remove = make([]types.String, 0, len(functionsItem.Conf.Remove))
+		for _, v := range functionsItem.Conf.Remove {
+			functions.Conf.Remove = append(functions.Conf.Remove, types.StringValue(v))
 		}
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)

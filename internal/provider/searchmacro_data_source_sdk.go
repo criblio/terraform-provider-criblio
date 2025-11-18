@@ -10,6 +10,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *SearchMacroDataSourceModel) RefreshFromOperationsGetSearchMacroByIDResponseBody(ctx context.Context, resp *operations.GetSearchMacroByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSearchMacro(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *SearchMacroDataSourceModel) RefreshFromSharedSearchMacro(ctx context.Context, resp *shared.SearchMacro) diag.Diagnostics {
 	var diags diag.Diagnostics
 

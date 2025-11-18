@@ -42,17 +42,43 @@ func CreateMetricsAggOptsEarliestNumber(number float64) MetricsAggOptsEarliest {
 
 func (u *MetricsAggOptsEarliest) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = MetricsAggOptsEarliestTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  MetricsAggOptsEarliestTypeStr,
+			Value: &str,
+		})
 	}
 
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = MetricsAggOptsEarliestTypeNumber
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  MetricsAggOptsEarliestTypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for MetricsAggOptsEarliest", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for MetricsAggOptsEarliest", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(MetricsAggOptsEarliestType)
+	switch best.Type {
+	case MetricsAggOptsEarliestTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case MetricsAggOptsEarliestTypeNumber:
+		u.Number = best.Value.(*float64)
 		return nil
 	}
 
@@ -105,17 +131,43 @@ func CreateMetricsAggOptsLatestNumber(number float64) MetricsAggOptsLatest {
 
 func (u *MetricsAggOptsLatest) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		u.Str = &str
-		u.Type = MetricsAggOptsLatestTypeStr
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  MetricsAggOptsLatestTypeStr,
+			Value: &str,
+		})
 	}
 
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		u.Number = &number
-		u.Type = MetricsAggOptsLatestTypeNumber
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  MetricsAggOptsLatestTypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for MetricsAggOptsLatest", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for MetricsAggOptsLatest", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(MetricsAggOptsLatestType)
+	switch best.Type {
+	case MetricsAggOptsLatestTypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case MetricsAggOptsLatestTypeNumber:
+		u.Number = best.Value.(*float64)
 		return nil
 	}
 

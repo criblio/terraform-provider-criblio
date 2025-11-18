@@ -11,10 +11,31 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsCreateDatasetProviderResponseBody(ctx context.Context, resp *operations.CreateDatasetProviderResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil && len(resp.Items) > 0 {
+		diags.Append(r.RefreshFromSharedGenericProvider(ctx, &resp.Items[0])...)
+	}
+
+	return diags
+}
+
 func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsGetDatasetProviderByIDResponseBody(ctx context.Context, resp *operations.GetDatasetProviderByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
+	if resp != nil && len(resp.Items) > 0 {
+		diags.Append(r.RefreshFromSharedGenericProvider(ctx, &resp.Items[0])...)
+	}
+
+	return diags
+}
+
+func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsUpdateDatasetProviderByIDResponseBody(ctx context.Context, resp *operations.UpdateDatasetProviderByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil && len(resp.Items) > 0 {
+		diags.Append(r.RefreshFromSharedGenericProvider(ctx, &resp.Items[0])...)
 	}
 
 	return diags
@@ -79,13 +100,26 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.Type = r.APIAzureProvider.Type
 	}
 	if resp.APIElasticSearchProvider != nil {
+		// Preserve existing password if it exists, as API returns masked value
+		existingPassword := types.StringNull()
+		if r.APIElasticSearchProvider != nil {
+			existingPassword = r.APIElasticSearchProvider.Password
+		}
+		
 		r.APIElasticSearchProvider = &tfTypes.APIElasticSearchProvider{}
 		r.APIElasticSearchProvider.Description = types.StringPointerValue(resp.APIElasticSearchProvider.Description)
 		r.Description = r.APIElasticSearchProvider.Description
 		r.APIElasticSearchProvider.Endpoint = types.StringValue(resp.APIElasticSearchProvider.Endpoint)
 		r.APIElasticSearchProvider.ID = types.StringValue(resp.APIElasticSearchProvider.ID)
 		r.ID = r.APIElasticSearchProvider.ID
-		r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
+		// Only update password if it's not masked (contains asterisks)
+		if resp.APIElasticSearchProvider.Password != "" && resp.APIElasticSearchProvider.Password[0] != '*' {
+			r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
+		} else if !existingPassword.IsNull() {
+			r.APIElasticSearchProvider.Password = existingPassword
+		} else {
+			r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
+		}
 		r.APIElasticSearchProvider.Type = types.StringValue(resp.APIElasticSearchProvider.Type)
 		r.Type = r.APIElasticSearchProvider.Type
 		r.APIElasticSearchProvider.Username = types.StringValue(resp.APIElasticSearchProvider.Username)
@@ -353,6 +387,14 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.Type = r.MetaProvider.Type
 	}
 	if resp.PrometheusProvider != nil {
+		// Preserve existing password and token if they exist, as API returns masked values
+		existingPassword := types.StringNull()
+		existingToken := types.StringNull()
+		if r.PrometheusProvider != nil {
+			existingPassword = r.PrometheusProvider.Password
+			existingToken = r.PrometheusProvider.Token
+		}
+		
 		r.PrometheusProvider = &tfTypes.PrometheusProvider{}
 		if resp.PrometheusProvider.AuthType != nil {
 			r.PrometheusProvider.AuthType = types.StringValue(string(*resp.PrometheusProvider.AuthType))
@@ -365,13 +407,33 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.PrometheusProvider.ID = types.StringValue(resp.PrometheusProvider.ID)
 		r.ID = r.PrometheusProvider.ID
 		r.PrometheusProvider.MaxConcurrency = types.Float64PointerValue(resp.PrometheusProvider.MaxConcurrency)
-		r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
-		r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
+		// Only update password if it's not masked
+		if resp.PrometheusProvider.Password != nil && *resp.PrometheusProvider.Password != "" && (*resp.PrometheusProvider.Password)[0] != '*' {
+			r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
+		} else if !existingPassword.IsNull() {
+			r.PrometheusProvider.Password = existingPassword
+		} else {
+			r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
+		}
+		// Only update token if it's not masked
+		if resp.PrometheusProvider.Token != nil && *resp.PrometheusProvider.Token != "" && (*resp.PrometheusProvider.Token)[0] != '*' {
+			r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
+		} else if !existingToken.IsNull() {
+			r.PrometheusProvider.Token = existingToken
+		} else {
+			r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
+		}
 		r.PrometheusProvider.Type = types.StringValue(resp.PrometheusProvider.Type)
 		r.Type = r.PrometheusProvider.Type
 		r.PrometheusProvider.Username = types.StringPointerValue(resp.PrometheusProvider.Username)
 	}
 	if resp.S3Provider != nil {
+		// Preserve existing aws_secret_key if it exists, as API returns masked value
+		existingAwsSecretKey := types.StringNull()
+		if r.S3Provider != nil {
+			existingAwsSecretKey = r.S3Provider.AwsSecretKey
+		}
+		
 		r.S3Provider = &tfTypes.S3Provider{}
 		r.S3Provider.AssumeRoleArn = types.StringPointerValue(resp.S3Provider.AssumeRoleArn)
 		r.S3Provider.AssumeRoleExternalID = types.StringPointerValue(resp.S3Provider.AssumeRoleExternalID)
@@ -381,7 +443,14 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		} else {
 			r.S3Provider.AwsAuthenticationMethod = types.StringNull()
 		}
-		r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
+		// Only update aws_secret_key if it's not masked (contains asterisks)
+		if resp.S3Provider.AwsSecretKey != nil && *resp.S3Provider.AwsSecretKey != "" && (*resp.S3Provider.AwsSecretKey)[0] != '*' {
+			r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
+		} else if !existingAwsSecretKey.IsNull() {
+			r.S3Provider.AwsSecretKey = existingAwsSecretKey
+		} else {
+			r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
+		}
 		r.S3Provider.Bucket = types.StringPointerValue(resp.S3Provider.Bucket)
 		r.S3Provider.BucketPathSuggestion = types.StringPointerValue(resp.S3Provider.BucketPathSuggestion)
 		r.S3Provider.Description = types.StringPointerValue(resp.S3Provider.Description)
@@ -484,32 +553,32 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			description = nil
 		}
 		availableEndpoints := make([]shared.HTTPEndpoint, 0, len(r.APIHTTPProvider.AvailableEndpoints))
-		for _, availableEndpointsItem := range r.APIHTTPProvider.AvailableEndpoints {
+		for availableEndpointsIndex := range r.APIHTTPProvider.AvailableEndpoints {
 			var name string
-			name = availableEndpointsItem.Name.ValueString()
+			name = r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Name.ValueString()
 
 			dataField := new(string)
-			if !availableEndpointsItem.DataField.IsUnknown() && !availableEndpointsItem.DataField.IsNull() {
-				*dataField = availableEndpointsItem.DataField.ValueString()
+			if !r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].DataField.IsUnknown() && !r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].DataField.IsNull() {
+				*dataField = r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].DataField.ValueString()
 			} else {
 				dataField = nil
 			}
 			method := new(shared.HTTPEndpointMethod)
-			if !availableEndpointsItem.Method.IsUnknown() && !availableEndpointsItem.Method.IsNull() {
-				*method = shared.HTTPEndpointMethod(availableEndpointsItem.Method.ValueString())
+			if !r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Method.IsUnknown() && !r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Method.IsNull() {
+				*method = shared.HTTPEndpointMethod(r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Method.ValueString())
 			} else {
 				method = nil
 			}
 			var url string
-			url = availableEndpointsItem.URL.ValueString()
+			url = r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].URL.ValueString()
 
-			headers := make([]shared.HTTPHeader, 0, len(availableEndpointsItem.Headers))
-			for _, headersItem := range availableEndpointsItem.Headers {
+			headers := make([]shared.HTTPHeader, 0, len(r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Headers))
+			for headersIndex := range r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Headers {
 				var name1 string
-				name1 = headersItem.Name.ValueString()
+				name1 = r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Headers[headersIndex].Name.ValueString()
 
 				var value string
-				value = headersItem.Value.ValueString()
+				value = r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Headers[headersIndex].Value.ValueString()
 
 				headers = append(headers, shared.HTTPHeader{
 					Name:  name1,
@@ -558,31 +627,31 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			description1 = nil
 		}
 		accountConfigs := make([]shared.AwsAccountConfig, 0, len(r.APIAwsProvider.AccountConfigs))
-		for _, accountConfigsItem := range r.APIAwsProvider.AccountConfigs {
+		for accountConfigsIndex := range r.APIAwsProvider.AccountConfigs {
 			var name2 string
-			name2 = accountConfigsItem.Name.ValueString()
+			name2 = r.APIAwsProvider.AccountConfigs[accountConfigsIndex].Name.ValueString()
 
 			assumeRoleArn := new(string)
-			if !accountConfigsItem.AssumeRoleArn.IsUnknown() && !accountConfigsItem.AssumeRoleArn.IsNull() {
-				*assumeRoleArn = accountConfigsItem.AssumeRoleArn.ValueString()
+			if !r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AssumeRoleArn.IsUnknown() && !r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AssumeRoleArn.IsNull() {
+				*assumeRoleArn = r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AssumeRoleArn.ValueString()
 			} else {
 				assumeRoleArn = nil
 			}
 			assumeRoleExternalID := new(string)
-			if !accountConfigsItem.AssumeRoleExternalID.IsUnknown() && !accountConfigsItem.AssumeRoleExternalID.IsNull() {
-				*assumeRoleExternalID = accountConfigsItem.AssumeRoleExternalID.ValueString()
+			if !r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AssumeRoleExternalID.IsUnknown() && !r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AssumeRoleExternalID.IsNull() {
+				*assumeRoleExternalID = r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AssumeRoleExternalID.ValueString()
 			} else {
 				assumeRoleExternalID = nil
 			}
 			awsAPIKey := new(string)
-			if !accountConfigsItem.AwsAPIKey.IsUnknown() && !accountConfigsItem.AwsAPIKey.IsNull() {
-				*awsAPIKey = accountConfigsItem.AwsAPIKey.ValueString()
+			if !r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AwsAPIKey.IsUnknown() && !r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AwsAPIKey.IsNull() {
+				*awsAPIKey = r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AwsAPIKey.ValueString()
 			} else {
 				awsAPIKey = nil
 			}
 			awsSecretKey := new(string)
-			if !accountConfigsItem.AwsSecretKey.IsUnknown() && !accountConfigsItem.AwsSecretKey.IsNull() {
-				*awsSecretKey = accountConfigsItem.AwsSecretKey.ValueString()
+			if !r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AwsSecretKey.IsUnknown() && !r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AwsSecretKey.IsNull() {
+				*awsSecretKey = r.APIAwsProvider.AccountConfigs[accountConfigsIndex].AwsSecretKey.ValueString()
 			} else {
 				awsSecretKey = nil
 			}
@@ -621,18 +690,18 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			description2 = nil
 		}
 		accountConfigs1 := make([]shared.AzureAccountConfig, 0, len(r.APIAzureProvider.AccountConfigs))
-		for _, accountConfigsItem1 := range r.APIAzureProvider.AccountConfigs {
+		for accountConfigsIndex1 := range r.APIAzureProvider.AccountConfigs {
 			var name3 string
-			name3 = accountConfigsItem1.Name.ValueString()
+			name3 = r.APIAzureProvider.AccountConfigs[accountConfigsIndex1].Name.ValueString()
 
 			var clientID string
-			clientID = accountConfigsItem1.ClientID.ValueString()
+			clientID = r.APIAzureProvider.AccountConfigs[accountConfigsIndex1].ClientID.ValueString()
 
 			var clientSecret string
-			clientSecret = accountConfigsItem1.ClientSecret.ValueString()
+			clientSecret = r.APIAzureProvider.AccountConfigs[accountConfigsIndex1].ClientSecret.ValueString()
 
 			var tenantID string
-			tenantID = accountConfigsItem1.TenantID.ValueString()
+			tenantID = r.APIAzureProvider.AccountConfigs[accountConfigsIndex1].TenantID.ValueString()
 
 			accountConfigs1 = append(accountConfigs1, shared.AzureAccountConfig{
 				Name:         name3,
@@ -668,12 +737,12 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			description3 = nil
 		}
 		accountConfigs2 := make([]shared.GcpAccountConfig, 0, len(r.APIGcpProvider.AccountConfigs))
-		for _, accountConfigsItem2 := range r.APIGcpProvider.AccountConfigs {
+		for accountConfigsIndex2 := range r.APIGcpProvider.AccountConfigs {
 			var name4 string
-			name4 = accountConfigsItem2.Name.ValueString()
+			name4 = r.APIGcpProvider.AccountConfigs[accountConfigsIndex2].Name.ValueString()
 
 			var serviceAccountCredentials string
-			serviceAccountCredentials = accountConfigsItem2.ServiceAccountCredentials.ValueString()
+			serviceAccountCredentials = r.APIGcpProvider.AccountConfigs[accountConfigsIndex2].ServiceAccountCredentials.ValueString()
 
 			accountConfigs2 = append(accountConfigs2, shared.GcpAccountConfig{
 				Name:                      name4,
@@ -707,15 +776,15 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			description4 = nil
 		}
 		accountConfigs3 := make([]shared.GoogleWorkspaceAccountConfig, 0, len(r.APIGoogleWorkspaceProvider.AccountConfigs))
-		for _, accountConfigsItem3 := range r.APIGoogleWorkspaceProvider.AccountConfigs {
+		for accountConfigsIndex3 := range r.APIGoogleWorkspaceProvider.AccountConfigs {
 			var name5 string
-			name5 = accountConfigsItem3.Name.ValueString()
+			name5 = r.APIGoogleWorkspaceProvider.AccountConfigs[accountConfigsIndex3].Name.ValueString()
 
 			var subject string
-			subject = accountConfigsItem3.Subject.ValueString()
+			subject = r.APIGoogleWorkspaceProvider.AccountConfigs[accountConfigsIndex3].Subject.ValueString()
 
 			var serviceAccountCredentials1 string
-			serviceAccountCredentials1 = accountConfigsItem3.ServiceAccountCredentials.ValueString()
+			serviceAccountCredentials1 = r.APIGoogleWorkspaceProvider.AccountConfigs[accountConfigsIndex3].ServiceAccountCredentials.ValueString()
 
 			accountConfigs3 = append(accountConfigs3, shared.GoogleWorkspaceAccountConfig{
 				Name:                      name5,
@@ -750,18 +819,18 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			description5 = nil
 		}
 		accountConfigs4 := make([]shared.MsGraphAccountConfig, 0, len(r.APIMsGraphProvider.AccountConfigs))
-		for _, accountConfigsItem4 := range r.APIMsGraphProvider.AccountConfigs {
+		for accountConfigsIndex4 := range r.APIMsGraphProvider.AccountConfigs {
 			var name6 string
-			name6 = accountConfigsItem4.Name.ValueString()
+			name6 = r.APIMsGraphProvider.AccountConfigs[accountConfigsIndex4].Name.ValueString()
 
 			var tenantId1 string
-			tenantId1 = accountConfigsItem4.TenantID.ValueString()
+			tenantId1 = r.APIMsGraphProvider.AccountConfigs[accountConfigsIndex4].TenantID.ValueString()
 
 			var clientId1 string
-			clientId1 = accountConfigsItem4.ClientID.ValueString()
+			clientId1 = r.APIMsGraphProvider.AccountConfigs[accountConfigsIndex4].ClientID.ValueString()
 
 			var clientSecret1 string
-			clientSecret1 = accountConfigsItem4.ClientSecret.ValueString()
+			clientSecret1 = r.APIMsGraphProvider.AccountConfigs[accountConfigsIndex4].ClientSecret.ValueString()
 
 			accountConfigs4 = append(accountConfigs4, shared.MsGraphAccountConfig{
 				Name:         name6,
@@ -797,15 +866,15 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			description6 = nil
 		}
 		accountConfigs5 := make([]shared.OktaAccountConfig, 0, len(r.APIOktaProvider.AccountConfigs))
-		for _, accountConfigsItem5 := range r.APIOktaProvider.AccountConfigs {
+		for accountConfigsIndex5 := range r.APIOktaProvider.AccountConfigs {
 			var name7 string
-			name7 = accountConfigsItem5.Name.ValueString()
+			name7 = r.APIOktaProvider.AccountConfigs[accountConfigsIndex5].Name.ValueString()
 
 			var domainEndpoint string
-			domainEndpoint = accountConfigsItem5.DomainEndpoint.ValueString()
+			domainEndpoint = r.APIOktaProvider.AccountConfigs[accountConfigsIndex5].DomainEndpoint.ValueString()
 
 			var apiToken string
-			apiToken = accountConfigsItem5.APIToken.ValueString()
+			apiToken = r.APIOktaProvider.AccountConfigs[accountConfigsIndex5].APIToken.ValueString()
 
 			accountConfigs5 = append(accountConfigs5, shared.OktaAccountConfig{
 				Name:           name7,
@@ -840,15 +909,15 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			description7 = nil
 		}
 		accountConfigs6 := make([]shared.TailscaleAccountConfig, 0, len(r.APITailscaleProvider.AccountConfigs))
-		for _, accountConfigsItem6 := range r.APITailscaleProvider.AccountConfigs {
+		for accountConfigsIndex6 := range r.APITailscaleProvider.AccountConfigs {
 			var name8 string
-			name8 = accountConfigsItem6.Name.ValueString()
+			name8 = r.APITailscaleProvider.AccountConfigs[accountConfigsIndex6].Name.ValueString()
 
 			var clientId2 string
-			clientId2 = accountConfigsItem6.ClientID.ValueString()
+			clientId2 = r.APITailscaleProvider.AccountConfigs[accountConfigsIndex6].ClientID.ValueString()
 
 			var clientSecret2 string
-			clientSecret2 = accountConfigsItem6.ClientSecret.ValueString()
+			clientSecret2 = r.APITailscaleProvider.AccountConfigs[accountConfigsIndex6].ClientSecret.ValueString()
 
 			accountConfigs6 = append(accountConfigs6, shared.TailscaleAccountConfig{
 				Name:         name8,
@@ -883,18 +952,18 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			description8 = nil
 		}
 		accountConfigs7 := make([]shared.ZoomAccountConfig, 0, len(r.APIZoomProvider.AccountConfigs))
-		for _, accountConfigsItem7 := range r.APIZoomProvider.AccountConfigs {
+		for accountConfigsIndex7 := range r.APIZoomProvider.AccountConfigs {
 			var name9 string
-			name9 = accountConfigsItem7.Name.ValueString()
+			name9 = r.APIZoomProvider.AccountConfigs[accountConfigsIndex7].Name.ValueString()
 
 			var accountID string
-			accountID = accountConfigsItem7.AccountID.ValueString()
+			accountID = r.APIZoomProvider.AccountConfigs[accountConfigsIndex7].AccountID.ValueString()
 
 			var clientId3 string
-			clientId3 = accountConfigsItem7.ClientID.ValueString()
+			clientId3 = r.APIZoomProvider.AccountConfigs[accountConfigsIndex7].ClientID.ValueString()
 
 			var clientSecret3 string
-			clientSecret3 = accountConfigsItem7.ClientSecret.ValueString()
+			clientSecret3 = r.APIZoomProvider.AccountConfigs[accountConfigsIndex7].ClientSecret.ValueString()
 
 			accountConfigs7 = append(accountConfigs7, shared.ZoomAccountConfig{
 				Name:         name9,
@@ -1443,12 +1512,12 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			connectionString = nil
 		}
 		sasConfigs := make([]shared.SasConfig, 0, len(r.AzureBlobProvider.SasConfigs))
-		for _, sasConfigsItem := range r.AzureBlobProvider.SasConfigs {
+		for sasConfigsIndex := range r.AzureBlobProvider.SasConfigs {
 			var containerName string
-			containerName = sasConfigsItem.ContainerName.ValueString()
+			containerName = r.AzureBlobProvider.SasConfigs[sasConfigsIndex].ContainerName.ValueString()
 
 			var blobSasURL string
-			blobSasURL = sasConfigsItem.BlobSasURL.ValueString()
+			blobSasURL = r.AzureBlobProvider.SasConfigs[sasConfigsIndex].BlobSasURL.ValueString()
 
 			sasConfigs = append(sasConfigs, shared.SasConfig{
 				ContainerName: containerName,

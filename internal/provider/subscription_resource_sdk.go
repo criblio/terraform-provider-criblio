@@ -10,6 +10,66 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *SubscriptionResourceModel) RefreshFromOperationsCreateSubscriptionResponseBody(ctx context.Context, resp *operations.CreateSubscriptionResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSubscription(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *SubscriptionResourceModel) RefreshFromOperationsGetSubscriptionByIDResponseBody(ctx context.Context, resp *operations.GetSubscriptionByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSubscription(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *SubscriptionResourceModel) RefreshFromOperationsUpdateSubscriptionByIDResponseBody(ctx context.Context, resp *operations.UpdateSubscriptionByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSubscription(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *SubscriptionResourceModel) RefreshFromSharedSubscription(ctx context.Context, resp *shared.Subscription) diag.Diagnostics {
 	var diags diag.Diagnostics
 

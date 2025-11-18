@@ -13,6 +13,66 @@ import (
 	"time"
 )
 
+func (r *CriblLakeDatasetResourceModel) RefreshFromOperationsCreateCriblLakeDatasetByLakeIDResponseBody(ctx context.Context, resp *operations.CreateCriblLakeDatasetByLakeIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCriblLakeDataset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *CriblLakeDatasetResourceModel) RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx context.Context, resp *operations.GetCriblLakeDatasetByLakeIDAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCriblLakeDataset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *CriblLakeDatasetResourceModel) RefreshFromOperationsUpdateCriblLakeDatasetByLakeIDAndIDResponseBody(ctx context.Context, resp *operations.UpdateCriblLakeDatasetByLakeIDAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCriblLakeDataset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *CriblLakeDatasetResourceModel) RefreshFromSharedCriblLakeDataset(ctx context.Context, resp *shared.CriblLakeDataset) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -130,8 +190,8 @@ func (r *CriblLakeDatasetResourceModel) ToSharedCriblLakeDataset(ctx context.Con
 	var diags diag.Diagnostics
 
 	acceleratedFields := make([]string, 0, len(r.AcceleratedFields))
-	for _, acceleratedFieldsItem := range r.AcceleratedFields {
-		acceleratedFields = append(acceleratedFields, acceleratedFieldsItem.ValueString())
+	for acceleratedFieldsIndex := range r.AcceleratedFields {
+		acceleratedFields = append(acceleratedFields, r.AcceleratedFields[acceleratedFieldsIndex].ValueString())
 	}
 	bucketName := new(string)
 	if !r.BucketName.IsUnknown() && !r.BucketName.IsNull() {
@@ -163,8 +223,8 @@ func (r *CriblLakeDatasetResourceModel) ToSharedCriblLakeDataset(ctx context.Con
 	var searchConfig *shared.LakeDatasetSearchConfig
 	if r.SearchConfig != nil {
 		datatypes := make([]string, 0, len(r.SearchConfig.Datatypes))
-		for _, datatypesItem := range r.SearchConfig.Datatypes {
-			datatypes = append(datatypes, datatypesItem.ValueString())
+		for datatypesIndex := range r.SearchConfig.Datatypes {
+			datatypes = append(datatypes, r.SearchConfig.Datatypes[datatypesIndex].ValueString())
 		}
 		var metadata *shared.DatasetMetadata
 		if r.SearchConfig.Metadata != nil {
@@ -181,8 +241,8 @@ func (r *CriblLakeDatasetResourceModel) ToSharedCriblLakeDataset(ctx context.Con
 				modified = nil
 			}
 			tags := make([]string, 0, len(r.SearchConfig.Metadata.Tags))
-			for _, tagsItem := range r.SearchConfig.Metadata.Tags {
-				tags = append(tags, tagsItem.ValueString())
+			for tagsIndex := range r.SearchConfig.Metadata.Tags {
+				tags = append(tags, r.SearchConfig.Metadata.Tags[tagsIndex].ValueString())
 			}
 			enableAcceleration := new(bool)
 			if !r.SearchConfig.Metadata.EnableAcceleration.IsUnknown() && !r.SearchConfig.Metadata.EnableAcceleration.IsNull() {

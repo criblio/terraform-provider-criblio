@@ -374,49 +374,49 @@ func (r *PackBreakersResourceModel) ToSharedEventBreakerRuleset(ctx context.Cont
 		minRawLength = nil
 	}
 	rules := make([]shared.EventBreakerRulesetRule, 0, len(r.Rules))
-	for _, rulesItem := range r.Rules {
+	for rulesIndex := range r.Rules {
 		var name string
-		name = rulesItem.Name.ValueString()
+		name = r.Rules[rulesIndex].Name.ValueString()
 
 		condition := new(string)
-		if !rulesItem.Condition.IsUnknown() && !rulesItem.Condition.IsNull() {
-			*condition = rulesItem.Condition.ValueString()
+		if !r.Rules[rulesIndex].Condition.IsUnknown() && !r.Rules[rulesIndex].Condition.IsNull() {
+			*condition = r.Rules[rulesIndex].Condition.ValueString()
 		} else {
 			condition = nil
 		}
 		typeVar := new(shared.EventBreakerType)
-		if !rulesItem.Type.IsUnknown() && !rulesItem.Type.IsNull() {
-			*typeVar = shared.EventBreakerType(rulesItem.Type.ValueString())
+		if !r.Rules[rulesIndex].Type.IsUnknown() && !r.Rules[rulesIndex].Type.IsNull() {
+			*typeVar = shared.EventBreakerType(r.Rules[rulesIndex].Type.ValueString())
 		} else {
 			typeVar = nil
 		}
 		timestampAnchorRegex := new(string)
-		if !rulesItem.TimestampAnchorRegex.IsUnknown() && !rulesItem.TimestampAnchorRegex.IsNull() {
-			*timestampAnchorRegex = rulesItem.TimestampAnchorRegex.ValueString()
+		if !r.Rules[rulesIndex].TimestampAnchorRegex.IsUnknown() && !r.Rules[rulesIndex].TimestampAnchorRegex.IsNull() {
+			*timestampAnchorRegex = r.Rules[rulesIndex].TimestampAnchorRegex.ValueString()
 		} else {
 			timestampAnchorRegex = nil
 		}
 		eventBreakerRegex := new(string)
-		if !rulesItem.EventBreakerRegex.IsUnknown() && !rulesItem.EventBreakerRegex.IsNull() {
-			*eventBreakerRegex = rulesItem.EventBreakerRegex.ValueString()
+		if !r.Rules[rulesIndex].EventBreakerRegex.IsUnknown() && !r.Rules[rulesIndex].EventBreakerRegex.IsNull() {
+			*eventBreakerRegex = r.Rules[rulesIndex].EventBreakerRegex.ValueString()
 		} else {
 			eventBreakerRegex = nil
 		}
 		typeVar1 := new(shared.EventBreakerRulesetRuleTimestampTypeTimestampType)
-		if !rulesItem.Timestamp.Type.IsUnknown() && !rulesItem.Timestamp.Type.IsNull() {
-			*typeVar1 = shared.EventBreakerRulesetRuleTimestampTypeTimestampType(rulesItem.Timestamp.Type.ValueString())
+		if !r.Rules[rulesIndex].Timestamp.Type.IsUnknown() && !r.Rules[rulesIndex].Timestamp.Type.IsNull() {
+			*typeVar1 = shared.EventBreakerRulesetRuleTimestampTypeTimestampType(r.Rules[rulesIndex].Timestamp.Type.ValueString())
 		} else {
 			typeVar1 = nil
 		}
 		length := new(float64)
-		if !rulesItem.Timestamp.Length.IsUnknown() && !rulesItem.Timestamp.Length.IsNull() {
-			*length = rulesItem.Timestamp.Length.ValueFloat64()
+		if !r.Rules[rulesIndex].Timestamp.Length.IsUnknown() && !r.Rules[rulesIndex].Timestamp.Length.IsNull() {
+			*length = r.Rules[rulesIndex].Timestamp.Length.ValueFloat64()
 		} else {
 			length = nil
 		}
 		format := new(string)
-		if !rulesItem.Timestamp.Format.IsUnknown() && !rulesItem.Timestamp.Format.IsNull() {
-			*format = rulesItem.Timestamp.Format.ValueString()
+		if !r.Rules[rulesIndex].Timestamp.Format.IsUnknown() && !r.Rules[rulesIndex].Timestamp.Format.IsNull() {
+			*format = r.Rules[rulesIndex].Timestamp.Format.ValueString()
 		} else {
 			format = nil
 		}
@@ -426,39 +426,39 @@ func (r *PackBreakersResourceModel) ToSharedEventBreakerRuleset(ctx context.Cont
 			Format: format,
 		}
 		timestampTimezone := new(string)
-		if !rulesItem.TimestampTimezone.IsUnknown() && !rulesItem.TimestampTimezone.IsNull() {
-			*timestampTimezone = rulesItem.TimestampTimezone.ValueString()
+		if !r.Rules[rulesIndex].TimestampTimezone.IsUnknown() && !r.Rules[rulesIndex].TimestampTimezone.IsNull() {
+			*timestampTimezone = r.Rules[rulesIndex].TimestampTimezone.ValueString()
 		} else {
 			timestampTimezone = nil
 		}
 		timestampEarliest := new(string)
-		if !rulesItem.TimestampEarliest.IsUnknown() && !rulesItem.TimestampEarliest.IsNull() {
-			*timestampEarliest = rulesItem.TimestampEarliest.ValueString()
+		if !r.Rules[rulesIndex].TimestampEarliest.IsUnknown() && !r.Rules[rulesIndex].TimestampEarliest.IsNull() {
+			*timestampEarliest = r.Rules[rulesIndex].TimestampEarliest.ValueString()
 		} else {
 			timestampEarliest = nil
 		}
 		timestampLatest := new(string)
-		if !rulesItem.TimestampLatest.IsUnknown() && !rulesItem.TimestampLatest.IsNull() {
-			*timestampLatest = rulesItem.TimestampLatest.ValueString()
+		if !r.Rules[rulesIndex].TimestampLatest.IsUnknown() && !r.Rules[rulesIndex].TimestampLatest.IsNull() {
+			*timestampLatest = r.Rules[rulesIndex].TimestampLatest.ValueString()
 		} else {
 			timestampLatest = nil
 		}
 		maxEventBytes := new(float64)
-		if !rulesItem.MaxEventBytes.IsUnknown() && !rulesItem.MaxEventBytes.IsNull() {
-			*maxEventBytes = rulesItem.MaxEventBytes.ValueFloat64()
+		if !r.Rules[rulesIndex].MaxEventBytes.IsUnknown() && !r.Rules[rulesIndex].MaxEventBytes.IsNull() {
+			*maxEventBytes = r.Rules[rulesIndex].MaxEventBytes.ValueFloat64()
 		} else {
 			maxEventBytes = nil
 		}
-		fields := make([]shared.Field, 0, len(rulesItem.Fields))
-		for _, fieldsItem := range rulesItem.Fields {
+		fields := make([]shared.Field, 0, len(r.Rules[rulesIndex].Fields))
+		for fieldsIndex := range r.Rules[rulesIndex].Fields {
 			name1 := new(string)
-			if !fieldsItem.Name.IsUnknown() && !fieldsItem.Name.IsNull() {
-				*name1 = fieldsItem.Name.ValueString()
+			if !r.Rules[rulesIndex].Fields[fieldsIndex].Name.IsUnknown() && !r.Rules[rulesIndex].Fields[fieldsIndex].Name.IsNull() {
+				*name1 = r.Rules[rulesIndex].Fields[fieldsIndex].Name.ValueString()
 			} else {
 				name1 = nil
 			}
 			var value string
-			value = fieldsItem.Value.ValueString()
+			value = r.Rules[rulesIndex].Fields[fieldsIndex].Value.ValueString()
 
 			fields = append(fields, shared.Field{
 				Name:  name1,
@@ -466,20 +466,20 @@ func (r *PackBreakersResourceModel) ToSharedEventBreakerRuleset(ctx context.Cont
 			})
 		}
 		disabled := new(bool)
-		if !rulesItem.Disabled.IsUnknown() && !rulesItem.Disabled.IsNull() {
-			*disabled = rulesItem.Disabled.ValueBool()
+		if !r.Rules[rulesIndex].Disabled.IsUnknown() && !r.Rules[rulesIndex].Disabled.IsNull() {
+			*disabled = r.Rules[rulesIndex].Disabled.ValueBool()
 		} else {
 			disabled = nil
 		}
 		parserEnabled := new(bool)
-		if !rulesItem.ParserEnabled.IsUnknown() && !rulesItem.ParserEnabled.IsNull() {
-			*parserEnabled = rulesItem.ParserEnabled.ValueBool()
+		if !r.Rules[rulesIndex].ParserEnabled.IsUnknown() && !r.Rules[rulesIndex].ParserEnabled.IsNull() {
+			*parserEnabled = r.Rules[rulesIndex].ParserEnabled.ValueBool()
 		} else {
 			parserEnabled = nil
 		}
 		shouldUseDataRaw := new(bool)
-		if !rulesItem.ShouldUseDataRaw.IsUnknown() && !rulesItem.ShouldUseDataRaw.IsNull() {
-			*shouldUseDataRaw = rulesItem.ShouldUseDataRaw.ValueBool()
+		if !r.Rules[rulesIndex].ShouldUseDataRaw.IsUnknown() && !r.Rules[rulesIndex].ShouldUseDataRaw.IsNull() {
+			*shouldUseDataRaw = r.Rules[rulesIndex].ShouldUseDataRaw.ValueBool()
 		} else {
 			shouldUseDataRaw = nil
 		}

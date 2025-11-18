@@ -12,6 +12,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *CriblLakeDatasetDataSourceModel) RefreshFromOperationsGetCriblLakeDatasetByLakeIDAndIDResponseBody(ctx context.Context, resp *operations.GetCriblLakeDatasetByLakeIDAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedCriblLakeDataset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *CriblLakeDatasetDataSourceModel) RefreshFromSharedCriblLakeDataset(ctx context.Context, resp *shared.CriblLakeDataset) diag.Diagnostics {
 	var diags diag.Diagnostics
 

@@ -4,28 +4,67 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *ParquetSchemaResourceModel) RefreshFromOperationsCreateSchemaResponseBody(ctx context.Context, resp *operations.CreateSchemaResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSchemaLibEntry(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *ParquetSchemaResourceModel) RefreshFromOperationsGetSchemaByIDResponseBody(ctx context.Context, resp *operations.GetSchemaByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.SchemaLibEntry{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.SchemaLibEntry
-
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Schema = types.StringValue(itemsItem.Schema)
-
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedSchemaLibEntry(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *ParquetSchemaResourceModel) RefreshFromOperationsUpdateSchemaByIDResponseBody(ctx context.Context, resp *operations.UpdateSchemaByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSchemaLibEntry(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags

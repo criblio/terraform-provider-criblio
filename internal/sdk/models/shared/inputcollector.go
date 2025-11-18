@@ -108,59 +108,109 @@ func CreateInputCollectorInputCollectorHealthCheck(inputCollectorHealthCheck Inp
 
 func (u *InputCollector) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var inputCollectorSplunk InputCollectorSplunk = InputCollectorSplunk{}
 	if err := utils.UnmarshalJSON(data, &inputCollectorSplunk, "", true, nil); err == nil {
-		u.InputCollectorSplunk = &inputCollectorSplunk
-		u.Type = InputCollectorTypeInputCollectorSplunk
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputCollectorTypeInputCollectorSplunk,
+			Value: &inputCollectorSplunk,
+		})
 	}
 
 	var inputCollectorRest InputCollectorRest = InputCollectorRest{}
 	if err := utils.UnmarshalJSON(data, &inputCollectorRest, "", true, nil); err == nil {
-		u.InputCollectorRest = &inputCollectorRest
-		u.Type = InputCollectorTypeInputCollectorRest
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputCollectorTypeInputCollectorRest,
+			Value: &inputCollectorRest,
+		})
 	}
 
 	var inputCollectorS3 InputCollectorS3 = InputCollectorS3{}
 	if err := utils.UnmarshalJSON(data, &inputCollectorS3, "", true, nil); err == nil {
-		u.InputCollectorS3 = &inputCollectorS3
-		u.Type = InputCollectorTypeInputCollectorS3
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputCollectorTypeInputCollectorS3,
+			Value: &inputCollectorS3,
+		})
 	}
 
 	var inputCollectorAzureBlob InputCollectorAzureBlob = InputCollectorAzureBlob{}
 	if err := utils.UnmarshalJSON(data, &inputCollectorAzureBlob, "", true, nil); err == nil {
-		u.InputCollectorAzureBlob = &inputCollectorAzureBlob
-		u.Type = InputCollectorTypeInputCollectorAzureBlob
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputCollectorTypeInputCollectorAzureBlob,
+			Value: &inputCollectorAzureBlob,
+		})
 	}
 
 	var inputCollectorCriblLake InputCollectorCriblLake = InputCollectorCriblLake{}
 	if err := utils.UnmarshalJSON(data, &inputCollectorCriblLake, "", true, nil); err == nil {
-		u.InputCollectorCriblLake = &inputCollectorCriblLake
-		u.Type = InputCollectorTypeInputCollectorCriblLake
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputCollectorTypeInputCollectorCriblLake,
+			Value: &inputCollectorCriblLake,
+		})
 	}
 
 	var inputCollectorDatabase InputCollectorDatabase = InputCollectorDatabase{}
 	if err := utils.UnmarshalJSON(data, &inputCollectorDatabase, "", true, nil); err == nil {
-		u.InputCollectorDatabase = &inputCollectorDatabase
-		u.Type = InputCollectorTypeInputCollectorDatabase
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputCollectorTypeInputCollectorDatabase,
+			Value: &inputCollectorDatabase,
+		})
 	}
 
 	var inputCollectorGCS InputCollectorGCS = InputCollectorGCS{}
 	if err := utils.UnmarshalJSON(data, &inputCollectorGCS, "", true, nil); err == nil {
-		u.InputCollectorGCS = &inputCollectorGCS
-		u.Type = InputCollectorTypeInputCollectorGCS
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputCollectorTypeInputCollectorGCS,
+			Value: &inputCollectorGCS,
+		})
 	}
 
 	var inputCollectorHealthCheck InputCollectorHealthCheck = InputCollectorHealthCheck{}
 	if err := utils.UnmarshalJSON(data, &inputCollectorHealthCheck, "", true, nil); err == nil {
-		u.InputCollectorHealthCheck = &inputCollectorHealthCheck
-		u.Type = InputCollectorTypeInputCollectorHealthCheck
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputCollectorTypeInputCollectorHealthCheck,
+			Value: &inputCollectorHealthCheck,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputCollector", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputCollector", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(InputCollectorType)
+	switch best.Type {
+	case InputCollectorTypeInputCollectorSplunk:
+		u.InputCollectorSplunk = best.Value.(*InputCollectorSplunk)
+		return nil
+	case InputCollectorTypeInputCollectorRest:
+		u.InputCollectorRest = best.Value.(*InputCollectorRest)
+		return nil
+	case InputCollectorTypeInputCollectorS3:
+		u.InputCollectorS3 = best.Value.(*InputCollectorS3)
+		return nil
+	case InputCollectorTypeInputCollectorAzureBlob:
+		u.InputCollectorAzureBlob = best.Value.(*InputCollectorAzureBlob)
+		return nil
+	case InputCollectorTypeInputCollectorCriblLake:
+		u.InputCollectorCriblLake = best.Value.(*InputCollectorCriblLake)
+		return nil
+	case InputCollectorTypeInputCollectorDatabase:
+		u.InputCollectorDatabase = best.Value.(*InputCollectorDatabase)
+		return nil
+	case InputCollectorTypeInputCollectorGCS:
+		u.InputCollectorGCS = best.Value.(*InputCollectorGCS)
+		return nil
+	case InputCollectorTypeInputCollectorHealthCheck:
+		u.InputCollectorHealthCheck = best.Value.(*InputCollectorHealthCheck)
 		return nil
 	}
 

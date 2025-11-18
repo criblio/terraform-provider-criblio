@@ -149,17 +149,43 @@ func CreateDatatypePreviewInputDatatypePreviewInputRawData(datatypePreviewInputR
 
 func (u *DatatypePreviewInput) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var datatypePreviewInputDataset DatatypePreviewInputDataset = DatatypePreviewInputDataset{}
 	if err := utils.UnmarshalJSON(data, &datatypePreviewInputDataset, "", true, nil); err == nil {
-		u.DatatypePreviewInputDataset = &datatypePreviewInputDataset
-		u.Type = DatatypePreviewInputTypeDatatypePreviewInputDataset
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  DatatypePreviewInputTypeDatatypePreviewInputDataset,
+			Value: &datatypePreviewInputDataset,
+		})
 	}
 
 	var datatypePreviewInputRawData DatatypePreviewInputRawData = DatatypePreviewInputRawData{}
 	if err := utils.UnmarshalJSON(data, &datatypePreviewInputRawData, "", true, nil); err == nil {
-		u.DatatypePreviewInputRawData = &datatypePreviewInputRawData
-		u.Type = DatatypePreviewInputTypeDatatypePreviewInputRawData
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  DatatypePreviewInputTypeDatatypePreviewInputRawData,
+			Value: &datatypePreviewInputRawData,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DatatypePreviewInput", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DatatypePreviewInput", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(DatatypePreviewInputType)
+	switch best.Type {
+	case DatatypePreviewInputTypeDatatypePreviewInputDataset:
+		u.DatatypePreviewInputDataset = best.Value.(*DatatypePreviewInputDataset)
+		return nil
+	case DatatypePreviewInputTypeDatatypePreviewInputRawData:
+		u.DatatypePreviewInputRawData = best.Value.(*DatatypePreviewInputRawData)
 		return nil
 	}
 

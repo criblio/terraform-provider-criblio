@@ -222,54 +222,54 @@ func (r *PackRoutesResourceModel) ToSharedRoutesInput(ctx context.Context) (*sha
 		id = nil
 	}
 	routes := make([]shared.RoutesRouteInput, 0, len(r.Routes))
-	for _, routesItem := range r.Routes {
+	for routesIndex := range r.Routes {
 		var name string
-		name = routesItem.Name.ValueString()
+		name = r.Routes[routesIndex].Name.ValueString()
 
 		disabled := new(bool)
-		if !routesItem.Disabled.IsUnknown() && !routesItem.Disabled.IsNull() {
-			*disabled = routesItem.Disabled.ValueBool()
+		if !r.Routes[routesIndex].Disabled.IsUnknown() && !r.Routes[routesIndex].Disabled.IsNull() {
+			*disabled = r.Routes[routesIndex].Disabled.ValueBool()
 		} else {
 			disabled = nil
 		}
 		filter := new(string)
-		if !routesItem.Filter.IsUnknown() && !routesItem.Filter.IsNull() {
-			*filter = routesItem.Filter.ValueString()
+		if !r.Routes[routesIndex].Filter.IsUnknown() && !r.Routes[routesIndex].Filter.IsNull() {
+			*filter = r.Routes[routesIndex].Filter.ValueString()
 		} else {
 			filter = nil
 		}
 		var pipeline string
-		pipeline = routesItem.Pipeline.ValueString()
+		pipeline = r.Routes[routesIndex].Pipeline.ValueString()
 
 		enableOutputExpression := new(bool)
-		if !routesItem.EnableOutputExpression.IsUnknown() && !routesItem.EnableOutputExpression.IsNull() {
-			*enableOutputExpression = routesItem.EnableOutputExpression.ValueBool()
+		if !r.Routes[routesIndex].EnableOutputExpression.IsUnknown() && !r.Routes[routesIndex].EnableOutputExpression.IsNull() {
+			*enableOutputExpression = r.Routes[routesIndex].EnableOutputExpression.ValueBool()
 		} else {
 			enableOutputExpression = nil
 		}
 		var output interface{}
-		if !routesItem.Output.IsUnknown() && !routesItem.Output.IsNull() {
-			_ = json.Unmarshal([]byte(routesItem.Output.ValueString()), &output)
+		if !r.Routes[routesIndex].Output.IsUnknown() && !r.Routes[routesIndex].Output.IsNull() {
+			_ = json.Unmarshal([]byte(r.Routes[routesIndex].Output.ValueString()), &output)
 		}
 		var outputExpression interface{}
-		if !routesItem.OutputExpression.IsUnknown() && !routesItem.OutputExpression.IsNull() {
-			_ = json.Unmarshal([]byte(routesItem.OutputExpression.ValueString()), &outputExpression)
+		if !r.Routes[routesIndex].OutputExpression.IsUnknown() && !r.Routes[routesIndex].OutputExpression.IsNull() {
+			_ = json.Unmarshal([]byte(r.Routes[routesIndex].OutputExpression.ValueString()), &outputExpression)
 		}
 		description := new(string)
-		if !routesItem.Description.IsUnknown() && !routesItem.Description.IsNull() {
-			*description = routesItem.Description.ValueString()
+		if !r.Routes[routesIndex].Description.IsUnknown() && !r.Routes[routesIndex].Description.IsNull() {
+			*description = r.Routes[routesIndex].Description.ValueString()
 		} else {
 			description = nil
 		}
 		final := new(bool)
-		if !routesItem.Final.IsUnknown() && !routesItem.Final.IsNull() {
-			*final = routesItem.Final.ValueBool()
+		if !r.Routes[routesIndex].Final.IsUnknown() && !r.Routes[routesIndex].Final.IsNull() {
+			*final = r.Routes[routesIndex].Final.ValueBool()
 		} else {
 			final = nil
 		}
 		var additionalProperties interface{}
-		if !routesItem.AdditionalProperties.IsUnknown() && !routesItem.AdditionalProperties.IsNull() {
-			_ = json.Unmarshal([]byte(routesItem.AdditionalProperties.ValueString()), &additionalProperties)
+		if !r.Routes[routesIndex].AdditionalProperties.IsUnknown() && !r.Routes[routesIndex].AdditionalProperties.IsNull() {
+			_ = json.Unmarshal([]byte(r.Routes[routesIndex].AdditionalProperties.ValueString()), &additionalProperties)
 		}
 		routes = append(routes, shared.RoutesRouteInput{
 			Name:                   name,
@@ -285,19 +285,19 @@ func (r *PackRoutesResourceModel) ToSharedRoutesInput(ctx context.Context) (*sha
 		})
 	}
 	groups := make(map[string]shared.RoutesGroups)
-	for groupsKey, groupsValue := range r.Groups {
+	for groupsKey := range r.Groups {
 		var name1 string
-		name1 = groupsValue.Name.ValueString()
+		name1 = r.Groups[groupsKey].Name.ValueString()
 
 		description1 := new(string)
-		if !groupsValue.Description.IsUnknown() && !groupsValue.Description.IsNull() {
-			*description1 = groupsValue.Description.ValueString()
+		if !r.Groups[groupsKey].Description.IsUnknown() && !r.Groups[groupsKey].Description.IsNull() {
+			*description1 = r.Groups[groupsKey].Description.ValueString()
 		} else {
 			description1 = nil
 		}
 		disabled1 := new(bool)
-		if !groupsValue.Disabled.IsUnknown() && !groupsValue.Disabled.IsNull() {
-			*disabled1 = groupsValue.Disabled.ValueBool()
+		if !r.Groups[groupsKey].Disabled.IsUnknown() && !r.Groups[groupsKey].Disabled.IsNull() {
+			*disabled1 = r.Groups[groupsKey].Disabled.ValueBool()
 		} else {
 			disabled1 = nil
 		}
@@ -309,16 +309,16 @@ func (r *PackRoutesResourceModel) ToSharedRoutesInput(ctx context.Context) (*sha
 		groups[groupsKey] = groupsInst
 	}
 	comments := make([]shared.Comment, 0, len(r.Comments))
-	for _, commentsItem := range r.Comments {
+	for commentsIndex := range r.Comments {
 		comment := new(string)
-		if !commentsItem.Comment.IsUnknown() && !commentsItem.Comment.IsNull() {
-			*comment = commentsItem.Comment.ValueString()
+		if !r.Comments[commentsIndex].Comment.IsUnknown() && !r.Comments[commentsIndex].Comment.IsNull() {
+			*comment = r.Comments[commentsIndex].Comment.ValueString()
 		} else {
 			comment = nil
 		}
 		var additionalProperties1 interface{}
-		if !commentsItem.AdditionalProperties.IsUnknown() && !commentsItem.AdditionalProperties.IsNull() {
-			_ = json.Unmarshal([]byte(commentsItem.AdditionalProperties.ValueString()), &additionalProperties1)
+		if !r.Comments[commentsIndex].AdditionalProperties.IsUnknown() && !r.Comments[commentsIndex].AdditionalProperties.IsNull() {
+			_ = json.Unmarshal([]byte(r.Comments[commentsIndex].AdditionalProperties.ValueString()), &additionalProperties1)
 		}
 		comments = append(comments, shared.Comment{
 			Comment:              comment,

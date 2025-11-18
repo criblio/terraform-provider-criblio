@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 957c79cb5d072b166111ae3da547ec1a
+  docChecksum: 6e682ec37e51706484db06576b9d9c34
   docVersion: 4.14.0
-  speakeasyVersion: 1.636.3
-  generationVersion: 2.723.11
-  releaseVersion: 1.18.27
-  configChecksum: 7aabf9325d99802bd9a1c36042491373
+  speakeasyVersion: 1.658.2
+  generationVersion: 2.755.9
+  releaseVersion: 1.20.23
+  configChecksum: cebce80239a3b8062ea733c37dd4ca05
   published: true
 features:
   terraform:
     additionalDependencies: 0.1.0
-    additionalProperties: 0.1.2
+    additionalProperties: 0.1.3
     constsAndDefaults: 0.3.0
-    core: 3.45.3
+    core: 3.46.16
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
     globalSecurity: 2.82.1
@@ -21,13 +21,13 @@ features:
     groups: 2.81.3
     ignores: 2.81.1
     inputOutputModels: 2.83.0
-    methodServerURLs: 2.82.1
+    methodServerURLs: 2.83.0
     nameOverrides: 2.81.3
     nullables: 0.0.0
     oauth2ClientCredentials: 0.3.0
     retries: 2.81.4
     serverIDs: 2.81.1
-    unions: 2.81.18
+    unions: 2.82.3
 generatedFiles:
   - .gitattributes
   - USAGE.md
@@ -327,7 +327,6 @@ generatedFiles:
   - internal/provider/packlookups_resource_sdk.go
   - internal/provider/packpipeline_data_source.go
   - internal/provider/packpipeline_data_source_sdk.go
-  - internal/provider/packpipeline_resource.go
   - internal/provider/packpipeline_resource_sdk.go
   - internal/provider/packroutes_data_source.go
   - internal/provider/packroutes_data_source_sdk.go
@@ -392,12 +391,8 @@ generatedFiles:
   - internal/provider/searchdashboardcategory_resource_sdk.go
   - internal/provider/searchdataset_data_source.go
   - internal/provider/searchdataset_data_source_sdk.go
-  - internal/provider/searchdataset_resource.go
-  - internal/provider/searchdataset_resource_sdk.go
   - internal/provider/searchdatasetprovider_data_source.go
   - internal/provider/searchdatasetprovider_data_source_sdk.go
-  - internal/provider/searchdatasetprovider_resource.go
-  - internal/provider/searchdatasetprovider_resource_sdk.go
   - internal/provider/searchmacro_data_source.go
   - internal/provider/searchmacro_data_source_sdk.go
   - internal/provider/searchmacro_resource.go
@@ -423,7 +418,6 @@ generatedFiles:
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
-  - internal/provider/types/add.go
   - internal/provider/types/additional_property.go
   - internal/provider/types/allow.go
   - internal/provider/types/api_aws_dataset.go
@@ -534,19 +528,15 @@ generatedFiles:
   - internal/provider/types/failover_configs.go
   - internal/provider/types/field.go
   - internal/provider/types/firewall.go
-  - internal/provider/types/function_specific_configs.go
   - internal/provider/types/gcp_account_config.go
   - internal/provider/types/gcp_endpoint_config.go
   - internal/provider/types/gcs_dataset.go
   - internal/provider/types/gcs_dataset_extra_path.go
   - internal/provider/types/gcs_provider.go
-  - internal/provider/types/generic_dataset.go
-  - internal/provider/types/generic_provider.go
   - internal/provider/types/git_commit_summary.go
   - internal/provider/types/git_commit_summary_files.go
   - internal/provider/types/git_settings.go
   - internal/provider/types/google_workspace_account_config.go
-  - internal/provider/types/grok_file.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
   - internal/provider/types/http_endpoint.go
@@ -1011,7 +1001,6 @@ generatedFiles:
   - internal/provider/types/internal_scheduling.go
   - internal/provider/types/job_settings.go
   - internal/provider/types/lake_dataset_search_config.go
-  - internal/provider/types/lakehouse.go
   - internal/provider/types/limits.go
   - internal/provider/types/limits_samples.go
   - internal/provider/types/listening_ports.go
@@ -1024,6 +1013,8 @@ generatedFiles:
   - internal/provider/types/mapping_ruleset.go
   - internal/provider/types/mapping_ruleset_conf.go
   - internal/provider/types/mapping_ruleset_function_conf.go
+  - internal/provider/types/mapping_ruleset_function_conf_add.go
+  - internal/provider/types/mapping_ruleset_function_conf_function_specific_configs.go
   - internal/provider/types/master_schema.go
   - internal/provider/types/master_schema_check_server_identity.go
   - internal/provider/types/master_schema_tls.go
@@ -1315,6 +1306,8 @@ generatedFiles:
   - internal/provider/types/pagination_config.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_function_conf.go
+  - internal/provider/types/pipeline_function_conf_add.go
+  - internal/provider/types/pipeline_function_conf_function_specific_configs.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
   - internal/provider/types/prometheus_auth_oauth_header1.go
@@ -1339,10 +1332,8 @@ generatedFiles:
   - internal/provider/types/s3_provider.go
   - internal/provider/types/sample.go
   - internal/provider/types/sas_config.go
-  - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
-  - internal/provider/types/schema_lib_entry.go
   - internal/provider/types/search_query.go
   - internal/provider/types/search_query_earliest.go
   - internal/provider/types/search_query_inline.go
@@ -2092,8 +2083,6 @@ generatedFiles:
   - internal/sdk/models/shared/function.go
   - internal/sdk/models/shared/gcpaccountconfig.go
   - internal/sdk/models/shared/gcpendpointconfig.go
-  - internal/sdk/models/shared/genericdataset.go
-  - internal/sdk/models/shared/genericprovider.go
   - internal/sdk/models/shared/gitcommitparams.go
   - internal/sdk/models/shared/gitcommitsummary.go
   - internal/sdk/models/shared/gitfile.go
@@ -2791,7 +2780,7 @@ examples:
           projectId: "config-group-prod-edge"
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemProjectsPipelinesByGroupIdAndProjectId:
@@ -2801,10 +2790,10 @@ examples:
           groupId: "grp-prod-edge"
           projectId: "config-group-prod-edge"
       requestBody:
-        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
+        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId:
@@ -2816,7 +2805,7 @@ examples:
           pipelineId: "main"
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId:
@@ -2827,10 +2816,10 @@ examples:
           projectId: "config-group-prod-edge"
           pipelineId: "main"
       requestBody:
-        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
+        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSystemProjectsPipelinesByGroupIdAndProjectIdAndPipelineId:
@@ -2842,7 +2831,7 @@ examples:
           pipelineId: "main"
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemProjectsVersionCommitByProjectId:
@@ -3348,7 +3337,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createPipeline:
@@ -3357,10 +3346,10 @@ examples:
         path:
           groupId: "Cribl"
       requestBody:
-        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
+        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getPipelineById:
@@ -3371,7 +3360,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updatePipelineById:
@@ -3381,10 +3370,10 @@ examples:
           id: "main"
           groupId: "Cribl"
       requestBody:
-        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
+        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deletePipelineById:
@@ -3395,7 +3384,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getPipelineByPack:
@@ -3416,7 +3405,7 @@ examples:
           pack: "myExistingPackId"
           groupId: "myExistingGroupId"
       requestBody:
-        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
+        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
       responses:
         "200":
           application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
@@ -3444,10 +3433,10 @@ examples:
         query:
           disabled: false
       requestBody:
-        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
+        application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deletePipelineByPackAndId:
@@ -4371,7 +4360,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "availableEndpoints": [{"name": "getUsers", "method": "GET", "url": "https://api.example.com/users"}], "authenticationMethod": "basic"}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "ApiHttpProvider", "availableEndpoints": [{"name": "getUsers", "method": "GET", "url": "https://api.example.com/users"}], "authenticationMethod": "basic"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDatasetProvider:
@@ -4379,11 +4368,13 @@ examples:
       parameters:
         path:
           groupId: "<id>"
+        query:
+          id: "provider-s3"
       requestBody:
-        application/json: {"id": "amazon_security_lake", "type": "<value>", "accountConfigs": []}
+        application/json: {"id": "myUniqueGenericProviderId", "type": "ApiTailscaleProvider", "accountConfigs": [{"name": "tailscale-account-1", "clientId": "tailscale-client-id-123", "clientSecret": "tailscale-client-secret-abc"}]}
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "accountConfigs": [{"name": "tailscale-account-1", "clientId": "tailscale-client-id-123", "clientSecret": "tailscale-client-secret-abc"}]}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "ApiMsGraphProvider", "accountConfigs": [{"name": "msgraph-account-1", "tenantId": "tenant-123", "clientId": "client-456", "clientSecret": "secret-789"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetProviderById:
@@ -4394,7 +4385,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "serviceAccountCredentials": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-gcp-project\",\n  \"private_key_id\": \"abcd1234efgh5678ijkl90\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9...==\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"my-service-account@my-gcp-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789012345678901\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\",\n  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/my-service-account%40my-gcp-project.iam.gserviceaccount.com\"\n}\n", "endpoint": "https://storage.googleapis.com"}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "GcsProvider", "serviceAccountCredentials": "***REDACTED***"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateDatasetProviderById:
@@ -4404,10 +4395,10 @@ examples:
           id: "provider-s3-main"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "api_elasticsearch", "type": "<value>", "endpoint": "<value>", "authType": "none", "maxConcurrency": 3}
+        application/json: {"id": "myUniqueGenericProviderId", "type": "CriblLeaderProvider"}
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description"}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "AwsSecurityLakeProvider"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteDatasetProviderById:
@@ -4418,7 +4409,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "generic", "description": "my generic provider description", "username": "click_user", "password": "click_password", "endpoint": "https://clickhouse.example.com:8443"}]}
+          application/json: {"items": [{"id": "myUniqueGenericProviderId", "type": "ClickHouseProvider", "username": "click_user", "endpoint": "https://clickhouse.example.com:8443"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listDataset:
@@ -4428,7 +4419,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "enabledEndpoints": ["login", "admin"]}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiGoogleWorkspaceDataset", "enabledEndpoints": ["login", "admin"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createDataset:
@@ -4436,11 +4427,13 @@ examples:
       parameters:
         path:
           groupId: "<id>"
+        query:
+          id: "web-logs"
       requestBody:
-        application/json: {"id": "<id>", "provider": "<value>", "type": "<value>", "enabledEndpoints": []}
+        application/json: {"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiAzureDataExplorerDataset", "cluster": "myadxcluster", "location": "eastus2", "database": "logsdb", "table": "logs", "timestampFieldContents": "kusto_datetime"}
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "cluster": "myadxcluster", "location": "eastus2", "database": "logsdb", "table": "logs", "timestampField": "event_time", "timestampFieldContents": "kusto_datetime"}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiHttpDataset", "enabledEndpoints": ["getUsers", "getEvents"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetById:
@@ -4451,7 +4444,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "index": "metrics-*", "timestampField": "@timestamp"}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiElasticSearchDataset", "index": "metrics-*", "timestampField": "@timestamp"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateDatasetById:
@@ -4461,10 +4454,10 @@ examples:
           id: "web-logs"
           groupId: "<id>"
       requestBody:
-        application/json: {"id": "<id>", "provider": "<value>", "type": "<value>", "table": "<value>"}
+        application/json: {"id": "myGenericDatasetId", "provider": "myProviderId", "type": "S3Dataset", "bucket": "<value>", "filter": "true"}
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "bucket": "<value>", "filter": "true"}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiAzureDataset", "enabledEndpoints": ["ActivityLogs", "SignInLogs"], "subscriptionIds": ["sub-12345", "sub-67890"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteDatasetById:
@@ -4475,7 +4468,7 @@ examples:
           groupId: "<id>"
       responses:
         "200":
-          application/json: {"items": [{"id": "myGenericDatasetId", "description": "This is a generic dataset", "provider": "myProviderId", "type": "cribl_lake", "metadata": {"created": "2025-10-06T12:00:00Z", "modified": "2025-10-06T12:34:56Z", "tags": ["prod", "pii"], "enableAcceleration": true}, "enabledEndpoints": ["users", "meetings", "recordings"]}]}
+          application/json: {"items": [{"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiZoomDataset", "enabledEndpoints": ["users", "meetings", "recordings"]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getDatasetAclById:
@@ -6968,7 +6961,7 @@ examples:
           disabled: false
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updatePacksById:
@@ -7389,7 +7382,7 @@ examples:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 4317, "maxActiveReq": 256, "maxRequestsPerSocket": 0, "requestTimeout": 0, "socketTimeout": 0, "keepAliveTimeout": 15, "enableHealthCheck": false, "ipAllowlistRegex": "/.*/", "ipDenylistRegex": "/^$/", "protocol": "grpc", "extractSpans": false, "extractMetrics": false, "otlpVersion": "0.10.0", "authType": "none", "maxActiveCxn": 1000, "authHeaderExpr": "`Bearer ${token}`", "tokenTimeoutSecs": 3600, "extractLogs": false}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSystemInputsByPack:
@@ -7405,7 +7398,7 @@ examples:
         application/json: {"id": "<id>", "type": "collection", "disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "staleChannelFlushMs": 10000, "throttleRatePerSec": "0"}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSystemInputsByPack:
@@ -7419,7 +7412,7 @@ examples:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "queueName": "<value>", "queueType": "standard", "createQueue": false, "awsAuthenticationMethod": "auto", "signatureVersion": "v4", "reuseConnections": true, "rejectUnauthorized": true, "enableAssumeRole": false, "durationSeconds": 3600, "maxMessages": 10, "visibilityTimeout": 600, "pollTimeout": 10, "numReceivers": 3}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemOutputsByPack:
@@ -7476,7 +7469,7 @@ examples:
         application/json: {"id": "countries.csv", "description": "Country code to name lookup", "tags": "geo,reference", "content": "US,United States\nCA,Canada", "mode": "memory"}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSystemLookupsByPackAndId:
@@ -7488,7 +7481,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteBreakersByPackAndId:
@@ -7500,7 +7493,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createRoutesByPack:

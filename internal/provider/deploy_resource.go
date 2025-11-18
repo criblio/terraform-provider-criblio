@@ -7,12 +7,10 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -61,14 +59,7 @@ func (r *DeployResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"provider": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["aws", "azure"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"aws",
-											"azure",
-										),
-									},
+									Computed: true,
 								},
 								"region": schema.StringAttribute{
 									Computed: true,
@@ -108,13 +99,7 @@ func (r *DeployResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Computed: true,
 						},
 						"type": schema.StringAttribute{
-							Computed:    true,
-							Description: `must be "lake_access"`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"lake_access",
-								),
-							},
+							Computed: true,
 						},
 						"worker_remote_access": schema.BoolAttribute{
 							Computed: true,

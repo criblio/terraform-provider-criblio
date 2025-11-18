@@ -7,7 +7,6 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -250,18 +249,7 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 									Computed: true,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["ldap", "splunk", "local", "saas", "saml", "openid"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"ldap",
-											"splunk",
-											"local",
-											"saas",
-											"saml",
-											"openid",
-										),
-									},
+									Computed: true,
 								},
 							},
 						},
@@ -294,18 +282,7 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"mode": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["single", "master", "worker", "edge", "managed-edge", "outpost"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"single",
-											"master",
-											"worker",
-											"edge",
-											"managed-edge",
-											"outpost",
-										),
-									},
+									Computed: true,
 								},
 							},
 						},
@@ -340,15 +317,7 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 									Computed: true,
 								},
 								"git_ops": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["none", "pull", "push"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"none",
-											"pull",
-											"push",
-										),
-									},
+									Computed: true,
 								},
 								"password": schema.StringAttribute{
 									Computed: true,
@@ -436,16 +405,7 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 									Computed: true,
 								},
 								"edge_metrics_mode": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["minimal", "basic", "all", "custom"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"minimal",
-											"basic",
-											"all",
-											"custom",
-										),
-									},
+									Computed: true,
 								},
 								"edge_nodes_count": schema.Float64Attribute{
 									Computed: true,
@@ -611,21 +571,9 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 									Attributes: map[string]schema.Attribute{
 										"number": schema.Float64Attribute{
 											Computed: true,
-											Validators: []validator.Float64{
-												float64validator.ConflictsWith(path.Expressions{
-													path.MatchRelative().AtParent().AtName("warm_pool_size_enum"),
-												}...),
-											},
 										},
 										"warm_pool_size_enum": schema.StringAttribute{
-											Computed:    true,
-											Description: `must be "auto"`,
-											Validators: []validator.String{
-												stringvalidator.ConflictsWith(path.Expressions{
-													path.MatchRelative().AtParent().AtName("number"),
-												}...),
-												stringvalidator.OneOf("auto"),
-											},
+											Computed: true,
 										},
 									},
 								},
@@ -694,14 +642,7 @@ func (r *GroupSystemSettingsResource) Schema(ctx context.Context, req resource.S
 									Computed: true,
 								},
 								"upgrade": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["false", "api"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"false",
-											"api",
-										),
-									},
+									Computed: true,
 								},
 							},
 						},

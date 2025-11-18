@@ -8,15 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *EventBreakerRulesetDataSourceModel) RefreshFromOperationsGetEventBreakerRulesetByIDResponseBody(ctx context.Context, resp *operations.GetEventBreakerRulesetByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *EventBreakerRulesetDataSourceModel) ToOperationsGetEventBreakerRulesetByIDRequest(ctx context.Context) (*operations.GetEventBreakerRulesetByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

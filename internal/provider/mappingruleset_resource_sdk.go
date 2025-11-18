@@ -11,6 +11,66 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *MappingRulesetResourceModel) RefreshFromOperationsCreateAdminProductsMappingsByProductResponseBody(ctx context.Context, resp *operations.CreateAdminProductsMappingsByProductResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedMappingRuleset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *MappingRulesetResourceModel) RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx context.Context, resp *operations.GetAdminProductsMappingsByProductAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedMappingRuleset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *MappingRulesetResourceModel) RefreshFromOperationsUpdateAdminProductsMappingsByProductAndIDResponseBody(ctx context.Context, resp *operations.UpdateAdminProductsMappingsByProductAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedMappingRuleset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *MappingRulesetResourceModel) RefreshFromSharedMappingRuleset(ctx context.Context, resp *shared.MappingRuleset) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -24,10 +84,10 @@ func (r *MappingRulesetResourceModel) RefreshFromSharedMappingRuleset(ctx contex
 		for _, functionsItem := range resp.Conf.Functions {
 			var functions tfTypes.MappingRulesetFunctionConf
 
-			functions.Conf.Add = []tfTypes.Add{}
+			functions.Conf.Add = []tfTypes.MappingRulesetFunctionConfAdd{}
 
 			for _, addItem := range functionsItem.Conf.Add {
-				var add tfTypes.Add
+				var add tfTypes.MappingRulesetFunctionConfAdd
 
 				add.Name = types.StringValue(addItem.Name)
 				add.Value = types.StringValue(addItem.Value)
@@ -134,53 +194,53 @@ func (r *MappingRulesetResourceModel) ToSharedMappingRuleset(ctx context.Context
 	var conf *shared.MappingRulesetConf
 	if r.Conf != nil {
 		functions := make([]shared.MappingRulesetFunctionConf, 0, len(r.Conf.Functions))
-		for _, functionsItem := range r.Conf.Functions {
+		for functionsIndex := range r.Conf.Functions {
 			filter := new(string)
-			if !functionsItem.Filter.IsUnknown() && !functionsItem.Filter.IsNull() {
-				*filter = functionsItem.Filter.ValueString()
+			if !r.Conf.Functions[functionsIndex].Filter.IsUnknown() && !r.Conf.Functions[functionsIndex].Filter.IsNull() {
+				*filter = r.Conf.Functions[functionsIndex].Filter.ValueString()
 			} else {
 				filter = nil
 			}
 			var id1 string
-			id1 = functionsItem.ID.ValueString()
+			id1 = r.Conf.Functions[functionsIndex].ID.ValueString()
 
 			description := new(string)
-			if !functionsItem.Description.IsUnknown() && !functionsItem.Description.IsNull() {
-				*description = functionsItem.Description.ValueString()
+			if !r.Conf.Functions[functionsIndex].Description.IsUnknown() && !r.Conf.Functions[functionsIndex].Description.IsNull() {
+				*description = r.Conf.Functions[functionsIndex].Description.ValueString()
 			} else {
 				description = nil
 			}
 			disabled := new(bool)
-			if !functionsItem.Disabled.IsUnknown() && !functionsItem.Disabled.IsNull() {
-				*disabled = functionsItem.Disabled.ValueBool()
+			if !r.Conf.Functions[functionsIndex].Disabled.IsUnknown() && !r.Conf.Functions[functionsIndex].Disabled.IsNull() {
+				*disabled = r.Conf.Functions[functionsIndex].Disabled.ValueBool()
 			} else {
 				disabled = nil
 			}
 			final := new(bool)
-			if !functionsItem.Final.IsUnknown() && !functionsItem.Final.IsNull() {
-				*final = functionsItem.Final.ValueBool()
+			if !r.Conf.Functions[functionsIndex].Final.IsUnknown() && !r.Conf.Functions[functionsIndex].Final.IsNull() {
+				*final = r.Conf.Functions[functionsIndex].Final.ValueBool()
 			} else {
 				final = nil
 			}
-			add := make([]shared.Add, 0, len(functionsItem.Conf.Add))
-			for _, addItem := range functionsItem.Conf.Add {
+			add := make([]shared.MappingRulesetFunctionConfAdd, 0, len(r.Conf.Functions[functionsIndex].Conf.Add))
+			for addIndex := range r.Conf.Functions[functionsIndex].Conf.Add {
 				var name string
-				name = addItem.Name.ValueString()
+				name = r.Conf.Functions[functionsIndex].Conf.Add[addIndex].Name.ValueString()
 
 				var value string
-				value = addItem.Value.ValueString()
+				value = r.Conf.Functions[functionsIndex].Conf.Add[addIndex].Value.ValueString()
 
-				add = append(add, shared.Add{
+				add = append(add, shared.MappingRulesetFunctionConfAdd{
 					Name:  name,
 					Value: value,
 				})
 			}
-			conf1 := shared.FunctionSpecificConfigs{
+			conf1 := shared.MappingRulesetFunctionConfFunctionSpecificConfigs{
 				Add: add,
 			}
 			groupID := new(string)
-			if !functionsItem.GroupID.IsUnknown() && !functionsItem.GroupID.IsNull() {
-				*groupID = functionsItem.GroupID.ValueString()
+			if !r.Conf.Functions[functionsIndex].GroupID.IsUnknown() && !r.Conf.Functions[functionsIndex].GroupID.IsNull() {
+				*groupID = r.Conf.Functions[functionsIndex].GroupID.ValueString()
 			} else {
 				groupID = nil
 			}

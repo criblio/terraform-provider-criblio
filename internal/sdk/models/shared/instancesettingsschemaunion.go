@@ -150,17 +150,43 @@ func CreateInstanceSettingsSchemaUnionInstanceSettingsSchema2(instanceSettingsSc
 
 func (u *InstanceSettingsSchemaUnion) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var instanceSettingsSchema1 InstanceSettingsSchema1 = InstanceSettingsSchema1{}
 	if err := utils.UnmarshalJSON(data, &instanceSettingsSchema1, "", true, nil); err == nil {
-		u.InstanceSettingsSchema1 = &instanceSettingsSchema1
-		u.Type = InstanceSettingsSchemaUnionTypeInstanceSettingsSchema1
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InstanceSettingsSchemaUnionTypeInstanceSettingsSchema1,
+			Value: &instanceSettingsSchema1,
+		})
 	}
 
 	var instanceSettingsSchema2 InstanceSettingsSchema2 = InstanceSettingsSchema2{}
 	if err := utils.UnmarshalJSON(data, &instanceSettingsSchema2, "", true, nil); err == nil {
-		u.InstanceSettingsSchema2 = &instanceSettingsSchema2
-		u.Type = InstanceSettingsSchemaUnionTypeInstanceSettingsSchema2
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InstanceSettingsSchemaUnionTypeInstanceSettingsSchema2,
+			Value: &instanceSettingsSchema2,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InstanceSettingsSchemaUnion", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InstanceSettingsSchemaUnion", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(InstanceSettingsSchemaUnionType)
+	switch best.Type {
+	case InstanceSettingsSchemaUnionTypeInstanceSettingsSchema1:
+		u.InstanceSettingsSchema1 = best.Value.(*InstanceSettingsSchema1)
+		return nil
+	case InstanceSettingsSchemaUnionTypeInstanceSettingsSchema2:
+		u.InstanceSettingsSchema2 = best.Value.(*InstanceSettingsSchema2)
 		return nil
 	}
 

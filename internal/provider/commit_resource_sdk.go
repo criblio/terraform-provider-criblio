@@ -61,8 +61,8 @@ func (r *CommitResourceModel) ToSharedGitCommitParams(ctx context.Context) (*sha
 		effective = nil
 	}
 	files := make([]string, 0, len(r.Files))
-	for _, filesItem := range r.Files {
-		files = append(files, filesItem.ValueString())
+	for filesIndex := range r.Files {
+		files = append(files, r.Files[filesIndex].ValueString())
 	}
 	group := new(string)
 	if !r.Group.IsUnknown() && !r.Group.IsNull() {

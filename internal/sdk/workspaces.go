@@ -461,6 +461,7 @@ func (s *Workspaces) V1WorkspacesListWorkspaces(ctx context.Context, request ope
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
 	}
 
 	return res, nil
@@ -1073,6 +1074,7 @@ func (s *Workspaces) V1WorkspacesGetWorkspace(ctx context.Context, request opera
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
 	}
 
 	return res, nil

@@ -6,11 +6,32 @@ import (
 	"context"
 	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
+
+func (r *SearchDashboardDataSourceModel) RefreshFromOperationsListSearchDashboardResponseBody(ctx context.Context, resp *operations.ListSearchDashboardResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSearchDashboard(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
 
 func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx context.Context, resp *shared.SearchDashboard) diag.Diagnostics {
 	var diags diag.Diagnostics

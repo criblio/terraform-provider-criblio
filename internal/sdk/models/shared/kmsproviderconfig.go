@@ -198,17 +198,43 @@ func CreateAuthKMSProviderConfigAuth2(kmsProviderConfigAuth2 KMSProviderConfigAu
 
 func (u *Auth) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var kmsProviderConfigAuth1 KMSProviderConfigAuth1 = KMSProviderConfigAuth1{}
 	if err := utils.UnmarshalJSON(data, &kmsProviderConfigAuth1, "", true, nil); err == nil {
-		u.KMSProviderConfigAuth1 = &kmsProviderConfigAuth1
-		u.Type = AuthTypeKMSProviderConfigAuth1
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  AuthTypeKMSProviderConfigAuth1,
+			Value: &kmsProviderConfigAuth1,
+		})
 	}
 
 	var kmsProviderConfigAuth2 KMSProviderConfigAuth2 = KMSProviderConfigAuth2{}
 	if err := utils.UnmarshalJSON(data, &kmsProviderConfigAuth2, "", true, nil); err == nil {
-		u.KMSProviderConfigAuth2 = &kmsProviderConfigAuth2
-		u.Type = AuthTypeKMSProviderConfigAuth2
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  AuthTypeKMSProviderConfigAuth2,
+			Value: &kmsProviderConfigAuth2,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Auth", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Auth", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(AuthType)
+	switch best.Type {
+	case AuthTypeKMSProviderConfigAuth1:
+		u.KMSProviderConfigAuth1 = best.Value.(*KMSProviderConfigAuth1)
+		return nil
+	case AuthTypeKMSProviderConfigAuth2:
+		u.KMSProviderConfigAuth2 = best.Value.(*KMSProviderConfigAuth2)
 		return nil
 	}
 

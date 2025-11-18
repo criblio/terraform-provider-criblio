@@ -348,8 +348,8 @@ func (r *PackResourceModel) ToSharedPackRequestBody(ctx context.Context) (*share
 		displayName = nil
 	}
 	exports := make([]string, 0, len(r.Exports))
-	for _, exportsItem := range r.Exports {
-		exports = append(exports, exportsItem.ValueString())
+	for exportsIndex := range r.Exports {
+		exports = append(exports, r.Exports[exportsIndex].ValueString())
 	}
 	force := new(bool)
 	if !r.Force.IsUnknown() && !r.Force.IsNull() {
@@ -399,20 +399,20 @@ func (r *PackResourceModel) ToSharedPackRequestBody(ctx context.Context) (*share
 	var tags *shared.PackRequestBodyTags
 	if r.Tags != nil {
 		dataType := make([]string, 0, len(r.Tags.DataType))
-		for _, dataTypeItem := range r.Tags.DataType {
-			dataType = append(dataType, dataTypeItem.ValueString())
+		for dataTypeIndex := range r.Tags.DataType {
+			dataType = append(dataType, r.Tags.DataType[dataTypeIndex].ValueString())
 		}
 		domain := make([]string, 0, len(r.Tags.Domain))
-		for _, domainItem := range r.Tags.Domain {
-			domain = append(domain, domainItem.ValueString())
+		for domainIndex := range r.Tags.Domain {
+			domain = append(domain, r.Tags.Domain[domainIndex].ValueString())
 		}
 		streamtags := make([]string, 0, len(r.Tags.Streamtags))
-		for _, streamtagsItem := range r.Tags.Streamtags {
-			streamtags = append(streamtags, streamtagsItem.ValueString())
+		for streamtagsIndex := range r.Tags.Streamtags {
+			streamtags = append(streamtags, r.Tags.Streamtags[streamtagsIndex].ValueString())
 		}
 		technology := make([]string, 0, len(r.Tags.Technology))
-		for _, technologyItem := range r.Tags.Technology {
-			technology = append(technology, technologyItem.ValueString())
+		for technologyIndex := range r.Tags.Technology {
+			technology = append(technology, r.Tags.Technology[technologyIndex].ValueString())
 		}
 		tags = &shared.PackRequestBodyTags{
 			DataType:   dataType,

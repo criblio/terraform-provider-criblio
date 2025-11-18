@@ -10,6 +10,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *SubscriptionDataSourceModel) RefreshFromOperationsGetSubscriptionByIDResponseBody(ctx context.Context, resp *operations.GetSubscriptionByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedSubscription(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *SubscriptionDataSourceModel) RefreshFromSharedSubscription(ctx context.Context, resp *shared.Subscription) diag.Diagnostics {
 	var diags diag.Diagnostics
 

@@ -1871,17 +1871,43 @@ func CreateOutputGrafanaCloudOutputGrafanaCloudGrafanaCloud2(outputGrafanaCloudG
 
 func (u *OutputGrafanaCloud) UnmarshalJSON(data []byte) error {
 
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
 	var outputGrafanaCloudGrafanaCloud1 OutputGrafanaCloudGrafanaCloud1 = OutputGrafanaCloudGrafanaCloud1{}
 	if err := utils.UnmarshalJSON(data, &outputGrafanaCloudGrafanaCloud1, "", true, nil); err == nil {
-		u.OutputGrafanaCloudGrafanaCloud1 = &outputGrafanaCloudGrafanaCloud1
-		u.Type = OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud1
-		return nil
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud1,
+			Value: &outputGrafanaCloudGrafanaCloud1,
+		})
 	}
 
 	var outputGrafanaCloudGrafanaCloud2 OutputGrafanaCloudGrafanaCloud2 = OutputGrafanaCloudGrafanaCloud2{}
 	if err := utils.UnmarshalJSON(data, &outputGrafanaCloudGrafanaCloud2, "", true, nil); err == nil {
-		u.OutputGrafanaCloudGrafanaCloud2 = &outputGrafanaCloudGrafanaCloud2
-		u.Type = OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud2
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud2,
+			Value: &outputGrafanaCloudGrafanaCloud2,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for OutputGrafanaCloud", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestCandidate(candidates)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for OutputGrafanaCloud", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(OutputGrafanaCloudType)
+	switch best.Type {
+	case OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud1:
+		u.OutputGrafanaCloudGrafanaCloud1 = best.Value.(*OutputGrafanaCloudGrafanaCloud1)
+		return nil
+	case OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud2:
+		u.OutputGrafanaCloudGrafanaCloud2 = best.Value.(*OutputGrafanaCloudGrafanaCloud2)
 		return nil
 	}
 

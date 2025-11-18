@@ -10,6 +10,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+func (r *HmacFunctionDataSourceModel) RefreshFromOperationsGetHmacFunctionByIDResponseBody(ctx context.Context, resp *operations.GetHmacFunctionByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedHmacFunction(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *HmacFunctionDataSourceModel) RefreshFromSharedHmacFunction(ctx context.Context, resp *shared.HmacFunction) diag.Diagnostics {
 	var diags diag.Diagnostics
 

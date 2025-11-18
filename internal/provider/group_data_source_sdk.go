@@ -8,15 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func (r *GroupDataSourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ctx context.Context, resp *operations.GetGroupsByIDResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *GroupDataSourceModel) ToOperationsGetGroupsByIDRequest(ctx context.Context) (*operations.GetGroupsByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
