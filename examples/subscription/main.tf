@@ -25,5 +25,5 @@ resource "criblio_subscription" "my_subscription_with_enabled" {
 }
 
 output "subscription" {
-  value = criblio_subscription.my_subscription
+  value = criblio_subscription.my_subscription[0]
 }

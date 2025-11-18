@@ -15,5 +15,5 @@ resource "criblio_project" "my_project" {
 }
 
 output "project" {
-  value = criblio_project.my_project
+  value = criblio_project.my_project[0]
 }

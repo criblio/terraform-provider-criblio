@@ -11,7 +11,7 @@ import (
 
 func TestGrok(t *testing.T) {
 	if os.Getenv("DEPLOYMENT") == "onprem" {
-		time.Sleep(2 * time.Second)
+		t.Skip("Skipping resource for On-Prem deployments as it is 'prohibited by current license'")
 	}
 
 	t.Run("plan-diff", func(t *testing.T) {
