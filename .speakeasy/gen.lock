@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: e1690fd4efcb2abf40c87e04dc37beeb
+  docChecksum: 475f0b85916621c4fd760df4beb3d596
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.19.1
-  configChecksum: d5d7e82c6173d971d8b27b0693ebec2a
+  releaseVersion: 1.20.2
+  configChecksum: 1eda236d4a2d9e3fe87321f9eb4acad5
   published: true
 features:
   terraform:
@@ -543,7 +543,6 @@ generatedFiles:
   - internal/provider/types/git_commit_summary_files.go
   - internal/provider/types/git_settings.go
   - internal/provider/types/google_workspace_account_config.go
-  - internal/provider/types/grok_file.go
   - internal/provider/types/host_info.go
   - internal/provider/types/hosts_file.go
   - internal/provider/types/http_endpoint.go
@@ -1340,7 +1339,6 @@ generatedFiles:
   - internal/provider/types/s3_provider.go
   - internal/provider/types/sample.go
   - internal/provider/types/sas_config.go
-  - internal/provider/types/saved_query.go
   - internal/provider/types/saved_query_schedule.go
   - internal/provider/types/scheduling_state_tracking.go
   - internal/provider/types/schema_lib_entry.go

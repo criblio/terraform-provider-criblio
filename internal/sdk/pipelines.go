@@ -3062,10 +3062,10 @@ func (s *Pipelines) DeleteSystemInputsByPack(ctx context.Context, request operat
 		} else {
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
-					InitialInterval: 500,
-					MaxInterval:     60000,
-					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					InitialInterval: 1000,
+					MaxInterval:     30000,
+					Exponent:        2,
+					MaxElapsedTime:  900000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -3077,9 +3077,10 @@ func (s *Pipelines) DeleteSystemInputsByPack(ctx context.Context, request operat
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
-				"502",
-				"503",
-				"504",
+				"400",
+				"401",
+				"404",
+				"500",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {

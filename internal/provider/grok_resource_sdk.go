@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -15,17 +14,17 @@ func (r *GrokResourceModel) RefreshFromOperationsCreateGrokFileResponseBody(ctx 
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.GrokFile{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.GrokFile
-
-			items.Content = types.StringValue(itemsItem.Content)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedGrokFile(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -35,17 +34,17 @@ func (r *GrokResourceModel) RefreshFromOperationsGetGrokFileByIDResponseBody(ctx
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.GrokFile{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.GrokFile
-
-			items.Content = types.StringValue(itemsItem.Content)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedGrokFile(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -55,17 +54,17 @@ func (r *GrokResourceModel) RefreshFromOperationsUpdateGrokFileByIDResponseBody(
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.GrokFile{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.GrokFile
-
-			items.Content = types.StringValue(itemsItem.Content)
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Tags = types.StringPointerValue(itemsItem.Tags)
-
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedGrokFile(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags

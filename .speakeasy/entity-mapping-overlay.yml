@@ -251,13 +251,13 @@ actions:
     update:
       x-speakeasy-entity: PackVars
 
-  - target: "$.paths['/m/default_search/search/saved/{id}'].get.responses['200'].content.application/json.schema"
-    update:
-      x-speakeasy-entity: SearchSavedQuery
-
-  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].get.responses['200'].content.application/json.schema"
+  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
       x-speakeasy-entity: Grok
+
+  - target: "$.paths['/m/default_search/search/saved/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
+    update:
+      x-speakeasy-entity: SearchSavedQuery
 
   - target: "$.paths['/master/groups/{id}'].get.responses['200'].content.application/json.schema"
     update:
