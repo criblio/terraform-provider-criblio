@@ -129,7 +129,7 @@ Optional:
 - `description` (String) Description of the provider
 - `endpoint` (String) Elasticsearch API endpoint URL. Not Null
 - `id` (String) Unique identifier for the provider. Not Null
-- `password` (String) Elasticsearch password for authentication. Not Null
+- `password` (String, Sensitive) Elasticsearch password for authentication. Not Null
 - `type` (String) Type of the provider. Not Null
 - `username` (String) Elasticsearch username for authentication. Not Null
 
@@ -424,7 +424,7 @@ Optional:
 - `assume_role_external_id` (String) External ID for role assumption
 - `aws_api_key` (String) AWS access key
 - `aws_authentication_method` (String) AWS authentication method. must be one of ["auto", "manual"]
-- `aws_secret_key` (String) AWS secret key
+- `aws_secret_key` (String, Sensitive) AWS secret key
 - `bucket` (String) S3 bucket name
 - `bucket_path_suggestion` (String) Suggested bucket path
 - `description` (String) Description of the provider

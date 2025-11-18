@@ -14,7 +14,8 @@ import (
 func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsCreateDatasetProviderResponseBody(ctx context.Context, resp *operations.CreateDatasetProviderResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
+	if resp != nil && len(resp.Items) > 0 {
+		diags.Append(r.RefreshFromSharedGenericProvider(ctx, &resp.Items[0])...)
 	}
 
 	return diags
@@ -23,7 +24,8 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsCreateDatasetP
 func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsGetDatasetProviderByIDResponseBody(ctx context.Context, resp *operations.GetDatasetProviderByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
+	if resp != nil && len(resp.Items) > 0 {
+		diags.Append(r.RefreshFromSharedGenericProvider(ctx, &resp.Items[0])...)
 	}
 
 	return diags
@@ -32,7 +34,8 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsGetDatasetProv
 func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsUpdateDatasetProviderByIDResponseBody(ctx context.Context, resp *operations.UpdateDatasetProviderByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
+	if resp != nil && len(resp.Items) > 0 {
+		diags.Append(r.RefreshFromSharedGenericProvider(ctx, &resp.Items[0])...)
 	}
 
 	return diags

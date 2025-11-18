@@ -5,8 +5,8 @@ management:
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.6
-  configChecksum: bd38cc87d4467875d89873f2497692fc
+  releaseVersion: 1.20.23
+  configChecksum: cebce80239a3b8062ea733c37dd4ca05
   published: true
 features:
   terraform:
@@ -391,12 +391,8 @@ generatedFiles:
   - internal/provider/searchdashboardcategory_resource_sdk.go
   - internal/provider/searchdataset_data_source.go
   - internal/provider/searchdataset_data_source_sdk.go
-  - internal/provider/searchdataset_resource.go
-  - internal/provider/searchdataset_resource_sdk.go
   - internal/provider/searchdatasetprovider_data_source.go
   - internal/provider/searchdatasetprovider_data_source_sdk.go
-  - internal/provider/searchdatasetprovider_resource.go
-  - internal/provider/searchdatasetprovider_resource_sdk.go
   - internal/provider/searchmacro_data_source.go
   - internal/provider/searchmacro_data_source_sdk.go
   - internal/provider/searchmacro_resource.go
@@ -2087,8 +2083,6 @@ generatedFiles:
   - internal/sdk/models/shared/function.go
   - internal/sdk/models/shared/gcpaccountconfig.go
   - internal/sdk/models/shared/gcpendpointconfig.go
-  - internal/sdk/models/shared/genericdataset.go
-  - internal/sdk/models/shared/genericprovider.go
   - internal/sdk/models/shared/gitcommitparams.go
   - internal/sdk/models/shared/gitcommitsummary.go
   - internal/sdk/models/shared/gitfile.go
@@ -4374,6 +4368,8 @@ examples:
       parameters:
         path:
           groupId: "<id>"
+        query:
+          id: "provider-s3"
       requestBody:
         application/json: {"id": "myUniqueGenericProviderId", "type": "ApiTailscaleProvider", "accountConfigs": [{"name": "tailscale-account-1", "clientId": "tailscale-client-id-123", "clientSecret": "tailscale-client-secret-abc"}]}
       responses:
@@ -4431,6 +4427,8 @@ examples:
       parameters:
         path:
           groupId: "<id>"
+        query:
+          id: "web-logs"
       requestBody:
         application/json: {"id": "myGenericDatasetId", "provider": "myProviderId", "type": "ApiAzureDataExplorerDataset", "cluster": "myadxcluster", "location": "eastus2", "database": "logsdb", "table": "logs", "timestampFieldContents": "kusto_datetime"}
       responses:

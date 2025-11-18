@@ -1949,199 +1949,199 @@ func (u *GenericProvider) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.Type {
-	case "ApiHttpProvider":
+	case "api_http":
 		apiHTTPProvider := new(APIHTTPProvider)
 		if err := utils.UnmarshalJSON(data, &apiHTTPProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiHttpProvider) type APIHTTPProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_http) type APIHTTPProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIHTTPProvider = apiHTTPProvider
 		u.Type = GenericProviderTypeAPIHTTPProvider
 		return nil
-	case "ApiAwsProvider":
+	case "api_aws":
 		apiAwsProvider := new(APIAwsProvider)
 		if err := utils.UnmarshalJSON(data, &apiAwsProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAwsProvider) type APIAwsProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_aws) type APIAwsProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIAwsProvider = apiAwsProvider
 		u.Type = GenericProviderTypeAPIAwsProvider
 		return nil
-	case "ApiAzureProvider":
+	case "api_azure":
 		apiAzureProvider := new(APIAzureProvider)
 		if err := utils.UnmarshalJSON(data, &apiAzureProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAzureProvider) type APIAzureProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_azure) type APIAzureProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIAzureProvider = apiAzureProvider
 		u.Type = GenericProviderTypeAPIAzureProvider
 		return nil
-	case "ApiGcpProvider":
+	case "api_gcp":
 		apiGcpProvider := new(APIGcpProvider)
 		if err := utils.UnmarshalJSON(data, &apiGcpProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiGcpProvider) type APIGcpProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_gcp) type APIGcpProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIGcpProvider = apiGcpProvider
 		u.Type = GenericProviderTypeAPIGcpProvider
 		return nil
-	case "ApiGoogleWorkspaceProvider":
+	case "api_google_workspace":
 		apiGoogleWorkspaceProvider := new(APIGoogleWorkspaceProvider)
 		if err := utils.UnmarshalJSON(data, &apiGoogleWorkspaceProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiGoogleWorkspaceProvider) type APIGoogleWorkspaceProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_google_workspace) type APIGoogleWorkspaceProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIGoogleWorkspaceProvider = apiGoogleWorkspaceProvider
 		u.Type = GenericProviderTypeAPIGoogleWorkspaceProvider
 		return nil
-	case "ApiMsGraphProvider":
+	case "api_msgraph":
 		apiMsGraphProvider := new(APIMsGraphProvider)
 		if err := utils.UnmarshalJSON(data, &apiMsGraphProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiMsGraphProvider) type APIMsGraphProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_msgraph) type APIMsGraphProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIMsGraphProvider = apiMsGraphProvider
 		u.Type = GenericProviderTypeAPIMsGraphProvider
 		return nil
-	case "ApiOktaProvider":
+	case "api_okta":
 		apiOktaProvider := new(APIOktaProvider)
 		if err := utils.UnmarshalJSON(data, &apiOktaProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiOktaProvider) type APIOktaProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_okta) type APIOktaProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIOktaProvider = apiOktaProvider
 		u.Type = GenericProviderTypeAPIOktaProvider
 		return nil
-	case "ApiTailscaleProvider":
+	case "api_tailscale":
 		apiTailscaleProvider := new(APITailscaleProvider)
 		if err := utils.UnmarshalJSON(data, &apiTailscaleProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiTailscaleProvider) type APITailscaleProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_tailscale) type APITailscaleProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APITailscaleProvider = apiTailscaleProvider
 		u.Type = GenericProviderTypeAPITailscaleProvider
 		return nil
-	case "ApiZoomProvider":
+	case "api_zoom":
 		apiZoomProvider := new(APIZoomProvider)
 		if err := utils.UnmarshalJSON(data, &apiZoomProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiZoomProvider) type APIZoomProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_zoom) type APIZoomProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIZoomProvider = apiZoomProvider
 		u.Type = GenericProviderTypeAPIZoomProvider
 		return nil
-	case "ApiAzureDataExplorerProvider":
+	case "api_azure_data_explorer":
 		apiAzureDataExplorerProvider := new(APIAzureDataExplorerProvider)
 		if err := utils.UnmarshalJSON(data, &apiAzureDataExplorerProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAzureDataExplorerProvider) type APIAzureDataExplorerProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_azure_data_explorer) type APIAzureDataExplorerProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIAzureDataExplorerProvider = apiAzureDataExplorerProvider
 		u.Type = GenericProviderTypeAPIAzureDataExplorerProvider
 		return nil
-	case "SnowflakeProvider":
+	case "snowflake":
 		snowflakeProvider := new(SnowflakeProvider)
 		if err := utils.UnmarshalJSON(data, &snowflakeProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == SnowflakeProvider) type SnowflakeProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == snowflake) type SnowflakeProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.SnowflakeProvider = snowflakeProvider
 		u.Type = GenericProviderTypeSnowflakeProvider
 		return nil
-	case "ClickHouseProvider":
+	case "clickhouse":
 		clickHouseProvider := new(ClickHouseProvider)
 		if err := utils.UnmarshalJSON(data, &clickHouseProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ClickHouseProvider) type ClickHouseProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == clickhouse) type ClickHouseProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.ClickHouseProvider = clickHouseProvider
 		u.Type = GenericProviderTypeClickHouseProvider
 		return nil
-	case "PrometheusProvider":
+	case "prometheus":
 		prometheusProvider := new(PrometheusProvider)
 		if err := utils.UnmarshalJSON(data, &prometheusProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == PrometheusProvider) type PrometheusProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == prometheus) type PrometheusProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.PrometheusProvider = prometheusProvider
 		u.Type = GenericProviderTypePrometheusProvider
 		return nil
-	case "ApiOpenSearchProvider":
+	case "api_opensearch":
 		apiOpenSearchProvider := new(APIOpenSearchProvider)
 		if err := utils.UnmarshalJSON(data, &apiOpenSearchProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiOpenSearchProvider) type APIOpenSearchProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_opensearch) type APIOpenSearchProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIOpenSearchProvider = apiOpenSearchProvider
 		u.Type = GenericProviderTypeAPIOpenSearchProvider
 		return nil
-	case "ApiElasticSearchProvider":
+	case "api_elasticsearch":
 		apiElasticSearchProvider := new(APIElasticSearchProvider)
 		if err := utils.UnmarshalJSON(data, &apiElasticSearchProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiElasticSearchProvider) type APIElasticSearchProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_elasticsearch) type APIElasticSearchProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.APIElasticSearchProvider = apiElasticSearchProvider
 		u.Type = GenericProviderTypeAPIElasticSearchProvider
 		return nil
-	case "AwsSecurityLakeProvider":
+	case "amazon_security_lake":
 		awsSecurityLakeProvider := new(AwsSecurityLakeProvider)
 		if err := utils.UnmarshalJSON(data, &awsSecurityLakeProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == AwsSecurityLakeProvider) type AwsSecurityLakeProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == amazon_security_lake) type AwsSecurityLakeProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.AwsSecurityLakeProvider = awsSecurityLakeProvider
 		u.Type = GenericProviderTypeAwsSecurityLakeProvider
 		return nil
-	case "S3Provider":
+	case "s3":
 		s3Provider := new(S3Provider)
 		if err := utils.UnmarshalJSON(data, &s3Provider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == S3Provider) type S3Provider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == s3) type S3Provider within GenericProvider: %w", string(data), err)
 		}
 
 		u.S3Provider = s3Provider
 		u.Type = GenericProviderTypeS3Provider
 		return nil
-	case "CriblLeaderProvider":
+	case "cribl_leader":
 		criblLeaderProvider := new(CriblLeaderProvider)
 		if err := utils.UnmarshalJSON(data, &criblLeaderProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == CriblLeaderProvider) type CriblLeaderProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == cribl_leader) type CriblLeaderProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.CriblLeaderProvider = criblLeaderProvider
 		u.Type = GenericProviderTypeCriblLeaderProvider
 		return nil
-	case "MetaProvider":
+	case "cribl_meta":
 		metaProvider := new(MetaProvider)
 		if err := utils.UnmarshalJSON(data, &metaProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == MetaProvider) type MetaProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == cribl_meta) type MetaProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.MetaProvider = metaProvider
 		u.Type = GenericProviderTypeMetaProvider
 		return nil
-	case "EdgeProvider":
+	case "cribl_edge":
 		edgeProvider := new(EdgeProvider)
 		if err := utils.UnmarshalJSON(data, &edgeProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == EdgeProvider) type EdgeProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == cribl_edge) type EdgeProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.EdgeProvider = edgeProvider
 		u.Type = GenericProviderTypeEdgeProvider
 		return nil
-	case "AzureBlobProvider":
+	case "azure_blob":
 		azureBlobProvider := new(AzureBlobProvider)
 		if err := utils.UnmarshalJSON(data, &azureBlobProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == AzureBlobProvider) type AzureBlobProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == azure_blob) type AzureBlobProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.AzureBlobProvider = azureBlobProvider
 		u.Type = GenericProviderTypeAzureBlobProvider
 		return nil
-	case "GcsProvider":
+	case "gcs":
 		gcsProvider := new(GcsProvider)
 		if err := utils.UnmarshalJSON(data, &gcsProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == GcsProvider) type GcsProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == gcs) type GcsProvider within GenericProvider: %w", string(data), err)
 		}
 
 		u.GcsProvider = gcsProvider

@@ -2,3 +2,9 @@ internal/provider/routes_resource.go
 internal/provider/packroutes_resource.go
 internal/provider/pack_resource.go
 internal/provider/packpipeline_resource.go
+internal/sdk/models/shared/genericprovider.go
+internal/sdk/models/shared/genericdataset.go
+internal/provider/searchdatasetprovider_resource_sdk.go
+internal/provider/searchdataset_resource_sdk.go
+internal/provider/searchdatasetprovider_resource.go
+internal/provider/searchdataset_resource.go

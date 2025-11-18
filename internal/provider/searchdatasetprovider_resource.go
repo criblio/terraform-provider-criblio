@@ -16,7 +16,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -372,15 +374,19 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 							speakeasy_stringvalidators.NotNull(),
 						},
 					},
-					"password": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Elasticsearch password for authentication. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-							stringvalidator.UTF8LengthAtLeast(1),
-						},
+				"password": schema.StringAttribute{
+					Computed:    true,
+					Optional:    true,
+					Sensitive:   true,
+					Description: `Elasticsearch password for authentication. Not Null`,
+					PlanModifiers: []planmodifier.String{
+						stringplanmodifier.UseStateForUnknown(),
 					},
+					Validators: []validator.String{
+						speakeasy_stringvalidators.NotNull(),
+						stringvalidator.UTF8LengthAtLeast(1),
+					},
+				},
 					"type": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -1503,10 +1509,13 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					}...),
 				},
 			},
-			"description": schema.StringAttribute{
-				Computed:    true,
-				Description: `Description of the provider`,
+		"description": schema.StringAttribute{
+			Computed:    true,
+			Description: `Description of the provider`,
+			PlanModifiers: []planmodifier.String{
+				stringplanmodifier.UseStateForUnknown(),
 			},
+		},
 			"edge_provider": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -1623,10 +1632,13 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					}...),
 				},
 			},
-			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Unique identifier for the provider`,
+		"id": schema.StringAttribute{
+			Computed:    true,
+			Description: `Unique identifier for the provider`,
+			PlanModifiers: []planmodifier.String{
+				stringplanmodifier.UseStateForUnknown(),
 			},
+		},
 			"meta_provider": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -1790,23 +1802,27 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						Optional:    true,
 						Description: `AWS access key`,
 					},
-					"aws_authentication_method": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `AWS authentication method. must be one of ["auto", "manual"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"auto",
-								"manual",
-							),
-						},
+				"aws_authentication_method": schema.StringAttribute{
+					Computed:    true,
+					Optional:    true,
+					Description: `AWS authentication method. must be one of ["auto", "manual"]`,
+					Validators: []validator.String{
+						stringvalidator.OneOf(
+							"auto",
+							"manual",
+						),
 					},
-					"aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `AWS secret key`,
+				},
+				"aws_secret_key": schema.StringAttribute{
+					Computed:    true,
+					Optional:    true,
+					Sensitive:   true,
+					Description: `AWS secret key`,
+					PlanModifiers: []planmodifier.String{
+						stringplanmodifier.UseStateForUnknown(),
 					},
-					"bucket": schema.StringAttribute{
+				},
+				"bucket": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
 						Description: `S3 bucket name`,
@@ -2001,10 +2017,13 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					}...),
 				},
 			},
-			"type": schema.StringAttribute{
-				Computed:    true,
-				Description: `Type of the provider`,
+		"type": schema.StringAttribute{
+			Computed:    true,
+			Description: `Type of the provider`,
+			PlanModifiers: []planmodifier.String{
+				stringplanmodifier.UseStateForUnknown(),
 			},
+		},
 		},
 	}
 }

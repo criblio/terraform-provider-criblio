@@ -2413,199 +2413,199 @@ func (u *GenericDataset) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.Type {
-	case "ApiHttpDataset":
+	case "api_http":
 		apiHTTPDataset := new(APIHTTPDataset)
 		if err := utils.UnmarshalJSON(data, &apiHTTPDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiHttpDataset) type APIHTTPDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_http) type APIHTTPDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIHTTPDataset = apiHTTPDataset
 		u.Type = GenericDatasetTypeAPIHTTPDataset
 		return nil
-	case "ApiAwsDataset":
+	case "api_aws":
 		apiAwsDataset := new(APIAwsDataset)
 		if err := utils.UnmarshalJSON(data, &apiAwsDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAwsDataset) type APIAwsDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_aws) type APIAwsDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIAwsDataset = apiAwsDataset
 		u.Type = GenericDatasetTypeAPIAwsDataset
 		return nil
-	case "ApiAzureDataset":
+	case "api_azure":
 		apiAzureDataset := new(APIAzureDataset)
 		if err := utils.UnmarshalJSON(data, &apiAzureDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAzureDataset) type APIAzureDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_azure) type APIAzureDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIAzureDataset = apiAzureDataset
 		u.Type = GenericDatasetTypeAPIAzureDataset
 		return nil
-	case "ApiGcpDataset":
+	case "api_gcp":
 		apiGcpDataset := new(APIGcpDataset)
 		if err := utils.UnmarshalJSON(data, &apiGcpDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiGcpDataset) type APIGcpDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_gcp) type APIGcpDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIGcpDataset = apiGcpDataset
 		u.Type = GenericDatasetTypeAPIGcpDataset
 		return nil
-	case "ApiGoogleWorkspaceDataset":
+	case "api_google_workspace":
 		apiGoogleWorkspaceDataset := new(APIGoogleWorkspaceDataset)
 		if err := utils.UnmarshalJSON(data, &apiGoogleWorkspaceDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiGoogleWorkspaceDataset) type APIGoogleWorkspaceDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_google_workspace) type APIGoogleWorkspaceDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIGoogleWorkspaceDataset = apiGoogleWorkspaceDataset
 		u.Type = GenericDatasetTypeAPIGoogleWorkspaceDataset
 		return nil
-	case "ApiMsGraphDataset":
+	case "api_msgraph":
 		apiMsGraphDataset := new(APIMsGraphDataset)
 		if err := utils.UnmarshalJSON(data, &apiMsGraphDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiMsGraphDataset) type APIMsGraphDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_msgraph) type APIMsGraphDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIMsGraphDataset = apiMsGraphDataset
 		u.Type = GenericDatasetTypeAPIMsGraphDataset
 		return nil
-	case "ApiOktaDataset":
+	case "api_okta":
 		apiOktaDataset := new(APIOktaDataset)
 		if err := utils.UnmarshalJSON(data, &apiOktaDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiOktaDataset) type APIOktaDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_okta) type APIOktaDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIOktaDataset = apiOktaDataset
 		u.Type = GenericDatasetTypeAPIOktaDataset
 		return nil
-	case "ApiTailscaleDataset":
+	case "api_tailscale":
 		apiTailscaleDataset := new(APITailscaleDataset)
 		if err := utils.UnmarshalJSON(data, &apiTailscaleDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiTailscaleDataset) type APITailscaleDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_tailscale) type APITailscaleDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APITailscaleDataset = apiTailscaleDataset
 		u.Type = GenericDatasetTypeAPITailscaleDataset
 		return nil
-	case "ApiZoomDataset":
+	case "api_zoom":
 		apiZoomDataset := new(APIZoomDataset)
 		if err := utils.UnmarshalJSON(data, &apiZoomDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiZoomDataset) type APIZoomDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_zoom) type APIZoomDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIZoomDataset = apiZoomDataset
 		u.Type = GenericDatasetTypeAPIZoomDataset
 		return nil
-	case "ApiAzureDataExplorerDataset":
+	case "api_azure_data_explorer":
 		apiAzureDataExplorerDataset := new(APIAzureDataExplorerDataset)
 		if err := utils.UnmarshalJSON(data, &apiAzureDataExplorerDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiAzureDataExplorerDataset) type APIAzureDataExplorerDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_azure_data_explorer) type APIAzureDataExplorerDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIAzureDataExplorerDataset = apiAzureDataExplorerDataset
 		u.Type = GenericDatasetTypeAPIAzureDataExplorerDataset
 		return nil
-	case "SnowflakeDataset":
+	case "snowflake":
 		snowflakeDataset := new(SnowflakeDataset)
 		if err := utils.UnmarshalJSON(data, &snowflakeDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == SnowflakeDataset) type SnowflakeDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == snowflake) type SnowflakeDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.SnowflakeDataset = snowflakeDataset
 		u.Type = GenericDatasetTypeSnowflakeDataset
 		return nil
-	case "ClickHouseDataset":
+	case "clickhouse":
 		clickHouseDataset := new(ClickHouseDataset)
 		if err := utils.UnmarshalJSON(data, &clickHouseDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ClickHouseDataset) type ClickHouseDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == clickhouse) type ClickHouseDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.ClickHouseDataset = clickHouseDataset
 		u.Type = GenericDatasetTypeClickHouseDataset
 		return nil
-	case "PrometheusDataset":
+	case "prometheus":
 		prometheusDataset := new(PrometheusDataset)
 		if err := utils.UnmarshalJSON(data, &prometheusDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == PrometheusDataset) type PrometheusDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == prometheus) type PrometheusDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.PrometheusDataset = prometheusDataset
 		u.Type = GenericDatasetTypePrometheusDataset
 		return nil
-	case "ApiOpenSearchDataset":
+	case "api_opensearch":
 		apiOpenSearchDataset := new(APIOpenSearchDataset)
 		if err := utils.UnmarshalJSON(data, &apiOpenSearchDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiOpenSearchDataset) type APIOpenSearchDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_opensearch) type APIOpenSearchDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIOpenSearchDataset = apiOpenSearchDataset
 		u.Type = GenericDatasetTypeAPIOpenSearchDataset
 		return nil
-	case "ApiElasticSearchDataset":
+	case "api_elasticsearch":
 		apiElasticSearchDataset := new(APIElasticSearchDataset)
 		if err := utils.UnmarshalJSON(data, &apiElasticSearchDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == ApiElasticSearchDataset) type APIElasticSearchDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == api_elasticsearch) type APIElasticSearchDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.APIElasticSearchDataset = apiElasticSearchDataset
 		u.Type = GenericDatasetTypeAPIElasticSearchDataset
 		return nil
-	case "S3Dataset":
+	case "s3":
 		s3Dataset := new(S3Dataset)
 		if err := utils.UnmarshalJSON(data, &s3Dataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == S3Dataset) type S3Dataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == s3) type S3Dataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.S3Dataset = s3Dataset
 		u.Type = GenericDatasetTypeS3Dataset
 		return nil
-	case "CriblLeaderDataset":
+	case "cribl_leader":
 		criblLeaderDataset := new(CriblLeaderDataset)
 		if err := utils.UnmarshalJSON(data, &criblLeaderDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == CriblLeaderDataset) type CriblLeaderDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == cribl_leader) type CriblLeaderDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.CriblLeaderDataset = criblLeaderDataset
 		u.Type = GenericDatasetTypeCriblLeaderDataset
 		return nil
-	case "MetaDataset":
+	case "cribl_meta":
 		metaDataset := new(MetaDataset)
 		if err := utils.UnmarshalJSON(data, &metaDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == MetaDataset) type MetaDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == cribl_meta) type MetaDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.MetaDataset = metaDataset
 		u.Type = GenericDatasetTypeMetaDataset
 		return nil
-	case "EdgeDataset":
+	case "cribl_edge":
 		edgeDataset := new(EdgeDataset)
 		if err := utils.UnmarshalJSON(data, &edgeDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == EdgeDataset) type EdgeDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == cribl_edge) type EdgeDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.EdgeDataset = edgeDataset
 		u.Type = GenericDatasetTypeEdgeDataset
 		return nil
-	case "AzureBlobDataset":
+	case "azure_blob":
 		azureBlobDataset := new(AzureBlobDataset)
 		if err := utils.UnmarshalJSON(data, &azureBlobDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == AzureBlobDataset) type AzureBlobDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == azure_blob) type AzureBlobDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.AzureBlobDataset = azureBlobDataset
 		u.Type = GenericDatasetTypeAzureBlobDataset
 		return nil
-	case "GcsDataset":
+	case "gcs":
 		gcsDataset := new(GcsDataset)
 		if err := utils.UnmarshalJSON(data, &gcsDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == GcsDataset) type GcsDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == gcs) type GcsDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.GcsDataset = gcsDataset
 		u.Type = GenericDatasetTypeGcsDataset
 		return nil
-	case "AwsSecurityLakeDataset":
+	case "amazon_security_lake":
 		awsSecurityLakeDataset := new(AwsSecurityLakeDataset)
 		if err := utils.UnmarshalJSON(data, &awsSecurityLakeDataset, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == AwsSecurityLakeDataset) type AwsSecurityLakeDataset within GenericDataset: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == amazon_security_lake) type AwsSecurityLakeDataset within GenericDataset: %w", string(data), err)
 		}
 
 		u.AwsSecurityLakeDataset = awsSecurityLakeDataset
