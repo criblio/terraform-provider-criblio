@@ -7,11 +7,11 @@ import (
 )
 
 type MappingRulesetFunctionConf struct {
-	Conf        MappingRulesetFunctionConfFunctionSpecificConfigs `tfsdk:"conf"`
-	Description types.String                                      `tfsdk:"description"`
-	Disabled    types.Bool                                        `tfsdk:"disabled"`
-	Filter      types.String                                      `tfsdk:"filter"`
-	Final       types.Bool                                        `tfsdk:"final"`
-	GroupID     types.String                                      `tfsdk:"group_id"`
-	ID          types.String                                      `tfsdk:"id"`
+	Conf        FunctionSpecificConfigs `tfsdk:"conf"`
+	Description types.String            `tfsdk:"description"`
+	Disabled    types.Bool              `tfsdk:"disabled"`
+	Filter      types.String            `tfsdk:"filter"`
+	Final       types.Bool              `tfsdk:"final"`
+	GroupID     types.String            `tfsdk:"group_id"`
+	ID          types.String            `tfsdk:"id"`
 }

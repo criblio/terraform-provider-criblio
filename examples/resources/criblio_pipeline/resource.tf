@@ -5,16 +5,7 @@ resource "criblio_pipeline" "my_pipeline" {
     functions = [
       {
         conf = {
-          add = [
-            {
-              disabled = true
-              name     = "...my_name..."
-              value    = "...my_value..."
-            }
-          ]
-          remove = [
-            "..."
-          ]
+          key = jsonencode("value")
         }
         description = "Parse and enrich fields"
         disabled    = false

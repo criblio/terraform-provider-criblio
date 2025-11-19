@@ -24917,36 +24917,10 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
-											"conf": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"add": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"disabled": schema.BoolAttribute{
-																	Computed:    true,
-																	Default:     booldefault.StaticBool(false),
-																	Description: `Whether this field addition is disabled. Default: false`,
-																},
-																"name": schema.StringAttribute{
-																	Computed:    true,
-																	Description: `Name of the field to add`,
-																},
-																"value": schema.StringAttribute{
-																	Computed:    true,
-																	Description: `Value to assign to the field`,
-																},
-															},
-														},
-														Description: `List of fields to add to the event`,
-													},
-													"remove": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-														Description: `List of field names to remove from the event`,
-													},
-												},
+											"conf": schema.MapAttribute{
+												Computed:    true,
+												ElementType: jsontypes.NormalizedType{},
+												Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.`,
 											},
 											"description": schema.StringAttribute{
 												Computed:    true,

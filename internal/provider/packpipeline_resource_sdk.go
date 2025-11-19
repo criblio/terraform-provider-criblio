@@ -216,21 +216,13 @@ func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Contex
 	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
 
-		functions.Conf.Add = []tfTypes.PipelineFunctionConfAdd{}
-
-		for _, addItem := range functionsItem.Conf.Add {
-			var add tfTypes.PipelineFunctionConfAdd
-
-			add.Disabled = types.BoolPointerValue(addItem.Disabled)
-			add.Name = types.StringValue(addItem.Name)
-			add.Value = types.StringValue(addItem.Value)
-
-			functions.Conf.Add = append(functions.Conf.Add, add)
+		// Convert conf to JSON
+		confBytes, err := json.Marshal(functionsItem.Conf)
+		if err != nil {
+			diags.AddError("Failed to marshal function conf", err.Error())
+			return diags
 		}
-		functions.Conf.Remove = make([]types.String, 0, len(functionsItem.Conf.Remove))
-		for _, v := range functionsItem.Conf.Remove {
-			functions.Conf.Remove = append(functions.Conf.Remove, types.StringValue(v))
-		}
+		functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 		functions.Filter = types.StringPointerValue(functionsItem.Filter)
@@ -393,33 +385,16 @@ func (r *PackPipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shar
 		} else {
 			final = nil
 		}
-		add := make([]shared.PipelineFunctionConfAdd, 0, len(r.Conf.Functions[functionsIndex].Conf.Add))
-		for addIndex := range r.Conf.Functions[functionsIndex].Conf.Add {
-			var name string
-			name = r.Conf.Functions[functionsIndex].Conf.Add[addIndex].Name.ValueString()
-
-			var value string
-			value = r.Conf.Functions[functionsIndex].Conf.Add[addIndex].Value.ValueString()
-
-			disabled1 := new(bool)
-			if !r.Conf.Functions[functionsIndex].Conf.Add[addIndex].Disabled.IsUnknown() && !r.Conf.Functions[functionsIndex].Conf.Add[addIndex].Disabled.IsNull() {
-				*disabled1 = r.Conf.Functions[functionsIndex].Conf.Add[addIndex].Disabled.ValueBool()
-			} else {
-				disabled1 = nil
+		// Parse the JSON conf to a map for flexible function configuration
+		var conf1 map[string]interface{}
+		if !r.Conf.Functions[functionsIndex].Conf.IsUnknown() && !r.Conf.Functions[functionsIndex].Conf.IsNull() {
+			confJSON := r.Conf.Functions[functionsIndex].Conf.ValueString()
+			if err := json.Unmarshal([]byte(confJSON), &conf1); err != nil {
+				diags.AddError("Failed to parse function conf", err.Error())
+				return nil, diags
 			}
-			add = append(add, shared.PipelineFunctionConfAdd{
-				Name:     name,
-				Value:    value,
-				Disabled: disabled1,
-			})
-		}
-		remove := make([]string, 0, len(r.Conf.Functions[functionsIndex].Conf.Remove))
-		for removeIndex := range r.Conf.Functions[functionsIndex].Conf.Remove {
-			remove = append(remove, r.Conf.Functions[functionsIndex].Conf.Remove[removeIndex].ValueString())
-		}
-		conf1 := shared.PipelineFunctionConfFunctionSpecificConfigs{
-			Add:    add,
-			Remove: remove,
+		} else {
+			conf1 = make(map[string]interface{})
 		}
 		groupID := new(string)
 		if !r.Conf.Functions[functionsIndex].GroupID.IsUnknown() && !r.Conf.Functions[functionsIndex].GroupID.IsNull() {
@@ -437,29 +412,32 @@ func (r *PackPipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shar
 			GroupID:     groupID,
 		})
 	}
-	groups := make(map[string]shared.PipelineGroups)
-	for groupsKey := range r.Conf.Groups {
-		var name1 string
-		name1 = r.Conf.Groups[groupsKey].Name.ValueString()
+	var groups map[string]shared.PipelineGroups
+	if len(r.Conf.Groups) > 0 {
+		groups = make(map[string]shared.PipelineGroups)
+		for groupsKey := range r.Conf.Groups {
+			var name string
+			name = r.Conf.Groups[groupsKey].Name.ValueString()
 
-		description2 := new(string)
-		if !r.Conf.Groups[groupsKey].Description.IsUnknown() && !r.Conf.Groups[groupsKey].Description.IsNull() {
-			*description2 = r.Conf.Groups[groupsKey].Description.ValueString()
-		} else {
-			description2 = nil
+			description2 := new(string)
+			if !r.Conf.Groups[groupsKey].Description.IsUnknown() && !r.Conf.Groups[groupsKey].Description.IsNull() {
+				*description2 = r.Conf.Groups[groupsKey].Description.ValueString()
+			} else {
+				description2 = nil
+			}
+			disabled1 := new(bool)
+			if !r.Conf.Groups[groupsKey].Disabled.IsUnknown() && !r.Conf.Groups[groupsKey].Disabled.IsNull() {
+				*disabled1 = r.Conf.Groups[groupsKey].Disabled.ValueBool()
+			} else {
+				disabled1 = nil
+			}
+			groupsInst := shared.PipelineGroups{
+				Name:        name,
+				Description: description2,
+				Disabled:    disabled1,
+			}
+			groups[groupsKey] = groupsInst
 		}
-		disabled2 := new(bool)
-		if !r.Conf.Groups[groupsKey].Disabled.IsUnknown() && !r.Conf.Groups[groupsKey].Disabled.IsNull() {
-			*disabled2 = r.Conf.Groups[groupsKey].Disabled.ValueBool()
-		} else {
-			disabled2 = nil
-		}
-		groupsInst := shared.PipelineGroups{
-			Name:        name1,
-			Description: description2,
-			Disabled:    disabled2,
-		}
-		groups[groupsKey] = groupsInst
 	}
 	conf := shared.PipelineConf{
 		AsyncFuncTimeout: asyncFuncTimeout,

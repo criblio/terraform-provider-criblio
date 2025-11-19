@@ -54718,36 +54718,8 @@ components:
         conf:
           type: object
           title: Function-specific configs
-          properties:
-            add:
-              type: array
-              title: Add fields
-              description: List of fields to add to the event
-              items:
-                type: object
-                required:
-                  - name
-                  - value
-                properties:
-                  name:
-                    type: string
-                    title: Field name
-                    description: Name of the field to add
-                  value:
-                    type: string
-                    title: Field value
-                    description: Value to assign to the field
-                  disabled:
-                    type: boolean
-                    title: Disabled
-                    description: Whether this field addition is disabled
-                    default: false
-            remove:
-              type: array
-              title: Remove fields
-              description: List of field names to remove from the event
-              items:
-                type: string
+          description: Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.
+          additionalProperties: true
         groupId:
           title: Group ID
           description: Group ID
@@ -68919,6 +68891,18 @@ paths:
           example: "default"
           default: default
       responses: *a121
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 1000
+          maxInterval: 30000
+          maxElapsedTime: 900000
+          exponent: 2.0
+        statusCodes:
+          - 400
+          - 401
+          - 404
+          - 500
   "/m/{groupId}/system/outputs/{id}/pq":
     delete:
       operationId: deleteOutputPqById
