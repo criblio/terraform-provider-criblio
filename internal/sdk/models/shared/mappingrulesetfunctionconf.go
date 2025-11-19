@@ -6,37 +6,37 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-type MappingRulesetFunctionConfAdd struct {
+type Add struct {
 	// Name of the field to add
 	Name string `json:"name"`
 	// Value to assign to the field
 	Value string `json:"value"`
 }
 
-func (m *MappingRulesetFunctionConfAdd) GetName() string {
-	if m == nil {
+func (a *Add) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return m.Name
+	return a.Name
 }
 
-func (m *MappingRulesetFunctionConfAdd) GetValue() string {
-	if m == nil {
+func (a *Add) GetValue() string {
+	if a == nil {
 		return ""
 	}
-	return m.Value
+	return a.Value
 }
 
-type MappingRulesetFunctionConfFunctionSpecificConfigs struct {
+type FunctionSpecificConfigs struct {
 	// List of fields to add to the event
-	Add []MappingRulesetFunctionConfAdd `json:"add,omitempty"`
+	Add []Add `json:"add,omitempty"`
 }
 
-func (m *MappingRulesetFunctionConfFunctionSpecificConfigs) GetAdd() []MappingRulesetFunctionConfAdd {
-	if m == nil {
+func (f *FunctionSpecificConfigs) GetAdd() []Add {
+	if f == nil {
 		return nil
 	}
-	return m.Add
+	return f.Add
 }
 
 type MappingRulesetFunctionConf struct {
@@ -49,8 +49,8 @@ type MappingRulesetFunctionConf struct {
 	// If true, data will not be pushed through this function
 	Disabled *bool `json:"disabled,omitempty"`
 	// If enabled, stops the results of this Function from being passed to the downstream Functions
-	Final *bool                                             `json:"final,omitempty"`
-	Conf  MappingRulesetFunctionConfFunctionSpecificConfigs `json:"conf"`
+	Final *bool                   `json:"final,omitempty"`
+	Conf  FunctionSpecificConfigs `json:"conf"`
 	// Group ID
 	GroupID *string `json:"groupId,omitempty"`
 }
@@ -101,9 +101,9 @@ func (m *MappingRulesetFunctionConf) GetFinal() *bool {
 	return m.Final
 }
 
-func (m *MappingRulesetFunctionConf) GetConf() MappingRulesetFunctionConfFunctionSpecificConfigs {
+func (m *MappingRulesetFunctionConf) GetConf() FunctionSpecificConfigs {
 	if m == nil {
-		return MappingRulesetFunctionConfFunctionSpecificConfigs{}
+		return FunctionSpecificConfigs{}
 	}
 	return m.Conf
 }

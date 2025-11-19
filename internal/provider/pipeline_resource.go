@@ -9,14 +9,17 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	speakeasy_mapvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -76,54 +79,14 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 								speakeasy_objectvalidators.NotNull(),
 							},
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.SingleNestedAttribute{
-									Computed: true,
-									Optional: true,
-									Attributes: map[string]schema.Attribute{
-										"add": schema.ListNestedAttribute{
-											Computed: true,
-											Optional: true,
-											NestedObject: schema.NestedAttributeObject{
-												Validators: []validator.Object{
-													speakeasy_objectvalidators.NotNull(),
-												},
-												Attributes: map[string]schema.Attribute{
-													"disabled": schema.BoolAttribute{
-														Computed:    true,
-														Optional:    true,
-														Default:     booldefault.StaticBool(false),
-														Description: `Whether this field addition is disabled. Default: false`,
-													},
-													"name": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `Name of the field to add. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `Value to assign to the field. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-												},
-											},
-											Description: `List of fields to add to the event`,
-										},
-										"remove": schema.ListAttribute{
-											Computed:    true,
-											Optional:    true,
-											ElementType: types.StringType,
-											Description: `List of field names to remove from the event`,
-										},
-									},
-									Description: `Not Null`,
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
+								"conf": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields. Not Null`,
+									Validators: []validator.Map{
+										speakeasy_mapvalidators.NotNull(),
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 									},
 								},
 								"description": schema.StringAttribute{

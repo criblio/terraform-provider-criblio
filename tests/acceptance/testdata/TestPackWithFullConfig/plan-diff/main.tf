@@ -1,0 +1,1 @@
+../../../../../examples/pack-with-full-config/main.tf

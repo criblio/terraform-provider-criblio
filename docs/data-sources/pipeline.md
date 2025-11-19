@@ -48,32 +48,13 @@ Read-Only:
 
 Read-Only:
 
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--conf--functions--conf))
+- `conf` (Map of String) Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function
 - `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
 - `group_id` (String) Group ID
 - `id` (String) Function ID
-
-<a id="nestedatt--conf--functions--conf"></a>
-### Nested Schema for `conf.functions.conf`
-
-Read-Only:
-
-- `add` (Attributes List) List of fields to add to the event (see [below for nested schema](#nestedatt--conf--functions--conf--add))
-- `remove` (List of String) List of field names to remove from the event
-
-<a id="nestedatt--conf--functions--conf--add"></a>
-### Nested Schema for `conf.functions.conf.add`
-
-Read-Only:
-
-- `disabled` (Boolean) Whether this field addition is disabled
-- `name` (String) Name of the field to add
-- `value` (String) Value to assign to the field
-
-
 
 
 <a id="nestedatt--conf--groups"></a>

@@ -44,10 +44,10 @@ func (r *MappingRulesetDataSourceModel) RefreshFromSharedMappingRuleset(ctx cont
 		for _, functionsItem := range resp.Conf.Functions {
 			var functions tfTypes.MappingRulesetFunctionConf
 
-			functions.Conf.Add = []tfTypes.MappingRulesetFunctionConfAdd{}
+			functions.Conf.Add = []tfTypes.Add{}
 
 			for _, addItem := range functionsItem.Conf.Add {
-				var add tfTypes.MappingRulesetFunctionConfAdd
+				var add tfTypes.Add
 
 				add.Name = types.StringValue(addItem.Name)
 				add.Value = types.StringValue(addItem.Value)
