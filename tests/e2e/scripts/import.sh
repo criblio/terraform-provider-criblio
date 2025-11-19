@@ -8,7 +8,7 @@ allEnvs=(
 	'criblio_schema.my_schema/{"group_id": "default", "id": "my_schema"}'
 	'criblio_global_var.my_globalvar/{"group_id": "default", "id": "sample_globalvar"}'
 	'criblio_appscope_config.my_appscopeconfig/{"group_id": "default", "id": "sample_appscope_config"}'
-	'criblio_pack_vars.my_packvars/{"group_id": "default", "pack": "pack-with-vars"}'
+	'criblio_pack_vars.my_packvars/{"id": "my_id", "group_id": "default", "pack": "pack-with-vars"}'
 	'criblio_pack_lookups.my_packlookups/{"group_id": "default", "pack": "pack-with-lookups", "id": "my_id"}'
 	'criblio_pack.my_pack/{"group_id": "default", "id": "pack-from-source"}'
 	'criblio_pack.breakers_pack/{"group_id": "default", "id": "pack-breakers"}'
@@ -22,7 +22,7 @@ allEnvs=(
 	'criblio_pack_source.my_packsource/{"group_id": "default", "pack": "pack-with-source", "id": "my_id"}'
 	'criblio_pack_destination.my_packdest/{"group_id": "default", "pack": "pack-with-dest", "id": "test"}'
 	'criblio_pack_routes.my_packroutes/{"group_id": "default", "pack": "pack-with-routes"}'
-	'criblio_pack_pipeline.my_packpipeline/{"group_id": "default", "pack": "pack-with-pipeline"}'
+	'criblio_pack_pipeline.my_packpipeline/{"id": "my_id", "group_id": "default", "pack": "pack-with-pipeline"}'
 	'criblio_event_breaker_ruleset.my_eventbreakerruleset/{"group_id": "default", "id": "test_eventbreakerruleset"}'
 )
 
