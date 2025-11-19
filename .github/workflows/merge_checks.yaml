@@ -129,6 +129,11 @@ jobs:
         run: |
           export CRIBL_ONPREM_SERVER_URL CRIBL_ONPREM_USERNAME CRIBL_ONPREM_PASSWORD
           export TF_ACC DEPLOYMENT GOMAXPROCS
+
+          #hack to create pack we need for acceptance testing onprem
+          token=`curl -s -X POST -d "{\"username\":\"$CRIBL_ONPREM_USERNAME\",\"password\":\"$CRIBL_ONPREM_PASSWORD\"}" -H "Content-Type: application/json" $CRIBL_ONPREM_SERVER_URL/api/v1/auth/login | jq '.token' | tr -d '"' `
+          curl -X POST   -H "Authorization: Bearer $token"   -H "Content-Type: application/json"   -d '{"version":"0.0.1","tags":{"streamtags":[]},"exports":[],"displayName":"HelloPack","id":"HelloPack"}'   $CRIBL_ONPREM_SERVER_URL/api/v1/m/default/packs
+
           make acceptance-test
 
       - name: Stop Docker Compose services

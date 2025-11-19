@@ -10,7 +10,6 @@ services:
       - "19000:9000"
 #  workers:
 #    image: cribl/cribl:latest
-#    user: 999:999
 #    depends_on: 
 #      - leader
 #    environment:
