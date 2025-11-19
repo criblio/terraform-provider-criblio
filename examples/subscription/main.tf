@@ -29,5 +29,5 @@ output "subscription" {
   //fancy logic is not required for most customer implementations
   value = length(criblio_subscription.my_subscription) > 0 ? criblio_subscription.my_subscription[0] : null
 
-  //value = criblio_subscription.my_subscription[0]
+  //value = criblio_subscription.my_subscription
 }

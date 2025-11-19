@@ -20,9 +20,9 @@ func TestProject(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_project.my_project[0]", "id", "my_project"),
-						resource.TestCheckResourceAttr("criblio_project.my_project[0]", "group_id", "default"),
-						resource.TestCheckResourceAttr("criblio_project.my_project[0]", "description", "test project"),
+						resource.TestCheckResourceAttr("criblio_project.my_project.0", "id", "my_project"),
+						resource.TestCheckResourceAttr("criblio_project.my_project.0", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_project.my_project.0", "description", "test project"),
 					),
 				},
 			},
