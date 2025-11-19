@@ -454,9 +454,11 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 	
 	if res.StatusCode != 200 {
 		// Check if error is because pack already exists - use UPDATE instead
-		if res != nil && res.RawResponse != nil {
+		if res != nil && res.RawResponse != nil && res.RawResponse.Body != nil {
 			body, _ := io.ReadAll(res.RawResponse.Body)
 			bodyStr := string(body)
+			// Restore the body so it can be read again later if needed
+			res.RawResponse.Body = io.NopCloser(bytes.NewReader(body))
 			if strings.Contains(bodyStr, "Pack Id conflicts with existing Pack") || strings.Contains(bodyStr, "already exists") {
 				// Pack already exists, use UPDATE instead
 				updateRequest, updateDiags := data.ToOperationsUpdatePacksByIDRequest(ctx)
@@ -484,22 +486,40 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 					resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(updateRes.RawResponse))
 					return
 				}
-				resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePacksByIDResponseBody(ctx, updateRes.Object)...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				// Continue with GET request below
-				goto skipCreate
+			resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePacksByIDResponseBody(ctx, updateRes.Object)...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+			resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+			// Pack was updated successfully, now fetch the latest state
+			getRequest := operations.GetPacksByIDRequest{
+				GroupID: data.GroupID.ValueString(),
+				ID:      data.ID.ValueString(),
+			}
+			getRes, getErr := r.client.Packs.GetPacksByID(ctx, getRequest)
+			if getErr != nil {
+				resp.Diagnostics.AddError("failure to invoke API", getErr.Error())
+				return
+			}
+			if getRes == nil || getRes.StatusCode != 200 || getRes.Object == nil {
+				resp.Diagnostics.AddError("unexpected response from API", "Failed to get pack after update")
+				return
+			}
+			resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+			// Save data into Terraform state
+			resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+			return
 			}
 		}
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-skipCreate:
 	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
