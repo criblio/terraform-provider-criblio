@@ -451,10 +451,55 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
+	
 	if res.StatusCode != 200 {
+		// Check if error is because pack already exists - use UPDATE instead
+		if res != nil && res.RawResponse != nil {
+			body, _ := io.ReadAll(res.RawResponse.Body)
+			bodyStr := string(body)
+			if strings.Contains(bodyStr, "Pack Id conflicts with existing Pack") || strings.Contains(bodyStr, "already exists") {
+				// Pack already exists, use UPDATE instead
+				updateRequest, updateDiags := data.ToOperationsUpdatePacksByIDRequest(ctx)
+				resp.Diagnostics.Append(updateDiags...)
+				if resp.Diagnostics.HasError() {
+					return
+				}
+				updateRes, updateErr := r.client.Packs.UpdatePacksByID(ctx, *updateRequest)
+				if updateErr != nil {
+					resp.Diagnostics.AddError("failure to invoke API", updateErr.Error())
+					if updateRes != nil && updateRes.RawResponse != nil {
+						resp.Diagnostics.AddError("unexpected http request/response", debugResponse(updateRes.RawResponse))
+					}
+					return
+				}
+				if updateRes == nil {
+					resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", updateRes))
+					return
+				}
+				if updateRes.StatusCode != 200 {
+					resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", updateRes.StatusCode), debugResponse(updateRes.RawResponse))
+					return
+				}
+				if !(updateRes.Object != nil) {
+					resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(updateRes.RawResponse))
+					return
+				}
+				resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePacksByIDResponseBody(ctx, updateRes.Object)...)
+				if resp.Diagnostics.HasError() {
+					return
+				}
+				resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+				if resp.Diagnostics.HasError() {
+					return
+				}
+				// Continue with GET request below
+				goto skipCreate
+			}
+		}
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
+skipCreate:
 	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return

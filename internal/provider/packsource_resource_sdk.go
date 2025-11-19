@@ -30,21 +30,13 @@ func (r *PackSourceResourceModel) RefreshFromOperationsCreateSystemInputsByPackR
 			for _, functionsItem := range itemsItem.Conf.Functions {
 				var functions tfTypes.PipelineFunctionConf
 
-				functions.Conf.Add = []tfTypes.PipelineFunctionConfAdd{}
-
-				for _, addItem := range functionsItem.Conf.Add {
-					var add tfTypes.PipelineFunctionConfAdd
-
-					add.Disabled = types.BoolPointerValue(addItem.Disabled)
-					add.Name = types.StringValue(addItem.Name)
-					add.Value = types.StringValue(addItem.Value)
-
-					functions.Conf.Add = append(functions.Conf.Add, add)
+				// Convert conf to JSON
+				confBytes, err := json.Marshal(functionsItem.Conf)
+				if err != nil {
+					diags.AddError("Failed to marshal function conf", err.Error())
+					return diags
 				}
-				functions.Conf.Remove = make([]types.String, 0, len(functionsItem.Conf.Remove))
-				for _, v := range functionsItem.Conf.Remove {
-					functions.Conf.Remove = append(functions.Conf.Remove, types.StringValue(v))
-				}
+				functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
 				functions.Description = types.StringPointerValue(functionsItem.Description)
 				functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 				functions.Filter = types.StringPointerValue(functionsItem.Filter)
@@ -179,21 +171,13 @@ func (r *PackSourceResourceModel) RefreshFromOperationsUpdateSystemInputsByPackR
 			for _, functionsItem := range itemsItem.Conf.Functions {
 				var functions tfTypes.PipelineFunctionConf
 
-				functions.Conf.Add = []tfTypes.PipelineFunctionConfAdd{}
-
-				for _, addItem := range functionsItem.Conf.Add {
-					var add tfTypes.PipelineFunctionConfAdd
-
-					add.Disabled = types.BoolPointerValue(addItem.Disabled)
-					add.Name = types.StringValue(addItem.Name)
-					add.Value = types.StringValue(addItem.Value)
-
-					functions.Conf.Add = append(functions.Conf.Add, add)
+				// Convert conf to JSON
+				confBytes, err := json.Marshal(functionsItem.Conf)
+				if err != nil {
+					diags.AddError("Failed to marshal function conf", err.Error())
+					return diags
 				}
-				functions.Conf.Remove = make([]types.String, 0, len(functionsItem.Conf.Remove))
-				for _, v := range functionsItem.Conf.Remove {
-					functions.Conf.Remove = append(functions.Conf.Remove, types.StringValue(v))
-				}
+				functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
 				functions.Description = types.StringPointerValue(functionsItem.Description)
 				functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 				functions.Filter = types.StringPointerValue(functionsItem.Filter)

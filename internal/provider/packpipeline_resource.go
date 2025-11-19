@@ -73,37 +73,10 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.SingleNestedAttribute{
-									Required: true,
-									Attributes: map[string]schema.Attribute{
-										"add": schema.ListNestedAttribute{
-											Optional: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"disabled": schema.BoolAttribute{
-														Computed:    true,
-														Optional:    true,
-														Default:     booldefault.StaticBool(false),
-														Description: `Whether this field addition is disabled. Default: false`,
-													},
-													"name": schema.StringAttribute{
-														Required:    true,
-														Description: `Name of the field to add`,
-													},
-													"value": schema.StringAttribute{
-														Required:    true,
-														Description: `Value to assign to the field`,
-													},
-												},
-											},
-											Description: `List of fields to add to the event`,
-										},
-										"remove": schema.ListAttribute{
-											Optional:    true,
-											ElementType: types.StringType,
-											Description: `List of field names to remove from the event`,
-										},
-									},
+								"conf": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
+									Required:    true,
+									Description: `Function-specific configuration as a JSON object. Different functions require different configuration fields.`,
 								},
 								"description": schema.StringAttribute{
 									Optional:    true,
@@ -323,93 +296,6 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 
-	// Check if "main" pipeline already exists (e.g., auto-created by pack)
-	// If it exists, use UPDATE instead of CREATE
-	// Only do this check for "main" pipelines since they're the ones auto-created
-	pipelineID := data.ID.ValueString()
-	if pipelineID == "main" {
-		checkRequest, checkDiags := data.ToOperationsGetPipelinesByPackWithIDRequest(ctx)
-		resp.Diagnostics.Append(checkDiags...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
-		checkRes, checkErr := r.client.Routes.GetPipelinesByPackWithID(ctx, *checkRequest)
-		if checkErr == nil && checkRes != nil && checkRes.StatusCode == 200 {
-		// Pipeline already exists, use UPDATE instead
-		request, requestDiags := data.ToOperationsUpdatePipelineByPackAndIDRequest(ctx)
-		resp.Diagnostics.Append(requestDiags...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
-		res, err := r.client.Pipelines.UpdatePipelineByPackAndID(ctx, *request)
-		if err != nil {
-			resp.Diagnostics.AddError("failure to invoke API", err.Error())
-			if res != nil && res.RawResponse != nil {
-				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
-			}
-			return
-		}
-		if res == nil {
-			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-			return
-		}
-		if res.StatusCode != 200 {
-			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-			return
-		}
-		if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
-			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-			return
-		}
-		resp.Diagnostics.Append(data.RefreshFromSharedPipeline(ctx, &res.Object.Items[0])...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
-		resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
-		// Get the full pipeline details after update
-		request1, request1Diags := data.ToOperationsGetPipelinesByPackWithIDRequest(ctx)
-		resp.Diagnostics.Append(request1Diags...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
-		res1, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request1)
-		if err != nil {
-			resp.Diagnostics.AddError("failure to invoke API", err.Error())
-			if res1 != nil && res1.RawResponse != nil {
-				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-			}
-			return
-		}
-		if res1 == nil {
-			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-			return
-		}
-		if res1.StatusCode != 200 {
-			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-			return
-		}
-		if !(res1.Object != nil) {
-			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-			return
-		}
-		resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx, res1.Object)...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
-		resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
-		// Save updated data into Terraform state
-		resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
-		return
-		}
-	}
-
-	// Pipeline doesn't exist (or is not "main"), proceed with CREATE
 	request, requestDiags := data.ToOperationsCreatePipelineByPackRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -418,8 +304,20 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 	}
 	res, err := r.client.Routes.CreatePipelineByPack(ctx, *request)
 	if err != nil {
-		// Check if error is because pipeline already exists (only for "main" pipelines)
-		if pipelineID == "main" && res != nil && res.RawResponse != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	
+	if res.StatusCode != 200 {
+		// Check if error is because pipeline already exists - use UPDATE instead
+		if res != nil && res.RawResponse != nil {
 			body, _ := io.ReadAll(res.RawResponse.Body)
 			bodyStr := string(body)
 			if strings.Contains(bodyStr, "pipeline already exists") || strings.Contains(bodyStr, "already exists") {
@@ -445,11 +343,11 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 					resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", updateRes.StatusCode), debugResponse(updateRes.RawResponse))
 					return
 				}
-				if !(updateRes.Object != nil && updateRes.Object.Items != nil && len(updateRes.Object.Items) > 0) {
+				if !(updateRes.Object != nil) {
 					resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(updateRes.RawResponse))
 					return
 				}
-				resp.Diagnostics.Append(data.RefreshFromSharedPipeline(ctx, &updateRes.Object.Items[0])...)
+				resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePipelineByPackAndIDResponseBody(ctx, updateRes.Object)...)
 				if resp.Diagnostics.HasError() {
 					return
 				}
@@ -457,56 +355,10 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 				if resp.Diagnostics.HasError() {
 					return
 				}
-				// Get the full pipeline details after update
-				request1, request1Diags := data.ToOperationsGetPipelinesByPackWithIDRequest(ctx)
-				resp.Diagnostics.Append(request1Diags...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				res1, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request1)
-				if err != nil {
-					resp.Diagnostics.AddError("failure to invoke API", err.Error())
-					if res1 != nil && res1.RawResponse != nil {
-						resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-					}
-					return
-				}
-				if res1 == nil {
-					resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-					return
-				}
-				if res1.StatusCode != 200 {
-					resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-					return
-				}
-				if !(res1.Object != nil) {
-					resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-					return
-				}
-				resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx, res1.Object)...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				// Save updated data into Terraform state
-				resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
-				return
+				// Continue with GET request below
+				goto skipCreate
 			}
 		}
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
-		}
-		return
-	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	if res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -525,6 +377,7 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+skipCreate:
 	request1, request1Diags := data.ToOperationsGetPipelinesByPackWithIDRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 

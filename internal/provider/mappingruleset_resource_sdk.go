@@ -84,10 +84,10 @@ func (r *MappingRulesetResourceModel) RefreshFromSharedMappingRuleset(ctx contex
 		for _, functionsItem := range resp.Conf.Functions {
 			var functions tfTypes.MappingRulesetFunctionConf
 
-			functions.Conf.Add = []tfTypes.MappingRulesetFunctionConfAdd{}
+			functions.Conf.Add = []tfTypes.Add{}
 
 			for _, addItem := range functionsItem.Conf.Add {
-				var add tfTypes.MappingRulesetFunctionConfAdd
+				var add tfTypes.Add
 
 				add.Name = types.StringValue(addItem.Name)
 				add.Value = types.StringValue(addItem.Value)
@@ -222,7 +222,7 @@ func (r *MappingRulesetResourceModel) ToSharedMappingRuleset(ctx context.Context
 			} else {
 				final = nil
 			}
-			add := make([]shared.MappingRulesetFunctionConfAdd, 0, len(r.Conf.Functions[functionsIndex].Conf.Add))
+			add := make([]shared.Add, 0, len(r.Conf.Functions[functionsIndex].Conf.Add))
 			for addIndex := range r.Conf.Functions[functionsIndex].Conf.Add {
 				var name string
 				name = r.Conf.Functions[functionsIndex].Conf.Add[addIndex].Name.ValueString()
@@ -230,12 +230,12 @@ func (r *MappingRulesetResourceModel) ToSharedMappingRuleset(ctx context.Context
 				var value string
 				value = r.Conf.Functions[functionsIndex].Conf.Add[addIndex].Value.ValueString()
 
-				add = append(add, shared.MappingRulesetFunctionConfAdd{
+				add = append(add, shared.Add{
 					Name:  name,
 					Value: value,
 				})
 			}
-			conf1 := shared.MappingRulesetFunctionConfFunctionSpecificConfigs{
+			conf1 := shared.FunctionSpecificConfigs{
 				Add: add,
 			}
 			groupID := new(string)

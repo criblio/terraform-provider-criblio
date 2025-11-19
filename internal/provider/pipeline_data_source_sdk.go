@@ -4,9 +4,11 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -41,21 +43,13 @@ func (r *PipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context,
 	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
 
-		functions.Conf.Add = []tfTypes.PipelineFunctionConfAdd{}
-
-		for _, addItem := range functionsItem.Conf.Add {
-			var add tfTypes.PipelineFunctionConfAdd
-
-			add.Disabled = types.BoolPointerValue(addItem.Disabled)
-			add.Name = types.StringValue(addItem.Name)
-			add.Value = types.StringValue(addItem.Value)
-
-			functions.Conf.Add = append(functions.Conf.Add, add)
+		// Convert conf to JSON
+		confBytes, err := json.Marshal(functionsItem.Conf)
+		if err != nil {
+			diags.AddError("Failed to marshal function conf", err.Error())
+			return diags
 		}
-		functions.Conf.Remove = make([]types.String, 0, len(functionsItem.Conf.Remove))
-		for _, v := range functionsItem.Conf.Remove {
-			functions.Conf.Remove = append(functions.Conf.Remove, types.StringValue(v))
-		}
+		functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 		functions.Filter = types.StringPointerValue(functionsItem.Filter)

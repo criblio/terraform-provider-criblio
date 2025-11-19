@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -59,35 +60,10 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"add": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"disabled": schema.BoolAttribute{
-														Computed:    true,
-														Description: `Whether this field addition is disabled`,
-													},
-													"name": schema.StringAttribute{
-														Computed:    true,
-														Description: `Name of the field to add`,
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Description: `Value to assign to the field`,
-													},
-												},
-											},
-											Description: `List of fields to add to the event`,
-										},
-										"remove": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `List of field names to remove from the event`,
-										},
-									},
+								"conf": schema.MapAttribute{
+									Computed:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
