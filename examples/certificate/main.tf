@@ -10,17 +10,6 @@ resource "criblio_certificate" "my_certificate" {
   passphrase = "SecurityPassphrase"
 }
 
-/*
-data "criblio_certificate" "my_certificate" {
-  id = "my-demo-cert-001"
-}
-
-output "my_certificate" {
-  value     = data.criblio_certificate.my_certificate
-  sensitive = true
-}
-*/
-
 data "criblio_certificates" "my_certificates" {
 }
 
