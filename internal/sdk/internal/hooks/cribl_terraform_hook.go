@@ -445,12 +445,12 @@ func (o *CriblTerraformHook) getOnPremBearerToken(ctx context.Context, serverURL
 			success = true
 			break
 		} else if resp.StatusCode == http.StatusTooManyRequests {
-			log.Printf(fmt.Sprintf("[DEBUG] 429 getting on-prem bearer token, waiting to retry %d seconds", i))
+			fmt.Printf("[DEBUG] 429 getting on-prem bearer token, waiting to retry %d seconds", i)
 			time.Sleep(time.Duration(i) * time.Second)
 		}
 	}
 
-	if success != true {
+	if !success {
 		return nil, fmt.Errorf("failed to get token: status=%d, body=%s", resp.StatusCode, string(body))
 	}
 

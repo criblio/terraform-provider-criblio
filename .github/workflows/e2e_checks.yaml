@@ -1,9 +1,6 @@
 name: e2e Tests
 on:
   workflow_call:
-  push:
-    branches:
-      - "INFRA-7367/ktraister/e2e-on-prem-test"
 
 concurrency:
   group: tfprovider2
