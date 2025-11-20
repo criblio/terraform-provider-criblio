@@ -5,8 +5,8 @@ management:
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.27
-  configChecksum: 270a95898c84f40317335b91873abd51
+  releaseVersion: 1.20.32
+  configChecksum: 0dd40bca79334aa524b89d97b375a5c1
   published: true
 features:
   terraform:
@@ -312,6 +312,7 @@ generatedFiles:
   - internal/provider/notificationtargets_data_source_sdk.go
   - internal/provider/pack_data_source.go
   - internal/provider/pack_data_source_sdk.go
+  - internal/provider/pack_resource.go
   - internal/provider/pack_resource_sdk.go
   - internal/provider/packbreakers_data_source.go
   - internal/provider/packbreakers_data_source_sdk.go
@@ -6967,6 +6968,8 @@ examples:
           minor: "true"
           spec: "^1.3.0"
           disabled: false
+      requestBody:
+        application/json: {"allowCustomFunctions": false, "author": "Cribl", "description": "Parsers and routes for Apache logs", "displayName": "Apache Logs Pack", "exports": ["pipelines/parse_apache", "routes/apache_to_clickhouse"], "force": false, "id": "pack-apache-logs", "isDisabled": false, "inputs": 2, "minLogStreamVersion": "4.10.0", "outputs": 1, "source": "https://github.com/org/packs/apache", "spec": "1.0.0", "tags": {"dataType": ["logs"], "domain": ["web"], "streamtags": ["env:prod"], "technology": ["apache"]}, "version": "2.3.1"}
       responses:
         "200":
           application/json: {"items": [{"author": "Cribl", "description": "Parsers and routes for Apache logs", "displayName": "Apache Logs Pack", "exports": ["pipelines/parse_apache", "routes/apache_to_clickhouse"], "id": "pack-apache-logs", "inputs": 2, "isDisabled": false, "minLogStreamVersion": "4.10.0", "outputs": 1, "settings": {}, "source": "https://github.com/org/packs/apache", "spec": "1.0.0", "tags": {"dataType": ["logs"], "domain": ["web"], "streamtags": ["env:prod"], "technology": ["apache"]}, "version": "2.3.1", "warnings": "<value>"}]}
