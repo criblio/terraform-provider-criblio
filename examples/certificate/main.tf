@@ -10,12 +10,21 @@ resource "criblio_certificate" "my_certificate" {
   passphrase = "SecurityPassphrase"
 }
 
-data "criblio_certificates" "my_certificates" {
+/* THIS IS BUSTED
+data "criblio_certificate" "my_certificate" {
+  id = "my-demo-cert-001"
+}
 
+output "my_certificate" {
+  value     = data.criblio_certificate.my_certificate
+  sensitive = true
+}
+*/
+
+data "criblio_certificates" "my_certificates" {
 }
 
 output "my_certificates" {
   value     = data.criblio_certificates.my_certificates
   sensitive = true
 }
-

@@ -426,18 +426,31 @@ func (o *CriblTerraformHook) getOnPremBearerToken(ctx context.Context, serverURL
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := o.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to make request: %v", err)
-	}
-	defer resp.Body.Close()
+	var body []byte
+	var resp *http.Response
+	success := false
+	for i := range 3 {
+		resp, err = o.client.Do(req)
+		if err != nil {
+			return nil, fmt.Errorf("failed to make request: %v", err)
+		}
+		defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read response: %v", err)
+		body, err = io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read response: %v", err)
+		}
+
+		if resp.StatusCode == http.StatusOK {
+			success = true
+			break
+		} else if resp.StatusCode == http.StatusTooManyRequests {
+			log.Printf(fmt.Sprintf("[DEBUG] 429 getting on-prem bearer token, waiting to retry %d seconds", i))
+			time.Sleep(time.Duration(i) * time.Second)
+		}
 	}
 
-	if resp.StatusCode != http.StatusOK {
+	if success != true {
 		return nil, fmt.Errorf("failed to get token: status=%d, body=%s", resp.StatusCode, string(body))
 	}
 
