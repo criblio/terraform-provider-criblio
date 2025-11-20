@@ -1,6 +1,5 @@
 internal/provider/routes_resource.go
 internal/provider/packroutes_resource.go
-internal/provider/pack_resource.go
 internal/provider/packpipeline_resource.go
 internal/provider/packpipeline_resource_sdk.go
 internal/provider/packsource_resource_sdk.go
