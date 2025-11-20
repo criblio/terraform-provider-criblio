@@ -10,7 +10,7 @@ resource "criblio_certificate" "my_certificate" {
   passphrase = "SecurityPassphrase"
 }
 
-/* THIS IS BUSTED
+/*
 data "criblio_certificate" "my_certificate" {
   id = "my-demo-cert-001"
 }
