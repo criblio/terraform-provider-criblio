@@ -67,13 +67,13 @@ resource "criblio_pack" "my_pack" {
 - `disabled` (Boolean)
 - `display_name` (String) Requires replacement if changed.
 - `exports` (List of String) Requires replacement if changed.
-- `filename` (String) the file to upload. Requires replacement if changed.
+- `filename` (String) the file to upload, if this option is used, the description and display_name will be ignored and the pack file's metadata will be used. Requires replacement if changed.
 - `force` (Boolean) Requires replacement if changed.
 - `inputs` (Number) Requires replacement if changed.
 - `is_disabled` (Boolean) Requires replacement if changed.
 - `min_log_stream_version` (String) Requires replacement if changed.
 - `outputs` (Number) Requires replacement if changed.
-- `source` (String) body string required Pack source. Requires replacement if changed.
+- `source` (String) body string required Pack source
 - `spec` (String) body string optional Specify a branch, tag or a semver spec
 - `tags` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--tags))
 - `version` (String) Requires replacement if changed.
