@@ -42,18 +42,23 @@ func checkLocalConfigDir() ([]byte, error) {
 
 	_, err = os.Stat(configPath)
 	if err != nil {
-		log.Printf("[DEBUG] No config file found %s", configPath)
-		legacyPath := filepath.Join(homeDir, ".cribl")
-		_, err := os.Stat(legacyPath)
-		if err != nil {
-			if errors.Is(err, os.ErrNotExist) {
-				log.Printf("[DEBUG] No config file found %s", legacyPath)
-				return []byte{}, err
-			} else {
-				return []byte{}, err
+		if errors.Is(err, os.ErrNotExist) {
+			log.Printf("[DEBUG] No config file found %s", configPath)
+			legacyPath := filepath.Join(homeDir, ".cribl")
+			_, err := os.Stat(legacyPath)
+			if err != nil {
+				if errors.Is(err, os.ErrNotExist) {
+					log.Printf("[DEBUG] No legacy config file found %s", legacyPath)
+					return []byte{}, err
+				} else {
+					return []byte{}, err
+				}
 			}
+			filePath = legacyPath
+		} else {
+			log.Printf("[ERROR] unknown error checking config file path: %v", err)
+			return []byte{}, fmt.Errorf("unknown error checking config file path: %v", err)
 		}
-		filePath = legacyPath
 	} else {
 		filePath = configPath
 	}
@@ -85,14 +90,14 @@ func checkConfigFileFormat(input []byte) (string, error) {
 func parseJSONConfig(file []byte) (*CriblConfig, error) {
 	log.Printf("[DEBUG] parsing JSON config")
 
-	var legacyConfig CriblConfig
-	err := json.Unmarshal(file, &legacyConfig)
+	var config CriblConfig
+	err := json.Unmarshal(file, &config)
 	if err != nil {
 		log.Printf("[ERROR] Failed to parse config file: %v", err)
 		return nil, fmt.Errorf("failed to parse config file: %v", err)
 	}
 
-	return &legacyConfig, nil
+	return &config, nil
 }
 
 func parseIniConfig(file []byte) (*CriblConfig, error) {
@@ -178,7 +183,7 @@ func GetCredentials() (*CriblConfig, error) {
 
 	format, err := checkConfigFileFormat(file)
 	if err != nil {
-		log.Printf("[DEBUG] No configuration file found, continuing")
+		log.Printf("[DEBUG] %v", err)
 		return nil, err
 	}
 
