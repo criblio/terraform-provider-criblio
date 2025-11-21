@@ -1,4 +1,8 @@
 resource "criblio_grok" "my_grok" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   group_id = "default"
   id       = "test_grok"
   content  = <<-EOT

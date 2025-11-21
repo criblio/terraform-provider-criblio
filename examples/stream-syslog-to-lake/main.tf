@@ -1,5 +1,9 @@
 # Worker Group Configuration
 resource "criblio_group" "syslog_worker_group" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   cloud = {
     provider = "aws"
     region   = "us-west-2"
@@ -20,15 +24,19 @@ resource "criblio_group" "syslog_worker_group" {
 
 # Syslog Source Configuration
 resource "criblio_source" "syslog_source" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   id       = "syslog-input"
-  group_id = criblio_group.syslog_worker_group.id
+  group_id = criblio_group.syslog_worker_group[0].id
 
   input_syslog = {
     input_syslog_syslog1 = {
       allow_non_standard_app_name = false
       connections = [
         {
-          output   = criblio_destination.cribl_lake.id
+          output   = criblio_destination.cribl_lake[0].id
           pipeline = "palo_alto_traffic"
         }
       ]
@@ -87,8 +95,12 @@ resource "criblio_source" "syslog_source" {
 
 # Cribl Lake Destination Configuration
 resource "criblio_destination" "cribl_lake" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   id       = "cribl-lake-2"
-  group_id = criblio_group.syslog_worker_group.id
+  group_id = criblio_group.syslog_worker_group[0].id
 
   output_cribl_lake = {
     id          = "cribl-lake-2"
@@ -100,8 +112,12 @@ resource "criblio_destination" "cribl_lake" {
 
 # Pack Configuration
 resource "criblio_pack" "syslog_pack" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   id           = "syslog-processing"
-  group_id     = criblio_group.syslog_worker_group.id
+  group_id     = criblio_group.syslog_worker_group[0].id
   filename     = "${abspath(path.module)}/cribl-palo-alto-networks-source-1.0.0.crbl"
   description  = "Pack for syslog processing"
   disabled     = false
@@ -112,37 +128,63 @@ resource "criblio_pack" "syslog_pack" {
 # Commit and Deploy Configuration
 data "criblio_config_version" "my_configversion" {
   id         = "syslog-workers"
-  depends_on = [criblio_commit.my_commit]
+  depends_on = [criblio_commit.my_commit[0]]
 }
 
 resource "criblio_commit" "my_commit" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   effective  = true
   group      = "syslog-workers"
   message    = "test"
-  depends_on = [criblio_source.syslog_source, criblio_destination.cribl_lake, criblio_pack.syslog_pack]
+  depends_on = [criblio_source.syslog_source, criblio_destination.cribl_lake, criblio_pack.syslog_pack[0]]
 }
 
 resource "criblio_deploy" "my_deploy" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   id      = "syslog-workers"
   version = data.criblio_config_version.my_configversion.items[0]
 }
 
 # Outputs
 output "worker_group_details" {
+  //fancy logic required for cribl internal testing
+  //fancy logic is not required for most customer implementations
+  value = length(criblio_group.syslog_worker_group) > 0 ? criblio_group.syslog_worker_group[0] : null
+
+  /*
   value = {
-    id   = criblio_group.syslog_worker_group.id
-    name = criblio_group.syslog_worker_group.name
+    id   = criblio_group.syslog_worker_group[0].id
+    name = criblio_group.syslog_worker_group[0].name
   }
+  */
 }
 
 output "source_details" {
+  //fancy logic required for cribl internal testing
+  //fancy logic is not required for most customer implementations
+  value = length(criblio_source.syslog_source) > 0 ? criblio_source.syslog_source[0].id : null
+
+  /*
   value = {
-    id = criblio_source.syslog_source.id
+    id = criblio_source.syslog_source[0].id
   }
+  */
 }
 
 output "destination_details" {
+  //fancy logic required for cribl internal testing
+  //fancy logic is not required for most customer implementations
+  value = length(criblio_destination.cribl_lake) > 0 ? criblio_destination.cribl_lake[0].id : null
+
+  /*
   value = {
-    id = criblio_destination.cribl_lake.id
+    id = criblio_destination.cribl_lake[0].id
   }
+  */
 }

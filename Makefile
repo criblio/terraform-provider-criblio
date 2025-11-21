@@ -7,14 +7,10 @@ e2e-test:
 	go mod tidy
 	go build -o tests/e2e/local-plugins/registry.terraform.io/criblio/criblio/999.99.9/$(OS)_$(ARCH)/terraform-provider-criblio_v999.99.9
 	@#run our wrapper script targeting our new plugin
-	./tests/e2e/scripts/e2e.sh
+	./tests/e2e/scripts/e2e.sh 
 
 acceptance-test:
-	export CRIBL_ORGANIZATION_ID="beautiful-nguyen-y8y4azd" &&  \
-	export CRIBL_WORKSPACE_ID="tfprovider" && \
-	export CRIBL_CLOUD_DOMAIN="cribl-playground.cloud" && \
-	export TF_ACC=true && \
-	go test -v ./tests/acceptance
+	go test -v ./tests/acceptance -parallel 1
 
 test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup

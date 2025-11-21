@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
@@ -8,6 +9,9 @@ import (
 )
 
 func TestSubscription(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping resource for On-Prem deployments as it is 'prohibited by current license'")
+	}
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,
@@ -15,10 +19,10 @@ func TestSubscription(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "id", "my_subscription"),
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "description", "test subscription"),
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "filter", "test"),
-						resource.TestCheckResourceAttr("criblio_subscription.my_subscription", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription.0", "id", "my_subscription"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription.0", "description", "test subscription"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription.0", "filter", "test"),
+						resource.TestCheckResourceAttr("criblio_subscription.my_subscription.0", "group_id", "default"),
 					),
 				},
 			},

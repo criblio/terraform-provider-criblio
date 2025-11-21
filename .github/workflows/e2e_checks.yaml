@@ -7,7 +7,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  e2e_test:
+  e2e_test_cloud:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
@@ -27,5 +27,42 @@ jobs:
           CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
           CRIBL_WORKSPACE_ID: "tfprovider2"
         run: | 
+          export CRIBL_CLIENT_ID CRIBL_CLIENT_SECRET CRIBL_CLOUD_DOMAIN CRIBL_ORGANIZATION_ID CRIBL_WORKSPACE_ID
           make e2e-test
 
+  e2e_test_onprem:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Start Docker Compose services
+        run: docker compose -f tests/docker/docker-compose.yml up -d 
+
+      - name: Sleep - Let Cribl Spin Up
+        run: sleep 30s
+        shell: bash
+
+      - name: Run e2e Tests [OnPrem]
+        env:
+          CRIBL_ONPREM_SERVER_URL: "http://localhost:19000"
+          CRIBL_ONPREM_USERNAME: "admin"
+          CRIBL_ONPREM_PASSWORD: "admin"
+        run: | 
+          export CRIBL_ONPREM_SERVER_URL CRIBL_ONPREM_USERNAME CRIBL_ONPREM_PASSWORD
+
+          #hack to create pack we need for acceptance testing onprem
+          token=`curl -s -X POST -d "{\"username\":\"$CRIBL_ONPREM_USERNAME\",\"password\":\"$CRIBL_ONPREM_PASSWORD\"}" -H "Content-Type: application/json" $CRIBL_ONPREM_SERVER_URL/api/v1/auth/login | jq '.token' | tr -d '"' `
+          curl -X POST   -H "Authorization: Bearer $token"   -H "Content-Type: application/json"   -d '{"version":"0.0.1","tags":{"streamtags":[]},"exports":[],"displayName":"HelloPacks","id":"HelloPacks"}'   $CRIBL_ONPREM_SERVER_URL/api/v1/m/default/packs
+
+          make e2e-test
+
+      - name: Stop Docker Compose services
+        if: always() 
+        run: docker compose -f tests/docker/docker-compose.yml down --rmi all

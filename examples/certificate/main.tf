@@ -1,6 +1,4 @@
 resource "criblio_certificate" "my_certificate" {
-
-
   ca       = file("${path.module}/server.crt")
   cert     = file("${path.module}/server.crt")
   priv_key = file("${path.module}/server.key")
@@ -13,12 +11,9 @@ resource "criblio_certificate" "my_certificate" {
 }
 
 data "criblio_certificates" "my_certificates" {
-
 }
 
 output "my_certificates" {
   value     = data.criblio_certificates.my_certificates
   sensitive = true
 }
-
-

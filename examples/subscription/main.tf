@@ -1,4 +1,8 @@
 resource "criblio_subscription" "my_subscription" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   description = "test subscription"
   disabled    = true
   filter      = "test"
@@ -8,6 +12,10 @@ resource "criblio_subscription" "my_subscription" {
 }
 
 resource "criblio_subscription" "my_subscription_with_enabled" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   description = "test subscription with enabled"
   disabled    = false
   filter      = "test"
@@ -17,5 +25,9 @@ resource "criblio_subscription" "my_subscription_with_enabled" {
 }
 
 output "subscription" {
-  value = criblio_subscription.my_subscription
+  //fancy logic required for cribl internal testing
+  //fancy logic is not required for most customer implementations
+  value = length(criblio_subscription.my_subscription) > 0 ? criblio_subscription.my_subscription[0] : null
+
+  //value = criblio_subscription.my_subscription
 }

@@ -69,7 +69,7 @@ jobs:
           fi
 
 
-  acceptance_test:
+  acceptance_test_cloud:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
@@ -83,14 +83,62 @@ jobs:
           go-version-file: 'go.mod'
           cache: true
 
-      - name: Run Acceptance Tests
+      - name: Run Acceptance Tests [Cloud]
         env:
+          CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
+          CRIBL_WORKSPACE_ID: "tfprovider"
+          CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
+          TF_ACC: true 
+          DEPLOYMENT: "cloud"
         run: | 
-          export CRIBL_CLIENT_ID CRIBL_CLIENT_SECRET
+          export CRIBL_ORGANIZATION_ID CRIBL_WORKSPACE_ID CRIBL_CLOUD_DOMAIN
+          export CRIBL_CLIENT_ID CRIBL_CLIENT_SECRET TF_ACC DEPLOYMENT
           make acceptance-test
 
+  acceptance_test_onprem:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.1.7"
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Start Docker Compose services
+        run: docker compose -f tests/docker/docker-compose.yml up -d
+
+      - name: Sleep - Let Cribl Spin Up
+        run: sleep 30s
+        shell: bash
+
+      - name: Run Acceptance Tests [OnPrem]
+        env:
+          CRIBL_ONPREM_SERVER_URL: "http://localhost:19000"
+          CRIBL_ONPREM_USERNAME: "admin"
+          CRIBL_ONPREM_PASSWORD: "admin"
+          TF_ACC: true
+          DEPLOYMENT: "onprem"
+          GOMAXPROCS: 1
+        run: |
+          export CRIBL_ONPREM_SERVER_URL CRIBL_ONPREM_USERNAME CRIBL_ONPREM_PASSWORD
+          export TF_ACC DEPLOYMENT GOMAXPROCS
+
+          #hack to create pack we need for acceptance testing onprem
+          token=`curl -s -X POST -d "{\"username\":\"$CRIBL_ONPREM_USERNAME\",\"password\":\"$CRIBL_ONPREM_PASSWORD\"}" -H "Content-Type: application/json" $CRIBL_ONPREM_SERVER_URL/api/v1/auth/login | jq '.token' | tr -d '"' `
+          curl -X POST   -H "Authorization: Bearer $token"   -H "Content-Type: application/json"   -d '{"version":"0.0.1","tags":{"streamtags":[]},"exports":[],"displayName":"HelloPacks","id":"HelloPacks"}'   $CRIBL_ONPREM_SERVER_URL/api/v1/m/default/packs
+
+          make acceptance-test
+
+      - name: Stop Docker Compose services
+        if: always()
+        run: docker compose -f tests/docker/docker-compose.yml down --rmi all
 
   unit_test_internal:
     runs-on: ubuntu-latest
@@ -105,7 +153,6 @@ jobs:
       - name: Run Unit Tests
         run: | 
           make unit-test
-
 
   speakeasy_test:
     runs-on: ubuntu-latest
