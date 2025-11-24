@@ -362,6 +362,8 @@ func (o *CriblTerraformHook) handleOnPremRequest(ctx BeforeRequestContext, req *
 	// Set authorization header
 	req.Header.Set("Authorization", "Bearer "+authToken)
 
+	path := trimPath(req.URL.Path)
+
 	// Check if this is a restricted endpoint for on-prem
 	if o.isRestrictedOnPremEndpoint(path) {
 		return req, fmt.Errorf("endpoint '%s' is not supported for on-prem deployments. On-prem deployments only support workspace resources (sources, destinations, routes, pipelines, etc.)", path)
@@ -371,7 +373,7 @@ func (o *CriblTerraformHook) handleOnPremRequest(ctx BeforeRequestContext, req *
 	baseURL := strings.TrimRight(serverURL, "/")
 
 	// Construct full URL
-	var newUrl string
+	var newURL string
 	if path == "" {
 		newURL = fmt.Sprintf("%s/api/v1", baseURL)
 	} else {
@@ -578,7 +580,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 			o.sessions.Store(sessionKey, tokenInfo)
 		}
 
-		req.Header.Set("Authorization", "Bearer "+token)
+		req.Header.Set("Authorization", "Bearer " + tokenInfo.Token)
 	}
 
 	// Handle URL routing
@@ -773,6 +775,10 @@ func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clien
 			fmt.Printf("[DEBUG] 429 getting on-prem bearer token, waiting to retry %d seconds", i)
 			time.Sleep(time.Duration(i) * time.Second)
 		}
+	}
+
+	if !success {
+		return nil, fmt.Errorf("unable to get bearer token after retries")
 	}
 
 	var result struct {
