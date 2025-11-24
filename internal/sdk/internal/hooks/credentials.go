@@ -38,29 +38,35 @@ func checkLocalConfigDir() ([]byte, error) {
 	// Check for credentials in ~/.cribl/credentials
 	configDir := filepath.Join(homeDir, ".cribl")
 	configPath := filepath.Join(configDir, "credentials")
+
 	var filePath string
 
-	_, err = os.Stat(configPath)
+	log.Printf("running")
+
+	modernPath := filepath.Join(homeDir, ".cribl")
+	modernExists, err := isFile(modernPath)
 	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			log.Printf("[DEBUG] No config file found %s", configPath)
-			legacyPath := filepath.Join(homeDir, ".cribl")
-			_, err := os.Stat(legacyPath)
-			if err != nil {
-				if errors.Is(err, os.ErrNotExist) {
-					log.Printf("[DEBUG] No legacy config file found %s", legacyPath)
-					return []byte{}, err
-				} else {
-					return []byte{}, err
-				}
-			}
+		log.Printf("[DEBUG] Modern config file check returned error %s", err)
+		return []byte{}, err
+	}
+
+	if modernExists {
+		filePath = configPath
+	} else {
+		log.Printf("[DEBUG] No modern config file found %s", configPath)
+		legacyPath := filepath.Join(homeDir, ".cribl")
+		legacyExists, err := isFile(legacyPath)
+		if err != nil {
+			log.Printf("[DEBUG] Legacy config file check returned error %s", err)
+			return []byte{}, err
+		}
+
+		if legacyExists {
 			filePath = legacyPath
 		} else {
-			log.Printf("[ERROR] unknown error checking config file path: %v", err)
-			return []byte{}, fmt.Errorf("unknown error checking config file path: %v", err)
+			log.Printf("[DEBUG] No legacy config file found %s", legacyPath)
+			return []byte{}, err
 		}
-	} else {
-		filePath = configPath
 	}
 
 	log.Printf("[DEBUG] Reading credentials from: %s", filePath)

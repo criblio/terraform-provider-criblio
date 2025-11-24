@@ -580,7 +580,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 			o.sessions.Store(sessionKey, tokenInfo)
 		}
 
-		req.Header.Set("Authorization", "Bearer " + tokenInfo.Token)
+		req.Header.Set("Authorization", "Bearer "+tokenInfo.Token)
 	}
 
 	// Handle URL routing
