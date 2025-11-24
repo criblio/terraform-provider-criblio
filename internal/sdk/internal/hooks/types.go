@@ -1,10 +1,8 @@
 package hooks
 
 import (
-	"time"
 	"sync"
-
-	"golang.org/x/sync/singleflight"
+	"time"
 )
 
 type TokenInfo struct {
