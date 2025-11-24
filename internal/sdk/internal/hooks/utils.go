@@ -11,3 +11,13 @@ func trimPath(path string) string {
 
 	return path
 }
+
+func isGatewayPath(path string) bool {
+	// Remove leading slash and api prefix for consistent checking
+	cleanPath := strings.TrimLeft(path, "/")
+	cleanPath = strings.TrimPrefix(cleanPath, "api/")
+	cleanPath = strings.TrimPrefix(cleanPath, "v1/")
+
+	// Gateway paths are for organization and workspace management
+	return strings.HasPrefix(cleanPath, "organizations/")
+}

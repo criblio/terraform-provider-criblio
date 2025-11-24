@@ -11,23 +11,8 @@ import (
 	"net/url"
 	"os"
 	"strings"
-	"sync"
 	"time"
 )
-
-type TokenInfo struct {
-	Token     string
-	ExpiresAt time.Time
-}
-
-// CriblTerraformHook implements both authentication and URL routing for Cribl Terraform API
-type CriblTerraformHook struct {
-	client      HTTPClient
-	sessions    sync.Map
-	baseURL     string
-	orgID       string
-	workspaceID string
-}
 
 var (
 	_ sdkInitHook       = (*CriblTerraformHook)(nil)
@@ -227,17 +212,6 @@ func (o *CriblTerraformHook) constructBaseURLWithProviderConfig(providerOrgID, p
 	return constructedURL
 }
 
-// isGatewayPath determines if a request path should be routed to the gateway
-func (o *CriblTerraformHook) isGatewayPath(path string) bool {
-	// Remove leading slash and api prefix for consistent checking
-	cleanPath := strings.TrimLeft(path, "/")
-	cleanPath = strings.TrimPrefix(cleanPath, "api/")
-	cleanPath = strings.TrimPrefix(cleanPath, "v1/")
-
-	// Gateway paths are for organization and workspace management
-	return strings.HasPrefix(cleanPath, "organizations/")
-}
-
 // isRestrictedOnPremEndpoint determines if a path is for a restricted endpoint that is not supported on on-prem deployments
 func (o *CriblTerraformHook) isRestrictedOnPremEndpoint(path string) bool {
 	// These endpoints are only available in Cribl.Cloud (gateway) and not in on-prem deployments
@@ -421,32 +395,9 @@ func (o *CriblTerraformHook) getOnPremBearerToken(ctx context.Context, serverURL
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	var body []byte
-	var resp *http.Response
-	success := false
-	for i := range 3 {
-		resp, err = o.client.Do(req)
-		if err != nil {
-			return nil, fmt.Errorf("failed to make request: %v", err)
-		}
-		defer resp.Body.Close()
-
-		body, err = io.ReadAll(resp.Body)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read response: %v", err)
-		}
-
-		if resp.StatusCode == http.StatusOK {
-			success = true
-			break
-		} else if resp.StatusCode == http.StatusTooManyRequests {
-			fmt.Printf("[DEBUG] 429 getting on-prem bearer token, waiting to retry %d seconds", i)
-			time.Sleep(time.Duration(i) * time.Second)
-		}
-	}
-
-	if !success {
-		return nil, fmt.Errorf("failed to get token: status=%d, body=%s", resp.StatusCode, string(body))
+	body, err := o.doRequestWithRetry(req)
+	if err != nil {
+		return nil, err
 	}
 
 	// Parse response - response contains "token" field with "Bearer " prefix
@@ -592,7 +543,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	path := strings.TrimLeft(req.URL.Path, "/")
 
 	// Check if this is a gateway path (management endpoints)
-	if o.isGatewayPath(path) || strings.Contains(req.URL.Host, "gateway.") {
+	if isGatewayPath(path) || strings.Contains(req.URL.Host, "gateway.") {
 		// Construct gateway URL
 		gatewayURL := o.constructGatewayURL(cloudDomain, config)
 
@@ -757,32 +708,9 @@ func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clien
 		req.Header.Set("Content-Type", "application/json")
 	}
 
-	var body []byte
-	var resp *http.Response
-	success := false
-	for i := range 3 {
-		resp, err = o.client.Do(req)
-		if err != nil {
-			return nil, fmt.Errorf("failed to make request: %v", err)
-		}
-		defer resp.Body.Close()
-
-		body, err = io.ReadAll(resp.Body)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read response: %v", err)
-		}
-
-		if resp.StatusCode == http.StatusOK {
-			success = true
-			break
-		} else if resp.StatusCode == http.StatusTooManyRequests {
-			fmt.Printf("[DEBUG] 429 getting on-prem bearer token, waiting to retry %d seconds", i)
-			time.Sleep(time.Duration(i) * time.Second)
-		}
-	}
-
-	if !success {
-		return nil, fmt.Errorf("failed to get token: status=%d, body=%s", resp.StatusCode, string(body))
+	body, err := o.doRequestWithRetry(req)
+	if err != nil {
+		return nil, err
 	}
 
 	var result struct {
@@ -880,4 +808,38 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 	}
 
 	return res, err
+}
+
+func (o *CriblTerraformHook) doRequestWithRetry(req *http.Request) ([]byte, error) {
+	var body []byte
+	var resp *http.Response
+	var err error
+
+	success := false
+	for i := range 3 {
+		resp, err = o.client.Do(req)
+		if err != nil {
+			return nil, fmt.Errorf("failed to make request with retry: %v", err)
+		}
+		defer resp.Body.Close()
+
+		body, err = io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read response with retry: %v", err)
+		}
+
+		if resp.StatusCode == http.StatusOK {
+			success = true
+			break
+		} else if resp.StatusCode == http.StatusTooManyRequests {
+			fmt.Printf("[DEBUG] 429 during request, waiting to retry %d seconds", i)
+			time.Sleep(time.Duration(i) * time.Second)
+		}
+	}
+
+	if !success {
+		return nil, fmt.Errorf("failed to do request: status=%d, body=%s", resp.StatusCode, string(body))
+	}
+
+	return body, nil
 }
