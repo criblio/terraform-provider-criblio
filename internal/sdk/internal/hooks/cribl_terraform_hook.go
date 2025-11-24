@@ -762,19 +762,32 @@ func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clien
 		req.Header.Set("Content-Type", "application/json")
 	}
 
-	resp, err := o.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to make request: %v", err)
-	}
-	defer resp.Body.Close()
+	var body []byte
+	var resp *http.Response
+	success := false
+	for i := range 3 {
+		resp, err = o.client.Do(req)
+		if err != nil {
+			return nil, fmt.Errorf("failed to make request: %v", err)
+		}
+		defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read response: %v", err)
+		body, err = io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read response: %v", err)
+		}
+
+		if resp.StatusCode == http.StatusOK {
+			success = true
+			break
+		} else if resp.StatusCode == http.StatusTooManyRequests {
+			fmt.Printf("[DEBUG] 429 getting on-prem bearer token, waiting to retry %d seconds", i)
+			time.Sleep(time.Duration(i) * time.Second)
+		}
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to get token: %s", string(body))
+	if !success {
+		return nil, fmt.Errorf("failed to get token: status=%d, body=%s", resp.StatusCode, string(body))
 	}
 
 	var result struct {
@@ -795,8 +808,13 @@ func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clien
 }
 
 func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Response, err error) (*http.Response, error) {
+	if res == nil {
+		return res, err
+	}
+
+	switch {
 	// If we get an authentication error, try to handle it with our custom auth
-	if res != nil && res.StatusCode == http.StatusUnauthorized {
+	case res.StatusCode == http.StatusUnauthorized:
 		// Get credentials from config or environment
 		config, err := GetCredentials()
 		if err != nil {
@@ -862,6 +880,9 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 			// Return a FailEarly error to stop other hooks from being called
 			return res, &FailEarly{Cause: fmt.Errorf("authentication handled by custom hook")}
 		}
+	case http.StatusTooManyRequests:
+		time.Sleep(1 * time.Second)
 	}
+
 	return res, err
 }
