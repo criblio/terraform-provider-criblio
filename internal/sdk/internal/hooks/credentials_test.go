@@ -39,7 +39,7 @@ func TestGetCredentialsNoFile(t *testing.T) {
 	os.Setenv("CRIBL_CLIENT_SECRET", "")
 	os.Setenv("CRIBL_ORGANIZATION_ID", "")
 	os.Setenv("CRIBL_WORKSPACE_ID", "")
-	os.Setenv("HOME", "/tmp")
+	os.Setenv("HOME", "/var/tmp")
 
 	_, err := checkLocalConfigDir()
 	if !errors.Is(err, os.ErrNotExist) {

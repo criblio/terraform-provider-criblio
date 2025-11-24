@@ -363,12 +363,7 @@ func (o *CriblTerraformHook) handleOnPremRequest(ctx BeforeRequestContext, req *
 	// Set authorization header
 	req.Header.Set("Authorization", "Bearer "+authToken)
 
-	// Validate that the requested endpoint is supported for on-prem deployments
-	path := strings.TrimLeft(req.URL.Path, "/")
-
-	// Remove /api/v1 if already present in path
-	path = strings.TrimPrefix(path, "api/v1/")
-	path = strings.TrimPrefix(path, "api/v1")
+	path := trimPath(req.URL.Path)
 
 	// Check if this is a restricted endpoint for on-prem
 	if o.isRestrictedOnPremEndpoint(path) {
