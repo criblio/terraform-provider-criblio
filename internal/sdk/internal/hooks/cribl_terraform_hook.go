@@ -212,72 +212,6 @@ func (o *CriblTerraformHook) constructBaseURLWithProviderConfig(providerOrgID, p
 	return constructedURL
 }
 
-// isRestrictedOnPremEndpoint determines if a path is for a restricted endpoint that is not supported on on-prem deployments
-func (o *CriblTerraformHook) isRestrictedOnPremEndpoint(path string) bool {
-	// These endpoints are only available in Cribl.Cloud (gateway) and not in on-prem deployments
-
-	// Check for search endpoints (can be in format /m/group/search/... or search/...)
-	// Search endpoints contain "search/" somewhere in the path
-	if strings.Contains(path, "search/") {
-		// Exclude /system/config-search from restrictions as it's an admin endpoint
-		if !strings.Contains(path, "/system/config-search") {
-			return true
-		}
-	}
-
-	// Check for lake endpoints
-	if strings.Contains(path, "/lake/") || strings.Contains(path, "products/lake/") {
-		return true
-	}
-
-	// Check for lakehouse endpoints
-	if strings.Contains(path, "lakehouse") {
-		return true
-	}
-
-	// Check for products/search endpoints
-	if strings.Contains(path, "products/search/") {
-		return true
-	}
-
-	// Check for gateway/management endpoints
-	restrictedPrefixes := []string{
-		"v1/organizations/", // Gateway management endpoints
-		"organizations/",    // Workspace management endpoints
-	}
-
-	// Check for restricted prefixes
-	for _, prefix := range restrictedPrefixes {
-		if strings.HasPrefix(path, prefix) {
-			return true
-		}
-	}
-
-	// Check for workspace management (these are gateway paths)
-	if strings.Contains(path, "workspace") && !strings.Contains(path, "/system/") {
-		return true
-	}
-
-	return false
-}
-
-// constructGatewayURL builds the gateway URL using the appropriate cloud domain
-func (o *CriblTerraformHook) constructGatewayURL(providerCloudDomain string, config *CriblConfig) string {
-	// Get cloud domain with proper precedence: Provider > Environment > Credentials > Default
-	cloudDomain := providerCloudDomain
-	if cloudDomain == "" {
-		cloudDomain = os.Getenv("CRIBL_CLOUD_DOMAIN")
-	}
-	if cloudDomain == "" && config != nil {
-		cloudDomain = config.CloudDomain
-	}
-	if cloudDomain == "" {
-		cloudDomain = "cribl.cloud" // Default domain
-	}
-
-	return fmt.Sprintf("https://gateway.%s", cloudDomain)
-}
-
 // handleOnPremRequest handles authentication and routing for on-prem deployments
 func (o *CriblTerraformHook) handleOnPremRequest(ctx BeforeRequestContext, req *http.Request, serverURL string) (*http.Request, error) {
 	log.Printf("[DEBUG] Handling on-prem request to: %s", serverURL)
@@ -340,7 +274,7 @@ func (o *CriblTerraformHook) handleOnPremRequest(ctx BeforeRequestContext, req *
 	path := trimPath(req.URL.Path)
 
 	// Check if this is a restricted endpoint for on-prem
-	if o.isRestrictedOnPremEndpoint(path) {
+	if isRestrictedOnPremEndpoint(path) {
 		return req, fmt.Errorf("endpoint '%s' is not supported for on-prem deployments. On-prem deployments only support workspace resources (sources, destinations, routes, pipelines, etc.)", path)
 	}
 
@@ -545,7 +479,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	// Check if this is a gateway path (management endpoints)
 	if isGatewayPath(path) || strings.Contains(req.URL.Host, "gateway.") {
 		// Construct gateway URL
-		gatewayURL := o.constructGatewayURL(cloudDomain, config)
+		gatewayURL := constructGatewayURL(cloudDomain, config)
 
 		// Parse gateway URL to get the host
 		parsedGatewayURL, err := url.Parse(gatewayURL)
