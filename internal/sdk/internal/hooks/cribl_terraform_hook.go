@@ -289,7 +289,7 @@ func (o *CriblTerraformHook) isRestrictedOnPremEndpoint(path string) bool {
 func (o *CriblTerraformHook) constructGatewayURL(providerCloudDomain string, config *CriblConfig) string {
 	// Get cloud domain with proper precedence: Provider > Environment > Credentials > Default
 	var cloudDomain string
-	envCloudDomain = os.Getenv("CRIBL_CLOUD_DOMAIN")
+	envCloudDomain := os.Getenv("CRIBL_CLOUD_DOMAIN")
 
 	if providerCloudDomain == "" && envCloudDomain != "" {
 		cloudDomain = os.Getenv("CRIBL_CLOUD_DOMAIN")
@@ -301,29 +301,6 @@ func (o *CriblTerraformHook) constructGatewayURL(providerCloudDomain string, con
 	}
 
 	return fmt.Sprintf("https://gateway.%s", cloudDomain)
-}
-
-// common refreshAuthToken function
-func (o *CriblTerraformHook) refreshAuthToken(sessionKey string) (string, error) {
-	var tokenInfo *TokenInfo
-
-	if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
-		tokenInfo = cachedTokenInfo.(*TokenInfo)
-		if time.Until(tokenInfo.ExpiresAt) < 30*time.Minute {
-			tokenInfo = nil
-		}
-	}
-
-	if tokenInfo == nil {
-		log.Printf("[DEBUG] Retrieving bearer token using username/password for on-prem authentication")
-		tokenInfo, err = o.getOnPremBearerToken(ctx.Context, serverURL, username, password)
-		if err != nil {
-			return "", fmt.Errorf("failed to get on-prem bearer token: %v", err)
-		}
-		o.sessions.Store(sessionKey, tokenInfo)
-	}
-
-	return tokenInfo.Token, nil
 }
 
 // handleOnPremRequest handles authentication and routing for on-prem deployments
@@ -357,7 +334,27 @@ func (o *CriblTerraformHook) handleOnPremRequest(ctx BeforeRequestContext, req *
 		authToken = bearerToken
 	} else if username != "" && password != "" {
 		// Check for cached token
-		authToken = refreshAuthToken(fmt.Sprintf("onprem:%s:%s:%s", serverURL, username, password))
+		sessionKey := fmt.Sprintf("onprem:%s:%s:%s", serverURL, username, password)
+		var tokenInfo *TokenInfo
+
+		if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
+			tokenInfo = cachedTokenInfo.(*TokenInfo)
+			if time.Until(tokenInfo.ExpiresAt) < 30*time.Minute {
+				tokenInfo = nil
+			}
+		}
+
+		if tokenInfo == nil {
+			log.Printf("[DEBUG] Retrieving bearer token using username/password for on-prem authentication")
+			newTokenInfo, err := o.getOnPremBearerToken(ctx.Context, serverURL, username, password)
+			if err != nil {
+				return req, fmt.Errorf("failed to get on-prem bearer token: %v", err)
+			}
+			tokenInfo = newTokenInfo
+			o.sessions.Store(sessionKey, tokenInfo)
+		}
+
+		authToken = tokenInfo.Token
 	} else {
 		return req, fmt.Errorf("on-prem authentication requires either CRIBL_BEARER_TOKEN or both CRIBL_ONPREM_USERNAME and CRIBL_ONPREM_PASSWORD")
 	}
@@ -561,7 +558,25 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 			return req, fmt.Errorf("no base URL or audience provided")
 		}
 
-		bearerToken := refreshToken(fmt.Sprintf("%s:%s", clientID, clientSecret))
+		// Get or create session
+		sessionKey := fmt.Sprintf("%s:%s", clientID, clientSecret)
+		var tokenInfo *TokenInfo
+
+		if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
+			tokenInfo = cachedTokenInfo.(*TokenInfo)
+			if time.Until(tokenInfo.ExpiresAt) < 60*time.Minute {
+				tokenInfo = nil
+			}
+		}
+
+		if tokenInfo == nil {
+			newTokenInfo, err := o.getBearerToken(ctx.Context, clientID, clientSecret, audience)
+			if err != nil {
+				return req, err
+			}
+			tokenInfo = newTokenInfo
+			o.sessions.Store(sessionKey, tokenInfo)
+		}
 
 		req.Header.Set("Authorization", "Bearer "+token)
 	}
@@ -824,7 +839,24 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 			}
 
 			// Get or create session
-			refreshAuthToken(fmt.Sprintf("%s:%s", config.ClientID, config.ClientSecret))
+			sessionKey := fmt.Sprintf("%s:%s", config.ClientID, config.ClientSecret)
+			var tokenInfo *TokenInfo
+
+			if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
+				tokenInfo = cachedTokenInfo.(*TokenInfo)
+				if time.Until(tokenInfo.ExpiresAt) < 60*time.Minute {
+					tokenInfo = nil
+				}
+			}
+
+			if tokenInfo == nil {
+				newTokenInfo, err := o.getBearerToken(ctx.Context, config.ClientID, config.ClientSecret, audience)
+				if err != nil {
+					return res, err
+				}
+				tokenInfo = newTokenInfo
+				o.sessions.Store(sessionKey, tokenInfo)
+			}
 
 			// Update org and workspace IDs from config
 			o.orgID = config.OrganizationID
