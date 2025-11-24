@@ -812,9 +812,9 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 		return res, err
 	}
 
-	switch {
+	switch res.StatusCode {
 	// If we get an authentication error, try to handle it with our custom auth
-	case res.StatusCode == http.StatusUnauthorized:
+	case http.StatusUnauthorized:
 		// Get credentials from config or environment
 		config, err := GetCredentials()
 		if err != nil {
