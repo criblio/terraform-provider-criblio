@@ -787,34 +787,6 @@ func TestGovDomainOAuth2MissingAuthServerID(t *testing.T) {
 	os.Setenv("CRIBL_BEARER_TOKEN", "")
 }
 
-func TestIsGatewayPath(t *testing.T) {
-	hook := NewCriblTerraformHook()
-
-	// Test cases for gateway paths
-	gatewayPaths := []struct {
-		path     string
-		expected bool
-		desc     string
-	}{
-		{"/v1/organizations/my-org/workspaces", true, "workspace creation path"},
-		{"/api/v1/organizations/my-org/workspaces", true, "workspace creation path with api prefix"},
-		{"v1/organizations/my-org/workspaces/workspace-id", true, "workspace operations path"},
-		{"api/v1/organizations/my-org/workspaces/workspace-id", true, "workspace operations path with api prefix"},
-		{"/v1/workspaces/workspace-id/sources", false, "regular workspace API path"},
-		{"/api/v1/workspaces/workspace-id/destinations", false, "regular workspace API path"},
-		{"/v1/system/health", false, "system health path"},
-		{"", false, "empty path"},
-		{"/", false, "root path"},
-	}
-
-	for _, test := range gatewayPaths {
-		result := hook.isGatewayPath(test.path)
-		if result != test.expected {
-			t.Errorf("isGatewayPath(%q) = %v, expected %v (%s)", test.path, result, test.expected, test.desc)
-		}
-	}
-}
-
 func TestConstructGatewayURL(t *testing.T) {
 	hook := NewCriblTerraformHook()
 

@@ -10,23 +10,6 @@ import (
 	"path/filepath"
 )
 
-type CriblConfig struct {
-	ClientID       string `json:"client_id" ini:"client_id"`
-	ClientSecret   string `json:"client_secret" ini:"client_secret"`
-	OrganizationID string `json:"organization_id" ini:"organization_id"`
-	Workspace      string `json:"workspace" ini:"workspace"`
-	CloudDomain    string `json:"cloud_domain" ini:"cloud_domain"`
-
-	// On-prem configuration fields
-	OnpremServerURL string `json:"onprem_server_url" ini:"onprem_server_url"`
-	OnpremUsername  string `json:"onprem_username" ini:"onprem_username"`
-	OnpremPassword  string `json:"onprem_password" ini:"onprem_password"`
-}
-
-type CriblConfigFile struct {
-	Profiles map[string]CriblConfig `json:"profiles"`
-}
-
 func checkLocalConfigDir() ([]byte, error) {
 	// Then try ~/.cribl/credentials file
 	homeDir, err := os.UserHomeDir()
