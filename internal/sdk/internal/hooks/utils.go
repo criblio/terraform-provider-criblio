@@ -74,18 +74,20 @@ func isRestrictedOnPremEndpoint(path string) bool {
 // constructGatewayURL builds the gateway URL using the appropriate cloud domain
 func constructGatewayURL(providerCloudDomain string, config *CriblConfig) string {
 	// Get cloud domain with proper precedence: Provider > Environment > Credentials > Default
-	cloudDomain := providerCloudDomain
-	if cloudDomain == "" {
-		cloudDomain = os.Getenv("CRIBL_CLOUD_DOMAIN")
-	}
-	if cloudDomain == "" && config != nil {
-		cloudDomain = config.CloudDomain
-	}
-	if cloudDomain == "" {
-		cloudDomain = "cribl.cloud" // Default domain
+	var output string
+
+	switch {
+	case providerCloudDomain != "":
+		output = providerCloudDomain
+	case os.Getenv("CRIBL_CLOUD_DOMAIN") != "":
+		output = os.Getenv("CRIBL_CLOUD_DOMAIN")
+	case config != nil && config.CloudDomain != "":
+		output = config.CloudDomain
+	default:
+		output = "cribl.cloud"
 	}
 
-	return fmt.Sprintf("https://gateway.%s", cloudDomain)
+	return fmt.Sprintf("https://gateway.%s", output)
 }
 
 // constructBaseURL builds the workspace URL from credentials when needed
