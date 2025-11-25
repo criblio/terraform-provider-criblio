@@ -21,6 +21,35 @@ import (
 	"time"
 )
 
+type session struct {
+	Credentials *credentials
+	Token       string
+	ExpiresAt   *int64
+	Scopes      []string
+}
+
+type tokenResponse struct {
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
+	ExpiresIn   *int64 `json:"expires_in"`
+}
+
+type credentials struct {
+	ClientID             string
+	ClientSecret         string
+	TokenURL             string
+	Scopes               []string
+	AdditionalProperties map[string]string
+}
+
+type clientCredentialsHook struct {
+	client   HTTPClient
+	sessions sync.Map
+
+	// sessionsGroup prevents concurrent token refreshes.
+	sessionsGroup *singleflight.Group
+}
+
 var (
 	_ sdkInitHook       = (*clientCredentialsHook)(nil)
 	_ beforeRequestHook = (*clientCredentialsHook)(nil)
