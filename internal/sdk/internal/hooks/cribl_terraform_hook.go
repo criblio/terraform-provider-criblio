@@ -76,97 +76,6 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 	return baseURL, client
 }
 
-// handleOnPremRequest handles authentication and routing for on-prem deployments
-func (o *CriblTerraformHook) handleOnPremRequest(ctx BeforeRequestContext, req *http.Request, serverURL string) (*http.Request, error) {
-	log.Printf("[DEBUG] Handling on-prem request to: %s", serverURL)
-
-	// Get username and password from environment
-	username := os.Getenv("CRIBL_ONPREM_USERNAME")
-	password := os.Getenv("CRIBL_ONPREM_PASSWORD")
-	bearerToken := os.Getenv("CRIBL_BEARER_TOKEN")
-
-	// Get credentials from config file as fallback
-	config, err := GetCredentials()
-	if err != nil {
-		log.Printf("[WARN] Failed to get credentials from config: %v", err)
-	}
-
-	// Use config as fallback if not in environment
-	if username == "" && config != nil {
-		username = config.OnpremUsername
-	}
-	if password == "" && config != nil {
-		password = config.OnpremPassword
-	}
-
-	var authToken string
-
-	// Try direct bearer token first
-	if bearerToken != "" {
-		log.Printf("[DEBUG] Using direct bearer token for on-prem authentication")
-		authToken = bearerToken
-	} else if username != "" && password != "" {
-		// Check for cached token
-		sessionKey := fmt.Sprintf("onprem:%s:%s:%s", serverURL, username, password)
-		var tokenInfo *TokenInfo
-
-		if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
-			tokenInfo = cachedTokenInfo.(*TokenInfo)
-			if time.Until(tokenInfo.ExpiresAt) < 30*time.Minute {
-				tokenInfo = nil
-			}
-		}
-
-		if tokenInfo == nil {
-			log.Printf("[DEBUG] Retrieving bearer token using username/password for on-prem authentication")
-			newTokenInfo, err := o.getOnPremBearerToken(ctx.Context, serverURL, username, password)
-			if err != nil {
-				return req, fmt.Errorf("failed to get on-prem bearer token: %v", err)
-			}
-			tokenInfo = newTokenInfo
-			o.sessions.Store(sessionKey, tokenInfo)
-		}
-
-		authToken = tokenInfo.Token
-	} else {
-		return req, fmt.Errorf("on-prem authentication requires either CRIBL_BEARER_TOKEN or both CRIBL_ONPREM_USERNAME and CRIBL_ONPREM_PASSWORD")
-	}
-
-	// Set authorization header
-	req.Header.Set("Authorization", "Bearer "+authToken)
-
-	path := trimPath(req.URL.Path)
-
-	// Check if this is a restricted endpoint for on-prem
-	if isRestrictedOnPremEndpoint(path) {
-		return req, fmt.Errorf("endpoint '%s' is not supported for on-prem deployments. On-prem deployments only support workspace resources (sources, destinations, routes, pipelines, etc.)", path)
-	}
-
-	// Handle URL routing for on-prem (always use serverURL/api/v1 path)
-	baseURL := strings.TrimRight(serverURL, "/")
-
-	// Construct full URL
-	if path == "" {
-		newURL := fmt.Sprintf("%s/api/v1", baseURL)
-		parsedURL, err := url.Parse(newURL)
-		if err != nil {
-			return req, fmt.Errorf("failed to parse on-prem URL: %v", err)
-		}
-		req.URL = parsedURL
-	} else {
-		newURL := fmt.Sprintf("%s/api/v1/%s", baseURL, path)
-		parsedURL, err := url.Parse(newURL)
-		if err != nil {
-			return req, fmt.Errorf("failed to parse on-prem URL: %v", err)
-		}
-		req.URL = parsedURL
-	}
-
-	log.Printf("[DEBUG] On-prem request URL: %s", req.URL.String())
-
-	return req, nil
-}
-
 // getOnPremBearerToken authenticates with on-prem server using username/password
 // Reference: https://docs.cribl.io/cribl-as-code/authentication/#sdk-cust-managed-auth
 func (o *CriblTerraformHook) getOnPremBearerToken(ctx context.Context, serverURL, username, password string) (*TokenInfo, error) {
@@ -224,164 +133,237 @@ func (o *CriblTerraformHook) getOnPremBearerToken(ctx context.Context, serverURL
 }
 
 func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.Request) (*http.Request, error) {
+
 	// Check for on-prem configuration first
 	onpremServerURL := os.Getenv("CRIBL_ONPREM_SERVER_URL")
-
-	// Handle on-prem authentication
+	onPrem := false
 	if onpremServerURL != "" {
-		return o.handleOnPremRequest(ctx, req, onpremServerURL)
+		onPrem = true
 	}
 
 	// First try to get credentials from security context
 	var clientID, clientSecret, orgID, workspaceID, cloudDomain string
 
-	if ctx.SecuritySource != nil {
-		if security, err := ctx.SecuritySource(ctx.Context); err == nil {
-			if s, ok := security.(shared.Security); ok {
-				// Get OAuth credentials
-				if s.ClientOauth != nil {
-					clientID = s.ClientOauth.ClientID
-					clientSecret = s.ClientOauth.ClientSecret
-				}
+	//this should get moved into GetCredentials since we're getting creds from the securityCtx
+	if !onPrem {
+		if ctx.SecuritySource != nil {
+			if security, err := ctx.SecuritySource(ctx.Context); err == nil {
+				if s, ok := security.(shared.Security); ok {
+					// Get OAuth credentials
+					if s.ClientOauth != nil {
+						clientID = s.ClientOauth.ClientID
+						clientSecret = s.ClientOauth.ClientSecret
+					}
 
-				// Get org and workspace IDs from provider config (higher precedence than credentials file)
-				if s.OrganizationID != nil {
-					orgID = *s.OrganizationID
-					o.orgID = orgID
+					// Get org and workspace IDs from provider config (higher precedence than credentials file)
+					if s.OrganizationID != nil {
+						orgID = *s.OrganizationID
+						o.orgID = orgID
+					}
+					if s.WorkspaceID != nil {
+						workspaceID = *s.WorkspaceID
+						o.workspaceID = workspaceID
+					}
+					if s.CloudDomain != nil {
+						cloudDomain = *s.CloudDomain
+					}
 				}
-				if s.WorkspaceID != nil {
-					workspaceID = *s.WorkspaceID
-					o.workspaceID = workspaceID
-				}
-				if s.CloudDomain != nil {
-					cloudDomain = *s.CloudDomain
-				}
+			} else {
+				log.Printf("[ERROR] Failed to get security info: %v", err)
 			}
-		} else {
-			log.Printf("[ERROR] Failed to get security info: %v", err)
 		}
 	}
 
 	// Get credentials file config for fallback values
+	// this function respects our ONPREM scheme and returns criblconfig with vars set correctly
 	config, err := GetCredentials()
 	if err != nil {
 		log.Printf("[ERROR] Failed to get credentials from config: %v", err)
 	}
 
 	// If we don't have credentials from security context, use config file
-	if clientID == "" || clientSecret == "" {
-		if config != nil {
-			clientID = config.ClientID
-			clientSecret = config.ClientSecret
+	//then this can get nixed too
+	if !onPrem {
+		if clientID == "" || clientSecret == "" {
+			if config != nil {
+				clientID = config.ClientID
+				clientSecret = config.ClientSecret
+			}
+		}
+
+		// Reconstruct baseURL with proper precedence: Provider Config > Environment > Credentials File > Default
+		input := ConstructBaseUrlInput{
+			ProviderOrgID:       orgID,
+			ProviderWorkspaceID: workspaceID,
+			ProviderCloudDomain: cloudDomain,
+		}
+		o.baseURL = constructBaseURL(input, config)
+	} else {
+		if clientID == "" || clientSecret == "" {
+			if config != nil {
+				clientID = config.OnpremUsername
+				clientSecret = config.OnpremPassword
+			}
 		}
 	}
-
-	// Reconstruct baseURL with proper precedence: Provider Config > Environment > Credentials File > Default
-	input := ConstructBaseUrlInput{
-		ProviderOrgID:       orgID,
-		ProviderWorkspaceID: workspaceID,
-		ProviderCloudDomain: cloudDomain,
-	}
-	o.baseURL = constructBaseURL(input, config)
 
 	// Handle authentication
 	if bearerToken := os.Getenv("CRIBL_BEARER_TOKEN"); bearerToken != "" {
 		req.Header.Set("Authorization", "Bearer "+bearerToken)
 	} else if clientID != "" && clientSecret != "" {
-		// Get audience from base URL
-		audience := ""
-		if o.baseURL != "" {
-			// Extract domain from workspace URL (e.g., from https://main-org.cribl.cloud)
-			parsedURL, err := url.Parse(o.baseURL)
-			if err != nil {
-				return req, fmt.Errorf("failed to parse base URL for audience: %v", err)
-			}
-
-			host := parsedURL.Host
-
-			// Handle test/localhost URLs differently
-			if strings.Contains(host, "127.0.0.1") || strings.Contains(host, "localhost") {
-				// For test URLs, use the same URL as audience
-				audience = o.baseURL
-			} else {
-				// Extract domain part after the first dash (remove workspace-org prefix)
-				parts := strings.SplitN(host, ".", 2)
-				if len(parts) < 2 {
-					return req, fmt.Errorf("invalid workspace URL format for audience: %s", host)
+		var authToken string
+		if !onPrem {
+			// Get audience from base URL
+			audience := ""
+			if o.baseURL != "" {
+				// Extract domain from workspace URL (e.g., from https://main-org.cribl.cloud)
+				parsedURL, err := url.Parse(o.baseURL)
+				if err != nil {
+					return req, fmt.Errorf("failed to parse base URL for audience: %v", err)
 				}
-				domain := parts[1] // e.g., "cribl.cloud"
 
-				audience = fmt.Sprintf("https://api.%s", domain)
+				host := parsedURL.Host
+
+				// Handle test/localhost URLs differently
+				if strings.Contains(host, "127.0.0.1") || strings.Contains(host, "localhost") {
+					// For test URLs, use the same URL as audience
+					audience = o.baseURL
+				} else {
+					// Extract domain part after the first dash (remove workspace-org prefix)
+					parts := strings.SplitN(host, ".", 2)
+					if len(parts) < 2 {
+						return req, fmt.Errorf("invalid workspace URL format for audience: %s", host)
+					}
+					domain := parts[1] // e.g., "cribl.cloud"
+
+					audience = fmt.Sprintf("https://api.%s", domain)
+				}
+			} else if os.Getenv("CRIBL_AUDIENCE") != "" {
+				audience = os.Getenv("CRIBL_AUDIENCE")
+			} else {
+				return req, fmt.Errorf("no base URL or audience provided")
 			}
-		} else if os.Getenv("CRIBL_AUDIENCE") != "" {
-			audience = os.Getenv("CRIBL_AUDIENCE")
+
+			// Get or create session
+			sessionKey := fmt.Sprintf("%s:%s", clientID, clientSecret)
+			var tokenInfo *TokenInfo
+
+			if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
+				tokenInfo = cachedTokenInfo.(*TokenInfo)
+				if time.Until(tokenInfo.ExpiresAt) < 60*time.Minute {
+					tokenInfo = nil
+				}
+			}
+
+			if tokenInfo == nil {
+				newTokenInfo, err := o.getBearerToken(ctx.Context, clientID, clientSecret, audience)
+				if err != nil {
+					return req, err
+				}
+				tokenInfo = newTokenInfo
+				o.sessions.Store(sessionKey, tokenInfo)
+			}
+			authToken = tokenInfo.Token
 		} else {
-			return req, fmt.Errorf("no base URL or audience provided")
-		}
+			// Check for cached token
+			sessionKey := fmt.Sprintf("onprem:%s:%s:%s", config.OnpremServerURL, config.OnpremUsername, config.OnpremPassword)
+			var tokenInfo *TokenInfo
 
-		// Get or create session
-		sessionKey := fmt.Sprintf("%s:%s", clientID, clientSecret)
-		var tokenInfo *TokenInfo
-
-		if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
-			tokenInfo = cachedTokenInfo.(*TokenInfo)
-			if time.Until(tokenInfo.ExpiresAt) < 60*time.Minute {
-				tokenInfo = nil
+			if cachedTokenInfo, ok := o.sessions.Load(sessionKey); ok {
+				tokenInfo = cachedTokenInfo.(*TokenInfo)
+				if time.Until(tokenInfo.ExpiresAt) < 30*time.Minute {
+					tokenInfo = nil
+				}
 			}
-		}
 
-		if tokenInfo == nil {
-			newTokenInfo, err := o.getBearerToken(ctx.Context, clientID, clientSecret, audience)
-			if err != nil {
-				return req, err
+			if tokenInfo == nil {
+				log.Printf("[DEBUG] Retrieving bearer token using username/password for on-prem authentication")
+				newTokenInfo, err := o.getOnPremBearerToken(ctx.Context, config.OnpremServerURL, config.OnpremUsername, config.OnpremPassword)
+				if err != nil {
+					return req, fmt.Errorf("failed to get on-prem bearer token: %v", err)
+				}
+				tokenInfo = newTokenInfo
+				o.sessions.Store(sessionKey, tokenInfo)
 			}
-			tokenInfo = newTokenInfo
-			o.sessions.Store(sessionKey, tokenInfo)
-		}
 
-		req.Header.Set("Authorization", "Bearer "+tokenInfo.Token)
+			authToken = tokenInfo.Token
+		}
+		req.Header.Set("Authorization", "Bearer "+authToken)
+	} else {
+		return req, fmt.Errorf("authentication requires either CRIBL_BEARER_TOKEN OR CRIBL_ONPREM_USERNAME and CRIBL_ONPREM_PASSWORD OR Cloud stuff")
 	}
 
-	// Handle URL routing
-	path := strings.TrimLeft(req.URL.Path, "/")
+	if !onPrem {
+		// Handle URL routing
+		path := strings.TrimLeft(req.URL.Path, "/")
 
-	// Check if this is a gateway path (management endpoints)
-	if isGatewayPath(path) || strings.Contains(req.URL.Host, "gateway.") {
-		// Construct gateway URL
-		gatewayURL := constructGatewayURL(cloudDomain, config)
+		// Check if this is a gateway path (management endpoints)
+		if isGatewayPath(path) || strings.Contains(req.URL.Host, "gateway.") {
+			// Construct gateway URL
+			gatewayURL := constructGatewayURL(cloudDomain, config)
 
-		// Parse gateway URL to get the host
-		parsedGatewayURL, err := url.Parse(gatewayURL)
-		if err != nil {
-			return req, fmt.Errorf("failed to parse gateway URL: %v", err)
-		}
+			// Parse gateway URL to get the host
+			parsedGatewayURL, err := url.Parse(gatewayURL)
+			if err != nil {
+				return req, fmt.Errorf("failed to parse gateway URL: %v", err)
+			}
 
-		// For gateway requests, don't add /api/v1 prefix - use path as-is
-		newURL := fmt.Sprintf("%s/%s", strings.TrimRight(gatewayURL, "/"), path)
-
-		parsedURL, err := url.Parse(newURL)
-		if err != nil {
-			return req, err
-		}
-
-		// Set both URL host and explicit Host header for gateway requests
-		req.URL = parsedURL
-		req.Host = parsedGatewayURL.Host
-	} else {
-		// Handle regular workspace API routing
-		trimmedBaseURL := strings.TrimRight(o.baseURL, "/")
-
-		// For workspace API, add /api/v1 prefix if not already present
-		if !strings.Contains(req.URL.String(), "/api/v1") && !strings.HasPrefix(path, "api/v1") {
-			newURL := fmt.Sprintf("%s/api/v1/%s", trimmedBaseURL, path)
+			// For gateway requests, don't add /api/v1 prefix - use path as-is
+			newURL := fmt.Sprintf("%s/%s", strings.TrimRight(gatewayURL, "/"), path)
 
 			parsedURL, err := url.Parse(newURL)
 			if err != nil {
 				return req, err
 			}
 
+			// Set both URL host and explicit Host header for gateway requests
+			req.URL = parsedURL
+			req.Host = parsedGatewayURL.Host
+		} else {
+			// Handle regular workspace API routing
+			trimmedBaseURL := strings.TrimRight(o.baseURL, "/")
+
+			// For workspace API, add /api/v1 prefix if not already present
+			if !strings.Contains(req.URL.String(), "/api/v1") && !strings.HasPrefix(path, "api/v1") {
+				newURL := fmt.Sprintf("%s/api/v1/%s", trimmedBaseURL, path)
+
+				parsedURL, err := url.Parse(newURL)
+				if err != nil {
+					return req, err
+				}
+
+				req.URL = parsedURL
+			}
+		}
+	} else {
+		path := trimPath(req.URL.Path)
+
+		// Check if this is a restricted endpoint for on-prem
+		if isRestrictedOnPremEndpoint(path) {
+			return req, fmt.Errorf("endpoint '%s' is not supported for on-prem deployments. On-prem deployments only support workspace resources (sources, destinations, routes, pipelines, etc.)", path)
+		}
+
+		// Handle URL routing for on-prem (always use serverURL/api/v1 path)
+		baseURL := strings.TrimRight(req.URL.Path, "/")
+
+		// Construct full URL
+		if path == "" {
+			newURL := fmt.Sprintf("%s/api/v1", baseURL)
+			parsedURL, err := url.Parse(newURL)
+			if err != nil {
+				return req, fmt.Errorf("failed to parse on-prem URL: %v", err)
+			}
+			req.URL = parsedURL
+		} else {
+			newURL := fmt.Sprintf("%s/api/v1/%s", baseURL, path)
+			parsedURL, err := url.Parse(newURL)
+			if err != nil {
+				return req, fmt.Errorf("failed to parse on-prem URL: %v", err)
+			}
 			req.URL = parsedURL
 		}
+
+		log.Printf("[DEBUG] On-prem request URL: %s", req.URL.String())
 	}
 
 	return req, nil
