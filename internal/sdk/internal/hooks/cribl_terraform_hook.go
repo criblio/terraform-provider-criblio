@@ -32,8 +32,9 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 	// Check for on-prem configuration in environment variables first
 	onpremServerURL := os.Getenv("CRIBL_ONPREM_SERVER_URL")
 	if onpremServerURL != "" {
-		log.Printf("[DEBUG] On-prem configuration detected in environment, using server URL: %s", onpremServerURL)
 		o.baseURL = onpremServerURL
+		log.Printf("[DEBUG] On-prem configuration detected in environment, using server URL: %s", onpremServerURL)
+		log.Printf("[DEBUG] Initialization complete")
 		return onpremServerURL, client
 	}
 
@@ -48,8 +49,9 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 
 	// Check for on-prem configuration in credentials file
 	if config != nil && config.OnpremServerURL != "" {
-		log.Printf("[DEBUG] On-prem configuration detected in credentials file, using server URL: %s", config.OnpremServerURL)
 		o.baseURL = config.OnpremServerURL
+		log.Printf("[DEBUG] On-prem configuration detected in credentials file, using server URL: %s", config.OnpremServerURL)
+		log.Printf("[DEBUG] Initialization complete")
 		return config.OnpremServerURL, client
 	}
 
@@ -66,6 +68,7 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 		finalBaseURL := constructBaseURL(input, config)
 		o.baseURL = finalBaseURL
 		log.Printf("[DEBUG] Final baseURL: %s", finalBaseURL)
+		log.Printf("[DEBUG] Initialization complete")
 		return finalBaseURL, client
 	} else {
 		log.Printf("[DEBUG] No credentials found")
@@ -74,62 +77,6 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 
 	log.Printf("[DEBUG] Initialization complete")
 	return baseURL, client
-}
-
-// getOnPremBearerToken authenticates with on-prem server using username/password
-// Reference: https://docs.cribl.io/cribl-as-code/authentication/#sdk-cust-managed-auth
-func (o *CriblTerraformHook) getOnPremBearerToken(ctx context.Context, serverURL, username, password string) (*TokenInfo, error) {
-	// Construct auth URL - use /api/v1/auth/login as per documentation
-	baseURL := strings.TrimRight(serverURL, "/")
-	authURL := fmt.Sprintf("%s/api/v1/auth/login", baseURL)
-
-	log.Printf("[DEBUG] Getting on-prem bearer token from: %s", authURL)
-
-	// Create request with username/password in JSON body
-	requestBody := map[string]string{
-		"username": username,
-		"password": password,
-	}
-
-	jsonData, err := json.Marshal(requestBody)
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal request body: %v", err)
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "POST", authURL, strings.NewReader(string(jsonData)))
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %v", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	body, err := o.doRequestWithRetry(req)
-	if err != nil {
-		return nil, err
-	}
-
-	// Parse response - response contains "token" field with "Bearer " prefix
-	var result struct {
-		Token               string `json:"token"`
-		ForcePasswordChange bool   `json:"forcePasswordChange"`
-	}
-	if err := json.Unmarshal(body, &result); err != nil {
-		return nil, fmt.Errorf("failed to parse response: %v", err)
-	}
-
-	// Remove "Bearer " prefix if present
-	token := strings.TrimPrefix(result.Token, "Bearer ")
-
-	// Token TTL from global settings (default 3600 seconds / 1 hour)
-	// Reference: Settings > Global > General Settings > API Server Settings > Advanced > Auth-token TTL
-	expiresIn := 3600 // Default to 1 hour
-	expiresAt := time.Now().Add(time.Duration(expiresIn) * time.Second)
-
-	log.Printf("[DEBUG] Successfully obtained on-prem bearer token (expires in %d seconds)", expiresIn)
-
-	return &TokenInfo{
-		Token:     token,
-		ExpiresAt: expiresAt,
-	}, nil
 }
 
 func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.Request) (*http.Request, error) {
@@ -174,6 +121,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 		}
 	}
 
+	var config *CriblConfig
 	// Get credentials file config for fallback values
 	// this function respects our ONPREM scheme and returns criblconfig with vars set correctly
 	config, err := GetCredentials()
@@ -193,6 +141,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 
 		// Reconstruct baseURL with proper precedence: Provider Config > Environment > Credentials File > Default
 		input := ConstructBaseUrlInput{
+			BaseURL:             o.baseURL,
 			ProviderOrgID:       orgID,
 			ProviderWorkspaceID: workspaceID,
 			ProviderCloudDomain: cloudDomain,
@@ -336,6 +285,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 			}
 		}
 	} else {
+
 		path := trimPath(req.URL.Path)
 
 		// Check if this is a restricted endpoint for on-prem
@@ -367,6 +317,62 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	}
 
 	return req, nil
+}
+
+// getOnPremBearerToken authenticates with on-prem server using username/password
+// Reference: https://docs.cribl.io/cribl-as-code/authentication/#sdk-cust-managed-auth
+func (o *CriblTerraformHook) getOnPremBearerToken(ctx context.Context, serverURL, username, password string) (*TokenInfo, error) {
+	// Construct auth URL - use /api/v1/auth/login as per documentation
+	baseURL := strings.TrimRight(serverURL, "/")
+	authURL := fmt.Sprintf("%s/api/v1/auth/login", baseURL)
+
+	log.Printf("[DEBUG] Getting on-prem bearer token from: %s", authURL)
+
+	// Create request with username/password in JSON body
+	requestBody := map[string]string{
+		"username": username,
+		"password": password,
+	}
+
+	jsonData, err := json.Marshal(requestBody)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", authURL, strings.NewReader(string(jsonData)))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	body, err := o.doRequestWithRetry(req)
+	if err != nil {
+		return nil, err
+	}
+
+	// Parse response - response contains "token" field with "Bearer " prefix
+	var result struct {
+		Token               string `json:"token"`
+		ForcePasswordChange bool   `json:"forcePasswordChange"`
+	}
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, fmt.Errorf("failed to parse response: %v", err)
+	}
+
+	// Remove "Bearer " prefix if present
+	token := strings.TrimPrefix(result.Token, "Bearer ")
+
+	// Token TTL from global settings (default 3600 seconds / 1 hour)
+	// Reference: Settings > Global > General Settings > API Server Settings > Advanced > Auth-token TTL
+	expiresIn := 3600 // Default to 1 hour
+	expiresAt := time.Now().Add(time.Duration(expiresIn) * time.Second)
+
+	log.Printf("[DEBUG] Successfully obtained on-prem bearer token (expires in %d seconds)", expiresIn)
+
+	return &TokenInfo{
+		Token:     token,
+		ExpiresAt: expiresAt,
+	}, nil
 }
 
 func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clientSecret, audience string) (*TokenInfo, error) {
@@ -602,6 +608,8 @@ func (o *CriblTerraformHook) doRequestWithRetry(req *http.Request) ([]byte, erro
 
 	success := false
 	for i := range 3 {
+		log.Printf("[DEBUG] http request attempt %d, doing query: %+v", i, req)
+
 		resp, err = o.client.Do(req)
 		if err != nil {
 			return nil, fmt.Errorf("failed to make request with retry: %v", err)
@@ -617,7 +625,7 @@ func (o *CriblTerraformHook) doRequestWithRetry(req *http.Request) ([]byte, erro
 			success = true
 			break
 		} else if resp.StatusCode == http.StatusTooManyRequests {
-			fmt.Printf("[DEBUG] 429 during request, waiting to retry %d seconds", i)
+			log.Printf("[DEBUG] 429 during request, waiting to retry %d seconds", i)
 			time.Sleep(time.Duration(i) * time.Second)
 		}
 	}

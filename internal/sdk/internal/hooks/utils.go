@@ -129,8 +129,13 @@ func constructBaseURL(input ConstructBaseUrlInput, config *CriblConfig) string {
 		workspaceSource = "default"
 	}
 
-	log.Printf("[DEBUG] Workspace selection: env='%s', config='%s', final='%s', source='%s'",
-		workspaceEnv, config.Workspace, workspace, workspaceSource)
+	if config != nil {
+		log.Printf("[DEBUG] Workspace selection: env='%s', config='%s', final='%s', source='%s'",
+			workspaceEnv, config.Workspace, workspace, workspaceSource)
+	} else {
+		log.Printf("[DEBUG] Workspace selection: env='%s', final='%s', source='%s'",
+			workspaceEnv, workspace, workspaceSource)
+	}
 
 	var orgSource, organizationID string
 	switch {
@@ -148,8 +153,13 @@ func constructBaseURL(input ConstructBaseUrlInput, config *CriblConfig) string {
 		orgSource = "default"
 	}
 
-	log.Printf("[DEBUG] Organization selection: env='%s', config='%s', final='%s', source='%s'",
-		orgEnv, config.OrganizationID, organizationID, orgSource)
+	if config != nil {
+		log.Printf("[DEBUG] Organization selection: env='%s', config='%s', final='%s', source='%s'",
+			orgEnv, config.OrganizationID, organizationID, orgSource)
+	} else {
+		log.Printf("[DEBUG] Organization selection: env='%s', final='%s', source='%s'",
+			orgEnv, organizationID, orgSource)
+	}
 
 	// Get cloud domain with proper precedence: Environment > Config > Default
 	var cloudDomain, domainSource string
@@ -160,7 +170,7 @@ func constructBaseURL(input ConstructBaseUrlInput, config *CriblConfig) string {
 	case os.Getenv("CRIBL_CLOUD_DOMAIN") != "":
 		cloudDomain = os.Getenv("CRIBL_CLOUD_DOMAIN")
 		domainSource = "environment"
-	case config.CloudDomain != "":
+	case config != nil && config.CloudDomain != "":
 		cloudDomain = config.CloudDomain
 		domainSource = "config"
 	default:
