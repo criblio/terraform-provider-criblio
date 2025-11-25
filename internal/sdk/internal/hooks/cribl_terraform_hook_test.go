@@ -55,20 +55,11 @@ func TestTerraformSDKInit(t *testing.T) {
 }
 
 func TestTerraformSDKInitGetCredentialsFailure(t *testing.T) {
-	os.Setenv("HOME", "/var/tmp")
-
-	creds := `IloveGo`
-	path := "/var/tmp/.cribl"
-
-	err := os.Mkdir(path, 0777)
-	if err != nil {
-		t.Errorf("Could not write temporary config directory: %s", err)
-	}
-
-	err = os.WriteFile(fmt.Sprintf("%s/credentials", path), []byte(creds), 0644)
-	if err != nil {
-		t.Errorf("Could not write temporary config file: %s", err)
-	}
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("HOME", "/root")
 
 	var myClient HTTPClient
 
@@ -78,11 +69,6 @@ func TestTerraformSDKInitGetCredentialsFailure(t *testing.T) {
 
 	if urlOut != myUrl {
 		t.Errorf("SDKInit returned incorrect url - expected %s, got %s", myUrl, urlOut)
-	}
-
-	err = os.RemoveAll(path)
-	if err != nil {
-		t.Errorf("Could not remove temporary config directory: %s", err)
 	}
 }
 

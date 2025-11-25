@@ -46,7 +46,7 @@ func isRestrictedOnPremEndpoint(path string) bool {
 	}
 
 	// Check for products/search endpoints
-	if strings.Contains(path, "products/search/") {
+	if strings.Contains(path, "products/search") {
 		return true
 	}
 

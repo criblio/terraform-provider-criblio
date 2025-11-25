@@ -160,6 +160,7 @@ func TestOnPremRestrictedEndpoints(t *testing.T) {
 		"/products/search/datasets":                    true,
 		"/api/v1/m/default_search/search/saved":        true,
 		"/api/v1/m/default_search/search/usage-groups": true,
+		"/api/v1/m/products/search":                    true,
 		"/api/v1/m/default_search/search/saved-query":  true,
 		"/m/default_search/search/dashboards":          true,
 		"v1/organizations/foo":                         true,
