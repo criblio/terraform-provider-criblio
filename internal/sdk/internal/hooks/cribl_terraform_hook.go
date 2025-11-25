@@ -42,8 +42,9 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 	log.Printf("[DEBUG] Attempting to get credentials")
 	config, err := GetCredentials()
 	if err != nil {
-		log.Printf("[ERROR] Failed to get credentials: %v", err)
 		o.baseURL = baseURL
+		log.Printf("[ERROR] Failed to get credentials: %v", err)
+		log.Printf("[DEBUG] Initialization complete")
 		return baseURL, client
 	}
 

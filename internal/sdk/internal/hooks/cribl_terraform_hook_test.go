@@ -54,6 +54,38 @@ func TestTerraformSDKInit(t *testing.T) {
 	}
 }
 
+func TestTerraformSDKInitGetCredentialsFailure(t *testing.T) {
+	os.Setenv("HOME", "/var/tmp")
+
+	creds := `IloveGo`
+	path := "/var/tmp/.cribl"
+
+	err := os.Mkdir(path, 0777)
+	if err != nil {
+		t.Errorf("Could not write temporary config directory: %s", err)
+	}
+
+	err = os.WriteFile(fmt.Sprintf("%s/credentials", path), []byte(creds), 0644)
+	if err != nil {
+		t.Errorf("Could not write temporary config file: %s", err)
+	}
+
+	var myClient HTTPClient
+
+	myUrl := "foobar"
+	test := NewCriblTerraformHook()
+	urlOut, _ := test.SDKInit(myUrl, myClient)
+
+	if urlOut != myUrl {
+		t.Errorf("SDKInit returned incorrect url - expected %s, got %s", myUrl, urlOut)
+	}
+
+	err = os.RemoveAll(path)
+	if err != nil {
+		t.Errorf("Could not remove temporary config directory: %s", err)
+	}
+}
+
 func TestTerraformSDKInitWithCloudDomain(t *testing.T) {
 	// Set all environment variables including cloud domain
 	os.Setenv("CRIBL_CLIENT_ID", "test-client")
