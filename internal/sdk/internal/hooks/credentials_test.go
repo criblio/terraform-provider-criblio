@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -31,6 +32,19 @@ func TestGetCredentialsEnvConfig(t *testing.T) {
 		t.Errorf("GetCredentials returned incorrect OrganizationID, expected %s got %s", org, cfg.OrganizationID)
 	} else if cfg.Workspace != workspace {
 		t.Errorf("GetCredentials returned incorrect Workspace, expected %s got %s", workspace, cfg.Workspace)
+	}
+}
+
+func TestCheckLocalConfigDirHomeDirError(t *testing.T) {
+	os.Setenv("HOME", "")
+
+	readCreds, err := checkLocalConfigDir()
+	if err == nil {
+		t.Errorf("GetCredentials error was not returned, but expected")
+	}
+
+	if string(readCreds) != string([]byte{}) {
+		t.Errorf("checkLocalConfigDir unexpected return - want []byte{}, got %s", readCreds)
 	}
 }
 
@@ -90,6 +104,27 @@ func TestGetCredentialsIniFile(t *testing.T) {
 	err = os.RemoveAll(path)
 	if err != nil {
 		t.Errorf("Could not remove temporary config directory: %s", err)
+	}
+}
+
+func TestParseIniConfigLoadFailure(t *testing.T) {
+	// Reset profile to default for this test
+	os.Setenv("CRIBL_PROFILE", "")
+
+	creds := `default
+                 client_id = your-client-id
+                 client_secret = your-client-secret
+                 organization_id = your-organization-id
+                 workspace = your-workspace-id
+                 cloud_domain = cribl-playground.cloud`
+
+	_, err := parseIniConfig([]byte(creds))
+	if err == nil {
+		t.Errorf("parseIniConfig did not throw expected error in operation")
+	} else {
+		if !strings.Contains(err.Error(), "failed to parse config file") {
+			t.Errorf("parseIniConfig did not return expected error, got: %s", err)
+		}
 	}
 }
 
