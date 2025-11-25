@@ -344,7 +344,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 		}
 
 		// Handle URL routing for on-prem (always use serverURL/api/v1 path)
-		baseURL := strings.TrimRight(req.URL.Path, "/")
+		baseURL := strings.TrimRight(config.OnpremServerURL, "/")
 
 		// Construct full URL
 		if path == "" {
