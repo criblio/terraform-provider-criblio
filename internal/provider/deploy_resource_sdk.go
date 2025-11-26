@@ -34,6 +34,7 @@ func (r *DeployResourceModel) RefreshFromOperationsUpdateGroupsDeployByIDRespons
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.EstimatedIngestRate = types.Float64PointerValue(itemsItem.EstimatedIngestRate)
 			items.ID = types.StringValue(itemsItem.ID)
+			items.Inherits = types.StringPointerValue(itemsItem.Inherits)
 			items.IsFleet = types.BoolPointerValue(itemsItem.IsFleet)
 			items.MaxWorkerAge = types.StringPointerValue(itemsItem.MaxWorkerAge)
 			items.Name = types.StringPointerValue(itemsItem.Name)

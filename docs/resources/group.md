@@ -21,6 +21,7 @@ resource "criblio_group" "my_group" {
   description           = "Production Edge configuration group"
   estimated_ingest_rate = 500000
   id                    = "config-group-prod-edge"
+  inherits              = "base-config"
   is_fleet              = false
   max_worker_age        = "1h"
   name                  = "Prod Edge"
@@ -50,6 +51,7 @@ resource "criblio_group" "my_group" {
 - `cloud` (Attributes) (see [below for nested schema](#nestedatt--cloud))
 - `description` (String)
 - `estimated_ingest_rate` (Number)
+- `inherits` (String)
 - `is_fleet` (Boolean)
 - `max_worker_age` (String) This is only configurable for hybrid worker groups.
 - `name` (String)
