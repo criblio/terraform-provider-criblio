@@ -40,6 +40,7 @@ Read-Only:
 - `description` (String)
 - `estimated_ingest_rate` (Number)
 - `id` (String)
+- `inherits` (String)
 - `is_fleet` (Boolean)
 - `max_worker_age` (String) This is only configurable for hybrid worker groups.
 - `name` (String)

@@ -39,6 +39,7 @@ type GroupResourceModel struct {
 	Description         types.String              `tfsdk:"description"`
 	EstimatedIngestRate types.Float64             `tfsdk:"estimated_ingest_rate"`
 	ID                  types.String              `tfsdk:"id"`
+	Inherits            types.String              `tfsdk:"inherits"`
 	IsFleet             types.Bool                `tfsdk:"is_fleet"`
 	MaxWorkerAge        types.String              `tfsdk:"max_worker_age"`
 	Name                types.String              `tfsdk:"name"`
@@ -95,6 +96,10 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Group id`,
+			},
+			"inherits": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
 			},
 			"is_fleet": schema.BoolAttribute{
 				Computed: true,

@@ -68,6 +68,7 @@ func (r *GroupResourceModel) RefreshFromSharedConfigGroup(ctx context.Context, r
 	r.Description = types.StringPointerValue(resp.Description)
 	r.EstimatedIngestRate = types.Float64PointerValue(resp.EstimatedIngestRate)
 	r.ID = types.StringValue(resp.ID)
+	r.Inherits = types.StringPointerValue(resp.Inherits)
 	r.IsFleet = types.BoolPointerValue(resp.IsFleet)
 	r.MaxWorkerAge = types.StringPointerValue(resp.MaxWorkerAge)
 	r.Name = types.StringPointerValue(resp.Name)
@@ -188,6 +189,12 @@ func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.C
 	var id string
 	id = r.ID.ValueString()
 
+	inherits := new(string)
+	if !r.Inherits.IsUnknown() && !r.Inherits.IsNull() {
+		*inherits = r.Inherits.ValueString()
+	} else {
+		inherits = nil
+	}
 	isFleet := new(bool)
 	if !r.IsFleet.IsUnknown() && !r.IsFleet.IsNull() {
 		*isFleet = r.IsFleet.ValueBool()
@@ -245,6 +252,7 @@ func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.C
 		Description:         description,
 		EstimatedIngestRate: estimatedIngestRate,
 		ID:                  id,
+		Inherits:            inherits,
 		IsFleet:             isFleet,
 		Name:                name,
 		OnPrem:              onPrem,

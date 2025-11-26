@@ -11,6 +11,7 @@ type ConfigGroup struct {
 	Description         types.String      `tfsdk:"description"`
 	EstimatedIngestRate types.Float64     `tfsdk:"estimated_ingest_rate"`
 	ID                  types.String      `tfsdk:"id"`
+	Inherits            types.String      `tfsdk:"inherits"`
 	IsFleet             types.Bool        `tfsdk:"is_fleet"`
 	MaxWorkerAge        types.String      `tfsdk:"max_worker_age"`
 	Name                types.String      `tfsdk:"name"`
