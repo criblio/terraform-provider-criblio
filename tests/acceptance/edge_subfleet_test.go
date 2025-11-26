@@ -9,7 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestEdgeSubfleet(t *testing.T) {
+func TestEdgeSubFleet(t *testing.T) {
 	if os.Getenv("DEPLOYMENT") == "onprem" {
 		time.Sleep(1 * time.Second)
 	}
