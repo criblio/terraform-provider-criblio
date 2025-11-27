@@ -68,14 +68,14 @@ func checkConfigFileFormat(input []byte) (string, error) {
 func parseJSONConfig(file []byte) (*CriblConfig, error) {
 	log.Printf("[DEBUG] parsing JSON config")
 
-	var legacyConfig CriblConfig
-	err := json.Unmarshal(file, &legacyConfig)
+	var config CriblConfig
+	err := json.Unmarshal(file, &config)
 	if err != nil {
 		log.Printf("[ERROR] Failed to parse config file: %v", err)
 		return nil, fmt.Errorf("failed to parse config file: %v", err)
 	}
 
-	return &legacyConfig, nil
+	return &config, nil
 }
 
 func parseIniConfig(file []byte) (*CriblConfig, error) {
@@ -161,7 +161,7 @@ func GetCredentials() (*CriblConfig, error) {
 
 	format, err := checkConfigFileFormat(file)
 	if err != nil {
-		log.Printf("[DEBUG] No configuration file found, continuing")
+		log.Printf("[DEBUG] No configuration file found, continuing - error: %v", err)
 		return nil, err
 	}
 
