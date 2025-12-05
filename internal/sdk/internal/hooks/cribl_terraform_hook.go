@@ -48,29 +48,29 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 		return baseURL, client
 	}
 
-	// Check for on-prem configuration in credentials file
-	if config != nil && config.OnpremServerURL != "" {
-		o.baseURL = config.OnpremServerURL
-		log.Printf("[DEBUG] On-prem configuration detected in credentials file, using server URL: %s", config.OnpremServerURL)
-		log.Printf("[DEBUG] Initialization complete")
-		return config.OnpremServerURL, client
-	}
-
 	// Set orgID and workspaceID from config
 	if config != nil {
-		log.Printf("[DEBUG] Setting orgID: %s and workspaceID: %s", config.OrganizationID, config.Workspace)
-		o.orgID = config.OrganizationID
-		o.workspaceID = config.Workspace
+		// Check for on-prem configuration in credentials file
+		if config.OnpremServerURL != "" {
+			o.baseURL = config.OnpremServerURL
+			log.Printf("[DEBUG] On-prem configuration detected in credentials file, using server URL: %s", config.OnpremServerURL)
+			log.Printf("[DEBUG] Initialization complete")
+			return config.OnpremServerURL, client
+		} else {
+			log.Printf("[DEBUG] Setting orgID: %s and workspaceID: %s", config.OrganizationID, config.Workspace)
+			o.orgID = config.OrganizationID
+			o.workspaceID = config.Workspace
 
-		// If baseURL is not provided or is a template, construct it from credentials
-		input := ConstructBaseUrlInput{
-			BaseURL: baseURL,
+			// If baseURL is not provided or is a template, construct it from credentials
+			input := ConstructBaseUrlInput{
+				BaseURL: baseURL,
+			}
+			finalBaseURL := constructBaseURL(input, config)
+			o.baseURL = finalBaseURL
+			log.Printf("[DEBUG] Final baseURL: %s", finalBaseURL)
+			log.Printf("[DEBUG] Initialization complete")
+			return finalBaseURL, client
 		}
-		finalBaseURL := constructBaseURL(input, config)
-		o.baseURL = finalBaseURL
-		log.Printf("[DEBUG] Final baseURL: %s", finalBaseURL)
-		log.Printf("[DEBUG] Initialization complete")
-		return finalBaseURL, client
 	} else {
 		log.Printf("[DEBUG] No credentials found")
 		o.baseURL = baseURL
@@ -81,7 +81,6 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 }
 
 func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.Request) (*http.Request, error) {
-
 	// Check for on-prem configuration first
 	onpremServerURL := os.Getenv("CRIBL_ONPREM_SERVER_URL")
 	onPrem := false
@@ -162,9 +161,9 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 		req.Header.Set("Authorization", "Bearer "+bearerToken)
 	} else if clientID != "" && clientSecret != "" {
 		var tokenInfo *TokenInfo
+		var sessionKey, audience string
 		if !onPrem {
 			// Get audience from base URL
-			audience := ""
 			if o.baseURL != "" {
 				// Extract domain from workspace URL (e.g., from https://main-org.cribl.cloud)
 				parsedURL, err := url.Parse(o.baseURL)
@@ -194,35 +193,30 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 				return req, fmt.Errorf("no base URL or audience provided")
 			}
 
-			// Get or create session
-			tokenInfo, err = o.loadTokenInfo(LoadTokenInfoInput{
-				SessionKey: fmt.Sprintf("%s:%s", clientID, clientSecret),
-				Context:    ctx.HookContext,
-				Audience:   audience,
-				Config:     config,
-			})
-			if err != nil {
-				return req, err
-			}
+			sessionKey = fmt.Sprintf("%s:%s", clientID, clientSecret)
 		} else {
-			tokenInfo, err = o.loadTokenInfo(LoadTokenInfoInput{
-				SessionKey: fmt.Sprintf("onprem:%s:%s:%s", config.OnpremServerURL, config.OnpremUsername, config.OnpremPassword),
-				Context:    ctx.HookContext,
-				Config:     config,
-			})
-			if err != nil {
-				return req, err
-			}
+			sessionKey = fmt.Sprintf("onprem:%s:%s:%s", config.OnpremServerURL, config.OnpremUsername, config.OnpremPassword)
 		}
+
+		// Get or create session
+		tokenInfo, err = o.loadTokenInfo(LoadTokenInfoInput{
+			SessionKey: sessionKey,
+			Context:    ctx.HookContext,
+			Audience:   audience,
+			Config:     config,
+		})
+		if err != nil {
+			return req, err
+		}
+
 		req.Header.Set("Authorization", "Bearer "+tokenInfo.Token)
 	} else {
 		return req, fmt.Errorf("authentication requires either CRIBL_BEARER_TOKEN OR CRIBL_ONPREM_USERNAME and CRIBL_ONPREM_PASSWORD OR Cloud stuff")
 	}
 
-	if !onPrem {
-		// Handle URL routing
-		path := strings.TrimLeft(req.URL.Path, "/")
+	path := trimPath(req.URL.Path)
 
+	if !onPrem {
 		// Check if this is a gateway path (management endpoints)
 		if isGatewayPath(path) || strings.Contains(req.URL.Host, "gateway.") {
 			// Construct gateway URL
@@ -262,9 +256,6 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 			}
 		}
 	} else {
-
-		path := trimPath(req.URL.Path)
-
 		// Check if this is a restricted endpoint for on-prem
 		if isRestrictedOnPremEndpoint(path) {
 			return req, fmt.Errorf("endpoint '%s' is not supported for on-prem deployments. On-prem deployments only support workspace resources (sources, destinations, routes, pipelines, etc.)", path)
