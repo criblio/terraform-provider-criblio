@@ -25,6 +25,14 @@ func isGatewayPath(path string) bool {
 	return strings.HasPrefix(cleanPath, "organizations/")
 }
 
+func isGatewayHost(host string) bool {
+	return strings.Contains(host, "gateway.")
+}
+
+func isLocalHost(host string) bool {
+	return strings.Contains(host, "127.0.0.1") || strings.Contains(host, "localhost")
+}
+
 // isRestrictedOnPremEndpoint determines if a path is for a restricted endpoint that is not supported on on-prem deployments
 func isRestrictedOnPremEndpoint(path string) bool {
 	// Search endpoints contain "search/" somewhere in the path

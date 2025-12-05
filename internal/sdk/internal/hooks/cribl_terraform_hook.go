@@ -174,7 +174,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 				host := parsedURL.Host
 
 				// Handle test/localhost URLs differently
-				if strings.Contains(host, "127.0.0.1") || strings.Contains(host, "localhost") {
+				if isLocalHost(host) {
 					// For test URLs, use the same URL as audience
 					audience = o.baseURL
 				} else {
@@ -218,7 +218,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 
 	if !onPrem {
 		// Check if this is a gateway path (management endpoints)
-		if isGatewayPath(path) || strings.Contains(req.URL.Host, "gateway.") {
+		if isGatewayPath(req.URL.Path) || isGatewayHost(req.URL.Host) {
 			// Construct gateway URL
 			gatewayURL := constructGatewayURL(cloudDomain, config)
 
@@ -240,11 +240,9 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 			req.URL = parsedURL
 			req.Host = parsedGatewayURL.Host
 		} else {
-			// Handle regular workspace API routing
-			trimmedBaseURL := strings.TrimRight(o.baseURL, "/")
-
 			// For workspace API, add /api/v1 prefix if not already present
 			if !strings.Contains(req.URL.String(), "/api/v1") && !strings.HasPrefix(path, "api/v1") {
+				trimmedBaseURL := strings.TrimRight(o.baseURL, "/")
 				newURL := fmt.Sprintf("%s/api/v1/%s", trimmedBaseURL, path)
 
 				parsedURL, err := url.Parse(newURL)
@@ -265,21 +263,18 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 		baseURL := strings.TrimRight(config.OnpremServerURL, "/")
 
 		// Construct full URL
+		var newURL string
 		if path == "" {
-			newURL := fmt.Sprintf("%s/api/v1", baseURL)
-			parsedURL, err := url.Parse(newURL)
-			if err != nil {
-				return req, fmt.Errorf("failed to parse on-prem URL: %v", err)
-			}
-			req.URL = parsedURL
+			newURL = fmt.Sprintf("%s/api/v1", baseURL)
 		} else {
-			newURL := fmt.Sprintf("%s/api/v1/%s", baseURL, path)
-			parsedURL, err := url.Parse(newURL)
-			if err != nil {
-				return req, fmt.Errorf("failed to parse on-prem URL: %v", err)
-			}
-			req.URL = parsedURL
+			newURL = fmt.Sprintf("%s/api/v1/%s", baseURL, path)
 		}
+
+		parsedURL, err := url.Parse(newURL)
+		if err != nil {
+			return req, fmt.Errorf("failed to parse on-prem URL: %v", err)
+		}
+		req.URL = parsedURL
 
 		log.Printf("[DEBUG] On-prem request URL: %s", req.URL.String())
 	}
@@ -291,8 +286,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 // Reference: https://docs.cribl.io/cribl-as-code/authentication/#sdk-cust-managed-auth
 func (o *CriblTerraformHook) getOnPremBearerToken(ctx context.Context, serverURL, username, password string) (*TokenInfo, error) {
 	// Construct auth URL - use /api/v1/auth/login as per documentation
-	baseURL := strings.TrimRight(serverURL, "/")
-	authURL := fmt.Sprintf("%s/api/v1/auth/login", baseURL)
+	authURL := fmt.Sprintf("%s/api/v1/auth/login", strings.TrimRight(serverURL, "/"))
 
 	log.Printf("[DEBUG] Getting on-prem bearer token from: %s", authURL)
 
@@ -358,7 +352,7 @@ func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clien
 		host := parsedURL.Host
 
 		// Handle test/localhost URLs differently
-		if strings.Contains(host, "127.0.0.1") || strings.Contains(host, "localhost") {
+		if isLocalHost(host) {
 			// For test URLs, use the same host but with /oauth/token path
 			authURL = fmt.Sprintf("%s://%s/oauth/token", parsedURL.Scheme, host)
 		} else {
@@ -414,7 +408,7 @@ func (o *CriblTerraformHook) getBearerToken(ctx context.Context, clientID, clien
 		host := parsedURL.Host
 
 		// Handle test/localhost URLs differently
-		if strings.Contains(host, "127.0.0.1") || strings.Contains(host, "localhost") {
+		if isLocalHost(host) {
 			// For test URLs, use the same URL as audience
 			audience = o.baseURL
 		} else {
@@ -516,7 +510,7 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 				host := parsedURL.Host
 
 				// Handle test/localhost URLs differently
-				if strings.Contains(host, "127.0.0.1") || strings.Contains(host, "localhost") {
+				if isLocalHost(host) {
 					// For test URLs, use the same URL as audience
 					audience = o.baseURL
 				} else {

@@ -40,6 +40,47 @@ func TestIsGatewayPath(t *testing.T) {
 	}
 }
 
+func TestIsGatewayHost(t *testing.T) {
+	// Test cases for gateway paths
+	gatewayHosts := []struct {
+		path     string
+		expected bool
+		desc     string
+	}{
+		{"foo.bar.com/api/v1/gateway", false, "plain URL path"},
+		{"foo.gateway.bar.com", true, "plain URL path"},
+		{"foo.gateway.com", true, "Does Gateway even still make PCs?"},
+	}
+
+	for _, test := range gatewayHosts {
+		result := isGatewayHost(test.path)
+		if result != test.expected {
+			t.Errorf("isGatewayHost(%q) = %v, expected %v (%s)", test.path, result, test.expected, test.desc)
+		}
+	}
+}
+
+func TestIsLocalHost(t *testing.T) {
+	// Test cases for gateway paths
+	gatewayHosts := []struct {
+		path     string
+		expected bool
+		desc     string
+	}{
+		{"foo.bar.com/api/v1/gateway", false, "plain URL path"},
+		{"foo.gateway.bar.com", false, "plain URL path"},
+		{"localhost", true, "localhost in words"},
+		{"127.0.0.1", true, "localhost in numbers"},
+	}
+
+	for _, test := range gatewayHosts {
+		result := isLocalHost(test.path)
+		if result != test.expected {
+			t.Errorf("isLocalHost(%q) = %v, expected %v (%s)", test.path, result, test.expected, test.desc)
+		}
+	}
+}
+
 func TestConstructGatewayURL(t *testing.T) {
 	// Test with default domain
 	result := constructGatewayURL("", nil)
