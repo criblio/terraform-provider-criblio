@@ -50,7 +50,6 @@ if [[ $tfApply -ne 0 ]] || [[ $tfImport -ne 0 ]] || [[ $tfRefresh -ne 0 ]] || [[
 	exitCode=1
 else
 	exitCode=0
-	break
 fi
 
 exit $exitCode
