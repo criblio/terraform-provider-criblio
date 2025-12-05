@@ -1,0 +1,4 @@
+# CODEOWNERS for terraform-provider-criblio.
+# for Internal code, two approvers from this list are needed
+# This is enforced by branch protection in the GitHub Repo
+/internal/sdk/internal/hooks/ @ktraister-cribl @wnoonan @kkorathaluri @FireBall1725

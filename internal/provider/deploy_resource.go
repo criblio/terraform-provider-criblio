@@ -75,6 +75,9 @@ func (r *DeployResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						"id": schema.StringAttribute{
 							Computed: true,
 						},
+						"inherits": schema.StringAttribute{
+							Computed: true,
+						},
 						"is_fleet": schema.BoolAttribute{
 							Computed: true,
 						},

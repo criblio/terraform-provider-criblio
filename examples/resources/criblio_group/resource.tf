@@ -6,6 +6,7 @@ resource "criblio_group" "my_group" {
   description           = "Production Edge configuration group"
   estimated_ingest_rate = 500000
   id                    = "config-group-prod-edge"
+  inherits              = "base-config"
   is_fleet              = false
   max_worker_age        = "1h"
   name                  = "Prod Edge"

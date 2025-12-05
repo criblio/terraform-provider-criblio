@@ -62069,7 +62069,6 @@ components:
         inherits:
           type: string
           example: "base-config"
-          x-speakeasy-terraform-ignore: true
         isFleet:
           type: boolean
           example: false
