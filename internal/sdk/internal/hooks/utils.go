@@ -35,26 +35,21 @@ func isLocalHost(host string) bool {
 
 // isRestrictedOnPremEndpoint determines if a path is for a restricted endpoint that is not supported on on-prem deployments
 func isRestrictedOnPremEndpoint(path string) bool {
+	switch {
 	// Search endpoints contain "search/" somewhere in the path
-	if strings.Contains(path, "search/") {
+	case strings.Contains(path, "search/"):
 		// Exclude /system/config-search from restrictions as it's an admin endpoint
 		if !strings.Contains(path, "/system/config-search") {
 			return true
 		}
-	}
-
 	// Check for lake endpoints
-	if strings.Contains(path, "/lake/") || strings.Contains(path, "products/lake/") {
+	case strings.Contains(path, "/lake/") || strings.Contains(path, "products/lake/"):
 		return true
-	}
-
 	// Check for lakehouse endpoints
-	if strings.Contains(path, "lakehouse") {
+	case strings.Contains(path, "lakehouse"):
 		return true
-	}
-
 	// Check for products/search endpoints
-	if strings.Contains(path, "products/search") {
+	case strings.Contains(path, "products/search"):
 		return true
 	}
 
@@ -109,7 +104,7 @@ func constructBaseURL(input ConstructBaseUrlInput, config *CriblConfig) string {
 	baseURL := input.BaseURL
 
 	// Special case: if we have a localhost/test URL, keep it even with environment variables
-	if baseURL != "" && (strings.Contains(baseURL, "127.0.0.1") || strings.Contains(baseURL, "localhost")) {
+	if baseURL != "" && isLocalHost(baseURL) {
 		log.Printf("[DEBUG] Localhost URL detected, keeping as-is: %s", baseURL)
 		return baseURL
 	}
