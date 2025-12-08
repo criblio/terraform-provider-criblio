@@ -1,318 +1,510 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id    = "main"
-  cloud_domain    = "cribl-playground.cloud"
-}
-
-resource "criblio_search_dashboard_category" "sre" {
-  description = "SRE dashboards"
-  id          = "SRE"
-  is_pack     = false
-  name        = "SRE"
-}
-
-resource "criblio_search_dashboard" "ecs_tasks" {
-  name              = "ECS tasks"
-  id                = "ecs_tasks"
-  category          = criblio_search_dashboard_category.sre.id
-  cache_ttl_seconds = 0
-  refresh_rate      = 60000
-  created           = 1733366400
-  created_by        = "saas-operations"
-  modified          = 1733366400
-  modified_by       = "saas-operations"
-
+resource "criblio_search_dashboard" "my_searchdashboard" {
+  id          = "sample_test_dashboard"
+  name        = "Sample Test Dashboard"
+  description = "A sample dashboard with several panels"
+  created     = 1703123456789
+  created_by  = "terraform"
+  modified    = 1703123456789
   elements = [
     {
       element = {
-        id      = "2tga2fara"
-        inputId = "time"
-        type    = "input.timerange"
-        title   = "Time"
-        layout = {
-          x = 2
-          y = 0
-          w = 2
-          h = 2
-        }
-        config = {
-          defaultValue = jsonencode({
-            earliest = "-3h"
-            latest   = "now"
-            timezone = "local"
-          })
-        }
-      }
-    },
-    {
-      element = {
-        id    = "c6ydxqpde"
-        type  = "chart.pie"
-        title = "Tasks by group"
+        id    = "uhyck3nbk"
+        type  = "counter.single"
+        title = "Single Value Visualization"
         layout = {
           x = 0
           y = 0
-          w = 6
-          h = 4
+          w = 4
+          h = 3
+        }
+        search = {
+          search_query_inline = {
+            query = "dataset=\"$vt_dummy\" event<42 | count"
+            earliest = {
+              number = 1703123456789
+            }
+            latest = {
+              number = 1703127056789
+            }
+            type = "inline"
+          }
         }
         config = {
-          colorPalette         = 0
-          colorPaletteReversed = false
-          customData = jsonencode({
-            trellis      = false
-            connectNulls = "Leave gaps"
-            stack        = false
-            dataFields   = ["group", "count_"]
-            seriesCount  = 1
-          })
-          xAxis = jsonencode({
-            labelOrientation = 0
-            position         = "Bottom"
-          })
-          yAxis = jsonencode({
-            position  = "Left"
-            scale     = "Linear"
-            splitLine = true
-          })
-          legend = jsonencode({
+          style           = false
+          apply_threshold = false
+          color_thresholds = {
+            thresholds = [
+              {
+                color     = "#45850B"
+                threshold = 30
+              },
+              {
+                color     = "#EFDB23"
+                threshold = 70
+              },
+              {
+                color     = "#B20000"
+                threshold = 100
+              }
+            ]
+          }
+          color_palette = 0
+          data = {
+            connect_nulls = "Leave gaps"
+            stack         = false
+          }
+          x_axis = {
+            label_orientation = 0
+            position          = "Bottom"
+          }
+          y_axis = {
+            position   = "Left"
+            scale      = "Linear"
+            split_line = true
+          }
+          legend = {
             position = "Right"
             truncate = true
-          })
-          onClickAction = jsonencode({
-            type = "None"
-          })
-        }
-        search = {
-          search_query_inline = {
-            type  = "inline"
-            query = "dataset=\"ecs_event\" lastStatus=\"RUNNING\" | summarize count() by group"
-            earliest = {
-              str = "$time.earliest$"
-            }
-            latest = {
-              str = "$time.latest$"
-            }
-            timezone = "$time.timezone$"
           }
+          series    = []
+          color     = "#0091eb"
+          decimals  = 0
+          label     = " The answer to life, the universe, and everything"
+          timestats = false
         }
       }
     },
     {
       element = {
-        id    = "678uwb26a-copy-copy-copy"
-        type  = "chart.column"
-        title = "Failed tasks by group/status "
+        id    = "arr3nh2me"
+        type  = "chart.pie"
+        title = "Donut Chart Visualization"
         layout = {
-          x = 6
+          x = 4
           y = 0
-          w = 6
-          h = 4
-        }
-        config = {
-          colorPalette         = 0
-          colorPaletteReversed = false
-          customData = jsonencode({
-            trellis      = false
-            connectNulls = "Leave gaps"
-            stack        = false
-            dataFields   = []
-            seriesCount  = 4
-          })
-          xAxis = jsonencode({
-            labelOrientation = 0
-            position         = "Bottom"
-          })
-          yAxis = jsonencode({
-            position  = "Left"
-            scale     = "Linear"
-            splitLine = true
-          })
-          legend = jsonencode({
-            position = "Bottom"
-            truncate = true
-          })
-          onClickAction = jsonencode({
-            type = "None"
-          })
+          w = 4
+          h = 3
         }
         search = {
           search_query_inline = {
-            type  = "inline"
-            query = "dataset=\"ecs_event\" containers.0.exitCode!=\"0\" lastStatus in (\"DEPROVISIONING\", \"STOPPED\") | timestats count() by group, lastStatus"
+            query = "dataset=\"$vt_dummy\" event<100 \n| extend method=iif(event%3==0, 'POST', 'GET') \n| summarize count() by method"
             earliest = {
-              str = "$time.earliest$"
+              number = 1703123456789
             }
             latest = {
-              str = "$time.latest$"
+              number = 1703127056789
             }
-            timezone = "$time.timezone$"
+            type = "inline"
           }
+        }
+        config = {
+          color_palette          = 0
+          color_palette_reversed = false
+          custom_data = {
+            summarize_others = false
+            series_count     = 1
+          }
+          legend = {
+            position = "Right"
+            truncate = true
+          }
+          onClick_action = {
+            type = "None"
+          }
+          data = {
+            connect_nulls = "Leave gaps"
+            stack         = false
+          }
+          x_axis = {
+            label_orientation = 0
+            position          = "Bottom"
+          }
+          y_axis = {
+            position   = "Left"
+            scale      = "Linear"
+            split_line = true
+          }
+          series = [
+            {
+              y_axis_field = "count_"
+              name         = "count_"
+              color        = "#00CCCC"
+            }
+          ]
+          timestats = false
         }
       }
     },
     {
       element = {
-        id    = "678uwb26a"
-        type  = "chart.column"
-        title = "Tenant-terraform tasks by status"
+        id    = "x8878143y"
+        type  = "chart.gauge"
+        title = "Gauge Chart Visualization"
+        layout = {
+          x = 8
+          y = 0
+          w = 4
+          h = 3
+        }
+        search = {
+          search_query_inline = {
+            query = "dataset=\"$vt_dummy\" event<42\n| count \n"
+            earliest = {
+              number = 1703123456789
+            }
+            latest = {
+              number = 1703127056789
+            }
+            type = "inline"
+          }
+        }
+        config = {
+          color_thresholds = {
+            thresholds = [
+              {
+                color     = "#45850B"
+                threshold = 30
+              },
+              {
+                color     = "#EFDB23"
+                threshold = 70
+              },
+              {
+                color     = "#B20000"
+                threshold = 100
+              }
+            ]
+          }
+          legend = {
+            position = "None"
+            truncate = true
+          }
+          color_palette = 10
+          data = {
+            connect_nulls = "Leave gaps"
+            stack         = false
+          }
+          x_axis = {
+            label_orientation = 0
+            position          = "Bottom"
+          }
+          y_axis = {
+            position   = "Left"
+            scale      = "Linear"
+            split_line = true
+          }
+          timestats = false
+        }
+      }
+    },
+    {
+      element = {
+        id    = "ndkk3w9ph"
+        type  = "chart.area"
+        title = "Area Chart Visualization"
         layout = {
           x = 0
-          y = 4
+          y = 3
           w = 6
-          h = 4
-        }
-        config = {
-          colorPalette         = 0
-          colorPaletteReversed = false
-          customData = jsonencode({
-            trellis      = false
-            connectNulls = "Leave gaps"
-            stack        = false
-            dataFields   = ["_time", "RUNNING", "PROVISIONING", "PENDING", "STOPPED", "DEPROVISIONING"]
-            seriesCount  = 5
-          })
-          xAxis = jsonencode({
-            labelOrientation = 0
-            position         = "Bottom"
-          })
-          yAxis = jsonencode({
-            position  = "Left"
-            scale     = "Linear"
-            splitLine = true
-          })
-          legend = jsonencode({
-            position = "Bottom"
-            truncate = true
-          })
-          onClickAction = jsonencode({
-            type = "None"
-          })
+          h = 3
         }
         search = {
           search_query_inline = {
-            type  = "inline"
-            query = "dataset=\"ecs_event\" group=\"family:tenant-terraform\" | timestats count() by lastStatus"
+            query = "dataset=\"$vt_dummy\" event<600 \n| extend _time=_time-rand(600), method=iif(event%2>0, \"GET\", \"POST\") \n| timestats span=1m count() by method"
             earliest = {
-              str = "$time.earliest$"
+              number = 1703123456789
             }
             latest = {
-              str = "$time.latest$"
+              number = 1703127056789
             }
-            timezone = "$time.timezone$"
+            type = "inline"
           }
+        }
+        config = {
+          color_palette          = 0
+          color_palette_reversed = false
+          custom_data = {
+            trellis       = false
+            connect_nulls = "Leave gaps"
+            stack         = false
+            series_count  = 2
+          }
+          x_axis = {
+            label_orientation = 0
+            position          = "Bottom"
+          }
+          y_axis = {
+            position   = "Left"
+            scale      = "Linear"
+            split_line = true
+          }
+          legend = {
+            position = "None"
+            truncate = true
+          }
+          onClick_action = {
+            type = "None"
+          }
+          data = {
+            connect_nulls = "Leave gaps"
+            stack         = false
+          }
+          timestats = true
         }
       }
     },
     {
       element = {
-        id    = "678uwb26a-copy"
+        id    = "0rfhfiufp"
         type  = "chart.column"
-        title = "Cleanup tasks by status"
+        title = "Bar Chart Visualization"
         layout = {
           x = 6
-          y = 4
+          y = 3
           w = 6
-          h = 4
-        }
-        config = {
-          colorPalette         = 0
-          colorPaletteReversed = false
-          customData = jsonencode({
-            trellis      = false
-            connectNulls = "Leave gaps"
-            stack        = false
-            dataFields   = ["_time", "PENDING", "PROVISIONING", "RUNNING", "DEPROVISIONING", "STOPPED"]
-            seriesCount  = 5
-          })
-          xAxis = jsonencode({
-            labelOrientation = 0
-            position         = "Bottom"
-          })
-          yAxis = jsonencode({
-            position  = "Left"
-            scale     = "Linear"
-            splitLine = true
-          })
-          legend = jsonencode({
-            position = "Bottom"
-            truncate = true
-          })
-          onClickAction = jsonencode({
-            type = "None"
-          })
+          h = 3
         }
         search = {
           search_query_inline = {
-            type  = "inline"
-            query = "dataset=\"ecs_event\" group=\"family:cleanup\" | timestats count() by lastStatus"
+            query = "dataset=\"$vt_dummy\" event<600 \n| extend _time=_time-rand(600), method=iif(event%2>0, \"GET\", \"POST\") \n| timestats span=1m count()"
             earliest = {
-              str = "$time.earliest$"
+              number = 1703123456789
             }
             latest = {
-              str = "$time.latest$"
+              number = 1703127056789
             }
-            timezone = "$time.timezone$"
+            type = "inline"
           }
+        }
+        config = {
+          color_palette          = 1
+          color_palette_reversed = false
+          custom_data = {
+            trellis       = false
+            connect_nulls = "Leave gaps"
+            stack         = false
+            series_count  = 1
+          }
+          x_axis = {
+            label_orientation = 0
+            position          = "Bottom"
+          }
+          y_axis = {
+            position   = "Left"
+            scale      = "Linear"
+            split_line = true
+          }
+          legend = {
+            position = "None"
+            truncate = true
+          }
+          onClick_action = {
+            type = "None"
+          }
+          data = {
+            connect_nulls = "Leave gaps"
+            stack         = false
+          }
+          timestats = true
+          series = [
+            {
+              y_axis_field = "count_"
+              name         = "count_"
+              color        = "#FF8042"
+            }
+          ]
         }
       }
     },
     {
       element = {
-        id    = "678uwb26a-copy-copy"
-        type  = "chart.column"
-        title = "Tenant-exec tasks by status"
+        id    = "dbkmmais5"
+        type  = "chart.funnel"
+        title = "Funnel Chart Visualization"
         layout = {
           x = 0
-          y = 8
-          w = 6
+          y = 6
+          w = 4
           h = 4
-        }
-        config = {
-          colorPalette         = 0
-          colorPaletteReversed = false
-          customData = jsonencode({
-            trellis      = false
-            connectNulls = "Leave gaps"
-            stack        = false
-            dataFields   = []
-            seriesCount  = 5
-          })
-          xAxis = jsonencode({
-            labelOrientation = 0
-            position         = "Bottom"
-          })
-          yAxis = jsonencode({
-            position  = "Left"
-            scale     = "Linear"
-            splitLine = true
-          })
-          legend = jsonencode({
-            position = "Bottom"
-            truncate = true
-          })
-          onClickAction = jsonencode({
-            type = "None"
-          })
         }
         search = {
           search_query_inline = {
-            type  = "inline"
-            query = "dataset=\"ecs_event\" group=\"family:tenant-exec\" | timestats count() by lastStatus"
+            query = "dataset=\"$vt_dummy\" event<100 \n| extend method=iif(event%3==0, 'POST', 'GET') \n| summarize count() by method"
             earliest = {
-              str = "$time.earliest$"
+              number = 1703123456789
             }
             latest = {
-              str = "$time.latest$"
+              number = 1703127056789
             }
-            timezone = "$time.timezone$"
+            type = "inline"
+          }
+        }
+        config = {
+          color_palette          = 9
+          color_palette_reversed = false
+          custom_data = {
+            summarize_others = false
+            series_count     = 1
+          }
+          legend = {
+            position = "None"
+            truncate = true
+          }
+          onClick_action = {
+            type = "None"
+          }
+          data = {
+            connect_nulls = "Leave gaps"
+            stack         = false
+          }
+          x_axis = {
+            label_orientation = 0
+            position          = "Bottom"
+          }
+          y_axis = {
+            position   = "Left"
+            scale      = "Linear"
+            split_line = true
+          }
+          series = [
+            {
+              y_axis_field = "count_"
+              name         = "count_"
+              color        = "#9E0142"
+            }
+          ]
+          timestats = false
+        }
+      }
+    },
+    {
+      element = {
+        id    = "qtifqfly4"
+        type  = "chart.line"
+        title = "Line Chart Visualization"
+        layout = {
+          x = 4
+          y = 6
+          w = 8
+          h = 4
+        }
+        search = {
+          search_query_inline = {
+            query = "dataset=\"$vt_dummy\" event<600 \n| extend _time=_time-rand(600), method=iif(event%2>0, \"GET\", \"POST\") \n| timestats span=1m count() by method"
+            earliest = {
+              number = 1703123456789
+            }
+            latest = {
+              number = 1703127056789
+            }
+            type = "inline"
+          }
+        }
+        config = {
+          color_palette          = 12
+          color_palette_reversed = false
+          custom_data = {
+            trellis       = false
+            connect_nulls = "Leave gaps"
+            stack         = false
+            series_count  = 2
+          }
+          x_axis = {
+            label_orientation = 0
+            position          = "Bottom"
+          }
+          y_axis = {
+            position   = "Left"
+            scale      = "Linear"
+            split_line = true
+          }
+          legend = {
+            position = "Right"
+            truncate = true
+          }
+          onClick_action = {
+            type = "None"
+          }
+          data = {
+            connect_nulls = "Leave gaps"
+            stack         = false
+          }
+          timestats = true
+          series = [
+            {
+              y_axis_field = "POST"
+              name         = "POST"
+              color        = "#56B4E9"
+            },
+            {
+              y_axis_field = "GET"
+              name         = "GET"
+              color        = "#000000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      element = {
+        id    = "uxwdqxfsa"
+        type  = "list.events"
+        title = "Raw Events Visualization"
+        layout = {
+          x = 0
+          y = 10
+          w = 12
+          h = 4
+        }
+        search = {
+          search_query_inline = {
+            query = "dataset=\"$vt_dummy\" event<20\n  | extend bytes = rand(10000), user = iif(event%3==0, 'admin', 'guest'), method=iif(event%3==0, 'POST', 'GET'), url = \"/api/v1/m/default_search/search/query?\"\n  | project-away dataset"
+            earliest = {
+              number = 1703123456789
+            }
+            latest = {
+              number = 1703127056789
+            }
+            type = "inline"
+          }
+        }
+        config = {
+          onClick_action = {
+            type = "None"
+          }
+          color_palette = 0
+          data = {
+            connect_nulls = "Leave gaps"
+            stack         = false
+          }
+          x_axis = {
+            label_orientation = 0
+            position          = "Bottom"
+          }
+          y_axis = {
+            position   = "Left"
+            scale      = "Linear"
+            split_line = true
+          }
+          legend = {
+            position = "Right"
+            truncate = true
+          }
+          series = [
+            {
+              y_axis_field = "status"
+              name         = "status"
+              color        = "#00CCCC"
+            },
+            {
+              y_axis_field = "response_time"
+              name         = "response_time"
+              color        = "#ffa600"
+            }
+          ]
+          axis = {
+            x_axis = "time"
+            y_axis = ["status", "response_time"]
           }
         }
       }
