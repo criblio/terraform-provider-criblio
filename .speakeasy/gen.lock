@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: bc77ef7ab2dbba1d06bad5b16db607e4
+  docChecksum: 12182c44dfd8f4be440ae906d6fd8202
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.33
-  configChecksum: 0f9b8b733be3cb7a3bacb9694e78176e
+  releaseVersion: 1.20.48
+  configChecksum: c83165104e371c3b9b081052218107d3
   published: true
 features:
   terraform:
@@ -182,6 +182,8 @@ generatedFiles:
   - examples/resources/criblio_schema/import-by-string-id.tf
   - examples/resources/criblio_schema/import.sh
   - examples/resources/criblio_schema/resource.tf
+  - examples/resources/criblio_search_dashboard/import-by-string-id.tf
+  - examples/resources/criblio_search_dashboard/import.sh
   - examples/resources/criblio_search_dashboard/resource.tf
   - examples/resources/criblio_search_dashboard_category/import-by-string-id.tf
   - examples/resources/criblio_search_dashboard_category/import.sh
@@ -381,7 +383,6 @@ generatedFiles:
   - internal/provider/searchdashboard_data_source.go
   - internal/provider/searchdashboard_data_source_sdk.go
   - internal/provider/searchdashboard_resource.go
-  - internal/provider/searchdashboard_resource_sdk.go
   - internal/provider/searchdashboardcategory_data_source.go
   - internal/provider/searchdashboardcategory_data_source_sdk.go
   - internal/provider/searchdashboardcategory_resource.go

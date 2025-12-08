@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *SearchDashboardDataSourceModel) RefreshFromOperationsListSearchDashboardResponseBody(ctx context.Context, resp *operations.ListSearchDashboardResponseBody) diag.Diagnostics {
+func (r *SearchDashboardDataSourceModel) RefreshFromOperationsGetSearchDashboardByIDResponseBody(ctx context.Context, resp *operations.GetSearchDashboardByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -50,6 +50,13 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 
 		if elementsItem.Element != nil {
 			elements.Element = &tfTypes.Element{}
+			if len(elementsItem.Element.Config) > 0 {
+				elements.Element.Config = make(map[string]jsontypes.Normalized, len(elementsItem.Element.Config))
+				for key, value := range elementsItem.Element.Config {
+					result, _ := json.Marshal(value)
+					elements.Element.Config[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
 			elements.Element.Description = types.StringPointerValue(elementsItem.Element.Description)
 			elements.Element.Empty = types.BoolPointerValue(elementsItem.Element.Empty)
 			elements.Element.HidePanel = types.BoolPointerValue(elementsItem.Element.HidePanel)
@@ -61,58 +68,61 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 			elements.Element.Layout.W = types.Float64Value(elementsItem.Element.Layout.W)
 			elements.Element.Layout.X = types.Float64Value(elementsItem.Element.Layout.X)
 			elements.Element.Layout.Y = types.Float64Value(elementsItem.Element.Layout.Y)
-			if elementsItem.Element.Search.SearchQuerySaved != nil {
-				elements.Element.Search.SearchQuerySaved = &tfTypes.SearchQuerySaved{}
-				elements.Element.Search.SearchQuerySaved.Query = types.StringPointerValue(elementsItem.Element.Search.SearchQuerySaved.Query)
-				elements.Element.Search.SearchQuerySaved.QueryID = types.StringValue(elementsItem.Element.Search.SearchQuerySaved.QueryID)
-				if elementsItem.Element.Search.SearchQuerySaved.RunMode != nil {
-					elements.Element.Search.SearchQuerySaved.RunMode = types.StringValue(string(*elementsItem.Element.Search.SearchQuerySaved.RunMode))
-				} else {
-					elements.Element.Search.SearchQuerySaved.RunMode = types.StringNull()
+			if elementsItem.Element.Search != nil {
+				elements.Element.Search = &tfTypes.SearchQuery{}
+				if elementsItem.Element.Search.SearchQuerySaved != nil {
+					elements.Element.Search.SearchQuerySaved = &tfTypes.SearchQuerySaved{}
+					elements.Element.Search.SearchQuerySaved.Query = types.StringPointerValue(elementsItem.Element.Search.SearchQuerySaved.Query)
+					elements.Element.Search.SearchQuerySaved.QueryID = types.StringValue(elementsItem.Element.Search.SearchQuerySaved.QueryID)
+					if elementsItem.Element.Search.SearchQuerySaved.RunMode != nil {
+						elements.Element.Search.SearchQuerySaved.RunMode = types.StringValue(string(*elementsItem.Element.Search.SearchQuerySaved.RunMode))
+					} else {
+						elements.Element.Search.SearchQuerySaved.RunMode = types.StringNull()
+					}
+					elements.Element.Search.SearchQuerySaved.Type = types.StringValue(string(elementsItem.Element.Search.SearchQuerySaved.Type))
 				}
-				elements.Element.Search.SearchQuerySaved.Type = types.StringValue(string(elementsItem.Element.Search.SearchQuerySaved.Type))
-			}
-			if elementsItem.Element.Search.SearchQueryInline != nil {
-				elements.Element.Search.SearchQueryInline = &tfTypes.SearchQueryInline{}
-				if elementsItem.Element.Search.SearchQueryInline.Earliest != nil {
-					elements.Element.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
-					if elementsItem.Element.Search.SearchQueryInline.Earliest.Str != nil {
-						elements.Element.Search.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Earliest.Str)
+				if elementsItem.Element.Search.SearchQueryInline != nil {
+					elements.Element.Search.SearchQueryInline = &tfTypes.SearchQueryInline{}
+					if elementsItem.Element.Search.SearchQueryInline.Earliest != nil {
+						elements.Element.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
+						if elementsItem.Element.Search.SearchQueryInline.Earliest.Str != nil {
+							elements.Element.Search.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Earliest.Str)
+						}
+						if elementsItem.Element.Search.SearchQueryInline.Earliest.Number != nil {
+							elements.Element.Search.SearchQueryInline.Earliest.Number = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.Earliest.Number)
+						}
 					}
-					if elementsItem.Element.Search.SearchQueryInline.Earliest.Number != nil {
-						elements.Element.Search.SearchQueryInline.Earliest.Number = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.Earliest.Number)
+					if elementsItem.Element.Search.SearchQueryInline.Latest != nil {
+						elements.Element.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
+						if elementsItem.Element.Search.SearchQueryInline.Latest.Str != nil {
+							elements.Element.Search.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Latest.Str)
+						}
+						if elementsItem.Element.Search.SearchQueryInline.Latest.Number != nil {
+							elements.Element.Search.SearchQueryInline.Latest.Number = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.Latest.Number)
+						}
 					}
+					elements.Element.Search.SearchQueryInline.ParentSearchID = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.ParentSearchID)
+					elements.Element.Search.SearchQueryInline.Query = types.StringValue(elementsItem.Element.Search.SearchQueryInline.Query)
+					elements.Element.Search.SearchQueryInline.SampleRate = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.SampleRate)
+					elements.Element.Search.SearchQueryInline.Timezone = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Timezone)
+					elements.Element.Search.SearchQueryInline.Type = types.StringValue(string(elementsItem.Element.Search.SearchQueryInline.Type))
 				}
-				if elementsItem.Element.Search.SearchQueryInline.Latest != nil {
-					elements.Element.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
-					if elementsItem.Element.Search.SearchQueryInline.Latest.Str != nil {
-						elements.Element.Search.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Latest.Str)
+				if elementsItem.Element.Search.SearchQueryValues != nil {
+					elements.Element.Search.SearchQueryValues = &tfTypes.SearchQueryValues{}
+					elements.Element.Search.SearchQueryValues.Type = types.StringValue(string(elementsItem.Element.Search.SearchQueryValues.Type))
+					elements.Element.Search.SearchQueryValues.Values = make([]types.String, 0, len(elementsItem.Element.Search.SearchQueryValues.Values))
+					for _, v := range elementsItem.Element.Search.SearchQueryValues.Values {
+						elements.Element.Search.SearchQueryValues.Values = append(elements.Element.Search.SearchQueryValues.Values, types.StringValue(v))
 					}
-					if elementsItem.Element.Search.SearchQueryInline.Latest.Number != nil {
-						elements.Element.Search.SearchQueryInline.Latest.Number = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.Latest.Number)
-					}
-				}
-				elements.Element.Search.SearchQueryInline.ParentSearchID = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.ParentSearchID)
-				elements.Element.Search.SearchQueryInline.Query = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Query)
-				elements.Element.Search.SearchQueryInline.SampleRate = types.Float64PointerValue(elementsItem.Element.Search.SearchQueryInline.SampleRate)
-				elements.Element.Search.SearchQueryInline.Timezone = types.StringPointerValue(elementsItem.Element.Search.SearchQueryInline.Timezone)
-				elements.Element.Search.SearchQueryInline.Type = types.StringValue(string(elementsItem.Element.Search.SearchQueryInline.Type))
-			}
-			if elementsItem.Element.Search.SearchQueryValues != nil {
-				elements.Element.Search.SearchQueryValues = &tfTypes.SearchQueryValues{}
-				elements.Element.Search.SearchQueryValues.Type = types.StringValue(string(elementsItem.Element.Search.SearchQueryValues.Type))
-				elements.Element.Search.SearchQueryValues.Values = make([]types.String, 0, len(elementsItem.Element.Search.SearchQueryValues.Values))
-				for _, v := range elementsItem.Element.Search.SearchQueryValues.Values {
-					elements.Element.Search.SearchQueryValues.Values = append(elements.Element.Search.SearchQueryValues.Values, types.StringValue(v))
 				}
 			}
 			elements.Element.Title = types.StringPointerValue(elementsItem.Element.Title)
 			elements.Element.Type = types.StringValue(string(elementsItem.Element.Type))
 			if len(elementsItem.Element.Value) > 0 {
 				elements.Element.Value = make(map[string]jsontypes.Normalized, len(elementsItem.Element.Value))
-				for key, value := range elementsItem.Element.Value {
-					result, _ := json.Marshal(value)
-					elements.Element.Value[key] = jsontypes.NewNormalizedValue(string(result))
+				for key1, value1 := range elementsItem.Element.Value {
+					result1, _ := json.Marshal(value1)
+					elements.Element.Value[key1] = jsontypes.NewNormalizedValue(string(result1))
 				}
 			}
 			if elementsItem.Element.Variant != nil {
@@ -162,4 +172,17 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 	}
 
 	return diags
+}
+
+func (r *SearchDashboardDataSourceModel) ToOperationsGetSearchDashboardByIDRequest(ctx context.Context) (*operations.GetSearchDashboardByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetSearchDashboardByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
 }

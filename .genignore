@@ -13,3 +13,4 @@ internal/provider/searchdatasetprovider_resource_sdk.go
 internal/provider/searchdataset_resource_sdk.go
 internal/provider/searchdatasetprovider_resource.go
 internal/provider/searchdataset_resource.go
+internal/provider/searchdashboard_resource_sdk.go

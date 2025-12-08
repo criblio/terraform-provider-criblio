@@ -24,6 +24,9 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
   elements = [
     {
       element = {
+        config = {
+          key = jsonencode("value")
+        }
         description      = "5xx error rate for checkout"
         empty            = false
         hide_panel       = false
@@ -48,7 +51,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
             parent_search_id = "parentSearch1"
             query            = "error OR warn"
             sample_rate      = 0.5
-            timezone         = "UTC"
+            timezone         = "$time.timezone$"
             type             = "inline"
           }
         }
@@ -121,6 +124,7 @@ Optional:
 
 Optional:
 
+- `config` (Map of String)
 - `description` (String)
 - `empty` (Boolean)
 - `hide_panel` (Boolean)
@@ -129,7 +133,7 @@ Optional:
 - `index` (Number)
 - `input_id` (String)
 - `layout` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--element--layout))
-- `search` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--element--search))
+- `search` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search))
 - `title` (String)
 - `type` (String) Not Null; must be one of ["chart.line", "chart.column", "chart.horizontalBar", "chart.area", "chart.scatter", "chart.pie", "chart.funnel", "chart.gauge", "chart.map", "list.events", "list.table", "counter.single", "input.timerange", "input.dropdown", "input.text", "input.number"]
 - `value` (Map of String)
@@ -163,7 +167,7 @@ Optional:
 - `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline--earliest))
 - `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline--latest))
 - `parent_search_id` (String)
-- `query` (String)
+- `query` (String) Not Null
 - `sample_rate` (Number)
 - `timezone` (String)
 - `type` (String) Not Null; must be "inline"
@@ -255,3 +259,22 @@ Optional:
 Optional:
 
 - `disabled` (Boolean) Not Null
+
+## Import
+
+Import is supported using the following syntax:
+
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = criblio_search_dashboard.my_criblio_search_dashboard
+  id = "dash-overview"
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+```shell
+terraform import criblio_search_dashboard.my_criblio_search_dashboard "dash-overview"
+```

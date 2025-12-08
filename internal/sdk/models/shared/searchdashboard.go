@@ -158,11 +158,12 @@ type Element struct {
 	Index           *float64                 `json:"index,omitempty"`
 	InputID         *string                  `json:"inputId,omitempty"`
 	Layout          DashboardLayout          `json:"layout"`
-	Search          SearchQuery              `json:"search"`
+	Search          *SearchQuery             `json:"search,omitempty"`
 	Title           *string                  `json:"title,omitempty"`
 	Type            DashboardElementType     `json:"type"`
 	Value           map[string]any           `json:"value,omitempty"`
 	Variant         *DashboardElementVariant `json:"variant,omitempty"`
+	Config          map[string]any           `json:"config,omitempty"`
 }
 
 func (e Element) MarshalJSON() ([]byte, error) {
@@ -170,7 +171,7 @@ func (e Element) MarshalJSON() ([]byte, error) {
 }
 
 func (e *Element) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"id", "layout", "search", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"id", "layout", "type"}); err != nil {
 		return err
 	}
 	return nil
@@ -232,9 +233,9 @@ func (e *Element) GetLayout() DashboardLayout {
 	return e.Layout
 }
 
-func (e *Element) GetSearch() SearchQuery {
+func (e *Element) GetSearch() *SearchQuery {
 	if e == nil {
-		return SearchQuery{}
+		return nil
 	}
 	return e.Search
 }
@@ -265,6 +266,13 @@ func (e *Element) GetVariant() *DashboardElementVariant {
 		return nil
 	}
 	return e.Variant
+}
+
+func (e *Element) GetConfig() map[string]any {
+	if e == nil {
+		return nil
+	}
+	return e.Config
 }
 
 type ElementUnionType string
@@ -304,19 +312,19 @@ func (u *ElementUnion) UnmarshalJSON(data []byte) error {
 	var candidates []utils.UnionCandidate
 
 	// Collect all valid candidates
-	var element Element = Element{}
-	if err := utils.UnmarshalJSON(data, &element, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  ElementUnionTypeElement,
-			Value: &element,
-		})
-	}
-
 	var elementMarkdown ElementMarkdown = ElementMarkdown{}
 	if err := utils.UnmarshalJSON(data, &elementMarkdown, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  ElementUnionTypeElementMarkdown,
 			Value: &elementMarkdown,
+		})
+	}
+
+	var element Element = Element{}
+	if err := utils.UnmarshalJSON(data, &element, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ElementUnionTypeElement,
+			Value: &element,
 		})
 	}
 
@@ -333,11 +341,11 @@ func (u *ElementUnion) UnmarshalJSON(data []byte) error {
 	// Set the union type and value based on the best candidate
 	u.Type = best.Type.(ElementUnionType)
 	switch best.Type {
-	case ElementUnionTypeElement:
-		u.Element = best.Value.(*Element)
-		return nil
 	case ElementUnionTypeElementMarkdown:
 		u.ElementMarkdown = best.Value.(*ElementMarkdown)
+		return nil
+	case ElementUnionTypeElement:
+		u.Element = best.Value.(*Element)
 		return nil
 	}
 

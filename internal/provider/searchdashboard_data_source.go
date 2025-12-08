@@ -87,6 +87,10 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 						"element": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
+								"config": schema.MapAttribute{
+									Computed:    true,
+									ElementType: jsontypes.NormalizedType{},
+								},
 								"description": schema.StringAttribute{
 									Computed: true,
 								},
@@ -269,7 +273,8 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 				},
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"modified": schema.Float64Attribute{
 				Computed: true,
@@ -357,7 +362,13 @@ func (r *SearchDashboardDataSource) Read(ctx context.Context, req datasource.Rea
 		return
 	}
 
-	res, err := r.client.Dashboards.ListSearchDashboard(ctx)
+	request, requestDiags := data.ToOperationsGetSearchDashboardByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Dashboards.GetSearchDashboardByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -377,7 +388,7 @@ func (r *SearchDashboardDataSource) Read(ctx context.Context, req datasource.Rea
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchDashboardResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSearchDashboardByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
