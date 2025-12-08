@@ -8,6 +8,7 @@ import (
 )
 
 type Element struct {
+	Config          map[string]jsontypes.Normalized `tfsdk:"config"`
 	Description     types.String                    `tfsdk:"description"`
 	Empty           types.Bool                      `tfsdk:"empty"`
 	HidePanel       types.Bool                      `tfsdk:"hide_panel"`
@@ -16,7 +17,7 @@ type Element struct {
 	Index           types.Float64                   `tfsdk:"index"`
 	InputID         types.String                    `tfsdk:"input_id"`
 	Layout          DashboardLayout                 `tfsdk:"layout"`
-	Search          SearchQuery                     `tfsdk:"search"`
+	Search          *SearchQuery                    `tfsdk:"search"`
 	Title           types.String                    `tfsdk:"title"`
 	Type            types.String                    `tfsdk:"type"`
 	Value           map[string]jsontypes.Normalized `tfsdk:"value"`

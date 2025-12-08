@@ -6212,41 +6212,45 @@ components:
             earliest:
               oneOf:
                 - type: string
-                  nullable: true
+                  default: "-1h"
+                  description: |
+                    Earliest time for the search query. Use "$time.earliest$" to reference the time input control's value.
+                    Can also be a relative time string (e.g., "-3h", "-1d") or absolute time string.
+                    The UI will resolve "$time.earliest$" from the time input control's defaultValue or current value.
                   example: "-1h"
                 - type: number
-                  nullable: true
+                  description: Earliest time as epoch timestamp
                   example: 1696166400
             latest:
               oneOf:
                 - type: string
-                  nullable: true
+                  default: "now"
+                  description: |
+                    Latest time for the search query. Use "$time.latest$" to reference the time input control's value.
+                    Can also be a relative time string (e.g., "now", "-1h") or absolute time string.
+                    The UI will resolve "$time.latest$" from the time input control's defaultValue or current value.
                   example: "now"
                 - type: number
-                  nullable: true
+                  description: Latest time as epoch timestamp
                   example: 1696170000
             parentSearchId:
               type: string
               example: "parentSearch1"
             query:
-              oneOf:
-                - type: string
-                  nullable: true
-                  example: "error OR warn"
+              type: string
+              example: "error OR warn"
             sampleRate:
               type: number
               example: 0.5
             timezone:
               type: string
-              example: "UTC"
+              example: "$time.timezone$"
             type:
               type: string
               enum:
                 - inline
               example: "inline"
           required:
-            - earliest
-            - latest
             - query
             - type
         - type: object
@@ -6397,11 +6401,13 @@ components:
                       h: 4
                   search:
                     $ref: "#/components/schemas/SearchQuery"
+                    nullable: true
                     example:
-                      query: "status:>=500 service:checkout env:prod"
-                      timeRange:
-                        from: "now-1h"
-                        to: "now"
+                      type: "inline"
+                      query: "dataset=\"ecs_event\" lastStatus=\"RUNNING\" | summarize count() by group"
+                      earliest: "$time.earliest$"
+                      latest: "$time.latest$"
+                      timezone: "$time.timezone$"
                   title:
                     type: string
                     example: "HTTP 5xx errors"
@@ -6425,10 +6431,12 @@ components:
                   variant:
                     $ref: "#/components/schemas/DashboardElementVariant"
                     example: "line"
+                  config:
+                    type: object
+                    additionalProperties: true
                 required:
                   - id
                   - layout
-                  - search
                   - type
               - type: object
                 properties:
@@ -66934,7 +66942,6 @@ paths:
         - dashboards
       summary: Get a list of SearchDashboard objects
       description: Get a list of SearchDashboard objects
-      x-speakeasy-entity-operation: SearchDashboard#get
       responses:
         &a78
         "200":
@@ -66980,6 +66987,7 @@ paths:
       tags: *a77
       summary: Get SearchDashboard by ID
       description: Get SearchDashboard by ID
+      x-speakeasy-entity-operation: SearchDashboard#get
       parameters:
         - name: id
           in: path

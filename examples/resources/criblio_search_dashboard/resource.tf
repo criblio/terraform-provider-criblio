@@ -9,6 +9,9 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
   elements = [
     {
       element = {
+        config = {
+          key = jsonencode("value")
+        }
         description      = "5xx error rate for checkout"
         empty            = false
         hide_panel       = false
@@ -33,7 +36,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
             parent_search_id = "parentSearch1"
             query            = "error OR warn"
             sample_rate      = 0.5
-            timezone         = "UTC"
+            timezone         = "$time.timezone$"
             type             = "inline"
           }
         }
