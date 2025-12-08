@@ -264,10 +264,10 @@ func (e *TypeInline) UnmarshalJSON(data []byte) error {
 }
 
 type SearchQueryInline struct {
-	Earliest       *SearchQueryEarliest `json:"earliest"`
-	Latest         *SearchQueryLatest   `json:"latest"`
+	Earliest       *SearchQueryEarliest `json:"earliest,omitempty"`
+	Latest         *SearchQueryLatest   `json:"latest,omitempty"`
 	ParentSearchID *string              `json:"parentSearchId,omitempty"`
-	Query          *string              `json:"query"`
+	Query          string               `json:"query"`
 	SampleRate     *float64             `json:"sampleRate,omitempty"`
 	Timezone       *string              `json:"timezone,omitempty"`
 	Type           TypeInline           `json:"type"`
@@ -278,7 +278,7 @@ func (s SearchQueryInline) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchQueryInline) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"query", "type"}); err != nil {
 		return err
 	}
 	return nil
@@ -305,9 +305,9 @@ func (s *SearchQueryInline) GetParentSearchID() *string {
 	return s.ParentSearchID
 }
 
-func (s *SearchQueryInline) GetQuery() *string {
+func (s *SearchQueryInline) GetQuery() string {
 	if s == nil {
-		return nil
+		return ""
 	}
 	return s.Query
 }
@@ -450,19 +450,19 @@ func (u *SearchQuery) UnmarshalJSON(data []byte) error {
 	var candidates []utils.UnionCandidate
 
 	// Collect all valid candidates
-	var searchQueryInline SearchQueryInline = SearchQueryInline{}
-	if err := utils.UnmarshalJSON(data, &searchQueryInline, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  SearchQueryTypeSearchQueryInline,
-			Value: &searchQueryInline,
-		})
-	}
-
 	var searchQuerySaved SearchQuerySaved = SearchQuerySaved{}
 	if err := utils.UnmarshalJSON(data, &searchQuerySaved, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  SearchQueryTypeSearchQuerySaved,
 			Value: &searchQuerySaved,
+		})
+	}
+
+	var searchQueryInline SearchQueryInline = SearchQueryInline{}
+	if err := utils.UnmarshalJSON(data, &searchQueryInline, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryTypeSearchQueryInline,
+			Value: &searchQueryInline,
 		})
 	}
 
@@ -487,11 +487,11 @@ func (u *SearchQuery) UnmarshalJSON(data []byte) error {
 	// Set the union type and value based on the best candidate
 	u.Type = best.Type.(SearchQueryType)
 	switch best.Type {
-	case SearchQueryTypeSearchQueryInline:
-		u.SearchQueryInline = best.Value.(*SearchQueryInline)
-		return nil
 	case SearchQueryTypeSearchQuerySaved:
 		u.SearchQuerySaved = best.Value.(*SearchQuerySaved)
+		return nil
+	case SearchQueryTypeSearchQueryInline:
+		u.SearchQueryInline = best.Value.(*SearchQueryInline)
 		return nil
 	case SearchQueryTypeSearchQueryValues:
 		u.SearchQueryValues = best.Value.(*SearchQueryValues)

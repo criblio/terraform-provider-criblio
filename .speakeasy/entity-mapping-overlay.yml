@@ -254,5 +254,9 @@ actions:
   - target: "$.paths['/master/groups/{id}'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
       x-speakeasy-entity: Group
+
+  - target: "$.paths['/m/default_search/search/dashboards'].get.responses['200'].content.application/json.schema.properties.items.items"
+    update:
+      x-speakeasy-entity: SearchDashboard
   
   

@@ -104,6 +104,14 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 						"element": schema.SingleNestedAttribute{
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
+								"config": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Validators: []validator.Map{
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
+								},
 								"description": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
@@ -234,8 +242,12 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													Optional: true,
 												},
 												"query": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
+													Computed:    true,
+													Optional:    true,
+													Description: `Not Null`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+													},
 												},
 												"sample_rate": schema.Float64Attribute{
 													Computed: true,
@@ -334,10 +346,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 												}...),
 											},
 										},
-									},
-									Description: `Not Null`,
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
 									},
 								},
 								"title": schema.StringAttribute{
@@ -689,7 +697,13 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	res, err := r.client.Dashboards.ListSearchDashboard(ctx)
+	request, requestDiags := data.ToOperationsGetSearchDashboardByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Dashboards.GetSearchDashboardByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -713,7 +727,7 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListSearchDashboardResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetSearchDashboardByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -823,5 +837,5 @@ func (r *SearchDashboardResource) Delete(ctx context.Context, req resource.Delet
 }
 
 func (r *SearchDashboardResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource search_dashboard.")
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }
