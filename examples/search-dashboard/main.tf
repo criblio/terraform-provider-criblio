@@ -30,9 +30,9 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          style           = false
-          apply_threshold = false
-          color_thresholds = {
+          style           = jsonencode(false)
+          apply_threshold = jsonencode(false)
+          color_thresholds = jsonencode({
             thresholds = [
               {
                 color     = "#45850B"
@@ -47,30 +47,30 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
                 threshold = 100
               }
             ]
-          }
-          color_palette = 0
-          data = {
+          })
+          color_palette = jsonencode(0)
+          data = jsonencode({
             connect_nulls = "Leave gaps"
             stack         = false
-          }
-          x_axis = {
+          })
+          x_axis = jsonencode({
             label_orientation = 0
             position          = "Bottom"
-          }
-          y_axis = {
+          })
+          y_axis = jsonencode({
             position   = "Left"
             scale      = "Linear"
             split_line = true
-          }
-          legend = {
+          })
+          legend = jsonencode({
             position = "Right"
             truncate = true
-          }
-          series    = []
-          color     = "#0091eb"
-          decimals  = 0
-          label     = " The answer to life, the universe, and everything"
-          timestats = false
+          })
+          series    = jsonencode([])
+          color     = jsonencode("#0091eb")
+          decimals  = jsonencode(0)
+          label     = jsonencode(" The answer to life, the universe, and everything")
+          timestats = jsonencode(false)
         }
       }
     },
@@ -98,40 +98,40 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette          = 0
-          color_palette_reversed = false
-          custom_data = {
+          color_palette          = jsonencode(0)
+          color_palette_reversed = jsonencode(false)
+          custom_data = jsonencode({
             summarize_others = false
             series_count     = 1
-          }
-          legend = {
+          })
+          legend = jsonencode({
             position = "Right"
             truncate = true
-          }
-          onClick_action = {
+          })
+          onClick_action = jsonencode({
             type = "None"
-          }
-          data = {
+          })
+          data = jsonencode({
             connect_nulls = "Leave gaps"
             stack         = false
-          }
-          x_axis = {
+          })
+          x_axis = jsonencode({
             label_orientation = 0
             position          = "Bottom"
-          }
-          y_axis = {
+          })
+          y_axis = jsonencode({
             position   = "Left"
             scale      = "Linear"
             split_line = true
-          }
-          series = [
+          })
+          series = jsonencode([
             {
               y_axis_field = "count_"
               name         = "count_"
               color        = "#00CCCC"
             }
-          ]
-          timestats = false
+          ])
+          timestats = jsonencode(false)
         }
       }
     },
@@ -159,7 +159,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_thresholds = {
+          color_thresholds = jsonencode({
             thresholds = [
               {
                 color     = "#45850B"
@@ -174,26 +174,26 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
                 threshold = 100
               }
             ]
-          }
-          legend = {
+          })
+          legend = jsonencode({
             position = "None"
             truncate = true
-          }
-          color_palette = 10
-          data = {
+          })
+          color_palette = jsonencode(10)
+          data = jsonencode({
             connect_nulls = "Leave gaps"
             stack         = false
-          }
-          x_axis = {
+          })
+          x_axis = jsonencode({
             label_orientation = 0
             position          = "Bottom"
-          }
-          y_axis = {
+          })
+          y_axis = jsonencode({
             position   = "Left"
             scale      = "Linear"
             split_line = true
-          }
-          timestats = false
+          })
+          timestats = jsonencode(false)
         }
       }
     },
@@ -221,35 +221,35 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette          = 0
-          color_palette_reversed = false
-          custom_data = {
+          color_palette          = jsonencode(0)
+          color_palette_reversed = jsonencode(false)
+          custom_data = jsonencode({
             trellis       = false
             connect_nulls = "Leave gaps"
             stack         = false
             series_count  = 2
-          }
-          x_axis = {
+          })
+          x_axis = jsonencode({
             label_orientation = 0
             position          = "Bottom"
-          }
-          y_axis = {
+          })
+          y_axis = jsonencode({
             position   = "Left"
             scale      = "Linear"
             split_line = true
-          }
-          legend = {
+          })
+          legend = jsonencode({
             position = "None"
             truncate = true
-          }
-          onClick_action = {
+          })
+          onClick_action = jsonencode({
             type = "None"
-          }
-          data = {
+          })
+          data = jsonencode({
             connect_nulls = "Leave gaps"
             stack         = false
-          }
-          timestats = true
+          })
+          timestats = jsonencode(true)
         }
       }
     },
@@ -277,42 +277,42 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette          = 1
-          color_palette_reversed = false
-          custom_data = {
+          color_palette          = jsonencode(1)
+          color_palette_reversed = jsonencode(false)
+          custom_data = jsonencode({
             trellis       = false
             connect_nulls = "Leave gaps"
             stack         = false
             series_count  = 1
-          }
-          x_axis = {
+          })
+          x_axis = jsonencode({
             label_orientation = 0
             position          = "Bottom"
-          }
-          y_axis = {
+          })
+          y_axis = jsonencode({
             position   = "Left"
             scale      = "Linear"
             split_line = true
-          }
-          legend = {
+          })
+          legend = jsonencode({
             position = "None"
             truncate = true
-          }
-          onClick_action = {
+          })
+          onClick_action = jsonencode({
             type = "None"
-          }
-          data = {
+          })
+          data = jsonencode({
             connect_nulls = "Leave gaps"
             stack         = false
-          }
-          timestats = true
-          series = [
+          })
+          timestats = jsonencode(true)
+          series = jsonencode([
             {
               y_axis_field = "count_"
               name         = "count_"
               color        = "#FF8042"
             }
-          ]
+          ])
         }
       }
     },
@@ -340,40 +340,40 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette          = 9
-          color_palette_reversed = false
-          custom_data = {
+          color_palette          = jsonencode(9)
+          color_palette_reversed = jsonencode(false)
+          custom_data = jsonencode({
             summarize_others = false
             series_count     = 1
-          }
-          legend = {
+          })
+          legend = jsonencode({
             position = "None"
             truncate = true
-          }
-          onClick_action = {
+          })
+          onClick_action = jsonencode({
             type = "None"
-          }
-          data = {
+          })
+          data = jsonencode({
             connect_nulls = "Leave gaps"
             stack         = false
-          }
-          x_axis = {
+          })
+          x_axis = jsonencode({
             label_orientation = 0
             position          = "Bottom"
-          }
-          y_axis = {
+          })
+          y_axis = jsonencode({
             position   = "Left"
             scale      = "Linear"
             split_line = true
-          }
-          series = [
+          })
+          series = jsonencode([
             {
               y_axis_field = "count_"
               name         = "count_"
               color        = "#9E0142"
             }
-          ]
-          timestats = false
+          ])
+          timestats = jsonencode(false)
         }
       }
     },
@@ -401,36 +401,36 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          color_palette          = 12
-          color_palette_reversed = false
-          custom_data = {
+          color_palette          = jsonencode(12)
+          color_palette_reversed = jsonencode(false)
+          custom_data = jsonencode({
             trellis       = false
             connect_nulls = "Leave gaps"
             stack         = false
             series_count  = 2
-          }
-          x_axis = {
+          })
+          x_axis = jsonencode({
             label_orientation = 0
             position          = "Bottom"
-          }
-          y_axis = {
+          })
+          y_axis = jsonencode({
             position   = "Left"
             scale      = "Linear"
             split_line = true
-          }
-          legend = {
+          })
+          legend = jsonencode({
             position = "Right"
             truncate = true
-          }
-          onClick_action = {
+          })
+          onClick_action = jsonencode({
             type = "None"
-          }
-          data = {
+          })
+          data = jsonencode({
             connect_nulls = "Leave gaps"
             stack         = false
-          }
-          timestats = true
-          series = [
+          })
+          timestats = jsonencode(true)
+          series = jsonencode([
             {
               y_axis_field = "POST"
               name         = "POST"
@@ -441,7 +441,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
               name         = "GET"
               color        = "#000000"
             }
-          ]
+          ])
         }
       }
     },
@@ -469,28 +469,28 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           }
         }
         config = {
-          onClick_action = {
+          onClick_action = jsonencode({
             type = "None"
-          }
-          color_palette = 0
-          data = {
+          })
+          color_palette = jsonencode(0)
+          data = jsonencode({
             connect_nulls = "Leave gaps"
             stack         = false
-          }
-          x_axis = {
+          })
+          x_axis = jsonencode({
             label_orientation = 0
             position          = "Bottom"
-          }
-          y_axis = {
+          })
+          y_axis = jsonencode({
             position   = "Left"
             scale      = "Linear"
             split_line = true
-          }
-          legend = {
+          })
+          legend = jsonencode({
             position = "Right"
             truncate = true
-          }
-          series = [
+          })
+          series = jsonencode([
             {
               y_axis_field = "status"
               name         = "status"
@@ -501,11 +501,11 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
               name         = "response_time"
               color        = "#ffa600"
             }
-          ]
-          axis = {
+          ])
+          axis = jsonencode({
             x_axis = "time"
             y_axis = ["status", "response_time"]
-          }
+          })
         }
       }
     }
