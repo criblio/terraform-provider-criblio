@@ -3,6 +3,7 @@ package hooks
 import (
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"strings"
 )
@@ -30,7 +31,8 @@ func isGatewayHost(host string) bool {
 }
 
 func isLocalHost(host string) bool {
-	return strings.Contains(host, "127.0.0.1") || strings.Contains(host, "localhost")
+	ip := net.ParseIP(host)
+	return ip.IsLoopback() || strings.Contains(host, "localhost")
 }
 
 // isRestrictedOnPremEndpoint determines if a path is for a restricted endpoint that is not supported on on-prem deployments
