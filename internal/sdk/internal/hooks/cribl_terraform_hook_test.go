@@ -54,6 +54,24 @@ func TestTerraformSDKInit(t *testing.T) {
 	}
 }
 
+func TestTerraformSDKInitGetCredentialsFailure(t *testing.T) {
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("HOME", "/root")
+
+	var myClient HTTPClient
+
+	myUrl := "foobar"
+	test := NewCriblTerraformHook()
+	urlOut, _ := test.SDKInit(myUrl, myClient)
+
+	if urlOut != myUrl {
+		t.Errorf("SDKInit returned incorrect url - expected %s, got %s", myUrl, urlOut)
+	}
+}
+
 func TestTerraformSDKInitWithCloudDomain(t *testing.T) {
 	// Set all environment variables including cloud domain
 	os.Setenv("CRIBL_CLIENT_ID", "test-client")
@@ -787,97 +805,6 @@ func TestGovDomainOAuth2MissingAuthServerID(t *testing.T) {
 	os.Setenv("CRIBL_BEARER_TOKEN", "")
 }
 
-func TestConstructGatewayURL(t *testing.T) {
-	hook := NewCriblTerraformHook()
-
-	// Test with default domain
-	result := hook.constructGatewayURL("", nil)
-	expected := "https://gateway.cribl.cloud"
-	if result != expected {
-		t.Errorf("constructGatewayURL('', nil) = %q, expected %q", result, expected)
-	}
-
-	// Test with provider cloud domain
-	result = hook.constructGatewayURL("cribl-playground.cloud", nil)
-	expected = "https://gateway.cribl-playground.cloud"
-	if result != expected {
-		t.Errorf("constructGatewayURL('cribl-playground.cloud', nil) = %q, expected %q", result, expected)
-	}
-
-	// Test with config cloud domain
-	config := &CriblConfig{
-		CloudDomain: "cribl-staging.cloud",
-	}
-	result = hook.constructGatewayURL("", config)
-	expected = "https://gateway.cribl-staging.cloud"
-	if result != expected {
-		t.Errorf("constructGatewayURL('', config) = %q, expected %q", result, expected)
-	}
-
-	// Test provider takes precedence over config
-	result = hook.constructGatewayURL("cribl-prod.cloud", config)
-	expected = "https://gateway.cribl-prod.cloud"
-	if result != expected {
-		t.Errorf("constructGatewayURL('cribl-prod.cloud', config) = %q, expected %q", result, expected)
-	}
-}
-
-func TestGatewayRouting(t *testing.T) {
-	// Set environment variables for test
-	os.Setenv("CRIBL_CLIENT_ID", "test-client")
-	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
-	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
-	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
-	os.Setenv("CRIBL_CLOUD_DOMAIN", "cribl-playground.cloud")
-	os.Setenv("CRIBL_BEARER_TOKEN", "test-bearer-token")
-
-	hook := NewCriblTerraformHook()
-	hook.SDKInit("initial-url", nil)
-
-	// Test gateway path routing
-	gatewayReq, err := http.NewRequest("POST", "/v1/organizations/test-org/workspaces", nil)
-	if err != nil {
-		t.Fatalf("Error creating test request: %v", err)
-	}
-
-	var ctx BeforeRequestContext
-	finalReq, err := hook.BeforeRequest(ctx, gatewayReq)
-	if err != nil {
-		t.Fatalf("BeforeRequest failed: %v", err)
-	}
-
-	// Should route to gateway URL (no /api prefix)
-	expectedURL := "https://gateway.cribl-playground.cloud/v1/organizations/test-org/workspaces"
-	if finalReq.URL.String() != expectedURL {
-		t.Errorf("Gateway routing failed. Got %q, expected %q", finalReq.URL.String(), expectedURL)
-	}
-
-	// Test workspace path routing
-	workspaceReq, err := http.NewRequest("GET", "/v1/workspaces/test-workspace/sources", nil)
-	if err != nil {
-		t.Fatalf("Error creating test request: %v", err)
-	}
-
-	finalReq, err = hook.BeforeRequest(ctx, workspaceReq)
-	if err != nil {
-		t.Fatalf("BeforeRequest failed: %v", err)
-	}
-
-	// Should route to workspace URL using provider config
-	expectedURL = "https://test-workspace-test-org.cribl-playground.cloud/api/v1/v1/workspaces/test-workspace/sources"
-	if finalReq.URL.String() != expectedURL {
-		t.Errorf("Workspace routing failed. Got %q, expected %q", finalReq.URL.String(), expectedURL)
-	}
-
-	// Clean up
-	os.Setenv("CRIBL_CLIENT_ID", "")
-	os.Setenv("CRIBL_CLIENT_SECRET", "")
-	os.Setenv("CRIBL_ORGANIZATION_ID", "")
-	os.Setenv("CRIBL_WORKSPACE_ID", "")
-	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
-	os.Setenv("CRIBL_BEARER_TOKEN", "")
-}
-
 func TestGatewayRoutingWithProviderConfig(t *testing.T) {
 	// Set environment variables that should be overridden by provider config
 	os.Setenv("CRIBL_CLIENT_ID", "env-client")
@@ -1253,59 +1180,12 @@ func TestOnPremMissingCredentials(t *testing.T) {
 		t.Fatalf("Expected error when no credentials provided")
 	}
 
-	if !strings.Contains(err.Error(), "requires either CRIBL_BEARER_TOKEN or both CRIBL_ONPREM_USERNAME and CRIBL_ONPREM_PASSWORD") {
+	if !strings.Contains(err.Error(), "authentication requires either environment variables or a cribl config file. Please refer to the provider docs") {
 		t.Errorf("Expected error about missing credentials, got: %v", err)
 	}
 
 	// Clean up
 	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
-}
-
-func TestOnPremRestrictedEndpoints(t *testing.T) {
-	// Test that restricted endpoints return errors for on-prem deployments
-	restrictedPaths := []struct {
-		path        string
-		description string
-	}{
-		{"/products/search/jobs", "Search endpoints"},
-		{"/products/lake/lakes", "Lake endpoints"},
-		{"/products/lake/lakehouses", "Lakehouse endpoints"},
-		{"/v1/organizations/org/workspaces", "Workspace creation via gateway"},
-		{"/api/v1/organizations/org/workspaces", "Workspace management"},
-		{"/search/jobs", "Search jobs"},
-		{"/products/lake/datasets", "Lake datasets"},
-		{"/api/v1/m/default_search/search/saved", "Search saved queries"},
-		{"/api/v1/m/default_search/search/usage-groups", "Search usage groups"},
-		{"/api/v1/m/default_search/search/saved-query", "Search saved query via group path"},
-		{"/m/default_search/search/dashboards", "Search dashboards"},
-	}
-
-	// Set up on-prem configuration
-	os.Setenv("CRIBL_ONPREM_SERVER_URL", "http://localhost:9000")
-	os.Setenv("CRIBL_BEARER_TOKEN", "test-token")
-
-	hook := NewCriblTerraformHook()
-	hook.SDKInit("http://localhost:9000", nil)
-
-	for _, tc := range restrictedPaths {
-		req, _ := http.NewRequest("GET", tc.path, nil)
-		ctx := BeforeRequestContext{
-			HookContext: HookContext{
-				Context: context.Background(),
-			},
-		}
-
-		_, err := hook.BeforeRequest(ctx, req)
-		if err == nil {
-			t.Errorf("Expected error for restricted endpoint %s (%s), got none", tc.path, tc.description)
-		} else if !strings.Contains(err.Error(), "not supported for on-prem deployments") {
-			t.Errorf("Expected error message about unsupported endpoint, got: %v", err)
-		}
-	}
-
-	// Clean up
-	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
-	os.Setenv("CRIBL_BEARER_TOKEN", "")
 }
 
 func TestOnPremAllowedEndpoints(t *testing.T) {

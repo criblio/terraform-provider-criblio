@@ -10,6 +10,20 @@ type TokenInfo struct {
 	ExpiresAt time.Time
 }
 
+type ConstructBaseUrlInput struct {
+	BaseURL             string
+	ProviderOrgID       string
+	ProviderWorkspaceID string
+	ProviderCloudDomain string
+}
+
+type LoadTokenInfoInput struct {
+	Context    HookContext
+	Config     *CriblConfig
+	Audience   string
+	SessionKey string
+}
+
 // CriblTerraformHook implements both authentication and URL routing for Cribl Terraform API
 type CriblTerraformHook struct {
 	client      HTTPClient
