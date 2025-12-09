@@ -211,7 +211,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", tokenInfo.Token))
 	} else {
-		return req, fmt.Errorf("Authentication requires either environment variables or a cribl config file. Please refer to the provider docs.")
+		return req, fmt.Errorf("authentication requires either environment variables or a cribl config file. Please refer to the provider docs")
 	}
 
 	path := trimPath(req.URL.Path)

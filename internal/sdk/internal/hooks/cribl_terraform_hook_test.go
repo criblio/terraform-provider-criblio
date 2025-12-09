@@ -1180,7 +1180,7 @@ func TestOnPremMissingCredentials(t *testing.T) {
 		t.Fatalf("Expected error when no credentials provided")
 	}
 
-	if !strings.Contains(err.Error(), "authentication requires either CRIBL_BEARER_TOKEN OR CRIBL_ONPREM_USERNAME and CRIBL_ONPREM_PASSWORD") {
+	if !strings.Contains(err.Error(), "authentication requires either environment variables or a cribl config file. Please refer to the provider docs") {
 		t.Errorf("Expected error about missing credentials, got: %v", err)
 	}
 
