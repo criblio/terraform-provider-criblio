@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -31,8 +32,25 @@ func isGatewayHost(host string) bool {
 }
 
 func isLocalHost(host string) bool {
+	if strings.Contains(host, "localhost") {
+		return true
+	}
+
+	if strings.Contains(host, "http") {
+		re := regexp.MustCompile(`https?:\/\/?`)
+		host = re.ReplaceAllString(host, "")
+	}
+
+	if strings.Contains(host, ":") {
+		host = strings.Split(host, ":")[0]
+	}
+
 	ip := net.ParseIP(host)
-	return ip.IsLoopback() || strings.Contains(host, "localhost")
+	if ip != nil {
+		return ip.IsLoopback()
+	} else {
+		return false
+	}
 }
 
 // isRestrictedOnPremEndpoint determines if a path is for a restricted endpoint that is not supported on on-prem deployments

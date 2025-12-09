@@ -71,6 +71,13 @@ func TestIsLocalHost(t *testing.T) {
 		{"foo.gateway.bar.com", false, "plain URL path"},
 		{"localhost", true, "localhost in words"},
 		{"127.0.0.1", true, "localhost in numbers"},
+		{"http://127.0.0.1:4344", true, "localhost in numbers with extra"},
+		{"http://127.0.0.1", true, "localhost in numbers with extra before"},
+		{"127.0.0.1:4344", true, "localhost in numbers with extra after"},
+		{"http://localhost:4344", true, "localhost in numbers with extra"},
+		{"http://localhost", true, "localhost in numbers with extra before"},
+		{"localhost:4344", true, "localhost in numbers with extra after"},
+		{"locahost:4344", false, "ella es loco"},
 	}
 
 	for _, test := range gatewayHosts {

@@ -158,7 +158,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 
 	// Handle authentication
 	if bearerToken := os.Getenv("CRIBL_BEARER_TOKEN"); bearerToken != "" {
-		req.Header.Set("Authorization", "Bearer "+bearerToken)
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", bearerToken))
 	} else if clientID != "" && clientSecret != "" {
 		var tokenInfo *TokenInfo
 		var sessionKey, audience string
@@ -187,8 +187,8 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 
 					audience = fmt.Sprintf("https://api.%s", domain)
 				}
-			} else if os.Getenv("CRIBL_AUDIENCE") != "" {
-				audience = os.Getenv("CRIBL_AUDIENCE")
+			} else if myVar := os.Getenv("CRIBL_AUDIENCE"); myVar != "" {
+				audience = myVar
 			} else {
 				return req, fmt.Errorf("no base URL or audience provided")
 			}
@@ -209,9 +209,9 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 			return req, err
 		}
 
-		req.Header.Set("Authorization", "Bearer "+tokenInfo.Token)
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", tokenInfo.Token))
 	} else {
-		return req, fmt.Errorf("authentication requires either CRIBL_BEARER_TOKEN OR CRIBL_ONPREM_USERNAME and CRIBL_ONPREM_PASSWORD OR Cloud stuff")
+		return req, fmt.Errorf("Authentication requires either environment variables or a cribl config file. Please refer to the provider docs.")
 	}
 
 	path := trimPath(req.URL.Path)
@@ -523,8 +523,8 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 
 					audience = fmt.Sprintf("https://api.%s", domain)
 				}
-			} else if os.Getenv("CRIBL_AUDIENCE") != "" {
-				audience = os.Getenv("CRIBL_AUDIENCE")
+			} else if myVar := os.Getenv("CRIBL_AUDIENCE"); myVar != "" {
+				audience = myVar
 			} else {
 				return res, fmt.Errorf("no base URL or audience provided")
 			}
