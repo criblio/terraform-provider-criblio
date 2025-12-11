@@ -21,6 +21,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -42,22 +45,14 @@ type SearchDashboardResource struct {
 
 // SearchDashboardResourceModel describes the resource data model.
 type SearchDashboardResourceModel struct {
-	CacheTTLSeconds    types.Float64               `tfsdk:"cache_ttl_seconds"`
-	Category           types.String                `tfsdk:"category"`
-	Created            types.Float64               `tfsdk:"created"`
-	CreatedBy          types.String                `tfsdk:"created_by"`
-	Description        types.String                `tfsdk:"description"`
-	DisplayCreatedBy   types.String                `tfsdk:"display_created_by"`
-	DisplayModifiedBy  types.String                `tfsdk:"display_modified_by"`
-	Elements           []tfTypes.ElementUnion      `tfsdk:"elements"`
-	ID                 types.String                `tfsdk:"id"`
-	Modified           types.Float64               `tfsdk:"modified"`
-	ModifiedBy         types.String                `tfsdk:"modified_by"`
-	Name               types.String                `tfsdk:"name"`
-	PackID             types.String                `tfsdk:"pack_id"`
-	RefreshRate        types.Float64               `tfsdk:"refresh_rate"`
-	ResolvedDatasetIds []types.String              `tfsdk:"resolved_dataset_ids"`
-	Schedule           *tfTypes.SavedQuerySchedule `tfsdk:"schedule"`
+	CacheTTLSeconds types.Float64                      `tfsdk:"cache_ttl_seconds"`
+	Description     types.String                       `tfsdk:"description"`
+	Elements        []tfTypes.DashboardElementUnion    `tfsdk:"elements"`
+	Groups          map[string]tfTypes.DashboardGroups `tfsdk:"groups"`
+	ID              types.String                       `tfsdk:"id"`
+	Name            types.String                       `tfsdk:"name"`
+	RefreshRate     types.Float64                      `tfsdk:"refresh_rate"`
+	Schedule        *tfTypes.SavedQuerySchedule        `tfsdk:"schedule"`
 }
 
 func (r *SearchDashboardResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,30 +64,16 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 		MarkdownDescription: "SearchDashboard Resource",
 		Attributes: map[string]schema.Attribute{
 			"cache_ttl_seconds": schema.Float64Attribute{
-				Computed: true,
-				Optional: true,
-			},
-			"category": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"created": schema.Float64Attribute{
-				Required: true,
-			},
-			"created_by": schema.StringAttribute{
-				Required: true,
+				Computed:    true,
+				Optional:    true,
+				Default:     float64default.StaticFloat64(0),
+				Description: `Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire. Default: 0`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"display_created_by": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"display_modified_by": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(``),
+				Description: `Description of the dashboard. Optional. Default: ""`,
 			},
 			"elements": schema.ListNestedAttribute{
 				Required: true,
@@ -101,32 +82,34 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 						speakeasy_objectvalidators.NotNull(),
 					},
 					Attributes: map[string]schema.Attribute{
-						"element": schema.SingleNestedAttribute{
+						"dashboard_element": schema.SingleNestedAttribute{
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.MapAttribute{
-									Computed:    true,
-									Optional:    true,
-									ElementType: jsontypes.NormalizedType{},
-									Validators: []validator.Map{
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+								"config": schema.SingleNestedAttribute{
+									Computed: true,
+									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"markdown": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
 									},
 								},
-								"description": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-								},
-								"empty": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-								},
 								"hide_panel": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
+									Computed:    true,
+									Optional:    true,
+									Default:     booldefault.StaticBool(false),
+									Description: `Default: false`,
 								},
 								"horizontal_chart": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
+									Computed:    true,
+									Optional:    true,
+									Default:     booldefault.StaticBool(false),
+									Description: `Default: false`,
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -136,13 +119,256 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 										speakeasy_stringvalidators.NotNull(),
 									},
 								},
-								"index": schema.Float64Attribute{
+								"layout": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"h": schema.Float64Attribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.Float64{
+												speakeasy_float64validators.NotNull(),
+											},
+										},
+										"w": schema.Float64Attribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.Float64{
+												speakeasy_float64validators.NotNull(),
+											},
+										},
+										"x": schema.Float64Attribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.Float64{
+												speakeasy_float64validators.NotNull(),
+											},
+										},
+										"y": schema.Float64Attribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.Float64{
+												speakeasy_float64validators.NotNull(),
+											},
+										},
+									},
+									Description: `Not Null`,
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
+								},
+								"search": schema.SingleNestedAttribute{
+									Computed: true,
+									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"alias": schema.StringAttribute{
+											Computed: true,
+											Optional: true,
+										},
+										"local_id": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
+										"query": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
+									},
+								},
+								"title_action": schema.SingleNestedAttribute{
+									Computed: true,
+									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"label": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
+										"open_in_new_tab": schema.BoolAttribute{
+											Computed: true,
+											Optional: true,
+										},
+										"url": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null; must be one of ["markdown.copilot", "markdown.default"]`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+										stringvalidator.OneOf(
+											"markdown.copilot",
+											"markdown.default",
+										),
+									},
+								},
+								"variant": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null; must be "markdown"`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+										stringvalidator.OneOf("markdown"),
+									},
+								},
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("dashboard_element_visualization"),
+									path.MatchRelative().AtParent().AtName("dashboard_element_input"),
+								}...),
+							},
+						},
+						"dashboard_element_input": schema.SingleNestedAttribute{
+							Optional: true,
+							Attributes: map[string]schema.Attribute{
+								"config": schema.SingleNestedAttribute{
+									Computed: true,
+									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"default_value": schema.SingleNestedAttribute{
+											Computed: true,
+											Optional: true,
+											Attributes: map[string]schema.Attribute{
+												"default_value": schema.SingleNestedAttribute{
+													Optional: true,
+													Attributes: map[string]schema.Attribute{
+														"earliest": schema.SingleNestedAttribute{
+															Computed: true,
+															Optional: true,
+															Attributes: map[string]schema.Attribute{
+																"number": schema.Float64Attribute{
+																	Optional: true,
+																	Validators: []validator.Float64{
+																		float64validator.ConflictsWith(path.Expressions{
+																			path.MatchRelative().AtParent().AtName("str"),
+																		}...),
+																	},
+																},
+																"str": schema.StringAttribute{
+																	Optional: true,
+																	Validators: []validator.String{
+																		stringvalidator.ConflictsWith(path.Expressions{
+																			path.MatchRelative().AtParent().AtName("number"),
+																		}...),
+																	},
+																},
+															},
+															Description: `Not Null`,
+															Validators: []validator.Object{
+																speakeasy_objectvalidators.NotNull(),
+															},
+														},
+														"latest": schema.SingleNestedAttribute{
+															Computed: true,
+															Optional: true,
+															Attributes: map[string]schema.Attribute{
+																"number": schema.Float64Attribute{
+																	Optional: true,
+																	Validators: []validator.Float64{
+																		float64validator.ConflictsWith(path.Expressions{
+																			path.MatchRelative().AtParent().AtName("str"),
+																		}...),
+																	},
+																},
+																"str": schema.StringAttribute{
+																	Optional: true,
+																	Validators: []validator.String{
+																		stringvalidator.ConflictsWith(path.Expressions{
+																			path.MatchRelative().AtParent().AtName("number"),
+																		}...),
+																	},
+																},
+															},
+															Description: `Not Null`,
+															Validators: []validator.Object{
+																speakeasy_objectvalidators.NotNull(),
+															},
+														},
+														"timezone": schema.StringAttribute{
+															Computed: true,
+															Optional: true,
+														},
+													},
+													Validators: []validator.Object{
+														objectvalidator.ConflictsWith(path.Expressions{
+															path.MatchRelative().AtParent().AtName("str"),
+															path.MatchRelative().AtParent().AtName("number"),
+														}...),
+													},
+												},
+												"number": schema.Float64Attribute{
+													Optional: true,
+													Validators: []validator.Float64{
+														float64validator.ConflictsWith(path.Expressions{
+															path.MatchRelative().AtParent().AtName("str"),
+															path.MatchRelative().AtParent().AtName("default_value"),
+														}...),
+													},
+												},
+												"str": schema.StringAttribute{
+													Optional: true,
+													Validators: []validator.String{
+														stringvalidator.ConflictsWith(path.Expressions{
+															path.MatchRelative().AtParent().AtName("number"),
+															path.MatchRelative().AtParent().AtName("default_value"),
+														}...),
+													},
+												},
+											},
+										},
+									},
+								},
+								"hide_panel": schema.BoolAttribute{
+									Computed:    true,
+									Optional:    true,
+									Default:     booldefault.StaticBool(false),
+									Description: `Default: false`,
+								},
+								"horizontal_chart": schema.BoolAttribute{
+									Computed:    true,
+									Optional:    true,
+									Default:     booldefault.StaticBool(false),
+									Description: `Default: false`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"input_id": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"layout": schema.SingleNestedAttribute{
 									Computed: true,
@@ -238,8 +464,10 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													},
 												},
 												"parent_search_id": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
+													Computed:    true,
+													Optional:    true,
+													Default:     stringdefault.StaticString(``),
+													Description: `Parent search ID for the search query. Optional. Default: ""`,
 												},
 												"query": schema.StringAttribute{
 													Computed:    true,
@@ -250,8 +478,10 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													},
 												},
 												"sample_rate": schema.Float64Attribute{
-													Computed: true,
-													Optional: true,
+													Computed:    true,
+													Optional:    true,
+													Default:     float64default.StaticFloat64(1),
+													Description: `Sample rate for the search query. Default: 1`,
 												},
 												"timezone": schema.StringAttribute{
 													Computed: true,
@@ -349,28 +579,43 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									},
 								},
 								"title": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Title of the element.`,
+								},
+								"title_action": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"label": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
+										"open_in_new_tab": schema.BoolAttribute{
+											Computed: true,
+											Optional: true,
+										},
+										"url": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
+									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Not Null; must be one of ["chart.line", "chart.column", "chart.horizontalBar", "chart.area", "chart.scatter", "chart.pie", "chart.funnel", "chart.gauge", "chart.map", "list.events", "list.table", "counter.single", "input.timerange", "input.dropdown", "input.text", "input.number"]`,
+									Description: `Not Null; must be one of ["input.timerange", "input.dropdown", "input.text", "input.number"]`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.OneOf(
-											"chart.line",
-											"chart.column",
-											"chart.horizontalBar",
-											"chart.area",
-											"chart.scatter",
-											"chart.pie",
-											"chart.funnel",
-											"chart.gauge",
-											"chart.map",
-											"list.events",
-											"list.table",
-											"counter.single",
 											"input.timerange",
 											"input.dropdown",
 											"input.text",
@@ -378,7 +623,18 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 										),
 									},
 								},
-								"value": schema.MapAttribute{
+							},
+							Validators: []validator.Object{
+								objectvalidator.ConflictsWith(path.Expressions{
+									path.MatchRelative().AtParent().AtName("dashboard_element_visualization"),
+									path.MatchRelative().AtParent().AtName("dashboard_element"),
+								}...),
+							},
+						},
+						"dashboard_element_visualization": schema.SingleNestedAttribute{
+							Optional: true,
+							Attributes: map[string]schema.Attribute{
+								"config": schema.MapAttribute{
 									Computed:    true,
 									Optional:    true,
 									ElementType: jsontypes.NormalizedType{},
@@ -386,39 +642,17 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 									},
 								},
-								"variant": schema.StringAttribute{
+								"hide_panel": schema.BoolAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `must be one of ["visualization", "input", "markdown"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"visualization",
-											"input",
-											"markdown",
-										),
-									},
+									Default:     booldefault.StaticBool(false),
+									Description: `Default: false`,
 								},
-							},
-							Validators: []validator.Object{
-								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("element_markdown"),
-								}...),
-							},
-						},
-						"element_markdown": schema.SingleNestedAttribute{
-							Optional: true,
-							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-								},
-								"empty": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
-								},
-								"hide_panel": schema.BoolAttribute{
-									Computed: true,
-									Optional: true,
+								"horizontal_chart": schema.BoolAttribute{
+									Computed:    true,
+									Optional:    true,
+									Default:     booldefault.StaticBool(false),
+									Description: `Default: false`,
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -427,10 +661,6 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 									},
-								},
-								"index": schema.Float64Attribute{
-									Computed: true,
-									Optional: true,
 								},
 								"layout": schema.SingleNestedAttribute{
 									Computed: true,
@@ -474,39 +704,291 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 										speakeasy_objectvalidators.NotNull(),
 									},
 								},
-								"title": schema.StringAttribute{
+								"search": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"search_query_inline": schema.SingleNestedAttribute{
+											Optional: true,
+											Attributes: map[string]schema.Attribute{
+												"earliest": schema.SingleNestedAttribute{
+													Computed: true,
+													Optional: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Optional: true,
+															Validators: []validator.Float64{
+																float64validator.ConflictsWith(path.Expressions{
+																	path.MatchRelative().AtParent().AtName("str"),
+																}...),
+															},
+														},
+														"str": schema.StringAttribute{
+															Optional: true,
+															Validators: []validator.String{
+																stringvalidator.ConflictsWith(path.Expressions{
+																	path.MatchRelative().AtParent().AtName("number"),
+																}...),
+															},
+														},
+													},
+												},
+												"latest": schema.SingleNestedAttribute{
+													Computed: true,
+													Optional: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Optional: true,
+															Validators: []validator.Float64{
+																float64validator.ConflictsWith(path.Expressions{
+																	path.MatchRelative().AtParent().AtName("str"),
+																}...),
+															},
+														},
+														"str": schema.StringAttribute{
+															Optional: true,
+															Validators: []validator.String{
+																stringvalidator.ConflictsWith(path.Expressions{
+																	path.MatchRelative().AtParent().AtName("number"),
+																}...),
+															},
+														},
+													},
+												},
+												"parent_search_id": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Default:     stringdefault.StaticString(``),
+													Description: `Parent search ID for the search query. Optional. Default: ""`,
+												},
+												"query": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Not Null`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+													},
+												},
+												"sample_rate": schema.Float64Attribute{
+													Computed:    true,
+													Optional:    true,
+													Default:     float64default.StaticFloat64(1),
+													Description: `Sample rate for the search query. Default: 1`,
+												},
+												"timezone": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+												},
+												"type": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Not Null; must be "inline"`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+														stringvalidator.OneOf("inline"),
+													},
+												},
+											},
+											Validators: []validator.Object{
+												objectvalidator.ConflictsWith(path.Expressions{
+													path.MatchRelative().AtParent().AtName("search_query_saved"),
+													path.MatchRelative().AtParent().AtName("search_query_values"),
+												}...),
+											},
+										},
+										"search_query_saved": schema.SingleNestedAttribute{
+											Optional: true,
+											Attributes: map[string]schema.Attribute{
+												"query": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+												},
+												"query_id": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Not Null`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+													},
+												},
+												"run_mode": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `must be one of ["newSearch", "lastRun"]`,
+													Validators: []validator.String{
+														stringvalidator.OneOf(
+															"newSearch",
+															"lastRun",
+														),
+													},
+												},
+												"type": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Not Null; must be "saved"`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+														stringvalidator.OneOf("saved"),
+													},
+												},
+											},
+											Validators: []validator.Object{
+												objectvalidator.ConflictsWith(path.Expressions{
+													path.MatchRelative().AtParent().AtName("search_query_inline"),
+													path.MatchRelative().AtParent().AtName("search_query_values"),
+												}...),
+											},
+										},
+										"search_query_values": schema.SingleNestedAttribute{
+											Optional: true,
+											Attributes: map[string]schema.Attribute{
+												"type": schema.StringAttribute{
+													Computed:    true,
+													Optional:    true,
+													Description: `Not Null; must be "values"`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+														stringvalidator.OneOf("values"),
+													},
+												},
+												"values": schema.ListAttribute{
+													Computed:    true,
+													Optional:    true,
+													ElementType: types.StringType,
+													Description: `Not Null`,
+													Validators: []validator.List{
+														speakeasy_listvalidators.NotNull(),
+													},
+												},
+											},
+											Validators: []validator.Object{
+												objectvalidator.ConflictsWith(path.Expressions{
+													path.MatchRelative().AtParent().AtName("search_query_saved"),
+													path.MatchRelative().AtParent().AtName("search_query_inline"),
+												}...),
+											},
+										},
+									},
+									Description: `Not Null`,
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
+								},
+								"title": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Title of the element.`,
+								},
+								"title_action": schema.SingleNestedAttribute{
+									Computed: true,
+									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"label": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
+										"open_in_new_tab": schema.BoolAttribute{
+											Computed: true,
+											Optional: true,
+										},
+										"url": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
+									},
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Not Null; must be "markdown.default"`,
+									Description: `Not Null; must be one of ["chart.area", "chart.column", "chart.funnel", "chart.gauge", "chart.horizontalBar", "chart.line", "chart.map", "chart.pie", "chart.scatter", "counter.single", "list.events", "list.table", "custom.throughputMetrics", "custom.flowMatrix"]`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.OneOf(
-											"markdown.default",
+											"chart.area",
+											"chart.column",
+											"chart.funnel",
+											"chart.gauge",
+											"chart.horizontalBar",
+											"chart.line",
+											"chart.map",
+											"chart.pie",
+											"chart.scatter",
+											"counter.single",
+											"list.events",
+											"list.table",
+											"custom.throughputMetrics",
+											"custom.flowMatrix",
 										),
-									},
-								},
-								"value": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-								},
-								"variant": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Not Null; must be "markdown"`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-										stringvalidator.OneOf("markdown"),
 									},
 								},
 							},
 							Validators: []validator.Object{
 								objectvalidator.ConflictsWith(path.Expressions{
-									path.MatchRelative().AtParent().AtName("element"),
+									path.MatchRelative().AtParent().AtName("dashboard_element_input"),
+									path.MatchRelative().AtParent().AtName("dashboard_element"),
 								}...),
+							},
+						},
+					},
+				},
+			},
+			"groups": schema.MapNestedAttribute{
+				Computed: true,
+				Optional: true,
+				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
+					Attributes: map[string]schema.Attribute{
+						"action": schema.SingleNestedAttribute{
+							Computed: true,
+							Optional: true,
+							Attributes: map[string]schema.Attribute{
+								"label": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+								"params": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+								},
+								"target": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+							},
+						},
+						"collapsed": schema.BoolAttribute{
+							Computed: true,
+							Optional: true,
+						},
+						"input_id": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+						},
+						"title": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Description: `Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 					},
@@ -516,28 +998,14 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 				Required:    true,
 				Description: `Unique ID to PATCH`,
 			},
-			"modified": schema.Float64Attribute{
-				Required: true,
-			},
-			"modified_by": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
 			"name": schema.StringAttribute{
 				Required: true,
 			},
-			"pack_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
 			"refresh_rate": schema.Float64Attribute{
-				Computed: true,
-				Optional: true,
-			},
-			"resolved_dataset_ids": schema.ListAttribute{
 				Computed:    true,
 				Optional:    true,
-				ElementType: types.StringType,
+				Default:     float64default.StaticFloat64(0),
+				Description: `Auto-refresh rate in milliseconds. Optional. Default: 0`,
 			},
 			"schedule": schema.SingleNestedAttribute{
 				Computed: true,

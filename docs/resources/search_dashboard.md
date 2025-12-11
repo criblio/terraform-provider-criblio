@@ -14,26 +14,17 @@ SearchDashboard Resource
 
 ```terraform
 resource "criblio_search_dashboard" "my_searchdashboard" {
-  cache_ttl_seconds   = 300
-  category            = "observability"
-  created             = 1696166400
-  created_by          = "user123"
-  description         = "Dashboard for monitoring system metrics"
-  display_created_by  = "User 123"
-  display_modified_by = "User 456"
+  cache_ttl_seconds = 6.24
+  description       = "...my_description..."
   elements = [
     {
-      element = {
+      dashboard_element = {
         config = {
-          key = jsonencode("value")
+          markdown = "...my_markdown..."
         }
-        description      = "5xx error rate for checkout"
-        empty            = false
-        hide_panel       = false
+        hide_panel       = true
         horizontal_chart = false
-        id               = "panel-http-5xx"
-        index            = 3
-        input_id         = "service"
+        id               = "...my_id..."
         layout = {
           h = 0
           w = 9
@@ -41,39 +32,37 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           y = 2
         }
         search = {
-          search_query_inline = {
-            earliest = {
-              number = 1696166400
-            }
-            latest = {
-              number = 1696170000
-            }
-            parent_search_id = "parentSearch1"
-            query            = "error OR warn"
-            sample_rate      = 0.5
-            timezone         = "$time.timezone$"
-            type             = "inline"
-          }
+          alias    = "...my_alias..."
+          local_id = "...my_local_id..."
+          query    = "...my_query..."
         }
-        title = "HTTP 5xx errors"
-        type  = "chart.line"
-        value = {
-          key = jsonencode("value")
+        title_action = {
+          label           = "...my_label..."
+          open_in_new_tab = true
+          url             = "...my_url..."
         }
+        type    = "markdown.copilot"
         variant = "markdown"
       }
     }
   ]
-  id           = "dashboard123"
-  modified     = 1696170000
-  modified_by  = "user456"
-  name         = "System Metrics Dashboard"
-  pack_id      = "New Pack Id"
-  refresh_rate = 60
-  resolved_dataset_ids = [
-    "string",
-    "int",
-  ]
+  groups = {
+    key = {
+      action = {
+        label = "...my_label..."
+        params = {
+          key = "value"
+        }
+        target = "...my_target..."
+      }
+      collapsed = true
+      input_id  = "...my_input_id..."
+      title     = "...my_title..."
+    }
+  }
+  id           = "dash-overview"
+  name         = "...my_name..."
+  refresh_rate = 2.1
   schedule = {
     cron_schedule = "0 * * * *"
     enabled       = true
@@ -91,24 +80,16 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
 
 ### Required
 
-- `created` (Number)
-- `created_by` (String)
 - `elements` (Attributes List) (see [below for nested schema](#nestedatt--elements))
 - `id` (String) Unique ID to PATCH
-- `modified` (Number)
 - `name` (String)
 
 ### Optional
 
-- `cache_ttl_seconds` (Number)
-- `category` (String)
-- `description` (String)
-- `display_created_by` (String)
-- `display_modified_by` (String)
-- `modified_by` (String)
-- `pack_id` (String)
-- `refresh_rate` (Number)
-- `resolved_dataset_ids` (List of String)
+- `cache_ttl_seconds` (Number) Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire. Default: 0
+- `description` (String) Description of the dashboard. Optional. Default: ""
+- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--groups))
+- `refresh_rate` (Number) Auto-refresh rate in milliseconds. Optional. Default: 0
 - `schedule` (Attributes) (see [below for nested schema](#nestedatt--schedule))
 
 <a id="nestedatt--elements"></a>
@@ -116,31 +97,35 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
 
 Optional:
 
-- `element` (Attributes) (see [below for nested schema](#nestedatt--elements--element))
-- `element_markdown` (Attributes) (see [below for nested schema](#nestedatt--elements--element_markdown))
+- `dashboard_element` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element))
+- `dashboard_element_input` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input))
+- `dashboard_element_visualization` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization))
 
-<a id="nestedatt--elements--element"></a>
-### Nested Schema for `elements.element`
+<a id="nestedatt--elements--dashboard_element"></a>
+### Nested Schema for `elements.dashboard_element`
 
 Optional:
 
-- `config` (Map of String)
-- `description` (String)
-- `empty` (Boolean)
-- `hide_panel` (Boolean)
-- `horizontal_chart` (Boolean)
+- `config` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element--config))
+- `hide_panel` (Boolean) Default: false
+- `horizontal_chart` (Boolean) Default: false
 - `id` (String) Not Null
-- `index` (Number)
-- `input_id` (String)
-- `layout` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--element--layout))
-- `search` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search))
-- `title` (String)
-- `type` (String) Not Null; must be one of ["chart.line", "chart.column", "chart.horizontalBar", "chart.area", "chart.scatter", "chart.pie", "chart.funnel", "chart.gauge", "chart.map", "list.events", "list.table", "counter.single", "input.timerange", "input.dropdown", "input.text", "input.number"]
-- `value` (Map of String)
-- `variant` (String) must be one of ["visualization", "input", "markdown"]
+- `layout` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--dashboard_element--layout))
+- `search` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element--search))
+- `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element--title_action))
+- `type` (String) Not Null; must be one of ["markdown.copilot", "markdown.default"]
+- `variant` (String) Not Null; must be "markdown"
 
-<a id="nestedatt--elements--element--layout"></a>
-### Nested Schema for `elements.element.layout`
+<a id="nestedatt--elements--dashboard_element--config"></a>
+### Nested Schema for `elements.dashboard_element.config`
+
+Optional:
+
+- `markdown` (String) Not Null
+
+
+<a id="nestedatt--elements--dashboard_element--layout"></a>
+### Nested Schema for `elements.dashboard_element.layout`
 
 Optional:
 
@@ -150,30 +135,124 @@ Optional:
 - `y` (Number) Not Null
 
 
-<a id="nestedatt--elements--element--search"></a>
-### Nested Schema for `elements.element.search`
+<a id="nestedatt--elements--dashboard_element--search"></a>
+### Nested Schema for `elements.dashboard_element.search`
 
 Optional:
 
-- `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline))
-- `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_saved))
-- `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_values))
-
-<a id="nestedatt--elements--element--search--search_query_inline"></a>
-### Nested Schema for `elements.element.search.search_query_inline`
-
-Optional:
-
-- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline--earliest))
-- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--element--search--search_query_inline--latest))
-- `parent_search_id` (String)
+- `alias` (String)
+- `local_id` (String) Not Null
 - `query` (String) Not Null
-- `sample_rate` (Number)
+
+
+<a id="nestedatt--elements--dashboard_element--title_action"></a>
+### Nested Schema for `elements.dashboard_element.title_action`
+
+Optional:
+
+- `label` (String) Not Null
+- `open_in_new_tab` (Boolean)
+- `url` (String) Not Null
+
+
+
+<a id="nestedatt--elements--dashboard_element_input"></a>
+### Nested Schema for `elements.dashboard_element_input`
+
+Optional:
+
+- `config` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config))
+- `hide_panel` (Boolean) Default: false
+- `horizontal_chart` (Boolean) Default: false
+- `id` (String) Not Null
+- `input_id` (String) Not Null
+- `layout` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--dashboard_element_input--layout))
+- `search` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search))
+- `title` (String) Title of the element.
+- `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--title_action))
+- `type` (String) Not Null; must be one of ["input.timerange", "input.dropdown", "input.text", "input.number"]
+
+<a id="nestedatt--elements--dashboard_element_input--config"></a>
+### Nested Schema for `elements.dashboard_element_input.config`
+
+Optional:
+
+- `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value))
+
+<a id="nestedatt--elements--dashboard_element_input--config--default_value"></a>
+### Nested Schema for `elements.dashboard_element_input.config.default_value`
+
+Optional:
+
+- `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value))
+- `number` (Number)
+- `str` (String)
+
+<a id="nestedatt--elements--dashboard_element_input--config--default_value--default_value"></a>
+### Nested Schema for `elements.dashboard_element_input.config.default_value.default_value`
+
+Optional:
+
+- `earliest` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value--earliest))
+- `latest` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value--latest))
+- `timezone` (String)
+
+<a id="nestedatt--elements--dashboard_element_input--config--default_value--default_value--earliest"></a>
+### Nested Schema for `elements.dashboard_element_input.config.default_value.default_value.earliest`
+
+Optional:
+
+- `number` (Number)
+- `str` (String)
+
+
+<a id="nestedatt--elements--dashboard_element_input--config--default_value--default_value--latest"></a>
+### Nested Schema for `elements.dashboard_element_input.config.default_value.default_value.latest`
+
+Optional:
+
+- `number` (Number)
+- `str` (String)
+
+
+
+
+
+<a id="nestedatt--elements--dashboard_element_input--layout"></a>
+### Nested Schema for `elements.dashboard_element_input.layout`
+
+Optional:
+
+- `h` (Number) Not Null
+- `w` (Number) Not Null
+- `x` (Number) Not Null
+- `y` (Number) Not Null
+
+
+<a id="nestedatt--elements--dashboard_element_input--search"></a>
+### Nested Schema for `elements.dashboard_element_input.search`
+
+Optional:
+
+- `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_inline))
+- `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_saved))
+- `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_values))
+
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_inline"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_inline`
+
+Optional:
+
+- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_inline--earliest))
+- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_inline--latest))
+- `parent_search_id` (String) Parent search ID for the search query. Optional. Default: ""
+- `query` (String) Not Null
+- `sample_rate` (Number) Sample rate for the search query. Default: 1
 - `timezone` (String)
 - `type` (String) Not Null; must be "inline"
 
-<a id="nestedatt--elements--element--search--search_query_inline--earliest"></a>
-### Nested Schema for `elements.element.search.search_query_inline.earliest`
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_inline--earliest"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_inline.earliest`
 
 Optional:
 
@@ -181,8 +260,8 @@ Optional:
 - `str` (String)
 
 
-<a id="nestedatt--elements--element--search--search_query_inline--latest"></a>
-### Nested Schema for `elements.element.search.search_query_inline.latest`
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_inline--latest"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_inline.latest`
 
 Optional:
 
@@ -191,8 +270,8 @@ Optional:
 
 
 
-<a id="nestedatt--elements--element--search--search_query_saved"></a>
-### Nested Schema for `elements.element.search.search_query_saved`
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_saved"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_saved`
 
 Optional:
 
@@ -202,8 +281,8 @@ Optional:
 - `type` (String) Not Null; must be "saved"
 
 
-<a id="nestedatt--elements--element--search--search_query_values"></a>
-### Nested Schema for `elements.element.search.search_query_values`
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_values"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_values`
 
 Optional:
 
@@ -212,25 +291,34 @@ Optional:
 
 
 
-
-<a id="nestedatt--elements--element_markdown"></a>
-### Nested Schema for `elements.element_markdown`
+<a id="nestedatt--elements--dashboard_element_input--title_action"></a>
+### Nested Schema for `elements.dashboard_element_input.title_action`
 
 Optional:
 
-- `description` (String)
-- `empty` (Boolean)
-- `hide_panel` (Boolean)
-- `id` (String) Not Null
-- `index` (Number)
-- `layout` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--element_markdown--layout))
-- `title` (String)
-- `type` (String) Not Null; must be "markdown.default"
-- `value` (String)
-- `variant` (String) Not Null; must be "markdown"
+- `label` (String) Not Null
+- `open_in_new_tab` (Boolean)
+- `url` (String) Not Null
 
-<a id="nestedatt--elements--element_markdown--layout"></a>
-### Nested Schema for `elements.element_markdown.layout`
+
+
+<a id="nestedatt--elements--dashboard_element_visualization"></a>
+### Nested Schema for `elements.dashboard_element_visualization`
+
+Optional:
+
+- `config` (Map of String)
+- `hide_panel` (Boolean) Default: false
+- `horizontal_chart` (Boolean) Default: false
+- `id` (String) Not Null
+- `layout` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--layout))
+- `search` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search))
+- `title` (String) Title of the element.
+- `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--title_action))
+- `type` (String) Not Null; must be one of ["chart.area", "chart.column", "chart.funnel", "chart.gauge", "chart.horizontalBar", "chart.line", "chart.map", "chart.pie", "chart.scatter", "counter.single", "list.events", "list.table", "custom.throughputMetrics", "custom.flowMatrix"]
+
+<a id="nestedatt--elements--dashboard_element_visualization--layout"></a>
+### Nested Schema for `elements.dashboard_element_visualization.layout`
 
 Optional:
 
@@ -239,6 +327,99 @@ Optional:
 - `x` (Number) Not Null
 - `y` (Number) Not Null
 
+
+<a id="nestedatt--elements--dashboard_element_visualization--search"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search`
+
+Optional:
+
+- `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_inline))
+- `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_saved))
+- `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_values))
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_inline"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_inline`
+
+Optional:
+
+- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_inline--earliest))
+- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_inline--latest))
+- `parent_search_id` (String) Parent search ID for the search query. Optional. Default: ""
+- `query` (String) Not Null
+- `sample_rate` (Number) Sample rate for the search query. Default: 1
+- `timezone` (String)
+- `type` (String) Not Null; must be "inline"
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_inline--earliest"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_inline.earliest`
+
+Optional:
+
+- `number` (Number)
+- `str` (String)
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_inline--latest"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_inline.latest`
+
+Optional:
+
+- `number` (Number)
+- `str` (String)
+
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_saved"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_saved`
+
+Optional:
+
+- `query` (String)
+- `query_id` (String) Not Null
+- `run_mode` (String) must be one of ["newSearch", "lastRun"]
+- `type` (String) Not Null; must be "saved"
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_values"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_values`
+
+Optional:
+
+- `type` (String) Not Null; must be "values"
+- `values` (List of String) Not Null
+
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--title_action"></a>
+### Nested Schema for `elements.dashboard_element_visualization.title_action`
+
+Optional:
+
+- `label` (String) Not Null
+- `open_in_new_tab` (Boolean)
+- `url` (String) Not Null
+
+
+
+
+<a id="nestedatt--groups"></a>
+### Nested Schema for `groups`
+
+Optional:
+
+- `action` (Attributes) (see [below for nested schema](#nestedatt--groups--action))
+- `collapsed` (Boolean)
+- `input_id` (String)
+- `title` (String) Not Null
+
+<a id="nestedatt--groups--action"></a>
+### Nested Schema for `groups.action`
+
+Optional:
+
+- `label` (String) Not Null
+- `params` (Map of String)
+- `target` (String) Not Null
 
 
 

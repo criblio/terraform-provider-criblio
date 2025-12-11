@@ -4,383 +4,124 @@ package shared
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-type SearchDashboardType string
+type AutoApplyMode string
 
 const (
-	SearchDashboardTypeMarkdownDefault SearchDashboardType = "markdown.default"
+	AutoApplyModeAll    AutoApplyMode = "all"
+	AutoApplyModeMetric AutoApplyMode = "metric"
+	AutoApplyModeOff    AutoApplyMode = "off"
 )
 
-func (e SearchDashboardType) ToPointer() *SearchDashboardType {
+func (e AutoApplyMode) ToPointer() *AutoApplyMode {
 	return &e
 }
-func (e *SearchDashboardType) UnmarshalJSON(data []byte) error {
+func (e *AutoApplyMode) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
-	case "markdown.default":
-		*e = SearchDashboardType(v)
+	case "all":
+		fallthrough
+	case "metric":
+		fallthrough
+	case "off":
+		*e = AutoApplyMode(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SearchDashboardType: %v", v)
+		return fmt.Errorf("invalid value for AutoApplyMode: %v", v)
 	}
 }
 
-type Variant string
+type AutoApplyURLSync string
 
 const (
-	VariantMarkdown Variant = "markdown"
+	AutoApplyURLSyncReplace AutoApplyURLSync = "replace"
+	AutoApplyURLSyncPush    AutoApplyURLSync = "push"
+	AutoApplyURLSyncOff     AutoApplyURLSync = "off"
 )
 
-func (e Variant) ToPointer() *Variant {
+func (e AutoApplyURLSync) ToPointer() *AutoApplyURLSync {
 	return &e
 }
-func (e *Variant) UnmarshalJSON(data []byte) error {
+func (e *AutoApplyURLSync) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
-	case "markdown":
-		*e = Variant(v)
+	case "replace":
+		fallthrough
+	case "push":
+		fallthrough
+	case "off":
+		*e = AutoApplyURLSync(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for Variant: %v", v)
+		return fmt.Errorf("invalid value for AutoApplyURLSync: %v", v)
 	}
-}
-
-type ElementMarkdown struct {
-	Description *string             `json:"description,omitempty"`
-	Empty       *bool               `json:"empty,omitempty"`
-	HidePanel   *bool               `json:"hidePanel,omitempty"`
-	ID          string              `json:"id"`
-	Index       *float64            `json:"index,omitempty"`
-	Layout      DashboardLayout     `json:"layout"`
-	Title       *string             `json:"title,omitempty"`
-	Type        SearchDashboardType `json:"type"`
-	Value       *string             `json:"value,omitempty"`
-	Variant     Variant             `json:"variant"`
-}
-
-func (e ElementMarkdown) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(e, "", false)
-}
-
-func (e *ElementMarkdown) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"id", "layout", "type", "variant"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (e *ElementMarkdown) GetDescription() *string {
-	if e == nil {
-		return nil
-	}
-	return e.Description
-}
-
-func (e *ElementMarkdown) GetEmpty() *bool {
-	if e == nil {
-		return nil
-	}
-	return e.Empty
-}
-
-func (e *ElementMarkdown) GetHidePanel() *bool {
-	if e == nil {
-		return nil
-	}
-	return e.HidePanel
-}
-
-func (e *ElementMarkdown) GetID() string {
-	if e == nil {
-		return ""
-	}
-	return e.ID
-}
-
-func (e *ElementMarkdown) GetIndex() *float64 {
-	if e == nil {
-		return nil
-	}
-	return e.Index
-}
-
-func (e *ElementMarkdown) GetLayout() DashboardLayout {
-	if e == nil {
-		return DashboardLayout{}
-	}
-	return e.Layout
-}
-
-func (e *ElementMarkdown) GetTitle() *string {
-	if e == nil {
-		return nil
-	}
-	return e.Title
-}
-
-func (e *ElementMarkdown) GetType() SearchDashboardType {
-	if e == nil {
-		return SearchDashboardType("")
-	}
-	return e.Type
-}
-
-func (e *ElementMarkdown) GetValue() *string {
-	if e == nil {
-		return nil
-	}
-	return e.Value
-}
-
-func (e *ElementMarkdown) GetVariant() Variant {
-	if e == nil {
-		return Variant("")
-	}
-	return e.Variant
-}
-
-type Element struct {
-	Description     *string                  `json:"description,omitempty"`
-	Empty           *bool                    `json:"empty,omitempty"`
-	HidePanel       *bool                    `json:"hidePanel,omitempty"`
-	HorizontalChart *bool                    `json:"horizontalChart,omitempty"`
-	ID              string                   `json:"id"`
-	Index           *float64                 `json:"index,omitempty"`
-	InputID         *string                  `json:"inputId,omitempty"`
-	Layout          DashboardLayout          `json:"layout"`
-	Search          *SearchQuery             `json:"search,omitempty"`
-	Title           *string                  `json:"title,omitempty"`
-	Type            DashboardElementType     `json:"type"`
-	Value           map[string]any           `json:"value,omitempty"`
-	Variant         *DashboardElementVariant `json:"variant,omitempty"`
-	Config          map[string]any           `json:"config,omitempty"`
-}
-
-func (e Element) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(e, "", false)
-}
-
-func (e *Element) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"id", "layout", "type"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (e *Element) GetDescription() *string {
-	if e == nil {
-		return nil
-	}
-	return e.Description
-}
-
-func (e *Element) GetEmpty() *bool {
-	if e == nil {
-		return nil
-	}
-	return e.Empty
-}
-
-func (e *Element) GetHidePanel() *bool {
-	if e == nil {
-		return nil
-	}
-	return e.HidePanel
-}
-
-func (e *Element) GetHorizontalChart() *bool {
-	if e == nil {
-		return nil
-	}
-	return e.HorizontalChart
-}
-
-func (e *Element) GetID() string {
-	if e == nil {
-		return ""
-	}
-	return e.ID
-}
-
-func (e *Element) GetIndex() *float64 {
-	if e == nil {
-		return nil
-	}
-	return e.Index
-}
-
-func (e *Element) GetInputID() *string {
-	if e == nil {
-		return nil
-	}
-	return e.InputID
-}
-
-func (e *Element) GetLayout() DashboardLayout {
-	if e == nil {
-		return DashboardLayout{}
-	}
-	return e.Layout
-}
-
-func (e *Element) GetSearch() *SearchQuery {
-	if e == nil {
-		return nil
-	}
-	return e.Search
-}
-
-func (e *Element) GetTitle() *string {
-	if e == nil {
-		return nil
-	}
-	return e.Title
-}
-
-func (e *Element) GetType() DashboardElementType {
-	if e == nil {
-		return DashboardElementType("")
-	}
-	return e.Type
-}
-
-func (e *Element) GetValue() map[string]any {
-	if e == nil {
-		return nil
-	}
-	return e.Value
-}
-
-func (e *Element) GetVariant() *DashboardElementVariant {
-	if e == nil {
-		return nil
-	}
-	return e.Variant
-}
-
-func (e *Element) GetConfig() map[string]any {
-	if e == nil {
-		return nil
-	}
-	return e.Config
-}
-
-type ElementUnionType string
-
-const (
-	ElementUnionTypeElement         ElementUnionType = "element"
-	ElementUnionTypeElementMarkdown ElementUnionType = "element_Markdown"
-)
-
-type ElementUnion struct {
-	Element         *Element         `queryParam:"inline,name=element"`
-	ElementMarkdown *ElementMarkdown `queryParam:"inline,name=element"`
-
-	Type ElementUnionType
-}
-
-func CreateElementUnionElement(element Element) ElementUnion {
-	typ := ElementUnionTypeElement
-
-	return ElementUnion{
-		Element: &element,
-		Type:    typ,
-	}
-}
-
-func CreateElementUnionElementMarkdown(elementMarkdown ElementMarkdown) ElementUnion {
-	typ := ElementUnionTypeElementMarkdown
-
-	return ElementUnion{
-		ElementMarkdown: &elementMarkdown,
-		Type:            typ,
-	}
-}
-
-func (u *ElementUnion) UnmarshalJSON(data []byte) error {
-
-	var candidates []utils.UnionCandidate
-
-	// Collect all valid candidates
-	var elementMarkdown ElementMarkdown = ElementMarkdown{}
-	if err := utils.UnmarshalJSON(data, &elementMarkdown, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  ElementUnionTypeElementMarkdown,
-			Value: &elementMarkdown,
-		})
-	}
-
-	var element Element = Element{}
-	if err := utils.UnmarshalJSON(data, &element, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  ElementUnionTypeElement,
-			Value: &element,
-		})
-	}
-
-	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for ElementUnion", string(data))
-	}
-
-	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
-	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for ElementUnion", string(data))
-	}
-
-	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(ElementUnionType)
-	switch best.Type {
-	case ElementUnionTypeElementMarkdown:
-		u.ElementMarkdown = best.Value.(*ElementMarkdown)
-		return nil
-	case ElementUnionTypeElement:
-		u.Element = best.Value.(*Element)
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for ElementUnion", string(data))
-}
-
-func (u ElementUnion) MarshalJSON() ([]byte, error) {
-	if u.Element != nil {
-		return utils.MarshalJSON(u.Element, "", true)
-	}
-
-	if u.ElementMarkdown != nil {
-		return utils.MarshalJSON(u.ElementMarkdown, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type ElementUnion: all fields are null")
 }
 
 type SearchDashboard struct {
-	CacheTTLSeconds    *float64            `json:"cacheTTLSeconds,omitempty"`
-	Category           *string             `json:"category,omitempty"`
-	Created            float64             `json:"created"`
-	CreatedBy          string              `json:"createdBy"`
-	Description        *string             `json:"description,omitempty"`
-	DisplayCreatedBy   *string             `json:"displayCreatedBy,omitempty"`
-	DisplayModifiedBy  *string             `json:"displayModifiedBy,omitempty"`
-	Elements           []ElementUnion      `json:"elements"`
-	ID                 string              `json:"id"`
-	Modified           float64             `json:"modified"`
-	ModifiedBy         *string             `json:"modifiedBy,omitempty"`
-	Name               string              `json:"name"`
-	PackID             *string             `json:"packId,omitempty"`
-	RefreshRate        *float64            `json:"refreshRate,omitempty"`
+	AutoApplyDebounceMs *float64          `json:"autoApplyDebounceMs,omitempty"`
+	AutoApplyMode       *AutoApplyMode    `json:"autoApplyMode,omitempty"`
+	AutoApplyURLSync    *AutoApplyURLSync `json:"autoApplyUrlSync,omitempty"`
+	// Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire.
+	CacheTTLSeconds *float64 `default:"0" json:"cache_ttl_seconds"`
+	Category        *string  `json:"category,omitempty"`
+	Created         float64  `json:"created"`
+	CreatedBy       string   `json:"createdBy"`
+	// Description of the dashboard. Optional.
+	Description       *string                    `default:"" json:"description"`
+	DisplayCreatedBy  *string                    `json:"displayCreatedBy,omitempty"`
+	DisplayModifiedBy *string                    `json:"displayModifiedBy,omitempty"`
+	Elements          []DashboardElementUnion    `json:"elements"`
+	Groups            map[string]DashboardGroups `json:"groups,omitempty"`
+	ID                string                     `json:"id"`
+	Modified          float64                    `json:"modified"`
+	ModifiedBy        *string                    `json:"modifiedBy,omitempty"`
+	Name              string                     `json:"name"`
+	PackID            *string                    `json:"packId,omitempty"`
+	// Auto-refresh rate in milliseconds. Optional.
+	RefreshRate        *float64            `default:"0" json:"refreshRate"`
 	ResolvedDatasetIds []string            `json:"resolvedDatasetIds,omitempty"`
 	Schedule           *SavedQuerySchedule `json:"schedule,omitempty"`
+}
+
+func (s SearchDashboard) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SearchDashboard) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"created", "createdBy", "elements", "id", "modified", "name"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SearchDashboard) GetAutoApplyDebounceMs() *float64 {
+	if s == nil {
+		return nil
+	}
+	return s.AutoApplyDebounceMs
+}
+
+func (s *SearchDashboard) GetAutoApplyMode() *AutoApplyMode {
+	if s == nil {
+		return nil
+	}
+	return s.AutoApplyMode
+}
+
+func (s *SearchDashboard) GetAutoApplyURLSync() *AutoApplyURLSync {
+	if s == nil {
+		return nil
+	}
+	return s.AutoApplyURLSync
 }
 
 func (s *SearchDashboard) GetCacheTTLSeconds() *float64 {
@@ -432,11 +173,18 @@ func (s *SearchDashboard) GetDisplayModifiedBy() *string {
 	return s.DisplayModifiedBy
 }
 
-func (s *SearchDashboard) GetElements() []ElementUnion {
+func (s *SearchDashboard) GetElements() []DashboardElementUnion {
 	if s == nil {
-		return []ElementUnion{}
+		return []DashboardElementUnion{}
 	}
 	return s.Elements
+}
+
+func (s *SearchDashboard) GetGroups() map[string]DashboardGroups {
+	if s == nil {
+		return nil
+	}
+	return s.Groups
 }
 
 func (s *SearchDashboard) GetID() string {

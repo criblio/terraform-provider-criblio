@@ -1,24 +1,15 @@
 resource "criblio_search_dashboard" "my_searchdashboard" {
-  cache_ttl_seconds   = 300
-  category            = "observability"
-  created             = 1696166400
-  created_by          = "user123"
-  description         = "Dashboard for monitoring system metrics"
-  display_created_by  = "User 123"
-  display_modified_by = "User 456"
+  cache_ttl_seconds = 6.24
+  description       = "...my_description..."
   elements = [
     {
-      element = {
+      dashboard_element = {
         config = {
-          key = jsonencode("value")
+          markdown = "...my_markdown..."
         }
-        description      = "5xx error rate for checkout"
-        empty            = false
-        hide_panel       = false
+        hide_panel       = true
         horizontal_chart = false
-        id               = "panel-http-5xx"
-        index            = 3
-        input_id         = "service"
+        id               = "...my_id..."
         layout = {
           h = 0
           w = 9
@@ -26,39 +17,37 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
           y = 2
         }
         search = {
-          search_query_inline = {
-            earliest = {
-              number = 1696166400
-            }
-            latest = {
-              number = 1696170000
-            }
-            parent_search_id = "parentSearch1"
-            query            = "error OR warn"
-            sample_rate      = 0.5
-            timezone         = "$time.timezone$"
-            type             = "inline"
-          }
+          alias    = "...my_alias..."
+          local_id = "...my_local_id..."
+          query    = "...my_query..."
         }
-        title = "HTTP 5xx errors"
-        type  = "chart.line"
-        value = {
-          key = jsonencode("value")
+        title_action = {
+          label           = "...my_label..."
+          open_in_new_tab = true
+          url             = "...my_url..."
         }
+        type    = "markdown.copilot"
         variant = "markdown"
       }
     }
   ]
-  id           = "dashboard123"
-  modified     = 1696170000
-  modified_by  = "user456"
-  name         = "System Metrics Dashboard"
-  pack_id      = "New Pack Id"
-  refresh_rate = 60
-  resolved_dataset_ids = [
-    "string",
-    "int",
-  ]
+  groups = {
+    key = {
+      action = {
+        label = "...my_label..."
+        params = {
+          key = "value"
+        }
+        target = "...my_target..."
+      }
+      collapsed = true
+      input_id  = "...my_input_id..."
+      title     = "...my_title..."
+    }
+  }
+  id           = "dash-overview"
+  name         = "...my_name..."
+  refresh_rate = 2.1
   schedule = {
     cron_schedule = "0 * * * *"
     enabled       = true

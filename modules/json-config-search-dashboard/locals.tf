@@ -9,15 +9,7 @@ locals {
   # Field mappings specific to search_dashboard
   field_mappings = {
     # Dashboard-level field mappings
-    "cacheTtlSeconds"    = "cache_ttl_seconds"
-    "cacheTTLSeconds"    = "cache_ttl_seconds" # Handle both camelCase variations
-    "createdBy"          = "created_by"
-    "displayCreatedBy"   = "display_created_by"
-    "displayModifiedBy"  = "display_modified_by"
-    "modifiedBy"         = "modified_by"
-    "packId"             = "pack_id"
-    "refreshRate"        = "refresh_rate"
-    "resolvedDatasetIds" = "resolved_dataset_ids"
+    "refreshRate" = "refresh_rate"
 
     # Element-level field mappings
     "hidePanel"       = "hide_panel"

@@ -30,22 +30,14 @@ type SearchDashboardDataSource struct {
 
 // SearchDashboardDataSourceModel describes the data model.
 type SearchDashboardDataSourceModel struct {
-	CacheTTLSeconds    types.Float64               `tfsdk:"cache_ttl_seconds"`
-	Category           types.String                `tfsdk:"category"`
-	Created            types.Float64               `tfsdk:"created"`
-	CreatedBy          types.String                `tfsdk:"created_by"`
-	Description        types.String                `tfsdk:"description"`
-	DisplayCreatedBy   types.String                `tfsdk:"display_created_by"`
-	DisplayModifiedBy  types.String                `tfsdk:"display_modified_by"`
-	Elements           []tfTypes.ElementUnion      `tfsdk:"elements"`
-	ID                 types.String                `tfsdk:"id"`
-	Modified           types.Float64               `tfsdk:"modified"`
-	ModifiedBy         types.String                `tfsdk:"modified_by"`
-	Name               types.String                `tfsdk:"name"`
-	PackID             types.String                `tfsdk:"pack_id"`
-	RefreshRate        types.Float64               `tfsdk:"refresh_rate"`
-	ResolvedDatasetIds []types.String              `tfsdk:"resolved_dataset_ids"`
-	Schedule           *tfTypes.SavedQuerySchedule `tfsdk:"schedule"`
+	CacheTTLSeconds types.Float64                      `tfsdk:"cache_ttl_seconds"`
+	Description     types.String                       `tfsdk:"description"`
+	Elements        []tfTypes.DashboardElementUnion    `tfsdk:"elements"`
+	Groups          map[string]tfTypes.DashboardGroups `tfsdk:"groups"`
+	ID              types.String                       `tfsdk:"id"`
+	Name            types.String                       `tfsdk:"name"`
+	RefreshRate     types.Float64                      `tfsdk:"refresh_rate"`
+	Schedule        *tfTypes.SavedQuerySchedule        `tfsdk:"schedule"`
 }
 
 // Metadata returns the data source type name.
@@ -60,42 +52,27 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 
 		Attributes: map[string]schema.Attribute{
 			"cache_ttl_seconds": schema.Float64Attribute{
-				Computed: true,
-			},
-			"category": schema.StringAttribute{
-				Computed: true,
-			},
-			"created": schema.Float64Attribute{
-				Computed: true,
-			},
-			"created_by": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire.`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
-			},
-			"display_created_by": schema.StringAttribute{
-				Computed: true,
-			},
-			"display_modified_by": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Description of the dashboard. Optional.`,
 			},
 			"elements": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"element": schema.SingleNestedAttribute{
+						"dashboard_element": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.MapAttribute{
-									Computed:    true,
-									ElementType: jsontypes.NormalizedType{},
-								},
-								"description": schema.StringAttribute{
+								"config": schema.SingleNestedAttribute{
 									Computed: true,
-								},
-								"empty": schema.BoolAttribute{
-									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"markdown": schema.StringAttribute{
+											Computed: true,
+										},
+									},
 								},
 								"hide_panel": schema.BoolAttribute{
 									Computed: true,
@@ -106,7 +83,115 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 								"id": schema.StringAttribute{
 									Computed: true,
 								},
-								"index": schema.Float64Attribute{
+								"layout": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"h": schema.Float64Attribute{
+											Computed: true,
+										},
+										"w": schema.Float64Attribute{
+											Computed: true,
+										},
+										"x": schema.Float64Attribute{
+											Computed: true,
+										},
+										"y": schema.Float64Attribute{
+											Computed: true,
+										},
+									},
+								},
+								"search": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"alias": schema.StringAttribute{
+											Computed: true,
+										},
+										"local_id": schema.StringAttribute{
+											Computed: true,
+										},
+										"query": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"title_action": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"label": schema.StringAttribute{
+											Computed: true,
+										},
+										"open_in_new_tab": schema.BoolAttribute{
+											Computed: true,
+										},
+										"url": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"variant": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"dashboard_element_input": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"config": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"default_value": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"default_value": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"earliest": schema.SingleNestedAttribute{
+															Computed: true,
+															Attributes: map[string]schema.Attribute{
+																"number": schema.Float64Attribute{
+																	Computed: true,
+																},
+																"str": schema.StringAttribute{
+																	Computed: true,
+																},
+															},
+														},
+														"latest": schema.SingleNestedAttribute{
+															Computed: true,
+															Attributes: map[string]schema.Attribute{
+																"number": schema.Float64Attribute{
+																	Computed: true,
+																},
+																"str": schema.StringAttribute{
+																	Computed: true,
+																},
+															},
+														},
+														"timezone": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"number": schema.Float64Attribute{
+													Computed: true,
+												},
+												"str": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+								},
+								"hide_panel": schema.BoolAttribute{
+									Computed: true,
+								},
+								"horizontal_chart": schema.BoolAttribute{
+									Computed: true,
+								},
+								"id": schema.StringAttribute{
 									Computed: true,
 								},
 								"input_id": schema.StringAttribute{
@@ -158,13 +243,15 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 													},
 												},
 												"parent_search_id": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Parent search ID for the search query. Optional.`,
 												},
 												"query": schema.StringAttribute{
 													Computed: true,
 												},
 												"sample_rate": schema.Float64Attribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Sample rate for the search query.`,
 												},
 												"timezone": schema.StringAttribute{
 													Computed: true,
@@ -206,36 +293,42 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 									},
 								},
 								"title": schema.StringAttribute{
+									Computed:    true,
+									Description: `Title of the element.`,
+								},
+								"title_action": schema.SingleNestedAttribute{
 									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"label": schema.StringAttribute{
+											Computed: true,
+										},
+										"open_in_new_tab": schema.BoolAttribute{
+											Computed: true,
+										},
+										"url": schema.StringAttribute{
+											Computed: true,
+										},
+									},
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
 								},
-								"value": schema.MapAttribute{
-									Computed:    true,
-									ElementType: jsontypes.NormalizedType{},
-								},
-								"variant": schema.StringAttribute{
-									Computed: true,
-								},
 							},
 						},
-						"element_markdown": schema.SingleNestedAttribute{
+						"dashboard_element_visualization": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"description": schema.StringAttribute{
-									Computed: true,
-								},
-								"empty": schema.BoolAttribute{
-									Computed: true,
+								"config": schema.MapAttribute{
+									Computed:    true,
+									ElementType: jsontypes.NormalizedType{},
 								},
 								"hide_panel": schema.BoolAttribute{
 									Computed: true,
 								},
-								"id": schema.StringAttribute{
+								"horizontal_chart": schema.BoolAttribute{
 									Computed: true,
 								},
-								"index": schema.Float64Attribute{
+								"id": schema.StringAttribute{
 									Computed: true,
 								},
 								"layout": schema.SingleNestedAttribute{
@@ -255,19 +348,137 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 										},
 									},
 								},
-								"title": schema.StringAttribute{
+								"search": schema.SingleNestedAttribute{
 									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"search_query_inline": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"earliest": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Computed: true,
+														},
+														"str": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"latest": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Computed: true,
+														},
+														"str": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"parent_search_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `Parent search ID for the search query. Optional.`,
+												},
+												"query": schema.StringAttribute{
+													Computed: true,
+												},
+												"sample_rate": schema.Float64Attribute{
+													Computed:    true,
+													Description: `Sample rate for the search query.`,
+												},
+												"timezone": schema.StringAttribute{
+													Computed: true,
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"search_query_saved": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"query": schema.StringAttribute{
+													Computed: true,
+												},
+												"query_id": schema.StringAttribute{
+													Computed: true,
+												},
+												"run_mode": schema.StringAttribute{
+													Computed: true,
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"search_query_values": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+												"values": schema.ListAttribute{
+													Computed:    true,
+													ElementType: types.StringType,
+												},
+											},
+										},
+									},
+								},
+								"title": schema.StringAttribute{
+									Computed:    true,
+									Description: `Title of the element.`,
+								},
+								"title_action": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"label": schema.StringAttribute{
+											Computed: true,
+										},
+										"open_in_new_tab": schema.BoolAttribute{
+											Computed: true,
+										},
+										"url": schema.StringAttribute{
+											Computed: true,
+										},
+									},
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
 								},
-								"value": schema.StringAttribute{
+							},
+						},
+					},
+				},
+			},
+			"groups": schema.MapNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"action": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"label": schema.StringAttribute{
 									Computed: true,
 								},
-								"variant": schema.StringAttribute{
+								"params": schema.MapAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+								},
+								"target": schema.StringAttribute{
 									Computed: true,
 								},
 							},
+						},
+						"collapsed": schema.BoolAttribute{
+							Computed: true,
+						},
+						"input_id": schema.StringAttribute{
+							Computed: true,
+						},
+						"title": schema.StringAttribute{
+							Computed: true,
 						},
 					},
 				},
@@ -276,24 +487,12 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"modified": schema.Float64Attribute{
-				Computed: true,
-			},
-			"modified_by": schema.StringAttribute{
-				Computed: true,
-			},
 			"name": schema.StringAttribute{
 				Computed: true,
 			},
-			"pack_id": schema.StringAttribute{
-				Computed: true,
-			},
 			"refresh_rate": schema.Float64Attribute{
-				Computed: true,
-			},
-			"resolved_dataset_ids": schema.ListAttribute{
 				Computed:    true,
-				ElementType: types.StringType,
+				Description: `Auto-refresh rate in milliseconds. Optional.`,
 			},
 			"schedule": schema.SingleNestedAttribute{
 				Computed: true,

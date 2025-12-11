@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 12182c44dfd8f4be440ae906d6fd8202
+  docChecksum: d4bb8ca2dacd6be1859444ff9f1a3368
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.48
-  configChecksum: c83165104e371c3b9b081052218107d3
+  releaseVersion: 1.20.59
+  configChecksum: 669a5301be7798f3af852f3ee4fd2da9
   published: true
 features:
   terraform:
@@ -383,6 +383,7 @@ generatedFiles:
   - internal/provider/searchdashboard_data_source.go
   - internal/provider/searchdashboard_data_source_sdk.go
   - internal/provider/searchdashboard_resource.go
+  - internal/provider/searchdashboard_resource_sdk.go
   - internal/provider/searchdashboardcategory_data_source.go
   - internal/provider/searchdashboardcategory_data_source_sdk.go
   - internal/provider/searchdashboardcategory_resource.go
@@ -505,8 +506,16 @@ generatedFiles:
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
   - internal/provider/types/custom_label.go
+  - internal/provider/types/dashboard_element.go
+  - internal/provider/types/dashboard_element_input.go
+  - internal/provider/types/dashboard_element_union.go
+  - internal/provider/types/dashboard_element_visualization.go
+  - internal/provider/types/dashboard_groups.go
+  - internal/provider/types/dashboard_groups_action.go
   - internal/provider/types/dashboard_layout.go
   - internal/provider/types/dataset_metadata.go
+  - internal/provider/types/default_value.go
+  - internal/provider/types/default_value_union.go
   - internal/provider/types/discover_request_header.go
   - internal/provider/types/discover_request_param.go
   - internal/provider/types/discovery_configuration.go
@@ -515,9 +524,6 @@ generatedFiles:
   - internal/provider/types/dns.go
   - internal/provider/types/edge_dataset.go
   - internal/provider/types/edge_provider.go
-  - internal/provider/types/element.go
-  - internal/provider/types/element_markdown.go
-  - internal/provider/types/element_union.go
   - internal/provider/types/endpoint_header.go
   - internal/provider/types/endpoint_param.go
   - internal/provider/types/event_breaker_ruleset_rule.go
@@ -712,6 +718,9 @@ generatedFiles:
   - internal/provider/types/input_elastic_pq.go
   - internal/provider/types/input_elastic_proxy_mode.go
   - internal/provider/types/input_elastic_tls_settings_server_side.go
+  - internal/provider/types/input_element_config.go
+  - internal/provider/types/input_element_config_earliest.go
+  - internal/provider/types/input_element_config_latest.go
   - internal/provider/types/input_eventhub.go
   - internal/provider/types/input_eventhub_authentication.go
   - internal/provider/types/input_eventhub_connection.go
@@ -1013,6 +1022,7 @@ generatedFiles:
   - internal/provider/types/mapping_ruleset.go
   - internal/provider/types/mapping_ruleset_conf.go
   - internal/provider/types/mapping_ruleset_function_conf.go
+  - internal/provider/types/markdown_element_config.go
   - internal/provider/types/master_schema.go
   - internal/provider/types/master_schema_check_server_identity.go
   - internal/provider/types/master_schema_tls.go
@@ -1302,6 +1312,7 @@ generatedFiles:
   - internal/provider/types/pack_request_body_tags.go
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
+  - internal/provider/types/panel_query_definition.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
@@ -1381,6 +1392,7 @@ generatedFiles:
   - internal/provider/types/target.go
   - internal/provider/types/target_config.go
   - internal/provider/types/target_config_conf.go
+  - internal/provider/types/title_action.go
   - internal/provider/types/tls_configuration.go
   - internal/provider/types/upgrade_group_settings.go
   - internal/provider/types/upgrade_package_urls.go
@@ -2035,8 +2047,8 @@ generatedFiles:
   - internal/sdk/models/shared/crudentitybase.go
   - internal/sdk/models/shared/dailyusagemetrics.go
   - internal/sdk/models/shared/dashboardcategory.go
-  - internal/sdk/models/shared/dashboardelementtype.go
-  - internal/sdk/models/shared/dashboardelementvariant.go
+  - internal/sdk/models/shared/dashboardelementunion.go
+  - internal/sdk/models/shared/dashboardgroups.go
   - internal/sdk/models/shared/dashboardlayout.go
   - internal/sdk/models/shared/databaseconnectionconfig.go
   - internal/sdk/models/shared/databaseconnectiontest.go
@@ -2125,6 +2137,8 @@ generatedFiles:
   - internal/sdk/models/shared/inputdatagen.go
   - internal/sdk/models/shared/inputedgeprometheus.go
   - internal/sdk/models/shared/inputelastic.go
+  - internal/sdk/models/shared/inputelementconfig.go
+  - internal/sdk/models/shared/inputelementtype.go
   - internal/sdk/models/shared/inputeventhub.go
   - internal/sdk/models/shared/inputexec.go
   - internal/sdk/models/shared/inputfile.go
@@ -2200,6 +2214,8 @@ generatedFiles:
   - internal/sdk/models/shared/mappingruleset.go
   - internal/sdk/models/shared/mappingrulesetfunctionconf.go
   - internal/sdk/models/shared/mappingtype.go
+  - internal/sdk/models/shared/markdownelementconfig.go
+  - internal/sdk/models/shared/markdownelementtype.go
   - internal/sdk/models/shared/masterschema.go
   - internal/sdk/models/shared/masterworkerentry.go
   - internal/sdk/models/shared/membershipschema.go
@@ -2295,6 +2311,7 @@ generatedFiles:
   - internal/sdk/models/shared/packinstallinfo.go
   - internal/sdk/models/shared/packrequestbody.go
   - internal/sdk/models/shared/paginationconfig.go
+  - internal/sdk/models/shared/panelquerydefinition.go
   - internal/sdk/models/shared/parserlibentry.go
   - internal/sdk/models/shared/parsermode.go
   - internal/sdk/models/shared/pipeline.go
@@ -2392,6 +2409,7 @@ generatedFiles:
   - internal/sdk/models/shared/tcpoutcompression.go
   - internal/sdk/models/shared/team.go
   - internal/sdk/models/shared/teamaccesscontrollist.go
+  - internal/sdk/models/shared/titleaction.go
   - internal/sdk/models/shared/tlsclientparams.go
   - internal/sdk/models/shared/trustpolicy.go
   - internal/sdk/models/shared/uistatepatch.go
@@ -2408,6 +2426,7 @@ generatedFiles:
   - internal/sdk/models/shared/userprofile.go
   - internal/sdk/models/shared/vaultkmstlsclientconfig.go
   - internal/sdk/models/shared/versioninfo.go
+  - internal/sdk/models/shared/visualizationelementtype.go
   - internal/sdk/models/shared/workspacecreaterequestdto.go
   - internal/sdk/models/shared/workspacepatchrequestdto.go
   - internal/sdk/models/shared/workspaceschema.go
@@ -4899,16 +4918,16 @@ examples:
     speakeasy-default-list-search-dashboard:
       responses:
         "200":
-          application/json: {"items": [{"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "Markdown panel for release notes", "empty": false, "hidePanel": false, "id": "panel-markdown-release-notes", "index": 7, "layout": {"h": 4, "w": 12, "x": 0, "y": 10}, "title": "Release notes", "type": "markdown.default", "value": "## Release notes\n- Added payment retry logic\n- Improved log verbosity controls\n", "variant": "markdown"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard"}]}
+          application/json: {"items": [{"cache_ttl_seconds": 0, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"hidePanel": false, "horizontalChart": false, "id": "<id>", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "type": "markdown.copilot", "variant": "markdown"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "refreshRate": 0}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSearchDashboard:
     speakeasy-default-create-search-dashboard:
       requestBody:
-        application/json: {"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "Markdown panel for release notes", "empty": false, "hidePanel": false, "id": "panel-markdown-release-notes", "index": 7, "layout": {"h": 4, "w": 12, "x": 0, "y": 10}, "title": "Release notes", "type": "markdown.default", "value": "## Release notes\n- Added payment retry logic\n- Improved log verbosity controls\n", "variant": "markdown"}, {"description": "Markdown panel for release notes", "empty": false, "hidePanel": false, "id": "panel-markdown-release-notes", "index": 7, "layout": {"h": 4, "w": 12, "x": 0, "y": 10}, "title": "Release notes", "type": "markdown.default", "value": "## Release notes\n- Added payment retry logic\n- Improved log verbosity controls\n", "variant": "markdown"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "packId": "New Pack Id", "refreshRate": 60, "resolvedDatasetIds": ["string", "int"], "schedule": {"cronSchedule": "0 * * * *", "enabled": true, "keepLastN": 5, "notifications": {"disabled": false, "items": [{"id": "notif1", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "group": "myNotificationGroup"}]}, "resumeMissed": true, "resumeOnBoot": false, "tz": "UTC"}}
+        application/json: {"cache_ttl_seconds": 0, "created": 1696166400, "createdBy": "user123", "description": "", "elements": [{"hidePanel": false, "horizontalChart": false, "id": "<id>", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "type": "markdown.default", "variant": "markdown"}, {"hidePanel": false, "horizontalChart": false, "id": "<id>", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "type": "markdown.default", "variant": "markdown"}], "id": "dashboard123", "modified": 1696170000, "name": "System Metrics Dashboard", "refreshRate": 0, "schedule": {"cronSchedule": "0 * * * *", "enabled": true, "keepLastN": 5, "notifications": {"disabled": false, "items": [{"id": "notif1", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "group": "myNotificationGroup"}]}, "resumeMissed": true, "resumeOnBoot": false, "tz": "UTC"}}
       responses:
         "200":
-          application/json: {"items": [{"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "Markdown panel for release notes", "empty": false, "hidePanel": false, "id": "panel-markdown-release-notes", "index": 7, "layout": {"h": 4, "w": 12, "x": 0, "y": 10}, "title": "Release notes", "type": "markdown.default", "value": "## Release notes\n- Added payment retry logic\n- Improved log verbosity controls\n", "variant": "markdown"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard"}]}
+          application/json: {"items": [{"cache_ttl_seconds": 0, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"hidePanel": false, "horizontalChart": false, "id": "<id>", "inputId": "<id>", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "search": {"earliest": "-1h", "latest": "now", "parentSearchId": "parentSearch1", "query": "error OR warn", "sampleRate": 0.5, "timezone": "$time.timezone$", "type": "inline"}, "type": "input.timerange"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "refreshRate": 0}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSearchDashboardById:
@@ -4918,7 +4937,7 @@ examples:
           id: "dash-overview"
       responses:
         "200":
-          application/json: {"items": [{"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "Markdown panel for release notes", "empty": false, "hidePanel": false, "id": "panel-markdown-release-notes", "index": 7, "layout": {"h": 4, "w": 12, "x": 0, "y": 10}, "title": "Release notes", "type": "markdown.default", "value": "## Release notes\n- Added payment retry logic\n- Improved log verbosity controls\n", "variant": "markdown"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard"}]}
+          application/json: {"items": [{"cache_ttl_seconds": 0, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"hidePanel": false, "horizontalChart": false, "id": "<id>", "inputId": "<id>", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "search": {"earliest": "-1h", "latest": "now", "parentSearchId": "parentSearch1", "query": "error OR warn", "sampleRate": 0.5, "timezone": "$time.timezone$", "type": "inline"}, "type": "input.number"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "refreshRate": 0}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSearchDashboardById:
@@ -4927,10 +4946,10 @@ examples:
         path:
           id: "dash-overview"
       requestBody:
-        application/json: {"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "Markdown panel for release notes", "empty": false, "hidePanel": false, "id": "panel-markdown-release-notes", "index": 7, "layout": {"h": 4, "w": 12, "x": 0, "y": 10}, "title": "Release notes", "type": "markdown.default", "value": "## Release notes\n- Added payment retry logic\n- Improved log verbosity controls\n", "variant": "markdown"}, {"description": "Markdown panel for release notes", "empty": false, "hidePanel": false, "id": "panel-markdown-release-notes", "index": 7, "layout": {"h": 4, "w": 12, "x": 0, "y": 10}, "title": "Release notes", "type": "markdown.default", "value": "## Release notes\n- Added payment retry logic\n- Improved log verbosity controls\n", "variant": "markdown"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "packId": "New Pack Id", "refreshRate": 60, "resolvedDatasetIds": ["string", "int"], "schedule": {"cronSchedule": "0 * * * *", "enabled": true, "keepLastN": 5, "notifications": {"disabled": false, "items": [{"id": "notif1", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "group": "myNotificationGroup"}]}, "resumeMissed": true, "resumeOnBoot": false, "tz": "UTC"}}
+        application/json: {"cache_ttl_seconds": 0, "created": 1696166400, "createdBy": "user123", "description": "", "elements": [{"hidePanel": false, "horizontalChart": false, "id": "<id>", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "type": "markdown.default", "variant": "markdown"}, {"hidePanel": false, "horizontalChart": false, "id": "<id>", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "search": {"query": "dataset=my_dataset | stats count", "queryId": "query123", "runMode": "lastRun", "type": "saved"}, "titleAction": {"label": "<value>", "url": "https://proper-filter.com"}, "type": "chart.scatter"}], "id": "dashboard123", "modified": 1696170000, "name": "System Metrics Dashboard", "refreshRate": 0, "schedule": {"cronSchedule": "0 * * * *", "enabled": true, "keepLastN": 5, "notifications": {"disabled": false, "items": [{"id": "notif1", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "group": "myNotificationGroup"}]}, "resumeMissed": true, "resumeOnBoot": false, "tz": "UTC"}}
       responses:
         "200":
-          application/json: {"items": [{"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "5xx error rate for checkout", "empty": false, "hidePanel": false, "horizontalChart": false, "id": "panel-http-5xx", "index": 3, "inputId": "service", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "search": {"query": "dataset=my_dataset | stats count", "queryId": "query123", "runMode": "lastRun", "type": "saved"}, "title": "HTTP 5xx errors", "type": "chart.line", "value": {"metric": "http.server.requests", "aggregation": "rate_5m", "groupBy": ["route"], "unit": "req/s", "thresholds": [{"value": 50, "color": "yellow"}, {"value": 100, "color": "red"}]}, "variant": "markdown"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard"}]}
+          application/json: {"items": [{"cache_ttl_seconds": 0, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"hidePanel": false, "horizontalChart": false, "id": "<id>", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "search": {"query": "dataset=my_dataset | stats count", "queryId": "query123", "runMode": "lastRun", "type": "saved"}, "titleAction": {"label": "<value>", "url": "https://fragrant-essence.info"}, "type": "chart.scatter"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "refreshRate": 0}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSearchDashboardById:
@@ -4940,7 +4959,7 @@ examples:
           id: "dash-overview"
       responses:
         "200":
-          application/json: {"items": [{"cacheTTLSeconds": 300, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"description": "5xx error rate for checkout", "empty": false, "hidePanel": false, "horizontalChart": false, "id": "panel-http-5xx", "index": 3, "inputId": "service", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "search": {"query": "dataset=my_dataset | stats count", "queryId": "query123", "runMode": "lastRun", "type": "saved"}, "title": "HTTP 5xx errors", "type": "chart.line", "value": {"metric": "http.server.requests", "aggregation": "rate_5m", "groupBy": ["route"], "unit": "req/s", "thresholds": [{"value": 50, "color": "yellow"}, {"value": 100, "color": "red"}]}, "variant": "markdown"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard"}]}
+          application/json: {"items": [{"cache_ttl_seconds": 0, "category": "observability", "created": 1696166400, "createdBy": "user123", "description": "Dashboard for monitoring system metrics", "displayCreatedBy": "User 123", "displayModifiedBy": "User 456", "elements": [{"hidePanel": false, "horizontalChart": false, "id": "<id>", "inputId": "<id>", "layout": {"h": 0, "w": 9, "x": 8, "y": 2}, "search": {"query": "dataset=my_dataset | stats count", "queryId": "query123", "runMode": "lastRun", "type": "saved"}, "type": "input.text"}], "id": "dashboard123", "modified": 1696170000, "modifiedBy": "user456", "name": "System Metrics Dashboard", "refreshRate": 0}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listSearchMacro:

@@ -6,7 +6,7 @@ info:
 
     This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.
 
-    Complementary API reference documentation is available at https://docs.cribl.io/cribl-as-code/api-reference/. Product documentation is available at https://docs.cribl.io.
+    Complementary API reference documentation is available at https://docs.cribl.io/cribl-as-code/api-reference/control-plane/cribl-core/. Product documentation is available at https://docs.cribl.io.
   version: 4.14.0
   contact:
     name: Support
@@ -6236,12 +6236,16 @@ components:
             parentSearchId:
               type: string
               example: "parentSearch1"
+              default: ""
+              description: Parent search ID for the search query. Optional.
             query:
               type: string
               example: "error OR warn"
             sampleRate:
               type: number
               example: 0.5
+              default: 1
+              description: Sample rate for the search query.
             timezone:
               type: string
               example: "$time.timezone$"
@@ -6269,6 +6273,24 @@ components:
           required:
             - type
             - values
+    ExpectedOutputType:
+      type: string
+      enum:
+        - range
+        - instant
+      x-speakeasy-unknown-values: allow
+    PanelQueryDefinition:
+      type: object
+      properties:
+        alias:
+          type: string
+        localId:
+          type: string
+        query:
+          type: string
+      required:
+        - localId
+        - query
     DashboardElementType:
       type: string
       enum:
@@ -6344,192 +6366,77 @@ components:
     SearchDashboard:
       type: object
       properties:
-        cacheTTLSeconds:
+        autoApplyDebounceMs:
           type: number
-          example: 300
+          x-speakeasy-terraform-ignore: true
+        autoApplyMode:
+          type: string
+          enum:
+            - all
+            - metric
+            - off
+          x-speakeasy-terraform-ignore: true
+        autoApplyUrlSync:
+          type: string
+          enum:
+            - replace
+            - push
+            - off
+          x-speakeasy-terraform-ignore: true
+        cache_ttl_seconds:
+          type: number
+          default: 0
+          description: Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire.
         category:
           type: string
-          example: "observability"
+          x-speakeasy-terraform-ignore: true
         created:
           type: number
-          example: 1696166400
+          x-speakeasy-terraform-ignore: true
         createdBy:
           type: string
-          example: "user123"
+          x-speakeasy-terraform-ignore: true
         description:
           type: string
-          example: "Dashboard for monitoring system metrics"
+          description: Description of the dashboard. Optional.
+          default: ""
         displayCreatedBy:
           type: string
-          example: "User 123"
+          x-speakeasy-terraform-ignore: true
         displayModifiedBy:
           type: string
-          example: "User 456"
+          x-speakeasy-terraform-ignore: true
         elements:
-          type: array
-          items:
-            oneOf:
-              - type: object
-                properties:
-                  description:
-                    type: string
-                    example: "5xx error rate for checkout"
-                  empty:
-                    type: boolean
-                    example: false
-                  hidePanel:
-                    type: boolean
-                    example: false
-                  horizontalChart:
-                    type: boolean
-                    example: false
-                  id:
-                    type: string
-                    example: "panel-http-5xx"
-                  index:
-                    type: number
-                    example: 3
-                  inputId:
-                    type: string
-                    example: "service"
-                  layout:
-                    $ref: "#/components/schemas/DashboardLayout"
-                    example:
-                      x: 0
-                      y: 6
-                      w: 12
-                      h: 4
-                  search:
-                    $ref: "#/components/schemas/SearchQuery"
-                    nullable: true
-                    example:
-                      type: "inline"
-                      query: "dataset=\"ecs_event\" lastStatus=\"RUNNING\" | summarize count() by group"
-                      earliest: "$time.earliest$"
-                      latest: "$time.latest$"
-                      timezone: "$time.timezone$"
-                  title:
-                    type: string
-                    example: "HTTP 5xx errors"
-                  type:
-                    $ref: "#/components/schemas/DashboardElementType"
-                    example: "timeseries"
-                  value:
-                    type: object
-                    additionalProperties: true
-                    example:
-                      metric: "http.server.requests"
-                      aggregation: "rate_5m"
-                      groupBy:
-                        - "route"
-                      unit: "req/s"
-                      thresholds:
-                        - value: 50
-                          color: "yellow"
-                        - value: 100
-                          color: "red"
-                  variant:
-                    $ref: "#/components/schemas/DashboardElementVariant"
-                    example: "line"
-                  config:
-                    type: object
-                    additionalProperties: true
-                required:
-                  - id
-                  - layout
-                  - type
-              - type: object
-                properties:
-                  description:
-                    type: string
-                    example: "Markdown panel for release notes"
-                  empty:
-                    type: boolean
-                    example: false
-                  hidePanel:
-                    type: boolean
-                    example: false
-                  id:
-                    type: string
-                    example: "panel-markdown-release-notes"
-                  index:
-                    type: number
-                    example: 7
-                  layout:
-                    $ref: "#/components/schemas/DashboardLayout"
-                    example:
-                      x: 0
-                      y: 10
-                      w: 12
-                      h: 4
-                  title:
-                    type: string
-                    example: "Release notes"
-                  type:
-                    type: string
-                    enum:
-                      - markdown.default
-                    example: "markdown.default"
-                  value:
-                    type: string
-                    example: |
-                      ## Release notes
-                      - Added payment retry logic
-                      - Improved log verbosity controls
-                  variant:
-                    type: string
-                    enum:
-                      - markdown
-                    example: "markdown"
-                example:
-                  description: "Markdown panel for release notes"
-                  empty: false
-                  hidePanel: false
-                  id: "panel-markdown-release-notes"
-                  index: 7
-                  layout:
-                    x: 0
-                    y: 10
-                    w: 12
-                    h: 4
-                  title: "Release notes"
-                  type: "markdown.default"
-                  value: |
-                    ## Release notes
-                    - Added payment retry logic
-                    - Improved log verbosity controls
-                  variant: "markdown"
-                required:
-                  - id
-                  - layout
-                  - type
-                  - variant
+          $ref: "#/components/schemas/DashboardElements"
+        groups:
+          $ref: "#/components/schemas/DashboardGroups"
+          x-speakeasy-terraform-ignore: true
         id:
           type: string
-          example: "dashboard123"
         modified:
           type: number
-          example: 1696170000
+          x-speakeasy-terraform-ignore: true
         modifiedBy:
           type: string
-          example: "user456"
+          x-speakeasy-terraform-ignore: true
         name:
           type: string
-          example: "System Metrics Dashboard"
         packId:
           type: string
-          example: "New Pack Id"
+          x-speakeasy-terraform-ignore: true
         refreshRate:
           type: number
-          example: 60
+          description: Auto-refresh rate in milliseconds. Optional.
+          default: 0
         resolvedDatasetIds:
           type: array
           items:
             type: string
-            example: "int"
-          example: ["string", "int"]
+          x-speakeasy-terraform-ignore: true
         schedule:
           $ref: "#/components/schemas/SavedQuerySchedule"
+          description: Schedule for the dashboard. Optional.
+          x-speakeasy-param-suppress-computed-diff: true
       required:
         - created
         - createdBy
@@ -6537,6 +6444,301 @@ components:
         - id
         - modified
         - name
+    CountedSearchDashboard:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: number of items present in the items array
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchDashboard"
+    ElementConfigType:
+      type: object
+      additionalProperties: true
+    TitleAction:
+      type: object
+      default: {}
+      properties:
+        label:
+          type: string
+        openInNewTab:
+          type: boolean
+        url:
+          type: string
+      required:
+        - label
+        - url
+    VisualizationElementType:
+      type: string
+      enum:
+        - chart.area
+        - chart.column
+        - chart.funnel
+        - chart.gauge
+        - chart.horizontalBar
+        - chart.line
+        - chart.map
+        - chart.pie
+        - chart.scatter
+        - counter.single
+        - list.events
+        - list.table
+        - custom.throughputMetrics
+        - custom.flowMatrix
+      x-speakeasy-unknown-values: allow
+    InputElementConfig:
+      type: object
+      properties:
+        applyMode:
+          type: string
+          enum:
+            - auto
+            - manual
+          x-speakeasy-unknown-values: allow
+          x-speakeasy-terraform-ignore: true
+        debounceMs:
+          type: number
+          x-speakeasy-terraform-ignore: true
+        defaultValue:
+          oneOf:
+            - type: string
+            - type: number
+            - type: object
+              properties:
+                earliest:
+                  oneOf:
+                    - type: string
+                    - type: number
+                latest:
+                  oneOf:
+                    - type: string
+                    - type: number
+                timezone:
+                  type: string
+              required:
+                - earliest
+                - latest
+    InputElementType:
+      type: string
+      enum:
+        - input.timerange
+        - input.dropdown
+        - input.text
+        - input.number
+      x-speakeasy-unknown-values: allow
+    MarkdownElementConfig:
+      type: object
+      properties:
+        markdown:
+          type: string
+      required:
+        - markdown
+    MarkdownElementType:
+      type: string
+      enum:
+        - markdown.copilot
+        - markdown.default
+      x-speakeasy-unknown-values: allow
+    DashboardElement:
+      oneOf:
+        - type: object
+          properties:
+            config:
+              $ref: "#/components/schemas/ElementConfigType"
+              description: Configuration for the element. Optional.
+              x-speakeasy-param-suppress-computed-diff: true
+            description:
+              type: string
+              x-speakeasy-terraform-ignore: true
+            empty:
+              type: boolean
+              x-speakeasy-terraform-ignore: true
+            group:
+              type: string
+              x-speakeasy-terraform-ignore: true
+            hidePanel:
+              type: boolean
+              default: false
+            horizontalChart:
+              type: boolean
+              default: false
+            id:
+              type: string
+            index:
+              type: number
+              x-speakeasy-terraform-ignore: true
+            layout:
+              $ref: "#/components/schemas/DashboardLayout"
+              description: Layout of the element.
+            search:
+              $ref: "#/components/schemas/SearchQuery"
+              description: Search query to execute.
+              x-speakeasy-param-suppress-computed-diff: true
+            title:
+              type: string
+              description: Title of the element.
+            titleAction:
+              $ref: "#/components/schemas/TitleAction"
+              description: Action to perform when the title is clicked. Optional.
+              default: {}
+            type:
+              $ref: "#/components/schemas/VisualizationElementType"
+              description: Type of the element.
+            variant:
+              type: string
+              enum:
+                - visualization
+              x-speakeasy-terraform-ignore: true
+          required:
+            - id
+            - layout
+            - search
+            - type
+        - type: object
+          properties:
+            config:
+              x-speakeasy-param-suppress-computed-diff: true
+              $ref: "#/components/schemas/InputElementConfig"
+              description: Configuration for the element. Optional.
+            description:
+              type: string
+              x-speakeasy-terraform-ignore: true
+            empty:
+              type: boolean
+              x-speakeasy-terraform-ignore: true
+            group:
+              type: string
+              x-speakeasy-terraform-ignore: true
+            hidePanel:
+              type: boolean
+              default: false
+            horizontalChart:
+              type: boolean
+              default: false
+            id:
+              type: string
+            index:
+              type: number
+              x-speakeasy-terraform-ignore: true
+            inputId:
+              type: string
+            layout:
+              $ref: "#/components/schemas/DashboardLayout"
+              description: Layout of the element.
+            search:
+              $ref: "#/components/schemas/SearchQuery"
+              description: Search query to execute.
+              x-speakeasy-param-suppress-computed-diff: true
+            title:
+              type: string
+              description: Title of the element.
+            titleAction:
+              default: {}
+              description: Action to perform when the title is clicked. Optional.
+              $ref: "#/components/schemas/TitleAction"
+              x-speakeasy-terraform-ignore: true
+            type:
+              $ref: "#/components/schemas/InputElementType"
+              description: Type of the element.
+            value:
+              type: object
+              additionalProperties: true
+              x-speakeasy-terraform-ignore: true
+            variant:
+              type: string
+              enum:
+                - input
+              x-speakeasy-terraform-ignore: true
+          required:
+            - id
+            - inputId
+            - layout
+            - type
+        - type: object
+          properties:
+            config:
+              $ref: "#/components/schemas/MarkdownElementConfig"
+              description: Configuration for the element. Optional.
+            description:
+              type: string
+              x-speakeasy-terraform-ignore: true
+            empty:
+              type: boolean
+              x-speakeasy-terraform-ignore: true
+            group:
+              type: string
+              x-speakeasy-terraform-ignore: true
+            hidePanel:
+              type: boolean
+              default: false
+            horizontalChart:
+              type: boolean
+              default: false
+            id:
+              type: string
+            index:
+              type: number
+              x-speakeasy-terraform-ignore: true
+            layout:
+              $ref: "#/components/schemas/DashboardLayout"
+              description: Layout of the element.
+            search:
+              $ref: "#/components/schemas/PanelQueryDefinition"
+              description: Search query to execute.
+              x-speakeasy-terraform-ignore: true
+            title:
+              type: string
+              x-speakeasy-terraform-ignore: true
+            titleAction:
+              default: {}
+              $ref: "#/components/schemas/TitleAction"
+              x-speakeasy-terraform-ignore: true
+            type:
+              $ref: "#/components/schemas/MarkdownElementType"
+              description: Type of the element.
+            variant:
+              type: string
+              enum:
+                - markdown
+              x-speakeasy-unknown-values: allow
+          required:
+            - id
+            - layout
+            - type
+            - variant
+    DashboardElements:
+      type: array
+      items:
+        $ref: "#/components/schemas/DashboardElement"
+    DashboardGroups:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          action:
+            type: object
+            properties:
+              label:
+                type: string
+              params:
+                type: object
+                additionalProperties:
+                  type: string
+              target:
+                type: string
+            required:
+              - label
+              - target
+          collapsed:
+            type: boolean
+          inputId:
+            type: string
+          title:
+            type: string
+        required:
+          - title
     SearchMacro:
       type: object
       properties:

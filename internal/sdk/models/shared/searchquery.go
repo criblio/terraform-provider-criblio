@@ -264,13 +264,15 @@ func (e *TypeInline) UnmarshalJSON(data []byte) error {
 }
 
 type SearchQueryInline struct {
-	Earliest       *SearchQueryEarliest `json:"earliest,omitempty"`
-	Latest         *SearchQueryLatest   `json:"latest,omitempty"`
-	ParentSearchID *string              `json:"parentSearchId,omitempty"`
-	Query          string               `json:"query"`
-	SampleRate     *float64             `json:"sampleRate,omitempty"`
-	Timezone       *string              `json:"timezone,omitempty"`
-	Type           TypeInline           `json:"type"`
+	Earliest *SearchQueryEarliest `json:"earliest,omitempty"`
+	Latest   *SearchQueryLatest   `json:"latest,omitempty"`
+	// Parent search ID for the search query. Optional.
+	ParentSearchID *string `default:"" json:"parentSearchId"`
+	Query          string  `json:"query"`
+	// Sample rate for the search query.
+	SampleRate *float64   `default:"1" json:"sampleRate"`
+	Timezone   *string    `json:"timezone,omitempty"`
+	Type       TypeInline `json:"type"`
 }
 
 func (s SearchQueryInline) MarshalJSON() ([]byte, error) {
