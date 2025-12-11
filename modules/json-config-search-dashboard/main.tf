@@ -7,12 +7,9 @@ resource "criblio_search_dashboard" "dashboard_from_json" {
   elements   = try(local.final_config.elements, [])
 
   # Optional fields
-  cache_ttl_seconds    = try(local.final_config.cache_ttl_seconds, null)
-  category             = try(local.final_config.category, null)
-  description          = try(local.final_config.description, null)
-  pack_id              = try(local.final_config.pack_id, null)
-  refresh_rate         = try(local.final_config.refresh_rate, null)
-  resolved_dataset_ids = try(local.final_config.resolved_dataset_ids, null)
+  description  = try(local.final_config.description, null)
+  refresh_rate = try(local.final_config.refresh_rate, null)
+
 
   # Schedule block if provided
   schedule = try(local.final_config.schedule, null) != null ? {
