@@ -1,4 +1,4 @@
-resource "criblio_search_dashboard" "sample" {
+resource "criblio_search_dashboard" "my_searchdashboard" {
   id          = "sample_test_dashboard"
   name        = "Sample Test Dashboard"
   description = "A sample dashboard with several panels"
