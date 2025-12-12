@@ -28,6 +28,7 @@ data "criblio_search_dashboard" "my_searchdashboard" {
 ### Read-Only
 
 - `cache_ttl_seconds` (Number) Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire.
+- `category` (String)
 - `description` (String) Description of the dashboard. Optional.
 - `elements` (Attributes List) (see [below for nested schema](#nestedatt--elements))
 - `groups` (Attributes Map) (see [below for nested schema](#nestedatt--groups))

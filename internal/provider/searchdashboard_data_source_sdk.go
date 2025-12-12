@@ -37,6 +37,7 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 	var diags diag.Diagnostics
 
 	r.CacheTTLSeconds = types.Float64PointerValue(resp.CacheTTLSeconds)
+	r.Category = types.StringPointerValue(resp.Category)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.Elements = []tfTypes.DashboardElementUnion{}
 

@@ -15,6 +15,7 @@ SearchDashboard Resource
 ```terraform
 resource "criblio_search_dashboard" "my_searchdashboard" {
   cache_ttl_seconds = 6.24
+  category          = "...my_category..."
   description       = "...my_description..."
   elements = [
     {
@@ -87,6 +88,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
 ### Optional
 
 - `cache_ttl_seconds` (Number) Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire. Default: 0
+- `category` (String)
 - `description` (String) Description of the dashboard. Optional. Default: ""
 - `groups` (Attributes Map) (see [below for nested schema](#nestedatt--groups))
 - `refresh_rate` (Number) Auto-refresh rate in milliseconds. Optional. Default: 0

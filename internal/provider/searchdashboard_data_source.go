@@ -31,6 +31,7 @@ type SearchDashboardDataSource struct {
 // SearchDashboardDataSourceModel describes the data model.
 type SearchDashboardDataSourceModel struct {
 	CacheTTLSeconds types.Float64                      `tfsdk:"cache_ttl_seconds"`
+	Category        types.String                       `tfsdk:"category"`
 	Description     types.String                       `tfsdk:"description"`
 	Elements        []tfTypes.DashboardElementUnion    `tfsdk:"elements"`
 	Groups          map[string]tfTypes.DashboardGroups `tfsdk:"groups"`
@@ -54,6 +55,9 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 			"cache_ttl_seconds": schema.Float64Attribute{
 				Computed:    true,
 				Description: `Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire.`,
+			},
+			"category": schema.StringAttribute{
+				Computed: true,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,

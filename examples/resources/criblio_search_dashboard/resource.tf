@@ -1,5 +1,6 @@
 resource "criblio_search_dashboard" "my_searchdashboard" {
   cache_ttl_seconds = 6.24
+  category          = "...my_category..."
   description       = "...my_description..."
   elements = [
     {

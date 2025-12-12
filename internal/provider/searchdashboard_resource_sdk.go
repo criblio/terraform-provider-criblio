@@ -77,6 +77,7 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 	var diags diag.Diagnostics
 
 	r.CacheTTLSeconds = types.Float64PointerValue(resp.CacheTTLSeconds)
+	r.Category = types.StringPointerValue(resp.Category)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.Elements = []tfTypes.DashboardElementUnion{}
 
@@ -387,6 +388,12 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 		*cacheTTLSeconds = r.CacheTTLSeconds.ValueFloat64()
 	} else {
 		cacheTTLSeconds = nil
+	}
+	category := new(string)
+	if !r.Category.IsUnknown() && !r.Category.IsNull() {
+		*category = r.Category.ValueString()
+	} else {
+		category = nil
 	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
@@ -1119,6 +1126,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 	}
 	out := shared.SearchDashboard{
 		CacheTTLSeconds: cacheTTLSeconds,
+		Category:        category,
 		Description:     description,
 		Elements:        elements,
 		Groups:          groups,
