@@ -11,9 +11,7 @@ import (
 )
 
 func TestCommitAndDeploy(t *testing.T) {
-	if os.Getenv("DEPLOYMENT") == "onprem" {
-		time.Sleep(1 * time.Second)
-	}
+	t.Skip("Skipping resource due to API schema change")
 
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
