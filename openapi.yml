@@ -6389,7 +6389,6 @@ components:
           description: Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire.
         category:
           type: string
-          x-speakeasy-terraform-ignore: true
         created:
           type: number
           x-speakeasy-terraform-ignore: true
