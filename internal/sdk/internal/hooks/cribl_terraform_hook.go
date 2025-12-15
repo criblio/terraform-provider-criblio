@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"io"
 	"log"
 	"net/http"
@@ -12,6 +11,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
 var (
@@ -95,11 +96,28 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	if !onPrem {
 		if ctx.SecuritySource != nil {
 			if security, err := ctx.SecuritySource(ctx.Context); err == nil {
-				if s, ok := security.(shared.Security); ok {
-					// Get OAuth credentials
+				var s shared.Security
+				var ok bool
+
+				// Try type assertion for both value and pointer types
+				switch v := security.(type) {
+				case shared.Security:
+					s = v
+					ok = true
+				case *shared.Security:
+					s = *v
+					ok = true
+				}
+
+				if ok {
+					// Get OAuth credentials from provider config
 					if s.ClientOauth != nil {
-						clientID = s.ClientOauth.ClientID
-						clientSecret = s.ClientOauth.ClientSecret
+						if s.ClientOauth.ClientID != "" {
+							clientID = s.ClientOauth.ClientID
+						}
+						if s.ClientOauth.ClientSecret != "" {
+							clientSecret = s.ClientOauth.ClientSecret
+						}
 					}
 
 					// Get org and workspace IDs from provider config (higher precedence than credentials file)
@@ -195,7 +213,23 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 
 			sessionKey = fmt.Sprintf("%s:%s", clientID, clientSecret)
 		} else {
+			if config == nil {
+				return req, fmt.Errorf("on-prem configuration requires credentials file or environment variables")
+			}
 			sessionKey = fmt.Sprintf("onprem:%s:%s:%s", config.OnpremServerURL, config.OnpremUsername, config.OnpremPassword)
+		}
+
+		// Ensure config is not nil - create minimal config with credentials if needed
+		configForToken := config
+		if configForToken == nil && clientID != "" && clientSecret != "" {
+			// Create minimal config with all provider variables
+			configForToken = &CriblConfig{
+				ClientID:       clientID,
+				ClientSecret:   clientSecret,
+				OrganizationID: orgID,
+				Workspace:      workspaceID,
+				CloudDomain:    cloudDomain,
+			}
 		}
 
 		// Get or create session
@@ -203,7 +237,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 			SessionKey: sessionKey,
 			Context:    ctx.HookContext,
 			Audience:   audience,
-			Config:     config,
+			Config:     configForToken,
 		})
 		if err != nil {
 			return req, err
@@ -566,6 +600,9 @@ func (o *CriblTerraformHook) loadTokenInfo(input LoadTokenInfoInput) (*TokenInfo
 
 	if tokenInfo == nil {
 		if strings.Contains(input.SessionKey, "onprem") {
+			if input.Config == nil {
+				return nil, fmt.Errorf("config is required for on-prem authentication but was nil")
+			}
 			log.Printf("[DEBUG] Retrieving bearer token using username/password for on-prem authentication")
 			newTokenInfo, err := o.getOnPremBearerToken(input.Context.Context,
 				input.Config.OnpremServerURL,
@@ -578,6 +615,9 @@ func (o *CriblTerraformHook) loadTokenInfo(input LoadTokenInfoInput) (*TokenInfo
 			o.sessions.Store(input.SessionKey, tokenInfo)
 
 		} else {
+			if input.Config == nil {
+				return nil, fmt.Errorf("config is required for cloud authentication but was nil")
+			}
 			newTokenInfo, err := o.getBearerToken(input.Context.Context, input.Config.ClientID, input.Config.ClientSecret, input.Audience)
 			if err != nil {
 				return tokenInfo, err
