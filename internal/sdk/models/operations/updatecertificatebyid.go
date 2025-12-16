@@ -10,6 +10,8 @@ import (
 type UpdateCertificateByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Certificate object to be updated
 	Certificate shared.Certificate `request:"mediaType=application/json"`
 }
@@ -19,6 +21,13 @@ func (u *UpdateCertificateByIDRequest) GetID() string {
 		return ""
 	}
 	return u.ID
+}
+
+func (u *UpdateCertificateByIDRequest) GetGroupID() string {
+	if u == nil {
+		return ""
+	}
+	return u.GroupID
 }
 
 func (u *UpdateCertificateByIDRequest) GetCertificate() shared.Certificate {

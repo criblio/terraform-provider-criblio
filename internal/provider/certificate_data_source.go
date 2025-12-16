@@ -34,6 +34,7 @@ type CertificateDataSourceModel struct {
 	Ca          types.String   `tfsdk:"ca"`
 	Cert        types.String   `tfsdk:"cert"`
 	Description types.String   `tfsdk:"description"`
+	GroupID     types.String   `tfsdk:"group_id"`
 	ID          types.String   `tfsdk:"id"`
 	InUse       []types.String `tfsdk:"in_use"`
 	Passphrase  types.String   `tfsdk:"passphrase"`
@@ -61,6 +62,10 @@ func (r *CertificateDataSource) Schema(ctx context.Context, req datasource.Schem
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
+			},
+			"group_id": schema.StringAttribute{
+				Required:    true,
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,

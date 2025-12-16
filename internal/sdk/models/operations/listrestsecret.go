@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+type ListRestSecretRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+}
+
+func (l *ListRestSecretRequest) GetGroupID() string {
+	if l == nil {
+		return ""
+	}
+	return l.GroupID
+}
+
 // ListRestSecretResponseBody - a list of RestSecret objects
 type ListRestSecretResponseBody struct {
 	Items []shared.RestSecret `json:"items,omitempty"`

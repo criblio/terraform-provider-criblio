@@ -14,7 +14,6 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/retry"
 	"net/http"
-	"net/url"
 )
 
 // Certificates - Actions related to Certificates
@@ -34,7 +33,7 @@ func newCertificates(rootSDK *CriblIo, sdkConfig config.SDKConfiguration, hooks 
 
 // ListCertificate - Get a list of Certificate objects
 // Get a list of Certificate objects
-func (s *Certificates) ListCertificate(ctx context.Context, opts ...operations.Option) (*operations.ListCertificateResponse, error) {
+func (s *Certificates) ListCertificate(ctx context.Context, request operations.ListCertificateRequest, opts ...operations.Option) (*operations.ListCertificateResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -53,7 +52,7 @@ func (s *Certificates) ListCertificate(ctx context.Context, opts ...operations.O
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/system/certificates")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/certificates", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -258,7 +257,7 @@ func (s *Certificates) ListCertificate(ctx context.Context, opts ...operations.O
 
 // CreateCertificate - Create Certificate
 // Create Certificate
-func (s *Certificates) CreateCertificate(ctx context.Context, request shared.Certificate, opts ...operations.Option) (*operations.CreateCertificateResponse, error) {
+func (s *Certificates) CreateCertificate(ctx context.Context, request operations.CreateCertificateRequest, opts ...operations.Option) (*operations.CreateCertificateResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -277,7 +276,7 @@ func (s *Certificates) CreateCertificate(ctx context.Context, request shared.Cer
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/system/certificates")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/certificates", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -291,7 +290,7 @@ func (s *Certificates) CreateCertificate(ctx context.Context, request shared.Cer
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Certificate", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -507,7 +506,7 @@ func (s *Certificates) GetCertificateByID(ctx context.Context, request operation
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/system/certificates/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/certificates/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -731,7 +730,7 @@ func (s *Certificates) UpdateCertificateByID(ctx context.Context, request operat
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/system/certificates/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/certificates/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -961,7 +960,7 @@ func (s *Certificates) DeleteCertificateByID(ctx context.Context, request operat
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/system/certificates/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/certificates/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

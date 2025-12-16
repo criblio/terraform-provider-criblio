@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+type ListCertificateRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+}
+
+func (l *ListCertificateRequest) GetGroupID() string {
+	if l == nil {
+		return ""
+	}
+	return l.GroupID
+}
+
 // ListCertificateResponseBody - a list of Certificate objects
 type ListCertificateResponseBody struct {
 	Items []shared.Certificate `json:"items,omitempty"`

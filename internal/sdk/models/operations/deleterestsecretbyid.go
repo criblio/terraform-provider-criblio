@@ -10,6 +10,8 @@ import (
 type DeleteRestSecretByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (d *DeleteRestSecretByIDRequest) GetID() string {
@@ -17,6 +19,13 @@ func (d *DeleteRestSecretByIDRequest) GetID() string {
 		return ""
 	}
 	return d.ID
+}
+
+func (d *DeleteRestSecretByIDRequest) GetGroupID() string {
+	if d == nil {
+		return ""
+	}
+	return d.GroupID
 }
 
 // DeleteRestSecretByIDResponseBody - a list of RestSecret objects

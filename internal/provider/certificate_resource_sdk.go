@@ -87,14 +87,39 @@ func (r *CertificateResourceModel) RefreshFromSharedCertificate(ctx context.Cont
 	return diags
 }
 
+func (r *CertificateResourceModel) ToOperationsCreateCertificateRequest(ctx context.Context) (*operations.CreateCertificateRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	certificate, certificateDiags := r.ToSharedCertificate(ctx)
+	diags.Append(certificateDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateCertificateRequest{
+		GroupID:     groupID,
+		Certificate: *certificate,
+	}
+
+	return &out, diags
+}
+
 func (r *CertificateResourceModel) ToOperationsDeleteCertificateByIDRequest(ctx context.Context) (*operations.DeleteCertificateByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var id string
 	id = r.ID.ValueString()
 
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
 	out := operations.DeleteCertificateByIDRequest{
-		ID: id,
+		ID:      id,
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -106,8 +131,12 @@ func (r *CertificateResourceModel) ToOperationsGetCertificateByIDRequest(ctx con
 	var id string
 	id = r.ID.ValueString()
 
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
 	out := operations.GetCertificateByIDRequest{
-		ID: id,
+		ID:      id,
+		GroupID: groupID,
 	}
 
 	return &out, diags
@@ -119,6 +148,9 @@ func (r *CertificateResourceModel) ToOperationsUpdateCertificateByIDRequest(ctx 
 	var id string
 	id = r.ID.ValueString()
 
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
 	certificate, certificateDiags := r.ToSharedCertificate(ctx)
 	diags.Append(certificateDiags...)
 
@@ -128,6 +160,7 @@ func (r *CertificateResourceModel) ToOperationsUpdateCertificateByIDRequest(ctx 
 
 	out := operations.UpdateCertificateByIDRequest{
 		ID:          id,
+		GroupID:     groupID,
 		Certificate: *certificate,
 	}
 

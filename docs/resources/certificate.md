@@ -17,6 +17,7 @@ resource "criblio_certificate" "my_certificate" {
   ca          = "LS0tLS1CR...FLS0tLS0K"
   cert        = "LS0tLS1CR...FLS0tLS0K"
   description = "Short description of x509 certificate"
+  group_id    = "default"
   id          = "myUniqueCertId"
   in_use = [
     "list",
@@ -34,6 +35,7 @@ resource "criblio_certificate" "my_certificate" {
 ### Required
 
 - `cert` (String) Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
 - `id` (String) Unique ID to PATCH
 - `priv_key` (String, Sensitive)
 
@@ -53,12 +55,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_certificate.my_criblio_certificate
-  id = "cert-001"
+  id = jsonencode({
+    group_id = "default"
+    id = "cert-001"
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_certificate.my_criblio_certificate "cert-001"
+terraform import criblio_certificate.my_criblio_certificate '{"group_id": "default", "id": "cert-001"}'
 ```

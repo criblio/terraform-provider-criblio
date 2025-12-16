@@ -10,6 +10,8 @@ import (
 type UpdateRestSecretByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// RestSecret object to be updated
 	RestSecret shared.RestSecret `request:"mediaType=application/json"`
 }
@@ -19,6 +21,13 @@ func (u *UpdateRestSecretByIDRequest) GetID() string {
 		return ""
 	}
 	return u.ID
+}
+
+func (u *UpdateRestSecretByIDRequest) GetGroupID() string {
+	if u == nil {
+		return ""
+	}
+	return u.GroupID
 }
 
 func (u *UpdateRestSecretByIDRequest) GetRestSecret() shared.RestSecret {

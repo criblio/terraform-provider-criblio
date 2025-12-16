@@ -10,6 +10,8 @@ import (
 type UpdateKeyMetadataEntityByIDRequest struct {
 	// Unique ID to PATCH
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// KeyMetadataEntity object to be updated
 	KeyMetadataEntity shared.KeyMetadataEntity `request:"mediaType=application/json"`
 }
@@ -19,6 +21,13 @@ func (u *UpdateKeyMetadataEntityByIDRequest) GetID() string {
 		return ""
 	}
 	return u.ID
+}
+
+func (u *UpdateKeyMetadataEntityByIDRequest) GetGroupID() string {
+	if u == nil {
+		return ""
+	}
+	return u.GroupID
 }
 
 func (u *UpdateKeyMetadataEntityByIDRequest) GetKeyMetadataEntity() shared.KeyMetadataEntity {

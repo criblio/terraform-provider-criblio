@@ -10,6 +10,8 @@ import (
 type DeleteKeyMetadataEntityByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (d *DeleteKeyMetadataEntityByIDRequest) GetID() string {
@@ -17,6 +19,13 @@ func (d *DeleteKeyMetadataEntityByIDRequest) GetID() string {
 		return ""
 	}
 	return d.ID
+}
+
+func (d *DeleteKeyMetadataEntityByIDRequest) GetGroupID() string {
+	if d == nil {
+		return ""
+	}
+	return d.GroupID
 }
 
 // DeleteKeyMetadataEntityByIDResponseBody - a list of KeyMetadataEntity objects

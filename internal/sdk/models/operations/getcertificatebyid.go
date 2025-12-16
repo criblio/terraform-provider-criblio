@@ -10,6 +10,8 @@ import (
 type GetCertificateByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (g *GetCertificateByIDRequest) GetID() string {
@@ -17,6 +19,13 @@ func (g *GetCertificateByIDRequest) GetID() string {
 		return ""
 	}
 	return g.ID
+}
+
+func (g *GetCertificateByIDRequest) GetGroupID() string {
+	if g == nil {
+		return ""
+	}
+	return g.GroupID
 }
 
 // GetCertificateByIDResponseBody - a list of Certificate objects

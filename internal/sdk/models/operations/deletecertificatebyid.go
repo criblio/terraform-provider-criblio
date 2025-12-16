@@ -10,6 +10,8 @@ import (
 type DeleteCertificateByIDRequest struct {
 	// Unique ID to DELETE
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (d *DeleteCertificateByIDRequest) GetID() string {
@@ -17,6 +19,13 @@ func (d *DeleteCertificateByIDRequest) GetID() string {
 		return ""
 	}
 	return d.ID
+}
+
+func (d *DeleteCertificateByIDRequest) GetGroupID() string {
+	if d == nil {
+		return ""
+	}
+	return d.GroupID
 }
 
 // DeleteCertificateByIDResponseBody - a list of Certificate objects

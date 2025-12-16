@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 429a3f6e5e7a82efe446bca7d08af849
+  docChecksum: 1e3518d4118e17109370195f90ee57dd
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.64
-  configChecksum: 7bcc11a5db0b76d300a54e811ab4ebb8
+  releaseVersion: 1.20.68
+  configChecksum: 716286580549961aca7ea839e2a0dafb
   published: true
 features:
   terraform:
@@ -49,6 +49,8 @@ generatedFiles:
   - examples/data-sources/criblio_group_system_settings/data-source.tf
   - examples/data-sources/criblio_hmac_function/data-source.tf
   - examples/data-sources/criblio_instance_settings/data-source.tf
+  - examples/data-sources/criblio_key/data-source.tf
+  - examples/data-sources/criblio_keys/data-source.tf
   - examples/data-sources/criblio_lookup_file/data-source.tf
   - examples/data-sources/criblio_mapping_ruleset/data-source.tf
   - examples/data-sources/criblio_mappings/data-source.tf
@@ -77,6 +79,7 @@ generatedFiles:
   - examples/data-sources/criblio_search_macro/data-source.tf
   - examples/data-sources/criblio_search_saved_query/data-source.tf
   - examples/data-sources/criblio_search_usage_group/data-source.tf
+  - examples/data-sources/criblio_secret/data-source.tf
   - examples/data-sources/criblio_source/data-source.tf
   - examples/data-sources/criblio_sources/data-source.tf
   - examples/data-sources/criblio_subscription/data-source.tf
@@ -124,6 +127,9 @@ generatedFiles:
   - examples/resources/criblio_hmac_function/import-by-string-id.tf
   - examples/resources/criblio_hmac_function/import.sh
   - examples/resources/criblio_hmac_function/resource.tf
+  - examples/resources/criblio_key/import-by-string-id.tf
+  - examples/resources/criblio_key/import.sh
+  - examples/resources/criblio_key/resource.tf
   - examples/resources/criblio_lakehouse_dataset_connection/resource.tf
   - examples/resources/criblio_lookup_file/import-by-string-id.tf
   - examples/resources/criblio_lookup_file/import.sh
@@ -201,6 +207,9 @@ generatedFiles:
   - examples/resources/criblio_search_saved_query/import.sh
   - examples/resources/criblio_search_saved_query/resource.tf
   - examples/resources/criblio_search_usage_group/resource.tf
+  - examples/resources/criblio_secret/import-by-string-id.tf
+  - examples/resources/criblio_secret/import.sh
+  - examples/resources/criblio_secret/resource.tf
   - examples/resources/criblio_source/import-by-string-id.tf
   - examples/resources/criblio_source/import.sh
   - examples/resources/criblio_source/resource.tf
@@ -290,6 +299,12 @@ generatedFiles:
   - internal/provider/hmacfunction_resource_sdk.go
   - internal/provider/instancesettings_data_source.go
   - internal/provider/instancesettings_data_source_sdk.go
+  - internal/provider/key_data_source.go
+  - internal/provider/key_data_source_sdk.go
+  - internal/provider/key_resource.go
+  - internal/provider/key_resource_sdk.go
+  - internal/provider/keys_data_source.go
+  - internal/provider/keys_data_source_sdk.go
   - internal/provider/lakehousedatasetconnection_resource.go
   - internal/provider/lakehousedatasetconnection_resource_sdk.go
   - internal/provider/lookupfile_data_source.go
@@ -403,6 +418,10 @@ generatedFiles:
   - internal/provider/searchusagegroup_data_source_sdk.go
   - internal/provider/searchusagegroup_resource.go
   - internal/provider/searchusagegroup_resource_sdk.go
+  - internal/provider/secret_data_source.go
+  - internal/provider/secret_data_source_sdk.go
+  - internal/provider/secret_resource.go
+  - internal/provider/secret_resource_sdk.go
   - internal/provider/source_data_source.go
   - internal/provider/source_data_source_sdk.go
   - internal/provider/source_resource.go
@@ -1008,6 +1027,7 @@ generatedFiles:
   - internal/provider/types/interfaces.go
   - internal/provider/types/internal_scheduling.go
   - internal/provider/types/job_settings.go
+  - internal/provider/types/key_metadata_entity.go
   - internal/provider/types/lake_dataset_search_config.go
   - internal/provider/types/limits.go
   - internal/provider/types/limits_samples.go
@@ -3513,6 +3533,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   listCertificate:
     speakeasy-default-list-certificate:
+      parameters:
+        path:
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
@@ -3520,6 +3543,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   createCertificate:
     speakeasy-default-create-certificate:
+      parameters:
+        path:
+          groupId: "default"
       requestBody:
         application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "SecurityPassphrase", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
       responses:
@@ -3532,6 +3558,7 @@ examples:
       parameters:
         path:
           id: "cert-001"
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
@@ -3542,6 +3569,7 @@ examples:
       parameters:
         path:
           id: "cert-001"
+          groupId: "default"
       requestBody:
         application/json: {"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "SecurityPassphrase", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}
       responses:
@@ -3554,6 +3582,7 @@ examples:
       parameters:
         path:
           id: "cert-001"
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueCertId", "description": "Short description of x509 certificate", "cert": "LS0tLS1CR...FLS0tLS0K", "privKey": "dont-share-this-key", "passphrase": "Security.jpg", "ca": "LS0tLS1CR...FLS0tLS0K", "inUse": ["list", "of", "configurations"]}]}
@@ -3637,6 +3666,9 @@ examples:
           application/json: {}
   listKeyMetadataEntity:
     speakeasy-default-list-key-metadata-entity:
+      parameters:
+        path:
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
@@ -3644,8 +3676,13 @@ examples:
           application/json: {"message": "This is my error message string"}
   createKeyMetadataEntity:
     speakeasy-default-create-key-metadata-entity:
+      parameters:
+        path:
+          groupId: "default"
+        query:
+          id: "key-001"
       requestBody:
-        application/json: {"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}
+        application/json: {"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "default"}
       responses:
         "200":
           application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
@@ -3656,6 +3693,7 @@ examples:
       parameters:
         path:
           id: "key-001"
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
@@ -3666,8 +3704,9 @@ examples:
       parameters:
         path:
           id: "key-001"
+          groupId: "default"
       requestBody:
-        application/json: {"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}
+        application/json: {"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "default"}
       responses:
         "200":
           application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
@@ -3678,6 +3717,7 @@ examples:
       parameters:
         path:
           id: "key-001"
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"keyId": "myKeyId", "description": "My Key Metadata", "algorithm": "aes-256-cbc", "kms": "local", "keyclass": 0, "created": 1759324416, "expires": 1759325416, "plainKey": "thisismyplaintextkeystring", "cipherKey": "encryptedkeystring", "useIV": true, "ivSize": 12, "group": "myKeyGroup"}]}
@@ -6036,6 +6076,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   listRestSecret:
     speakeasy-default-list-rest-secret:
+      parameters:
+        path:
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"apiKey": "api_9f3c2a1b0e5d4c7a", "description": "API key for ingestion service", "id": "sec-3f7a2c9d", "password": "app-password-123", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "secretType": "text", "tags": "env:prod,team:security", "username": "ingest-bot", "value": "token-abc123"}]}
@@ -6043,6 +6086,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   createRestSecret:
     speakeasy-default-create-rest-secret:
+      parameters:
+        path:
+          groupId: "default"
       requestBody:
         application/json: {"apiKey": "api_9f3c2a1b0e5d4c7a", "description": "API key for ingestion service", "id": "sec-3f7a2c9d", "password": "app-password-123", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "secretType": "text", "tags": "env:prod,team:security", "username": "ingest-bot", "value": "token-abc123"}
       responses:
@@ -6055,6 +6101,7 @@ examples:
       parameters:
         path:
           id: "secret-s3"
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"apiKey": "api_9f3c2a1b0e5d4c7a", "description": "API key for ingestion service", "id": "sec-3f7a2c9d", "password": "app-password-123", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "secretType": "text", "tags": "env:prod,team:security", "username": "ingest-bot", "value": "token-abc123"}]}
@@ -6065,6 +6112,7 @@ examples:
       parameters:
         path:
           id: "secret-s3"
+          groupId: "default"
       requestBody:
         application/json: {"apiKey": "api_9f3c2a1b0e5d4c7a", "description": "API key for ingestion service", "id": "sec-3f7a2c9d", "password": "app-password-123", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "secretType": "text", "tags": "env:prod,team:security", "username": "ingest-bot", "value": "token-abc123"}
       responses:
@@ -6077,6 +6125,7 @@ examples:
       parameters:
         path:
           id: "secret-s3"
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"apiKey": "api_9f3c2a1b0e5d4c7a", "description": "API key for ingestion service", "id": "sec-3f7a2c9d", "password": "app-password-123", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "secretType": "text", "tags": "env:prod,team:security", "username": "ingest-bot", "value": "token-abc123"}]}

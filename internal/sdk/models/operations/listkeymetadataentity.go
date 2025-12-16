@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+type ListKeyMetadataEntityRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+}
+
+func (l *ListKeyMetadataEntityRequest) GetGroupID() string {
+	if l == nil {
+		return ""
+	}
+	return l.GroupID
+}
+
 // ListKeyMetadataEntityResponseBody - a list of KeyMetadataEntity objects
 type ListKeyMetadataEntityResponseBody struct {
 	Items []shared.KeyMetadataEntity `json:"items,omitempty"`

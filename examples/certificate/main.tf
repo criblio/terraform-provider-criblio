@@ -6,11 +6,13 @@ resource "criblio_certificate" "my_certificate" {
   description = "Demo x509 certificate for Cribl configuration"
   id          = "my-demo-cert-001"
   in_use      = ["wef-prod"]
+  group_id    = "default"
 
   passphrase = "SecurityPassphrase"
 }
 
 data "criblio_certificates" "my_certificates" {
+  group_id = "default"
 }
 
 output "my_certificates" {

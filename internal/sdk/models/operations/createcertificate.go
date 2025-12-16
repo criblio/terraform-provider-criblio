@@ -7,6 +7,27 @@ import (
 	"net/http"
 )
 
+type CreateCertificateRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// New Certificate object
+	Certificate shared.Certificate `request:"mediaType=application/json"`
+}
+
+func (c *CreateCertificateRequest) GetGroupID() string {
+	if c == nil {
+		return ""
+	}
+	return c.GroupID
+}
+
+func (c *CreateCertificateRequest) GetCertificate() shared.Certificate {
+	if c == nil {
+		return shared.Certificate{}
+	}
+	return c.Certificate
+}
+
 // CreateCertificateResponseBody - a list of Certificate objects
 type CreateCertificateResponseBody struct {
 	Items []shared.Certificate `json:"items,omitempty"`
