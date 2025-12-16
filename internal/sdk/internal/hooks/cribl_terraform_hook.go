@@ -96,20 +96,17 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	if !onPrem {
 		if ctx.SecuritySource != nil {
 			if security, err := ctx.SecuritySource(ctx.Context); err == nil {
-				var s shared.Security
-				var ok bool
+				var s *shared.Security
 
 				// Try type assertion for both value and pointer types
 				switch v := security.(type) {
 				case shared.Security:
-					s = v
-					ok = true
+					s = &v
 				case *shared.Security:
-					s = *v
-					ok = true
+					s = v
 				}
 
-				if ok {
+				if s != nil {
 					// Get OAuth credentials from provider config
 					if s.ClientOauth != nil {
 						if s.ClientOauth.ClientID != "" {
@@ -599,10 +596,11 @@ func (o *CriblTerraformHook) loadTokenInfo(input LoadTokenInfoInput) (*TokenInfo
 	}
 
 	if tokenInfo == nil {
+		if input.Config == nil {
+			return nil, fmt.Errorf("config is required for authentication but was nil")
+		}
+
 		if strings.Contains(input.SessionKey, "onprem") {
-			if input.Config == nil {
-				return nil, fmt.Errorf("config is required for on-prem authentication but was nil")
-			}
 			log.Printf("[DEBUG] Retrieving bearer token using username/password for on-prem authentication")
 			newTokenInfo, err := o.getOnPremBearerToken(input.Context.Context,
 				input.Config.OnpremServerURL,
@@ -613,11 +611,7 @@ func (o *CriblTerraformHook) loadTokenInfo(input LoadTokenInfoInput) (*TokenInfo
 			}
 			tokenInfo = newTokenInfo
 			o.sessions.Store(input.SessionKey, tokenInfo)
-
 		} else {
-			if input.Config == nil {
-				return nil, fmt.Errorf("config is required for cloud authentication but was nil")
-			}
 			newTokenInfo, err := o.getBearerToken(input.Context.Context, input.Config.ClientID, input.Config.ClientSecret, input.Audience)
 			if err != nil {
 				return tokenInfo, err
