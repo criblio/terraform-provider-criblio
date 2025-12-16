@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -12,6 +11,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
 func TestNewCriblTerraformHook(t *testing.T) {
@@ -1265,6 +1266,154 @@ func TestOnPremWithProviderConfig(t *testing.T) {
 	expectedAuth := "Bearer provider-provided-token"
 	if resultReq.Header.Get("Authorization") != expectedAuth {
 		t.Errorf("Expected Authorization %q, got %q", expectedAuth, resultReq.Header.Get("Authorization"))
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestProviderConfigWithNilCredentialsFile(t *testing.T) {
+	// Test scenario: Provider config provides client_id and client_secret,
+	// but no credentials file exists (config is nil)
+	// This tests the fix for the nil pointer dereference panic
+
+	// Clear environment variables to ensure we're testing provider config only
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "test-bearer-token") // Use bearer token to avoid OAuth complexity
+	os.Setenv("HOME", "/nonexistent")                    // Ensure no credentials file is found
+
+	// Create hook and initialize with a template URL (not concrete)
+	// This allows provider variables to override it
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("https://{workspaceId}-{organizationId}.{cloudDomain}", &http.Client{})
+
+	// Simulate provider configuration with client_id and client_secret
+	providerSecurity := shared.Security{
+		ClientOauth: &shared.SchemeClientOauth{
+			ClientID:     "provider-client-id",
+			ClientSecret: "provider-client-secret",
+		},
+		OrganizationID: StringPtr("provider-org"),
+		WorkspaceID:    StringPtr("provider-workspace"),
+		CloudDomain:    StringPtr("cribl-playground.cloud"),
+	}
+
+	// Create security source that returns provider config
+	securitySource := func(ctx context.Context) (interface{}, error) {
+		return providerSecurity, nil
+	}
+
+	// Create test request context with security source
+	myCtx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context:        context.Background(),
+			SecuritySource: securitySource,
+		},
+	}
+
+	// Create a test request
+	myReq, err := http.NewRequest("GET", "/api/v1/test", nil)
+	if err != nil {
+		t.Fatalf("Error creating test request: %v", err)
+	}
+
+	// Call BeforeRequest - should not panic even though config is nil
+	// It should create a minimal config object with provider credentials
+	finalReq, err := hook.BeforeRequest(myCtx, myReq)
+	if err != nil {
+		t.Fatalf("BeforeRequest should not fail with provider config: %v", err)
+	}
+
+	// Verify bearer token was used
+	expectedAuth := "Bearer test-bearer-token"
+	if finalReq.Header.Get("Authorization") != expectedAuth {
+		t.Errorf("Expected Authorization %q, got %q", expectedAuth, finalReq.Header.Get("Authorization"))
+	}
+
+	// The main goal: verify that BeforeRequest didn't panic when config is nil
+	// and that it successfully extracted provider variables
+	// Verify that hook stored the provider org and workspace IDs
+	if hook.orgID != "provider-org" {
+		t.Errorf("Expected orgID 'provider-org', got %q", hook.orgID)
+	}
+	if hook.workspaceID != "provider-workspace" {
+		t.Errorf("Expected workspaceID 'provider-workspace', got %q", hook.workspaceID)
+	}
+
+	// Verify that the request was processed successfully (no panic occurred)
+	if finalReq == nil {
+		t.Error("finalReq should not be nil - indicates a panic occurred")
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+}
+
+func TestProviderConfigWithPointerType(t *testing.T) {
+	// Test that provider config works when Security is passed as a pointer
+	// This tests the type assertion fix for pointer types
+
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "test-bearer-token")
+	os.Setenv("HOME", "/nonexistent")
+
+	hook := NewCriblTerraformHook()
+	hook.SDKInit("initial-url", nil)
+
+	// Simulate provider configuration as a pointer (as it might be passed)
+	providerSecurity := &shared.Security{
+		ClientOauth: &shared.SchemeClientOauth{
+			ClientID:     "pointer-client-id",
+			ClientSecret: "pointer-client-secret",
+		},
+		OrganizationID: StringPtr("pointer-org"),
+		WorkspaceID:    StringPtr("pointer-workspace"),
+		CloudDomain:    StringPtr("cribl-staging.cloud"),
+	}
+
+	// Create security source that returns pointer type
+	securitySource := func(ctx context.Context) (interface{}, error) {
+		return providerSecurity, nil
+	}
+
+	myCtx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context:        context.Background(),
+			SecuritySource: securitySource,
+		},
+	}
+
+	myReq, err := http.NewRequest("GET", "/api/v1/test", nil)
+	if err != nil {
+		t.Fatalf("Error creating test request: %v", err)
+	}
+
+	// Should not panic and should extract credentials correctly
+	finalReq, err := hook.BeforeRequest(myCtx, myReq)
+	if err != nil {
+		t.Fatalf("BeforeRequest should not fail with pointer type: %v", err)
+	}
+
+	// Verify bearer token was used (since we set it)
+	expectedAuth := "Bearer test-bearer-token"
+	if finalReq.Header.Get("Authorization") != expectedAuth {
+		t.Errorf("Expected Authorization %q, got %q", expectedAuth, finalReq.Header.Get("Authorization"))
+	}
+
+	// Verify org and workspace IDs were extracted from pointer
+	if hook.orgID != "pointer-org" {
+		t.Errorf("Expected orgID 'pointer-org', got %q", hook.orgID)
+	}
+	if hook.workspaceID != "pointer-workspace" {
+		t.Errorf("Expected workspaceID 'pointer-workspace', got %q", hook.workspaceID)
 	}
 
 	// Clean up
