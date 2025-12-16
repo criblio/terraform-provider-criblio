@@ -1,21 +1,57 @@
+
 resource "criblio_pipeline" "my_pipeline" {
+  id       = "pipeline-1"
+  group_id = "default"
   conf = {
-    async_func_timeout = 60
+    streamtags         = []
     description        = "my_description"
+    output             = "my_output"
+    async_func_timeout = 60
     functions = [
-    ]
-    groups = {
-      key = {
-        description = "my_description"
-        disabled    = true
-        name        = "my_name"
-      }
-    }
-    output = "my_output"
-    streamtags = [
-      "tags"
+      {
+        id       = "serde"
+        filter   = "true"
+        disabled = false
+        conf = jsonencode({
+          srcField = "_raw"
+          mode     = "extract"
+          type     = "json"
+        })
+      },
+      {
+        id       = "eval"
+        filter   = "channel===\"ProcessMetrics\""
+        disabled = false
+        final    = true
+        conf = jsonencode({
+          remove = [
+            "_raw"
+          ]
+        })
+      },
+      {
+        id       = "drop"
+        filter   = "!(/log\\/(?:cribl|access|audit)\\.log$/.test(source) || /service\\/(?:metrics|connection_proxy|lease|notifications|\\w*connections)/.test(source))"
+        disabled = false
+        conf     = jsonencode({})
+      },
+      {
+        id       = "eval"
+        filter   = "true"
+        disabled = false
+        conf = jsonencode({
+          remove = [
+            "_raw"
+          ]
+          add = [
+            {
+              name     = "url"
+              value    = "url.match(\"(?:.*system\\/metrics)\")[0] || url"
+              disabled = false
+            }
+          ]
+        })
+      },
     ]
   }
-  group_id = "default"
-  id       = "pipeline-1"
 }

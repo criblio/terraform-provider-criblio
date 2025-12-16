@@ -74,7 +74,7 @@ Optional:
 
 Optional:
 
-- `conf` (Map of String) Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields. Not Null
+- `conf` (String) Function-specific configuration as a JSON object. Different functions require different configuration fields.
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
