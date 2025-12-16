@@ -22,7 +22,7 @@ func TestHmacFunctions(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_hmac_function.my_hmacfunction", "id", "my_hmacfunction"),
+						resource.TestCheckResourceAttr("criblio_hmac_function.my_hmacfunction", "id", "my_hmacfunction_test"),
 						resource.TestCheckResourceAttr("criblio_hmac_function.my_hmacfunction", "description", "test hmac function"),
 						resource.TestCheckResourceAttr("criblio_hmac_function.my_hmacfunction", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_hmac_function.my_hmacfunction", "header_name", "signature"),

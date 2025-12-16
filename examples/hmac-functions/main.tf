@@ -3,8 +3,8 @@ resource "criblio_hmac_function" "my_hmacfunction" {
   group_id          = "default"
   header_expression = "'hmac sha256 ' + C.Crypto.createHmac('test', C.Secret('yourSecret','text').value, 'sha256','hex')"
   header_name       = "signature"
-  id                = "my_hmacfunction"
-  lib               = "cribl"
+  id                = "my_hmacfunction_test"
+  lib               = "custom"
   string_builders = [
     "true"
   ]
