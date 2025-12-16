@@ -5,8 +5,8 @@ management:
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.62
-  configChecksum: 396017eb3c891b4b4bf1d4e851a336c3
+  releaseVersion: 1.20.64
+  configChecksum: 7bcc11a5db0b76d300a54e811ab4ebb8
   published: true
 features:
   terraform:
@@ -349,7 +349,6 @@ generatedFiles:
   - internal/provider/parserlibentry_resource.go
   - internal/provider/parserlibentry_resource_sdk.go
   - internal/provider/pipeline_data_source.go
-  - internal/provider/pipeline_resource.go
   - internal/provider/project_data_source.go
   - internal/provider/project_data_source_sdk.go
   - internal/provider/project_resource.go
