@@ -3,7 +3,10 @@ resource "criblio_pipeline" "my_pipeline" {
   id       = "pipeline-1"
   group_id = "default"
   conf = {
-    streamtags = []
+    streamtags         = []
+    description        = "my_description"
+    output             = "my_output"
+    async_func_timeout = 60
     functions = [
       {
         id       = "serde"
