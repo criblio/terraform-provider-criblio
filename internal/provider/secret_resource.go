@@ -33,15 +33,11 @@ type SecretResource struct {
 
 // SecretResourceModel describes the resource data model.
 type SecretResourceModel struct {
-	APIKey      types.String `tfsdk:"api_key"`
 	Description types.String `tfsdk:"description"`
 	GroupID     types.String `tfsdk:"group_id"`
 	ID          types.String `tfsdk:"id"`
-	Password    types.String `tfsdk:"password"`
-	SecretKey   types.String `tfsdk:"secret_key"`
 	SecretType  types.String `tfsdk:"secret_type"`
 	Tags        types.String `tfsdk:"tags"`
-	Username    types.String `tfsdk:"username"`
 	Value       types.String `tfsdk:"value"`
 }
 
@@ -53,10 +49,6 @@ func (r *SecretResource) Schema(ctx context.Context, req resource.SchemaRequest,
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Secret Resource",
 		Attributes: map[string]schema.Attribute{
-			"api_key": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
 			"description": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -68,14 +60,6 @@ func (r *SecretResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to PATCH`,
-			},
-			"password": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"secret_key": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
 			},
 			"secret_type": schema.StringAttribute{
 				Required:    true,
@@ -89,10 +73,6 @@ func (r *SecretResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"username": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
 			},

@@ -55232,6 +55232,7 @@ components:
         apiKey:
           type: string
           example: "api_9f3c2a1b0e5d4c7a"
+          x-speakeasy-terraform-ignore: true
         description:
           type: string
           example: "API key for ingestion service"
@@ -55241,9 +55242,11 @@ components:
         password:
           type: string
           example: "app-password-123"
+          x-speakeasy-terraform-ignore: true
         secretKey:
           type: string
           example: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+          x-speakeasy-terraform-ignore: true
         secretType:
           $ref: "#/components/schemas/SecretType"
         tags:
@@ -55252,6 +55255,7 @@ components:
         username:
           type: string
           example: "ingest-bot"
+          x-speakeasy-terraform-ignore: true
         value:
           type: string
           example: "token-abc123"

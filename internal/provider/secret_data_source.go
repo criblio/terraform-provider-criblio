@@ -28,15 +28,11 @@ type SecretDataSource struct {
 
 // SecretDataSourceModel describes the data model.
 type SecretDataSourceModel struct {
-	APIKey      types.String `tfsdk:"api_key"`
 	Description types.String `tfsdk:"description"`
 	GroupID     types.String `tfsdk:"group_id"`
 	ID          types.String `tfsdk:"id"`
-	Password    types.String `tfsdk:"password"`
-	SecretKey   types.String `tfsdk:"secret_key"`
 	SecretType  types.String `tfsdk:"secret_type"`
 	Tags        types.String `tfsdk:"tags"`
-	Username    types.String `tfsdk:"username"`
 	Value       types.String `tfsdk:"value"`
 }
 
@@ -51,9 +47,6 @@ func (r *SecretDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 		MarkdownDescription: "Secret DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"api_key": schema.StringAttribute{
-				Computed: true,
-			},
 			"description": schema.StringAttribute{
 				Computed: true,
 			},
@@ -65,19 +58,10 @@ func (r *SecretDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Required:    true,
 				Description: `Unique ID to GET`,
 			},
-			"password": schema.StringAttribute{
-				Computed: true,
-			},
-			"secret_key": schema.StringAttribute{
-				Computed: true,
-			},
 			"secret_type": schema.StringAttribute{
 				Computed: true,
 			},
 			"tags": schema.StringAttribute{
-				Computed: true,
-			},
-			"username": schema.StringAttribute{
 				Computed: true,
 			},
 			"value": schema.StringAttribute{

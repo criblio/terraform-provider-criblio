@@ -73,14 +73,10 @@ func (r *SecretResourceModel) RefreshFromOperationsUpdateRestSecretByIDResponseB
 func (r *SecretResourceModel) RefreshFromSharedRestSecret(ctx context.Context, resp *shared.RestSecret) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.APIKey = types.StringPointerValue(resp.APIKey)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
-	r.Password = types.StringPointerValue(resp.Password)
-	r.SecretKey = types.StringPointerValue(resp.SecretKey)
 	r.SecretType = types.StringValue(string(resp.SecretType))
 	r.Tags = types.StringPointerValue(resp.Tags)
-	r.Username = types.StringPointerValue(resp.Username)
 	r.Value = types.StringPointerValue(resp.Value)
 
 	return diags
@@ -169,12 +165,6 @@ func (r *SecretResourceModel) ToOperationsUpdateRestSecretByIDRequest(ctx contex
 func (r *SecretResourceModel) ToSharedRestSecret(ctx context.Context) (*shared.RestSecret, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	apiKey := new(string)
-	if !r.APIKey.IsUnknown() && !r.APIKey.IsNull() {
-		*apiKey = r.APIKey.ValueString()
-	} else {
-		apiKey = nil
-	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
@@ -184,30 +174,12 @@ func (r *SecretResourceModel) ToSharedRestSecret(ctx context.Context) (*shared.R
 	var id string
 	id = r.ID.ValueString()
 
-	password := new(string)
-	if !r.Password.IsUnknown() && !r.Password.IsNull() {
-		*password = r.Password.ValueString()
-	} else {
-		password = nil
-	}
-	secretKey := new(string)
-	if !r.SecretKey.IsUnknown() && !r.SecretKey.IsNull() {
-		*secretKey = r.SecretKey.ValueString()
-	} else {
-		secretKey = nil
-	}
 	secretType := shared.SecretType(r.SecretType.ValueString())
 	tags := new(string)
 	if !r.Tags.IsUnknown() && !r.Tags.IsNull() {
 		*tags = r.Tags.ValueString()
 	} else {
 		tags = nil
-	}
-	username := new(string)
-	if !r.Username.IsUnknown() && !r.Username.IsNull() {
-		*username = r.Username.ValueString()
-	} else {
-		username = nil
 	}
 	value := new(string)
 	if !r.Value.IsUnknown() && !r.Value.IsNull() {
@@ -216,14 +188,10 @@ func (r *SecretResourceModel) ToSharedRestSecret(ctx context.Context) (*shared.R
 		value = nil
 	}
 	out := shared.RestSecret{
-		APIKey:      apiKey,
 		Description: description,
 		ID:          id,
-		Password:    password,
-		SecretKey:   secretKey,
 		SecretType:  secretType,
 		Tags:        tags,
-		Username:    username,
 		Value:       value,
 	}
 

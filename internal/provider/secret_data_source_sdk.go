@@ -33,14 +33,10 @@ func (r *SecretDataSourceModel) RefreshFromOperationsGetRestSecretByIDResponseBo
 func (r *SecretDataSourceModel) RefreshFromSharedRestSecret(ctx context.Context, resp *shared.RestSecret) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.APIKey = types.StringPointerValue(resp.APIKey)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
-	r.Password = types.StringPointerValue(resp.Password)
-	r.SecretKey = types.StringPointerValue(resp.SecretKey)
 	r.SecretType = types.StringValue(string(resp.SecretType))
 	r.Tags = types.StringPointerValue(resp.Tags)
-	r.Username = types.StringPointerValue(resp.Username)
 	r.Value = types.StringPointerValue(resp.Value)
 
 	return diags

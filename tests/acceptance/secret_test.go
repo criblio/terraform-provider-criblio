@@ -18,7 +18,8 @@ func TestSecret(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_secret.my_secret", "id", "sec-test-001"),
 						resource.TestCheckResourceAttr("criblio_secret.my_secret", "description", "API key for ingestion service"),

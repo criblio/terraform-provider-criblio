@@ -29,11 +29,7 @@ data "criblio_secret" "my_secret" {
 
 ### Read-Only
 
-- `api_key` (String)
 - `description` (String)
-- `password` (String)
-- `secret_key` (String)
 - `secret_type` (String)
 - `tags` (String)
-- `username` (String)
 - `value` (String)
