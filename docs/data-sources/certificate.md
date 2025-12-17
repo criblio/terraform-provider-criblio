@@ -14,7 +14,8 @@ Certificate DataSource
 
 ```terraform
 data "criblio_certificate" "my_certificate" {
-  id = "cert-001"
+  group_id = "default"
+  id       = "cert-001"
 }
 ```
 
@@ -23,6 +24,7 @@ data "criblio_certificate" "my_certificate" {
 
 ### Required
 
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
 - `id` (String) Unique ID to GET
 
 ### Read-Only

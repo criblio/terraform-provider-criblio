@@ -36,3 +36,16 @@ func (r *CertificatesDataSourceModel) RefreshFromOperationsListCertificateRespon
 
 	return diags
 }
+
+func (r *CertificatesDataSourceModel) ToOperationsListCertificateRequest(ctx context.Context) (*operations.ListCertificateRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
+	out := operations.ListCertificateRequest{
+		GroupID: groupID,
+	}
+
+	return &out, diags
+}

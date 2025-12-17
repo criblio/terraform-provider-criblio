@@ -14,7 +14,6 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/retry"
 	"net/http"
-	"net/url"
 )
 
 // Keys - Actions related to encryption keys
@@ -34,7 +33,7 @@ func newKeys(rootSDK *CriblIo, sdkConfig config.SDKConfiguration, hooks *hooks.H
 
 // ListKeyMetadataEntity - Get a list of KeyMetadataEntity objects
 // Get a list of KeyMetadataEntity objects
-func (s *Keys) ListKeyMetadataEntity(ctx context.Context, opts ...operations.Option) (*operations.ListKeyMetadataEntityResponse, error) {
+func (s *Keys) ListKeyMetadataEntity(ctx context.Context, request operations.ListKeyMetadataEntityRequest, opts ...operations.Option) (*operations.ListKeyMetadataEntityResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -53,7 +52,7 @@ func (s *Keys) ListKeyMetadataEntity(ctx context.Context, opts ...operations.Opt
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/system/keys")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/keys", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -243,6 +242,7 @@ func (s *Keys) ListKeyMetadataEntity(ctx context.Context, opts ...operations.Opt
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -257,7 +257,7 @@ func (s *Keys) ListKeyMetadataEntity(ctx context.Context, opts ...operations.Opt
 
 // CreateKeyMetadataEntity - Create KeyMetadataEntity
 // Create KeyMetadataEntity
-func (s *Keys) CreateKeyMetadataEntity(ctx context.Context, request shared.KeyMetadataEntity, opts ...operations.Option) (*operations.CreateKeyMetadataEntityResponse, error) {
+func (s *Keys) CreateKeyMetadataEntity(ctx context.Context, request operations.CreateKeyMetadataEntityRequest, opts ...operations.Option) (*operations.CreateKeyMetadataEntityResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -276,7 +276,7 @@ func (s *Keys) CreateKeyMetadataEntity(ctx context.Context, request shared.KeyMe
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/system/keys")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/keys", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -290,7 +290,7 @@ func (s *Keys) CreateKeyMetadataEntity(ctx context.Context, request shared.KeyMe
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "KeyMetadataEntity", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -314,6 +314,10 @@ func (s *Keys) CreateKeyMetadataEntity(ctx context.Context, request shared.KeyMe
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
@@ -473,6 +477,7 @@ func (s *Keys) CreateKeyMetadataEntity(ctx context.Context, request shared.KeyMe
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -506,7 +511,7 @@ func (s *Keys) GetKeyMetadataEntityByID(ctx context.Context, request operations.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/system/keys/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/keys/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -729,7 +734,7 @@ func (s *Keys) UpdateKeyMetadataEntityByID(ctx context.Context, request operatio
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/system/keys/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/keys/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -959,7 +964,7 @@ func (s *Keys) DeleteKeyMetadataEntityByID(ctx context.Context, request operatio
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/system/keys/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/keys/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

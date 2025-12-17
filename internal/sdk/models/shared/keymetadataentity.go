@@ -108,7 +108,7 @@ type KeyMetadataEntity struct {
 	// Length of the initialization vector, in bytes
 	IvSize *InitializationVectorSize `default:"12" json:"ivSize"`
 	// Name of the Group/Fleet that created this key
-	Group *string `json:"group,omitempty"`
+	GroupID *string `json:"group,omitempty"`
 }
 
 func (k KeyMetadataEntity) MarshalJSON() ([]byte, error) {
@@ -199,9 +199,9 @@ func (k *KeyMetadataEntity) GetIvSize() *InitializationVectorSize {
 	return k.IvSize
 }
 
-func (k *KeyMetadataEntity) GetGroup() *string {
+func (k *KeyMetadataEntity) GetGroupID() *string {
 	if k == nil {
 		return nil
 	}
-	return k.Group
+	return k.GroupID
 }

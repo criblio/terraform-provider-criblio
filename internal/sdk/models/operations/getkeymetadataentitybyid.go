@@ -10,6 +10,8 @@ import (
 type GetKeyMetadataEntityByIDRequest struct {
 	// Unique ID to GET
 	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 }
 
 func (g *GetKeyMetadataEntityByIDRequest) GetID() string {
@@ -17,6 +19,13 @@ func (g *GetKeyMetadataEntityByIDRequest) GetID() string {
 		return ""
 	}
 	return g.ID
+}
+
+func (g *GetKeyMetadataEntityByIDRequest) GetGroupID() string {
+	if g == nil {
+		return ""
+	}
+	return g.GroupID
 }
 
 // GetKeyMetadataEntityByIDResponseBody - a list of KeyMetadataEntity objects

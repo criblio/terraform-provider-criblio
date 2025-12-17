@@ -7,6 +7,36 @@ import (
 	"net/http"
 )
 
+type CreateKeyMetadataEntityRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// The id of this key metadata entity instance
+	ID string `queryParam:"style=form,explode=true,name=id"`
+	// New KeyMetadataEntity object
+	KeyMetadataEntity shared.KeyMetadataEntity `request:"mediaType=application/json"`
+}
+
+func (c *CreateKeyMetadataEntityRequest) GetGroupID() string {
+	if c == nil {
+		return ""
+	}
+	return c.GroupID
+}
+
+func (c *CreateKeyMetadataEntityRequest) GetID() string {
+	if c == nil {
+		return ""
+	}
+	return c.ID
+}
+
+func (c *CreateKeyMetadataEntityRequest) GetKeyMetadataEntity() shared.KeyMetadataEntity {
+	if c == nil {
+		return shared.KeyMetadataEntity{}
+	}
+	return c.KeyMetadataEntity
+}
+
 // CreateKeyMetadataEntityResponseBody - a list of KeyMetadataEntity objects
 type CreateKeyMetadataEntityResponseBody struct {
 	Items []shared.KeyMetadataEntity `json:"items,omitempty"`

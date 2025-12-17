@@ -53,8 +53,12 @@ func (r *CertificateDataSourceModel) ToOperationsGetCertificateByIDRequest(ctx c
 	var id string
 	id = r.ID.ValueString()
 
+	var groupID string
+	groupID = r.GroupID.ValueString()
+
 	out := operations.GetCertificateByIDRequest{
-		ID: id,
+		ID:      id,
+		GroupID: groupID,
 	}
 
 	return &out, diags

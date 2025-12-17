@@ -2041,6 +2041,7 @@ components:
           type: string
           title: Key ID
           example: "myKeyId"
+          x-speakeasy-terraform-ignore: true
         description:
           type: string
           title: Description
@@ -2070,6 +2071,7 @@ components:
           type: number
           title: Creation time
           example: 1759324416
+          x-speakeasy-terraform-ignore: true
         expires:
           type: number
           title: Expiration time
@@ -2078,10 +2080,12 @@ components:
           type: string
           title: Plain text key
           example: "thisismyplaintextkeystring"
+          x-speakeasy-terraform-ignore: true
         cipherKey:
           type: string
           title: Encrypted key
           example: "encryptedkeystring"
+          x-speakeasy-terraform-ignore: true
         useIV:
           type: boolean
           title: Use initialization vector
@@ -2103,11 +2107,13 @@ components:
           default: 12
           description: Length of the initialization vector, in bytes
           example: 12
+          x-speakeasy-terraform-ignore: true
         group:
           type: string
           title: Group/Fleet
           description: Name of the Group/Fleet that created this key
-          example: "myKeyGroup"
+          example: "default"
+          x-speakeasy-name-override: groupId
     BulletinMessage:
       type: object
       additionalProperties: false
@@ -55226,6 +55232,7 @@ components:
         apiKey:
           type: string
           example: "api_9f3c2a1b0e5d4c7a"
+          x-speakeasy-terraform-ignore: true
         description:
           type: string
           example: "API key for ingestion service"
@@ -55235,9 +55242,11 @@ components:
         password:
           type: string
           example: "app-password-123"
+          x-speakeasy-terraform-ignore: true
         secretKey:
           type: string
           example: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+          x-speakeasy-terraform-ignore: true
         secretType:
           $ref: "#/components/schemas/SecretType"
         tags:
@@ -55246,6 +55255,7 @@ components:
         username:
           type: string
           example: "ingest-bot"
+          x-speakeasy-terraform-ignore: true
         value:
           type: string
           example: "token-abc123"
@@ -63468,7 +63478,7 @@ paths:
           description: Unique ID to DELETE
           example: "bnr-001"
       responses: *a2
-  /system/certificates:
+  /m/{groupId}/system/certificates:
     get:
       operationId: listCertificate
       tags:
@@ -63502,12 +63512,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
     post:
       operationId: createCertificate
       tags: *a4
       summary: Create Certificate
       description: Create Certificate
       x-speakeasy-entity-operation: Certificate#create
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
       requestBody:
         description: New Certificate object
         required: true
@@ -63516,7 +63546,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Certificate"
       responses: *a5
-  "/system/certificates/{id}":
+  "/m/{groupId}/system/certificates/{id}":
     get:
       operationId: getCertificateById
       tags: *a4
@@ -63532,6 +63562,15 @@ paths:
             type: string
             example: "cert-001"
           description: Unique ID to GET
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
       responses: *a5
     patch:
       operationId: updateCertificateById
@@ -63545,6 +63584,15 @@ paths:
           required: true
           schema: *a6
           description: Unique ID to PATCH
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
       requestBody:
         description: Certificate object to be updated
         required: true
@@ -63566,6 +63614,15 @@ paths:
           schema: *a6
           description: Unique ID to DELETE
           example: "cert-001"
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
       responses: *a5
   "/settings/features/{id}":
     get:
@@ -63791,7 +63848,7 @@ paths:
           default: default
           example: "myExistingGroupId"
       responses: *a8
-  /system/keys:
+  /m/{groupId}/system/keys:
     get:
       operationId: listKeyMetadataEntity
       tags:
@@ -63799,6 +63856,16 @@ paths:
         - keys
       summary: Get a list of KeyMetadataEntity objects
       description: Get a list of KeyMetadataEntity objects
+      x-speakeasy-entity-operation: Keys#get
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: "default"
       responses:
         &a11
         "200":
@@ -63829,6 +63896,7 @@ paths:
       tags: *a10
       summary: Create KeyMetadataEntity
       description: Create KeyMetadataEntity
+      x-speakeasy-entity-operation: Key#create,get,update,delete
       requestBody:
         description: New KeyMetadataEntity object
         required: true
@@ -63837,7 +63905,23 @@ paths:
             schema:
               $ref: "#/components/schemas/KeyMetadataEntity"
       responses: *a11
-  "/system/keys/{id}":
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: "default"
+        - name: id
+          in: query
+          required: true
+          description: The id of this key metadata entity instance
+          schema:
+            type: string
+          example: "key-001"
+  "/m/{groupId}/system/keys/{id}":
     get:
       operationId: getKeyMetadataEntityById
       tags: *a10
@@ -63852,6 +63936,14 @@ paths:
             type: string
             example: "key-001"
           description: Unique ID to GET
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: "default"
       responses: *a11
     patch:
       operationId: updateKeyMetadataEntityById
@@ -63865,6 +63957,14 @@ paths:
           schema: *a12
           description: Unique ID to PATCH
           example: "key-001"
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: "default"
       requestBody:
         description: KeyMetadataEntity object to be updated
         required: true
@@ -63885,6 +63985,14 @@ paths:
           schema: *a12
           description: Unique ID to DELETE
           example: "key-001"
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: "default"
       responses: *a11
   /system/messages:
     get:
@@ -70958,7 +71066,7 @@ paths:
           description: pack ID to DELETE
           example: "observability-pack"
       responses: *a145
-  /system/secrets:
+  /m/{groupId}/system/secrets:
     get:
       operationId: listRestSecret
       tags:
@@ -70966,6 +71074,16 @@ paths:
         - secrets
       summary: Get a list of RestSecret objects
       description: Get a list of RestSecret objects
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
       responses:
         &a151
         "200":
@@ -71003,6 +71121,7 @@ paths:
       tags: *a150
       summary: Create RestSecret
       description: Create RestSecret
+      x-speakeasy-entity-operation: Secret#create
       requestBody:
         description: New RestSecret object
         required: true
@@ -71017,12 +71136,23 @@ paths:
                 accessKeyId: "AKIA****************"
                 secretAccessKey: "********************"
       responses: *a151
-  "/system/secrets/{id}":
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
+  "/m/{groupId}/system/secrets/{id}":
     get:
       operationId: getRestSecretById
       tags: *a150
       summary: Get RestSecret by ID
       description: Get RestSecret by ID
+      x-speakeasy-entity-operation: Secret#get
       parameters:
         - name: id
           in: path
@@ -71032,12 +71162,22 @@ paths:
             type: string
           description: Unique ID to GET
           example: "secret-s3"
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
       responses: *a151
     patch:
       operationId: updateRestSecretById
       tags: *a150
       summary: Update RestSecret
       description: Update RestSecret
+      x-speakeasy-entity-operation: Secret#update
       parameters:
         - name: id
           in: path
@@ -71045,6 +71185,15 @@ paths:
           schema: *a152
           description: Unique ID to PATCH
           example: "secret-s3"
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
       requestBody:
         description: RestSecret object to be updated
         required: true
@@ -71062,6 +71211,7 @@ paths:
       tags: *a150
       summary: Delete RestSecret
       description: Delete RestSecret
+      x-speakeasy-entity-operation: Secret#delete
       parameters:
         - name: id
           in: path
@@ -71069,6 +71219,15 @@ paths:
           schema: *a152
           description: Unique ID to DELETE
           example: "secret-s3"
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "default"
+          description: The consumer group to which this instance belongs. Defaults to 'default'.
+          default: default
+          example: default
       responses: *a151
   /system/status/inputs:
     get:

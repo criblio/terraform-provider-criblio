@@ -7,6 +7,27 @@ import (
 	"net/http"
 )
 
+type CreateRestSecretRequest struct {
+	// The consumer group to which this instance belongs. Defaults to 'default'.
+	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
+	// New RestSecret object
+	RestSecret shared.RestSecret `request:"mediaType=application/json"`
+}
+
+func (c *CreateRestSecretRequest) GetGroupID() string {
+	if c == nil {
+		return ""
+	}
+	return c.GroupID
+}
+
+func (c *CreateRestSecretRequest) GetRestSecret() shared.RestSecret {
+	if c == nil {
+		return shared.RestSecret{}
+	}
+	return c.RestSecret
+}
+
 // CreateRestSecretResponseBody - a list of RestSecret objects
 type CreateRestSecretResponseBody struct {
 	Items []shared.RestSecret `json:"items,omitempty"`

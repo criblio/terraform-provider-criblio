@@ -29,7 +29,8 @@ type CertificatesDataSource struct {
 
 // CertificatesDataSourceModel describes the data model.
 type CertificatesDataSourceModel struct {
-	Items []tfTypes.Certificate `tfsdk:"items"`
+	GroupID types.String          `tfsdk:"group_id"`
+	Items   []tfTypes.Certificate `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -43,6 +44,10 @@ func (r *CertificatesDataSource) Schema(ctx context.Context, req datasource.Sche
 		MarkdownDescription: "Certificates DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"group_id": schema.StringAttribute{
+				Required:    true,
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
+			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
@@ -119,7 +124,13 @@ func (r *CertificatesDataSource) Read(ctx context.Context, req datasource.ReadRe
 		return
 	}
 
-	res, err := r.client.Certificates.ListCertificate(ctx)
+	request, requestDiags := data.ToOperationsListCertificateRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Certificates.ListCertificate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

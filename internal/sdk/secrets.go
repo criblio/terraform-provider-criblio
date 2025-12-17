@@ -14,7 +14,6 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/retry"
 	"net/http"
-	"net/url"
 )
 
 // Secrets - Actions related to Secrets
@@ -34,7 +33,7 @@ func newSecrets(rootSDK *CriblIo, sdkConfig config.SDKConfiguration, hooks *hook
 
 // ListRestSecret - Get a list of RestSecret objects
 // Get a list of RestSecret objects
-func (s *Secrets) ListRestSecret(ctx context.Context, opts ...operations.Option) (*operations.ListRestSecretResponse, error) {
+func (s *Secrets) ListRestSecret(ctx context.Context, request operations.ListRestSecretRequest, opts ...operations.Option) (*operations.ListRestSecretResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -53,7 +52,7 @@ func (s *Secrets) ListRestSecret(ctx context.Context, opts ...operations.Option)
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/system/secrets")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/secrets", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -257,7 +256,7 @@ func (s *Secrets) ListRestSecret(ctx context.Context, opts ...operations.Option)
 
 // CreateRestSecret - Create RestSecret
 // Create RestSecret
-func (s *Secrets) CreateRestSecret(ctx context.Context, request shared.RestSecret, opts ...operations.Option) (*operations.CreateRestSecretResponse, error) {
+func (s *Secrets) CreateRestSecret(ctx context.Context, request operations.CreateRestSecretRequest, opts ...operations.Option) (*operations.CreateRestSecretResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -276,7 +275,7 @@ func (s *Secrets) CreateRestSecret(ctx context.Context, request shared.RestSecre
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/system/secrets")
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/secrets", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -290,7 +289,7 @@ func (s *Secrets) CreateRestSecret(ctx context.Context, request shared.RestSecre
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "RestSecret", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -506,7 +505,7 @@ func (s *Secrets) GetRestSecretByID(ctx context.Context, request operations.GetR
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/system/secrets/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/secrets/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -696,6 +695,7 @@ func (s *Secrets) GetRestSecretByID(ctx context.Context, request operations.GetR
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -729,7 +729,7 @@ func (s *Secrets) UpdateRestSecretByID(ctx context.Context, request operations.U
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/system/secrets/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/secrets/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -959,7 +959,7 @@ func (s *Secrets) DeleteRestSecretByID(ctx context.Context, request operations.D
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/system/secrets/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/m/{groupId}/system/secrets/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
