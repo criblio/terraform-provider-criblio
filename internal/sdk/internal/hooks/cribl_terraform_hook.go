@@ -1,11 +1,14 @@
 package hooks
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
+	"math"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -628,19 +631,70 @@ func (o *CriblTerraformHook) doRequestWithRetry(req *http.Request) ([]byte, erro
 	var body []byte
 	var resp *http.Response
 	var err error
+	ctx := req.Context()
+
+	const (
+		maxRetries     = 3
+		initialBackoff = 500 * time.Millisecond
+		maxBackoff     = 5 * time.Second
+		backoffExp     = 1.5
+		jitterFactor   = 0.25
+	)
+
+	// Store request body for retries (HTTP request bodies are single-use)
+	var reqBodyBytes []byte
+	if req.Body != nil && req.Body != http.NoBody {
+		reqBodyBytes, err = io.ReadAll(req.Body)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read request body: %v", err)
+		}
+		req.Body.Close()
+		// Restore body for first attempt
+		req.Body = io.NopCloser(bytes.NewReader(reqBodyBytes))
+	}
 
 	success := false
-	for i := range 3 {
-		log.Printf("[DEBUG] http request attempt %d, doing query: %+v", i, req)
+	for attempt := range maxRetries {
+		log.Printf("[DEBUG] http request attempt %d/%d, doing query: %+v", attempt+1, maxRetries, req)
+
+		// Restore request body for retries (if not using GetBody)
+		if attempt > 0 && reqBodyBytes != nil && (req.GetBody == nil) {
+			req.Body = io.NopCloser(bytes.NewReader(reqBodyBytes))
+		} else if attempt > 0 && req.GetBody != nil {
+			// Use GetBody if available (more efficient)
+			newBody, err := req.GetBody()
+			if err != nil {
+				return nil, fmt.Errorf("failed to get request body for retry: %v", err)
+			}
+			req.Body = newBody
+		}
 
 		resp, err = o.client.Do(req)
 		if err != nil {
+			log.Printf("[DEBUG] Request failed on attempt %d: %v", attempt+1, err)
+			if attempt < maxRetries-1 {
+				backoff := calculateBackoff(attempt, initialBackoff, maxBackoff, backoffExp, jitterFactor)
+				log.Printf("[DEBUG] Retrying after %v", backoff)
+				if !waitWithContext(ctx, backoff) {
+					return nil, fmt.Errorf("request cancelled: %v", ctx.Err())
+				}
+				continue
+			}
 			return nil, fmt.Errorf("failed to make request with retry: %v", err)
 		}
-		defer resp.Body.Close()
 
 		body, err = io.ReadAll(resp.Body)
+		resp.Body.Close() // Close immediately after reading
 		if err != nil {
+			log.Printf("[DEBUG] Failed to read response body on attempt %d: %v", attempt+1, err)
+			if attempt < maxRetries-1 {
+				backoff := calculateBackoff(attempt, initialBackoff, maxBackoff, backoffExp, jitterFactor)
+				log.Printf("[DEBUG] Retrying after %v", backoff)
+				if !waitWithContext(ctx, backoff) {
+					return nil, fmt.Errorf("request cancelled: %v", ctx.Err())
+				}
+				continue
+			}
 			return nil, fmt.Errorf("failed to read response with retry: %v", err)
 		}
 
@@ -648,14 +702,62 @@ func (o *CriblTerraformHook) doRequestWithRetry(req *http.Request) ([]byte, erro
 			success = true
 			break
 		} else if resp.StatusCode == http.StatusTooManyRequests {
-			log.Printf("[DEBUG] 429 during request, waiting to retry %d seconds", i)
-			time.Sleep(time.Duration(i) * time.Second)
+			// For 429, use exponential backoff with longer initial delay
+			backoff := calculateBackoff(attempt, 1*time.Second, maxBackoff, backoffExp, jitterFactor)
+			log.Printf("[DEBUG] 429 Too Many Requests, waiting %v before retry", backoff)
+			if attempt < maxRetries-1 {
+				if !waitWithContext(ctx, backoff) {
+					return nil, fmt.Errorf("request cancelled: %v", ctx.Err())
+				}
+				continue
+			}
+		} else {
+			// For other non-200 status codes, don't retry (likely permanent error)
+			break
 		}
 	}
 
 	if !success {
-		return nil, fmt.Errorf("failed to do request: status=%d, body=%s", resp.StatusCode, string(body))
+		if resp != nil {
+			return nil, fmt.Errorf("failed to do request: status=%d, body=%s", resp.StatusCode, string(body))
+		}
+		return nil, fmt.Errorf("failed to do request: no response received")
 	}
 
 	return body, nil
+}
+
+// calculateBackoff computes exponential backoff with jitter
+func calculateBackoff(attempt int, initial, max time.Duration, exponent, jitterFactor float64) time.Duration {
+	interval := float64(initial) * math.Pow(float64(attempt+1), exponent)
+
+	// Add jitter (±25% of interval)
+	jitter := rand.Float64() * jitterFactor * interval
+	if rand.Float64() < 0.5 {
+		jitter = -jitter
+	}
+	interval = interval + jitter
+
+	if interval <= 0 {
+		interval = float64(initial)
+	}
+
+	if interval > float64(max) {
+		interval = float64(max)
+	}
+
+	return time.Duration(interval)
+}
+
+// waitWithContext waits for the duration or until context is cancelled
+func waitWithContext(ctx context.Context, duration time.Duration) bool {
+	timer := time.NewTimer(duration)
+	defer timer.Stop()
+
+	select {
+	case <-ctx.Done():
+		return false
+	case <-timer.C:
+		return true
+	}
 }

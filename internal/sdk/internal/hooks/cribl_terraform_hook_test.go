@@ -1419,3 +1419,461 @@ func TestProviderConfigWithPointerType(t *testing.T) {
 	// Clean up
 	os.Setenv("CRIBL_BEARER_TOKEN", "")
 }
+
+func TestDoRequestWithRetrySuccess(t *testing.T) {
+	// Test successful request without retries
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	attemptCount := 0
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			attemptCount++
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(`{"access_token":"success-token","expires_in":300}`)),
+			}, nil
+		},
+	}
+
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://test-workspace-test-org.cribl.cloud", mockClient)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", "https://login.cribl.cloud/oauth/token", strings.NewReader(`{"grant_type":"client_credentials"}`))
+
+	body, err := hook.doRequestWithRetry(req)
+	if err != nil {
+		t.Fatalf("Expected success but got error: %v", err)
+	}
+
+	if string(body) != `{"access_token":"success-token","expires_in":300}` {
+		t.Errorf("Expected body %q, got %q", `{"access_token":"success-token","expires_in":300}`, string(body))
+	}
+
+	if attemptCount != 1 {
+		t.Errorf("Expected 1 attempt, got %d", attemptCount)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+}
+
+func TestDoRequestWithRetryNetworkError(t *testing.T) {
+	// Test retry on network errors
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	attemptCount := 0
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			attemptCount++
+			if attemptCount < 2 {
+				return nil, errors.New("network error")
+			}
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(`{"access_token":"retry-success","expires_in":300}`)),
+			}, nil
+		},
+	}
+
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://test-workspace-test-org.cribl.cloud", mockClient)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", "https://login.cribl.cloud/oauth/token", strings.NewReader(`{"grant_type":"client_credentials"}`))
+
+	body, err := hook.doRequestWithRetry(req)
+	if err != nil {
+		t.Fatalf("Expected success after retry but got error: %v", err)
+	}
+
+	if string(body) != `{"access_token":"retry-success","expires_in":300}` {
+		t.Errorf("Expected body %q, got %q", `{"access_token":"retry-success","expires_in":300}`, string(body))
+	}
+
+	if attemptCount != 2 {
+		t.Errorf("Expected 2 attempts, got %d", attemptCount)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+}
+
+func TestDoRequestWithRetryUnexpectedEOF(t *testing.T) {
+	// Test retry on unexpected EOF (body read error)
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	attemptCount := 0
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			attemptCount++
+			// First attempt: return response with body that will fail to read
+			if attemptCount == 1 {
+				return &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       io.NopCloser(&failingReader{err: io.ErrUnexpectedEOF}),
+				}, nil
+			}
+			// Second attempt: return successful response
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(`{"access_token":"eof-retry-success","expires_in":300}`)),
+			}, nil
+		},
+	}
+
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://test-workspace-test-org.cribl.cloud", mockClient)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", "https://login.cribl.cloud/oauth/token", strings.NewReader(`{"grant_type":"client_credentials"}`))
+
+	body, err := hook.doRequestWithRetry(req)
+	if err != nil {
+		t.Fatalf("Expected success after EOF retry but got error: %v", err)
+	}
+
+	if string(body) != `{"access_token":"eof-retry-success","expires_in":300}` {
+		t.Errorf("Expected body %q, got %q", `{"access_token":"eof-retry-success","expires_in":300}`, string(body))
+	}
+
+	if attemptCount != 2 {
+		t.Errorf("Expected 2 attempts, got %d", attemptCount)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+}
+
+func TestDoRequestWithRetry429(t *testing.T) {
+	// Test retry on 429 Too Many Requests
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	attemptCount := 0
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			attemptCount++
+			if attemptCount < 3 {
+				return &http.Response{
+					StatusCode: http.StatusTooManyRequests,
+					Body:       io.NopCloser(strings.NewReader(`{"error":"rate limited"}`)),
+				}, nil
+			}
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(`{"access_token":"429-retry-success","expires_in":300}`)),
+			}, nil
+		},
+	}
+
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://test-workspace-test-org.cribl.cloud", mockClient)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", "https://login.cribl.cloud/oauth/token", strings.NewReader(`{"grant_type":"client_credentials"}`))
+
+	body, err := hook.doRequestWithRetry(req)
+	if err != nil {
+		t.Fatalf("Expected success after 429 retry but got error: %v", err)
+	}
+
+	if string(body) != `{"access_token":"429-retry-success","expires_in":300}` {
+		t.Errorf("Expected body %q, got %q", `{"access_token":"429-retry-success","expires_in":300}`, string(body))
+	}
+
+	if attemptCount != 3 {
+		t.Errorf("Expected 3 attempts, got %d", attemptCount)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+}
+
+func TestDoRequestWithRetryMaxRetriesExhausted(t *testing.T) {
+	// Test that max retries are exhausted and error is returned
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	attemptCount := 0
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			attemptCount++
+			return nil, errors.New("persistent network error")
+		},
+	}
+
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://test-workspace-test-org.cribl.cloud", mockClient)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", "https://login.cribl.cloud/oauth/token", strings.NewReader(`{"grant_type":"client_credentials"}`))
+
+	_, err := hook.doRequestWithRetry(req)
+	if err == nil {
+		t.Fatalf("Expected error after max retries but got success")
+	}
+
+	if !strings.Contains(err.Error(), "failed to make request with retry") {
+		t.Errorf("Expected error about failed request, got: %v", err)
+	}
+
+	if attemptCount != 3 {
+		t.Errorf("Expected 3 attempts (max retries), got %d", attemptCount)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+}
+
+func TestDoRequestWithRetryNon200Status(t *testing.T) {
+	// Test that non-200 status codes (except 429) don't retry
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	attemptCount := 0
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			attemptCount++
+			return &http.Response{
+				StatusCode: http.StatusBadRequest,
+				Body:       io.NopCloser(strings.NewReader(`{"error":"bad request"}`)),
+			}, nil
+		},
+	}
+
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://test-workspace-test-org.cribl.cloud", mockClient)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", "https://login.cribl.cloud/oauth/token", strings.NewReader(`{"grant_type":"client_credentials"}`))
+
+	_, err := hook.doRequestWithRetry(req)
+	if err == nil {
+		t.Fatalf("Expected error for non-200 status but got success")
+	}
+
+	if !strings.Contains(err.Error(), "status=400") {
+		t.Errorf("Expected error with status 400, got: %v", err)
+	}
+
+	if attemptCount != 1 {
+		t.Errorf("Expected 1 attempt (no retry for 400), got %d", attemptCount)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+}
+
+func TestDoRequestWithRetryContextCancellation(t *testing.T) {
+	// Test that context cancellation is respected
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	attemptCount := 0
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			attemptCount++
+			if attemptCount == 1 {
+				return nil, errors.New("network error")
+			}
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(`{"access_token":"token","expires_in":300}`)),
+			}, nil
+		},
+	}
+
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://test-workspace-test-org.cribl.cloud", mockClient)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	req, _ := http.NewRequestWithContext(ctx, "POST", "https://login.cribl.cloud/oauth/token", strings.NewReader(`{"grant_type":"client_credentials"}`))
+
+	// Cancel context during retry backoff
+	go func() {
+		time.Sleep(100 * time.Millisecond)
+		cancel()
+	}()
+
+	_, err := hook.doRequestWithRetry(req)
+	if err == nil {
+		t.Fatalf("Expected error due to context cancellation but got success")
+	}
+
+	if !strings.Contains(err.Error(), "request cancelled") {
+		t.Errorf("Expected cancellation error, got: %v", err)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+}
+
+func TestDoRequestWithRetryRequestBodyReuse(t *testing.T) {
+	// Test that request body is properly reused on retries
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	attemptCount := 0
+	requestBodies := []string{}
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			attemptCount++
+			// Read request body to verify it's sent on each retry
+			if req.Body != nil {
+				bodyBytes, _ := io.ReadAll(req.Body)
+				requestBodies = append(requestBodies, string(bodyBytes))
+			}
+
+			if attemptCount < 2 {
+				return nil, errors.New("network error")
+			}
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(`{"access_token":"body-reuse-success","expires_in":300}`)),
+			}, nil
+		},
+	}
+
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://test-workspace-test-org.cribl.cloud", mockClient)
+
+	ctx := context.Background()
+	requestBody := `{"grant_type":"client_credentials","client_id":"test"}`
+	req, _ := http.NewRequestWithContext(ctx, "POST", "https://login.cribl.cloud/oauth/token", strings.NewReader(requestBody))
+
+	body, err := hook.doRequestWithRetry(req)
+	if err != nil {
+		t.Fatalf("Expected success after retry but got error: %v", err)
+	}
+
+	if string(body) != `{"access_token":"body-reuse-success","expires_in":300}` {
+		t.Errorf("Expected body %q, got %q", `{"access_token":"body-reuse-success","expires_in":300}`, string(body))
+	}
+
+	if attemptCount != 2 {
+		t.Errorf("Expected 2 attempts, got %d", attemptCount)
+	}
+
+	// Verify request body was sent on both attempts
+	if len(requestBodies) != 2 {
+		t.Errorf("Expected 2 request bodies, got %d", len(requestBodies))
+	}
+	for i, body := range requestBodies {
+		if body != requestBody {
+			t.Errorf("Attempt %d: Expected request body %q, got %q", i+1, requestBody, body)
+		}
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+}
+
+func TestDoRequestWithRetryNoBody(t *testing.T) {
+	// Test request with no body
+	os.Setenv("CRIBL_CLIENT_ID", "test-client")
+	os.Setenv("CRIBL_CLIENT_SECRET", "test-secret")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "test-org")
+	os.Setenv("CRIBL_WORKSPACE_ID", "test-workspace")
+
+	attemptCount := 0
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			attemptCount++
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(`{"access_token":"no-body-success","expires_in":300}`)),
+			}, nil
+		},
+	}
+
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://test-workspace-test-org.cribl.cloud", mockClient)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "GET", "https://login.cribl.cloud/oauth/token", nil)
+
+	body, err := hook.doRequestWithRetry(req)
+	if err != nil {
+		t.Fatalf("Expected success but got error: %v", err)
+	}
+
+	if string(body) != `{"access_token":"no-body-success","expires_in":300}` {
+		t.Errorf("Expected body %q, got %q", `{"access_token":"no-body-success","expires_in":300}`, string(body))
+	}
+
+	if attemptCount != 1 {
+		t.Errorf("Expected 1 attempt, got %d", attemptCount)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+}
+
+// failingReader is a reader that always returns an error
+type failingReader struct {
+	err error
+}
+
+func (r *failingReader) Read(p []byte) (n int, err error) {
+	return 0, r.err
+}
+
+func (r *failingReader) Close() error {
+	return nil
+}
