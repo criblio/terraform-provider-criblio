@@ -647,27 +647,16 @@ func (o *CriblTerraformHook) doRequestWithRetry(req *http.Request) ([]byte, erro
 		}
 	}
 
-	// Custom retry policy: retry on 429, connection errors, and 500-range (except 501)
+	// Custom retry policy: add 429 retry support (go-retryablehttp doesn't retry on 429 by default)
 	retryClient.CheckRetry = func(ctx context.Context, resp *http.Response, err error) (bool, error) {
-		// Always retry on connection errors
-		if err != nil {
-			return true, nil
-		}
-
-		// Retry on 429 Too Many Requests
+		// Add custom retry logic for 429 Too Many Requests
 		if resp != nil && resp.StatusCode == http.StatusTooManyRequests {
 			log.Printf("[DEBUG] 429 Too Many Requests, will retry")
 			return true, nil
 		}
 
-		// Retry on 500-range status codes (except 501)
-		if resp != nil && resp.StatusCode >= 500 && resp.StatusCode != 501 {
-			log.Printf("[DEBUG] %d status code, will retry", resp.StatusCode)
-			return true, nil
-		}
-
-		// Don't retry on other status codes
-		return false, nil
+		// Use go-retryablehttp's default retry policy for all other cases (connection errors, 500-range, etc.)
+		return retryablehttp.DefaultRetryPolicy(ctx, resp, err)
 	}
 
 	// Convert standard http.Request to retryablehttp.Request
