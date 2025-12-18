@@ -1648,8 +1648,9 @@ func TestDoRequestWithRetryMaxRetriesExhausted(t *testing.T) {
 		t.Errorf("Expected error about failed request, got: %v", err)
 	}
 
-	if attemptCount != 3 {
-		t.Errorf("Expected 3 attempts (max retries), got %d", attemptCount)
+	// go-retryablehttp with RetryMax=3 means 1 initial attempt + 3 retries = 4 total attempts
+	if attemptCount != 4 {
+		t.Errorf("Expected 4 attempts (1 initial + 3 retries), got %d", attemptCount)
 	}
 
 	// Clean up
@@ -1743,8 +1744,9 @@ func TestDoRequestWithRetryContextCancellation(t *testing.T) {
 		t.Fatalf("Expected error due to context cancellation but got success")
 	}
 
-	if !strings.Contains(err.Error(), "request cancelled") {
-		t.Errorf("Expected cancellation error, got: %v", err)
+	// go-retryablehttp returns "context canceled" in the error message
+	if !strings.Contains(err.Error(), "context canceled") {
+		t.Errorf("Expected cancellation error containing 'context canceled', got: %v", err)
 	}
 
 	// Clean up

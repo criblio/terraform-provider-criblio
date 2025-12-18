@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math"
-	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -16,6 +14,7 @@ import (
 	"time"
 
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/go-retryablehttp"
 )
 
 var (
@@ -628,136 +627,159 @@ func (o *CriblTerraformHook) loadTokenInfo(input LoadTokenInfoInput) (*TokenInfo
 }
 
 func (o *CriblTerraformHook) doRequestWithRetry(req *http.Request) ([]byte, error) {
-	var body []byte
-	var resp *http.Response
-	var err error
 	ctx := req.Context()
 
-	const (
-		maxRetries     = 3
-		initialBackoff = 500 * time.Millisecond
-		maxBackoff     = 5 * time.Second
-		backoffExp     = 1.5
-		jitterFactor   = 0.25
-	)
+	// Create retryable HTTP client with configuration
+	retryClient := retryablehttp.NewClient()
+	retryClient.RetryMax = 3
+	retryClient.RetryWaitMin = 500 * time.Millisecond
+	retryClient.RetryWaitMax = 5 * time.Second
+	retryClient.Backoff = retryablehttp.DefaultBackoff
+	retryClient.Logger = &retryableLogger{}
 
-	// Store request body for retries (HTTP request bodies are single-use)
-	var reqBodyBytes []byte
+	// Use the underlying HTTP client if it's an *http.Client, otherwise use default
+	if stdClient, ok := o.client.(*http.Client); ok {
+		retryClient.HTTPClient = stdClient
+	} else {
+		// Create a wrapper transport that uses our HTTPClient interface
+		retryClient.HTTPClient = &http.Client{
+			Transport: &httpClientTransport{client: o.client},
+		}
+	}
+
+	// Custom retry policy: retry on 429, connection errors, and 500-range (except 501)
+	retryClient.CheckRetry = func(ctx context.Context, resp *http.Response, err error) (bool, error) {
+		// Always retry on connection errors
+		if err != nil {
+			return true, nil
+		}
+
+		// Retry on 429 Too Many Requests
+		if resp != nil && resp.StatusCode == http.StatusTooManyRequests {
+			log.Printf("[DEBUG] 429 Too Many Requests, will retry")
+			return true, nil
+		}
+
+		// Retry on 500-range status codes (except 501)
+		if resp != nil && resp.StatusCode >= 500 && resp.StatusCode != 501 {
+			log.Printf("[DEBUG] %d status code, will retry", resp.StatusCode)
+			return true, nil
+		}
+
+		// Don't retry on other status codes
+		return false, nil
+	}
+
+	// Convert standard http.Request to retryablehttp.Request
+	// go-retryablehttp handles body rewinding automatically
+	var retryReq *retryablehttp.Request
+
 	if req.Body != nil && req.Body != http.NoBody {
-		reqBodyBytes, err = io.ReadAll(req.Body)
+		// Read body once and let retryablehttp handle rewinding
+		bodyBytes, err := io.ReadAll(req.Body)
 		if err != nil {
 			return nil, fmt.Errorf("failed to read request body: %v", err)
 		}
 		req.Body.Close()
-		// Restore body for first attempt
-		req.Body = io.NopCloser(bytes.NewReader(reqBodyBytes))
+		retryReq, err = retryablehttp.NewRequest(req.Method, req.URL.String(), bytes.NewReader(bodyBytes))
+		if err != nil {
+			return nil, fmt.Errorf("failed to create retryable request: %v", err)
+		}
+	} else {
+		var err error
+		retryReq, err = retryablehttp.NewRequest(req.Method, req.URL.String(), nil)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create retryable request: %v", err)
+		}
 	}
 
-	success := false
-	for attempt := range maxRetries {
-		log.Printf("[DEBUG] http request attempt %d/%d, doing query: %+v", attempt+1, maxRetries, req)
+	// Copy headers and context
+	retryReq.Header = req.Header.Clone()
+	retryReq = retryReq.WithContext(ctx)
 
-		// Restore request body for retries (if not using GetBody)
-		if attempt > 0 && reqBodyBytes != nil && (req.GetBody == nil) {
-			req.Body = io.NopCloser(bytes.NewReader(reqBodyBytes))
-		} else if attempt > 0 && req.GetBody != nil {
-			// Use GetBody if available (more efficient)
-			newBody, err := req.GetBody()
-			if err != nil {
-				return nil, fmt.Errorf("failed to get request body for retry: %v", err)
-			}
-			req.Body = newBody
-		}
+	// Execute request with retries
+	// Note: go-retryablehttp doesn't retry on body read errors, so we need to handle that
+	const maxBodyReadRetries = 3
+	var body []byte
+	var resp *http.Response
+	var err error
 
-		resp, err = o.client.Do(req)
+	for attempt := range maxBodyReadRetries {
+		resp, err = retryClient.Do(retryReq)
 		if err != nil {
-			log.Printf("[DEBUG] Request failed on attempt %d: %v", attempt+1, err)
-			if attempt < maxRetries-1 {
-				backoff := calculateBackoff(attempt, initialBackoff, maxBackoff, backoffExp, jitterFactor)
-				log.Printf("[DEBUG] Retrying after %v", backoff)
-				if !waitWithContext(ctx, backoff) {
-					return nil, fmt.Errorf("request cancelled: %v", ctx.Err())
-				}
-				continue
-			}
 			return nil, fmt.Errorf("failed to make request with retry: %v", err)
 		}
 
+		// Try to read the body
 		body, err = io.ReadAll(resp.Body)
-		resp.Body.Close() // Close immediately after reading
+		resp.Body.Close()
+
 		if err != nil {
 			log.Printf("[DEBUG] Failed to read response body on attempt %d: %v", attempt+1, err)
-			if attempt < maxRetries-1 {
-				backoff := calculateBackoff(attempt, initialBackoff, maxBackoff, backoffExp, jitterFactor)
-				log.Printf("[DEBUG] Retrying after %v", backoff)
-				if !waitWithContext(ctx, backoff) {
+			if attempt < maxBodyReadRetries-1 {
+				// Recreate the request for retry (go-retryablehttp will handle its own retries)
+				if retryReq.Body != nil {
+					if bodyBytes, readErr := io.ReadAll(retryReq.Body); readErr == nil {
+						retryReq.Body = io.NopCloser(bytes.NewReader(bodyBytes))
+					}
+				}
+				// Use exponential backoff for body read retries
+				backoff := time.Duration(500*(attempt+1)) * time.Millisecond
+				select {
+				case <-ctx.Done():
 					return nil, fmt.Errorf("request cancelled: %v", ctx.Err())
+				case <-time.After(backoff):
 				}
 				continue
 			}
 			return nil, fmt.Errorf("failed to read response with retry: %v", err)
 		}
 
+		// Check for successful status
 		if resp.StatusCode == http.StatusOK {
-			success = true
-			break
-		} else if resp.StatusCode == http.StatusTooManyRequests {
-			// For 429, use exponential backoff with longer initial delay
-			backoff := calculateBackoff(attempt, 1*time.Second, maxBackoff, backoffExp, jitterFactor)
-			log.Printf("[DEBUG] 429 Too Many Requests, waiting %v before retry", backoff)
-			if attempt < maxRetries-1 {
-				if !waitWithContext(ctx, backoff) {
-					return nil, fmt.Errorf("request cancelled: %v", ctx.Err())
-				}
-				continue
-			}
-		} else {
-			// For other non-200 status codes, don't retry (likely permanent error)
-			break
+			return body, nil
 		}
-	}
 
-	if !success {
-		if resp != nil {
+		// For non-200 status codes, return error (go-retryablehttp already handled retries)
+		if resp.StatusCode != http.StatusTooManyRequests {
 			return nil, fmt.Errorf("failed to do request: status=%d, body=%s", resp.StatusCode, string(body))
 		}
-		return nil, fmt.Errorf("failed to do request: no response received")
+
+		// If we got here with 429, go-retryablehttp should have retried, but if not, break
+		break
 	}
 
-	return body, nil
+	// If we exhausted retries or got non-200 status
+	if resp != nil {
+		return nil, fmt.Errorf("failed to do request: status=%d, body=%s", resp.StatusCode, string(body))
+	}
+	return nil, fmt.Errorf("failed to do request: no response received")
 }
 
-// calculateBackoff computes exponential backoff with jitter
-func calculateBackoff(attempt int, initial, max time.Duration, exponent, jitterFactor float64) time.Duration {
-	interval := float64(initial) * math.Pow(float64(attempt+1), exponent)
+// retryableLogger implements retryablehttp.Logger interface for debug logging
+type retryableLogger struct{}
 
-	// Add jitter (±25% of interval)
-	jitter := rand.Float64() * jitterFactor * interval
-	if rand.Float64() < 0.5 {
-		jitter = -jitter
-	}
-	interval = interval + jitter
-
-	if interval <= 0 {
-		interval = float64(initial)
-	}
-
-	if interval > float64(max) {
-		interval = float64(max)
-	}
-
-	return time.Duration(interval)
+func (l *retryableLogger) Error(msg string, keysAndValues ...interface{}) {
+	log.Printf("[ERROR] retryablehttp: %s %v", msg, keysAndValues)
 }
 
-// waitWithContext waits for the duration or until context is cancelled
-func waitWithContext(ctx context.Context, duration time.Duration) bool {
-	timer := time.NewTimer(duration)
-	defer timer.Stop()
+func (l *retryableLogger) Info(msg string, keysAndValues ...interface{}) {
+	log.Printf("[INFO] retryablehttp: %s %v", msg, keysAndValues)
+}
 
-	select {
-	case <-ctx.Done():
-		return false
-	case <-timer.C:
-		return true
-	}
+func (l *retryableLogger) Debug(msg string, keysAndValues ...interface{}) {
+	log.Printf("[DEBUG] retryablehttp: %s %v", msg, keysAndValues)
+}
+
+func (l *retryableLogger) Warn(msg string, keysAndValues ...interface{}) {
+	log.Printf("[WARN] retryablehttp: %s %v", msg, keysAndValues)
+}
+
+// httpClientTransport wraps HTTPClient interface to implement http.RoundTripper
+type httpClientTransport struct {
+	client HTTPClient
+}
+
+func (t *httpClientTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	return t.client.Do(req)
 }
