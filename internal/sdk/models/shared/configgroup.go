@@ -37,7 +37,11 @@ func (c *ConfigGroupGit) GetLog() []Commit {
 type ConfigGroupType string
 
 const (
-	ConfigGroupTypeLakeAccess ConfigGroupType = "lake_access"
+	ConfigGroupTypeEdge        ConfigGroupType = "edge"
+	ConfigGroupTypeStream      ConfigGroupType = "stream"
+	ConfigGroupTypeSearch      ConfigGroupType = "search"
+	ConfigGroupTypeLakeAccess  ConfigGroupType = "lake_access"
+	ConfigGroupTypeLocalSearch ConfigGroupType = "local_search"
 )
 
 func (e ConfigGroupType) ToPointer() *ConfigGroupType {
@@ -49,7 +53,15 @@ func (e *ConfigGroupType) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "edge":
+		fallthrough
+	case "stream":
+		fallthrough
+	case "search":
+		fallthrough
 	case "lake_access":
+		fallthrough
+	case "local_search":
 		*e = ConfigGroupType(v)
 		return nil
 	default:
@@ -71,14 +83,15 @@ type ConfigGroup struct {
 	IsSearch                *bool                `json:"isSearch,omitempty"`
 	LookupDeployments       []ConfigGroupLookups `json:"lookupDeployments,omitempty"`
 	Name                    *string              `json:"name,omitempty"`
-	OnPrem                  *bool                `json:"onPrem,omitempty"`
-	Provisioned             *bool                `json:"provisioned,omitempty"`
-	Streamtags              []string             `json:"streamtags,omitempty"`
-	Tags                    *string              `json:"tags,omitempty"`
-	Type                    *ConfigGroupType     `json:"type,omitempty"`
-	UpgradeVersion          *string              `json:"upgradeVersion,omitempty"`
-	WorkerCount             *float64             `json:"workerCount,omitempty"`
-	WorkerRemoteAccess      *bool                `json:"workerRemoteAccess,omitempty"`
+	// Whether this is an on-premises group. Cannot be true when cloud is set.
+	OnPrem             *bool            `json:"onPrem,omitempty"`
+	Provisioned        *bool            `json:"provisioned,omitempty"`
+	Streamtags         []string         `json:"streamtags,omitempty"`
+	Tags               *string          `json:"tags,omitempty"`
+	Type               *ConfigGroupType `json:"type,omitempty"`
+	UpgradeVersion     *string          `json:"upgradeVersion,omitempty"`
+	WorkerCount        *float64         `json:"workerCount,omitempty"`
+	WorkerRemoteAccess *bool            `json:"workerRemoteAccess,omitempty"`
 	// This is only configurable for hybrid worker groups.
 	MaxWorkerAge *string `json:"maxWorkerAge,omitempty"`
 }

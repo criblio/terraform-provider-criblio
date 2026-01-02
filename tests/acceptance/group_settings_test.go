@@ -8,7 +8,6 @@ import (
 )
 
 func TestGroupSettings(t *testing.T) {
-	t.Skip("Skipping resource due to API schema change")
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories: providerFactory,

@@ -18,6 +18,6 @@ resource "criblio_group" "my_group" {
     "edge",
   ]
   tags                 = "environment=prod,team=platform"
-  type                 = "lake_access"
+  type                 = "search"
   worker_remote_access = true
 }

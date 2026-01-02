@@ -33,7 +33,7 @@ resource "criblio_group" "my_group" {
     "edge",
   ]
   tags                 = "environment=prod,team=platform"
-  type                 = "lake_access"
+  type                 = "search"
   worker_remote_access = true
 }
 ```
@@ -44,7 +44,7 @@ resource "criblio_group" "my_group" {
 ### Required
 
 - `id` (String) Group id
-- `product` (String) Cribl Product. must be one of ["stream", "edge"]; Requires replacement if changed.
+- `product` (String) Cribl Product. must be one of ["stream", "edge"].
 
 ### Optional
 
@@ -59,7 +59,7 @@ resource "criblio_group" "my_group" {
 - `provisioned` (Boolean)
 - `streamtags` (List of String)
 - `tags` (String)
-- `type` (String) must be "lake_access"
+- `type` (String) must be one of ["edge", "stream", "search", "lake_access", "local_search"]
 - `worker_remote_access` (Boolean)
 
 <a id="nestedatt--cloud"></a>

@@ -89,7 +89,8 @@ func (r *DeployResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Computed: true,
 						},
 						"on_prem": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Whether this is an on-premises group. Cannot be true when cloud is set.`,
 						},
 						"provisioned": schema.BoolAttribute{
 							Computed: true,
