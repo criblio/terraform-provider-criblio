@@ -5,15 +5,20 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
+
+	"regexp"
+
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/errors"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -113,6 +118,9 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"name": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9-]+$`), "must match pattern "+regexp.MustCompile(`^[a-z0-9-]+$`).String()),
+				},
 			},
 			"on_prem": schema.BoolAttribute{
 				Computed: true,
@@ -121,9 +129,9 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"product": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+					custom_stringplanmodifier.NoReplaceProductModifier(),
 				},
-				Description: `Cribl Product. must be one of ["stream", "edge"]; Requires replacement if changed.`,
+				Description: `Cribl Product. must be one of ["stream", "edge"].`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"stream",
@@ -147,10 +155,14 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"type": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `must be "lake_access"`,
+				Description: `must be one of ["edge", "stream", "search", "lake_access", "local_search"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
+						"edge",
+						"stream",
+						"search",
 						"lake_access",
+						"local_search",
 					),
 				},
 			},
@@ -198,6 +210,25 @@ func (r *GroupResource) Create(ctx context.Context, req resource.CreateRequest, 
 
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	// Validate: cloud is only allowed for stream product, and cannot be set with onPrem
+	if data.Cloud != nil {
+		productValue := data.Product.ValueString()
+		if productValue == "edge" {
+			resp.Diagnostics.AddError(
+				"Invalid Configuration",
+				"cloud configuration is only allowed for stream product, not edge. For edge product, use onPrem instead.",
+			)
+			return
+		}
+		if !data.OnPrem.IsNull() && !data.OnPrem.IsUnknown() && data.OnPrem.ValueBool() {
+			resp.Diagnostics.AddError(
+				"Invalid Configuration",
+				"cloud and onPrem cannot both be set. Group cannot be both on-premises and cloud at the same time.",
+			)
+			return
+		}
 	}
 
 	request, requestDiags := data.ToOperationsCreateProductsGroupsByProductRequest(ctx)
@@ -341,6 +372,25 @@ func (r *GroupResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
+	// Validate: cloud is only allowed for stream product, and cannot be set with onPrem
+	if data.Cloud != nil {
+		productValue := data.Product.ValueString()
+		if productValue == "edge" {
+			resp.Diagnostics.AddError(
+				"Invalid Configuration",
+				"cloud configuration is only allowed for stream product, not edge.",
+			)
+			return
+		}
+		if !data.OnPrem.IsNull() && !data.OnPrem.IsUnknown() && data.OnPrem.ValueBool() {
+			resp.Diagnostics.AddError(
+				"Invalid Configuration",
+				"cloud and onPrem cannot both be set. Group cannot be both on-premises and cloud at the same time.",
+			)
+			return
+		}
+	}
+
 	request, requestDiags := data.ToOperationsUpdateGroupsByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -441,6 +491,20 @@ func (r *GroupResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	}
 	res, err := r.client.Groups.DeleteGroupsByID(ctx, *request)
 	if err != nil {
+		// Check if the error is a 403 Forbidden for default groups
+		// These cannot be deleted by the API, but we should remove them from Terraform state
+		if apiErr, ok := err.(*errors.APIError); ok && apiErr.StatusCode == 403 {
+			// Check if the error message indicates default groups cannot be deleted
+			errorBody := apiErr.Body
+			if strings.Contains(errorBody, "Not allowed to delete the default group/fleet") ||
+				strings.Contains(errorBody, "not allowed to delete") ||
+				strings.Contains(errorBody, "default group") {
+				// Default groups cannot be deleted - just remove from state
+				// This allows users to "unmanage" default groups without errors
+				return
+			}
+		}
+		// For other errors, report them normally
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))

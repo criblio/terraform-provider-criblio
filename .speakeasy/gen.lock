@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 7f51adc0f12f5232371b039be1d7ceea
+  docChecksum: b8c7f1f39673a27c7431f0c46a14cdfd
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.72
-  configChecksum: 6d6cddabdcbd64970e97dcebe2cbd0ea
+  releaseVersion: 1.20.75
+  configChecksum: 153b0f9b70bfb82ca77dce9f45e793b6
   published: true
 features:
   terraform:
@@ -287,7 +287,6 @@ generatedFiles:
   - internal/provider/grok_resource_sdk.go
   - internal/provider/group_data_source.go
   - internal/provider/group_data_source_sdk.go
-  - internal/provider/group_resource.go
   - internal/provider/group_resource_sdk.go
   - internal/provider/groupsystemsettings_data_source.go
   - internal/provider/groupsystemsettings_data_source_sdk.go
@@ -7240,7 +7239,7 @@ examples:
         path:
           product: "stream"
       requestBody:
-        application/json: {"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "type": "lake_access", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true, "maxWorkerAge": "1h"}
+        application/json: {"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true, "maxWorkerAge": "1h"}
       responses:
         "200":
           application/json: {"items": [{"cloud": {"provider": "aws", "region": "us-east-1"}, "estimatedIngestRate": 250000, "id": "grp-prod-edge", "isFleet": false, "name": "edge-group-prod", "onPrem": false, "provisioned": true, "streamtags": ["prod", "web"], "workerRemoteAccess": true}]}
@@ -7297,7 +7296,7 @@ examples:
         path:
           id: "workers-west"
       requestBody:
-        application/json: {"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "type": "lake_access", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true, "maxWorkerAge": "1h"}
+        application/json: {"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true, "maxWorkerAge": "1h"}
       responses:
         "200":
           application/json: {"items": [{"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "type": "lake_access", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true, "maxWorkerAge": "1h"}]}

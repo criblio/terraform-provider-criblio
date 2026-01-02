@@ -62240,6 +62240,7 @@ components:
       properties:
         cloud:
           $ref: "#/components/schemas/ConfigGroupCloud"
+          description: Cloud configuration. Only applicable for stream product. Cannot be set when onPrem is true.
         configVersion:
           type: string
           example: "v12"
@@ -62308,10 +62309,12 @@ components:
                   version: "v4"
         name:
           type: string
+          pattern: "^[a-z0-9-]+$"
           example: "Prod Edge"
         onPrem:
           type: boolean
           example: true
+          description: Whether this is an on-premises group. Cannot be true when cloud is set.
         provisioned:
           type: boolean
           example: true
@@ -62328,8 +62331,12 @@ components:
         type:
           type: string
           enum:
+            - edge
+            - stream
+            - search
             - lake_access
-          example: "lake_access"
+            - local_search
+          x-speakeasy-unknown-values: allow
         upgradeVersion:
           type: string
           example: "6.0.1"
@@ -79952,6 +79959,7 @@ paths:
               - edge
           description: Cribl Product
           example: "stream"
+          x-speakeasy-plan-modifiers: NoReplaceProductModifier
     get:
       operationId: getProductsGroupsByProduct
       tags:
