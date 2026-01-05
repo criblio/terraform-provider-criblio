@@ -74,6 +74,11 @@ const (
 	OutputTypeOutputNetflow                OutputType = "OutputNetflow"
 	OutputTypeOutputDynatraceHTTP          OutputType = "OutputDynatraceHttp"
 	OutputTypeOutputDynatraceOtlp          OutputType = "OutputDynatraceOtlp"
+	OutputTypeOutputSentinelOneAiSiem      OutputType = "OutputSentinelOneAiSiem"
+	OutputTypeOutputChronicle              OutputType = "OutputChronicle"
+	OutputTypeOutputDatabricks             OutputType = "OutputDatabricks"
+	OutputTypeOutputMicrosoftFabric        OutputType = "OutputMicrosoftFabric"
+	OutputTypeOutputCloudflareR2           OutputType = "OutputCloudflareR2"
 )
 
 type Output struct {
@@ -140,6 +145,11 @@ type Output struct {
 	OutputNetflow                *OutputNetflow                `queryParam:"inline,name=Output"`
 	OutputDynatraceHTTP          *OutputDynatraceHTTP          `queryParam:"inline,name=Output"`
 	OutputDynatraceOtlp          *OutputDynatraceOtlp          `queryParam:"inline,name=Output"`
+	OutputSentinelOneAiSiem      *OutputSentinelOneAiSiem      `queryParam:"inline,name=Output"`
+	OutputChronicle              *OutputChronicle              `queryParam:"inline,name=Output"`
+	OutputDatabricks             *OutputDatabricks             `queryParam:"inline,name=Output"`
+	OutputMicrosoftFabric        *OutputMicrosoftFabric        `queryParam:"inline,name=Output"`
+	OutputCloudflareR2           *OutputCloudflareR2           `queryParam:"inline,name=Output"`
 
 	Type OutputType
 }
@@ -711,6 +721,51 @@ func CreateOutputOutputDynatraceOtlp(outputDynatraceOtlp OutputDynatraceOtlp) Ou
 	}
 }
 
+func CreateOutputOutputSentinelOneAiSiem(outputSentinelOneAiSiem OutputSentinelOneAiSiem) Output {
+	typ := OutputTypeOutputSentinelOneAiSiem
+
+	return Output{
+		OutputSentinelOneAiSiem: &outputSentinelOneAiSiem,
+		Type:                    typ,
+	}
+}
+
+func CreateOutputOutputChronicle(outputChronicle OutputChronicle) Output {
+	typ := OutputTypeOutputChronicle
+
+	return Output{
+		OutputChronicle: &outputChronicle,
+		Type:            typ,
+	}
+}
+
+func CreateOutputOutputDatabricks(outputDatabricks OutputDatabricks) Output {
+	typ := OutputTypeOutputDatabricks
+
+	return Output{
+		OutputDatabricks: &outputDatabricks,
+		Type:             typ,
+	}
+}
+
+func CreateOutputOutputMicrosoftFabric(outputMicrosoftFabric OutputMicrosoftFabric) Output {
+	typ := OutputTypeOutputMicrosoftFabric
+
+	return Output{
+		OutputMicrosoftFabric: &outputMicrosoftFabric,
+		Type:                  typ,
+	}
+}
+
+func CreateOutputOutputCloudflareR2(outputCloudflareR2 OutputCloudflareR2) Output {
+	typ := OutputTypeOutputCloudflareR2
+
+	return Output{
+		OutputCloudflareR2: &outputCloudflareR2,
+		Type:               typ,
+	}
+}
+
 func (u *Output) UnmarshalJSON(data []byte) error {
 
 	var candidates []utils.UnionCandidate
@@ -729,6 +784,22 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  OutputTypeOutputSecurityLake,
 			Value: &outputSecurityLake,
+		})
+	}
+
+	var outputChronicle OutputChronicle = OutputChronicle{}
+	if err := utils.UnmarshalJSON(data, &outputChronicle, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputChronicle,
+			Value: &outputChronicle,
+		})
+	}
+
+	var outputDatabricks OutputDatabricks = OutputDatabricks{}
+	if err := utils.UnmarshalJSON(data, &outputDatabricks, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputDatabricks,
+			Value: &outputDatabricks,
 		})
 	}
 
@@ -777,6 +848,22 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  OutputTypeOutputClickHouse,
 			Value: &outputClickHouse,
+		})
+	}
+
+	var outputMicrosoftFabric OutputMicrosoftFabric = OutputMicrosoftFabric{}
+	if err := utils.UnmarshalJSON(data, &outputMicrosoftFabric, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputMicrosoftFabric,
+			Value: &outputMicrosoftFabric,
+		})
+	}
+
+	var outputCloudflareR2 OutputCloudflareR2 = OutputCloudflareR2{}
+	if err := utils.UnmarshalJSON(data, &outputCloudflareR2, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputCloudflareR2,
+			Value: &outputCloudflareR2,
 		})
 	}
 
@@ -1196,6 +1283,14 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var outputSentinelOneAiSiem OutputSentinelOneAiSiem = OutputSentinelOneAiSiem{}
+	if err := utils.UnmarshalJSON(data, &outputSentinelOneAiSiem, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputSentinelOneAiSiem,
+			Value: &outputSentinelOneAiSiem,
+		})
+	}
+
 	var outputGrafanaCloud OutputGrafanaCloud = OutputGrafanaCloud{}
 	if err := utils.UnmarshalJSON(data, &outputGrafanaCloud, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1239,6 +1334,12 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 	case OutputTypeOutputSecurityLake:
 		u.OutputSecurityLake = best.Value.(*OutputSecurityLake)
 		return nil
+	case OutputTypeOutputChronicle:
+		u.OutputChronicle = best.Value.(*OutputChronicle)
+		return nil
+	case OutputTypeOutputDatabricks:
+		u.OutputDatabricks = best.Value.(*OutputDatabricks)
+		return nil
 	case OutputTypeOutputSentinel:
 		u.OutputSentinel = best.Value.(*OutputSentinel)
 		return nil
@@ -1256,6 +1357,12 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	case OutputTypeOutputClickHouse:
 		u.OutputClickHouse = best.Value.(*OutputClickHouse)
+		return nil
+	case OutputTypeOutputMicrosoftFabric:
+		u.OutputMicrosoftFabric = best.Value.(*OutputMicrosoftFabric)
+		return nil
+	case OutputTypeOutputCloudflareR2:
+		u.OutputCloudflareR2 = best.Value.(*OutputCloudflareR2)
 		return nil
 	case OutputTypeOutputDefault:
 		u.OutputDefault = best.Value.(*OutputDefault)
@@ -1412,6 +1519,9 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	case OutputTypeOutputDynatraceOtlp:
 		u.OutputDynatraceOtlp = best.Value.(*OutputDynatraceOtlp)
+		return nil
+	case OutputTypeOutputSentinelOneAiSiem:
+		u.OutputSentinelOneAiSiem = best.Value.(*OutputSentinelOneAiSiem)
 		return nil
 	case OutputTypeOutputGrafanaCloud:
 		u.OutputGrafanaCloud = best.Value.(*OutputGrafanaCloud)
@@ -1678,6 +1788,26 @@ func (u Output) MarshalJSON() ([]byte, error) {
 
 	if u.OutputDynatraceOtlp != nil {
 		return utils.MarshalJSON(u.OutputDynatraceOtlp, "", true)
+	}
+
+	if u.OutputSentinelOneAiSiem != nil {
+		return utils.MarshalJSON(u.OutputSentinelOneAiSiem, "", true)
+	}
+
+	if u.OutputChronicle != nil {
+		return utils.MarshalJSON(u.OutputChronicle, "", true)
+	}
+
+	if u.OutputDatabricks != nil {
+		return utils.MarshalJSON(u.OutputDatabricks, "", true)
+	}
+
+	if u.OutputMicrosoftFabric != nil {
+		return utils.MarshalJSON(u.OutputMicrosoftFabric, "", true)
+	}
+
+	if u.OutputCloudflareR2 != nil {
+		return utils.MarshalJSON(u.OutputCloudflareR2, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type Output: all fields are null")

@@ -334,34 +334,34 @@ func (e *ExtraLogType) GetDescription() *string {
 	return e.Description
 }
 
-type CustomLabel struct {
+type OutputGoogleChronicleCustomLabel struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
-func (c CustomLabel) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
+func (o OutputGoogleChronicleCustomLabel) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
 }
 
-func (c *CustomLabel) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"key", "value"}); err != nil {
+func (o *OutputGoogleChronicleCustomLabel) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"key", "value"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *CustomLabel) GetKey() string {
-	if c == nil {
+func (o *OutputGoogleChronicleCustomLabel) GetKey() string {
+	if o == nil {
 		return ""
 	}
-	return c.Key
+	return o.Key
 }
 
-func (c *CustomLabel) GetValue() string {
-	if c == nil {
+func (o *OutputGoogleChronicleCustomLabel) GetValue() string {
+	if o == nil {
 		return ""
 	}
-	return c.Value
+	return o.Value
 }
 
 // OutputGoogleChronicleCompression - Codec to use to compress the persisted data
@@ -524,7 +524,7 @@ type OutputGoogleChronicle struct {
 	// User-configured environment namespace to identify the data domain the logs originated from. Use namespace as a tag to identify the appropriate data domain for indexing and enrichment functionality. Can be overwritten by event field __namespace.
 	Namespace *string `json:"namespace,omitempty"`
 	// Custom labels to be added to every batch
-	CustomLabels []CustomLabel `json:"customLabels,omitempty"`
+	CustomLabels []OutputGoogleChronicleCustomLabel `json:"customLabels,omitempty"`
 	// Organization's API key in Google SecOps
 	APIKey *string `json:"apiKey,omitempty"`
 	// Select or create a stored text secret
@@ -783,7 +783,7 @@ func (o *OutputGoogleChronicle) GetNamespace() *string {
 	return o.Namespace
 }
 
-func (o *OutputGoogleChronicle) GetCustomLabels() []CustomLabel {
+func (o *OutputGoogleChronicle) GetCustomLabels() []OutputGoogleChronicleCustomLabel {
 	if o == nil {
 		return nil
 	}

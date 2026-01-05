@@ -14,7 +14,7 @@ type OutputGoogleChronicle struct {
 	Compress                        types.Bool                                  `tfsdk:"compress"`
 	Concurrency                     types.Float64                               `tfsdk:"concurrency"`
 	CustomerID                      types.String                                `tfsdk:"customer_id"`
-	CustomLabels                    []CustomLabel                               `tfsdk:"custom_labels"`
+	CustomLabels                    []OutputGoogleChronicleCustomLabel          `tfsdk:"custom_labels"`
 	Description                     types.String                                `tfsdk:"description"`
 	Environment                     types.String                                `tfsdk:"environment"`
 	ExtraHTTPHeaders                []OutputGoogleChronicleExtraHTTPHeader      `tfsdk:"extra_http_headers"`

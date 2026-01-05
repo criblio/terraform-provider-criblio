@@ -280,6 +280,85 @@ resource "criblio_pack_destination" "my_packdestination" {
     workspace_id        = "22222222-2222-2222-2222-222222222222"
     workspace_key       = "***REDACTED***"
   }
+  output_chronicle = {
+    api_version           = "...my_api_version..."
+    authentication_method = "serviceAccount"
+    compress              = true
+    concurrency           = 25.61
+    custom_labels = [
+      {
+        key          = "...my_key..."
+        rbac_enabled = false
+        value        = "...my_value..."
+      }
+    ]
+    description = "...my_description..."
+    environment = "...my_environment..."
+    extra_http_headers = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    failed_request_logging_mode = "payload"
+    flush_period_sec            = 0.11
+    gcp_instance                = "...my_gcp_instance..."
+    gcp_project_id              = "...my_gcp_project_id..."
+    id                          = "...my_id..."
+    ingestion_method            = "...my_ingestion_method..."
+    log_text_field              = "...my_log_text_field..."
+    log_type                    = "...my_log_type..."
+    max_payload_events          = 5.04
+    max_payload_size_kb         = 2620.78
+    namespace                   = "...my_namespace..."
+    on_backpressure             = "block"
+    pipeline                    = "...my_pipeline..."
+    pq_compress                 = "gzip"
+    pq_controls = {
+      # ...
+    }
+    pq_max_backpressure_sec           = 8.78
+    pq_max_buffer_size                = 961.48
+    pq_max_file_size                  = "...my_pq_max_file_size..."
+    pq_max_size                       = "...my_pq_max_size..."
+    pq_mode                           = "error"
+    pq_on_backpressure                = "block"
+    pq_path                           = "...my_pq_path..."
+    pq_rate_per_sec                   = 5.18
+    pq_strict_ordering                = false
+    region                            = "...my_region..."
+    reject_unauthorized               = false
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+      {
+        backoff_rate    = 13.66
+        http_status     = 575.57
+        initial_backoff = 12382.43
+        max_backoff     = 140551.67
+      }
+    ]
+    safe_headers = [
+      "..."
+    ]
+    service_account_credentials        = "...my_service_account_credentials..."
+    service_account_credentials_secret = "...my_service_account_credentials_secret..."
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    timeout_retry_settings = {
+      backoff_rate    = 19.58
+      initial_backoff = 476612.3
+      max_backoff     = 154167.96
+      timeout_retry   = true
+    }
+    timeout_sec           = 4865019203906175
+    total_memory_limit_kb = 6.13
+    type                  = "chronicle"
+    use_round_robin_dns   = true
+  }
   output_click_house = {
     async_inserts    = true
     auth_header_expr = "`Bearer ${token}`"
@@ -394,6 +473,74 @@ resource "criblio_pack_destination" "my_packdestination" {
     use_round_robin_dns    = true
     username               = "clickuser"
     wait_for_async_inserts = true
+  }
+  output_cloudflare_r2 = {
+    add_id_to_stage_path      = false
+    automatic_schema          = true
+    aws_api_key               = "...my_aws_api_key..."
+    aws_authentication_method = "secret"
+    aws_secret                = "...my_aws_secret..."
+    aws_secret_key            = "...my_aws_secret_key..."
+    base_file_name            = "...my_base_file_name..."
+    bucket                    = "...my_bucket..."
+    compress                  = "none"
+    compression_level         = "best_speed"
+    deadletter_enabled        = true
+    deadletter_path           = "...my_deadletter_path..."
+    description               = "...my_description..."
+    dest_path                 = "...my_dest_path..."
+    directory_batch_size      = 0.49
+    empty_dir_cleanup_sec     = 21545.04
+    enable_page_checksum      = false
+    enable_statistics         = true
+    enable_write_page_index   = false
+    endpoint                  = "...my_endpoint..."
+    environment               = "...my_environment..."
+    file_name_suffix          = "...my_file_name_suffix..."
+    force_close_on_shutdown   = true
+    format                    = "parquet"
+    header_line               = "...my_header_line..."
+    id                        = "...my_id..."
+    key_value_metadata = [
+      {
+        key   = "...my_key..."
+        value = "...my_value..."
+      }
+    ]
+    max_concurrent_file_parts = 3.4
+    max_file_idle_time_sec    = 84949.45
+    max_file_open_time_sec    = 59360.77
+    max_file_size_mb          = 410.5
+    max_open_files            = 1667.28
+    max_retry_num             = 10.21
+    object_acl                = "{ \"see\": \"documentation\" }"
+    on_backpressure           = "block"
+    on_disk_full_backpressure = "drop"
+    parquet_data_page_version = "DATA_PAGE_V1"
+    parquet_page_size         = "...my_parquet_page_size..."
+    parquet_row_group_length  = 30271683.86
+    parquet_schema            = "...my_parquet_schema..."
+    parquet_version           = "PARQUET_2_4"
+    partition_expr            = "...my_partition_expr..."
+    pipeline                  = "...my_pipeline..."
+    region                    = "{ \"see\": \"documentation\" }"
+    reject_unauthorized       = false
+    remove_empty_dirs         = true
+    reuse_connections         = true
+    server_side_encryption    = "AES256"
+    should_log_invalid_rows   = true
+    signature_version         = "v2"
+    stage_path                = "...my_stage_path..."
+    storage_class             = "STANDARD"
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    type                  = "cloudflare_r2"
+    verify_permissions    = false
+    write_high_water_mark = 1607.6
   }
   output_cloudwatch = {
     assume_role_arn           = "arn:aws:iam::123456789012:role/CloudWatchLogsWriter"
@@ -740,6 +887,67 @@ resource "criblio_pack_destination" "my_packdestination" {
     type                = "crowdstrike_next_gen_siem"
     url                 = "https://ingest.us-1.crowdstrike.com/api/ingest/hec/abcd1234/v1/services/collector"
     use_round_robin_dns = true
+  }
+  output_databricks = {
+    add_id_to_stage_path    = false
+    automatic_schema        = true
+    base_file_name          = "...my_base_file_name..."
+    catalog                 = "...my_catalog..."
+    client_id               = "...my_client_id..."
+    client_text_secret      = "...my_client_text_secret..."
+    compress                = "gzip"
+    compression_level       = "best_compression"
+    deadletter_enabled      = true
+    deadletter_path         = "...my_deadletter_path..."
+    description             = "...my_description..."
+    dest_path               = "...my_dest_path..."
+    directory_batch_size    = 8.14
+    empty_dir_cleanup_sec   = 72689.38
+    enable_page_checksum    = false
+    enable_statistics       = false
+    enable_write_page_index = true
+    environment             = "...my_environment..."
+    events_volume_name      = "...my_events_volume_name..."
+    file_name_suffix        = "...my_file_name_suffix..."
+    force_close_on_shutdown = false
+    format                  = "json"
+    header_line             = "...my_header_line..."
+    id                      = "...my_id..."
+    key_value_metadata = [
+      {
+        key   = "...my_key..."
+        value = "...my_value..."
+      }
+    ]
+    max_file_idle_time_sec    = 681.94
+    max_file_open_time_sec    = 993.14
+    max_file_size_mb          = 727.03
+    max_open_files            = 389.22
+    max_retry_num             = 6.59
+    on_backpressure           = "block"
+    on_disk_full_backpressure = "drop"
+    parquet_data_page_version = "DATA_PAGE_V1"
+    parquet_page_size         = "...my_parquet_page_size..."
+    parquet_row_group_length  = 15677567.64
+    parquet_schema            = "...my_parquet_schema..."
+    parquet_version           = "PARQUET_2_6"
+    partition_expr            = "...my_partition_expr..."
+    pipeline                  = "...my_pipeline..."
+    remove_empty_dirs         = true
+    schema                    = "...my_schema..."
+    scope                     = "...my_scope..."
+    should_log_invalid_rows   = true
+    stage_path                = "...my_stage_path..."
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    timeout_sec           = 35.93
+    type                  = "databricks"
+    workspace_id          = "...my_workspace_id..."
+    write_high_water_mark = 2087.98
   }
   output_datadog = {
     allow_api_key_from_events = false
@@ -2216,6 +2424,68 @@ resource "criblio_pack_destination" "my_packdestination" {
     use_round_robin_dns   = true
     username              = 12345
   }
+  output_microsoft_fabric = {
+    ack                    = 9
+    authentication_timeout = 3288750.42
+    backoff_rate           = 5.11
+    bootstrap_server       = "...my_bootstrap_server..."
+    connection_timeout     = 1684445.58
+    description            = "...my_description..."
+    environment            = "...my_environment..."
+    flush_event_count      = 1487.63
+    flush_period_sec       = 1.31
+    format                 = "json"
+    id                     = "...my_id..."
+    initial_backoff        = 29883.16
+    max_back_off           = 77303.8
+    max_record_size_kb     = 6.17
+    max_retries            = 97.46
+    on_backpressure        = "drop"
+    pipeline               = "...my_pipeline..."
+    pq_compress            = "none"
+    pq_controls = {
+      # ...
+    }
+    pq_max_backpressure_sec    = 0.99
+    pq_max_buffer_size         = 672.08
+    pq_max_file_size           = "...my_pq_max_file_size..."
+    pq_max_size                = "...my_pq_max_size..."
+    pq_mode                    = "error"
+    pq_on_backpressure         = "block"
+    pq_path                    = "...my_pq_path..."
+    pq_rate_per_sec            = 8.31
+    pq_strict_ordering         = true
+    reauthentication_threshold = 288466.03
+    request_timeout            = 1480874.35
+    sasl = {
+      cert_path               = "...my_cert_path..."
+      certificate_name        = "...my_certificate_name..."
+      client_id               = "...my_client_id..."
+      client_secret_auth_type = "secret"
+      client_text_secret      = "...my_client_text_secret..."
+      disabled                = true
+      mechanism               = "plain"
+      oauth_endpoint          = "https://login.partner.microsoftonline.cn"
+      passphrase              = "...my_passphrase..."
+      priv_key_path           = "...my_priv_key_path..."
+      scope                   = "...my_scope..."
+      tenant_id               = "...my_tenant_id..."
+      text_secret             = "...my_text_secret..."
+      username                = "...my_username..."
+    }
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    tls = {
+      disabled            = false
+      reject_unauthorized = false
+    }
+    topic = "...my_topic..."
+    type  = "microsoft_fabric"
+  }
   output_minio = {
     add_id_to_stage_path      = true
     automatic_schema          = true
@@ -2997,6 +3267,85 @@ resource "criblio_pack_destination" "my_packdestination" {
     type                  = "sentinel"
     url                   = "https://example.dce.ingest.monitor.azure.com"
     use_round_robin_dns   = true
+  }
+  output_sentinel_one_ai_siem = {
+    auth_type                       = "secret"
+    base_url                        = "...my_base_url..."
+    compress                        = false
+    concurrency                     = 31.25
+    data_source_category            = "...my_data_source_category..."
+    data_source_category_expression = "...my_data_source_category_expression..."
+    data_source_name                = "...my_data_source_name..."
+    data_source_name_expression     = "...my_data_source_name_expression..."
+    data_source_vendor              = "...my_data_source_vendor..."
+    data_source_vendor_expression   = "...my_data_source_vendor_expression..."
+    description                     = "...my_description..."
+    endpoint                        = "/services/collector/event"
+    environment                     = "...my_environment..."
+    event_type                      = "...my_event_type..."
+    event_type_expression           = "...my_event_type_expression..."
+    extra_http_headers = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    failed_request_logging_mode = "none"
+    flush_period_sec            = 9.1
+    host                        = "...my_host..."
+    host_expression             = "...my_host_expression..."
+    id                          = "...my_id..."
+    max_payload_events          = 2.86
+    max_payload_size_kb         = 1688557.17
+    on_backpressure             = "queue"
+    pipeline                    = "...my_pipeline..."
+    pq_compress                 = "gzip"
+    pq_controls = {
+      # ...
+    }
+    pq_max_backpressure_sec           = 7.17
+    pq_max_buffer_size                = 752.28
+    pq_max_file_size                  = "...my_pq_max_file_size..."
+    pq_max_size                       = "...my_pq_max_size..."
+    pq_mode                           = "error"
+    pq_on_backpressure                = "drop"
+    pq_path                           = "...my_pq_path..."
+    pq_rate_per_sec                   = 3.06
+    pq_strict_ordering                = false
+    region                            = "EMEA"
+    reject_unauthorized               = false
+    response_honor_retry_after_header = false
+    response_retry_settings = [
+      {
+        backoff_rate    = 16.04
+        http_status     = 446.64
+        initial_backoff = 39944.69
+        max_backoff     = 147908.36
+      }
+    ]
+    safe_headers = [
+      "..."
+    ]
+    source                 = "...my_source..."
+    source_expression      = "...my_source_expression..."
+    source_type            = "...my_source_type..."
+    source_type_expression = "...my_source_type_expression..."
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    text_secret = "...my_text_secret..."
+    timeout_retry_settings = {
+      backoff_rate    = 16.03
+      initial_backoff = 80266.12
+      max_backoff     = 22615.81
+      timeout_retry   = false
+    }
+    timeout_sec = 4122508657543719
+    token       = "...my_token..."
+    type        = "sentinel_one_ai_siem"
   }
   output_service_now = {
     auth_token_name    = "lightstep-access-token"

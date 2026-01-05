@@ -4640,9 +4640,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			ingestMode = nil
 		}
-		oauthEndpoint := new(shared.MicrosoftEntraIDAuthenticationEndpoint)
+		oauthEndpoint := new(shared.OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint)
 		if !r.OutputAzureDataExplorer.OauthEndpoint.IsUnknown() && !r.OutputAzureDataExplorer.OauthEndpoint.IsNull() {
-			*oauthEndpoint = shared.MicrosoftEntraIDAuthenticationEndpoint(r.OutputAzureDataExplorer.OauthEndpoint.ValueString())
+			*oauthEndpoint = shared.OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint(r.OutputAzureDataExplorer.OauthEndpoint.ValueString())
 		} else {
 			oauthEndpoint = nil
 		}
@@ -6424,7 +6424,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			namespace = nil
 		}
-		customLabels := make([]shared.CustomLabel, 0, len(r.OutputGoogleChronicle.CustomLabels))
+		customLabels := make([]shared.OutputGoogleChronicleCustomLabel, 0, len(r.OutputGoogleChronicle.CustomLabels))
 		for customLabelsIndex := range r.OutputGoogleChronicle.CustomLabels {
 			var key4 string
 			key4 = r.OutputGoogleChronicle.CustomLabels[customLabelsIndex].Key.ValueString()
@@ -6432,7 +6432,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var value16 string
 			value16 = r.OutputGoogleChronicle.CustomLabels[customLabelsIndex].Value.ValueString()
 
-			customLabels = append(customLabels, shared.CustomLabel{
+			customLabels = append(customLabels, shared.OutputGoogleChronicleCustomLabel{
 				Key:   key4,
 				Value: value16,
 			})
@@ -11376,9 +11376,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			storageClass4 = nil
 		}
-		serverSideEncryption1 := new(shared.ServerSideEncryption)
+		serverSideEncryption1 := new(shared.OutputMinioServerSideEncryption)
 		if !r.OutputMinio.ServerSideEncryption.IsUnknown() && !r.OutputMinio.ServerSideEncryption.IsNull() {
-			*serverSideEncryption1 = shared.ServerSideEncryption(r.OutputMinio.ServerSideEncryption.ValueString())
+			*serverSideEncryption1 = shared.OutputMinioServerSideEncryption(r.OutputMinio.ServerSideEncryption.ValueString())
 		} else {
 			serverSideEncryption1 = nil
 		}
@@ -20290,6 +20290,1917 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	if outputDynatraceOtlp != nil {
 		out = shared.Output{
 			OutputDynatraceOtlp: outputDynatraceOtlp,
+		}
+	}
+	var outputSentinelOneAiSiem *shared.OutputSentinelOneAiSiem
+	if r.OutputSentinelOneAiSiem != nil {
+		id64 := new(string)
+		if !r.OutputSentinelOneAiSiem.ID.IsUnknown() && !r.OutputSentinelOneAiSiem.ID.IsNull() {
+			*id64 = r.OutputSentinelOneAiSiem.ID.ValueString()
+		} else {
+			id64 = nil
+		}
+		typeVar64 := shared.OutputSentinelOneAiSiemType(r.OutputSentinelOneAiSiem.Type.ValueString())
+		pipeline63 := new(string)
+		if !r.OutputSentinelOneAiSiem.Pipeline.IsUnknown() && !r.OutputSentinelOneAiSiem.Pipeline.IsNull() {
+			*pipeline63 = r.OutputSentinelOneAiSiem.Pipeline.ValueString()
+		} else {
+			pipeline63 = nil
+		}
+		systemFields63 := make([]string, 0, len(r.OutputSentinelOneAiSiem.SystemFields))
+		for systemFieldsIndex63 := range r.OutputSentinelOneAiSiem.SystemFields {
+			systemFields63 = append(systemFields63, r.OutputSentinelOneAiSiem.SystemFields[systemFieldsIndex63].ValueString())
+		}
+		environment63 := new(string)
+		if !r.OutputSentinelOneAiSiem.Environment.IsUnknown() && !r.OutputSentinelOneAiSiem.Environment.IsNull() {
+			*environment63 = r.OutputSentinelOneAiSiem.Environment.ValueString()
+		} else {
+			environment63 = nil
+		}
+		streamtags63 := make([]string, 0, len(r.OutputSentinelOneAiSiem.Streamtags))
+		for streamtagsIndex63 := range r.OutputSentinelOneAiSiem.Streamtags {
+			streamtags63 = append(streamtags63, r.OutputSentinelOneAiSiem.Streamtags[streamtagsIndex63].ValueString())
+		}
+		region15 := new(shared.OutputSentinelOneAiSiemRegion)
+		if !r.OutputSentinelOneAiSiem.Region.IsUnknown() && !r.OutputSentinelOneAiSiem.Region.IsNull() {
+			*region15 = shared.OutputSentinelOneAiSiemRegion(r.OutputSentinelOneAiSiem.Region.ValueString())
+		} else {
+			region15 = nil
+		}
+		endpoint15 := new(shared.AISIEMEndpointPath)
+		if !r.OutputSentinelOneAiSiem.Endpoint.IsUnknown() && !r.OutputSentinelOneAiSiem.Endpoint.IsNull() {
+			*endpoint15 = shared.AISIEMEndpointPath(r.OutputSentinelOneAiSiem.Endpoint.ValueString())
+		} else {
+			endpoint15 = nil
+		}
+		concurrency32 := new(float64)
+		if !r.OutputSentinelOneAiSiem.Concurrency.IsUnknown() && !r.OutputSentinelOneAiSiem.Concurrency.IsNull() {
+			*concurrency32 = r.OutputSentinelOneAiSiem.Concurrency.ValueFloat64()
+		} else {
+			concurrency32 = nil
+		}
+		maxPayloadSizeKb31 := new(float64)
+		if !r.OutputSentinelOneAiSiem.MaxPayloadSizeKB.IsUnknown() && !r.OutputSentinelOneAiSiem.MaxPayloadSizeKB.IsNull() {
+			*maxPayloadSizeKb31 = r.OutputSentinelOneAiSiem.MaxPayloadSizeKB.ValueFloat64()
+		} else {
+			maxPayloadSizeKb31 = nil
+		}
+		maxPayloadEvents28 := new(float64)
+		if !r.OutputSentinelOneAiSiem.MaxPayloadEvents.IsUnknown() && !r.OutputSentinelOneAiSiem.MaxPayloadEvents.IsNull() {
+			*maxPayloadEvents28 = r.OutputSentinelOneAiSiem.MaxPayloadEvents.ValueFloat64()
+		} else {
+			maxPayloadEvents28 = nil
+		}
+		compress37 := new(bool)
+		if !r.OutputSentinelOneAiSiem.Compress.IsUnknown() && !r.OutputSentinelOneAiSiem.Compress.IsNull() {
+			*compress37 = r.OutputSentinelOneAiSiem.Compress.ValueBool()
+		} else {
+			compress37 = nil
+		}
+		rejectUnauthorized57 := new(bool)
+		if !r.OutputSentinelOneAiSiem.RejectUnauthorized.IsUnknown() && !r.OutputSentinelOneAiSiem.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized57 = r.OutputSentinelOneAiSiem.RejectUnauthorized.ValueBool()
+		} else {
+			rejectUnauthorized57 = nil
+		}
+		timeoutSec31 := new(float64)
+		if !r.OutputSentinelOneAiSiem.TimeoutSec.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutSec.IsNull() {
+			*timeoutSec31 = r.OutputSentinelOneAiSiem.TimeoutSec.ValueFloat64()
+		} else {
+			timeoutSec31 = nil
+		}
+		flushPeriodSec42 := new(float64)
+		if !r.OutputSentinelOneAiSiem.FlushPeriodSec.IsUnknown() && !r.OutputSentinelOneAiSiem.FlushPeriodSec.IsNull() {
+			*flushPeriodSec42 = r.OutputSentinelOneAiSiem.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec42 = nil
+		}
+		extraHTTPHeaders29 := make([]shared.OutputSentinelOneAiSiemExtraHTTPHeader, 0, len(r.OutputSentinelOneAiSiem.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex29 := range r.OutputSentinelOneAiSiem.ExtraHTTPHeaders {
+			name45 := new(string)
+			if !r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Name.IsUnknown() && !r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Name.IsNull() {
+				*name45 = r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Name.ValueString()
+			} else {
+				name45 = nil
+			}
+			var value59 string
+			value59 = r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Value.ValueString()
+
+			extraHTTPHeaders29 = append(extraHTTPHeaders29, shared.OutputSentinelOneAiSiemExtraHTTPHeader{
+				Name:  name45,
+				Value: value59,
+			})
+		}
+		failedRequestLoggingMode29 := new(shared.OutputSentinelOneAiSiemFailedRequestLoggingMode)
+		if !r.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsUnknown() && !r.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsNull() {
+			*failedRequestLoggingMode29 = shared.OutputSentinelOneAiSiemFailedRequestLoggingMode(r.OutputSentinelOneAiSiem.FailedRequestLoggingMode.ValueString())
+		} else {
+			failedRequestLoggingMode29 = nil
+		}
+		safeHeaders29 := make([]string, 0, len(r.OutputSentinelOneAiSiem.SafeHeaders))
+		for safeHeadersIndex29 := range r.OutputSentinelOneAiSiem.SafeHeaders {
+			safeHeaders29 = append(safeHeaders29, r.OutputSentinelOneAiSiem.SafeHeaders[safeHeadersIndex29].ValueString())
+		}
+		authType32 := new(shared.OutputSentinelOneAiSiemAuthenticationMethod)
+		if !r.OutputSentinelOneAiSiem.AuthType.IsUnknown() && !r.OutputSentinelOneAiSiem.AuthType.IsNull() {
+			*authType32 = shared.OutputSentinelOneAiSiemAuthenticationMethod(r.OutputSentinelOneAiSiem.AuthType.ValueString())
+		} else {
+			authType32 = nil
+		}
+		responseRetrySettings30 := make([]shared.OutputSentinelOneAiSiemResponseRetrySetting, 0, len(r.OutputSentinelOneAiSiem.ResponseRetrySettings))
+		for responseRetrySettingsIndex30 := range r.OutputSentinelOneAiSiem.ResponseRetrySettings {
+			var httpStatus30 float64
+			httpStatus30 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].HTTPStatus.ValueFloat64()
+
+			initialBackoff64 := new(float64)
+			if !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].InitialBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].InitialBackoff.IsNull() {
+				*initialBackoff64 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff64 = nil
+			}
+			backoffRate64 := new(float64)
+			if !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].BackoffRate.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].BackoffRate.IsNull() {
+				*backoffRate64 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].BackoffRate.ValueFloat64()
+			} else {
+				backoffRate64 = nil
+			}
+			maxBackoff60 := new(float64)
+			if !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].MaxBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].MaxBackoff.IsNull() {
+				*maxBackoff60 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex30].MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff60 = nil
+			}
+			responseRetrySettings30 = append(responseRetrySettings30, shared.OutputSentinelOneAiSiemResponseRetrySetting{
+				HTTPStatus:     httpStatus30,
+				InitialBackoff: initialBackoff64,
+				BackoffRate:    backoffRate64,
+				MaxBackoff:     maxBackoff60,
+			})
+		}
+		var timeoutRetrySettings30 *shared.OutputSentinelOneAiSiemTimeoutRetrySettings
+		if r.OutputSentinelOneAiSiem.TimeoutRetrySettings != nil {
+			timeoutRetry30 := new(bool)
+			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry.IsNull() {
+				*timeoutRetry30 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			} else {
+				timeoutRetry30 = nil
+			}
+			initialBackoff65 := new(float64)
+			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff.IsNull() {
+				*initialBackoff65 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff65 = nil
+			}
+			backoffRate65 := new(float64)
+			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate.IsNull() {
+				*backoffRate65 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+			} else {
+				backoffRate65 = nil
+			}
+			maxBackoff61 := new(float64)
+			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff.IsNull() {
+				*maxBackoff61 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff61 = nil
+			}
+			timeoutRetrySettings30 = &shared.OutputSentinelOneAiSiemTimeoutRetrySettings{
+				TimeoutRetry:   timeoutRetry30,
+				InitialBackoff: initialBackoff65,
+				BackoffRate:    backoffRate65,
+				MaxBackoff:     maxBackoff61,
+			}
+		}
+		responseHonorRetryAfterHeader30 := new(bool)
+		if !r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsNull() {
+			*responseHonorRetryAfterHeader30 = r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.ValueBool()
+		} else {
+			responseHonorRetryAfterHeader30 = nil
+		}
+		onBackpressure56 := new(shared.OutputSentinelOneAiSiemBackpressureBehavior)
+		if !r.OutputSentinelOneAiSiem.OnBackpressure.IsUnknown() && !r.OutputSentinelOneAiSiem.OnBackpressure.IsNull() {
+			*onBackpressure56 = shared.OutputSentinelOneAiSiemBackpressureBehavior(r.OutputSentinelOneAiSiem.OnBackpressure.ValueString())
+		} else {
+			onBackpressure56 = nil
+		}
+		description64 := new(string)
+		if !r.OutputSentinelOneAiSiem.Description.IsUnknown() && !r.OutputSentinelOneAiSiem.Description.IsNull() {
+			*description64 = r.OutputSentinelOneAiSiem.Description.ValueString()
+		} else {
+			description64 = nil
+		}
+		token17 := new(string)
+		if !r.OutputSentinelOneAiSiem.Token.IsUnknown() && !r.OutputSentinelOneAiSiem.Token.IsNull() {
+			*token17 = r.OutputSentinelOneAiSiem.Token.ValueString()
+		} else {
+			token17 = nil
+		}
+		textSecret28 := new(string)
+		if !r.OutputSentinelOneAiSiem.TextSecret.IsUnknown() && !r.OutputSentinelOneAiSiem.TextSecret.IsNull() {
+			*textSecret28 = r.OutputSentinelOneAiSiem.TextSecret.ValueString()
+		} else {
+			textSecret28 = nil
+		}
+		baseURL := new(string)
+		if !r.OutputSentinelOneAiSiem.BaseURL.IsUnknown() && !r.OutputSentinelOneAiSiem.BaseURL.IsNull() {
+			*baseURL = r.OutputSentinelOneAiSiem.BaseURL.ValueString()
+		} else {
+			baseURL = nil
+		}
+		hostExpression := new(string)
+		if !r.OutputSentinelOneAiSiem.HostExpression.IsUnknown() && !r.OutputSentinelOneAiSiem.HostExpression.IsNull() {
+			*hostExpression = r.OutputSentinelOneAiSiem.HostExpression.ValueString()
+		} else {
+			hostExpression = nil
+		}
+		sourceExpression := new(string)
+		if !r.OutputSentinelOneAiSiem.SourceExpression.IsUnknown() && !r.OutputSentinelOneAiSiem.SourceExpression.IsNull() {
+			*sourceExpression = r.OutputSentinelOneAiSiem.SourceExpression.ValueString()
+		} else {
+			sourceExpression = nil
+		}
+		sourceTypeExpression := new(string)
+		if !r.OutputSentinelOneAiSiem.SourceTypeExpression.IsUnknown() && !r.OutputSentinelOneAiSiem.SourceTypeExpression.IsNull() {
+			*sourceTypeExpression = r.OutputSentinelOneAiSiem.SourceTypeExpression.ValueString()
+		} else {
+			sourceTypeExpression = nil
+		}
+		dataSourceCategoryExpression := new(string)
+		if !r.OutputSentinelOneAiSiem.DataSourceCategoryExpression.IsUnknown() && !r.OutputSentinelOneAiSiem.DataSourceCategoryExpression.IsNull() {
+			*dataSourceCategoryExpression = r.OutputSentinelOneAiSiem.DataSourceCategoryExpression.ValueString()
+		} else {
+			dataSourceCategoryExpression = nil
+		}
+		dataSourceNameExpression := new(string)
+		if !r.OutputSentinelOneAiSiem.DataSourceNameExpression.IsUnknown() && !r.OutputSentinelOneAiSiem.DataSourceNameExpression.IsNull() {
+			*dataSourceNameExpression = r.OutputSentinelOneAiSiem.DataSourceNameExpression.ValueString()
+		} else {
+			dataSourceNameExpression = nil
+		}
+		dataSourceVendorExpression := new(string)
+		if !r.OutputSentinelOneAiSiem.DataSourceVendorExpression.IsUnknown() && !r.OutputSentinelOneAiSiem.DataSourceVendorExpression.IsNull() {
+			*dataSourceVendorExpression = r.OutputSentinelOneAiSiem.DataSourceVendorExpression.ValueString()
+		} else {
+			dataSourceVendorExpression = nil
+		}
+		eventTypeExpression := new(string)
+		if !r.OutputSentinelOneAiSiem.EventTypeExpression.IsUnknown() && !r.OutputSentinelOneAiSiem.EventTypeExpression.IsNull() {
+			*eventTypeExpression = r.OutputSentinelOneAiSiem.EventTypeExpression.ValueString()
+		} else {
+			eventTypeExpression = nil
+		}
+		host13 := new(string)
+		if !r.OutputSentinelOneAiSiem.Host.IsUnknown() && !r.OutputSentinelOneAiSiem.Host.IsNull() {
+			*host13 = r.OutputSentinelOneAiSiem.Host.ValueString()
+		} else {
+			host13 = nil
+		}
+		source1 := new(string)
+		if !r.OutputSentinelOneAiSiem.Source.IsUnknown() && !r.OutputSentinelOneAiSiem.Source.IsNull() {
+			*source1 = r.OutputSentinelOneAiSiem.Source.ValueString()
+		} else {
+			source1 = nil
+		}
+		sourceType := new(string)
+		if !r.OutputSentinelOneAiSiem.SourceType.IsUnknown() && !r.OutputSentinelOneAiSiem.SourceType.IsNull() {
+			*sourceType = r.OutputSentinelOneAiSiem.SourceType.ValueString()
+		} else {
+			sourceType = nil
+		}
+		dataSourceCategory := new(string)
+		if !r.OutputSentinelOneAiSiem.DataSourceCategory.IsUnknown() && !r.OutputSentinelOneAiSiem.DataSourceCategory.IsNull() {
+			*dataSourceCategory = r.OutputSentinelOneAiSiem.DataSourceCategory.ValueString()
+		} else {
+			dataSourceCategory = nil
+		}
+		dataSourceName := new(string)
+		if !r.OutputSentinelOneAiSiem.DataSourceName.IsUnknown() && !r.OutputSentinelOneAiSiem.DataSourceName.IsNull() {
+			*dataSourceName = r.OutputSentinelOneAiSiem.DataSourceName.ValueString()
+		} else {
+			dataSourceName = nil
+		}
+		dataSourceVendor := new(string)
+		if !r.OutputSentinelOneAiSiem.DataSourceVendor.IsUnknown() && !r.OutputSentinelOneAiSiem.DataSourceVendor.IsNull() {
+			*dataSourceVendor = r.OutputSentinelOneAiSiem.DataSourceVendor.ValueString()
+		} else {
+			dataSourceVendor = nil
+		}
+		eventType1 := new(string)
+		if !r.OutputSentinelOneAiSiem.EventType.IsUnknown() && !r.OutputSentinelOneAiSiem.EventType.IsNull() {
+			*eventType1 = r.OutputSentinelOneAiSiem.EventType.ValueString()
+		} else {
+			eventType1 = nil
+		}
+		pqStrictOrdering := new(bool)
+		if !r.OutputSentinelOneAiSiem.PqStrictOrdering.IsUnknown() && !r.OutputSentinelOneAiSiem.PqStrictOrdering.IsNull() {
+			*pqStrictOrdering = r.OutputSentinelOneAiSiem.PqStrictOrdering.ValueBool()
+		} else {
+			pqStrictOrdering = nil
+		}
+		pqRatePerSec := new(float64)
+		if !r.OutputSentinelOneAiSiem.PqRatePerSec.IsUnknown() && !r.OutputSentinelOneAiSiem.PqRatePerSec.IsNull() {
+			*pqRatePerSec = r.OutputSentinelOneAiSiem.PqRatePerSec.ValueFloat64()
+		} else {
+			pqRatePerSec = nil
+		}
+		pqMode48 := new(shared.OutputSentinelOneAiSiemMode)
+		if !r.OutputSentinelOneAiSiem.PqMode.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMode.IsNull() {
+			*pqMode48 = shared.OutputSentinelOneAiSiemMode(r.OutputSentinelOneAiSiem.PqMode.ValueString())
+		} else {
+			pqMode48 = nil
+		}
+		pqMaxBufferSize := new(float64)
+		if !r.OutputSentinelOneAiSiem.PqMaxBufferSize.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMaxBufferSize.IsNull() {
+			*pqMaxBufferSize = r.OutputSentinelOneAiSiem.PqMaxBufferSize.ValueFloat64()
+		} else {
+			pqMaxBufferSize = nil
+		}
+		pqMaxBackpressureSec := new(float64)
+		if !r.OutputSentinelOneAiSiem.PqMaxBackpressureSec.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMaxBackpressureSec.IsNull() {
+			*pqMaxBackpressureSec = r.OutputSentinelOneAiSiem.PqMaxBackpressureSec.ValueFloat64()
+		} else {
+			pqMaxBackpressureSec = nil
+		}
+		pqMaxFileSize48 := new(string)
+		if !r.OutputSentinelOneAiSiem.PqMaxFileSize.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMaxFileSize.IsNull() {
+			*pqMaxFileSize48 = r.OutputSentinelOneAiSiem.PqMaxFileSize.ValueString()
+		} else {
+			pqMaxFileSize48 = nil
+		}
+		pqMaxSize48 := new(string)
+		if !r.OutputSentinelOneAiSiem.PqMaxSize.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMaxSize.IsNull() {
+			*pqMaxSize48 = r.OutputSentinelOneAiSiem.PqMaxSize.ValueString()
+		} else {
+			pqMaxSize48 = nil
+		}
+		pqPath48 := new(string)
+		if !r.OutputSentinelOneAiSiem.PqPath.IsUnknown() && !r.OutputSentinelOneAiSiem.PqPath.IsNull() {
+			*pqPath48 = r.OutputSentinelOneAiSiem.PqPath.ValueString()
+		} else {
+			pqPath48 = nil
+		}
+		pqCompress48 := new(shared.OutputSentinelOneAiSiemCompression)
+		if !r.OutputSentinelOneAiSiem.PqCompress.IsUnknown() && !r.OutputSentinelOneAiSiem.PqCompress.IsNull() {
+			*pqCompress48 = shared.OutputSentinelOneAiSiemCompression(r.OutputSentinelOneAiSiem.PqCompress.ValueString())
+		} else {
+			pqCompress48 = nil
+		}
+		pqOnBackpressure48 := new(shared.OutputSentinelOneAiSiemQueueFullBehavior)
+		if !r.OutputSentinelOneAiSiem.PqOnBackpressure.IsUnknown() && !r.OutputSentinelOneAiSiem.PqOnBackpressure.IsNull() {
+			*pqOnBackpressure48 = shared.OutputSentinelOneAiSiemQueueFullBehavior(r.OutputSentinelOneAiSiem.PqOnBackpressure.ValueString())
+		} else {
+			pqOnBackpressure48 = nil
+		}
+		var pqControls48 *shared.OutputSentinelOneAiSiemPqControls
+		if r.OutputSentinelOneAiSiem.PqControls != nil {
+			pqControls48 = &shared.OutputSentinelOneAiSiemPqControls{}
+		}
+		outputSentinelOneAiSiem = &shared.OutputSentinelOneAiSiem{
+			ID:                            id64,
+			Type:                          typeVar64,
+			Pipeline:                      pipeline63,
+			SystemFields:                  systemFields63,
+			Environment:                   environment63,
+			Streamtags:                    streamtags63,
+			Region:                        region15,
+			Endpoint:                      endpoint15,
+			Concurrency:                   concurrency32,
+			MaxPayloadSizeKB:              maxPayloadSizeKb31,
+			MaxPayloadEvents:              maxPayloadEvents28,
+			Compress:                      compress37,
+			RejectUnauthorized:            rejectUnauthorized57,
+			TimeoutSec:                    timeoutSec31,
+			FlushPeriodSec:                flushPeriodSec42,
+			ExtraHTTPHeaders:              extraHTTPHeaders29,
+			FailedRequestLoggingMode:      failedRequestLoggingMode29,
+			SafeHeaders:                   safeHeaders29,
+			AuthType:                      authType32,
+			ResponseRetrySettings:         responseRetrySettings30,
+			TimeoutRetrySettings:          timeoutRetrySettings30,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader30,
+			OnBackpressure:                onBackpressure56,
+			Description:                   description64,
+			Token:                         token17,
+			TextSecret:                    textSecret28,
+			BaseURL:                       baseURL,
+			HostExpression:                hostExpression,
+			SourceExpression:              sourceExpression,
+			SourceTypeExpression:          sourceTypeExpression,
+			DataSourceCategoryExpression:  dataSourceCategoryExpression,
+			DataSourceNameExpression:      dataSourceNameExpression,
+			DataSourceVendorExpression:    dataSourceVendorExpression,
+			EventTypeExpression:           eventTypeExpression,
+			Host:                          host13,
+			Source:                        source1,
+			SourceType:                    sourceType,
+			DataSourceCategory:            dataSourceCategory,
+			DataSourceName:                dataSourceName,
+			DataSourceVendor:              dataSourceVendor,
+			EventType:                     eventType1,
+			PqStrictOrdering:              pqStrictOrdering,
+			PqRatePerSec:                  pqRatePerSec,
+			PqMode:                        pqMode48,
+			PqMaxBufferSize:               pqMaxBufferSize,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec,
+			PqMaxFileSize:                 pqMaxFileSize48,
+			PqMaxSize:                     pqMaxSize48,
+			PqPath:                        pqPath48,
+			PqCompress:                    pqCompress48,
+			PqOnBackpressure:              pqOnBackpressure48,
+			PqControls:                    pqControls48,
+		}
+	}
+	if outputSentinelOneAiSiem != nil {
+		out = shared.Output{
+			OutputSentinelOneAiSiem: outputSentinelOneAiSiem,
+		}
+	}
+	var outputChronicle *shared.OutputChronicle
+	if r.OutputChronicle != nil {
+		id65 := new(string)
+		if !r.OutputChronicle.ID.IsUnknown() && !r.OutputChronicle.ID.IsNull() {
+			*id65 = r.OutputChronicle.ID.ValueString()
+		} else {
+			id65 = nil
+		}
+		typeVar65 := shared.OutputChronicleType(r.OutputChronicle.Type.ValueString())
+		pipeline64 := new(string)
+		if !r.OutputChronicle.Pipeline.IsUnknown() && !r.OutputChronicle.Pipeline.IsNull() {
+			*pipeline64 = r.OutputChronicle.Pipeline.ValueString()
+		} else {
+			pipeline64 = nil
+		}
+		systemFields64 := make([]string, 0, len(r.OutputChronicle.SystemFields))
+		for systemFieldsIndex64 := range r.OutputChronicle.SystemFields {
+			systemFields64 = append(systemFields64, r.OutputChronicle.SystemFields[systemFieldsIndex64].ValueString())
+		}
+		environment64 := new(string)
+		if !r.OutputChronicle.Environment.IsUnknown() && !r.OutputChronicle.Environment.IsNull() {
+			*environment64 = r.OutputChronicle.Environment.ValueString()
+		} else {
+			environment64 = nil
+		}
+		streamtags64 := make([]string, 0, len(r.OutputChronicle.Streamtags))
+		for streamtagsIndex64 := range r.OutputChronicle.Streamtags {
+			streamtags64 = append(streamtags64, r.OutputChronicle.Streamtags[streamtagsIndex64].ValueString())
+		}
+		apiVersion1 := new(string)
+		if !r.OutputChronicle.APIVersion.IsUnknown() && !r.OutputChronicle.APIVersion.IsNull() {
+			*apiVersion1 = r.OutputChronicle.APIVersion.ValueString()
+		} else {
+			apiVersion1 = nil
+		}
+		authenticationMethod1 := new(shared.OutputChronicleAuthenticationMethod)
+		if !r.OutputChronicle.AuthenticationMethod.IsUnknown() && !r.OutputChronicle.AuthenticationMethod.IsNull() {
+			*authenticationMethod1 = shared.OutputChronicleAuthenticationMethod(r.OutputChronicle.AuthenticationMethod.ValueString())
+		} else {
+			authenticationMethod1 = nil
+		}
+		responseRetrySettings31 := make([]shared.OutputChronicleResponseRetrySetting, 0, len(r.OutputChronicle.ResponseRetrySettings))
+		for responseRetrySettingsIndex31 := range r.OutputChronicle.ResponseRetrySettings {
+			var httpStatus31 float64
+			httpStatus31 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].HTTPStatus.ValueFloat64()
+
+			initialBackoff66 := new(float64)
+			if !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].InitialBackoff.IsUnknown() && !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].InitialBackoff.IsNull() {
+				*initialBackoff66 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff66 = nil
+			}
+			backoffRate66 := new(float64)
+			if !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].BackoffRate.IsUnknown() && !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].BackoffRate.IsNull() {
+				*backoffRate66 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].BackoffRate.ValueFloat64()
+			} else {
+				backoffRate66 = nil
+			}
+			maxBackoff62 := new(float64)
+			if !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].MaxBackoff.IsUnknown() && !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].MaxBackoff.IsNull() {
+				*maxBackoff62 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex31].MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff62 = nil
+			}
+			responseRetrySettings31 = append(responseRetrySettings31, shared.OutputChronicleResponseRetrySetting{
+				HTTPStatus:     httpStatus31,
+				InitialBackoff: initialBackoff66,
+				BackoffRate:    backoffRate66,
+				MaxBackoff:     maxBackoff62,
+			})
+		}
+		var timeoutRetrySettings31 *shared.OutputChronicleTimeoutRetrySettings
+		if r.OutputChronicle.TimeoutRetrySettings != nil {
+			timeoutRetry31 := new(bool)
+			if !r.OutputChronicle.TimeoutRetrySettings.TimeoutRetry.IsUnknown() && !r.OutputChronicle.TimeoutRetrySettings.TimeoutRetry.IsNull() {
+				*timeoutRetry31 = r.OutputChronicle.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			} else {
+				timeoutRetry31 = nil
+			}
+			initialBackoff67 := new(float64)
+			if !r.OutputChronicle.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputChronicle.TimeoutRetrySettings.InitialBackoff.IsNull() {
+				*initialBackoff67 = r.OutputChronicle.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff67 = nil
+			}
+			backoffRate67 := new(float64)
+			if !r.OutputChronicle.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputChronicle.TimeoutRetrySettings.BackoffRate.IsNull() {
+				*backoffRate67 = r.OutputChronicle.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+			} else {
+				backoffRate67 = nil
+			}
+			maxBackoff63 := new(float64)
+			if !r.OutputChronicle.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputChronicle.TimeoutRetrySettings.MaxBackoff.IsNull() {
+				*maxBackoff63 = r.OutputChronicle.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff63 = nil
+			}
+			timeoutRetrySettings31 = &shared.OutputChronicleTimeoutRetrySettings{
+				TimeoutRetry:   timeoutRetry31,
+				InitialBackoff: initialBackoff67,
+				BackoffRate:    backoffRate67,
+				MaxBackoff:     maxBackoff63,
+			}
+		}
+		responseHonorRetryAfterHeader31 := new(bool)
+		if !r.OutputChronicle.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputChronicle.ResponseHonorRetryAfterHeader.IsNull() {
+			*responseHonorRetryAfterHeader31 = r.OutputChronicle.ResponseHonorRetryAfterHeader.ValueBool()
+		} else {
+			responseHonorRetryAfterHeader31 = nil
+		}
+		var region16 string
+		region16 = r.OutputChronicle.Region.ValueString()
+
+		concurrency33 := new(float64)
+		if !r.OutputChronicle.Concurrency.IsUnknown() && !r.OutputChronicle.Concurrency.IsNull() {
+			*concurrency33 = r.OutputChronicle.Concurrency.ValueFloat64()
+		} else {
+			concurrency33 = nil
+		}
+		maxPayloadSizeKb32 := new(float64)
+		if !r.OutputChronicle.MaxPayloadSizeKB.IsUnknown() && !r.OutputChronicle.MaxPayloadSizeKB.IsNull() {
+			*maxPayloadSizeKb32 = r.OutputChronicle.MaxPayloadSizeKB.ValueFloat64()
+		} else {
+			maxPayloadSizeKb32 = nil
+		}
+		maxPayloadEvents29 := new(float64)
+		if !r.OutputChronicle.MaxPayloadEvents.IsUnknown() && !r.OutputChronicle.MaxPayloadEvents.IsNull() {
+			*maxPayloadEvents29 = r.OutputChronicle.MaxPayloadEvents.ValueFloat64()
+		} else {
+			maxPayloadEvents29 = nil
+		}
+		compress38 := new(bool)
+		if !r.OutputChronicle.Compress.IsUnknown() && !r.OutputChronicle.Compress.IsNull() {
+			*compress38 = r.OutputChronicle.Compress.ValueBool()
+		} else {
+			compress38 = nil
+		}
+		rejectUnauthorized58 := new(bool)
+		if !r.OutputChronicle.RejectUnauthorized.IsUnknown() && !r.OutputChronicle.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized58 = r.OutputChronicle.RejectUnauthorized.ValueBool()
+		} else {
+			rejectUnauthorized58 = nil
+		}
+		timeoutSec32 := new(float64)
+		if !r.OutputChronicle.TimeoutSec.IsUnknown() && !r.OutputChronicle.TimeoutSec.IsNull() {
+			*timeoutSec32 = r.OutputChronicle.TimeoutSec.ValueFloat64()
+		} else {
+			timeoutSec32 = nil
+		}
+		flushPeriodSec43 := new(float64)
+		if !r.OutputChronicle.FlushPeriodSec.IsUnknown() && !r.OutputChronicle.FlushPeriodSec.IsNull() {
+			*flushPeriodSec43 = r.OutputChronicle.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec43 = nil
+		}
+		extraHTTPHeaders30 := make([]shared.OutputChronicleExtraHTTPHeader, 0, len(r.OutputChronicle.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex30 := range r.OutputChronicle.ExtraHTTPHeaders {
+			name46 := new(string)
+			if !r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Name.IsUnknown() && !r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Name.IsNull() {
+				*name46 = r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Name.ValueString()
+			} else {
+				name46 = nil
+			}
+			var value60 string
+			value60 = r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Value.ValueString()
+
+			extraHTTPHeaders30 = append(extraHTTPHeaders30, shared.OutputChronicleExtraHTTPHeader{
+				Name:  name46,
+				Value: value60,
+			})
+		}
+		failedRequestLoggingMode30 := new(shared.OutputChronicleFailedRequestLoggingMode)
+		if !r.OutputChronicle.FailedRequestLoggingMode.IsUnknown() && !r.OutputChronicle.FailedRequestLoggingMode.IsNull() {
+			*failedRequestLoggingMode30 = shared.OutputChronicleFailedRequestLoggingMode(r.OutputChronicle.FailedRequestLoggingMode.ValueString())
+		} else {
+			failedRequestLoggingMode30 = nil
+		}
+		safeHeaders30 := make([]string, 0, len(r.OutputChronicle.SafeHeaders))
+		for safeHeadersIndex30 := range r.OutputChronicle.SafeHeaders {
+			safeHeaders30 = append(safeHeaders30, r.OutputChronicle.SafeHeaders[safeHeadersIndex30].ValueString())
+		}
+		useRoundRobinDns29 := new(bool)
+		if !r.OutputChronicle.UseRoundRobinDNS.IsUnknown() && !r.OutputChronicle.UseRoundRobinDNS.IsNull() {
+			*useRoundRobinDns29 = r.OutputChronicle.UseRoundRobinDNS.ValueBool()
+		} else {
+			useRoundRobinDns29 = nil
+		}
+		onBackpressure57 := new(shared.OutputChronicleBackpressureBehavior)
+		if !r.OutputChronicle.OnBackpressure.IsUnknown() && !r.OutputChronicle.OnBackpressure.IsNull() {
+			*onBackpressure57 = shared.OutputChronicleBackpressureBehavior(r.OutputChronicle.OnBackpressure.ValueString())
+		} else {
+			onBackpressure57 = nil
+		}
+		totalMemoryLimitKb11 := new(float64)
+		if !r.OutputChronicle.TotalMemoryLimitKB.IsUnknown() && !r.OutputChronicle.TotalMemoryLimitKB.IsNull() {
+			*totalMemoryLimitKb11 = r.OutputChronicle.TotalMemoryLimitKB.ValueFloat64()
+		} else {
+			totalMemoryLimitKb11 = nil
+		}
+		ingestionMethod := new(string)
+		if !r.OutputChronicle.IngestionMethod.IsUnknown() && !r.OutputChronicle.IngestionMethod.IsNull() {
+			*ingestionMethod = r.OutputChronicle.IngestionMethod.ValueString()
+		} else {
+			ingestionMethod = nil
+		}
+		namespace1 := new(string)
+		if !r.OutputChronicle.Namespace.IsUnknown() && !r.OutputChronicle.Namespace.IsNull() {
+			*namespace1 = r.OutputChronicle.Namespace.ValueString()
+		} else {
+			namespace1 = nil
+		}
+		var logType4 string
+		logType4 = r.OutputChronicle.LogType.ValueString()
+
+		logTextField1 := new(string)
+		if !r.OutputChronicle.LogTextField.IsUnknown() && !r.OutputChronicle.LogTextField.IsNull() {
+			*logTextField1 = r.OutputChronicle.LogTextField.ValueString()
+		} else {
+			logTextField1 = nil
+		}
+		var gcpProjectID string
+		gcpProjectID = r.OutputChronicle.GcpProjectID.ValueString()
+
+		var gcpInstance string
+		gcpInstance = r.OutputChronicle.GcpInstance.ValueString()
+
+		customLabels1 := make([]shared.OutputChronicleCustomLabel, 0, len(r.OutputChronicle.CustomLabels))
+		for customLabelsIndex1 := range r.OutputChronicle.CustomLabels {
+			var key12 string
+			key12 = r.OutputChronicle.CustomLabels[customLabelsIndex1].Key.ValueString()
+
+			var value61 string
+			value61 = r.OutputChronicle.CustomLabels[customLabelsIndex1].Value.ValueString()
+
+			rbacEnabled := new(bool)
+			if !r.OutputChronicle.CustomLabels[customLabelsIndex1].RbacEnabled.IsUnknown() && !r.OutputChronicle.CustomLabels[customLabelsIndex1].RbacEnabled.IsNull() {
+				*rbacEnabled = r.OutputChronicle.CustomLabels[customLabelsIndex1].RbacEnabled.ValueBool()
+			} else {
+				rbacEnabled = nil
+			}
+			customLabels1 = append(customLabels1, shared.OutputChronicleCustomLabel{
+				Key:         key12,
+				Value:       value61,
+				RbacEnabled: rbacEnabled,
+			})
+		}
+		description65 := new(string)
+		if !r.OutputChronicle.Description.IsUnknown() && !r.OutputChronicle.Description.IsNull() {
+			*description65 = r.OutputChronicle.Description.ValueString()
+		} else {
+			description65 = nil
+		}
+		serviceAccountCredentials3 := new(string)
+		if !r.OutputChronicle.ServiceAccountCredentials.IsUnknown() && !r.OutputChronicle.ServiceAccountCredentials.IsNull() {
+			*serviceAccountCredentials3 = r.OutputChronicle.ServiceAccountCredentials.ValueString()
+		} else {
+			serviceAccountCredentials3 = nil
+		}
+		serviceAccountCredentialsSecret1 := new(string)
+		if !r.OutputChronicle.ServiceAccountCredentialsSecret.IsUnknown() && !r.OutputChronicle.ServiceAccountCredentialsSecret.IsNull() {
+			*serviceAccountCredentialsSecret1 = r.OutputChronicle.ServiceAccountCredentialsSecret.ValueString()
+		} else {
+			serviceAccountCredentialsSecret1 = nil
+		}
+		pqStrictOrdering1 := new(bool)
+		if !r.OutputChronicle.PqStrictOrdering.IsUnknown() && !r.OutputChronicle.PqStrictOrdering.IsNull() {
+			*pqStrictOrdering1 = r.OutputChronicle.PqStrictOrdering.ValueBool()
+		} else {
+			pqStrictOrdering1 = nil
+		}
+		pqRatePerSec1 := new(float64)
+		if !r.OutputChronicle.PqRatePerSec.IsUnknown() && !r.OutputChronicle.PqRatePerSec.IsNull() {
+			*pqRatePerSec1 = r.OutputChronicle.PqRatePerSec.ValueFloat64()
+		} else {
+			pqRatePerSec1 = nil
+		}
+		pqMode49 := new(shared.OutputChronicleMode)
+		if !r.OutputChronicle.PqMode.IsUnknown() && !r.OutputChronicle.PqMode.IsNull() {
+			*pqMode49 = shared.OutputChronicleMode(r.OutputChronicle.PqMode.ValueString())
+		} else {
+			pqMode49 = nil
+		}
+		pqMaxBufferSize1 := new(float64)
+		if !r.OutputChronicle.PqMaxBufferSize.IsUnknown() && !r.OutputChronicle.PqMaxBufferSize.IsNull() {
+			*pqMaxBufferSize1 = r.OutputChronicle.PqMaxBufferSize.ValueFloat64()
+		} else {
+			pqMaxBufferSize1 = nil
+		}
+		pqMaxBackpressureSec1 := new(float64)
+		if !r.OutputChronicle.PqMaxBackpressureSec.IsUnknown() && !r.OutputChronicle.PqMaxBackpressureSec.IsNull() {
+			*pqMaxBackpressureSec1 = r.OutputChronicle.PqMaxBackpressureSec.ValueFloat64()
+		} else {
+			pqMaxBackpressureSec1 = nil
+		}
+		pqMaxFileSize49 := new(string)
+		if !r.OutputChronicle.PqMaxFileSize.IsUnknown() && !r.OutputChronicle.PqMaxFileSize.IsNull() {
+			*pqMaxFileSize49 = r.OutputChronicle.PqMaxFileSize.ValueString()
+		} else {
+			pqMaxFileSize49 = nil
+		}
+		pqMaxSize49 := new(string)
+		if !r.OutputChronicle.PqMaxSize.IsUnknown() && !r.OutputChronicle.PqMaxSize.IsNull() {
+			*pqMaxSize49 = r.OutputChronicle.PqMaxSize.ValueString()
+		} else {
+			pqMaxSize49 = nil
+		}
+		pqPath49 := new(string)
+		if !r.OutputChronicle.PqPath.IsUnknown() && !r.OutputChronicle.PqPath.IsNull() {
+			*pqPath49 = r.OutputChronicle.PqPath.ValueString()
+		} else {
+			pqPath49 = nil
+		}
+		pqCompress49 := new(shared.OutputChronicleCompression)
+		if !r.OutputChronicle.PqCompress.IsUnknown() && !r.OutputChronicle.PqCompress.IsNull() {
+			*pqCompress49 = shared.OutputChronicleCompression(r.OutputChronicle.PqCompress.ValueString())
+		} else {
+			pqCompress49 = nil
+		}
+		pqOnBackpressure49 := new(shared.OutputChronicleQueueFullBehavior)
+		if !r.OutputChronicle.PqOnBackpressure.IsUnknown() && !r.OutputChronicle.PqOnBackpressure.IsNull() {
+			*pqOnBackpressure49 = shared.OutputChronicleQueueFullBehavior(r.OutputChronicle.PqOnBackpressure.ValueString())
+		} else {
+			pqOnBackpressure49 = nil
+		}
+		var pqControls49 *shared.OutputChroniclePqControls
+		if r.OutputChronicle.PqControls != nil {
+			pqControls49 = &shared.OutputChroniclePqControls{}
+		}
+		outputChronicle = &shared.OutputChronicle{
+			ID:                              id65,
+			Type:                            typeVar65,
+			Pipeline:                        pipeline64,
+			SystemFields:                    systemFields64,
+			Environment:                     environment64,
+			Streamtags:                      streamtags64,
+			APIVersion:                      apiVersion1,
+			AuthenticationMethod:            authenticationMethod1,
+			ResponseRetrySettings:           responseRetrySettings31,
+			TimeoutRetrySettings:            timeoutRetrySettings31,
+			ResponseHonorRetryAfterHeader:   responseHonorRetryAfterHeader31,
+			Region:                          region16,
+			Concurrency:                     concurrency33,
+			MaxPayloadSizeKB:                maxPayloadSizeKb32,
+			MaxPayloadEvents:                maxPayloadEvents29,
+			Compress:                        compress38,
+			RejectUnauthorized:              rejectUnauthorized58,
+			TimeoutSec:                      timeoutSec32,
+			FlushPeriodSec:                  flushPeriodSec43,
+			ExtraHTTPHeaders:                extraHTTPHeaders30,
+			FailedRequestLoggingMode:        failedRequestLoggingMode30,
+			SafeHeaders:                     safeHeaders30,
+			UseRoundRobinDNS:                useRoundRobinDns29,
+			OnBackpressure:                  onBackpressure57,
+			TotalMemoryLimitKB:              totalMemoryLimitKb11,
+			IngestionMethod:                 ingestionMethod,
+			Namespace:                       namespace1,
+			LogType:                         logType4,
+			LogTextField:                    logTextField1,
+			GcpProjectID:                    gcpProjectID,
+			GcpInstance:                     gcpInstance,
+			CustomLabels:                    customLabels1,
+			Description:                     description65,
+			ServiceAccountCredentials:       serviceAccountCredentials3,
+			ServiceAccountCredentialsSecret: serviceAccountCredentialsSecret1,
+			PqStrictOrdering:                pqStrictOrdering1,
+			PqRatePerSec:                    pqRatePerSec1,
+			PqMode:                          pqMode49,
+			PqMaxBufferSize:                 pqMaxBufferSize1,
+			PqMaxBackpressureSec:            pqMaxBackpressureSec1,
+			PqMaxFileSize:                   pqMaxFileSize49,
+			PqMaxSize:                       pqMaxSize49,
+			PqPath:                          pqPath49,
+			PqCompress:                      pqCompress49,
+			PqOnBackpressure:                pqOnBackpressure49,
+			PqControls:                      pqControls49,
+		}
+	}
+	if outputChronicle != nil {
+		out = shared.Output{
+			OutputChronicle: outputChronicle,
+		}
+	}
+	var outputDatabricks *shared.OutputDatabricks
+	if r.OutputDatabricks != nil {
+		id66 := new(string)
+		if !r.OutputDatabricks.ID.IsUnknown() && !r.OutputDatabricks.ID.IsNull() {
+			*id66 = r.OutputDatabricks.ID.ValueString()
+		} else {
+			id66 = nil
+		}
+		typeVar66 := shared.OutputDatabricksType(r.OutputDatabricks.Type.ValueString())
+		pipeline65 := new(string)
+		if !r.OutputDatabricks.Pipeline.IsUnknown() && !r.OutputDatabricks.Pipeline.IsNull() {
+			*pipeline65 = r.OutputDatabricks.Pipeline.ValueString()
+		} else {
+			pipeline65 = nil
+		}
+		systemFields65 := make([]string, 0, len(r.OutputDatabricks.SystemFields))
+		for systemFieldsIndex65 := range r.OutputDatabricks.SystemFields {
+			systemFields65 = append(systemFields65, r.OutputDatabricks.SystemFields[systemFieldsIndex65].ValueString())
+		}
+		environment65 := new(string)
+		if !r.OutputDatabricks.Environment.IsUnknown() && !r.OutputDatabricks.Environment.IsNull() {
+			*environment65 = r.OutputDatabricks.Environment.ValueString()
+		} else {
+			environment65 = nil
+		}
+		streamtags65 := make([]string, 0, len(r.OutputDatabricks.Streamtags))
+		for streamtagsIndex65 := range r.OutputDatabricks.Streamtags {
+			streamtags65 = append(streamtags65, r.OutputDatabricks.Streamtags[streamtagsIndex65].ValueString())
+		}
+		destPath8 := new(string)
+		if !r.OutputDatabricks.DestPath.IsUnknown() && !r.OutputDatabricks.DestPath.IsNull() {
+			*destPath8 = r.OutputDatabricks.DestPath.ValueString()
+		} else {
+			destPath8 = nil
+		}
+		stagePath9 := new(string)
+		if !r.OutputDatabricks.StagePath.IsUnknown() && !r.OutputDatabricks.StagePath.IsNull() {
+			*stagePath9 = r.OutputDatabricks.StagePath.ValueString()
+		} else {
+			stagePath9 = nil
+		}
+		addIDToStagePath9 := new(bool)
+		if !r.OutputDatabricks.AddIDToStagePath.IsUnknown() && !r.OutputDatabricks.AddIDToStagePath.IsNull() {
+			*addIDToStagePath9 = r.OutputDatabricks.AddIDToStagePath.ValueBool()
+		} else {
+			addIDToStagePath9 = nil
+		}
+		removeEmptyDirs9 := new(bool)
+		if !r.OutputDatabricks.RemoveEmptyDirs.IsUnknown() && !r.OutputDatabricks.RemoveEmptyDirs.IsNull() {
+			*removeEmptyDirs9 = r.OutputDatabricks.RemoveEmptyDirs.ValueBool()
+		} else {
+			removeEmptyDirs9 = nil
+		}
+		partitionExpr7 := new(string)
+		if !r.OutputDatabricks.PartitionExpr.IsUnknown() && !r.OutputDatabricks.PartitionExpr.IsNull() {
+			*partitionExpr7 = r.OutputDatabricks.PartitionExpr.ValueString()
+		} else {
+			partitionExpr7 = nil
+		}
+		format19 := new(shared.OutputDatabricksDataFormat)
+		if !r.OutputDatabricks.Format.IsUnknown() && !r.OutputDatabricks.Format.IsNull() {
+			*format19 = shared.OutputDatabricksDataFormat(r.OutputDatabricks.Format.ValueString())
+		} else {
+			format19 = nil
+		}
+		baseFileName7 := new(string)
+		if !r.OutputDatabricks.BaseFileName.IsUnknown() && !r.OutputDatabricks.BaseFileName.IsNull() {
+			*baseFileName7 = r.OutputDatabricks.BaseFileName.ValueString()
+		} else {
+			baseFileName7 = nil
+		}
+		fileNameSuffix7 := new(string)
+		if !r.OutputDatabricks.FileNameSuffix.IsUnknown() && !r.OutputDatabricks.FileNameSuffix.IsNull() {
+			*fileNameSuffix7 = r.OutputDatabricks.FileNameSuffix.ValueString()
+		} else {
+			fileNameSuffix7 = nil
+		}
+		maxFileSizeMb9 := new(float64)
+		if !r.OutputDatabricks.MaxFileSizeMB.IsUnknown() && !r.OutputDatabricks.MaxFileSizeMB.IsNull() {
+			*maxFileSizeMb9 = r.OutputDatabricks.MaxFileSizeMB.ValueFloat64()
+		} else {
+			maxFileSizeMb9 = nil
+		}
+		maxFileOpenTimeSec9 := new(float64)
+		if !r.OutputDatabricks.MaxFileOpenTimeSec.IsUnknown() && !r.OutputDatabricks.MaxFileOpenTimeSec.IsNull() {
+			*maxFileOpenTimeSec9 = r.OutputDatabricks.MaxFileOpenTimeSec.ValueFloat64()
+		} else {
+			maxFileOpenTimeSec9 = nil
+		}
+		maxFileIdleTimeSec9 := new(float64)
+		if !r.OutputDatabricks.MaxFileIdleTimeSec.IsUnknown() && !r.OutputDatabricks.MaxFileIdleTimeSec.IsNull() {
+			*maxFileIdleTimeSec9 = r.OutputDatabricks.MaxFileIdleTimeSec.ValueFloat64()
+		} else {
+			maxFileIdleTimeSec9 = nil
+		}
+		maxOpenFiles9 := new(float64)
+		if !r.OutputDatabricks.MaxOpenFiles.IsUnknown() && !r.OutputDatabricks.MaxOpenFiles.IsNull() {
+			*maxOpenFiles9 = r.OutputDatabricks.MaxOpenFiles.ValueFloat64()
+		} else {
+			maxOpenFiles9 = nil
+		}
+		headerLine7 := new(string)
+		if !r.OutputDatabricks.HeaderLine.IsUnknown() && !r.OutputDatabricks.HeaderLine.IsNull() {
+			*headerLine7 = r.OutputDatabricks.HeaderLine.ValueString()
+		} else {
+			headerLine7 = nil
+		}
+		writeHighWaterMark7 := new(float64)
+		if !r.OutputDatabricks.WriteHighWaterMark.IsUnknown() && !r.OutputDatabricks.WriteHighWaterMark.IsNull() {
+			*writeHighWaterMark7 = r.OutputDatabricks.WriteHighWaterMark.ValueFloat64()
+		} else {
+			writeHighWaterMark7 = nil
+		}
+		onBackpressure58 := new(shared.OutputDatabricksBackpressureBehavior)
+		if !r.OutputDatabricks.OnBackpressure.IsUnknown() && !r.OutputDatabricks.OnBackpressure.IsNull() {
+			*onBackpressure58 = shared.OutputDatabricksBackpressureBehavior(r.OutputDatabricks.OnBackpressure.ValueString())
+		} else {
+			onBackpressure58 = nil
+		}
+		deadletterEnabled9 := new(bool)
+		if !r.OutputDatabricks.DeadletterEnabled.IsUnknown() && !r.OutputDatabricks.DeadletterEnabled.IsNull() {
+			*deadletterEnabled9 = r.OutputDatabricks.DeadletterEnabled.ValueBool()
+		} else {
+			deadletterEnabled9 = nil
+		}
+		onDiskFullBackpressure9 := new(shared.OutputDatabricksDiskSpaceProtection)
+		if !r.OutputDatabricks.OnDiskFullBackpressure.IsUnknown() && !r.OutputDatabricks.OnDiskFullBackpressure.IsNull() {
+			*onDiskFullBackpressure9 = shared.OutputDatabricksDiskSpaceProtection(r.OutputDatabricks.OnDiskFullBackpressure.ValueString())
+		} else {
+			onDiskFullBackpressure9 = nil
+		}
+		forceCloseOnShutdown := new(bool)
+		if !r.OutputDatabricks.ForceCloseOnShutdown.IsUnknown() && !r.OutputDatabricks.ForceCloseOnShutdown.IsNull() {
+			*forceCloseOnShutdown = r.OutputDatabricks.ForceCloseOnShutdown.ValueBool()
+		} else {
+			forceCloseOnShutdown = nil
+		}
+		var workspaceId1 string
+		workspaceId1 = r.OutputDatabricks.WorkspaceID.ValueString()
+
+		scope2 := new(string)
+		if !r.OutputDatabricks.Scope.IsUnknown() && !r.OutputDatabricks.Scope.IsNull() {
+			*scope2 = r.OutputDatabricks.Scope.ValueString()
+		} else {
+			scope2 = nil
+		}
+		var clientId3 string
+		clientId3 = r.OutputDatabricks.ClientID.ValueString()
+
+		catalog := new(string)
+		if !r.OutputDatabricks.Catalog.IsUnknown() && !r.OutputDatabricks.Catalog.IsNull() {
+			*catalog = r.OutputDatabricks.Catalog.ValueString()
+		} else {
+			catalog = nil
+		}
+		schema := new(string)
+		if !r.OutputDatabricks.Schema.IsUnknown() && !r.OutputDatabricks.Schema.IsNull() {
+			*schema = r.OutputDatabricks.Schema.ValueString()
+		} else {
+			schema = nil
+		}
+		eventsVolumeName := new(string)
+		if !r.OutputDatabricks.EventsVolumeName.IsUnknown() && !r.OutputDatabricks.EventsVolumeName.IsNull() {
+			*eventsVolumeName = r.OutputDatabricks.EventsVolumeName.ValueString()
+		} else {
+			eventsVolumeName = nil
+		}
+		var clientTextSecret1 string
+		clientTextSecret1 = r.OutputDatabricks.ClientTextSecret.ValueString()
+
+		timeoutSec33 := new(float64)
+		if !r.OutputDatabricks.TimeoutSec.IsUnknown() && !r.OutputDatabricks.TimeoutSec.IsNull() {
+			*timeoutSec33 = r.OutputDatabricks.TimeoutSec.ValueFloat64()
+		} else {
+			timeoutSec33 = nil
+		}
+		description66 := new(string)
+		if !r.OutputDatabricks.Description.IsUnknown() && !r.OutputDatabricks.Description.IsNull() {
+			*description66 = r.OutputDatabricks.Description.ValueString()
+		} else {
+			description66 = nil
+		}
+		compress39 := new(shared.OutputDatabricksCompression)
+		if !r.OutputDatabricks.Compress.IsUnknown() && !r.OutputDatabricks.Compress.IsNull() {
+			*compress39 = shared.OutputDatabricksCompression(r.OutputDatabricks.Compress.ValueString())
+		} else {
+			compress39 = nil
+		}
+		compressionLevel6 := new(shared.OutputDatabricksCompressionLevel)
+		if !r.OutputDatabricks.CompressionLevel.IsUnknown() && !r.OutputDatabricks.CompressionLevel.IsNull() {
+			*compressionLevel6 = shared.OutputDatabricksCompressionLevel(r.OutputDatabricks.CompressionLevel.ValueString())
+		} else {
+			compressionLevel6 = nil
+		}
+		automaticSchema7 := new(bool)
+		if !r.OutputDatabricks.AutomaticSchema.IsUnknown() && !r.OutputDatabricks.AutomaticSchema.IsNull() {
+			*automaticSchema7 = r.OutputDatabricks.AutomaticSchema.ValueBool()
+		} else {
+			automaticSchema7 = nil
+		}
+		parquetSchema1 := new(string)
+		if !r.OutputDatabricks.ParquetSchema.IsUnknown() && !r.OutputDatabricks.ParquetSchema.IsNull() {
+			*parquetSchema1 = r.OutputDatabricks.ParquetSchema.ValueString()
+		} else {
+			parquetSchema1 = nil
+		}
+		parquetVersion7 := new(shared.OutputDatabricksParquetVersion)
+		if !r.OutputDatabricks.ParquetVersion.IsUnknown() && !r.OutputDatabricks.ParquetVersion.IsNull() {
+			*parquetVersion7 = shared.OutputDatabricksParquetVersion(r.OutputDatabricks.ParquetVersion.ValueString())
+		} else {
+			parquetVersion7 = nil
+		}
+		parquetDataPageVersion7 := new(shared.OutputDatabricksDataPageVersion)
+		if !r.OutputDatabricks.ParquetDataPageVersion.IsUnknown() && !r.OutputDatabricks.ParquetDataPageVersion.IsNull() {
+			*parquetDataPageVersion7 = shared.OutputDatabricksDataPageVersion(r.OutputDatabricks.ParquetDataPageVersion.ValueString())
+		} else {
+			parquetDataPageVersion7 = nil
+		}
+		parquetRowGroupLength7 := new(float64)
+		if !r.OutputDatabricks.ParquetRowGroupLength.IsUnknown() && !r.OutputDatabricks.ParquetRowGroupLength.IsNull() {
+			*parquetRowGroupLength7 = r.OutputDatabricks.ParquetRowGroupLength.ValueFloat64()
+		} else {
+			parquetRowGroupLength7 = nil
+		}
+		parquetPageSize7 := new(string)
+		if !r.OutputDatabricks.ParquetPageSize.IsUnknown() && !r.OutputDatabricks.ParquetPageSize.IsNull() {
+			*parquetPageSize7 = r.OutputDatabricks.ParquetPageSize.ValueString()
+		} else {
+			parquetPageSize7 = nil
+		}
+		shouldLogInvalidRows7 := new(bool)
+		if !r.OutputDatabricks.ShouldLogInvalidRows.IsUnknown() && !r.OutputDatabricks.ShouldLogInvalidRows.IsNull() {
+			*shouldLogInvalidRows7 = r.OutputDatabricks.ShouldLogInvalidRows.ValueBool()
+		} else {
+			shouldLogInvalidRows7 = nil
+		}
+		keyValueMetadata7 := make([]shared.OutputDatabricksKeyValueMetadatum, 0, len(r.OutputDatabricks.KeyValueMetadata))
+		for keyValueMetadataIndex7 := range r.OutputDatabricks.KeyValueMetadata {
+			key13 := new(string)
+			if !r.OutputDatabricks.KeyValueMetadata[keyValueMetadataIndex7].Key.IsUnknown() && !r.OutputDatabricks.KeyValueMetadata[keyValueMetadataIndex7].Key.IsNull() {
+				*key13 = r.OutputDatabricks.KeyValueMetadata[keyValueMetadataIndex7].Key.ValueString()
+			} else {
+				key13 = nil
+			}
+			var value62 string
+			value62 = r.OutputDatabricks.KeyValueMetadata[keyValueMetadataIndex7].Value.ValueString()
+
+			keyValueMetadata7 = append(keyValueMetadata7, shared.OutputDatabricksKeyValueMetadatum{
+				Key:   key13,
+				Value: value62,
+			})
+		}
+		enableStatistics7 := new(bool)
+		if !r.OutputDatabricks.EnableStatistics.IsUnknown() && !r.OutputDatabricks.EnableStatistics.IsNull() {
+			*enableStatistics7 = r.OutputDatabricks.EnableStatistics.ValueBool()
+		} else {
+			enableStatistics7 = nil
+		}
+		enableWritePageIndex7 := new(bool)
+		if !r.OutputDatabricks.EnableWritePageIndex.IsUnknown() && !r.OutputDatabricks.EnableWritePageIndex.IsNull() {
+			*enableWritePageIndex7 = r.OutputDatabricks.EnableWritePageIndex.ValueBool()
+		} else {
+			enableWritePageIndex7 = nil
+		}
+		enablePageChecksum7 := new(bool)
+		if !r.OutputDatabricks.EnablePageChecksum.IsUnknown() && !r.OutputDatabricks.EnablePageChecksum.IsNull() {
+			*enablePageChecksum7 = r.OutputDatabricks.EnablePageChecksum.ValueBool()
+		} else {
+			enablePageChecksum7 = nil
+		}
+		emptyDirCleanupSec8 := new(float64)
+		if !r.OutputDatabricks.EmptyDirCleanupSec.IsUnknown() && !r.OutputDatabricks.EmptyDirCleanupSec.IsNull() {
+			*emptyDirCleanupSec8 = r.OutputDatabricks.EmptyDirCleanupSec.ValueFloat64()
+		} else {
+			emptyDirCleanupSec8 = nil
+		}
+		directoryBatchSize := new(float64)
+		if !r.OutputDatabricks.DirectoryBatchSize.IsUnknown() && !r.OutputDatabricks.DirectoryBatchSize.IsNull() {
+			*directoryBatchSize = r.OutputDatabricks.DirectoryBatchSize.ValueFloat64()
+		} else {
+			directoryBatchSize = nil
+		}
+		deadletterPath8 := new(string)
+		if !r.OutputDatabricks.DeadletterPath.IsUnknown() && !r.OutputDatabricks.DeadletterPath.IsNull() {
+			*deadletterPath8 = r.OutputDatabricks.DeadletterPath.ValueString()
+		} else {
+			deadletterPath8 = nil
+		}
+		maxRetryNum8 := new(float64)
+		if !r.OutputDatabricks.MaxRetryNum.IsUnknown() && !r.OutputDatabricks.MaxRetryNum.IsNull() {
+			*maxRetryNum8 = r.OutputDatabricks.MaxRetryNum.ValueFloat64()
+		} else {
+			maxRetryNum8 = nil
+		}
+		outputDatabricks = &shared.OutputDatabricks{
+			ID:                     id66,
+			Type:                   typeVar66,
+			Pipeline:               pipeline65,
+			SystemFields:           systemFields65,
+			Environment:            environment65,
+			Streamtags:             streamtags65,
+			DestPath:               destPath8,
+			StagePath:              stagePath9,
+			AddIDToStagePath:       addIDToStagePath9,
+			RemoveEmptyDirs:        removeEmptyDirs9,
+			PartitionExpr:          partitionExpr7,
+			Format:                 format19,
+			BaseFileName:           baseFileName7,
+			FileNameSuffix:         fileNameSuffix7,
+			MaxFileSizeMB:          maxFileSizeMb9,
+			MaxFileOpenTimeSec:     maxFileOpenTimeSec9,
+			MaxFileIdleTimeSec:     maxFileIdleTimeSec9,
+			MaxOpenFiles:           maxOpenFiles9,
+			HeaderLine:             headerLine7,
+			WriteHighWaterMark:     writeHighWaterMark7,
+			OnBackpressure:         onBackpressure58,
+			DeadletterEnabled:      deadletterEnabled9,
+			OnDiskFullBackpressure: onDiskFullBackpressure9,
+			ForceCloseOnShutdown:   forceCloseOnShutdown,
+			WorkspaceID:            workspaceId1,
+			Scope:                  scope2,
+			ClientID:               clientId3,
+			Catalog:                catalog,
+			Schema:                 schema,
+			EventsVolumeName:       eventsVolumeName,
+			ClientTextSecret:       clientTextSecret1,
+			TimeoutSec:             timeoutSec33,
+			Description:            description66,
+			Compress:               compress39,
+			CompressionLevel:       compressionLevel6,
+			AutomaticSchema:        automaticSchema7,
+			ParquetSchema:          parquetSchema1,
+			ParquetVersion:         parquetVersion7,
+			ParquetDataPageVersion: parquetDataPageVersion7,
+			ParquetRowGroupLength:  parquetRowGroupLength7,
+			ParquetPageSize:        parquetPageSize7,
+			ShouldLogInvalidRows:   shouldLogInvalidRows7,
+			KeyValueMetadata:       keyValueMetadata7,
+			EnableStatistics:       enableStatistics7,
+			EnableWritePageIndex:   enableWritePageIndex7,
+			EnablePageChecksum:     enablePageChecksum7,
+			EmptyDirCleanupSec:     emptyDirCleanupSec8,
+			DirectoryBatchSize:     directoryBatchSize,
+			DeadletterPath:         deadletterPath8,
+			MaxRetryNum:            maxRetryNum8,
+		}
+	}
+	if outputDatabricks != nil {
+		out = shared.Output{
+			OutputDatabricks: outputDatabricks,
+		}
+	}
+	var outputMicrosoftFabric *shared.OutputMicrosoftFabric
+	if r.OutputMicrosoftFabric != nil {
+		id67 := new(string)
+		if !r.OutputMicrosoftFabric.ID.IsUnknown() && !r.OutputMicrosoftFabric.ID.IsNull() {
+			*id67 = r.OutputMicrosoftFabric.ID.ValueString()
+		} else {
+			id67 = nil
+		}
+		typeVar67 := shared.OutputMicrosoftFabricType(r.OutputMicrosoftFabric.Type.ValueString())
+		pipeline66 := new(string)
+		if !r.OutputMicrosoftFabric.Pipeline.IsUnknown() && !r.OutputMicrosoftFabric.Pipeline.IsNull() {
+			*pipeline66 = r.OutputMicrosoftFabric.Pipeline.ValueString()
+		} else {
+			pipeline66 = nil
+		}
+		systemFields66 := make([]string, 0, len(r.OutputMicrosoftFabric.SystemFields))
+		for systemFieldsIndex66 := range r.OutputMicrosoftFabric.SystemFields {
+			systemFields66 = append(systemFields66, r.OutputMicrosoftFabric.SystemFields[systemFieldsIndex66].ValueString())
+		}
+		environment66 := new(string)
+		if !r.OutputMicrosoftFabric.Environment.IsUnknown() && !r.OutputMicrosoftFabric.Environment.IsNull() {
+			*environment66 = r.OutputMicrosoftFabric.Environment.ValueString()
+		} else {
+			environment66 = nil
+		}
+		streamtags66 := make([]string, 0, len(r.OutputMicrosoftFabric.Streamtags))
+		for streamtagsIndex66 := range r.OutputMicrosoftFabric.Streamtags {
+			streamtags66 = append(streamtags66, r.OutputMicrosoftFabric.Streamtags[streamtagsIndex66].ValueString())
+		}
+		var topic4 string
+		topic4 = r.OutputMicrosoftFabric.Topic.ValueString()
+
+		ack4 := new(shared.OutputMicrosoftFabricAcknowledgments)
+		if !r.OutputMicrosoftFabric.Ack.IsUnknown() && !r.OutputMicrosoftFabric.Ack.IsNull() {
+			*ack4 = shared.OutputMicrosoftFabricAcknowledgments(r.OutputMicrosoftFabric.Ack.ValueInt64())
+		} else {
+			ack4 = nil
+		}
+		format20 := new(shared.OutputMicrosoftFabricRecordDataFormat)
+		if !r.OutputMicrosoftFabric.Format.IsUnknown() && !r.OutputMicrosoftFabric.Format.IsNull() {
+			*format20 = shared.OutputMicrosoftFabricRecordDataFormat(r.OutputMicrosoftFabric.Format.ValueString())
+		} else {
+			format20 = nil
+		}
+		maxRecordSizeKb8 := new(float64)
+		if !r.OutputMicrosoftFabric.MaxRecordSizeKB.IsUnknown() && !r.OutputMicrosoftFabric.MaxRecordSizeKB.IsNull() {
+			*maxRecordSizeKb8 = r.OutputMicrosoftFabric.MaxRecordSizeKB.ValueFloat64()
+		} else {
+			maxRecordSizeKb8 = nil
+		}
+		flushEventCount4 := new(float64)
+		if !r.OutputMicrosoftFabric.FlushEventCount.IsUnknown() && !r.OutputMicrosoftFabric.FlushEventCount.IsNull() {
+			*flushEventCount4 = r.OutputMicrosoftFabric.FlushEventCount.ValueFloat64()
+		} else {
+			flushEventCount4 = nil
+		}
+		flushPeriodSec44 := new(float64)
+		if !r.OutputMicrosoftFabric.FlushPeriodSec.IsUnknown() && !r.OutputMicrosoftFabric.FlushPeriodSec.IsNull() {
+			*flushPeriodSec44 = r.OutputMicrosoftFabric.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec44 = nil
+		}
+		connectionTimeout19 := new(float64)
+		if !r.OutputMicrosoftFabric.ConnectionTimeout.IsUnknown() && !r.OutputMicrosoftFabric.ConnectionTimeout.IsNull() {
+			*connectionTimeout19 = r.OutputMicrosoftFabric.ConnectionTimeout.ValueFloat64()
+		} else {
+			connectionTimeout19 = nil
+		}
+		requestTimeout7 := new(float64)
+		if !r.OutputMicrosoftFabric.RequestTimeout.IsUnknown() && !r.OutputMicrosoftFabric.RequestTimeout.IsNull() {
+			*requestTimeout7 = r.OutputMicrosoftFabric.RequestTimeout.ValueFloat64()
+		} else {
+			requestTimeout7 = nil
+		}
+		maxRetries8 := new(float64)
+		if !r.OutputMicrosoftFabric.MaxRetries.IsUnknown() && !r.OutputMicrosoftFabric.MaxRetries.IsNull() {
+			*maxRetries8 = r.OutputMicrosoftFabric.MaxRetries.ValueFloat64()
+		} else {
+			maxRetries8 = nil
+		}
+		maxBackOff4 := new(float64)
+		if !r.OutputMicrosoftFabric.MaxBackOff.IsUnknown() && !r.OutputMicrosoftFabric.MaxBackOff.IsNull() {
+			*maxBackOff4 = r.OutputMicrosoftFabric.MaxBackOff.ValueFloat64()
+		} else {
+			maxBackOff4 = nil
+		}
+		initialBackoff68 := new(float64)
+		if !r.OutputMicrosoftFabric.InitialBackoff.IsUnknown() && !r.OutputMicrosoftFabric.InitialBackoff.IsNull() {
+			*initialBackoff68 = r.OutputMicrosoftFabric.InitialBackoff.ValueFloat64()
+		} else {
+			initialBackoff68 = nil
+		}
+		backoffRate68 := new(float64)
+		if !r.OutputMicrosoftFabric.BackoffRate.IsUnknown() && !r.OutputMicrosoftFabric.BackoffRate.IsNull() {
+			*backoffRate68 = r.OutputMicrosoftFabric.BackoffRate.ValueFloat64()
+		} else {
+			backoffRate68 = nil
+		}
+		authenticationTimeout4 := new(float64)
+		if !r.OutputMicrosoftFabric.AuthenticationTimeout.IsUnknown() && !r.OutputMicrosoftFabric.AuthenticationTimeout.IsNull() {
+			*authenticationTimeout4 = r.OutputMicrosoftFabric.AuthenticationTimeout.ValueFloat64()
+		} else {
+			authenticationTimeout4 = nil
+		}
+		reauthenticationThreshold4 := new(float64)
+		if !r.OutputMicrosoftFabric.ReauthenticationThreshold.IsUnknown() && !r.OutputMicrosoftFabric.ReauthenticationThreshold.IsNull() {
+			*reauthenticationThreshold4 = r.OutputMicrosoftFabric.ReauthenticationThreshold.ValueFloat64()
+		} else {
+			reauthenticationThreshold4 = nil
+		}
+		var sasl3 *shared.OutputMicrosoftFabricAuthentication
+		if r.OutputMicrosoftFabric.Sasl != nil {
+			disabled28 := new(bool)
+			if !r.OutputMicrosoftFabric.Sasl.Disabled.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.Disabled.IsNull() {
+				*disabled28 = r.OutputMicrosoftFabric.Sasl.Disabled.ValueBool()
+			} else {
+				disabled28 = nil
+			}
+			mechanism3 := new(shared.OutputMicrosoftFabricSASLMechanism)
+			if !r.OutputMicrosoftFabric.Sasl.Mechanism.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.Mechanism.IsNull() {
+				*mechanism3 = shared.OutputMicrosoftFabricSASLMechanism(r.OutputMicrosoftFabric.Sasl.Mechanism.ValueString())
+			} else {
+				mechanism3 = nil
+			}
+			username10 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.Username.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.Username.IsNull() {
+				*username10 = r.OutputMicrosoftFabric.Sasl.Username.ValueString()
+			} else {
+				username10 = nil
+			}
+			textSecret29 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.TextSecret.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.TextSecret.IsNull() {
+				*textSecret29 = r.OutputMicrosoftFabric.Sasl.TextSecret.ValueString()
+			} else {
+				textSecret29 = nil
+			}
+			clientSecretAuthType := new(shared.OutputMicrosoftFabricAuthenticationMethod)
+			if !r.OutputMicrosoftFabric.Sasl.ClientSecretAuthType.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.ClientSecretAuthType.IsNull() {
+				*clientSecretAuthType = shared.OutputMicrosoftFabricAuthenticationMethod(r.OutputMicrosoftFabric.Sasl.ClientSecretAuthType.ValueString())
+			} else {
+				clientSecretAuthType = nil
+			}
+			clientTextSecret2 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.ClientTextSecret.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.ClientTextSecret.IsNull() {
+				*clientTextSecret2 = r.OutputMicrosoftFabric.Sasl.ClientTextSecret.ValueString()
+			} else {
+				clientTextSecret2 = nil
+			}
+			certificateName18 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.CertificateName.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.CertificateName.IsNull() {
+				*certificateName18 = r.OutputMicrosoftFabric.Sasl.CertificateName.ValueString()
+			} else {
+				certificateName18 = nil
+			}
+			certPath16 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.CertPath.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.CertPath.IsNull() {
+				*certPath16 = r.OutputMicrosoftFabric.Sasl.CertPath.ValueString()
+			} else {
+				certPath16 = nil
+			}
+			privKeyPath16 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.PrivKeyPath.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.PrivKeyPath.IsNull() {
+				*privKeyPath16 = r.OutputMicrosoftFabric.Sasl.PrivKeyPath.ValueString()
+			} else {
+				privKeyPath16 = nil
+			}
+			passphrase16 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.Passphrase.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.Passphrase.IsNull() {
+				*passphrase16 = r.OutputMicrosoftFabric.Sasl.Passphrase.ValueString()
+			} else {
+				passphrase16 = nil
+			}
+			oauthEndpoint1 := new(shared.OutputMicrosoftFabricMicrosoftEntraIDAuthenticationEndpoint)
+			if !r.OutputMicrosoftFabric.Sasl.OauthEndpoint.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.OauthEndpoint.IsNull() {
+				*oauthEndpoint1 = shared.OutputMicrosoftFabricMicrosoftEntraIDAuthenticationEndpoint(r.OutputMicrosoftFabric.Sasl.OauthEndpoint.ValueString())
+			} else {
+				oauthEndpoint1 = nil
+			}
+			clientId4 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.ClientID.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.ClientID.IsNull() {
+				*clientId4 = r.OutputMicrosoftFabric.Sasl.ClientID.ValueString()
+			} else {
+				clientId4 = nil
+			}
+			tenantId2 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.TenantID.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.TenantID.IsNull() {
+				*tenantId2 = r.OutputMicrosoftFabric.Sasl.TenantID.ValueString()
+			} else {
+				tenantId2 = nil
+			}
+			scope3 := new(string)
+			if !r.OutputMicrosoftFabric.Sasl.Scope.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.Scope.IsNull() {
+				*scope3 = r.OutputMicrosoftFabric.Sasl.Scope.ValueString()
+			} else {
+				scope3 = nil
+			}
+			sasl3 = &shared.OutputMicrosoftFabricAuthentication{
+				Disabled:             disabled28,
+				Mechanism:            mechanism3,
+				Username:             username10,
+				TextSecret:           textSecret29,
+				ClientSecretAuthType: clientSecretAuthType,
+				ClientTextSecret:     clientTextSecret2,
+				CertificateName:      certificateName18,
+				CertPath:             certPath16,
+				PrivKeyPath:          privKeyPath16,
+				Passphrase:           passphrase16,
+				OauthEndpoint:        oauthEndpoint1,
+				ClientID:             clientId4,
+				TenantID:             tenantId2,
+				Scope:                scope3,
+			}
+		}
+		var tls20 *shared.OutputMicrosoftFabricTLSSettingsClientSide
+		if r.OutputMicrosoftFabric.TLS != nil {
+			disabled29 := new(bool)
+			if !r.OutputMicrosoftFabric.TLS.Disabled.IsUnknown() && !r.OutputMicrosoftFabric.TLS.Disabled.IsNull() {
+				*disabled29 = r.OutputMicrosoftFabric.TLS.Disabled.ValueBool()
+			} else {
+				disabled29 = nil
+			}
+			rejectUnauthorized59 := new(bool)
+			if !r.OutputMicrosoftFabric.TLS.RejectUnauthorized.IsUnknown() && !r.OutputMicrosoftFabric.TLS.RejectUnauthorized.IsNull() {
+				*rejectUnauthorized59 = r.OutputMicrosoftFabric.TLS.RejectUnauthorized.ValueBool()
+			} else {
+				rejectUnauthorized59 = nil
+			}
+			tls20 = &shared.OutputMicrosoftFabricTLSSettingsClientSide{
+				Disabled:           disabled29,
+				RejectUnauthorized: rejectUnauthorized59,
+			}
+		}
+		onBackpressure59 := new(shared.OutputMicrosoftFabricBackpressureBehavior)
+		if !r.OutputMicrosoftFabric.OnBackpressure.IsUnknown() && !r.OutputMicrosoftFabric.OnBackpressure.IsNull() {
+			*onBackpressure59 = shared.OutputMicrosoftFabricBackpressureBehavior(r.OutputMicrosoftFabric.OnBackpressure.ValueString())
+		} else {
+			onBackpressure59 = nil
+		}
+		var bootstrapServer string
+		bootstrapServer = r.OutputMicrosoftFabric.BootstrapServer.ValueString()
+
+		description67 := new(string)
+		if !r.OutputMicrosoftFabric.Description.IsUnknown() && !r.OutputMicrosoftFabric.Description.IsNull() {
+			*description67 = r.OutputMicrosoftFabric.Description.ValueString()
+		} else {
+			description67 = nil
+		}
+		pqStrictOrdering2 := new(bool)
+		if !r.OutputMicrosoftFabric.PqStrictOrdering.IsUnknown() && !r.OutputMicrosoftFabric.PqStrictOrdering.IsNull() {
+			*pqStrictOrdering2 = r.OutputMicrosoftFabric.PqStrictOrdering.ValueBool()
+		} else {
+			pqStrictOrdering2 = nil
+		}
+		pqRatePerSec2 := new(float64)
+		if !r.OutputMicrosoftFabric.PqRatePerSec.IsUnknown() && !r.OutputMicrosoftFabric.PqRatePerSec.IsNull() {
+			*pqRatePerSec2 = r.OutputMicrosoftFabric.PqRatePerSec.ValueFloat64()
+		} else {
+			pqRatePerSec2 = nil
+		}
+		pqMode50 := new(shared.OutputMicrosoftFabricMode)
+		if !r.OutputMicrosoftFabric.PqMode.IsUnknown() && !r.OutputMicrosoftFabric.PqMode.IsNull() {
+			*pqMode50 = shared.OutputMicrosoftFabricMode(r.OutputMicrosoftFabric.PqMode.ValueString())
+		} else {
+			pqMode50 = nil
+		}
+		pqMaxBufferSize2 := new(float64)
+		if !r.OutputMicrosoftFabric.PqMaxBufferSize.IsUnknown() && !r.OutputMicrosoftFabric.PqMaxBufferSize.IsNull() {
+			*pqMaxBufferSize2 = r.OutputMicrosoftFabric.PqMaxBufferSize.ValueFloat64()
+		} else {
+			pqMaxBufferSize2 = nil
+		}
+		pqMaxBackpressureSec2 := new(float64)
+		if !r.OutputMicrosoftFabric.PqMaxBackpressureSec.IsUnknown() && !r.OutputMicrosoftFabric.PqMaxBackpressureSec.IsNull() {
+			*pqMaxBackpressureSec2 = r.OutputMicrosoftFabric.PqMaxBackpressureSec.ValueFloat64()
+		} else {
+			pqMaxBackpressureSec2 = nil
+		}
+		pqMaxFileSize50 := new(string)
+		if !r.OutputMicrosoftFabric.PqMaxFileSize.IsUnknown() && !r.OutputMicrosoftFabric.PqMaxFileSize.IsNull() {
+			*pqMaxFileSize50 = r.OutputMicrosoftFabric.PqMaxFileSize.ValueString()
+		} else {
+			pqMaxFileSize50 = nil
+		}
+		pqMaxSize50 := new(string)
+		if !r.OutputMicrosoftFabric.PqMaxSize.IsUnknown() && !r.OutputMicrosoftFabric.PqMaxSize.IsNull() {
+			*pqMaxSize50 = r.OutputMicrosoftFabric.PqMaxSize.ValueString()
+		} else {
+			pqMaxSize50 = nil
+		}
+		pqPath50 := new(string)
+		if !r.OutputMicrosoftFabric.PqPath.IsUnknown() && !r.OutputMicrosoftFabric.PqPath.IsNull() {
+			*pqPath50 = r.OutputMicrosoftFabric.PqPath.ValueString()
+		} else {
+			pqPath50 = nil
+		}
+		pqCompress50 := new(shared.OutputMicrosoftFabricCompression)
+		if !r.OutputMicrosoftFabric.PqCompress.IsUnknown() && !r.OutputMicrosoftFabric.PqCompress.IsNull() {
+			*pqCompress50 = shared.OutputMicrosoftFabricCompression(r.OutputMicrosoftFabric.PqCompress.ValueString())
+		} else {
+			pqCompress50 = nil
+		}
+		pqOnBackpressure50 := new(shared.OutputMicrosoftFabricQueueFullBehavior)
+		if !r.OutputMicrosoftFabric.PqOnBackpressure.IsUnknown() && !r.OutputMicrosoftFabric.PqOnBackpressure.IsNull() {
+			*pqOnBackpressure50 = shared.OutputMicrosoftFabricQueueFullBehavior(r.OutputMicrosoftFabric.PqOnBackpressure.ValueString())
+		} else {
+			pqOnBackpressure50 = nil
+		}
+		var pqControls50 *shared.OutputMicrosoftFabricPqControls
+		if r.OutputMicrosoftFabric.PqControls != nil {
+			pqControls50 = &shared.OutputMicrosoftFabricPqControls{}
+		}
+		outputMicrosoftFabric = &shared.OutputMicrosoftFabric{
+			ID:                        id67,
+			Type:                      typeVar67,
+			Pipeline:                  pipeline66,
+			SystemFields:              systemFields66,
+			Environment:               environment66,
+			Streamtags:                streamtags66,
+			Topic:                     topic4,
+			Ack:                       ack4,
+			Format:                    format20,
+			MaxRecordSizeKB:           maxRecordSizeKb8,
+			FlushEventCount:           flushEventCount4,
+			FlushPeriodSec:            flushPeriodSec44,
+			ConnectionTimeout:         connectionTimeout19,
+			RequestTimeout:            requestTimeout7,
+			MaxRetries:                maxRetries8,
+			MaxBackOff:                maxBackOff4,
+			InitialBackoff:            initialBackoff68,
+			BackoffRate:               backoffRate68,
+			AuthenticationTimeout:     authenticationTimeout4,
+			ReauthenticationThreshold: reauthenticationThreshold4,
+			Sasl:                      sasl3,
+			TLS:                       tls20,
+			OnBackpressure:            onBackpressure59,
+			BootstrapServer:           bootstrapServer,
+			Description:               description67,
+			PqStrictOrdering:          pqStrictOrdering2,
+			PqRatePerSec:              pqRatePerSec2,
+			PqMode:                    pqMode50,
+			PqMaxBufferSize:           pqMaxBufferSize2,
+			PqMaxBackpressureSec:      pqMaxBackpressureSec2,
+			PqMaxFileSize:             pqMaxFileSize50,
+			PqMaxSize:                 pqMaxSize50,
+			PqPath:                    pqPath50,
+			PqCompress:                pqCompress50,
+			PqOnBackpressure:          pqOnBackpressure50,
+			PqControls:                pqControls50,
+		}
+	}
+	if outputMicrosoftFabric != nil {
+		out = shared.Output{
+			OutputMicrosoftFabric: outputMicrosoftFabric,
+		}
+	}
+	var outputCloudflareR2 *shared.OutputCloudflareR2
+	if r.OutputCloudflareR2 != nil {
+		id68 := new(string)
+		if !r.OutputCloudflareR2.ID.IsUnknown() && !r.OutputCloudflareR2.ID.IsNull() {
+			*id68 = r.OutputCloudflareR2.ID.ValueString()
+		} else {
+			id68 = nil
+		}
+		typeVar68 := shared.OutputCloudflareR2Type(r.OutputCloudflareR2.Type.ValueString())
+		pipeline67 := new(string)
+		if !r.OutputCloudflareR2.Pipeline.IsUnknown() && !r.OutputCloudflareR2.Pipeline.IsNull() {
+			*pipeline67 = r.OutputCloudflareR2.Pipeline.ValueString()
+		} else {
+			pipeline67 = nil
+		}
+		systemFields67 := make([]string, 0, len(r.OutputCloudflareR2.SystemFields))
+		for systemFieldsIndex67 := range r.OutputCloudflareR2.SystemFields {
+			systemFields67 = append(systemFields67, r.OutputCloudflareR2.SystemFields[systemFieldsIndex67].ValueString())
+		}
+		environment67 := new(string)
+		if !r.OutputCloudflareR2.Environment.IsUnknown() && !r.OutputCloudflareR2.Environment.IsNull() {
+			*environment67 = r.OutputCloudflareR2.Environment.ValueString()
+		} else {
+			environment67 = nil
+		}
+		streamtags67 := make([]string, 0, len(r.OutputCloudflareR2.Streamtags))
+		for streamtagsIndex67 := range r.OutputCloudflareR2.Streamtags {
+			streamtags67 = append(streamtags67, r.OutputCloudflareR2.Streamtags[streamtagsIndex67].ValueString())
+		}
+		var endpoint16 string
+		endpoint16 = r.OutputCloudflareR2.Endpoint.ValueString()
+
+		var bucket7 string
+		bucket7 = r.OutputCloudflareR2.Bucket.ValueString()
+
+		awsAuthenticationMethod10 := new(shared.OutputCloudflareR2AuthenticationMethod)
+		if !r.OutputCloudflareR2.AwsAuthenticationMethod.IsUnknown() && !r.OutputCloudflareR2.AwsAuthenticationMethod.IsNull() {
+			*awsAuthenticationMethod10 = shared.OutputCloudflareR2AuthenticationMethod(r.OutputCloudflareR2.AwsAuthenticationMethod.ValueString())
+		} else {
+			awsAuthenticationMethod10 = nil
+		}
+		awsSecretKey11 := new(string)
+		if !r.OutputCloudflareR2.AwsSecretKey.IsUnknown() && !r.OutputCloudflareR2.AwsSecretKey.IsNull() {
+			*awsSecretKey11 = r.OutputCloudflareR2.AwsSecretKey.ValueString()
+		} else {
+			awsSecretKey11 = nil
+		}
+		var region17 interface{}
+		if !r.OutputCloudflareR2.Region.IsUnknown() && !r.OutputCloudflareR2.Region.IsNull() {
+			_ = json.Unmarshal([]byte(r.OutputCloudflareR2.Region.ValueString()), &region17)
+		}
+		stagePath10 := new(string)
+		if !r.OutputCloudflareR2.StagePath.IsUnknown() && !r.OutputCloudflareR2.StagePath.IsNull() {
+			*stagePath10 = r.OutputCloudflareR2.StagePath.ValueString()
+		} else {
+			stagePath10 = nil
+		}
+		addIDToStagePath10 := new(bool)
+		if !r.OutputCloudflareR2.AddIDToStagePath.IsUnknown() && !r.OutputCloudflareR2.AddIDToStagePath.IsNull() {
+			*addIDToStagePath10 = r.OutputCloudflareR2.AddIDToStagePath.ValueBool()
+		} else {
+			addIDToStagePath10 = nil
+		}
+		destPath9 := new(string)
+		if !r.OutputCloudflareR2.DestPath.IsUnknown() && !r.OutputCloudflareR2.DestPath.IsNull() {
+			*destPath9 = r.OutputCloudflareR2.DestPath.ValueString()
+		} else {
+			destPath9 = nil
+		}
+		signatureVersion10 := new(shared.OutputCloudflareR2SignatureVersion)
+		if !r.OutputCloudflareR2.SignatureVersion.IsUnknown() && !r.OutputCloudflareR2.SignatureVersion.IsNull() {
+			*signatureVersion10 = shared.OutputCloudflareR2SignatureVersion(r.OutputCloudflareR2.SignatureVersion.ValueString())
+		} else {
+			signatureVersion10 = nil
+		}
+		var objectAcl6 interface{}
+		if !r.OutputCloudflareR2.ObjectACL.IsUnknown() && !r.OutputCloudflareR2.ObjectACL.IsNull() {
+			_ = json.Unmarshal([]byte(r.OutputCloudflareR2.ObjectACL.ValueString()), &objectAcl6)
+		}
+		storageClass7 := new(shared.OutputCloudflareR2StorageClass)
+		if !r.OutputCloudflareR2.StorageClass.IsUnknown() && !r.OutputCloudflareR2.StorageClass.IsNull() {
+			*storageClass7 = shared.OutputCloudflareR2StorageClass(r.OutputCloudflareR2.StorageClass.ValueString())
+		} else {
+			storageClass7 = nil
+		}
+		serverSideEncryption4 := new(shared.OutputCloudflareR2ServerSideEncryption)
+		if !r.OutputCloudflareR2.ServerSideEncryption.IsUnknown() && !r.OutputCloudflareR2.ServerSideEncryption.IsNull() {
+			*serverSideEncryption4 = shared.OutputCloudflareR2ServerSideEncryption(r.OutputCloudflareR2.ServerSideEncryption.ValueString())
+		} else {
+			serverSideEncryption4 = nil
+		}
+		reuseConnections11 := new(bool)
+		if !r.OutputCloudflareR2.ReuseConnections.IsUnknown() && !r.OutputCloudflareR2.ReuseConnections.IsNull() {
+			*reuseConnections11 = r.OutputCloudflareR2.ReuseConnections.ValueBool()
+		} else {
+			reuseConnections11 = nil
+		}
+		rejectUnauthorized60 := new(bool)
+		if !r.OutputCloudflareR2.RejectUnauthorized.IsUnknown() && !r.OutputCloudflareR2.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized60 = r.OutputCloudflareR2.RejectUnauthorized.ValueBool()
+		} else {
+			rejectUnauthorized60 = nil
+		}
+		verifyPermissions5 := new(bool)
+		if !r.OutputCloudflareR2.VerifyPermissions.IsUnknown() && !r.OutputCloudflareR2.VerifyPermissions.IsNull() {
+			*verifyPermissions5 = r.OutputCloudflareR2.VerifyPermissions.ValueBool()
+		} else {
+			verifyPermissions5 = nil
+		}
+		removeEmptyDirs10 := new(bool)
+		if !r.OutputCloudflareR2.RemoveEmptyDirs.IsUnknown() && !r.OutputCloudflareR2.RemoveEmptyDirs.IsNull() {
+			*removeEmptyDirs10 = r.OutputCloudflareR2.RemoveEmptyDirs.ValueBool()
+		} else {
+			removeEmptyDirs10 = nil
+		}
+		partitionExpr8 := new(string)
+		if !r.OutputCloudflareR2.PartitionExpr.IsUnknown() && !r.OutputCloudflareR2.PartitionExpr.IsNull() {
+			*partitionExpr8 = r.OutputCloudflareR2.PartitionExpr.ValueString()
+		} else {
+			partitionExpr8 = nil
+		}
+		format21 := new(shared.OutputCloudflareR2DataFormat)
+		if !r.OutputCloudflareR2.Format.IsUnknown() && !r.OutputCloudflareR2.Format.IsNull() {
+			*format21 = shared.OutputCloudflareR2DataFormat(r.OutputCloudflareR2.Format.ValueString())
+		} else {
+			format21 = nil
+		}
+		baseFileName8 := new(string)
+		if !r.OutputCloudflareR2.BaseFileName.IsUnknown() && !r.OutputCloudflareR2.BaseFileName.IsNull() {
+			*baseFileName8 = r.OutputCloudflareR2.BaseFileName.ValueString()
+		} else {
+			baseFileName8 = nil
+		}
+		fileNameSuffix8 := new(string)
+		if !r.OutputCloudflareR2.FileNameSuffix.IsUnknown() && !r.OutputCloudflareR2.FileNameSuffix.IsNull() {
+			*fileNameSuffix8 = r.OutputCloudflareR2.FileNameSuffix.ValueString()
+		} else {
+			fileNameSuffix8 = nil
+		}
+		maxFileSizeMb10 := new(float64)
+		if !r.OutputCloudflareR2.MaxFileSizeMB.IsUnknown() && !r.OutputCloudflareR2.MaxFileSizeMB.IsNull() {
+			*maxFileSizeMb10 = r.OutputCloudflareR2.MaxFileSizeMB.ValueFloat64()
+		} else {
+			maxFileSizeMb10 = nil
+		}
+		maxOpenFiles10 := new(float64)
+		if !r.OutputCloudflareR2.MaxOpenFiles.IsUnknown() && !r.OutputCloudflareR2.MaxOpenFiles.IsNull() {
+			*maxOpenFiles10 = r.OutputCloudflareR2.MaxOpenFiles.ValueFloat64()
+		} else {
+			maxOpenFiles10 = nil
+		}
+		headerLine8 := new(string)
+		if !r.OutputCloudflareR2.HeaderLine.IsUnknown() && !r.OutputCloudflareR2.HeaderLine.IsNull() {
+			*headerLine8 = r.OutputCloudflareR2.HeaderLine.ValueString()
+		} else {
+			headerLine8 = nil
+		}
+		writeHighWaterMark8 := new(float64)
+		if !r.OutputCloudflareR2.WriteHighWaterMark.IsUnknown() && !r.OutputCloudflareR2.WriteHighWaterMark.IsNull() {
+			*writeHighWaterMark8 = r.OutputCloudflareR2.WriteHighWaterMark.ValueFloat64()
+		} else {
+			writeHighWaterMark8 = nil
+		}
+		onBackpressure60 := new(shared.OutputCloudflareR2BackpressureBehavior)
+		if !r.OutputCloudflareR2.OnBackpressure.IsUnknown() && !r.OutputCloudflareR2.OnBackpressure.IsNull() {
+			*onBackpressure60 = shared.OutputCloudflareR2BackpressureBehavior(r.OutputCloudflareR2.OnBackpressure.ValueString())
+		} else {
+			onBackpressure60 = nil
+		}
+		deadletterEnabled10 := new(bool)
+		if !r.OutputCloudflareR2.DeadletterEnabled.IsUnknown() && !r.OutputCloudflareR2.DeadletterEnabled.IsNull() {
+			*deadletterEnabled10 = r.OutputCloudflareR2.DeadletterEnabled.ValueBool()
+		} else {
+			deadletterEnabled10 = nil
+		}
+		onDiskFullBackpressure10 := new(shared.OutputCloudflareR2DiskSpaceProtection)
+		if !r.OutputCloudflareR2.OnDiskFullBackpressure.IsUnknown() && !r.OutputCloudflareR2.OnDiskFullBackpressure.IsNull() {
+			*onDiskFullBackpressure10 = shared.OutputCloudflareR2DiskSpaceProtection(r.OutputCloudflareR2.OnDiskFullBackpressure.ValueString())
+		} else {
+			onDiskFullBackpressure10 = nil
+		}
+		forceCloseOnShutdown1 := new(bool)
+		if !r.OutputCloudflareR2.ForceCloseOnShutdown.IsUnknown() && !r.OutputCloudflareR2.ForceCloseOnShutdown.IsNull() {
+			*forceCloseOnShutdown1 = r.OutputCloudflareR2.ForceCloseOnShutdown.ValueBool()
+		} else {
+			forceCloseOnShutdown1 = nil
+		}
+		maxFileOpenTimeSec10 := new(float64)
+		if !r.OutputCloudflareR2.MaxFileOpenTimeSec.IsUnknown() && !r.OutputCloudflareR2.MaxFileOpenTimeSec.IsNull() {
+			*maxFileOpenTimeSec10 = r.OutputCloudflareR2.MaxFileOpenTimeSec.ValueFloat64()
+		} else {
+			maxFileOpenTimeSec10 = nil
+		}
+		maxFileIdleTimeSec10 := new(float64)
+		if !r.OutputCloudflareR2.MaxFileIdleTimeSec.IsUnknown() && !r.OutputCloudflareR2.MaxFileIdleTimeSec.IsNull() {
+			*maxFileIdleTimeSec10 = r.OutputCloudflareR2.MaxFileIdleTimeSec.ValueFloat64()
+		} else {
+			maxFileIdleTimeSec10 = nil
+		}
+		maxConcurrentFileParts6 := new(float64)
+		if !r.OutputCloudflareR2.MaxConcurrentFileParts.IsUnknown() && !r.OutputCloudflareR2.MaxConcurrentFileParts.IsNull() {
+			*maxConcurrentFileParts6 = r.OutputCloudflareR2.MaxConcurrentFileParts.ValueFloat64()
+		} else {
+			maxConcurrentFileParts6 = nil
+		}
+		description68 := new(string)
+		if !r.OutputCloudflareR2.Description.IsUnknown() && !r.OutputCloudflareR2.Description.IsNull() {
+			*description68 = r.OutputCloudflareR2.Description.ValueString()
+		} else {
+			description68 = nil
+		}
+		awsAPIKey11 := new(string)
+		if !r.OutputCloudflareR2.AwsAPIKey.IsUnknown() && !r.OutputCloudflareR2.AwsAPIKey.IsNull() {
+			*awsAPIKey11 = r.OutputCloudflareR2.AwsAPIKey.ValueString()
+		} else {
+			awsAPIKey11 = nil
+		}
+		awsSecret10 := new(string)
+		if !r.OutputCloudflareR2.AwsSecret.IsUnknown() && !r.OutputCloudflareR2.AwsSecret.IsNull() {
+			*awsSecret10 = r.OutputCloudflareR2.AwsSecret.ValueString()
+		} else {
+			awsSecret10 = nil
+		}
+		compress40 := new(shared.OutputCloudflareR2Compression)
+		if !r.OutputCloudflareR2.Compress.IsUnknown() && !r.OutputCloudflareR2.Compress.IsNull() {
+			*compress40 = shared.OutputCloudflareR2Compression(r.OutputCloudflareR2.Compress.ValueString())
+		} else {
+			compress40 = nil
+		}
+		compressionLevel7 := new(shared.OutputCloudflareR2CompressionLevel)
+		if !r.OutputCloudflareR2.CompressionLevel.IsUnknown() && !r.OutputCloudflareR2.CompressionLevel.IsNull() {
+			*compressionLevel7 = shared.OutputCloudflareR2CompressionLevel(r.OutputCloudflareR2.CompressionLevel.ValueString())
+		} else {
+			compressionLevel7 = nil
+		}
+		automaticSchema8 := new(bool)
+		if !r.OutputCloudflareR2.AutomaticSchema.IsUnknown() && !r.OutputCloudflareR2.AutomaticSchema.IsNull() {
+			*automaticSchema8 = r.OutputCloudflareR2.AutomaticSchema.ValueBool()
+		} else {
+			automaticSchema8 = nil
+		}
+		parquetSchema2 := new(string)
+		if !r.OutputCloudflareR2.ParquetSchema.IsUnknown() && !r.OutputCloudflareR2.ParquetSchema.IsNull() {
+			*parquetSchema2 = r.OutputCloudflareR2.ParquetSchema.ValueString()
+		} else {
+			parquetSchema2 = nil
+		}
+		parquetVersion8 := new(shared.OutputCloudflareR2ParquetVersion)
+		if !r.OutputCloudflareR2.ParquetVersion.IsUnknown() && !r.OutputCloudflareR2.ParquetVersion.IsNull() {
+			*parquetVersion8 = shared.OutputCloudflareR2ParquetVersion(r.OutputCloudflareR2.ParquetVersion.ValueString())
+		} else {
+			parquetVersion8 = nil
+		}
+		parquetDataPageVersion8 := new(shared.OutputCloudflareR2DataPageVersion)
+		if !r.OutputCloudflareR2.ParquetDataPageVersion.IsUnknown() && !r.OutputCloudflareR2.ParquetDataPageVersion.IsNull() {
+			*parquetDataPageVersion8 = shared.OutputCloudflareR2DataPageVersion(r.OutputCloudflareR2.ParquetDataPageVersion.ValueString())
+		} else {
+			parquetDataPageVersion8 = nil
+		}
+		parquetRowGroupLength8 := new(float64)
+		if !r.OutputCloudflareR2.ParquetRowGroupLength.IsUnknown() && !r.OutputCloudflareR2.ParquetRowGroupLength.IsNull() {
+			*parquetRowGroupLength8 = r.OutputCloudflareR2.ParquetRowGroupLength.ValueFloat64()
+		} else {
+			parquetRowGroupLength8 = nil
+		}
+		parquetPageSize8 := new(string)
+		if !r.OutputCloudflareR2.ParquetPageSize.IsUnknown() && !r.OutputCloudflareR2.ParquetPageSize.IsNull() {
+			*parquetPageSize8 = r.OutputCloudflareR2.ParquetPageSize.ValueString()
+		} else {
+			parquetPageSize8 = nil
+		}
+		shouldLogInvalidRows8 := new(bool)
+		if !r.OutputCloudflareR2.ShouldLogInvalidRows.IsUnknown() && !r.OutputCloudflareR2.ShouldLogInvalidRows.IsNull() {
+			*shouldLogInvalidRows8 = r.OutputCloudflareR2.ShouldLogInvalidRows.ValueBool()
+		} else {
+			shouldLogInvalidRows8 = nil
+		}
+		keyValueMetadata8 := make([]shared.OutputCloudflareR2KeyValueMetadatum, 0, len(r.OutputCloudflareR2.KeyValueMetadata))
+		for keyValueMetadataIndex8 := range r.OutputCloudflareR2.KeyValueMetadata {
+			key14 := new(string)
+			if !r.OutputCloudflareR2.KeyValueMetadata[keyValueMetadataIndex8].Key.IsUnknown() && !r.OutputCloudflareR2.KeyValueMetadata[keyValueMetadataIndex8].Key.IsNull() {
+				*key14 = r.OutputCloudflareR2.KeyValueMetadata[keyValueMetadataIndex8].Key.ValueString()
+			} else {
+				key14 = nil
+			}
+			var value63 string
+			value63 = r.OutputCloudflareR2.KeyValueMetadata[keyValueMetadataIndex8].Value.ValueString()
+
+			keyValueMetadata8 = append(keyValueMetadata8, shared.OutputCloudflareR2KeyValueMetadatum{
+				Key:   key14,
+				Value: value63,
+			})
+		}
+		enableStatistics8 := new(bool)
+		if !r.OutputCloudflareR2.EnableStatistics.IsUnknown() && !r.OutputCloudflareR2.EnableStatistics.IsNull() {
+			*enableStatistics8 = r.OutputCloudflareR2.EnableStatistics.ValueBool()
+		} else {
+			enableStatistics8 = nil
+		}
+		enableWritePageIndex8 := new(bool)
+		if !r.OutputCloudflareR2.EnableWritePageIndex.IsUnknown() && !r.OutputCloudflareR2.EnableWritePageIndex.IsNull() {
+			*enableWritePageIndex8 = r.OutputCloudflareR2.EnableWritePageIndex.ValueBool()
+		} else {
+			enableWritePageIndex8 = nil
+		}
+		enablePageChecksum8 := new(bool)
+		if !r.OutputCloudflareR2.EnablePageChecksum.IsUnknown() && !r.OutputCloudflareR2.EnablePageChecksum.IsNull() {
+			*enablePageChecksum8 = r.OutputCloudflareR2.EnablePageChecksum.ValueBool()
+		} else {
+			enablePageChecksum8 = nil
+		}
+		emptyDirCleanupSec9 := new(float64)
+		if !r.OutputCloudflareR2.EmptyDirCleanupSec.IsUnknown() && !r.OutputCloudflareR2.EmptyDirCleanupSec.IsNull() {
+			*emptyDirCleanupSec9 = r.OutputCloudflareR2.EmptyDirCleanupSec.ValueFloat64()
+		} else {
+			emptyDirCleanupSec9 = nil
+		}
+		directoryBatchSize1 := new(float64)
+		if !r.OutputCloudflareR2.DirectoryBatchSize.IsUnknown() && !r.OutputCloudflareR2.DirectoryBatchSize.IsNull() {
+			*directoryBatchSize1 = r.OutputCloudflareR2.DirectoryBatchSize.ValueFloat64()
+		} else {
+			directoryBatchSize1 = nil
+		}
+		deadletterPath9 := new(string)
+		if !r.OutputCloudflareR2.DeadletterPath.IsUnknown() && !r.OutputCloudflareR2.DeadletterPath.IsNull() {
+			*deadletterPath9 = r.OutputCloudflareR2.DeadletterPath.ValueString()
+		} else {
+			deadletterPath9 = nil
+		}
+		maxRetryNum9 := new(float64)
+		if !r.OutputCloudflareR2.MaxRetryNum.IsUnknown() && !r.OutputCloudflareR2.MaxRetryNum.IsNull() {
+			*maxRetryNum9 = r.OutputCloudflareR2.MaxRetryNum.ValueFloat64()
+		} else {
+			maxRetryNum9 = nil
+		}
+		outputCloudflareR2 = &shared.OutputCloudflareR2{
+			ID:                      id68,
+			Type:                    typeVar68,
+			Pipeline:                pipeline67,
+			SystemFields:            systemFields67,
+			Environment:             environment67,
+			Streamtags:              streamtags67,
+			Endpoint:                endpoint16,
+			Bucket:                  bucket7,
+			AwsAuthenticationMethod: awsAuthenticationMethod10,
+			AwsSecretKey:            awsSecretKey11,
+			Region:                  region17,
+			StagePath:               stagePath10,
+			AddIDToStagePath:        addIDToStagePath10,
+			DestPath:                destPath9,
+			SignatureVersion:        signatureVersion10,
+			ObjectACL:               objectAcl6,
+			StorageClass:            storageClass7,
+			ServerSideEncryption:    serverSideEncryption4,
+			ReuseConnections:        reuseConnections11,
+			RejectUnauthorized:      rejectUnauthorized60,
+			VerifyPermissions:       verifyPermissions5,
+			RemoveEmptyDirs:         removeEmptyDirs10,
+			PartitionExpr:           partitionExpr8,
+			Format:                  format21,
+			BaseFileName:            baseFileName8,
+			FileNameSuffix:          fileNameSuffix8,
+			MaxFileSizeMB:           maxFileSizeMb10,
+			MaxOpenFiles:            maxOpenFiles10,
+			HeaderLine:              headerLine8,
+			WriteHighWaterMark:      writeHighWaterMark8,
+			OnBackpressure:          onBackpressure60,
+			DeadletterEnabled:       deadletterEnabled10,
+			OnDiskFullBackpressure:  onDiskFullBackpressure10,
+			ForceCloseOnShutdown:    forceCloseOnShutdown1,
+			MaxFileOpenTimeSec:      maxFileOpenTimeSec10,
+			MaxFileIdleTimeSec:      maxFileIdleTimeSec10,
+			MaxConcurrentFileParts:  maxConcurrentFileParts6,
+			Description:             description68,
+			AwsAPIKey:               awsAPIKey11,
+			AwsSecret:               awsSecret10,
+			Compress:                compress40,
+			CompressionLevel:        compressionLevel7,
+			AutomaticSchema:         automaticSchema8,
+			ParquetSchema:           parquetSchema2,
+			ParquetVersion:          parquetVersion8,
+			ParquetDataPageVersion:  parquetDataPageVersion8,
+			ParquetRowGroupLength:   parquetRowGroupLength8,
+			ParquetPageSize:         parquetPageSize8,
+			ShouldLogInvalidRows:    shouldLogInvalidRows8,
+			KeyValueMetadata:        keyValueMetadata8,
+			EnableStatistics:        enableStatistics8,
+			EnableWritePageIndex:    enableWritePageIndex8,
+			EnablePageChecksum:      enablePageChecksum8,
+			EmptyDirCleanupSec:      emptyDirCleanupSec9,
+			DirectoryBatchSize:      directoryBatchSize1,
+			DeadletterPath:          deadletterPath9,
+			MaxRetryNum:             maxRetryNum9,
+		}
+	}
+	if outputCloudflareR2 != nil {
+		out = shared.Output{
+			OutputCloudflareR2: outputCloudflareR2,
 		}
 	}
 

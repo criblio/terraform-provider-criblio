@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+  cloud_domain    = "cribl-playground.cloud"
+}
+
 locals {
   # Base Cribl HTTP configuration
   cribl_http_config = {
@@ -36,7 +50,6 @@ locals {
     compression            = "gzip"
     concurrency            = 8
     dns_resolve_period_sec = 300
-    environment            = "main"
     exclude_fields = [
       "__kube_*",
       "__metadata",
@@ -110,6 +123,146 @@ resource "criblio_destination" "my_cribl_http_destination" {
   group_id          = "default"
   id                = "cribl_http_prod"
   output_cribl_http = local.cribl_http_config
+}
+
+# Chronicle destination
+resource "criblio_destination" "my_chronicle_destination" {
+  group_id = "default"
+  id       = "chronicle_prod"
+  output_chronicle = {
+    id                                 = "chronicle_prod"
+    type                               = "chronicle"
+    description                        = "Send events to Google Chronicle"
+    authentication_method              = "serviceAccountSecret"
+    compress                           = true
+    concurrency                        = 8
+    gcp_project_id                     = "my-gcp-project"
+    gcp_instance                       = "123e4567-e89b-12d3-a456-426614174000"
+    log_type                           = "UNSTRUCTURED_DATA"
+    ingestion_method                   = "BATCH"
+    region                             = "us"
+    on_backpressure                    = "block"
+    pipeline                           = "default"
+    flush_period_sec                   = 2
+    max_payload_events                 = 1000
+    max_payload_size_kb                = 2048
+    timeout_sec                        = 30
+    reject_unauthorized                = true
+    service_account_credentials_secret = "chronicle-service-account"
+  }
+}
+
+# Cloudflare R2 destination
+resource "criblio_destination" "my_cloudflare_r2_destination" {
+  group_id = "default"
+  id       = "cloudflare_r2_prod"
+  output_cloudflare_r2 = {
+    id                        = "cloudflare_r2_prod"
+    type                      = "cloudflare_r2"
+    description               = "Write objects to Cloudflare R2"
+    bucket                    = "my-r2-bucket"
+    endpoint                  = "https://my-account-id.r2.cloudflarestorage.com"
+    aws_authentication_method = "auto"
+    compress                  = "gzip"
+    format                    = "json"
+    dest_path                 = "logs/ingest"
+    on_backpressure           = "block"
+    pipeline                  = "default"
+    max_file_size_mb          = 64
+    max_retry_num             = 10
+  }
+}
+
+
+
+# Databricks destination
+resource "criblio_destination" "my_databricks_destination" {
+  group_id = "default"
+  id       = "databricks_prod"
+  output_databricks = {
+    id                 = "databricks_prod"
+    type               = "databricks"
+    description        = "Write data to Databricks"
+    workspace_id       = "https://my-workspace.cloud.databricks.com"
+    catalog            = "main"
+    schema             = "default"
+    events_volume_name = "events_volume"
+    compress           = "gzip"
+    format             = "json"
+    dest_path          = "logs/ingest"
+    on_backpressure    = "block"
+    pipeline           = "default"
+    max_file_size_mb   = 64
+    max_retry_num      = 10
+    client_id          = "databricks-client-id"
+    client_text_secret = "databricks-client-secret"
+    scope              = "databricks-scope"
+  }
+}
+
+# Microsoft Fabric destination
+resource "criblio_destination" "my_microsoft_fabric_destination" {
+  group_id = "default"
+  id       = "microsoft_fabric_prod"
+  output_microsoft_fabric = {
+    id                 = "microsoft_fabric_prod"
+    type               = "microsoft_fabric"
+    description        = "Produce events to Microsoft Fabric"
+    bootstrap_server   = "my-workspace.servicebus.windows.net:9093"
+    topic              = "app-events"
+    format             = "json"
+    on_backpressure    = "block"
+    pipeline           = "default"
+    flush_period_sec   = 2
+    flush_event_count  = 1000
+    max_record_size_kb = 1024
+    ack                = 1
+    max_retries        = 5
+    sasl = {
+      disabled           = false
+      mechanism          = "oauthbearer"
+      client_id          = "fabric-client-id"
+      client_text_secret = "fabric-client-secret"
+      tenant_id          = "tenant-id"
+      oauth_endpoint     = "https://login.microsoftonline.com"
+      scope              = "https://servicebus.azure.net/.default"
+    }
+    tls = {
+      disabled            = false
+      reject_unauthorized = true
+    }
+  }
+}
+
+# SentinelOne AI SIEM destination
+resource "criblio_destination" "my_sentinel_one_ai_siem_destination" {
+  group_id = "default"
+  id       = "sentinel_one_ai_siem_prod"
+  output_sentinel_one_ai_siem = {
+    id                   = "sentinel_one_ai_siem_prod"
+    type                 = "sentinel_one_ai_siem"
+    description          = "Send events to SentinelOne AI SIEM"
+    base_url             = "https://api.sentinelone.com"
+    endpoint             = "/services/collector/raw"
+    auth_type            = "manual"
+    token                = "sentinelone-token"
+    compress             = false
+    concurrency          = 8
+    on_backpressure      = "block"
+    pipeline             = "default"
+    flush_period_sec     = 2
+    max_payload_events   = 1000
+    max_payload_size_kb  = 2048
+    timeout_sec          = 30
+    reject_unauthorized  = true
+    region               = "US"
+    data_source_vendor   = "Cribl"
+    data_source_name     = "Cribl Stream"
+    data_source_category = "Security"
+    event_type           = "log"
+    source               = "cribl"
+    source_type          = "stream"
+  }
 }
 
 /*

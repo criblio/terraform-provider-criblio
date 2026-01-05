@@ -57,19 +57,19 @@ func (e *IngestionMode) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// MicrosoftEntraIDAuthenticationEndpoint - Endpoint used to acquire authentication tokens from Azure
-type MicrosoftEntraIDAuthenticationEndpoint string
+// OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint - Endpoint used to acquire authentication tokens from Azure
+type OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint string
 
 const (
-	MicrosoftEntraIDAuthenticationEndpointHTTPSLoginMicrosoftonlineCom       MicrosoftEntraIDAuthenticationEndpoint = "https://login.microsoftonline.com"
-	MicrosoftEntraIDAuthenticationEndpointHTTPSLoginMicrosoftonlineUs        MicrosoftEntraIDAuthenticationEndpoint = "https://login.microsoftonline.us"
-	MicrosoftEntraIDAuthenticationEndpointHTTPSLoginPartnerMicrosoftonlineCn MicrosoftEntraIDAuthenticationEndpoint = "https://login.partner.microsoftonline.cn"
+	OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpointHTTPSLoginMicrosoftonlineCom       OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint = "https://login.microsoftonline.com"
+	OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpointHTTPSLoginMicrosoftonlineUs        OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint = "https://login.microsoftonline.us"
+	OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpointHTTPSLoginPartnerMicrosoftonlineCn OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint = "https://login.partner.microsoftonline.cn"
 )
 
-func (e MicrosoftEntraIDAuthenticationEndpoint) ToPointer() *MicrosoftEntraIDAuthenticationEndpoint {
+func (e OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint) ToPointer() *OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint {
 	return &e
 }
-func (e *MicrosoftEntraIDAuthenticationEndpoint) UnmarshalJSON(data []byte) error {
+func (e *OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -80,10 +80,10 @@ func (e *MicrosoftEntraIDAuthenticationEndpoint) UnmarshalJSON(data []byte) erro
 	case "https://login.microsoftonline.us":
 		fallthrough
 	case "https://login.partner.microsoftonline.cn":
-		*e = MicrosoftEntraIDAuthenticationEndpoint(v)
+		*e = OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for MicrosoftEntraIDAuthenticationEndpoint: %v", v)
+		return fmt.Errorf("invalid value for OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint: %v", v)
 	}
 }
 
@@ -641,7 +641,7 @@ type OutputAzureDataExplorer struct {
 	ValidateDatabaseSettings *bool          `default:"true" json:"validateDatabaseSettings"`
 	IngestMode               *IngestionMode `default:"batching" json:"ingestMode"`
 	// Endpoint used to acquire authentication tokens from Azure
-	OauthEndpoint *MicrosoftEntraIDAuthenticationEndpoint `default:"https://login.microsoftonline.com" json:"oauthEndpoint"`
+	OauthEndpoint *OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint `default:"https://login.microsoftonline.com" json:"oauthEndpoint"`
 	// Directory ID (tenant identifier) in Azure Active Directory
 	TenantID string `json:"tenantId"`
 	// client_id to pass in the OAuth request parameter
@@ -832,7 +832,7 @@ func (o *OutputAzureDataExplorer) GetIngestMode() *IngestionMode {
 	return o.IngestMode
 }
 
-func (o *OutputAzureDataExplorer) GetOauthEndpoint() *MicrosoftEntraIDAuthenticationEndpoint {
+func (o *OutputAzureDataExplorer) GetOauthEndpoint() *OutputAzureDataExplorerMicrosoftEntraIDAuthenticationEndpoint {
 	if o == nil {
 		return nil
 	}

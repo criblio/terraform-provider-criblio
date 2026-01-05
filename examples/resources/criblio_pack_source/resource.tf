@@ -146,6 +146,102 @@ resource "criblio_pack_source" "my_packsource" {
     type               = "azure_blob"
     visibility_timeout = 300
   }
+  input_cloudflare_hec = {
+    access_control_allow_headers = [
+      "..."
+    ]
+    access_control_allow_origin = [
+      "..."
+    ]
+    activity_log_sample_rate = 3.88
+    allowed_indexes = [
+      "..."
+    ]
+    auth_tokens = [
+      {
+        allowed_indexes_at_token = [
+          "..."
+        ]
+        auth_type   = "secret"
+        description = "...my_description..."
+        enabled     = true
+        metadata = [
+          {
+            name  = "...my_name..."
+            value = "...my_value..."
+          }
+        ]
+        token        = "...my_token..."
+        token_secret = "...my_token_secret..."
+      }
+    ]
+    breaker_rulesets = [
+      "..."
+    ]
+    capture_headers = false
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    description             = "...my_description..."
+    disabled                = false
+    emit_token_metrics      = false
+    enable_health_check     = "{ \"see\": \"documentation\" }"
+    enable_proxy_header     = true
+    environment             = "...my_environment..."
+    hec_api                 = "...my_hec_api..."
+    host                    = "...my_host..."
+    id                      = "...my_id..."
+    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
+    ip_denylist_regex       = "...my_ip_denylist_regex..."
+    keep_alive_timeout      = 570.14
+    max_active_req          = 2.45
+    max_requests_per_socket = 7
+    metadata = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    pipeline = "...my_pipeline..."
+    port     = 33269.88
+    pq = {
+      commit_frequency = 3.71
+      compress         = "none"
+      max_buffer_size  = 45.55
+      max_file_size    = "...my_max_file_size..."
+      max_size         = "...my_max_size..."
+      mode             = "smart"
+      path             = "...my_path..."
+      pq_controls = {
+        # ...
+      }
+    }
+    pq_enabled             = false
+    request_timeout        = 1.68
+    send_to_routes         = true
+    socket_timeout         = 7.9
+    stale_channel_flush_ms = 22807582.17
+    streamtags = [
+      "..."
+    ]
+    tls = {
+      ca_path             = "...my_ca_path..."
+      cert_path           = "...my_cert_path..."
+      certificate_name    = "...my_certificate_name..."
+      common_name_regex   = "...my_common_name_regex..."
+      disabled            = false
+      max_version         = "TLSv1"
+      min_version         = "TLSv1"
+      passphrase          = "...my_passphrase..."
+      priv_key_path       = "...my_priv_key_path..."
+      reject_unauthorized = true
+      request_cert        = true
+    }
+    type = "cloudflare_hec"
+  }
   input_collection = {
     breaker_rulesets = [
       "access-logs-v1",
@@ -4153,6 +4249,94 @@ resource "criblio_pack_source" "my_packsource" {
     text_secret = "wiz-client-secret"
     ttl         = "4h"
     type        = "wiz"
+  }
+  input_wiz_webhook = {
+    activity_log_sample_rate = 3.29
+    allowed_methods = [
+      "..."
+    ]
+    allowed_paths = [
+      "..."
+    ]
+    auth_tokens = [
+      "..."
+    ]
+    auth_tokens_ext = [
+      {
+        description = "...my_description..."
+        metadata = [
+          {
+            name  = "...my_name..."
+            value = "...my_value..."
+          }
+        ]
+        token = "...my_token..."
+      }
+    ]
+    breaker_rulesets = [
+      "..."
+    ]
+    capture_headers = true
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    description             = "...my_description..."
+    disabled                = true
+    enable_health_check     = false
+    enable_proxy_header     = true
+    environment             = "...my_environment..."
+    host                    = "...my_host..."
+    id                      = "...my_id..."
+    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
+    ip_denylist_regex       = "...my_ip_denylist_regex..."
+    keep_alive_timeout      = 507.02
+    max_active_req          = 5.16
+    max_requests_per_socket = 3
+    metadata = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    pipeline = "...my_pipeline..."
+    port     = 17894.17
+    pq = {
+      commit_frequency = 5.71
+      compress         = "none"
+      max_buffer_size  = 46.61
+      max_file_size    = "...my_max_file_size..."
+      max_size         = "...my_max_size..."
+      mode             = "smart"
+      path             = "...my_path..."
+      pq_controls = {
+        # ...
+      }
+    }
+    pq_enabled             = false
+    request_timeout        = 0.37
+    send_to_routes         = true
+    socket_timeout         = 6.98
+    stale_channel_flush_ms = 17177358.87
+    streamtags = [
+      "..."
+    ]
+    tls = {
+      ca_path             = "...my_ca_path..."
+      cert_path           = "...my_cert_path..."
+      certificate_name    = "...my_certificate_name..."
+      common_name_regex   = "...my_common_name_regex..."
+      disabled            = true
+      max_version         = "TLSv1"
+      min_version         = "TLSv1.3"
+      passphrase          = "...my_passphrase..."
+      priv_key_path       = "...my_priv_key_path..."
+      reject_unauthorized = false
+      request_cert        = true
+    }
+    type = "wiz_webhook"
   }
   input_zscaler_hec = {
     access_control_allow_headers = [

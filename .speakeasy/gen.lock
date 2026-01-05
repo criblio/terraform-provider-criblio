@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: b8c7f1f39673a27c7431f0c46a14cdfd
+  docChecksum: ba419d5afa3da899fd36c7433224114b
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.75
-  configChecksum: 153b0f9b70bfb82ca77dce9f45e793b6
+  releaseVersion: 1.20.77
+  configChecksum: e45ad53c8efdf64bddb4167f01071525
   published: true
 features:
   terraform:
@@ -522,7 +522,6 @@ generatedFiles:
   - internal/provider/types/cribl_leader_dataset.go
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
-  - internal/provider/types/custom_label.go
   - internal/provider/types/dashboard_element.go
   - internal/provider/types/dashboard_element_input.go
   - internal/provider/types/dashboard_element_union.go
@@ -578,6 +577,14 @@ generatedFiles:
   - internal/provider/types/input_azure_blob_connection.go
   - internal/provider/types/input_azure_blob_metadatum.go
   - internal/provider/types/input_azure_blob_pq.go
+  - internal/provider/types/input_cloudflare_hec.go
+  - internal/provider/types/input_cloudflare_hec_auth_token.go
+  - internal/provider/types/input_cloudflare_hec_auth_token_metadatum.go
+  - internal/provider/types/input_cloudflare_hec_connection.go
+  - internal/provider/types/input_cloudflare_hec_metadatum.go
+  - internal/provider/types/input_cloudflare_hec_pq.go
+  - internal/provider/types/input_cloudflare_hec_pq_controls.go
+  - internal/provider/types/input_cloudflare_hec_tls_settings_server_side.go
   - internal/provider/types/input_collection.go
   - internal/provider/types/input_collection_connection.go
   - internal/provider/types/input_collection_metadatum.go
@@ -1013,6 +1020,14 @@ generatedFiles:
   - internal/provider/types/input_wiz_metadatum.go
   - internal/provider/types/input_wiz_pq.go
   - internal/provider/types/input_wiz_retry_rules.go
+  - internal/provider/types/input_wiz_webhook.go
+  - internal/provider/types/input_wiz_webhook_auth_tokens_ext.go
+  - internal/provider/types/input_wiz_webhook_auth_tokens_ext_metadatum.go
+  - internal/provider/types/input_wiz_webhook_connection.go
+  - internal/provider/types/input_wiz_webhook_metadatum.go
+  - internal/provider/types/input_wiz_webhook_pq.go
+  - internal/provider/types/input_wiz_webhook_pq_controls.go
+  - internal/provider/types/input_wiz_webhook_tls_settings_server_side.go
   - internal/provider/types/input_zscaler_hec.go
   - internal/provider/types/input_zscaler_hec_auth_token.go
   - internal/provider/types/input_zscaler_hec_auth_token_metadatum.go
@@ -1067,6 +1082,12 @@ generatedFiles:
   - internal/provider/types/output_azure_logs_pq_controls.go
   - internal/provider/types/output_azure_logs_response_retry_setting.go
   - internal/provider/types/output_azure_logs_timeout_retry_settings.go
+  - internal/provider/types/output_chronicle.go
+  - internal/provider/types/output_chronicle_custom_label.go
+  - internal/provider/types/output_chronicle_extra_http_header.go
+  - internal/provider/types/output_chronicle_pq_controls.go
+  - internal/provider/types/output_chronicle_response_retry_setting.go
+  - internal/provider/types/output_chronicle_timeout_retry_settings.go
   - internal/provider/types/output_click_house.go
   - internal/provider/types/output_click_house_column_mapping.go
   - internal/provider/types/output_click_house_extra_http_header.go
@@ -1076,6 +1097,8 @@ generatedFiles:
   - internal/provider/types/output_click_house_response_retry_setting.go
   - internal/provider/types/output_click_house_timeout_retry_settings.go
   - internal/provider/types/output_click_house_tls_settings_client_side.go
+  - internal/provider/types/output_cloudflare_r2.go
+  - internal/provider/types/output_cloudflare_r2_key_value_metadatum.go
   - internal/provider/types/output_cloudwatch.go
   - internal/provider/types/output_cloudwatch_pq_controls.go
   - internal/provider/types/output_confluent_cloud.go
@@ -1102,6 +1125,8 @@ generatedFiles:
   - internal/provider/types/output_crowdstrike_next_gen_siem_pq_controls.go
   - internal/provider/types/output_crowdstrike_next_gen_siem_response_retry_setting.go
   - internal/provider/types/output_crowdstrike_next_gen_siem_timeout_retry_settings.go
+  - internal/provider/types/output_databricks.go
+  - internal/provider/types/output_databricks_key_value_metadatum.go
   - internal/provider/types/output_datadog.go
   - internal/provider/types/output_datadog_extra_http_header.go
   - internal/provider/types/output_datadog_pq_controls.go
@@ -1147,6 +1172,7 @@ generatedFiles:
   - internal/provider/types/output_filesystem.go
   - internal/provider/types/output_filesystem_key_value_metadatum.go
   - internal/provider/types/output_google_chronicle.go
+  - internal/provider/types/output_google_chronicle_custom_label.go
   - internal/provider/types/output_google_chronicle_extra_http_header.go
   - internal/provider/types/output_google_chronicle_pq_controls.go
   - internal/provider/types/output_google_chronicle_response_retry_setting.go
@@ -1208,6 +1234,10 @@ generatedFiles:
   - internal/provider/types/output_loki_pq_controls.go
   - internal/provider/types/output_loki_response_retry_setting.go
   - internal/provider/types/output_loki_timeout_retry_settings.go
+  - internal/provider/types/output_microsoft_fabric.go
+  - internal/provider/types/output_microsoft_fabric_authentication.go
+  - internal/provider/types/output_microsoft_fabric_pq_controls.go
+  - internal/provider/types/output_microsoft_fabric_tls_settings_client_side.go
   - internal/provider/types/output_minio.go
   - internal/provider/types/output_minio_key_value_metadatum.go
   - internal/provider/types/output_msk.go
@@ -1254,6 +1284,11 @@ generatedFiles:
   - internal/provider/types/output_security_lake_key_value_metadatum.go
   - internal/provider/types/output_sentinel.go
   - internal/provider/types/output_sentinel_extra_http_header.go
+  - internal/provider/types/output_sentinel_one_ai_siem.go
+  - internal/provider/types/output_sentinel_one_ai_siem_extra_http_header.go
+  - internal/provider/types/output_sentinel_one_ai_siem_pq_controls.go
+  - internal/provider/types/output_sentinel_one_ai_siem_response_retry_setting.go
+  - internal/provider/types/output_sentinel_one_ai_siem_timeout_retry_settings.go
   - internal/provider/types/output_sentinel_pq_controls.go
   - internal/provider/types/output_sentinel_response_retry_setting.go
   - internal/provider/types/output_sentinel_timeout_retry_settings.go
@@ -2134,6 +2169,7 @@ generatedFiles:
   - internal/sdk/models/shared/input.go
   - internal/sdk/models/shared/inputappscope.go
   - internal/sdk/models/shared/inputazureblob.go
+  - internal/sdk/models/shared/inputcloudflarehec.go
   - internal/sdk/models/shared/inputcollection.go
   - internal/sdk/models/shared/inputcollector.go
   - internal/sdk/models/shared/inputcollectorazureblob.go
@@ -2201,6 +2237,7 @@ generatedFiles:
   - internal/sdk/models/shared/inputwindowsmetrics.go
   - internal/sdk/models/shared/inputwineventlogs.go
   - internal/sdk/models/shared/inputwiz.go
+  - internal/sdk/models/shared/inputwizwebhook.go
   - internal/sdk/models/shared/inputzscalerhec.go
   - internal/sdk/models/shared/instancesettingsschemaunion.go
   - internal/sdk/models/shared/iometricsentry.go
@@ -2262,13 +2299,16 @@ generatedFiles:
   - internal/sdk/models/shared/outputazuredataexplorer.go
   - internal/sdk/models/shared/outputazureeventhub.go
   - internal/sdk/models/shared/outputazurelogs.go
+  - internal/sdk/models/shared/outputchronicle.go
   - internal/sdk/models/shared/outputclickhouse.go
+  - internal/sdk/models/shared/outputcloudflarer2.go
   - internal/sdk/models/shared/outputcloudwatch.go
   - internal/sdk/models/shared/outputconfluentcloud.go
   - internal/sdk/models/shared/outputcriblhttp.go
   - internal/sdk/models/shared/outputcribllake.go
   - internal/sdk/models/shared/outputcribltcp.go
   - internal/sdk/models/shared/outputcrowdstrikenextgensiem.go
+  - internal/sdk/models/shared/outputdatabricks.go
   - internal/sdk/models/shared/outputdatadog.go
   - internal/sdk/models/shared/outputdataset.go
   - internal/sdk/models/shared/outputdefault.go
@@ -2293,6 +2333,7 @@ generatedFiles:
   - internal/sdk/models/shared/outputkafka.go
   - internal/sdk/models/shared/outputkinesis.go
   - internal/sdk/models/shared/outputloki.go
+  - internal/sdk/models/shared/outputmicrosoftfabric.go
   - internal/sdk/models/shared/outputminio.go
   - internal/sdk/models/shared/outputmsk.go
   - internal/sdk/models/shared/outputnetflow.go
@@ -2306,6 +2347,7 @@ generatedFiles:
   - internal/sdk/models/shared/outputsamplesresponse.go
   - internal/sdk/models/shared/outputsecuritylake.go
   - internal/sdk/models/shared/outputsentinel.go
+  - internal/sdk/models/shared/outputsentineloneaisiem.go
   - internal/sdk/models/shared/outputservicenow.go
   - internal/sdk/models/shared/outputsignalfx.go
   - internal/sdk/models/shared/outputsnmp.go
