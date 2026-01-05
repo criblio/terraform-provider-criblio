@@ -66,9 +66,11 @@ const (
 	InputTypeInputRawUDP               InputType = "InputRawUdp"
 	InputTypeInputJournalFiles         InputType = "InputJournalFiles"
 	InputTypeInputWiz                  InputType = "InputWiz"
+	InputTypeInputWizWebhook           InputType = "InputWizWebhook"
 	InputTypeInputNetflow              InputType = "InputNetflow"
 	InputTypeInputSecurityLake         InputType = "InputSecurityLake"
 	InputTypeInputZscalerHec           InputType = "InputZscalerHec"
+	InputTypeInputCloudflareHec        InputType = "InputCloudflareHec"
 )
 
 type Input struct {
@@ -127,9 +129,11 @@ type Input struct {
 	InputRawUDP               *InputRawUDP               `queryParam:"inline,name=Input"`
 	InputJournalFiles         *InputJournalFiles         `queryParam:"inline,name=Input"`
 	InputWiz                  *InputWiz                  `queryParam:"inline,name=Input"`
+	InputWizWebhook           *InputWizWebhook           `queryParam:"inline,name=Input"`
 	InputNetflow              *InputNetflow              `queryParam:"inline,name=Input"`
 	InputSecurityLake         *InputSecurityLake         `queryParam:"inline,name=Input"`
 	InputZscalerHec           *InputZscalerHec           `queryParam:"inline,name=Input"`
+	InputCloudflareHec        *InputCloudflareHec        `queryParam:"inline,name=Input"`
 
 	Type InputType
 }
@@ -629,6 +633,15 @@ func CreateInputInputWiz(inputWiz InputWiz) Input {
 	}
 }
 
+func CreateInputInputWizWebhook(inputWizWebhook InputWizWebhook) Input {
+	typ := InputTypeInputWizWebhook
+
+	return Input{
+		InputWizWebhook: &inputWizWebhook,
+		Type:            typ,
+	}
+}
+
 func CreateInputInputNetflow(inputNetflow InputNetflow) Input {
 	typ := InputTypeInputNetflow
 
@@ -656,11 +669,28 @@ func CreateInputInputZscalerHec(inputZscalerHec InputZscalerHec) Input {
 	}
 }
 
+func CreateInputInputCloudflareHec(inputCloudflareHec InputCloudflareHec) Input {
+	typ := InputTypeInputCloudflareHec
+
+	return Input{
+		InputCloudflareHec: &inputCloudflareHec,
+		Type:               typ,
+	}
+}
+
 func (u *Input) UnmarshalJSON(data []byte) error {
 
 	var candidates []utils.UnionCandidate
 
 	// Collect all valid candidates
+	var inputCloudflareHec InputCloudflareHec = InputCloudflareHec{}
+	if err := utils.UnmarshalJSON(data, &inputCloudflareHec, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputCloudflareHec,
+			Value: &inputCloudflareHec,
+		})
+	}
+
 	var inputMsk InputMsk = InputMsk{}
 	if err := utils.UnmarshalJSON(data, &inputMsk, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -834,6 +864,14 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  InputTypeInputWiz,
 			Value: &inputWiz,
+		})
+	}
+
+	var inputWizWebhook InputWizWebhook = InputWizWebhook{}
+	if err := utils.UnmarshalJSON(data, &inputWizWebhook, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputWizWebhook,
+			Value: &inputWizWebhook,
 		})
 	}
 
@@ -1138,6 +1176,9 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 	// Set the union type and value based on the best candidate
 	u.Type = best.Type.(InputType)
 	switch best.Type {
+	case InputTypeInputCloudflareHec:
+		u.InputCloudflareHec = best.Value.(*InputCloudflareHec)
+		return nil
 	case InputTypeInputMsk:
 		u.InputMsk = best.Value.(*InputMsk)
 		return nil
@@ -1203,6 +1244,9 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		return nil
 	case InputTypeInputWiz:
 		u.InputWiz = best.Value.(*InputWiz)
+		return nil
+	case InputTypeInputWizWebhook:
+		u.InputWizWebhook = best.Value.(*InputWizWebhook)
 		return nil
 	case InputTypeInputSecurityLake:
 		u.InputSecurityLake = best.Value.(*InputSecurityLake)
@@ -1538,6 +1582,10 @@ func (u Input) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.InputWiz, "", true)
 	}
 
+	if u.InputWizWebhook != nil {
+		return utils.MarshalJSON(u.InputWizWebhook, "", true)
+	}
+
 	if u.InputNetflow != nil {
 		return utils.MarshalJSON(u.InputNetflow, "", true)
 	}
@@ -1548,6 +1596,10 @@ func (u Input) MarshalJSON() ([]byte, error) {
 
 	if u.InputZscalerHec != nil {
 		return utils.MarshalJSON(u.InputZscalerHec, "", true)
+	}
+
+	if u.InputCloudflareHec != nil {
+		return utils.MarshalJSON(u.InputCloudflareHec, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type Input: all fields are null")

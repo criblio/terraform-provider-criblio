@@ -295,6 +295,85 @@ resource "criblio_pack_destination" "my_packdestination" {
     workspace_id        = "22222222-2222-2222-2222-222222222222"
     workspace_key       = "***REDACTED***"
   }
+  output_chronicle = {
+    api_version           = "...my_api_version..."
+    authentication_method = "serviceAccount"
+    compress              = true
+    concurrency           = 25.61
+    custom_labels = [
+      {
+        key          = "...my_key..."
+        rbac_enabled = false
+        value        = "...my_value..."
+      }
+    ]
+    description = "...my_description..."
+    environment = "...my_environment..."
+    extra_http_headers = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    failed_request_logging_mode = "payload"
+    flush_period_sec            = 0.11
+    gcp_instance                = "...my_gcp_instance..."
+    gcp_project_id              = "...my_gcp_project_id..."
+    id                          = "...my_id..."
+    ingestion_method            = "...my_ingestion_method..."
+    log_text_field              = "...my_log_text_field..."
+    log_type                    = "...my_log_type..."
+    max_payload_events          = 5.04
+    max_payload_size_kb         = 2620.78
+    namespace                   = "...my_namespace..."
+    on_backpressure             = "block"
+    pipeline                    = "...my_pipeline..."
+    pq_compress                 = "gzip"
+    pq_controls = {
+      # ...
+    }
+    pq_max_backpressure_sec           = 8.78
+    pq_max_buffer_size                = 961.48
+    pq_max_file_size                  = "...my_pq_max_file_size..."
+    pq_max_size                       = "...my_pq_max_size..."
+    pq_mode                           = "error"
+    pq_on_backpressure                = "block"
+    pq_path                           = "...my_pq_path..."
+    pq_rate_per_sec                   = 5.18
+    pq_strict_ordering                = false
+    region                            = "...my_region..."
+    reject_unauthorized               = false
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+      {
+        backoff_rate    = 13.66
+        http_status     = 575.57
+        initial_backoff = 12382.43
+        max_backoff     = 140551.67
+      }
+    ]
+    safe_headers = [
+      "..."
+    ]
+    service_account_credentials        = "...my_service_account_credentials..."
+    service_account_credentials_secret = "...my_service_account_credentials_secret..."
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    timeout_retry_settings = {
+      backoff_rate    = 19.58
+      initial_backoff = 476612.3
+      max_backoff     = 154167.96
+      timeout_retry   = true
+    }
+    timeout_sec           = 4865019203906175
+    total_memory_limit_kb = 6.13
+    type                  = "chronicle"
+    use_round_robin_dns   = true
+  }
   output_click_house = {
     async_inserts    = true
     auth_header_expr = "`Bearer ${token}`"
@@ -409,6 +488,74 @@ resource "criblio_pack_destination" "my_packdestination" {
     use_round_robin_dns    = true
     username               = "clickuser"
     wait_for_async_inserts = true
+  }
+  output_cloudflare_r2 = {
+    add_id_to_stage_path      = false
+    automatic_schema          = true
+    aws_api_key               = "...my_aws_api_key..."
+    aws_authentication_method = "secret"
+    aws_secret                = "...my_aws_secret..."
+    aws_secret_key            = "...my_aws_secret_key..."
+    base_file_name            = "...my_base_file_name..."
+    bucket                    = "...my_bucket..."
+    compress                  = "none"
+    compression_level         = "best_speed"
+    deadletter_enabled        = true
+    deadletter_path           = "...my_deadletter_path..."
+    description               = "...my_description..."
+    dest_path                 = "...my_dest_path..."
+    directory_batch_size      = 0.49
+    empty_dir_cleanup_sec     = 21545.04
+    enable_page_checksum      = false
+    enable_statistics         = true
+    enable_write_page_index   = false
+    endpoint                  = "...my_endpoint..."
+    environment               = "...my_environment..."
+    file_name_suffix          = "...my_file_name_suffix..."
+    force_close_on_shutdown   = true
+    format                    = "parquet"
+    header_line               = "...my_header_line..."
+    id                        = "...my_id..."
+    key_value_metadata = [
+      {
+        key   = "...my_key..."
+        value = "...my_value..."
+      }
+    ]
+    max_concurrent_file_parts = 3.4
+    max_file_idle_time_sec    = 84949.45
+    max_file_open_time_sec    = 59360.77
+    max_file_size_mb          = 410.5
+    max_open_files            = 1667.28
+    max_retry_num             = 10.21
+    object_acl                = "{ \"see\": \"documentation\" }"
+    on_backpressure           = "block"
+    on_disk_full_backpressure = "drop"
+    parquet_data_page_version = "DATA_PAGE_V1"
+    parquet_page_size         = "...my_parquet_page_size..."
+    parquet_row_group_length  = 30271683.86
+    parquet_schema            = "...my_parquet_schema..."
+    parquet_version           = "PARQUET_2_4"
+    partition_expr            = "...my_partition_expr..."
+    pipeline                  = "...my_pipeline..."
+    region                    = "{ \"see\": \"documentation\" }"
+    reject_unauthorized       = false
+    remove_empty_dirs         = true
+    reuse_connections         = true
+    server_side_encryption    = "AES256"
+    should_log_invalid_rows   = true
+    signature_version         = "v2"
+    stage_path                = "...my_stage_path..."
+    storage_class             = "STANDARD"
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    type                  = "cloudflare_r2"
+    verify_permissions    = false
+    write_high_water_mark = 1607.6
   }
   output_cloudwatch = {
     assume_role_arn           = "arn:aws:iam::123456789012:role/CloudWatchLogsWriter"
@@ -755,6 +902,67 @@ resource "criblio_pack_destination" "my_packdestination" {
     type                = "crowdstrike_next_gen_siem"
     url                 = "https://ingest.us-1.crowdstrike.com/api/ingest/hec/abcd1234/v1/services/collector"
     use_round_robin_dns = true
+  }
+  output_databricks = {
+    add_id_to_stage_path    = false
+    automatic_schema        = true
+    base_file_name          = "...my_base_file_name..."
+    catalog                 = "...my_catalog..."
+    client_id               = "...my_client_id..."
+    client_text_secret      = "...my_client_text_secret..."
+    compress                = "gzip"
+    compression_level       = "best_compression"
+    deadletter_enabled      = true
+    deadletter_path         = "...my_deadletter_path..."
+    description             = "...my_description..."
+    dest_path               = "...my_dest_path..."
+    directory_batch_size    = 8.14
+    empty_dir_cleanup_sec   = 72689.38
+    enable_page_checksum    = false
+    enable_statistics       = false
+    enable_write_page_index = true
+    environment             = "...my_environment..."
+    events_volume_name      = "...my_events_volume_name..."
+    file_name_suffix        = "...my_file_name_suffix..."
+    force_close_on_shutdown = false
+    format                  = "json"
+    header_line             = "...my_header_line..."
+    id                      = "...my_id..."
+    key_value_metadata = [
+      {
+        key   = "...my_key..."
+        value = "...my_value..."
+      }
+    ]
+    max_file_idle_time_sec    = 681.94
+    max_file_open_time_sec    = 993.14
+    max_file_size_mb          = 727.03
+    max_open_files            = 389.22
+    max_retry_num             = 6.59
+    on_backpressure           = "block"
+    on_disk_full_backpressure = "drop"
+    parquet_data_page_version = "DATA_PAGE_V1"
+    parquet_page_size         = "...my_parquet_page_size..."
+    parquet_row_group_length  = 15677567.64
+    parquet_schema            = "...my_parquet_schema..."
+    parquet_version           = "PARQUET_2_6"
+    partition_expr            = "...my_partition_expr..."
+    pipeline                  = "...my_pipeline..."
+    remove_empty_dirs         = true
+    schema                    = "...my_schema..."
+    scope                     = "...my_scope..."
+    should_log_invalid_rows   = true
+    stage_path                = "...my_stage_path..."
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    timeout_sec           = 35.93
+    type                  = "databricks"
+    workspace_id          = "...my_workspace_id..."
+    write_high_water_mark = 2087.98
   }
   output_datadog = {
     allow_api_key_from_events = false
@@ -2231,6 +2439,68 @@ resource "criblio_pack_destination" "my_packdestination" {
     use_round_robin_dns   = true
     username              = 12345
   }
+  output_microsoft_fabric = {
+    ack                    = 9
+    authentication_timeout = 3288750.42
+    backoff_rate           = 5.11
+    bootstrap_server       = "...my_bootstrap_server..."
+    connection_timeout     = 1684445.58
+    description            = "...my_description..."
+    environment            = "...my_environment..."
+    flush_event_count      = 1487.63
+    flush_period_sec       = 1.31
+    format                 = "json"
+    id                     = "...my_id..."
+    initial_backoff        = 29883.16
+    max_back_off           = 77303.8
+    max_record_size_kb     = 6.17
+    max_retries            = 97.46
+    on_backpressure        = "drop"
+    pipeline               = "...my_pipeline..."
+    pq_compress            = "none"
+    pq_controls = {
+      # ...
+    }
+    pq_max_backpressure_sec    = 0.99
+    pq_max_buffer_size         = 672.08
+    pq_max_file_size           = "...my_pq_max_file_size..."
+    pq_max_size                = "...my_pq_max_size..."
+    pq_mode                    = "error"
+    pq_on_backpressure         = "block"
+    pq_path                    = "...my_pq_path..."
+    pq_rate_per_sec            = 8.31
+    pq_strict_ordering         = true
+    reauthentication_threshold = 288466.03
+    request_timeout            = 1480874.35
+    sasl = {
+      cert_path               = "...my_cert_path..."
+      certificate_name        = "...my_certificate_name..."
+      client_id               = "...my_client_id..."
+      client_secret_auth_type = "secret"
+      client_text_secret      = "...my_client_text_secret..."
+      disabled                = true
+      mechanism               = "plain"
+      oauth_endpoint          = "https://login.partner.microsoftonline.cn"
+      passphrase              = "...my_passphrase..."
+      priv_key_path           = "...my_priv_key_path..."
+      scope                   = "...my_scope..."
+      tenant_id               = "...my_tenant_id..."
+      text_secret             = "...my_text_secret..."
+      username                = "...my_username..."
+    }
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    tls = {
+      disabled            = false
+      reject_unauthorized = false
+    }
+    topic = "...my_topic..."
+    type  = "microsoft_fabric"
+  }
   output_minio = {
     add_id_to_stage_path      = true
     automatic_schema          = true
@@ -3012,6 +3282,85 @@ resource "criblio_pack_destination" "my_packdestination" {
     type                  = "sentinel"
     url                   = "https://example.dce.ingest.monitor.azure.com"
     use_round_robin_dns   = true
+  }
+  output_sentinel_one_ai_siem = {
+    auth_type                       = "secret"
+    base_url                        = "...my_base_url..."
+    compress                        = false
+    concurrency                     = 31.25
+    data_source_category            = "...my_data_source_category..."
+    data_source_category_expression = "...my_data_source_category_expression..."
+    data_source_name                = "...my_data_source_name..."
+    data_source_name_expression     = "...my_data_source_name_expression..."
+    data_source_vendor              = "...my_data_source_vendor..."
+    data_source_vendor_expression   = "...my_data_source_vendor_expression..."
+    description                     = "...my_description..."
+    endpoint                        = "/services/collector/event"
+    environment                     = "...my_environment..."
+    event_type                      = "...my_event_type..."
+    event_type_expression           = "...my_event_type_expression..."
+    extra_http_headers = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    failed_request_logging_mode = "none"
+    flush_period_sec            = 9.1
+    host                        = "...my_host..."
+    host_expression             = "...my_host_expression..."
+    id                          = "...my_id..."
+    max_payload_events          = 2.86
+    max_payload_size_kb         = 1688557.17
+    on_backpressure             = "queue"
+    pipeline                    = "...my_pipeline..."
+    pq_compress                 = "gzip"
+    pq_controls = {
+      # ...
+    }
+    pq_max_backpressure_sec           = 7.17
+    pq_max_buffer_size                = 752.28
+    pq_max_file_size                  = "...my_pq_max_file_size..."
+    pq_max_size                       = "...my_pq_max_size..."
+    pq_mode                           = "error"
+    pq_on_backpressure                = "drop"
+    pq_path                           = "...my_pq_path..."
+    pq_rate_per_sec                   = 3.06
+    pq_strict_ordering                = false
+    region                            = "EMEA"
+    reject_unauthorized               = false
+    response_honor_retry_after_header = false
+    response_retry_settings = [
+      {
+        backoff_rate    = 16.04
+        http_status     = 446.64
+        initial_backoff = 39944.69
+        max_backoff     = 147908.36
+      }
+    ]
+    safe_headers = [
+      "..."
+    ]
+    source                 = "...my_source..."
+    source_expression      = "...my_source_expression..."
+    source_type            = "...my_source_type..."
+    source_type_expression = "...my_source_type_expression..."
+    streamtags = [
+      "..."
+    ]
+    system_fields = [
+      "..."
+    ]
+    text_secret = "...my_text_secret..."
+    timeout_retry_settings = {
+      backoff_rate    = 16.03
+      initial_backoff = 80266.12
+      max_backoff     = 22615.81
+      timeout_retry   = false
+    }
+    timeout_sec = 4122508657543719
+    token       = "...my_token..."
+    type        = "sentinel_one_ai_siem"
   }
   output_service_now = {
     auth_token_name    = "lightstep-access-token"
@@ -3987,13 +4336,16 @@ resource "criblio_pack_destination" "my_packdestination" {
 - `output_azure_data_explorer` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer))
 - `output_azure_eventhub` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub))
 - `output_azure_logs` (Attributes) (see [below for nested schema](#nestedatt--output_azure_logs))
+- `output_chronicle` (Attributes) (see [below for nested schema](#nestedatt--output_chronicle))
 - `output_click_house` (Attributes) (see [below for nested schema](#nestedatt--output_click_house))
+- `output_cloudflare_r2` (Attributes) (see [below for nested schema](#nestedatt--output_cloudflare_r2))
 - `output_cloudwatch` (Attributes) (see [below for nested schema](#nestedatt--output_cloudwatch))
 - `output_confluent_cloud` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud))
 - `output_cribl_http` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http))
 - `output_cribl_lake` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_lake))
 - `output_cribl_tcp` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_tcp))
 - `output_crowdstrike_next_gen_siem` (Attributes) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem))
+- `output_databricks` (Attributes) (see [below for nested schema](#nestedatt--output_databricks))
 - `output_datadog` (Attributes) (see [below for nested schema](#nestedatt--output_datadog))
 - `output_dataset` (Attributes) (see [below for nested schema](#nestedatt--output_dataset))
 - `output_default` (Attributes) (see [below for nested schema](#nestedatt--output_default))
@@ -4018,6 +4370,7 @@ resource "criblio_pack_destination" "my_packdestination" {
 - `output_kafka` (Attributes) (see [below for nested schema](#nestedatt--output_kafka))
 - `output_kinesis` (Attributes) (see [below for nested schema](#nestedatt--output_kinesis))
 - `output_loki` (Attributes) (see [below for nested schema](#nestedatt--output_loki))
+- `output_microsoft_fabric` (Attributes) (see [below for nested schema](#nestedatt--output_microsoft_fabric))
 - `output_minio` (Attributes) (see [below for nested schema](#nestedatt--output_minio))
 - `output_msk` (Attributes) (see [below for nested schema](#nestedatt--output_msk))
 - `output_netflow` (Attributes) (see [below for nested schema](#nestedatt--output_netflow))
@@ -4030,6 +4383,7 @@ resource "criblio_pack_destination" "my_packdestination" {
 - `output_s3` (Attributes) (see [below for nested schema](#nestedatt--output_s3))
 - `output_security_lake` (Attributes) (see [below for nested schema](#nestedatt--output_security_lake))
 - `output_sentinel` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel))
+- `output_sentinel_one_ai_siem` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem))
 - `output_service_now` (Attributes) (see [below for nested schema](#nestedatt--output_service_now))
 - `output_signalfx` (Attributes) (see [below for nested schema](#nestedatt--output_signalfx))
 - `output_snmp` (Attributes) (see [below for nested schema](#nestedatt--output_snmp))
@@ -4427,6 +4781,119 @@ Optional:
 
 
 
+<a id="nestedatt--output_chronicle"></a>
+### Nested Schema for `output_chronicle`
+
+Required:
+
+- `gcp_instance` (String) The Google Cloud Platform (GCP) instance to send events to. This is the Chronicle customer uuid.
+- `gcp_project_id` (String) The Google Cloud Platform (GCP) project ID to send events to
+- `log_type` (String) Default log type value to send to SecOps. Can be overwritten by event field __logType.
+- `region` (String) Regional endpoint to send events to
+- `type` (String) must be "chronicle"
+
+Optional:
+
+- `api_version` (String) Default: "v1alpha"
+- `authentication_method` (String) Default: "serviceAccount"; must be one of ["serviceAccount", "serviceAccountSecret"]
+- `compress` (Boolean) Compress the payload body before sending. Default: true
+- `concurrency` (Number) Maximum number of ongoing requests before blocking. Default: 5
+- `custom_labels` (Attributes List) Custom labels to be added to every event (see [below for nested schema](#nestedatt--output_chronicle--custom_labels))
+- `description` (String)
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_chronicle--extra_http_headers))
+- `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. Default: "none"; must be one of ["payload", "payloadAndHeaders", "none"]
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit. Default: 1
+- `id` (String) Unique ID for this output
+- `ingestion_method` (String) Default: "ImportLogs"
+- `log_text_field` (String) Name of the event field that contains the log text to send. If not specified, Stream sends a JSON representation of the whole event.
+- `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0
+- `max_payload_size_kb` (Number) Maximum size, in KB, of the request body. Default: 1024
+- `namespace` (String) User-configured environment namespace to identify the data domain the logs originated from. This namespace is used as a tag to identify the appropriate data domain for indexing and enrichment functionality. Can be overwritten by event field __namespace.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop", "queue"]
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `pq_compress` (String) Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_chronicle--pq_controls))
+- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue. Default: 30
+- `pq_max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 42
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.). Default: "1 MB"
+- `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem. Default: "error"; must be one of ["error", "always", "backpressure"]
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
+- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
+- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling. Default: 0
+- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed. Default: true
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.
+Default: true
+- `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: true
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_chronicle--response_retry_settings))
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
+- `service_account_credentials_secret` (String) Select or create a stored text secret
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_chronicle--timeout_retry_settings))
+- `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 90
+- `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
+- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. Default: false
+
+<a id="nestedatt--output_chronicle--custom_labels"></a>
+### Nested Schema for `output_chronicle.custom_labels`
+
+Required:
+
+- `key` (String)
+- `value` (String)
+
+Optional:
+
+- `rbac_enabled` (Boolean) Designate this label for role-based access control and filtering. Default: false
+
+
+<a id="nestedatt--output_chronicle--extra_http_headers"></a>
+### Nested Schema for `output_chronicle.extra_http_headers`
+
+Required:
+
+- `value` (String)
+
+Optional:
+
+- `name` (String)
+
+
+<a id="nestedatt--output_chronicle--pq_controls"></a>
+### Nested Schema for `output_chronicle.pq_controls`
+
+
+<a id="nestedatt--output_chronicle--response_retry_settings"></a>
+### Nested Schema for `output_chronicle.response_retry_settings`
+
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
+Optional:
+
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc. Default: 2
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds). Default: 10000
+
+
+<a id="nestedatt--output_chronicle--timeout_retry_settings"></a>
+### Nested Schema for `output_chronicle.timeout_retry_settings`
+
+Optional:
+
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc. Default: 2
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds). Default: 10000
+- `timeout_retry` (Boolean) Default: false
+
+
+
 <a id="nestedatt--output_click_house"></a>
 ### Nested Schema for `output_click_house`
 
@@ -4583,6 +5050,85 @@ Optional:
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
+
+
+
+<a id="nestedatt--output_cloudflare_r2"></a>
+### Nested Schema for `output_cloudflare_r2`
+
+Required:
+
+- `bucket` (String) Name of the destination R2 bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `endpoint` (String) Cloudflare R2 service URL (example: https://<ACCOUNT_ID>.r2.cloudflarestorage.com)
+- `type` (String) must be "cloudflare_r2"
+
+Optional:
+
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location. Default: true
+- `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated. Default: false
+- `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
+- `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles. Default: "auto"; must be one of ["auto", "secret", "manual"]
+- `aws_secret` (String) Select or create a stored secret that references your access key and secret key
+- `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression, such as `${C.env.SOME_SECRET}`).
+- `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant). Default: "`CriblOut`"
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered. Default: "gzip"; must be one of ["none", "gzip"]
+- `compression_level` (String) Compression level to apply before moving files to final destination. Default: "best_speed"; must be one of ["best_speed", "normal", "best_compression"]
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors. Default: false
+- `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded. Default: "$CRIBL_HOME/state/outputs/dead-letter"
+- `description` (String)
+- `dest_path` (String) Root directory to prepend to path before uploading. Enter a constant, or a JavaScript expression enclosed in quotes or backticks.
+- `directory_batch_size` (Number) Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory. Default: 1000
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories. Default: 300
+- `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity. Default: false
+- `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics. Default: true
+- `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping. Default: true
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`). Default: "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+- `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss. Default: false
+- `format` (String) Format of the output data. Default: "json"; must be one of ["json", "raw", "parquet"]
+- `header_line` (String) If set, this line will be written to the beginning of each output file. Default: ""
+- `id` (String) Unique ID for this output
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_cloudflare_r2--key_value_metadata))
+- `max_concurrent_file_parts` (Number) Maximum number of parts to upload in parallel per file. Minimum part size is 5MB. Default: 4
+- `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location. Default: 30
+- `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location. Default: 300
+- `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location. Default: 32
+- `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location. Default: 100
+- `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered. Default: 20
+- `object_acl` (String) Parsed as JSON.
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop"]
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit. Default: "block"; must be one of ["block", "drop"]
+- `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it. Default: "DATA_PAGE_V2"; must be one of ["DATA_PAGE_V1", "DATA_PAGE_V2"]
+- `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression. Default: "1MB"
+- `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows. Default: 10000
+- `parquet_schema` (String) To add a new schema, navigate to Processing > Knowledge > Parquet Schemas
+- `parquet_version` (String) Determines which data types are supported and how they are represented. Default: "PARQUET_2_6"; must be one of ["PARQUET_1_0", "PARQUET_2_4", "PARQUET_2_6"]
+- `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory. Default: "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')"
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `region` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates). Default: true
+- `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files. Default: true
+- `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
+- `server_side_encryption` (String) Server-side encryption for uploaded objects. must be "AES256"
+- `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
+- `signature_version` (String) Signature version to use for signing MinIO requests. Default: "v4"; must be one of ["v2", "v4"]
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
+- `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY"]
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
+- `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself. Default: true
+- `write_high_water_mark` (Number) Buffer size used to write to a file. Default: 64
+
+<a id="nestedatt--output_cloudflare_r2--key_value_metadata"></a>
+### Nested Schema for `output_cloudflare_r2.key_value_metadata`
+
+Required:
+
+- `value` (String)
+
+Optional:
+
+- `key` (String) Default: ""
 
 
 
@@ -5055,6 +5601,78 @@ Optional:
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds). Default: 10000
 - `timeout_retry` (Boolean) Default: false
+
+
+
+<a id="nestedatt--output_databricks"></a>
+### Nested Schema for `output_databricks`
+
+Required:
+
+- `client_id` (String) OAuth client ID for Unity Catalog authentication
+- `client_text_secret` (String) OAuth client secret for Unity Catalog authentication
+- `type` (String) must be "databricks"
+- `workspace_id` (String) Databricks workspace ID
+
+Optional:
+
+- `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location. Default: true
+- `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated. Default: false
+- `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant). Default: "`CriblOut`"
+- `catalog` (String) Name of the catalog to use for the output. Default: "main"
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered. Default: "gzip"; must be one of ["none", "gzip"]
+- `compression_level` (String) Compression level to apply before moving files to final destination. Default: "best_speed"; must be one of ["best_speed", "normal", "best_compression"]
+- `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors. Default: false
+- `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded. Default: "$CRIBL_HOME/state/outputs/dead-letter"
+- `description` (String)
+- `dest_path` (String) Optional path to prepend to files before uploading. Default: ""
+- `directory_batch_size` (Number) Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory. Default: 1000
+- `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories. Default: 300
+- `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity. Default: false
+- `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics. Default: true
+- `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping. Default: true
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `events_volume_name` (String) Name of the events volume in Databricks. Default: "events"
+- `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`). Default: "`.${C.env[\"CRIBL_WORKER_ID\"]}.${__format}${__compression === \"gzip\" ? \".gz\" : \"\"}`"
+- `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss. Default: false
+- `format` (String) Format of the output data. Default: "json"; must be one of ["json", "raw", "parquet"]
+- `header_line` (String) If set, this line will be written to the beginning of each output file. Default: ""
+- `id` (String) Unique ID for this output
+- `key_value_metadata` (Attributes List) The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001" (see [below for nested schema](#nestedatt--output_databricks--key_value_metadata))
+- `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location. Default: 30
+- `max_file_open_time_sec` (Number) Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location. Default: 300
+- `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location. Default: 32
+- `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location. Default: 100
+- `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered. Default: 20
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop"]
+- `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit. Default: "block"; must be one of ["block", "drop"]
+- `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it. Default: "DATA_PAGE_V2"; must be one of ["DATA_PAGE_V1", "DATA_PAGE_V2"]
+- `parquet_page_size` (String) Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression. Default: "1MB"
+- `parquet_row_group_length` (Number) The number of rows that every group will contain. The final group can contain a smaller number of rows. Default: 10000
+- `parquet_schema` (String) To add a new schema, navigate to Processing > Knowledge > Parquet Schemas
+- `parquet_version` (String) Determines which data types are supported and how they are represented. Default: "PARQUET_2_6"; must be one of ["PARQUET_1_0", "PARQUET_2_4", "PARQUET_2_6"]
+- `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory. Default: "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')"
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files. Default: true
+- `schema` (String) Name of the catalog schema to use for the output. Default: "external"
+- `scope` (String) OAuth scope for Unity Catalog authentication. Default: "all-apis"
+- `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
+- `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant, stable storage. Default: "$CRIBL_HOME/state/outputs/staging"
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
+- `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 60
+- `write_high_water_mark` (Number) Buffer size used to write to a file. Default: 64
+
+<a id="nestedatt--output_databricks--key_value_metadata"></a>
+### Nested Schema for `output_databricks.key_value_metadata`
+
+Required:
+
+- `value` (String)
+
+Optional:
+
+- `key` (String) Default: ""
 
 
 
@@ -7136,6 +7754,86 @@ Optional:
 
 
 
+<a id="nestedatt--output_microsoft_fabric"></a>
+### Nested Schema for `output_microsoft_fabric`
+
+Required:
+
+- `bootstrap_server` (String) Bootstrap server from Fabric Eventstream's endpoint
+- `topic` (String) Topic name from Fabric Eventstream's endpoint
+- `type` (String) must be "microsoft_fabric"
+
+Optional:
+
+- `ack` (Number) Control the number of required acknowledgments. Default: 1; must be one of ["1", "0", "-1"]
+- `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request. Default: 10000
+- `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details. Default: 2
+- `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully. Default: 10000
+- `description` (String)
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `flush_event_count` (Number) Maximum number of events in a batch before forcing a flush. Default: 1000
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size. Default: 1
+- `format` (String) Format to use to serialize events before writing to the Event Hubs Kafka brokers. Default: "json"; must be one of ["json", "raw"]
+- `id` (String) Unique ID for this output
+- `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes). Default: 300
+- `max_back_off` (Number) The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds). Default: 30000
+- `max_record_size_kb` (Number) Maximum size of each record batch before compression. Setting should be < message.max.bytes settings in Event Hubs brokers. Default: 768
+- `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data. Default: 5
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop", "queue"]
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `pq_compress` (String) Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_microsoft_fabric--pq_controls))
+- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue. Default: 30
+- `pq_max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 42
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.). Default: "1 MB"
+- `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem. Default: "error"; must be one of ["error", "always", "backpressure"]
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
+- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
+- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling. Default: 0
+- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed. Default: true
+- `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire. Default: 10000
+- `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request. Default: 60000
+- `sasl` (Attributes) Authentication parameters to use when connecting to bootstrap server. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--output_microsoft_fabric--sasl))
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--output_microsoft_fabric--tls))
+
+<a id="nestedatt--output_microsoft_fabric--pq_controls"></a>
+### Nested Schema for `output_microsoft_fabric.pq_controls`
+
+
+<a id="nestedatt--output_microsoft_fabric--sasl"></a>
+### Nested Schema for `output_microsoft_fabric.sasl`
+
+Optional:
+
+- `cert_path` (String)
+- `certificate_name` (String) Select or create a stored certificate
+- `client_id` (String) client_id to pass in the OAuth request parameter
+- `client_secret_auth_type` (String) Default: "secret"; must be one of ["secret", "certificate"]
+- `client_text_secret` (String) Select or create a stored text secret
+- `disabled` (Boolean) Default: false
+- `mechanism` (String) Default: "plain"; must be one of ["plain", "oauthbearer"]
+- `oauth_endpoint` (String) Endpoint used to acquire authentication tokens from Azure. Default: "https://login.microsoftonline.com"; must be one of ["https://login.microsoftonline.com", "https://login.microsoftonline.us", "https://login.partner.microsoftonline.cn"]
+- `passphrase` (String)
+- `priv_key_path` (String)
+- `scope` (String) Scope to pass in the OAuth request parameter
+- `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory
+- `text_secret` (String) Select or create a stored text secret corresponding to the SASL JASS Password Primary or Password Secondary
+- `username` (String) The username for authentication. This should always be $ConnectionString. Default: "$ConnectionString"
+
+
+<a id="nestedatt--output_microsoft_fabric--tls"></a>
+### Nested Schema for `output_microsoft_fabric.tls`
+
+Optional:
+
+- `disabled` (Boolean) Default: false
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's). Default: true
+
+
+
 <a id="nestedatt--output_minio"></a>
 ### Nested Schema for `output_minio`
 
@@ -8149,6 +8847,112 @@ Optional:
 
 <a id="nestedatt--output_sentinel--timeout_retry_settings"></a>
 ### Nested Schema for `output_sentinel.timeout_retry_settings`
+
+Optional:
+
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc. Default: 2
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds). Default: 10000
+- `timeout_retry` (Boolean) Default: false
+
+
+
+<a id="nestedatt--output_sentinel_one_ai_siem"></a>
+### Nested Schema for `output_sentinel_one_ai_siem`
+
+Required:
+
+- `type` (String) must be "sentinel_one_ai_siem"
+
+Optional:
+
+- `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate. Default: "manual"; must be one of ["manual", "secret"]
+- `base_url` (String) Base URL of the endpoint used to send events to, such as https://<Your-S1-Tenant>.sentinelone.net. Must begin with http:// or https://, can include a port number, and no trailing slashes. Matches pattern: ^https?://[a-zA-Z0-9.-]+(:[0-9]+)?$. Default: "https://<Your-S1-Tenant>.sentinelone.net"
+- `compress` (Boolean) Compress the payload body before sending. Default: true
+- `concurrency` (Number) Maximum number of ongoing requests before blocking. Default: 5
+- `data_source_category` (String) Specify the dataSource.category value to pass as a parameter to SentinelOne AI SIEM. This value helps categorize data and enables additional features. Don't quote this value. The default is security. Default: "security"
+- `data_source_category_expression` (String) Define the dataSource.category for events using a JavaScript expression. This value helps categorize data and helps enable extra features in SentinelOne AI SIEM. You must enclose text constants in quotes. The default value is 'security'. Default: "'security'"
+- `data_source_name` (String) Specify the dataSource.name value to pass as a parameter to AI SIEM. This value should reflect the type of data being inserted. Don't quote this value. The default is cribl. Default: "cribl"
+- `data_source_name_expression` (String) Define the dataSource.name for events using a JavaScript expression. This value should reflect the type of data being inserted into AI SIEM. You must enclose text constants in quotes (such as, 'networkActivity' or 'authLogs'). Default: "__e.__dataSourceName || 'cribl'"
+- `data_source_vendor` (String) Specify the dataSource.vendorvalue to pass as a parameter to AI SIEM. This value should reflect the vendor of the data being inserted. Don't quote this value. The default is cribl. Default: "cribl"
+- `data_source_vendor_expression` (String) Define the dataSource.vendor for events using a JavaScript expression. This value should reflect the vendor of the data being inserted into AI SIEM. You must enclose text constants in quotes (such as, 'Cisco' or 'Microsoft'). Default: "__e.__dataSourceVendor || 'cribl'"
+- `description` (String)
+- `endpoint` (String) Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text). Default: "/services/collector/event"; must be one of ["/services/collector/event", "/services/collector/raw"]
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `event_type` (String) Specify the event.type value to pass as an optional parameter to AI SIEM. This value acts as a label, grouping events into meaningful categories like Process Creation, File Modification, or Network Connection. Don't quote this value. By default, this field is empty. Default: ""
+- `event_type_expression` (String) Optionally, define the event.type for events using a JavaScript expression. This value acts as a label, grouping events into meaningful categories. You must enclose text constants in quotes (such as, 'Process Creation' or 'Network Connection'). Default: ""
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--extra_http_headers))
+- `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. Default: "none"; must be one of ["payload", "payloadAndHeaders", "none"]
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit. Default: 5
+- `host` (String) Define the serverHost for events using a JavaScript expression. This value will be passed to AI SIEM. You must enclose text constants in quotes (such as, 'myServerName'). Default: "C.os.hostname()"
+- `host_expression` (String) Define serverHost for events using a JavaScript expression. You must enclose text constants in quotes (such as, 'myServer'). Default: "__e.host || C.os.hostname()"
+- `id` (String) Unique ID for this output
+- `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited). Default: 0
+- `max_payload_size_kb` (Number) Maximum size, in KB, of the request body. Default: 5120
+- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. Default: "block"; must be one of ["block", "drop", "queue"]
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `pq_compress` (String) Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--pq_controls))
+- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue. Default: 30
+- `pq_max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 42
+- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.). Default: "1 MB"
+- `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
+- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem. Default: "error"; must be one of ["error", "always", "backpressure"]
+- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged. Default: "block"; must be one of ["block", "drop"]
+- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>. Default: "$CRIBL_HOME/state/queues"
+- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling. Default: 0
+- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed. Default: true
+- `region` (String) The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in. Default: "US"; must be one of ["US", "CA", "EMEA", "AP", "APS", "AU", "Custom"]
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
+        that value will take precedence.
+Default: true
+- `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored. Default: true
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--response_retry_settings))
+- `safe_headers` (List of String) List of headers that are safe to log in plain text. Default: []
+- `source` (String) Specify the logFile value to pass as a parameter to SentinelOne AI SIEM. Don't quote this value. The default is cribl. Default: "cribl"
+- `source_expression` (String) Define logFile for events using a JavaScript expression. You must enclose text constants in quotes (such as, 'myLogFile.txt'). Default: "__e.source || (__e.__criblMetrics ? 'metrics' : 'cribl')"
+- `source_type` (String) Specify the sourcetype parameter for SentinelOne AI SIEM, which determines the parser. Don't quote this value. For custom parsers, substitute hecRawParser with your parser's name. The default is hecRawParser. Default: "hecRawParser"
+- `source_type_expression` (String) Define the parser for events using a JavaScript expression. This value helps parse data into AI SIEM. You must enclose text constants in quotes (such as, 'dottedJson'). For custom parsers, substitute 'dottedJson' with your parser's name. Default: "__e.sourcetype || 'dottedJson'"
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_pipe"]
+- `text_secret` (String) Select or create a stored text secret
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--timeout_retry_settings))
+- `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
+- `token` (String) In the SentinelOne Console select Policy & Settings then select the Singularity AI SIEM section, API Keys will be at the bottom. Under Log Access Keys select a Write token and copy it here
+
+<a id="nestedatt--output_sentinel_one_ai_siem--extra_http_headers"></a>
+### Nested Schema for `output_sentinel_one_ai_siem.extra_http_headers`
+
+Required:
+
+- `value` (String)
+
+Optional:
+
+- `name` (String)
+
+
+<a id="nestedatt--output_sentinel_one_ai_siem--pq_controls"></a>
+### Nested Schema for `output_sentinel_one_ai_siem.pq_controls`
+
+
+<a id="nestedatt--output_sentinel_one_ai_siem--response_retry_settings"></a>
+### Nested Schema for `output_sentinel_one_ai_siem.response_retry_settings`
+
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
+Optional:
+
+- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc. Default: 2
+- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000
+- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds). Default: 10000
+
+
+<a id="nestedatt--output_sentinel_one_ai_siem--timeout_retry_settings"></a>
+### Nested Schema for `output_sentinel_one_ai_siem.timeout_retry_settings`
 
 Optional:
 

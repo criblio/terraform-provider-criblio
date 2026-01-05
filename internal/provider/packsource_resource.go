@@ -50,6 +50,7 @@ type PackSourceResourceModel struct {
 	ID                        types.String                       `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
 	InputAppscope             *tfTypes.InputAppscope             `queryParam:"inline" tfsdk:"input_appscope" tfPlanOnly:"true"`
 	InputAzureBlob            *tfTypes.InputAzureBlob            `queryParam:"inline" tfsdk:"input_azure_blob" tfPlanOnly:"true"`
+	InputCloudflareHec        *tfTypes.InputCloudflareHec        `queryParam:"inline" tfsdk:"input_cloudflare_hec" tfPlanOnly:"true"`
 	InputCollection           *tfTypes.InputCollection           `queryParam:"inline" tfsdk:"input_collection" tfPlanOnly:"true"`
 	InputConfluentCloud       *tfTypes.InputConfluentCloud       `queryParam:"inline" tfsdk:"input_confluent_cloud" tfPlanOnly:"true"`
 	InputCribl                *tfTypes.InputCribl                `queryParam:"inline" tfsdk:"input_cribl" tfPlanOnly:"true"`
@@ -105,6 +106,7 @@ type PackSourceResourceModel struct {
 	InputWindowsMetrics       *tfTypes.InputWindowsMetrics       `queryParam:"inline" tfsdk:"input_windows_metrics" tfPlanOnly:"true"`
 	InputWinEventLogs         *tfTypes.InputWinEventLogs         `queryParam:"inline" tfsdk:"input_win_event_logs" tfPlanOnly:"true"`
 	InputWiz                  *tfTypes.InputWiz                  `queryParam:"inline" tfsdk:"input_wiz" tfPlanOnly:"true"`
+	InputWizWebhook           *tfTypes.InputWizWebhook           `queryParam:"inline" tfsdk:"input_wiz_webhook" tfPlanOnly:"true"`
 	InputZscalerHec           *tfTypes.InputZscalerHec           `queryParam:"inline" tfsdk:"input_zscaler_hec" tfPlanOnly:"true"`
 	Items                     []tfTypes.Routes1                  `tfsdk:"items"`
 	Pack                      types.String                       `tfsdk:"pack"`
@@ -544,6 +546,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.Object{
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -599,6 +602,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -898,6 +902,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.Object{
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -953,6 +958,492 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
+						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
+					}...),
+				},
+			},
+			"input_cloudflare_hec": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"access_control_allow_headers": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+					},
+					"access_control_allow_origin": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+					},
+					"activity_log_sample_rate": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(100),
+						Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
+					},
+					"allowed_indexes": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+					},
+					"auth_tokens": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"allowed_indexes_at_token": schema.ListAttribute{
+									Optional:    true,
+									ElementType: types.StringType,
+									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Optional:    true,
+									Default:     stringdefault.StaticString(`secret`),
+									Description: `Select Secret to use a text secret to authenticate. Default: "secret"; must be one of ["secret", "manual"]`,
+									Validators: []validator.String{
+										stringvalidator.OneOf(
+											"secret",
+											"manual",
+										),
+									},
+								},
+								"description": schema.StringAttribute{
+									Optional: true,
+								},
+								"enabled": schema.BoolAttribute{
+									Computed:    true,
+									Optional:    true,
+									Default:     booldefault.StaticBool(true),
+									Description: `Default: true`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Optional: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Required: true,
+											},
+											"value": schema.StringAttribute{
+												Required:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+									Description: `Fields to add to events referencing this token`,
+								},
+								"token": schema.StringAttribute{
+									Optional:    true,
+									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+								},
+								"token_secret": schema.StringAttribute{
+									Optional:    true,
+									Description: `Select or create a stored text secret`,
+								},
+							},
+						},
+						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+					},
+					"breaker_rulesets": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+					},
+					"capture_headers": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Add request headers to events, in the __headers field. Default: false`,
+					},
+					"connections": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"output": schema.StringAttribute{
+									Required: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Optional: true,
+								},
+							},
+						},
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+					},
+					"description": schema.StringAttribute{
+						Optional: true,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"emit_token_metrics": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
+					},
+					"enable_health_check": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
+						Optional:    true,
+						Description: `Parsed as JSON.`,
+					},
+					"enable_proxy_header": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
+					},
+					"environment": schema.StringAttribute{
+						Optional:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"hec_api": schema.StringAttribute{
+						Required:    true,
+						Description: `Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint.`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern "+regexp.MustCompile(`^/`).String()),
+						},
+					},
+					"host": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`0.0.0.0`),
+						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
+					},
+					"id": schema.StringAttribute{
+						Optional:    true,
+						Description: `Unique ID for this input`,
+					},
+					"ip_allowlist_regex": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/.*/`),
+						Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist. Default: "/.*/"`,
+					},
+					"ip_denylist_regex": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/^$/`),
+						Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist. Default: "/^$/"`,
+					},
+					"keep_alive_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(5),
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
+					},
+					"max_active_req": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(256),
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"max_requests_per_socket": schema.Int64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     int64default.StaticInt64(0),
+						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
+					},
+					"metadata": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required: true,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+								},
+							},
+						},
+						Description: `Fields to add to every event. May be overridden by fields added at the token or request level.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Optional:    true,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"port": schema.Float64Attribute{
+						Required:    true,
+						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
+					},
+					"pq": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"commit_frequency": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(42),
+								Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"compress": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`none`),
+								Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"none",
+										"gzip",
+									),
+								},
+							},
+							"max_buffer_size": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1000),
+								Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
+							},
+							"max_file_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`1 MB`),
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"max_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`5GB`),
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`always`),
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"smart",
+										"always",
+									),
+								},
+							},
+							"path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
+							},
+							"pq_controls": schema.SingleNestedAttribute{
+								Optional: true,
+							},
+						},
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
+					},
+					"request_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
+					},
+					"socket_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"stale_channel_flush_ms": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(10000),
+						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"ca_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"common_name_regex": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`/.*/`),
+								Description: `Regex matching allowable common names in peer certificates' subject attribute. Default: "/.*/"`,
+							},
+							"disabled": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Default: true`,
+							},
+							"max_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"min_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"passphrase": schema.StringAttribute{
+								Optional:    true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"reject_unauthorized": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). Default: true`,
+							},
+							"request_cert": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
+							},
+						},
+					},
+					"type": schema.StringAttribute{
+						Required:    true,
+						Description: `must be "cloudflare_hec"`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"cloudflare_hec",
+							),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_appscope"),
+						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collection"),
+						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
+						path.MatchRelative().AtParent().AtName("input_cribl"),
+						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
+						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
+						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
+						path.MatchRelative().AtParent().AtName("input_datagen"),
+						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_elastic"),
+						path.MatchRelative().AtParent().AtName("input_eventhub"),
+						path.MatchRelative().AtParent().AtName("input_exec"),
+						path.MatchRelative().AtParent().AtName("input_file"),
+						path.MatchRelative().AtParent().AtName("input_firehose"),
+						path.MatchRelative().AtParent().AtName("input_google_pubsub"),
+						path.MatchRelative().AtParent().AtName("input_grafana"),
+						path.MatchRelative().AtParent().AtName("input_http"),
+						path.MatchRelative().AtParent().AtName("input_http_raw"),
+						path.MatchRelative().AtParent().AtName("input_journal_files"),
+						path.MatchRelative().AtParent().AtName("input_kafka"),
+						path.MatchRelative().AtParent().AtName("input_kinesis"),
+						path.MatchRelative().AtParent().AtName("input_kube_events"),
+						path.MatchRelative().AtParent().AtName("input_kube_logs"),
+						path.MatchRelative().AtParent().AtName("input_kube_metrics"),
+						path.MatchRelative().AtParent().AtName("input_loki"),
+						path.MatchRelative().AtParent().AtName("input_metrics"),
+						path.MatchRelative().AtParent().AtName("input_model_driven_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_msk"),
+						path.MatchRelative().AtParent().AtName("input_netflow"),
+						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
+						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
+						path.MatchRelative().AtParent().AtName("input_office365_service"),
+						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
+						path.MatchRelative().AtParent().AtName("input_raw_udp"),
+						path.MatchRelative().AtParent().AtName("input_s3"),
+						path.MatchRelative().AtParent().AtName("input_s3_inventory"),
+						path.MatchRelative().AtParent().AtName("input_security_lake"),
+						path.MatchRelative().AtParent().AtName("input_snmp"),
+						path.MatchRelative().AtParent().AtName("input_splunk"),
+						path.MatchRelative().AtParent().AtName("input_splunk_hec"),
+						path.MatchRelative().AtParent().AtName("input_splunk_search"),
+						path.MatchRelative().AtParent().AtName("input_sqs"),
+						path.MatchRelative().AtParent().AtName("input_syslog"),
+						path.MatchRelative().AtParent().AtName("input_system_metrics"),
+						path.MatchRelative().AtParent().AtName("input_system_state"),
+						path.MatchRelative().AtParent().AtName("input_tcp"),
+						path.MatchRelative().AtParent().AtName("input_tcpjson"),
+						path.MatchRelative().AtParent().AtName("input_wef"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
+						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -1160,6 +1651,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
@@ -1214,6 +1706,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -1776,6 +2269,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
@@ -1830,6 +2324,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -1992,6 +2487,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
@@ -2046,6 +2542,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -2377,6 +2874,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -2431,6 +2929,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -2762,6 +3261,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -2816,6 +3316,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -3109,6 +3610,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -3163,6 +3665,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -3336,6 +3839,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -3390,6 +3894,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -3777,6 +4282,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -3831,6 +4337,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -4180,6 +4687,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -4234,6 +4742,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -4415,6 +4924,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -4469,6 +4979,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -4975,6 +5486,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -5029,6 +5541,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -5487,6 +6000,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -5541,6 +6055,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -5927,6 +6442,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -5981,6 +6497,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -6194,6 +6711,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -6248,6 +6766,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -6521,6 +7040,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -6575,6 +7095,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -6904,6 +7425,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -6958,6 +7480,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -7197,6 +7720,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -7251,6 +7775,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -8363,6 +8888,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -8417,6 +8943,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -8809,6 +9336,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -8863,6 +9391,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -9250,6 +9779,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -9304,6 +9834,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -9511,6 +10042,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -9565,6 +10097,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -10125,6 +10658,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -10179,6 +10713,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -10504,6 +11039,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -10558,6 +11094,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -10735,6 +11272,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -10789,6 +11327,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -11048,6 +11587,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -11102,6 +11642,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -11341,6 +11882,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -11395,6 +11937,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -11828,6 +12371,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -11882,6 +12426,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -12160,6 +12705,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -12214,6 +12760,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -12475,6 +13022,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -12529,6 +13077,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -13144,6 +13693,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -13198,6 +13748,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -13424,6 +13975,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -13478,6 +14030,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -13860,6 +14413,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -13914,6 +14468,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -14346,6 +14901,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -14400,6 +14956,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -14768,6 +15325,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -14822,6 +15380,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -15295,6 +15854,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -15349,6 +15909,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -15782,6 +16343,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -15836,6 +16398,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -16271,6 +16834,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -16325,6 +16889,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -16531,6 +17096,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -16585,6 +17151,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -16984,6 +17551,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -17038,6 +17606,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -17460,6 +18029,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -17514,6 +18084,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -17919,6 +18490,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -17973,6 +18545,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -18245,6 +18818,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -18299,6 +18873,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -18659,6 +19234,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -18713,6 +19289,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -19166,6 +19743,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -19220,6 +19798,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -19728,6 +20307,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -19782,6 +20362,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -20082,6 +20663,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -20136,6 +20718,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -20878,6 +21461,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -20932,6 +21516,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -21454,6 +22039,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -21508,6 +22094,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -21874,6 +22461,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -21928,6 +22516,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -22271,6 +22860,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -22325,6 +22915,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -22644,6 +23235,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -22698,6 +23290,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -23172,6 +23765,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -23226,6 +23820,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -23459,6 +24054,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -23513,6 +24109,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_wef"),
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -23958,6 +24555,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -24012,6 +24610,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_wef"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -24350,6 +24949,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -24404,6 +25004,459 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_wef"),
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
+						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
+					}...),
+				},
+			},
+			"input_wiz_webhook": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"activity_log_sample_rate": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(100),
+						Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
+						},
+					},
+					"allowed_methods": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("*")})),
+						ElementType: types.StringType,
+						Description: `List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all. Default: ["*"]`,
+					},
+					"allowed_paths": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("*")})),
+						ElementType: types.StringType,
+						Description: `List of URI paths accepted by this input. Wildcards are supported (such as /api/v*/hook). Defaults to allow all. Default: ["*"]`,
+					},
+					"auth_tokens": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+					},
+					"auth_tokens_ext": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Optional: true,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Optional: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Required: true,
+											},
+											"value": schema.StringAttribute{
+												Required:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+									Description: `Fields to add to events referencing this token`,
+								},
+								"token": schema.StringAttribute{
+									Required:    true,
+									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+								},
+							},
+						},
+						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+					},
+					"breaker_rulesets": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("Cribl - Do Not Break Ruleset")})),
+						ElementType: types.StringType,
+						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream. Default: ["Cribl - Do Not Break Ruleset"]`,
+					},
+					"capture_headers": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Add request headers to events, in the __headers field. Default: false`,
+					},
+					"connections": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"output": schema.StringAttribute{
+									Required: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Optional: true,
+								},
+							},
+						},
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+					},
+					"description": schema.StringAttribute{
+						Optional: true,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"enable_health_check": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+					},
+					"enable_proxy_header": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
+					},
+					"environment": schema.StringAttribute{
+						Optional:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"host": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`0.0.0.0`),
+						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
+					},
+					"id": schema.StringAttribute{
+						Optional:    true,
+						Description: `Unique ID for this input`,
+					},
+					"ip_allowlist_regex": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/.*/`),
+						Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist. Default: "/.*/"`,
+					},
+					"ip_denylist_regex": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/^$/`),
+						Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist. Default: "/^$/"`,
+					},
+					"keep_alive_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(5),
+						Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
+					},
+					"max_active_req": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(256),
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"max_requests_per_socket": schema.Int64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     int64default.StaticInt64(0),
+						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
+					},
+					"metadata": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required: true,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+								},
+							},
+						},
+						Description: `Fields to add to events from this input`,
+					},
+					"pipeline": schema.StringAttribute{
+						Optional:    true,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"port": schema.Float64Attribute{
+						Required:    true,
+						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
+					},
+					"pq": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"commit_frequency": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(42),
+								Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"compress": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`none`),
+								Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"none",
+										"gzip",
+									),
+								},
+							},
+							"max_buffer_size": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1000),
+								Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
+							},
+							"max_file_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`1 MB`),
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"max_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`5GB`),
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`always`),
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"smart",
+										"always",
+									),
+								},
+							},
+							"path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
+							},
+							"pq_controls": schema.SingleNestedAttribute{
+								Optional: true,
+							},
+						},
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
+					},
+					"request_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
+					},
+					"socket_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"stale_channel_flush_ms": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(10000),
+						Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+						Validators: []validator.Float64{
+							float64validator.Between(10, 43200000),
+						},
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"ca_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"common_name_regex": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`/.*/`),
+								Description: `Regex matching allowable common names in peer certificates' subject attribute. Default: "/.*/"`,
+							},
+							"disabled": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Default: true`,
+							},
+							"max_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"min_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"passphrase": schema.StringAttribute{
+								Optional:    true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"reject_unauthorized": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). Default: true`,
+							},
+							"request_cert": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
+							},
+						},
+					},
+					"type": schema.StringAttribute{
+						Required:    true,
+						Description: `must be "wiz_webhook"`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"wiz_webhook",
+							),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_appscope"),
+						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
+						path.MatchRelative().AtParent().AtName("input_collection"),
+						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
+						path.MatchRelative().AtParent().AtName("input_cribl"),
+						path.MatchRelative().AtParent().AtName("input_cribl_http"),
+						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
+						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
+						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
+						path.MatchRelative().AtParent().AtName("input_datagen"),
+						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_elastic"),
+						path.MatchRelative().AtParent().AtName("input_eventhub"),
+						path.MatchRelative().AtParent().AtName("input_exec"),
+						path.MatchRelative().AtParent().AtName("input_file"),
+						path.MatchRelative().AtParent().AtName("input_firehose"),
+						path.MatchRelative().AtParent().AtName("input_google_pubsub"),
+						path.MatchRelative().AtParent().AtName("input_grafana"),
+						path.MatchRelative().AtParent().AtName("input_http"),
+						path.MatchRelative().AtParent().AtName("input_http_raw"),
+						path.MatchRelative().AtParent().AtName("input_journal_files"),
+						path.MatchRelative().AtParent().AtName("input_kafka"),
+						path.MatchRelative().AtParent().AtName("input_kinesis"),
+						path.MatchRelative().AtParent().AtName("input_kube_events"),
+						path.MatchRelative().AtParent().AtName("input_kube_logs"),
+						path.MatchRelative().AtParent().AtName("input_kube_metrics"),
+						path.MatchRelative().AtParent().AtName("input_loki"),
+						path.MatchRelative().AtParent().AtName("input_metrics"),
+						path.MatchRelative().AtParent().AtName("input_model_driven_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_msk"),
+						path.MatchRelative().AtParent().AtName("input_netflow"),
+						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
+						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
+						path.MatchRelative().AtParent().AtName("input_office365_service"),
+						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_prometheus"),
+						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
+						path.MatchRelative().AtParent().AtName("input_raw_udp"),
+						path.MatchRelative().AtParent().AtName("input_s3"),
+						path.MatchRelative().AtParent().AtName("input_s3_inventory"),
+						path.MatchRelative().AtParent().AtName("input_security_lake"),
+						path.MatchRelative().AtParent().AtName("input_snmp"),
+						path.MatchRelative().AtParent().AtName("input_splunk"),
+						path.MatchRelative().AtParent().AtName("input_splunk_hec"),
+						path.MatchRelative().AtParent().AtName("input_splunk_search"),
+						path.MatchRelative().AtParent().AtName("input_sqs"),
+						path.MatchRelative().AtParent().AtName("input_syslog"),
+						path.MatchRelative().AtParent().AtName("input_system_metrics"),
+						path.MatchRelative().AtParent().AtName("input_system_state"),
+						path.MatchRelative().AtParent().AtName("input_tcp"),
+						path.MatchRelative().AtParent().AtName("input_tcpjson"),
+						path.MatchRelative().AtParent().AtName("input_wef"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
+						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
 				},
@@ -24824,6 +25877,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("input_appscope"),
 						path.MatchRelative().AtParent().AtName("input_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_cloudflare_hec"),
 						path.MatchRelative().AtParent().AtName("input_collection"),
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
@@ -24879,6 +25933,7 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
+						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 					}...),
 				},
 			},

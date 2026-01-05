@@ -161,6 +161,102 @@ resource "criblio_source" "my_source" {
     type               = "azure_blob"
     visibility_timeout = 300
   }
+  input_cloudflare_hec = {
+    access_control_allow_headers = [
+      "..."
+    ]
+    access_control_allow_origin = [
+      "..."
+    ]
+    activity_log_sample_rate = 1.27
+    allowed_indexes = [
+      "..."
+    ]
+    auth_tokens = [
+      {
+        allowed_indexes_at_token = [
+          "..."
+        ]
+        auth_type   = "manual"
+        description = "...my_description..."
+        enabled     = true
+        metadata = [
+          {
+            name  = "...my_name..."
+            value = "...my_value..."
+          }
+        ]
+        token        = "...my_token..."
+        token_secret = "...my_token_secret..."
+      }
+    ]
+    breaker_rulesets = [
+      "..."
+    ]
+    capture_headers = true
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    description             = "...my_description..."
+    disabled                = true
+    emit_token_metrics      = true
+    enable_health_check     = "{ \"see\": \"documentation\" }"
+    enable_proxy_header     = true
+    environment             = "...my_environment..."
+    hec_api                 = "...my_hec_api..."
+    host                    = "...my_host..."
+    id                      = "...my_id..."
+    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
+    ip_denylist_regex       = "...my_ip_denylist_regex..."
+    keep_alive_timeout      = 202.84
+    max_active_req          = 9.66
+    max_requests_per_socket = 6
+    metadata = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    pipeline = "...my_pipeline..."
+    port     = 12718.67
+    pq = {
+      commit_frequency = 1.06
+      compress         = "none"
+      max_buffer_size  = 50.38
+      max_file_size    = "...my_max_file_size..."
+      max_size         = "...my_max_size..."
+      mode             = "always"
+      path             = "...my_path..."
+      pq_controls = {
+        # ...
+      }
+    }
+    pq_enabled             = false
+    request_timeout        = 0.67
+    send_to_routes         = true
+    socket_timeout         = 7.15
+    stale_channel_flush_ms = 13230412.18
+    streamtags = [
+      "..."
+    ]
+    tls = {
+      ca_path             = "...my_ca_path..."
+      cert_path           = "...my_cert_path..."
+      certificate_name    = "...my_certificate_name..."
+      common_name_regex   = "...my_common_name_regex..."
+      disabled            = true
+      max_version         = "TLSv1.2"
+      min_version         = "TLSv1.2"
+      passphrase          = "...my_passphrase..."
+      priv_key_path       = "...my_priv_key_path..."
+      reject_unauthorized = true
+      request_cert        = false
+    }
+    type = "cloudflare_hec"
+  }
   input_collection = {
     breaker_rulesets = [
       "access-logs-v1",
@@ -3940,6 +4036,94 @@ resource "criblio_source" "my_source" {
     ttl         = "4h"
     type        = "wiz"
   }
+  input_wiz_webhook = {
+    activity_log_sample_rate = 7.91
+    allowed_methods = [
+      "..."
+    ]
+    allowed_paths = [
+      "..."
+    ]
+    auth_tokens = [
+      "..."
+    ]
+    auth_tokens_ext = [
+      {
+        description = "...my_description..."
+        metadata = [
+          {
+            name  = "...my_name..."
+            value = "...my_value..."
+          }
+        ]
+        token = "...my_token..."
+      }
+    ]
+    breaker_rulesets = [
+      "..."
+    ]
+    capture_headers = true
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    description             = "...my_description..."
+    disabled                = false
+    enable_health_check     = false
+    enable_proxy_header     = true
+    environment             = "...my_environment..."
+    host                    = "...my_host..."
+    id                      = "...my_id..."
+    ip_allowlist_regex      = "...my_ip_allowlist_regex..."
+    ip_denylist_regex       = "...my_ip_denylist_regex..."
+    keep_alive_timeout      = 45.27
+    max_active_req          = 5.89
+    max_requests_per_socket = 4
+    metadata = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    pipeline = "...my_pipeline..."
+    port     = 12741.38
+    pq = {
+      commit_frequency = 6.42
+      compress         = "none"
+      max_buffer_size  = 44.98
+      max_file_size    = "...my_max_file_size..."
+      max_size         = "...my_max_size..."
+      mode             = "smart"
+      path             = "...my_path..."
+      pq_controls = {
+        # ...
+      }
+    }
+    pq_enabled             = true
+    request_timeout        = 4.77
+    send_to_routes         = true
+    socket_timeout         = 5.78
+    stale_channel_flush_ms = 25135250.73
+    streamtags = [
+      "..."
+    ]
+    tls = {
+      ca_path             = "...my_ca_path..."
+      cert_path           = "...my_cert_path..."
+      certificate_name    = "...my_certificate_name..."
+      common_name_regex   = "...my_common_name_regex..."
+      disabled            = false
+      max_version         = "TLSv1"
+      min_version         = "TLSv1"
+      passphrase          = "...my_passphrase..."
+      priv_key_path       = "...my_priv_key_path..."
+      reject_unauthorized = false
+      request_cert        = true
+    }
+    type = "wiz_webhook"
+  }
   input_zscaler_hec = {
     access_control_allow_headers = [
       "Authorization",
@@ -4047,6 +4231,7 @@ resource "criblio_source" "my_source" {
 
 - `input_appscope` (Attributes) (see [below for nested schema](#nestedatt--input_appscope))
 - `input_azure_blob` (Attributes) (see [below for nested schema](#nestedatt--input_azure_blob))
+- `input_cloudflare_hec` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec))
 - `input_collection` (Attributes) (see [below for nested schema](#nestedatt--input_collection))
 - `input_confluent_cloud` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud))
 - `input_cribl` (Attributes) (see [below for nested schema](#nestedatt--input_cribl))
@@ -4102,6 +4287,7 @@ resource "criblio_source" "my_source" {
 - `input_win_event_logs` (Attributes) (see [below for nested schema](#nestedatt--input_win_event_logs))
 - `input_windows_metrics` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics))
 - `input_wiz` (Attributes) (see [below for nested schema](#nestedatt--input_wiz))
+- `input_wiz_webhook` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook))
 - `input_zscaler_hec` (Attributes) (see [below for nested schema](#nestedatt--input_zscaler_hec))
 
 ### Read-Only
@@ -4320,6 +4506,131 @@ Optional:
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
 - `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
+
+
+
+<a id="nestedatt--input_cloudflare_hec"></a>
+### Nested Schema for `input_cloudflare_hec`
+
+Required:
+
+- `hec_api` (String) Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint.
+- `port` (Number) Port to listen on
+- `type` (String) must be "cloudflare_hec"
+
+Optional:
+
+- `access_control_allow_headers` (List of String) HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.
+- `access_control_allow_origin` (List of String) HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.
+- `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100
+- `allowed_indexes` (List of String) List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.
+- `auth_tokens` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_cloudflare_hec--auth_tokens))
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `capture_headers` (Boolean) Add request headers to events, in the __headers field. Default: false
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cloudflare_hec--connections))
+- `description` (String)
+- `disabled` (Boolean) Default: false
+- `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false
+- `enable_health_check` (String) Parsed as JSON.
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"
+- `id` (String) Unique ID for this input
+- `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist. Default: "/.*/"
+- `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist. Default: "/^$/"
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256
+- `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
+- `metadata` (Attributes List) Fields to add to every event. May be overridden by fields added at the token or request level. (see [below for nested schema](#nestedatt--input_cloudflare_hec--metadata))
+- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec--pq))
+- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
+- `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
+- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
+- `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec--tls))
+
+<a id="nestedatt--input_cloudflare_hec--auth_tokens"></a>
+### Nested Schema for `input_cloudflare_hec.auth_tokens`
+
+Optional:
+
+- `allowed_indexes_at_token` (List of String) Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.
+- `auth_type` (String) Select Secret to use a text secret to authenticate. Default: "secret"; must be one of ["secret", "manual"]
+- `description` (String)
+- `enabled` (Boolean) Default: true
+- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_cloudflare_hec--auth_tokens--metadata))
+- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
+- `token_secret` (String) Select or create a stored text secret
+
+<a id="nestedatt--input_cloudflare_hec--auth_tokens--metadata"></a>
+### Nested Schema for `input_cloudflare_hec.auth_tokens.metadata`
+
+Required:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+
+<a id="nestedatt--input_cloudflare_hec--connections"></a>
+### Nested Schema for `input_cloudflare_hec.connections`
+
+Required:
+
+- `output` (String)
+
+Optional:
+
+- `pipeline` (String)
+
+
+<a id="nestedatt--input_cloudflare_hec--metadata"></a>
+### Nested Schema for `input_cloudflare_hec.metadata`
+
+Required:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_cloudflare_hec--pq"></a>
+### Nested Schema for `input_cloudflare_hec.pq`
+
+Optional:
+
+- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them. Default: 42
+- `compress` (String) Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]
+- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
+- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
+- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec--pq--pq_controls))
+
+<a id="nestedatt--input_cloudflare_hec--pq--pq_controls"></a>
+### Nested Schema for `input_cloudflare_hec.pq.pq_controls`
+
+
+
+<a id="nestedatt--input_cloudflare_hec--tls"></a>
+### Nested Schema for `input_cloudflare_hec.tls`
+
+Optional:
+
+- `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
+- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
+- `certificate_name` (String) The name of the predefined certificate
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute. Default: "/.*/"
+- `disabled` (Boolean) Default: true
+- `max_version` (String) must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]
+- `min_version` (String) must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]
+- `passphrase` (String) Passphrase to use to decrypt private key
+- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). Default: true
+- `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false
 
 
 
@@ -10340,6 +10651,128 @@ Optional:
 - `retry_connect_reset` (Boolean) Retry request when a connection reset (ECONNRESET) error occurs. Default: false
 - `retry_connect_timeout` (Boolean) Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs. Default: false
 - `type` (String) The algorithm to use when performing HTTP retries. Default: "backoff"; must be one of ["none", "backoff", "static"]
+
+
+
+<a id="nestedatt--input_wiz_webhook"></a>
+### Nested Schema for `input_wiz_webhook`
+
+Required:
+
+- `port` (Number) Port to listen on
+- `type` (String) must be "wiz_webhook"
+
+Optional:
+
+- `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100
+- `allowed_methods` (List of String) List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all. Default: ["*"]
+- `allowed_paths` (List of String) List of URI paths accepted by this input. Wildcards are supported (such as /api/v*/hook). Defaults to allow all. Default: ["*"]
+- `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
+- `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_wiz_webhook--auth_tokens_ext))
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream. Default: ["Cribl - Do Not Break Ruleset"]
+- `capture_headers` (Boolean) Add request headers to events, in the __headers field. Default: false
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_wiz_webhook--connections))
+- `description` (String)
+- `disabled` (Boolean) Default: false
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"
+- `id` (String) Unique ID for this input
+- `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist. Default: "/.*/"
+- `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist. Default: "/^$/"
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes). Default: 5
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256
+- `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_wiz_webhook--metadata))
+- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--pq))
+- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
+- `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
+- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
+- `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--tls))
+
+<a id="nestedatt--input_wiz_webhook--auth_tokens_ext"></a>
+### Nested Schema for `input_wiz_webhook.auth_tokens_ext`
+
+Required:
+
+- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
+
+Optional:
+
+- `description` (String)
+- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_wiz_webhook--auth_tokens_ext--metadata))
+
+<a id="nestedatt--input_wiz_webhook--auth_tokens_ext--metadata"></a>
+### Nested Schema for `input_wiz_webhook.auth_tokens_ext.metadata`
+
+Required:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+
+<a id="nestedatt--input_wiz_webhook--connections"></a>
+### Nested Schema for `input_wiz_webhook.connections`
+
+Required:
+
+- `output` (String)
+
+Optional:
+
+- `pipeline` (String)
+
+
+<a id="nestedatt--input_wiz_webhook--metadata"></a>
+### Nested Schema for `input_wiz_webhook.metadata`
+
+Required:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_wiz_webhook--pq"></a>
+### Nested Schema for `input_wiz_webhook.pq`
+
+Optional:
+
+- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them. Default: 42
+- `compress` (String) Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]
+- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk. Default: 1000
+- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"
+- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
+- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--pq--pq_controls))
+
+<a id="nestedatt--input_wiz_webhook--pq--pq_controls"></a>
+### Nested Schema for `input_wiz_webhook.pq.pq_controls`
+
+
+
+<a id="nestedatt--input_wiz_webhook--tls"></a>
+### Nested Schema for `input_wiz_webhook.tls`
+
+Optional:
+
+- `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
+- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
+- `certificate_name` (String) The name of the predefined certificate
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute. Default: "/.*/"
+- `disabled` (Boolean) Default: true
+- `max_version` (String) must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]
+- `min_version` (String) must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]
+- `passphrase` (String) Passphrase to use to decrypt private key
+- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). Default: true
+- `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false
 
 
 

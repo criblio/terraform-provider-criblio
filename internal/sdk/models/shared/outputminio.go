@@ -157,27 +157,27 @@ func (e *OutputMinioStorageClass) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// ServerSideEncryption - Server-side encryption for uploaded objects
-type ServerSideEncryption string
+// OutputMinioServerSideEncryption - Server-side encryption for uploaded objects
+type OutputMinioServerSideEncryption string
 
 const (
-	ServerSideEncryptionAes256 ServerSideEncryption = "AES256"
+	OutputMinioServerSideEncryptionAes256 OutputMinioServerSideEncryption = "AES256"
 )
 
-func (e ServerSideEncryption) ToPointer() *ServerSideEncryption {
+func (e OutputMinioServerSideEncryption) ToPointer() *OutputMinioServerSideEncryption {
 	return &e
 }
-func (e *ServerSideEncryption) UnmarshalJSON(data []byte) error {
+func (e *OutputMinioServerSideEncryption) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "AES256":
-		*e = ServerSideEncryption(v)
+		*e = OutputMinioServerSideEncryption(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for ServerSideEncryption: %v", v)
+		return fmt.Errorf("invalid value for OutputMinioServerSideEncryption: %v", v)
 	}
 }
 
@@ -444,7 +444,7 @@ type OutputMinio struct {
 	// Storage class to select for uploaded objects
 	StorageClass *OutputMinioStorageClass `json:"storageClass,omitempty"`
 	// Server-side encryption for uploaded objects
-	ServerSideEncryption *ServerSideEncryption `json:"serverSideEncryption,omitempty"`
+	ServerSideEncryption *OutputMinioServerSideEncryption `json:"serverSideEncryption,omitempty"`
 	// Reuse connections between requests, which can improve performance
 	ReuseConnections *bool `default:"true" json:"reuseConnections"`
 	// Reject certificates that cannot be verified against a valid CA, such as self-signed certificates)
@@ -648,7 +648,7 @@ func (o *OutputMinio) GetStorageClass() *OutputMinioStorageClass {
 	return o.StorageClass
 }
 
-func (o *OutputMinio) GetServerSideEncryption() *ServerSideEncryption {
+func (o *OutputMinio) GetServerSideEncryption() *OutputMinioServerSideEncryption {
 	if o == nil {
 		return nil
 	}

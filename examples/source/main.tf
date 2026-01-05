@@ -32,7 +32,6 @@ resource "criblio_source" "my_http_source" {
     elastic_api             = "/elastic"
     enable_health_check     = true
     enable_proxy_header     = false
-    environment             = "main"
     host                    = "0.0.0.0"
     id                      = "http-listener"
     keep_alive_timeout      = 30
@@ -79,6 +78,125 @@ resource "criblio_source" "my_http_source" {
       request_cert        = false
     }
     type = "http"
+  }
+}
+
+# Cloudflare HEC source
+resource "criblio_source" "my_cloudflare_hec_source" {
+  group_id = "default"
+  id       = "cloudflare-hec-listener"
+  input_cloudflare_hec = {
+    id          = "cloudflare-hec-listener"
+    type        = "cloudflare_hec"
+    description = "Cloudflare HTTP Event Collector listener"
+    disabled    = false
+    host        = "0.0.0.0"
+    port        = 10093
+    hec_api     = "/services/collector/event"
+    connections = [
+      {
+        output   = "default"
+        pipeline = "default"
+      }
+    ]
+    auth_tokens = [
+      {
+        enabled      = true
+        auth_type    = "secret"
+        token        = "cloudflare-hec-token"
+        token_secret = "cloudflare-hec-token-secret"
+        description  = "Cloudflare HEC token"
+      }
+    ]
+    capture_headers          = true
+    enable_proxy_header      = false
+    keep_alive_timeout       = 30
+    max_active_req           = 512
+    max_requests_per_socket  = 1000
+    request_timeout          = 30
+    socket_timeout           = 60
+    send_to_routes           = true
+    activity_log_sample_rate = 100
+    emit_token_metrics       = false
+    streamtags = [
+      "prod",
+      "cloudflare",
+    ]
+    tls = {
+      disabled            = true
+      reject_unauthorized = true
+      request_cert        = false
+    }
+  }
+}
+
+# Wiz Webhook source
+resource "criblio_source" "my_wiz_webhook_source" {
+  group_id = "default"
+  id       = "wiz-webhook-listener"
+  input_wiz_webhook = {
+    id          = "wiz-webhook-listener"
+    type        = "wiz_webhook"
+    description = "Wiz webhook listener"
+    disabled    = false
+    host        = "0.0.0.0"
+    port        = 10092
+    pipeline    = "default"
+    connections = [
+      {
+        output   = "default"
+        pipeline = "default"
+      }
+    ]
+    auth_tokens = [
+      "wiz-webhook-token-1",
+      "wiz-webhook-token-2",
+    ]
+    auth_tokens_ext = [
+      {
+        description = "Wiz webhook token"
+        token       = "wiz-webhook-token-1"
+        metadata = [
+          {
+            name  = "sourcetype"
+            value = "\"wiz:webhook\""
+          }
+        ]
+      }
+    ]
+    allowed_methods = [
+      "POST",
+      "PUT",
+    ]
+    allowed_paths = [
+      "/webhook",
+      "/events",
+    ]
+    capture_headers          = true
+    enable_proxy_header      = false
+    enable_health_check      = true
+    keep_alive_timeout       = 30
+    max_active_req           = 512
+    max_requests_per_socket  = 1000
+    request_timeout          = 30
+    socket_timeout           = 60
+    send_to_routes           = true
+    activity_log_sample_rate = 100
+    metadata = [
+      {
+        name  = "source"
+        value = "\"wiz\""
+      }
+    ]
+    streamtags = [
+      "prod",
+      "wiz",
+    ]
+    tls = {
+      disabled            = true
+      reject_unauthorized = true
+      request_cert        = false
+    }
   }
 }
 
