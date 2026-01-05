@@ -141,6 +141,7 @@ resource "criblio_source" "my_wiz_webhook_source" {
     disabled    = false
     host        = "0.0.0.0"
     port        = 10092
+    pipeline    = "default"
     connections = [
       {
         output   = "default"
