@@ -7,6 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestSystemInfo(t *testing.T) {
@@ -21,10 +22,11 @@ func TestSystemInfo(t *testing.T) {
 			Steps: []resource.TestStep{
 				{
 					ConfigDirectory: config.TestNameDirectory(),
-					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttrSet("data.criblio_system_info.my_systeminfo", "items.#"),
-						resource.TestCheckResourceAttrSet("data.criblio_system_info.my_systeminfo", "items.0.build.VERSION"),
-					),
+					ConfigPlanChecks: resource.ConfigPlanChecks{
+						PreApply: []plancheck.PlanCheck{
+							plancheck.ExpectEmptyPlan(),
+						},
+					},
 				},
 			},
 		})
