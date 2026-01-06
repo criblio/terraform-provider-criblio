@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: ba419d5afa3da899fd36c7433224114b
+  docChecksum: 58a4e98e61e079234422a6f7dcfdf892
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.77
-  configChecksum: e45ad53c8efdf64bddb4167f01071525
+  releaseVersion: 1.20.82
+  configChecksum: a9cf474cdf67cfc88f3ba18167de0821
   published: true
 features:
   terraform:
@@ -83,6 +83,7 @@ generatedFiles:
   - examples/data-sources/criblio_source/data-source.tf
   - examples/data-sources/criblio_sources/data-source.tf
   - examples/data-sources/criblio_subscription/data-source.tf
+  - examples/data-sources/criblio_system_info/data-source.tf
   - examples/data-sources/criblio_workspace/data-source.tf
   - examples/data-sources/criblio_workspaces/data-source.tf
   - examples/provider/provider.tf
@@ -431,6 +432,8 @@ generatedFiles:
   - internal/provider/subscription_data_source_sdk.go
   - internal/provider/subscription_resource.go
   - internal/provider/subscription_resource_sdk.go
+  - internal/provider/systeminfo_data_source.go
+  - internal/provider/systeminfo_data_source_sdk.go
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
@@ -542,6 +545,7 @@ generatedFiles:
   - internal/provider/types/edge_provider.go
   - internal/provider/types/endpoint_header.go
   - internal/provider/types/endpoint_param.go
+  - internal/provider/types/env.go
   - internal/provider/types/event_breaker_ruleset_rule.go
   - internal/provider/types/event_breaker_ruleset_timestamp_format.go
   - internal/provider/types/extent_tag.go
@@ -1043,6 +1047,8 @@ generatedFiles:
   - internal/provider/types/job_settings.go
   - internal/provider/types/key_metadata_entity.go
   - internal/provider/types/lake_dataset_search_config.go
+  - internal/provider/types/license_info.go
+  - internal/provider/types/license_limits.go
   - internal/provider/types/limits.go
   - internal/provider/types/limits_samples.go
   - internal/provider/types/listening_ports.go
@@ -1411,6 +1417,12 @@ generatedFiles:
   - internal/provider/types/socks_proxy_opts.go
   - internal/provider/types/subscription_metadatum.go
   - internal/provider/types/summary.go
+  - internal/provider/types/system_conf.go
+  - internal/provider/types/system_info.go
+  - internal/provider/types/system_info_conf.go
+  - internal/provider/types/system_info_limits.go
+  - internal/provider/types/system_info_os.go
+  - internal/provider/types/system_info_samples.go
   - internal/provider/types/system_settings.go
   - internal/provider/types/system_settings_api.go
   - internal/provider/types/system_settings_backups.go
@@ -2092,6 +2104,7 @@ generatedFiles:
   - internal/sdk/models/shared/containerdroot.go
   - internal/sdk/models/shared/containerdtask.go
   - internal/sdk/models/shared/containerport.go
+  - internal/sdk/models/shared/countedsysteminfo.go
   - internal/sdk/models/shared/cputimemetric.go
   - internal/sdk/models/shared/criblevent.go
   - internal/sdk/models/shared/cribllakedataset.go

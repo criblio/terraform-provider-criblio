@@ -621,12 +621,12 @@ func (s *Diag) GetSystemInfo(ctx context.Context, opts ...operations.Option) (*o
 				return nil, err
 			}
 
-			var out operations.GetSystemInfoResponseBody
+			var out shared.CountedSystemInfo
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.Object = &out
+			res.CountedSystemInfo = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -656,6 +656,7 @@ func (s *Diag) GetSystemInfo(ctx context.Context, opts ...operations.Option) (*o
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {

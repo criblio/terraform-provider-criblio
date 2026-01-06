@@ -7,18 +7,6 @@ import (
 	"net/http"
 )
 
-// GetSystemInfoResponseBody - a list of SystemInfo objects
-type GetSystemInfoResponseBody struct {
-	Items []shared.SystemInfo `json:"items,omitempty"`
-}
-
-func (g *GetSystemInfoResponseBody) GetItems() []shared.SystemInfo {
-	if g == nil {
-		return nil
-	}
-	return g.Items
-}
-
 type GetSystemInfoResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -27,7 +15,7 @@ type GetSystemInfoResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// a list of SystemInfo objects
-	Object *GetSystemInfoResponseBody
+	CountedSystemInfo *shared.CountedSystemInfo
 	// Unexpected error
 	Error *shared.Error
 }
@@ -53,11 +41,11 @@ func (g *GetSystemInfoResponse) GetRawResponse() *http.Response {
 	return g.RawResponse
 }
 
-func (g *GetSystemInfoResponse) GetObject() *GetSystemInfoResponseBody {
+func (g *GetSystemInfoResponse) GetCountedSystemInfo() *shared.CountedSystemInfo {
 	if g == nil {
 		return nil
 	}
-	return g.Object
+	return g.CountedSystemInfo
 }
 
 func (g *GetSystemInfoResponse) GetError() *shared.Error {

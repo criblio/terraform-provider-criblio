@@ -63007,6 +63007,7 @@ components:
           example: "/opt/cribl/local"
         cpus:
           type: array
+          x-speakeasy-terraform-ignore: true
           items:
             type: object
             properties:
@@ -63029,6 +63030,7 @@ components:
                 sys: 78910
         diskUsage:
           type: object
+          x-speakeasy-terraform-ignore: true
           properties:
             bytesAvailable:
               type: number
@@ -63058,6 +63060,7 @@ components:
           example: "6f1b2c3d-4e5f-6789-abcd-ef0123456789"
         hasCloudWorkspace:
           type: boolean
+          x-speakeasy-terraform-ignore: true
           example: true
         hostname:
           type: string
@@ -63067,12 +63070,15 @@ components:
           example: "/opt/cribl"
         isCriblSandbox:
           type: boolean
+          x-speakeasy-terraform-ignore: true
           example: false
         isFedRampEnabled:
           type: boolean
+          x-speakeasy-terraform-ignore: true
           example: false
         isFipsEnabled:
           type: boolean
+          x-speakeasy-terraform-ignore: true
           example: false
         license:
           $ref: "#/components/schemas/LicenseInfo"
@@ -63090,6 +63096,7 @@ components:
           required:
             - samples
         loadavg:
+          x-speakeasy-terraform-ignore: true
           type: array
           items:
             type: number
@@ -63098,6 +63105,7 @@ components:
             - 0.22
             - 0.30
         memory:
+          x-speakeasy-terraform-ignore: true
           type: object
           properties:
             free:
@@ -63111,12 +63119,14 @@ components:
             - total
         messages:
           type: array
+          x-speakeasy-terraform-ignore: true
           items:
             $ref: "#/components/schemas/BulletinMessage"
           example: []
         net:
           type: object
           additionalProperties: true
+          x-speakeasy-terraform-ignore: true
           example: {}
         os:
           type: object
@@ -63146,6 +63156,7 @@ components:
           $ref: "#/components/schemas/SystemConf"
         uptime:
           type: number
+          x-speakeasy-terraform-ignore: true
           example: 86400
         version:
           type: string
@@ -63158,7 +63169,6 @@ components:
         - apiPort
         - conf
         - configPath
-        - cpus
         - diskUsage
         - distMode
         - env
@@ -63169,13 +63179,23 @@ components:
         - limits
         - loadavg
         - memory
-        - messages
         - net
         - os
         - systemConf
         - uptime
         - version
         - workerProcesses
+    CountedSystemInfo:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: number of items present in the items array
+          x-speakeasy-ignore: true
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SystemInfo"
     Diag:
       type: object
       properties:
@@ -79834,30 +79854,14 @@ paths:
         - diag
       summary: Get basic system information
       description: Get basic system information
-      deprecated: false
+      x-speakeasy-entity-operation: SystemInfo#get
       responses:
         "200":
           description: a list of SystemInfo objects
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    description: number of items present in the items array
-                    x-speakeasy-ignore: true
-                  items:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/SystemInfo"
-              example:
-                count: 1
-                items:
-                  - version: "6.0.0"
-                    commit: "1a2b3c4d"
-                    buildDate: "2025-10-01T00:00:00Z"
-                    platform: "linux/x86_64"
+                $ref: "#/components/schemas/CountedSystemInfo"
         "401":
           description: Unauthorized
         "500":
@@ -79866,10 +79870,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Unexpected error"
-                status: 500
-                requestId: "req-sysinfo-01"
   /system/diag:
     get:
       operationId: getSystemDiag
