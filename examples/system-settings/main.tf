@@ -6,5 +6,5 @@ output "system_settings" {
 }
 
 output "version" {
-  value = jsondecode(data.criblio_system_info.my_systeminfo.items[0].build["VERSION"])
+  value = length(data.criblio_system_info.my_systeminfo.items) > 0 ? jsondecode(data.criblio_system_info.my_systeminfo.items[0].build["VERSION"]) : null
 }
