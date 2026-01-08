@@ -387,6 +387,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_source](docs/data-sources/source.md)
 * [criblio_sources](docs/data-sources/sources.md)
 * [criblio_subscription](docs/data-sources/subscription.md)
+* [criblio_system_info](docs/data-sources/system_info.md)
 * [criblio_workspace](docs/data-sources/workspace.md)
 * [criblio_workspaces](docs/data-sources/workspaces.md)
 <!-- End Available Resources and Data Sources [operations] -->

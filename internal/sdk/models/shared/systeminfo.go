@@ -215,7 +215,7 @@ type SystemInfo struct {
 	APIPort           float64           `json:"apiPort"`
 	Conf              SystemInfoConf    `json:"conf"`
 	ConfigPath        string            `json:"configPath"`
-	Cpus              []Cpus            `json:"cpus"`
+	Cpus              []Cpus            `json:"cpus,omitempty"`
 	DiskUsage         DiskUsage         `json:"diskUsage"`
 	DistMode          AppMode           `json:"distMode"`
 	Env               Env               `json:"env"`
@@ -230,7 +230,7 @@ type SystemInfo struct {
 	Limits            SystemInfoLimits  `json:"limits"`
 	Loadavg           []float64         `json:"loadavg"`
 	Memory            SystemInfoMemory  `json:"memory"`
-	Messages          []BulletinMessage `json:"messages"`
+	Messages          []BulletinMessage `json:"messages,omitempty"`
 	Net               map[string]any    `json:"net"`
 	Os                SystemInfoOs      `json:"os"`
 	SystemConf        SystemConf        `json:"systemConf"`
@@ -269,7 +269,7 @@ func (s *SystemInfo) GetConfigPath() string {
 
 func (s *SystemInfo) GetCpus() []Cpus {
 	if s == nil {
-		return []Cpus{}
+		return nil
 	}
 	return s.Cpus
 }
@@ -374,7 +374,7 @@ func (s *SystemInfo) GetMemory() SystemInfoMemory {
 
 func (s *SystemInfo) GetMessages() []BulletinMessage {
 	if s == nil {
-		return []BulletinMessage{}
+		return nil
 	}
 	return s.Messages
 }

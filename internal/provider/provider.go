@@ -326,6 +326,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewSourceDataSource,
 		NewSourcesDataSource,
 		NewSubscriptionDataSource,
+		NewSystemInfoDataSource,
 		NewWorkspaceDataSource,
 		NewWorkspacesDataSource,
 	}
