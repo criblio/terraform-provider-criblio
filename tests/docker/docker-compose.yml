@@ -8,3 +8,10 @@ services:
       - CRIBL_DIST_LEADER_URL=tcp://${CRIBL_DIST_TOKEN:-criblmaster}@0.0.0.0:4200
     ports:
       - "19000:9000"
+  workers:
+    image: cribl/cribl:latest
+    depends_on: 
+      - leader
+    environment:
+      - CRIBL_DIST_MODE=worker
+      - CRIBL_DIST_LEADER_URL=tcp://${CRIBL_DIST_TOKEN:-criblmaster}@leader:4200
