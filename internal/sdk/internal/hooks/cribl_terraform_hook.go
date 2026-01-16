@@ -180,6 +180,8 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	} else if clientID != "" && clientSecret != "" {
 		var tokenInfo *TokenInfo
 		var sessionKey, audience string
+		var configForToken *CriblConfig
+
 		if !onPrem {
 			// Get audience from base URL
 			if o.baseURL != "" {
@@ -205,25 +207,18 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 
 					audience = fmt.Sprintf("https://api.%s", domain)
 				}
-			} else if myVar := os.Getenv("CRIBL_AUDIENCE"); myVar != "" {
-				audience = myVar
+			} else if envAudience := os.Getenv("CRIBL_AUDIENCE"); envAudience != "" {
+				audience = envAudience
 			} else {
 				return req, fmt.Errorf("no base URL or audience provided")
 			}
 
 			sessionKey = fmt.Sprintf("%s:%s", clientID, clientSecret)
-		} else {
-			if config == nil {
-				return req, fmt.Errorf("on-prem configuration requires credentials file or environment variables")
-			}
-			sessionKey = fmt.Sprintf("onprem:%s:%s:%s", config.OnpremServerURL, config.OnpremUsername, config.OnpremPassword)
-		}
 
-		// Ensure config is not nil and has credentials - create minimal config with credentials if needed
-		// This handles the case where provider variables are set but no credentials file exists
-		configForToken := config
-		if clientID != "" && clientSecret != "" {
-			if configForToken == nil || (configForToken.ClientID == "" && configForToken.ClientSecret == "") {
+			// Ensure config is not nil and has credentials - create minimal config with credentials if needed
+			// This handles the case where provider variables are set but no credentials file exists
+			configForToken = config
+			if clientID != "" && clientSecret != "" && (configForToken == nil || (configForToken.ClientID == "" && configForToken.ClientSecret == "")) {
 				// Create minimal config with all provider variables
 				configForToken = &CriblConfig{
 					ClientID:       clientID,
@@ -233,6 +228,13 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 					CloudDomain:    cloudDomain,
 				}
 			}
+		} else {
+			if config == nil {
+				return req, fmt.Errorf("on-prem configuration requires credentials file or environment variables")
+			}
+			sessionKey = fmt.Sprintf("onprem:%s:%s:%s", config.OnpremServerURL, config.OnpremUsername, config.OnpremPassword)
+			// For on-prem, use config as-is (it should have on-prem fields)
+			configForToken = config
 		}
 
 		// Get or create session
@@ -572,8 +574,8 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 
 					audience = fmt.Sprintf("https://api.%s", domain)
 				}
-			} else if myVar := os.Getenv("CRIBL_AUDIENCE"); myVar != "" {
-				audience = myVar
+			} else if envAudience := os.Getenv("CRIBL_AUDIENCE"); envAudience != "" {
+				audience = envAudience
 			} else {
 				return res, fmt.Errorf("no base URL or audience provided")
 			}
