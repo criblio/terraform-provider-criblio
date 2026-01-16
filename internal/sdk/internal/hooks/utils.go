@@ -129,10 +129,12 @@ func constructBaseURL(input ConstructBaseUrlInput, config *CriblConfig) string {
 		return baseURL
 	}
 
-	// If no environment variables are set and we have a concrete URL, use it as-is
+	// If no environment variables or provider variables are set and we have a concrete URL, use it as-is
+	// Provider variables take precedence over concrete baseURL, so check for them first
 	if workspaceEnv == "" && orgEnv == "" && domainEnv == "" &&
+		input.ProviderWorkspaceID == "" && input.ProviderOrgID == "" && input.ProviderCloudDomain == "" &&
 		baseURL != "" && !strings.Contains(baseURL, "{workspaceName}") && !strings.Contains(baseURL, "{organizationId}") {
-		log.Printf("[DEBUG] No environment variables set, using provided concrete URL: %s", baseURL)
+		log.Printf("[DEBUG] No environment or provider variables set, using provided concrete URL: %s", baseURL)
 		return baseURL
 	}
 
