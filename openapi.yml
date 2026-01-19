@@ -1249,7 +1249,7 @@ components:
           properties:
             type:
               type: string
-              enum: [splunk, s3, azureblob, cribllake, database, gcs, healthcheck, rest]
+              enum: [splunk, s3, azureblob, cribllake, database, gcs, healthcheck, rest, script]
               title: Collector Type
               example: "splunk"
             destructive:
