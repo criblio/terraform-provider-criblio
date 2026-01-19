@@ -21,14 +21,31 @@ func TestCollector(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "id", "splunk-demo-collector"),
 						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "group_id", "default"),
-						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.environment", "demo"),
-						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.collector.type", "splunk"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "id", "splunk-demo-collector"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector",
+							"input_collector_splunk.environment", "demo"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector",
+							"input_collector_splunk.collector.type", "splunk"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector",
+							"input_collector_splunk.collector.conf.authentication", "token"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector",
+							"input_collector_splunk.collector.conf.disable_time_filter", "false"),
+
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "id", "rest-api-demo-collector"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.environment", "demo"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.collector.type", "rest"),
+
+						/*
+							resource.TestCheckResourceAttr("criblio_collector.script_collector", "group_id", "default"),
+							resource.TestCheckResourceAttr("criblio_collector.script_collector",
+								"input_collector_script.collector.type", "script"),
+							resource.TestCheckResourceAttr("criblio_collector.script_collector",
+								"input_collector_script.collector.conf.shell", "/bin/bash"),
+							resource.TestCheckResourceAttr("criblio_collector.script_collector",
+								"input_collector_script.collector.conf.discover_script", "echo 1"),
+						*/
 					),
 				},
 			},

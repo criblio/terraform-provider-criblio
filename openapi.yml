@@ -958,6 +958,7 @@ components:
       required:
         - collector
         - type
+        - id
       properties:
         # Common Job-Level Properties
         id:
@@ -1249,7 +1250,7 @@ components:
           properties:
             type:
               type: string
-              enum: [splunk, s3, azureblob, cribllake, database, gcs, healthcheck, rest]
+              enum: [splunk, s3, azureblob, cribllake, database, gcs, healthcheck, rest, script]
               title: Collector Type
               example: "splunk"
             destructive:
@@ -1265,6 +1266,34 @@ components:
               default: "utf8"
               example: "utf8"
     # Specific collector type implementations
+    InputCollectorScript:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
+              type: object
+              required: [type]
+              properties:
+                type:
+                  type: string
+                  enum: [script]
+                  example: "script"
+                conf:
+                  type: object
+                  properties:
+                    shell:
+                      type: string
+                      title: Shell 
+                      example: "/bin/bash"
+                    discoverScript:
+                      type: string
+                      title: Discover script
+                      example: "echo Hello Discovery Script"
+                    collectScript:
+                      type: string
+                      title: Collect script
+                      example: "echo Hello Collect Script"
     InputCollectorSplunk:
       allOf:
         - $ref: '#/components/schemas/InputCollectorBase'
@@ -2026,6 +2055,7 @@ components:
         - $ref: '#/components/schemas/InputCollectorDatabase'
         - $ref: '#/components/schemas/InputCollectorGCS'
         - $ref: '#/components/schemas/InputCollectorHealthCheck'
+        - $ref: '#/components/schemas/InputCollectorScript'
     KeyMetadataEntity:
       type: object
       required:

@@ -749,7 +749,7 @@ func (i *InputCollectorGCSCollector) GetConf() *InputCollectorGCSConf {
 }
 
 type InputCollectorGCS struct {
-	ID                   *string                           `json:"id,omitempty"`
+	ID                   string                            `json:"id"`
 	Type                 *InputCollectorGCSTypeCollection1 `default:"collection" json:"type"`
 	TTL                  *string                           `default:"4h" json:"ttl"`
 	IgnoreGroupJobsLimit *bool                             `default:"false" json:"ignoreGroupJobsLimit"`
@@ -773,15 +773,15 @@ func (i InputCollectorGCS) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorGCS) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputCollectorGCS) GetID() *string {
+func (i *InputCollectorGCS) GetID() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.ID
 }

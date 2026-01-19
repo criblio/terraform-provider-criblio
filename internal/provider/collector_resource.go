@@ -54,6 +54,7 @@ type CollectorResourceModel struct {
 	InputCollectorHealthCheck *tfTypes.InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check" tfPlanOnly:"true"`
 	InputCollectorRest        *tfTypes.InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest" tfPlanOnly:"true"`
 	InputCollectorS3          *tfTypes.InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3" tfPlanOnly:"true"`
+	InputCollectorScript      *tfTypes.InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script" tfPlanOnly:"true"`
 	InputCollectorSplunk      *tfTypes.InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk" tfPlanOnly:"true"`
 	Items                     []map[string]jsontypes.Normalized  `tfsdk:"items"`
 }
@@ -142,7 +143,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -447,6 +448,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
 						path.MatchRelative().AtParent().AtName("input_collector_rest"),
 						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_script"),
 						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
 					}...),
 				},
@@ -481,7 +483,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -786,6 +788,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
 						path.MatchRelative().AtParent().AtName("input_collector_rest"),
 						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_script"),
 						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
 					}...),
 				},
@@ -825,7 +828,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -1130,6 +1133,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
 						path.MatchRelative().AtParent().AtName("input_collector_rest"),
 						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_script"),
 						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
 					}...),
 				},
@@ -1196,7 +1200,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -1501,6 +1505,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
 						path.MatchRelative().AtParent().AtName("input_collector_rest"),
 						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_script"),
 						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
 					}...),
 				},
@@ -1585,7 +1590,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -1890,6 +1895,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
 						path.MatchRelative().AtParent().AtName("input_collector_rest"),
 						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_script"),
 						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
 					}...),
 				},
@@ -2359,7 +2365,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -2664,6 +2670,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
 						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
 						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_script"),
 						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
 					}...),
 				},
@@ -2739,7 +2746,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -3044,6 +3051,350 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
 						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
 						path.MatchRelative().AtParent().AtName("input_collector_rest"),
+						path.MatchRelative().AtParent().AtName("input_collector_script"),
+						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
+					}...),
+				},
+			},
+			"input_collector_script": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"collector": schema.SingleNestedAttribute{
+						Required: true,
+						Attributes: map[string]schema.Attribute{
+							"conf": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"collect_script": schema.StringAttribute{
+										Optional: true,
+									},
+									"discover_script": schema.StringAttribute{
+										Optional: true,
+									},
+									"shell": schema.StringAttribute{
+										Optional: true,
+									},
+								},
+							},
+							"type": schema.StringAttribute{
+								Required:    true,
+								Description: `must be "script"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf("script"),
+								},
+							},
+						},
+					},
+					"environment": schema.StringAttribute{
+						Optional: true,
+					},
+					"id": schema.StringAttribute{
+						Required: true,
+					},
+					"ignore_group_jobs_limit": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"input": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"breaker_rulesets": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+							},
+							"metadata": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required: true,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+										},
+									},
+								},
+								Description: `Fields to add to events from this input`,
+							},
+							"output": schema.StringAttribute{
+								Optional:    true,
+								Description: `Destination to send results to`,
+							},
+							"pipeline": schema.StringAttribute{
+								Optional:    true,
+								Description: `Pipeline to process results`,
+							},
+							"preprocess": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"args": schema.ListAttribute{
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `Arguments to be added to the custom command`,
+									},
+									"command": schema.StringAttribute{
+										Optional:    true,
+										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Default: true`,
+									},
+								},
+							},
+							"send_to_routes": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
+							},
+							"stale_channel_flush_ms": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(10000),
+								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
+								Validators: []validator.Float64{
+									float64validator.Between(10, 43200000),
+								},
+							},
+							"throttle_rate_per_sec": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`0`),
+								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`collection`),
+								Description: `Default: "collection"; must be "collection"`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"collection",
+									),
+								},
+							},
+						},
+					},
+					"remove_fields": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Default: []`,
+					},
+					"resume_on_boot": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Default: true`,
+					},
+					"saved_state": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `Saved state for the collector`,
+					},
+					"schedule": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"cron_schedule": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable to configure scheduling for this Collector`,
+							},
+							"max_concurrent_runs": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1),
+								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"resume_missed": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Resume missed scheduled runs. Default: false`,
+							},
+							"run": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"earliest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(0),
+										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
+									},
+									"expression": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`true`),
+										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
+									},
+									"job_timeout": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`0`),
+										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
+										},
+									},
+									"latest": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Latest time to collect data for the selected timezone. Default: 1`,
+									},
+									"log_level": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`info`),
+										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"error",
+												"warn",
+												"info",
+												"debug",
+												"silly",
+											),
+										},
+									},
+									"max_task_reschedule": schema.Float64Attribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     float64default.StaticFloat64(1),
+										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
+										Validators: []validator.Float64{
+											float64validator.AtLeast(1),
+										},
+									},
+									"max_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`10MB`),
+										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"min_task_size": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`1MB`),
+										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
+										},
+									},
+									"mode": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`list`),
+										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"list",
+												"preview",
+												"run",
+											),
+										},
+									},
+									"reschedule_dropped_tasks": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
+									},
+									"state_tracking": schema.SingleNestedAttribute{
+										Optional: true,
+										Attributes: map[string]schema.Attribute{
+											"enabled": schema.BoolAttribute{
+												Computed:    true,
+												Optional:    true,
+												Default:     booldefault.StaticBool(false),
+												Description: `Default: false`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Optional: true,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Optional: true,
+											},
+										},
+										Description: `State tracking configuration`,
+									},
+									"time_range_type": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     stringdefault.StaticString(`relative`),
+										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"relative",
+												"absolute",
+											),
+										},
+									},
+									"time_warning": schema.SingleNestedAttribute{
+										Optional:    true,
+										Description: `Time warning configuration`,
+									},
+								},
+							},
+							"skippable": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
+							},
+						},
+						Description: `Configuration for a scheduled job`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping. Default: []`,
+					},
+					"ttl": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`4h`),
+						Description: `Default: "4h"`,
+					},
+					"worker_affinity": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("input_collector_azure_blob"),
+						path.MatchRelative().AtParent().AtName("input_collector_cribl_lake"),
+						path.MatchRelative().AtParent().AtName("input_collector_database"),
+						path.MatchRelative().AtParent().AtName("input_collector_gcs"),
+						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
+						path.MatchRelative().AtParent().AtName("input_collector_rest"),
+						path.MatchRelative().AtParent().AtName("input_collector_s3"),
 						path.MatchRelative().AtParent().AtName("input_collector_splunk"),
 					}...),
 				},
@@ -3155,7 +3506,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -3461,6 +3812,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						path.MatchRelative().AtParent().AtName("input_collector_health_check"),
 						path.MatchRelative().AtParent().AtName("input_collector_rest"),
 						path.MatchRelative().AtParent().AtName("input_collector_s3"),
+						path.MatchRelative().AtParent().AtName("input_collector_script"),
 					}...),
 				},
 			},

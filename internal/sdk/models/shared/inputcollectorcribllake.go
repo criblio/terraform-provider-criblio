@@ -654,7 +654,7 @@ func (i *InputCollectorCriblLakeCollector) GetConf() *InputCollectorCriblLakeCon
 }
 
 type InputCollectorCriblLake struct {
-	ID                   *string                                 `json:"id,omitempty"`
+	ID                   string                                  `json:"id"`
 	Type                 *InputCollectorCriblLakeTypeCollection1 `default:"collection" json:"type"`
 	TTL                  *string                                 `default:"4h" json:"ttl"`
 	IgnoreGroupJobsLimit *bool                                   `default:"false" json:"ignoreGroupJobsLimit"`
@@ -678,15 +678,15 @@ func (i InputCollectorCriblLake) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorCriblLake) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputCollectorCriblLake) GetID() *string {
+func (i *InputCollectorCriblLake) GetID() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.ID
 }
