@@ -38,13 +38,13 @@ func TestCollector(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.collector.type", "rest"),
 
 						/*
-						resource.TestCheckResourceAttr("criblio_collector.script_collector", "group_id", "default"),
-						resource.TestCheckResourceAttr("criblio_collector.script_collector",
-							"input_collector_script.collector.type", "script"),
-						resource.TestCheckResourceAttr("criblio_collector.script_collector",
-							"input_collector_script.collector.conf.shell", "/bin/bash"),
-						resource.TestCheckResourceAttr("criblio_collector.script_collector",
-							"input_collector_script.collector.conf.discover_script", "echo 1"),
+							resource.TestCheckResourceAttr("criblio_collector.script_collector", "group_id", "default"),
+							resource.TestCheckResourceAttr("criblio_collector.script_collector",
+								"input_collector_script.collector.type", "script"),
+							resource.TestCheckResourceAttr("criblio_collector.script_collector",
+								"input_collector_script.collector.conf.shell", "/bin/bash"),
+							resource.TestCheckResourceAttr("criblio_collector.script_collector",
+								"input_collector_script.collector.conf.discover_script", "echo 1"),
 						*/
 					),
 				},

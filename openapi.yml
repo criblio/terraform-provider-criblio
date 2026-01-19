@@ -1265,6 +1265,34 @@ components:
               default: "utf8"
               example: "utf8"
     # Specific collector type implementations
+    InputCollectorScript:
+      allOf:
+        - $ref: '#/components/schemas/InputCollectorBase'
+        - type: object
+          properties:
+            collector:
+              type: object
+              required: [type]
+              properties:
+                type:
+                  type: string
+                  enum: [script]
+                  example: "script"
+                conf:
+                  type: object
+                  properties:
+                    shell:
+                      type: string
+                      title: Shell 
+                      example: "/bin/bash"
+                    discoverScript:
+                      type: string
+                      title: Discover script
+                      example: "echo Hello Discovery Script"
+                    collectScript:
+                      type: string
+                      title: Collect script
+                      example: "echo Hello Collect Script"
     InputCollectorSplunk:
       allOf:
         - $ref: '#/components/schemas/InputCollectorBase'
@@ -1358,34 +1386,6 @@ components:
                       type: string
                       title: Bearer token secret
                       example: "splunkBearerTokenSecret"
-    InputCollectorScript:
-      allOf:
-        - $ref: '#/components/schemas/InputCollectorBase'
-        - type: object
-          properties:
-            collector:
-              type: object
-              required: [type]
-              properties:
-                type:
-                  type: string
-                  enum: [script]
-                  example: "script"
-                conf:
-                  type: object
-                  properties:
-                    shell:
-                      type: string
-                      title: Shell 
-                      example: "/bin/bash"
-                    discoverScript:
-                      type: string
-                      title: Discover script
-                      example: "echo Hello Discovery Script"
-                    collectScript:
-                      type: string
-                      title: Collect script
-                      example: "echo Hello Collect Script"
     InputCollectorRest:
       allOf:
         - $ref: '#/components/schemas/InputCollectorBase'
