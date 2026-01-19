@@ -94,7 +94,8 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	// First try to get credentials from security context
 	var clientID, clientSecret, orgID, workspaceID, cloudDomain string
 
-	//this should get moved into GetCredentials since we're getting creds from the securityCtx
+	// Extract credentials from provider configuration (SecuritySource) if available
+	// Provider config takes precedence over environment variables and credentials file
 	if !onPrem {
 		if ctx.SecuritySource != nil {
 			if security, err := ctx.SecuritySource(ctx.Context); err == nil {
@@ -179,6 +180,8 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	} else if clientID != "" && clientSecret != "" {
 		var tokenInfo *TokenInfo
 		var sessionKey, audience string
+		var configForToken *CriblConfig
+
 		if !onPrem {
 			// Get audience from base URL
 			if o.baseURL != "" {
@@ -204,31 +207,34 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 
 					audience = fmt.Sprintf("https://api.%s", domain)
 				}
-			} else if myVar := os.Getenv("CRIBL_AUDIENCE"); myVar != "" {
-				audience = myVar
+			} else if envAudience := os.Getenv("CRIBL_AUDIENCE"); envAudience != "" {
+				audience = envAudience
 			} else {
 				return req, fmt.Errorf("no base URL or audience provided")
 			}
 
 			sessionKey = fmt.Sprintf("%s:%s", clientID, clientSecret)
+
+			// Ensure config is not nil and has credentials - create minimal config with credentials if needed
+			// This handles the case where provider variables are set but no credentials file exists
+			configForToken = config
+			if clientID != "" && clientSecret != "" && (configForToken == nil || (configForToken.ClientID == "" && configForToken.ClientSecret == "")) {
+				// Create minimal config with all provider variables
+				configForToken = &CriblConfig{
+					ClientID:       clientID,
+					ClientSecret:   clientSecret,
+					OrganizationID: orgID,
+					Workspace:      workspaceID,
+					CloudDomain:    cloudDomain,
+				}
+			}
 		} else {
 			if config == nil {
 				return req, fmt.Errorf("on-prem configuration requires credentials file or environment variables")
 			}
 			sessionKey = fmt.Sprintf("onprem:%s:%s:%s", config.OnpremServerURL, config.OnpremUsername, config.OnpremPassword)
-		}
-
-		// Ensure config is not nil - create minimal config with credentials if needed
-		configForToken := config
-		if configForToken == nil && clientID != "" && clientSecret != "" {
-			// Create minimal config with all provider variables
-			configForToken = &CriblConfig{
-				ClientID:       clientID,
-				ClientSecret:   clientSecret,
-				OrganizationID: orgID,
-				Workspace:      workspaceID,
-				CloudDomain:    cloudDomain,
-			}
+			// For on-prem, use config as-is (it should have on-prem fields)
+			configForToken = config
 		}
 
 		// Get or create session
@@ -273,8 +279,20 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 			req.URL = parsedURL
 			req.Host = parsedGatewayURL.Host
 		} else {
-			// For workspace API, add /api/v1 prefix if not already present
-			if !strings.Contains(req.URL.String(), "/api/v1") && !strings.HasPrefix(path, "api/v1") {
+			// For workspace API, construct full URL if request URL is relative (no scheme)
+			// Check if URL is relative (no scheme like http:// or https://)
+			if req.URL.Scheme == "" {
+				trimmedBaseURL := strings.TrimRight(o.baseURL, "/")
+				newURL := fmt.Sprintf("%s/api/v1/%s", trimmedBaseURL, path)
+
+				parsedURL, err := url.Parse(newURL)
+				if err != nil {
+					return req, err
+				}
+
+				req.URL = parsedURL
+			} else if !strings.Contains(req.URL.String(), "/api/v1") && !strings.HasPrefix(path, "api/v1") {
+				// If URL is absolute but missing /api/v1, add it
 				trimmedBaseURL := strings.TrimRight(o.baseURL, "/")
 				newURL := fmt.Sprintf("%s/api/v1/%s", trimmedBaseURL, path)
 
@@ -556,8 +574,8 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 
 					audience = fmt.Sprintf("https://api.%s", domain)
 				}
-			} else if myVar := os.Getenv("CRIBL_AUDIENCE"); myVar != "" {
-				audience = myVar
+			} else if envAudience := os.Getenv("CRIBL_AUDIENCE"); envAudience != "" {
+				audience = envAudience
 			} else {
 				return res, fmt.Errorf("no base URL or audience provided")
 			}

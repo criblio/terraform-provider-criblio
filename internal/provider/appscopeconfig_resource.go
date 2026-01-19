@@ -1160,8 +1160,7 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -1172,8 +1171,7 @@ func (r *AppscopeConfigResource) Schema(ctx context.Context, req resource.Schema
 				Description: `Unique ID for this Appscope config`,
 			},
 			"lib": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Required:    true,
 				Description: `must be one of ["cribl", "cribl-custom", "custom"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

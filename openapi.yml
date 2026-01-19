@@ -282,7 +282,6 @@ components:
             run:
               type: object
               title: Run settings
-              type: object
               required:
                 - mode
               properties:
@@ -624,7 +623,6 @@ components:
             run:
               type: object
               title: Run settings
-              type: object
               required:
                 - mode
               properties:
@@ -739,7 +737,6 @@ components:
               title: Executor-specific settings
               properties: {}
               example: {"setting": "value"}
-      type: object
     SavedJobScheduledSearch:
       required:
         - savedQueryId
@@ -3014,34 +3011,6 @@ components:
         objectCount:
           type: number
           example: 5000
-    DatasetMetadata:
-      type: object
-      properties:
-        earliest:
-          type: string
-          example: "2025-09-30T13:41:44Z"
-        enableAcceleration:
-          type: boolean
-          example: true
-        fieldList:
-          type: array
-          items:
-            type: string
-            example: "fieldName"
-          example: ["field1", "field2"]
-        latestRunInfo:
-          $ref: "#/components/schemas/DatasetMetadataRunInfo"
-        scanMode:
-          type: string
-          enum:
-            - detailed
-            - quick
-          example: "detailed"
-      required:
-        - earliest
-        - enableAcceleration
-        - fieldList
-        - scanMode
     LakeDatasetSearchConfig:
       type: object
       properties:
@@ -3995,14 +3964,11 @@ components:
               title: "Path"
               description: "The templated path under which to look for data"
               minLength: 1
-              templated: true
             filter:
               type: string
               title: "Path Filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
             region:
               type: string
@@ -4031,14 +3997,11 @@ components:
                     title: "Path"
                     description: "The templated path under which to look for data"
                     minLength: 1
-                    templated: true
                   filter:
                     type: string
                     title: "Path Filter"
                     description: "A JavaScript filter expression to be evaluated against the provided path"
                     minLength: 1
-                    templated: true
-                    jsExpression: true
                     default: "true"
                   region:
                     type: string
@@ -4166,15 +4129,12 @@ components:
               title: "Path"
               description: "The directory from which to collect data"
               minLength: 1
-              templated: true
               example: "/var/log/cribl"
             filter:
               type: string
               title: "Path filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "filename.endsWith('.log')"
             extraPaths:
@@ -4191,15 +4151,12 @@ components:
                     title: "Path"
                     description: "The directory from which to collect data"
                     minLength: 1
-                    templated: true
                     example: "path/to/dir"
                   filter:
                     type: string
                     title: "Path filter"
                     description: "A JavaScript filter expression to be evaluated against the provided path"
                     minLength: 1
-                    templated: true
-                    jsExpression: true
                     default: "true"
                     example: "truthy"
     CriblLeaderProvider:
@@ -4265,15 +4222,12 @@ components:
               title: "Path"
               description: "The directory where data will be collected. Environment variables and templating are supported."
               minLength: 1
-              templated: true
               example: "/data/edge"
             filter:
               type: string
               title: "Path Filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "size > 0"
     EdgeProvider:
@@ -4308,15 +4262,12 @@ components:
               title: "Path"
               description: "The templated path under which to look for data"
               minLength: 1
-              templated: true
               example: "logs/2025/10/01/"
             filter:
               type: string
               title: "Path Filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "path.endsWith('.json')"
             extraPaths:
@@ -4340,14 +4291,11 @@ components:
                     description: "Path inside the additional container"
                     example: "archive/2025/"
                     minLength: 1
-                    templated: true
                   filter:
                     type: string
                     title: "Path Filter"
                     description: "A JavaScript filter expression to be evaluated against the provided path"
                     minLength: 1
-                    templated: true
-                    jsExpression: true
                     default: "true"
                     example: "truthy"
             storageClasses:
@@ -4451,15 +4399,12 @@ components:
               title: "Bucket path"
               description: "Google Cloud Storage bucket path. Templating is supported."
               minLength: 1
-              templated: true
               example: "my-gcs-bucket"
             filter:
               type: string
               title: "Path filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "path.endsWith('.json')"
             region:
@@ -4481,15 +4426,12 @@ components:
                     title: "Bucket path"
                     description: "Google Cloud Storage bucket path"
                     minLength: 1
-                    templated: true
                     example: "my-extra-bucket"
                   filter:
                     type: string
                     title: "Path filter"
                     description: "A JavaScript filter expression to be evaluated against the provided path"
                     minLength: 1
-                    templated: true
-                    jsExpression: true
                     default: "true"
                     example: "path.includes('archive')"
                   region:
@@ -4551,7 +4493,6 @@ components:
               title: "Path"
               description: "The templated path under which to look for data, in each folder"
               minLength: 1
-              templated: true
               default: "${vendor}/${sourceLocation}/${pathVersion}/region=${region}/accountId=${accountId}/eventDay=${_time:%Y%m%d}/"
               example: "AWS/CloudTrail/v1/region=us-east-1/accountId=123456789012/eventDay=20251001/"
             filter:
@@ -4559,8 +4500,6 @@ components:
               title: "Path Filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "path.includes('CloudTrail')"
             selectedBuckets:
@@ -4579,7 +4518,6 @@ components:
                     type: string
                     title: "Bucket name"
                     description: "S3 bucket name"
-                    templated: true
                     example: "aws-securitylake-us-east-1"
                     minLength: 1
                   region:
@@ -4587,95 +4525,6 @@ components:
                     title: "Region"
                     description: "AWS region where the bucket is located"
                     example: "us-east-1"
-    AwsSecurityLakeProvider:
-      allOf:
-        - $ref: '#/components/schemas/Provider'
-        - type: object
-          required:
-            - signatureVersion
-          properties:
-            type:
-              type: string
-              enum: [amazon_security_lake]
-              example: "amazon_security_lake"
-            awsAuthenticationMethod:
-              type: string
-              title: "Authentication method"
-              description: "AWS authentication method"
-              enum: [auto, manual]
-              enumNames: ["AssumeRole", "AWS keys"]
-              example: "auto"
-            assumeRoleArn:
-              type: string
-              title: "Assume Role ARN"
-              description: "ARN of the role to assume"
-              example: "arn:aws:iam::123456789012:role/SecurityLakeRole"
-            assumeRoleExternalId:
-              type: string
-              title: "External ID"
-              description: "External ID for role assumption"
-              example: "external-id-123"
-            awsApiKey:
-              type: string
-              title: "Access Key"
-              description: "AWS access key"
-              example: "AKIAIOSFODNN7EXAMPLE"
-            awsSecretKey:
-              type: string
-              title: "Secret Key"
-              description: "AWS secret key"
-              example: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-            bucket:
-              type: string
-              title: "Bucket"
-              description: "S3 bucket name"
-              example: "aws-securitylake-bucket"
-            region:
-              type: string
-              title: "Region"
-              description: "AWS region"
-              example: "us-east-1"
-            endpoint:
-              type: string
-              title: "Endpoint"
-              description: "S3 endpoint URL"
-              example: "https://s3.us-east-1.amazonaws.com"
-            signatureVersion:
-              type: string
-              title: "Signature Version"
-              description: "AWS signature version"
-              example: "v4"
-              enum: [v2, v4]
-            rejectUnauthorized:
-              type: boolean
-              title: "Reject Unauthorized"
-              description: "Whether to reject unauthorized requests"
-              example: true
-            reuseConnections:
-              type: boolean
-              title: "Reuse Connections"
-              description: "Whether to reuse connections"
-              example: false
-            enableAssumeRole:
-              type: boolean
-              title: "Enable Assume Role"
-              description: "Whether to enable role assumption"
-              example: true
-            bucketPathSuggestion:
-              type: string
-              title: "Bucket Path Suggestion"
-              description: "Suggested bucket path"
-              example: "https://{bucket}.s3.amazonaws.com"
-            sessionToken:
-              type: string
-              title: "Session Token"
-              description: "AWS session token"
-              example: "Thisismysessiontoken"
-            enableAbacTagging:
-              type: boolean
-              title: "Enable ABAC Tagging"
-              description: "Whether to enable ABAC source-ip tagging" 
-              example: true
     TailscaleAccountConfig:
       type: object
       required:
@@ -5811,6 +5660,8 @@ components:
       required:
         - id
         - config
+        - description
+        - lib
       properties:
         id:
           type: string
@@ -5829,11 +5680,6 @@ components:
           $ref: "#/components/schemas/AppscopeConfigWithCustom"
         lib:
           $ref: "#/components/schemas/CriblLib"
-      required:
-        - config
-        - description
-        - id
-        - lib
     GrokFile:
       type: object
       properties:
@@ -60963,7 +60809,6 @@ components:
             run:
               type: object
               title: Run settings
-              type: object
               required:
                 - mode
               properties:
@@ -61452,7 +61297,6 @@ components:
             run:
               type: object
               title: Run settings
-              type: object
               required:
                 - mode
               properties:
@@ -61719,7 +61563,6 @@ components:
             run:
               type: object
               title: Run settings
-              type: object
               required:
                 - mode
               properties:
@@ -69197,7 +69040,6 @@ paths:
               - default
           example: default
           description: lake id that contains the Datasets
-          example: "myExistingLakeId"
         - name: id
           in: path
           required: true

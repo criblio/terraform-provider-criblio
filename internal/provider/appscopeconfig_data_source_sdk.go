@@ -392,13 +392,9 @@ func (r *AppscopeConfigDataSourceModel) RefreshFromSharedAppscopeLibEntry(ctx co
 
 		r.Config.Tags = append(r.Config.Tags, tags1)
 	}
-	r.Description = types.StringPointerValue(resp.Description)
+	r.Description = types.StringValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
-	if resp.Lib != nil {
-		r.Lib = types.StringValue(string(*resp.Lib))
-	} else {
-		r.Lib = types.StringNull()
-	}
+	r.Lib = types.StringValue(string(resp.Lib))
 	r.Tags = types.StringPointerValue(resp.Tags)
 
 	return diags

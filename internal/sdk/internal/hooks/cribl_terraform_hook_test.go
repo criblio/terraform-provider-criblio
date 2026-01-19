@@ -1420,6 +1420,135 @@ func TestProviderConfigWithPointerType(t *testing.T) {
 	os.Setenv("CRIBL_BEARER_TOKEN", "")
 }
 
+func TestProviderVariablesOnlyNoEnvNoConfig(t *testing.T) {
+	// Test scenario: User provides ONLY provider variables (no environment variables, no config file)
+	// This tests the exact scenario from the user's issue where provider variables aren't being used
+
+	// Clear ALL environment variables to ensure we're testing provider config only
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+	os.Setenv("CRIBL_ONPREM_SERVER_URL", "")
+	os.Setenv("HOME", "/nonexistent") // Ensure no credentials file is found
+
+	// Create a mock HTTP client that intercepts OAuth token requests
+	oauthTokenRequested := false
+	oauthRequestBody := ""
+	oauthRequestURL := ""
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			// Capture OAuth token request
+			if strings.Contains(req.URL.Path, "/oauth/token") {
+				oauthTokenRequested = true
+				oauthRequestURL = req.URL.String()
+				bodyBytes, _ := io.ReadAll(req.Body)
+				oauthRequestBody = string(bodyBytes)
+				// Return successful OAuth token response
+				return &http.Response{
+					StatusCode: http.StatusOK,
+					Header:     make(http.Header),
+					Body:       io.NopCloser(strings.NewReader(`{"access_token":"provider-oauth-token","expires_in":3600}`)),
+				}, nil
+			}
+			// For other requests, return empty response
+			return &http.Response{StatusCode: http.StatusOK, Body: io.NopCloser(strings.NewReader(""))}, nil
+		},
+	}
+
+	// Create hook and initialize with a concrete URL (simulating what happens in SDKInit)
+	// This tests that provider variables override the concrete URL
+	hook := NewCriblTerraformHook()
+	hook.client = mockClient
+	hook.SDKInit("https://main-recursing-mirzakhani-4ev894w.cribl-staging.cloud", mockClient)
+
+	// Simulate provider configuration with ALL credentials and variables
+	providerSecurity := shared.Security{
+		ClientOauth: &shared.SchemeClientOauth{
+			ClientID:     "provider-client-id",
+			ClientSecret: "provider-client-secret",
+		},
+		OrganizationID: StringPtr("provider-org"),
+		WorkspaceID:    StringPtr("provider-workspace"),
+		CloudDomain:    StringPtr("cribl-playground.cloud"),
+	}
+
+	// Create security source that returns provider config
+	securitySource := func(ctx context.Context) (interface{}, error) {
+		return providerSecurity, nil
+	}
+
+	// Create test request context with security source
+	myCtx := BeforeRequestContext{
+		HookContext: HookContext{
+			Context:        context.Background(),
+			SecuritySource: securitySource,
+		},
+	}
+
+	// Create a test request
+	myReq, err := http.NewRequest("GET", "/api/v1/test", nil)
+	if err != nil {
+		t.Fatalf("Error creating test request: %v", err)
+	}
+
+	// Call BeforeRequest - should use provider config to get OAuth token and construct URL
+	finalReq, err := hook.BeforeRequest(myCtx, myReq)
+	if err != nil {
+		t.Fatalf("BeforeRequest should not fail with provider config: %v", err)
+	}
+
+	// Verify OAuth token was requested using provider credentials
+	if !oauthTokenRequested {
+		t.Error("OAuth token request should have been made with provider credentials")
+	}
+
+	// Verify OAuth request URL is correct (should use provider cloud domain)
+	if !strings.Contains(oauthRequestURL, "cribl-playground.cloud") {
+		t.Errorf("OAuth request URL should contain provider cloud domain, got: %s", oauthRequestURL)
+	}
+
+	// Verify OAuth request body contains provider credentials
+	if !strings.Contains(oauthRequestBody, `"client_id":"provider-client-id"`) {
+		t.Errorf("OAuth request should contain provider client_id, got body: %s", oauthRequestBody)
+	}
+	if !strings.Contains(oauthRequestBody, `"client_secret":"provider-client-secret"`) {
+		t.Errorf("OAuth request should contain provider client_secret, got body: %s", oauthRequestBody)
+	}
+
+	// Verify Authorization header contains OAuth token from provider credentials
+	expectedAuth := "Bearer provider-oauth-token"
+	actualAuth := finalReq.Header.Get("Authorization")
+	if actualAuth != expectedAuth {
+		t.Errorf("Expected Authorization header %q, got %q", expectedAuth, actualAuth)
+	}
+
+	// Verify URL was constructed using provider variables (not the concrete URL from SDKInit)
+	expectedURL := "https://provider-workspace-provider-org.cribl-playground.cloud/api/v1/test"
+	if finalReq.URL.String() != expectedURL {
+		t.Errorf("Expected URL %q, got %q", expectedURL, finalReq.URL.String())
+	}
+
+	// Verify hook stored provider org and workspace IDs
+	if hook.orgID != "provider-org" {
+		t.Errorf("Expected orgID 'provider-org', got %q", hook.orgID)
+	}
+	if hook.workspaceID != "provider-workspace" {
+		t.Errorf("Expected workspaceID 'provider-workspace', got %q", hook.workspaceID)
+	}
+
+	// Clean up
+	os.Setenv("CRIBL_CLIENT_ID", "")
+	os.Setenv("CRIBL_CLIENT_SECRET", "")
+	os.Setenv("CRIBL_ORGANIZATION_ID", "")
+	os.Setenv("CRIBL_WORKSPACE_ID", "")
+	os.Setenv("CRIBL_CLOUD_DOMAIN", "")
+	os.Setenv("CRIBL_BEARER_TOKEN", "")
+	os.Setenv("HOME", "")
+}
+
 func TestDoRequestWithRetrySuccess(t *testing.T) {
 	// Test successful request without retries
 	os.Setenv("CRIBL_CLIENT_ID", "test-client")
