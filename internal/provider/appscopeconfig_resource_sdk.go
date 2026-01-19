@@ -432,13 +432,9 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 
 		r.Config.Tags = append(r.Config.Tags, tags1)
 	}
-	r.Description = types.StringPointerValue(resp.Description)
+	r.Description = types.StringValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
-	if resp.Lib != nil {
-		r.Lib = types.StringValue(string(*resp.Lib))
-	} else {
-		r.Lib = types.StringNull()
-	}
+	r.Lib = types.StringValue(string(resp.Lib))
 	r.Tags = types.StringPointerValue(resp.Tags)
 
 	return diags
@@ -530,12 +526,9 @@ func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Conte
 	var id string
 	id = r.ID.ValueString()
 
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
+	var description string
+	description = r.Description.ValueString()
+
 	tags := new(string)
 	if !r.Tags.IsUnknown() && !r.Tags.IsNull() {
 		*tags = r.Tags.ValueString()
@@ -1609,12 +1602,7 @@ func (r *AppscopeConfigResourceModel) ToSharedAppscopeLibEntry(ctx context.Conte
 		Protocol: protocol1,
 		Tags:     tags2,
 	}
-	lib := new(shared.CriblLib)
-	if !r.Lib.IsUnknown() && !r.Lib.IsNull() {
-		*lib = shared.CriblLib(r.Lib.ValueString())
-	} else {
-		lib = nil
-	}
+	lib := shared.CriblLib(r.Lib.ValueString())
 	out := shared.AppscopeLibEntry{
 		ID:          id,
 		Description: description,

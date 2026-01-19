@@ -274,13 +274,13 @@ resource "criblio_appscope_config" "my_appscopeconfig" {
 ### Required
 
 - `config` (Attributes) (see [below for nested schema](#nestedatt--config))
+- `description` (String)
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Unique ID for this Appscope config
+- `lib` (String) must be one of ["cribl", "cribl-custom", "custom"]
 
 ### Optional
 
-- `description` (String)
-- `lib` (String) must be one of ["cribl", "cribl-custom", "custom"]
 - `tags` (String)
 
 <a id="nestedatt--config"></a>

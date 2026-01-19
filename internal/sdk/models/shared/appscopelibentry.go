@@ -5,10 +5,10 @@ package shared
 type AppscopeLibEntry struct {
 	// Unique ID for this Appscope config
 	ID          string                   `json:"id"`
-	Description *string                  `json:"description,omitempty"`
+	Description string                   `json:"description"`
 	Tags        *string                  `json:"tags,omitempty"`
 	Config      AppscopeConfigWithCustom `json:"config"`
-	Lib         *CriblLib                `json:"lib,omitempty"`
+	Lib         CriblLib                 `json:"lib"`
 }
 
 func (a *AppscopeLibEntry) GetID() string {
@@ -18,9 +18,9 @@ func (a *AppscopeLibEntry) GetID() string {
 	return a.ID
 }
 
-func (a *AppscopeLibEntry) GetDescription() *string {
+func (a *AppscopeLibEntry) GetDescription() string {
 	if a == nil {
-		return nil
+		return ""
 	}
 	return a.Description
 }
@@ -39,9 +39,9 @@ func (a *AppscopeLibEntry) GetConfig() AppscopeConfigWithCustom {
 	return a.Config
 }
 
-func (a *AppscopeLibEntry) GetLib() *CriblLib {
+func (a *AppscopeLibEntry) GetLib() CriblLib {
 	if a == nil {
-		return nil
+		return CriblLib("")
 	}
 	return a.Lib
 }
