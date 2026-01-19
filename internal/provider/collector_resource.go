@@ -143,7 +143,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -483,7 +483,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -828,7 +828,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -1200,7 +1200,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -1590,7 +1590,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -2365,7 +2365,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -2746,7 +2746,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -3089,7 +3089,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -3506,7 +3506,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Optional: true,
 					},
 					"id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,

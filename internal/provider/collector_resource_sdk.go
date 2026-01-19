@@ -164,12 +164,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 	var out shared.InputCollector
 	var inputCollectorSplunk *shared.InputCollectorSplunk
 	if r.InputCollectorSplunk != nil {
-		id := new(string)
-		if !r.InputCollectorSplunk.ID.IsUnknown() && !r.InputCollectorSplunk.ID.IsNull() {
-			*id = r.InputCollectorSplunk.ID.ValueString()
-		} else {
-			id = nil
-		}
+		var id string
+		id = r.InputCollectorSplunk.ID.ValueString()
+
 		ttl := new(string)
 		if !r.InputCollectorSplunk.TTL.IsUnknown() && !r.InputCollectorSplunk.TTL.IsNull() {
 			*ttl = r.InputCollectorSplunk.TTL.ValueString()
@@ -609,12 +606,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 	}
 	var inputCollectorRest *shared.InputCollectorRest
 	if r.InputCollectorRest != nil {
-		id1 := new(string)
-		if !r.InputCollectorRest.ID.IsUnknown() && !r.InputCollectorRest.ID.IsNull() {
-			*id1 = r.InputCollectorRest.ID.ValueString()
-		} else {
-			id1 = nil
-		}
+		var id1 string
+		id1 = r.InputCollectorRest.ID.ValueString()
+
 		ttl1 := new(string)
 		if !r.InputCollectorRest.TTL.IsUnknown() && !r.InputCollectorRest.TTL.IsNull() {
 			*ttl1 = r.InputCollectorRest.TTL.ValueString()
@@ -1517,12 +1511,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 	}
 	var inputCollectorS3 *shared.InputCollectorS3
 	if r.InputCollectorS3 != nil {
-		id2 := new(string)
-		if !r.InputCollectorS3.ID.IsUnknown() && !r.InputCollectorS3.ID.IsNull() {
-			*id2 = r.InputCollectorS3.ID.ValueString()
-		} else {
-			id2 = nil
-		}
+		var id2 string
+		id2 = r.InputCollectorS3.ID.ValueString()
+
 		ttl2 := new(string)
 		if !r.InputCollectorS3.TTL.IsUnknown() && !r.InputCollectorS3.TTL.IsNull() {
 			*ttl2 = r.InputCollectorS3.TTL.ValueString()
@@ -1908,12 +1899,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 	}
 	var inputCollectorAzureBlob *shared.InputCollectorAzureBlob
 	if r.InputCollectorAzureBlob != nil {
-		id3 := new(string)
-		if !r.InputCollectorAzureBlob.ID.IsUnknown() && !r.InputCollectorAzureBlob.ID.IsNull() {
-			*id3 = r.InputCollectorAzureBlob.ID.ValueString()
-		} else {
-			id3 = nil
-		}
+		var id3 string
+		id3 = r.InputCollectorAzureBlob.ID.ValueString()
+
 		ttl3 := new(string)
 		if !r.InputCollectorAzureBlob.TTL.IsUnknown() && !r.InputCollectorAzureBlob.TTL.IsNull() {
 			*ttl3 = r.InputCollectorAzureBlob.TTL.ValueString()
@@ -2285,12 +2273,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 	}
 	var inputCollectorCriblLake *shared.InputCollectorCriblLake
 	if r.InputCollectorCriblLake != nil {
-		id4 := new(string)
-		if !r.InputCollectorCriblLake.ID.IsUnknown() && !r.InputCollectorCriblLake.ID.IsNull() {
-			*id4 = r.InputCollectorCriblLake.ID.ValueString()
-		} else {
-			id4 = nil
-		}
+		var id4 string
+		id4 = r.InputCollectorCriblLake.ID.ValueString()
+
 		ttl4 := new(string)
 		if !r.InputCollectorCriblLake.TTL.IsUnknown() && !r.InputCollectorCriblLake.TTL.IsNull() {
 			*ttl4 = r.InputCollectorCriblLake.TTL.ValueString()
@@ -2618,12 +2603,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 	}
 	var inputCollectorDatabase *shared.InputCollectorDatabase
 	if r.InputCollectorDatabase != nil {
-		id5 := new(string)
-		if !r.InputCollectorDatabase.ID.IsUnknown() && !r.InputCollectorDatabase.ID.IsNull() {
-			*id5 = r.InputCollectorDatabase.ID.ValueString()
-		} else {
-			id5 = nil
-		}
+		var id5 string
+		id5 = r.InputCollectorDatabase.ID.ValueString()
+
 		ttl5 := new(string)
 		if !r.InputCollectorDatabase.TTL.IsUnknown() && !r.InputCollectorDatabase.TTL.IsNull() {
 			*ttl5 = r.InputCollectorDatabase.TTL.ValueString()
@@ -2965,12 +2947,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 	}
 	var inputCollectorGCS *shared.InputCollectorGCS
 	if r.InputCollectorGCS != nil {
-		id6 := new(string)
-		if !r.InputCollectorGCS.ID.IsUnknown() && !r.InputCollectorGCS.ID.IsNull() {
-			*id6 = r.InputCollectorGCS.ID.ValueString()
-		} else {
-			id6 = nil
-		}
+		var id6 string
+		id6 = r.InputCollectorGCS.ID.ValueString()
+
 		ttl6 := new(string)
 		if !r.InputCollectorGCS.TTL.IsUnknown() && !r.InputCollectorGCS.TTL.IsNull() {
 			*ttl6 = r.InputCollectorGCS.TTL.ValueString()
@@ -3335,12 +3314,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 	}
 	var inputCollectorHealthCheck *shared.InputCollectorHealthCheck
 	if r.InputCollectorHealthCheck != nil {
-		id7 := new(string)
-		if !r.InputCollectorHealthCheck.ID.IsUnknown() && !r.InputCollectorHealthCheck.ID.IsNull() {
-			*id7 = r.InputCollectorHealthCheck.ID.ValueString()
-		} else {
-			id7 = nil
-		}
+		var id7 string
+		id7 = r.InputCollectorHealthCheck.ID.ValueString()
+
 		ttl7 := new(string)
 		if !r.InputCollectorHealthCheck.TTL.IsUnknown() && !r.InputCollectorHealthCheck.TTL.IsNull() {
 			*ttl7 = r.InputCollectorHealthCheck.TTL.ValueString()
@@ -3717,12 +3693,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 	}
 	var inputCollectorScript *shared.InputCollectorScript
 	if r.InputCollectorScript != nil {
-		id8 := new(string)
-		if !r.InputCollectorScript.ID.IsUnknown() && !r.InputCollectorScript.ID.IsNull() {
-			*id8 = r.InputCollectorScript.ID.ValueString()
-		} else {
-			id8 = nil
-		}
+		var id8 string
+		id8 = r.InputCollectorScript.ID.ValueString()
+
 		ttl8 := new(string)
 		if !r.InputCollectorScript.TTL.IsUnknown() && !r.InputCollectorScript.TTL.IsNull() {
 			*ttl8 = r.InputCollectorScript.TTL.ValueString()

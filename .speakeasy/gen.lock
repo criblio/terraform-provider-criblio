@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 520e35a9cac13c4914a8e0cee97c0066
+  docChecksum: 24971828a9854ca135a148a59895411a
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
@@ -3689,7 +3689,7 @@ examples:
         query:
           id: "collector-2"
       requestBody:
-        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "splunk"}}
+        application/json: {"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "splunk", "conf": {"searchHead": "https://splunk.example.com", "search": "index=main sourcetype=syslog | stats count", "earliest": "-24h", "latest": "now", "endpoint": "/services/search/jobs", "outputMode": "json", "authentication": "token", "timeout": 60, "useRoundRobinDns": false, "disableTimeFilter": false, "rejectUnauthorized": true, "handleEscapedChars": true, "username": "splunkUser", "password": "splunkPassword", "credentialsSecret": "splunkCredentialsSecret", "token": "splunkBearerToken", "tokenSecret": "splunkBearerTokenSecret"}}}
       responses:
         "200":
           application/json: {}
@@ -8029,7 +8029,7 @@ examples:
           id: "myJobIdToCRUD"
           groupId: "myExistingGroupId"
       requestBody:
-        application/json: {"type": "collection", "ttl": "4h", "ignoreGroupJobsLimit": false, "removeFields": [], "resumeOnBoot": true, "streamtags": [], "workerAffinity": false, "collector": {"type": "database"}}
+        application/json: {"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "gcs", "conf": {"serviceAccountCredentials": "***REDACTED***", "bucket": "my-gcs-bucket", "path": "logs/2025/10/", "authType": "manual", "recurse": true, "extractors": [{}], "maxBatchSize": 200}}}
       responses:
         "200":
           application/json: {}

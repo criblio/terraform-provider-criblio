@@ -20,6 +20,7 @@ resource "criblio_collector" "splunk_access_log_collector" {
         username            = "cribl-user"
       }
     }
+    id                      = "splunk-demo-collector"
     environment             = "demo"
     ignore_group_jobs_limit = false
     input = {

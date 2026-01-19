@@ -958,6 +958,7 @@ components:
       required:
         - collector
         - type
+        - id
       properties:
         # Common Job-Level Properties
         id:

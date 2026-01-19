@@ -946,11 +946,11 @@ resource "criblio_collector" "my_collector" {
 Required:
 
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector))
+- `id` (String)
 
 Optional:
 
 - `environment` (String)
-- `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--input))
 - `remove_fields` (List of String) Default: []
@@ -1085,11 +1085,11 @@ Optional:
 Required:
 
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector))
+- `id` (String)
 
 Optional:
 
 - `environment` (String)
-- `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--input))
 - `remove_fields` (List of String) Default: []
@@ -1213,11 +1213,11 @@ Optional:
 Required:
 
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--collector))
+- `id` (String)
 
 Optional:
 
 - `environment` (String)
-- `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--input))
 - `remove_fields` (List of String) Default: []
@@ -1343,11 +1343,11 @@ Optional:
 Required:
 
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--collector))
+- `id` (String)
 
 Optional:
 
 - `environment` (String)
-- `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--input))
 - `remove_fields` (List of String) Default: []
@@ -1481,11 +1481,11 @@ Optional:
 Required:
 
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--collector))
+- `id` (String)
 
 Optional:
 
 - `environment` (String)
-- `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--input))
 - `remove_fields` (List of String) Default: []
@@ -1616,11 +1616,11 @@ Optional:
 Required:
 
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector))
+- `id` (String)
 
 Optional:
 
 - `environment` (String)
-- `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--input))
 - `remove_fields` (List of String) Default: []
@@ -1908,11 +1908,11 @@ Optional:
 Required:
 
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--collector))
+- `id` (String)
 
 Optional:
 
 - `environment` (String)
-- `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--input))
 - `remove_fields` (List of String) Default: []
@@ -2049,11 +2049,11 @@ Optional:
 Required:
 
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--collector))
+- `id` (String)
 
 Optional:
 
 - `environment` (String)
-- `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--input))
 - `remove_fields` (List of String) Default: []
@@ -2179,11 +2179,11 @@ Optional:
 Required:
 
 - `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--collector))
+- `id` (String)
 
 Optional:
 
 - `environment` (String)
-- `id` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--input))
 - `remove_fields` (List of String) Default: []
