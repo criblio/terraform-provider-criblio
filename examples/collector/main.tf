@@ -1,4 +1,3 @@
-
 resource "criblio_collector" "splunk_access_log_collector" {
   group_id = "default"
   id       = "splunk-demo-collector"
@@ -181,6 +180,7 @@ resource "criblio_collector" "rest_api_collector" {
   }
 }
 
+/* collector type does not work in playground for now. Enable when fixed
 resource "criblio_collector" "script_collector" {
   group_id = "default"
   id       = "script-demo-collector"
@@ -207,7 +207,7 @@ resource "criblio_collector" "script_collector" {
           value = "'organizations'"
         },
       ]
-      output = "lookup"
+      output = "devnull"
       preprocess = {
         disabled = true
       }
@@ -215,10 +215,11 @@ resource "criblio_collector" "script_collector" {
       stale_channel_flush_ms = 10000
       throttle_rate_per_sec  = "0"
       type                   = "collection"
+      pipeline               = "main"
     }
     "resume_on_boot" = false
     "schedule" = {
-      cron_schedule       = "*/4 * * * *"
+      cron_schedule       = "*\/4 * * * *"
       enabled             = true
       max_concurrent_runs = 1
       resume_missed       = true
@@ -241,3 +242,4 @@ resource "criblio_collector" "script_collector" {
     "worker_affinity" = false
   }
 }
+*/
