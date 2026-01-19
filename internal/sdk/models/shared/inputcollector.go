@@ -19,6 +19,7 @@ const (
 	InputCollectorTypeInputCollectorDatabase    InputCollectorType = "InputCollectorDatabase"
 	InputCollectorTypeInputCollectorGCS         InputCollectorType = "InputCollectorGCS"
 	InputCollectorTypeInputCollectorHealthCheck InputCollectorType = "InputCollectorHealthCheck"
+	InputCollectorTypeInputCollectorScript      InputCollectorType = "InputCollectorScript"
 )
 
 type InputCollector struct {
@@ -30,6 +31,7 @@ type InputCollector struct {
 	InputCollectorDatabase    *InputCollectorDatabase    `queryParam:"inline,name=InputCollector"`
 	InputCollectorGCS         *InputCollectorGCS         `queryParam:"inline,name=InputCollector"`
 	InputCollectorHealthCheck *InputCollectorHealthCheck `queryParam:"inline,name=InputCollector"`
+	InputCollectorScript      *InputCollectorScript      `queryParam:"inline,name=InputCollector"`
 
 	Type InputCollectorType
 }
@@ -106,6 +108,15 @@ func CreateInputCollectorInputCollectorHealthCheck(inputCollectorHealthCheck Inp
 	}
 }
 
+func CreateInputCollectorInputCollectorScript(inputCollectorScript InputCollectorScript) InputCollector {
+	typ := InputCollectorTypeInputCollectorScript
+
+	return InputCollector{
+		InputCollectorScript: &inputCollectorScript,
+		Type:                 typ,
+	}
+}
+
 func (u *InputCollector) UnmarshalJSON(data []byte) error {
 
 	var candidates []utils.UnionCandidate
@@ -175,6 +186,14 @@ func (u *InputCollector) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var inputCollectorScript InputCollectorScript = InputCollectorScript{}
+	if err := utils.UnmarshalJSON(data, &inputCollectorScript, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputCollectorTypeInputCollectorScript,
+			Value: &inputCollectorScript,
+		})
+	}
+
 	if len(candidates) == 0 {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputCollector", string(data))
 	}
@@ -212,6 +231,9 @@ func (u *InputCollector) UnmarshalJSON(data []byte) error {
 	case InputCollectorTypeInputCollectorHealthCheck:
 		u.InputCollectorHealthCheck = best.Value.(*InputCollectorHealthCheck)
 		return nil
+	case InputCollectorTypeInputCollectorScript:
+		u.InputCollectorScript = best.Value.(*InputCollectorScript)
+		return nil
 	}
 
 	return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputCollector", string(data))
@@ -248,6 +270,10 @@ func (u InputCollector) MarshalJSON() ([]byte, error) {
 
 	if u.InputCollectorHealthCheck != nil {
 		return utils.MarshalJSON(u.InputCollectorHealthCheck, "", true)
+	}
+
+	if u.InputCollectorScript != nil {
+		return utils.MarshalJSON(u.InputCollectorScript, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type InputCollector: all fields are null")

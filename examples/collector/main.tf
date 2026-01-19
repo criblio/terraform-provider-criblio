@@ -4,6 +4,7 @@ resource "criblio_collector" "splunk_access_log_collector" {
   id       = "splunk-demo-collector"
   input_collector_splunk = {
     collector = {
+      type = "splunk"
       conf = {
         authentication      = "token"
         disable_time_filter = false
@@ -19,10 +20,8 @@ resource "criblio_collector" "splunk_access_log_collector" {
         use_round_robin_dns = false
         username            = "cribl-user"
       }
-      type = "splunk"
     }
     environment             = "demo"
-    id                      = "splunk-demo-collector"
     ignore_group_jobs_limit = false
     input = {
       breaker_rulesets = [
@@ -88,6 +87,7 @@ resource "criblio_collector" "rest_api_collector" {
   id       = "rest-api-demo-collector"
   input_collector_rest = {
     collector = {
+      type = "rest"
       conf = {
         # Mandatory REST collector parameters
         base_url     = "https://api.demo.example.com"
@@ -117,7 +117,6 @@ resource "criblio_collector" "rest_api_collector" {
         collect_method      = "get"
         collect_url         = "api.demo.example.com/api/v1/logs"
       }
-      type = "rest"
     }
     environment             = "demo"
     id                      = "rest-api-demo-collector"
@@ -179,5 +178,66 @@ resource "criblio_collector" "rest_api_collector" {
     ]
     ttl             = "2h"
     worker_affinity = false
+  }
+}
+
+resource "criblio_collector" "script_collector" {
+  group_id = "default"
+  id       = "script-demo-collector"
+  input_collector_script = {
+    collector = {
+      type = "script"
+      conf = {
+        collect_script  = "echo 1"
+        discover_script = "echo 1"
+        shell           = "/bin/bash"
+      }
+      destructive = false
+    }
+    "id"                      = "script-demo-collector"
+    "ignore_group_jobs_limit" = false
+    "input" = {
+      metadata = [
+        {
+          name  = "saas_domain"
+          value = "'cribl.cloud'"
+        },
+        {
+          name  = "type"
+          value = "'organizations'"
+        },
+      ]
+      output = "lookup"
+      preprocess = {
+        disabled = true
+      }
+      send_to_routes         = false
+      stale_channel_flush_ms = 10000
+      throttle_rate_per_sec  = "0"
+      type                   = "collection"
+    }
+    "resume_on_boot" = false
+    "schedule" = {
+      cron_schedule       = "*/4 * * * *"
+      enabled             = true
+      max_concurrent_runs = 1
+      resume_missed       = true
+      run = {
+        expression               = "true"
+        job_timeout              = "0"
+        log_level                = "info"
+        max_task_reschedule      = 1
+        max_task_size            = "10MB"
+        min_task_size            = "1MB"
+        mode                     = "run"
+        reschedule_dropped_tasks = true
+        time_range_type          = "relative"
+        timestamp_timezone       = "UTC"
+      }
+      skippable = false
+    }
+    "ttl"             = "4h"
+    "type"            = "collection"
+    "worker_affinity" = false
   }
 }

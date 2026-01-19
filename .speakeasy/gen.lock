@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 285072b4a57e684aef05cf90a26ec947
+  docChecksum: 83bc075825fa8f2e1acc401e7af1851b
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
@@ -674,6 +674,17 @@ generatedFiles:
   - internal/provider/types/input_collector_s3_schedule.go
   - internal/provider/types/input_collector_s3_state_tracking.go
   - internal/provider/types/input_collector_s3_time_warning.go
+  - internal/provider/types/input_collector_script.go
+  - internal/provider/types/input_collector_script_collector.go
+  - internal/provider/types/input_collector_script_conf.go
+  - internal/provider/types/input_collector_script_input.go
+  - internal/provider/types/input_collector_script_metadatum.go
+  - internal/provider/types/input_collector_script_preprocess.go
+  - internal/provider/types/input_collector_script_run_settings.go
+  - internal/provider/types/input_collector_script_saved_state.go
+  - internal/provider/types/input_collector_script_schedule.go
+  - internal/provider/types/input_collector_script_state_tracking.go
+  - internal/provider/types/input_collector_script_time_warning.go
   - internal/provider/types/input_collector_splunk.go
   - internal/provider/types/input_collector_splunk_collector.go
   - internal/provider/types/input_collector_splunk_conf.go
@@ -2192,6 +2203,7 @@ generatedFiles:
   - internal/sdk/models/shared/inputcollectorhealthcheck.go
   - internal/sdk/models/shared/inputcollectorrest.go
   - internal/sdk/models/shared/inputcollectors3.go
+  - internal/sdk/models/shared/inputcollectorscript.go
   - internal/sdk/models/shared/inputcollectorsplunk.go
   - internal/sdk/models/shared/inputconfluentcloud.go
   - internal/sdk/models/shared/inputcribl.go

@@ -737,6 +737,87 @@ resource "criblio_collector" "my_collector" {
     ttl             = "2h"
     worker_affinity = false
   }
+  input_collector_script = {
+    collector = {
+      conf = {
+        collect_script  = "echo Hello Collect Script"
+        discover_script = "echo Hello Discovery Script"
+        shell           = "/bin/bash"
+      }
+      type = "script"
+    }
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
+    ignore_group_jobs_limit = false
+    input = {
+      breaker_rulesets = [
+        "rule1",
+        "rule2",
+      ]
+      metadata = [
+        {
+          name  = "sourceType"
+          value = "`value_expression`"
+        }
+      ]
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
+      preprocess = {
+        args = [
+          "--flag",
+          "value",
+        ]
+        command  = "cat"
+        disabled = true
+      }
+      send_to_routes         = true
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
+      type                   = "collection"
+    }
+    remove_fields = [
+      "field1",
+      "field2",
+    ]
+    resume_on_boot = true
+    saved_state = {
+      # ...
+    }
+    schedule = {
+      cron_schedule       = "0 * * * *"
+      enabled             = true
+      max_concurrent_runs = 2
+      resume_missed       = true
+      run = {
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
+        log_level                = "debug"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
+        mode                     = "list"
+        reschedule_dropped_tasks = true
+        state_tracking = {
+          enabled                 = true
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
+        }
+        time_range_type = "relative"
+        time_warning = {
+          # ...
+        }
+      }
+      skippable = false
+    }
+    streamtags = [
+      "tag1",
+      "tag2",
+    ]
+    ttl             = "2h"
+    worker_affinity = false
+  }
   input_collector_splunk = {
     collector = {
       conf = {
@@ -852,6 +933,7 @@ resource "criblio_collector" "my_collector" {
 - `input_collector_health_check` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check))
 - `input_collector_rest` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest))
 - `input_collector_s3` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3))
+- `input_collector_script` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script))
 - `input_collector_splunk` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk))
 
 ### Read-Only
@@ -1956,6 +2038,136 @@ Optional:
 
 <a id="nestedatt--input_collector_s3--schedule--run--time_warning"></a>
 ### Nested Schema for `input_collector_s3.schedule.run.time_warning`
+
+
+
+
+
+<a id="nestedatt--input_collector_script"></a>
+### Nested Schema for `input_collector_script`
+
+Required:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--collector))
+
+Optional:
+
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean) Default: false
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--input))
+- `remove_fields` (List of String) Default: []
+- `resume_on_boot` (Boolean) Default: true
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_script--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_script--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping. Default: []
+- `ttl` (String) Default: "4h"
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
+
+<a id="nestedatt--input_collector_script--collector"></a>
+### Nested Schema for `input_collector_script.collector`
+
+Required:
+
+- `type` (String) must be "script"
+
+Optional:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--collector--conf))
+
+<a id="nestedatt--input_collector_script--collector--conf"></a>
+### Nested Schema for `input_collector_script.collector.conf`
+
+Optional:
+
+- `collect_script` (String)
+- `discover_script` (String)
+- `shell` (String)
+
+
+
+<a id="nestedatt--input_collector_script--input"></a>
+### Nested Schema for `input_collector_script.input`
+
+Optional:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_script--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"
+- `type` (String) Default: "collection"; must be "collection"
+
+<a id="nestedatt--input_collector_script--input--metadata"></a>
+### Nested Schema for `input_collector_script.input.metadata`
+
+Required:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_script--input--preprocess"></a>
+### Nested Schema for `input_collector_script.input.preprocess`
+
+Optional:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean) Default: true
+
+
+
+<a id="nestedatt--input_collector_script--saved_state"></a>
+### Nested Schema for `input_collector_script.saved_state`
+
+
+<a id="nestedatt--input_collector_script--schedule"></a>
+### Nested Schema for `input_collector_script.schedule`
+
+Optional:
+
+- `cron_schedule` (String) A cron schedule on which to run this job. Default: "*/5 * * * *"
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time. Default: 1
+- `resume_missed` (Boolean) Resume missed scheduled runs. Default: false
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true
+
+<a id="nestedatt--input_collector_script--schedule--run"></a>
+### Nested Schema for `input_collector_script.schedule.run`
+
+Optional:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone. Default: 0
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected. Default: "true"
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"
+- `latest` (Number) Latest time to collect data for the selected timezone. Default: 1
+- `log_level` (String) Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled. Default: 1
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors. Default: true
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_script--schedule--run--state_tracking))
+- `time_range_type` (String) Default: "relative"; must be one of ["relative", "absolute"]
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_script--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_script--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_script.schedule.run.state_tracking`
+
+Optional:
+
+- `enabled` (Boolean) Default: false
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_script--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_script.schedule.run.time_warning`
 
 
 

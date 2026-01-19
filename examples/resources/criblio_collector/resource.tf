@@ -722,6 +722,87 @@ resource "criblio_collector" "my_collector" {
     ttl             = "2h"
     worker_affinity = false
   }
+  input_collector_script = {
+    collector = {
+      conf = {
+        collect_script  = "echo Hello Collect Script"
+        discover_script = "echo Hello Discovery Script"
+        shell           = "/bin/bash"
+      }
+      type = "script"
+    }
+    environment             = "production"
+    id                      = "myInputCollectorJobId"
+    ignore_group_jobs_limit = false
+    input = {
+      breaker_rulesets = [
+        "rule1",
+        "rule2",
+      ]
+      metadata = [
+        {
+          name  = "sourceType"
+          value = "`value_expression`"
+        }
+      ]
+      output   = "defaultDestination"
+      pipeline = "defaultPipeline"
+      preprocess = {
+        args = [
+          "--flag",
+          "value",
+        ]
+        command  = "cat"
+        disabled = true
+      }
+      send_to_routes         = true
+      stale_channel_flush_ms = 20000
+      throttle_rate_per_sec  = "42 MB"
+      type                   = "collection"
+    }
+    remove_fields = [
+      "field1",
+      "field2",
+    ]
+    resume_on_boot = true
+    saved_state = {
+      # ...
+    }
+    schedule = {
+      cron_schedule       = "0 * * * *"
+      enabled             = true
+      max_concurrent_runs = 2
+      resume_missed       = true
+      run = {
+        earliest                 = 0
+        expression               = "true"
+        job_timeout              = "30m"
+        latest                   = 10
+        log_level                = "debug"
+        max_task_reschedule      = 3
+        max_task_size            = "10GB"
+        min_task_size            = "1GB"
+        mode                     = "list"
+        reschedule_dropped_tasks = true
+        state_tracking = {
+          enabled                 = true
+          state_merge_expression  = "merge(state,newState)"
+          state_update_expression = "state = state + 1"
+        }
+        time_range_type = "relative"
+        time_warning = {
+          # ...
+        }
+      }
+      skippable = false
+    }
+    streamtags = [
+      "tag1",
+      "tag2",
+    ]
+    ttl             = "2h"
+    worker_affinity = false
+  }
   input_collector_splunk = {
     collector = {
       conf = {
