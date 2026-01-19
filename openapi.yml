@@ -3964,14 +3964,11 @@ components:
               title: "Path"
               description: "The templated path under which to look for data"
               minLength: 1
-              templated: true
             filter:
               type: string
               title: "Path Filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
             region:
               type: string
@@ -4000,14 +3997,11 @@ components:
                     title: "Path"
                     description: "The templated path under which to look for data"
                     minLength: 1
-                    templated: true
                   filter:
                     type: string
                     title: "Path Filter"
                     description: "A JavaScript filter expression to be evaluated against the provided path"
                     minLength: 1
-                    templated: true
-                    jsExpression: true
                     default: "true"
                   region:
                     type: string
@@ -4135,15 +4129,12 @@ components:
               title: "Path"
               description: "The directory from which to collect data"
               minLength: 1
-              templated: true
               example: "/var/log/cribl"
             filter:
               type: string
               title: "Path filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "filename.endsWith('.log')"
             extraPaths:
@@ -4160,15 +4151,12 @@ components:
                     title: "Path"
                     description: "The directory from which to collect data"
                     minLength: 1
-                    templated: true
                     example: "path/to/dir"
                   filter:
                     type: string
                     title: "Path filter"
                     description: "A JavaScript filter expression to be evaluated against the provided path"
                     minLength: 1
-                    templated: true
-                    jsExpression: true
                     default: "true"
                     example: "truthy"
     CriblLeaderProvider:
@@ -4234,15 +4222,12 @@ components:
               title: "Path"
               description: "The directory where data will be collected. Environment variables and templating are supported."
               minLength: 1
-              templated: true
               example: "/data/edge"
             filter:
               type: string
               title: "Path Filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "size > 0"
     EdgeProvider:
@@ -4277,15 +4262,12 @@ components:
               title: "Path"
               description: "The templated path under which to look for data"
               minLength: 1
-              templated: true
               example: "logs/2025/10/01/"
             filter:
               type: string
               title: "Path Filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "path.endsWith('.json')"
             extraPaths:
@@ -4309,14 +4291,11 @@ components:
                     description: "Path inside the additional container"
                     example: "archive/2025/"
                     minLength: 1
-                    templated: true
                   filter:
                     type: string
                     title: "Path Filter"
                     description: "A JavaScript filter expression to be evaluated against the provided path"
                     minLength: 1
-                    templated: true
-                    jsExpression: true
                     default: "true"
                     example: "truthy"
             storageClasses:
@@ -4420,15 +4399,12 @@ components:
               title: "Bucket path"
               description: "Google Cloud Storage bucket path. Templating is supported."
               minLength: 1
-              templated: true
               example: "my-gcs-bucket"
             filter:
               type: string
               title: "Path filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "path.endsWith('.json')"
             region:
@@ -4450,15 +4426,12 @@ components:
                     title: "Bucket path"
                     description: "Google Cloud Storage bucket path"
                     minLength: 1
-                    templated: true
                     example: "my-extra-bucket"
                   filter:
                     type: string
                     title: "Path filter"
                     description: "A JavaScript filter expression to be evaluated against the provided path"
                     minLength: 1
-                    templated: true
-                    jsExpression: true
                     default: "true"
                     example: "path.includes('archive')"
                   region:
@@ -4520,7 +4493,6 @@ components:
               title: "Path"
               description: "The templated path under which to look for data, in each folder"
               minLength: 1
-              templated: true
               default: "${vendor}/${sourceLocation}/${pathVersion}/region=${region}/accountId=${accountId}/eventDay=${_time:%Y%m%d}/"
               example: "AWS/CloudTrail/v1/region=us-east-1/accountId=123456789012/eventDay=20251001/"
             filter:
@@ -4528,8 +4500,6 @@ components:
               title: "Path Filter"
               description: "A JavaScript filter expression to be evaluated against the provided path"
               minLength: 1
-              templated: true
-              jsExpression: true
               default: "true"
               example: "path.includes('CloudTrail')"
             selectedBuckets:
@@ -4548,7 +4518,6 @@ components:
                     type: string
                     title: "Bucket name"
                     description: "S3 bucket name"
-                    templated: true
                     example: "aws-securitylake-us-east-1"
                     minLength: 1
                   region:
