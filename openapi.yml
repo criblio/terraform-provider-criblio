@@ -13446,11 +13446,6 @@ components:
           title: Description
           example: Grafana listener supporting Prom remote write and Loki logs
       type: object
-      anyOf:
-        - required:
-            - prometheusAPI
-        - required:
-            - lokiAPI
     InputLoki:
       required:
         - host
@@ -26275,13 +26270,6 @@ components:
             handshake. Disable if compatibility issues arise.
           example: true
       type: object
-      anyOf:
-        - required:
-            - host
-            - udpPort
-        - required:
-            - host
-            - tcpPort
     InputFile:
       required:
         - id
@@ -47171,6 +47159,7 @@ components:
           example: datadog_api_key
       type: object
     OutputGrafanaCloud:
+      type: object
       required:
         - id
         - type
@@ -47677,12 +47666,6 @@ components:
           type: object
           title: ""
           example: {}
-      type: object
-      anyOf:
-        - required:
-            - lokiUrl
-        - required:
-            - prometheusUrl
     OutputLoki:
       required:
         - url

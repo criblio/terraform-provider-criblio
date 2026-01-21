@@ -7782,1104 +7782,544 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"input_grafana": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
-					"input_grafana_grafana1": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"activity_log_sample_rate": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(100),
-								Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(1),
-								},
-							},
-							"capture_headers": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Add request headers to events, in the __headers field. Default: false`,
-							},
-							"connections": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"output": schema.StringAttribute{
-											Required: true,
-										},
-										"pipeline": schema.StringAttribute{
-											Optional: true,
-										},
-									},
-								},
-								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-							},
-							"description": schema.StringAttribute{
-								Optional: true,
-							},
-							"disabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Default: false`,
-							},
-							"enable_health_check": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
-							},
-							"enable_proxy_header": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
-							},
-							"environment": schema.StringAttribute{
-								Optional:    true,
-								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-							},
-							"host": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0.0.0.0`),
-								Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
-							},
-							"id": schema.StringAttribute{
-								Optional:    true,
-								Description: `Unique ID for this input`,
-							},
-							"ip_allowlist_regex": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/.*/`),
-								Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist. Default: "/.*/"`,
-							},
-							"ip_denylist_regex": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/^$/`),
-								Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist. Default: "/^$/"`,
-							},
-							"keep_alive_timeout": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(5),
-								Description: `Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes. Default: 5`,
-								Validators: []validator.Float64{
-									float64validator.Between(1, 600),
-								},
-							},
-							"loki_api": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/loki/api/v1/push`),
-								Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured. Default: "/loki/api/v1/push"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern "+regexp.MustCompile(`^/`).String()),
-								},
-							},
-							"loki_auth": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"auth_header_expr": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`` + "`" + `Bearer ${token}` + "`" + ``),
-										Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `. Default: "` + "`" + `Bearer ${token}` + "`" + `"`,
-									},
-									"auth_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`none`),
-										Description: `Loki logs authentication type. Default: "none"; must be one of ["none", "basic", "credentialsSecret", "token", "textSecret", "oauth"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"basic",
-												"credentialsSecret",
-												"token",
-												"textSecret",
-												"oauth",
-											),
-										},
-									},
-									"credentials_secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Select or create a secret that references your credentials`,
-									},
-									"login_url": schema.StringAttribute{
-										Optional:    true,
-										Description: `URL for OAuth`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
-										},
-									},
-									"oauth_headers": schema.ListNestedAttribute{
-										Optional: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"name": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth header name`,
-												},
-												"value": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth header value`,
-												},
-											},
-										},
-										Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
-									},
-									"oauth_params": schema.ListNestedAttribute{
-										Optional: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"name": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth parameter name`,
-												},
-												"value": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth parameter value`,
-												},
-											},
-										},
-										Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
-									},
-									"password": schema.StringAttribute{
-										Optional: true,
-									},
-									"secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Secret parameter value to pass in request body`,
-									},
-									"secret_param_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `Secret parameter name to pass in request body`,
-									},
-									"text_secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Select or create a stored text secret`,
-									},
-									"token": schema.StringAttribute{
-										Optional:    true,
-										Description: `Bearer token to include in the authorization header`,
-									},
-									"token_attribute_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
-									},
-									"token_timeout_secs": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(3600),
-										Description: `How often the OAuth token should be refreshed. Default: 3600`,
-										Validators: []validator.Float64{
-											float64validator.Between(1, 300000),
-										},
-									},
-									"username": schema.StringAttribute{
-										Optional: true,
-									},
-								},
-							},
-							"max_active_req": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(256),
-								Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"max_requests_per_socket": schema.Int64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     int64default.StaticInt64(0),
-								Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
-							},
-							"metadata": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"name": schema.StringAttribute{
-											Required: true,
-										},
-										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-										},
-									},
-								},
-								Description: `Fields to add to events from this input`,
-							},
-							"pipeline": schema.StringAttribute{
-								Optional:    true,
-								Description: `Pipeline to process data from this Source before sending it through the Routes`,
-							},
-							"port": schema.Float64Attribute{
-								Required:    true,
-								Description: `Port to listen on`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
-								},
-							},
-							"pq": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"commit_frequency": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(42),
-										Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(1),
-										},
-									},
-									"compress": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`none`),
-										Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"gzip",
-											),
-										},
-									},
-									"max_buffer_size": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1000),
-										Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(42),
-										},
-									},
-									"max_file_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1 MB`),
-										Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"max_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`5GB`),
-										Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"smart",
-												"always",
-											),
-										},
-									},
-									"path": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
-										Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
-									},
-								},
-							},
-							"pq_enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
-							},
-							"prometheus_api": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/api/prom/push`),
-								Description: `Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' must be configured. Default: "/api/prom/push"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern "+regexp.MustCompile(`^/`).String()),
-								},
-							},
-							"prometheus_auth": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"auth_header_expr": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`` + "`" + `Bearer ${token}` + "`" + ``),
-										Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `. Default: "` + "`" + `Bearer ${token}` + "`" + `"`,
-									},
-									"auth_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`none`),
-										Description: `Remote Write authentication type. Default: "none"; must be one of ["none", "basic", "credentialsSecret", "token", "textSecret", "oauth"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"basic",
-												"credentialsSecret",
-												"token",
-												"textSecret",
-												"oauth",
-											),
-										},
-									},
-									"credentials_secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Select or create a secret that references your credentials`,
-									},
-									"login_url": schema.StringAttribute{
-										Optional:    true,
-										Description: `URL for OAuth`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
-										},
-									},
-									"oauth_headers": schema.ListNestedAttribute{
-										Optional: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"name": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth header name`,
-												},
-												"value": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth header value`,
-												},
-											},
-										},
-										Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
-									},
-									"oauth_params": schema.ListNestedAttribute{
-										Optional: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"name": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth parameter name`,
-												},
-												"value": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth parameter value`,
-												},
-											},
-										},
-										Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
-									},
-									"password": schema.StringAttribute{
-										Optional: true,
-									},
-									"secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Secret parameter value to pass in request body`,
-									},
-									"secret_param_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `Secret parameter name to pass in request body`,
-									},
-									"text_secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Select or create a stored text secret`,
-									},
-									"token": schema.StringAttribute{
-										Optional:    true,
-										Description: `Bearer token to include in the authorization header`,
-									},
-									"token_attribute_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
-									},
-									"token_timeout_secs": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(3600),
-										Description: `How often the OAuth token should be refreshed. Default: 3600`,
-										Validators: []validator.Float64{
-											float64validator.Between(1, 300000),
-										},
-									},
-									"username": schema.StringAttribute{
-										Optional: true,
-									},
-								},
-							},
-							"request_timeout": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(0),
-								Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-							},
-							"socket_timeout": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(0),
-								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"streamtags": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}. Default: []`,
-							},
-							"tls": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"ca_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"cert_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"certificate_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `The name of the predefined certificate`,
-									},
-									"common_name_regex": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Default: true`,
-									},
-									"max_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"min_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"passphrase": schema.StringAttribute{
-										Optional:    true,
-										Description: `Passphrase to use to decrypt private key`,
-									},
-									"priv_key_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"reject_unauthorized": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"request_cert": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
-									},
-								},
-							},
-							"type": schema.StringAttribute{
-								Optional:    true,
-								Description: `must be "grafana"`,
-								Validators: []validator.String{
-									stringvalidator.OneOf("grafana"),
-								},
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("input_grafana_grafana2"),
-							}...),
+					"activity_log_sample_rate": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(100),
+						Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(1),
 						},
 					},
-					"input_grafana_grafana2": schema.SingleNestedAttribute{
+					"capture_headers": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Add request headers to events, in the __headers field. Default: false`,
+					},
+					"connections": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"output": schema.StringAttribute{
+									Required: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Optional: true,
+								},
+							},
+						},
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+					},
+					"description": schema.StringAttribute{
+						Optional: true,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"enable_health_check": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+					},
+					"enable_proxy_header": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
+					},
+					"environment": schema.StringAttribute{
+						Optional:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"host": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`0.0.0.0`),
+						Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
+					},
+					"id": schema.StringAttribute{
+						Optional:    true,
+						Description: `Unique ID for this input`,
+					},
+					"ip_allowlist_regex": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/.*/`),
+						Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist. Default: "/.*/"`,
+					},
+					"ip_denylist_regex": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/^$/`),
+						Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist. Default: "/^$/"`,
+					},
+					"keep_alive_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(5),
+						Description: `Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes. Default: 5`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 600),
+						},
+					},
+					"loki_api": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/loki/api/v1/push`),
+						Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured. Default: "/loki/api/v1/push"`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern "+regexp.MustCompile(`^/`).String()),
+						},
+					},
+					"loki_auth": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"activity_log_sample_rate": schema.Float64Attribute{
+							"auth_header_expr": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     float64default.StaticFloat64(100),
-								Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(1),
-								},
+								Default:     stringdefault.StaticString(`` + "`" + `Bearer ${token}` + "`" + ``),
+								Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `. Default: "` + "`" + `Bearer ${token}` + "`" + `"`,
 							},
-							"capture_headers": schema.BoolAttribute{
+							"auth_type": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Add request headers to events, in the __headers field. Default: false`,
-							},
-							"connections": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"output": schema.StringAttribute{
-											Required: true,
-										},
-										"pipeline": schema.StringAttribute{
-											Optional: true,
-										},
-									},
-								},
-								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-							},
-							"description": schema.StringAttribute{
-								Optional: true,
-							},
-							"disabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Default: false`,
-							},
-							"enable_health_check": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
-							},
-							"enable_proxy_header": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false`,
-							},
-							"environment": schema.StringAttribute{
-								Optional:    true,
-								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-							},
-							"host": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0.0.0.0`),
-								Description: `Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"`,
-							},
-							"id": schema.StringAttribute{
-								Optional:    true,
-								Description: `Unique ID for this input`,
-							},
-							"ip_allowlist_regex": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/.*/`),
-								Description: `Messages from matched IP addresses will be processed, unless also matched by the denylist. Default: "/.*/"`,
-							},
-							"ip_denylist_regex": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/^$/`),
-								Description: `Messages from matched IP addresses will be ignored. This takes precedence over the allowlist. Default: "/^$/"`,
-							},
-							"keep_alive_timeout": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(5),
-								Description: `Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes. Default: 5`,
-								Validators: []validator.Float64{
-									float64validator.Between(1, 600),
-								},
-							},
-							"loki_api": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/loki/api/v1/push`),
-								Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured. Default: "/loki/api/v1/push"`,
+								Default:     stringdefault.StaticString(`none`),
+								Description: `Loki logs authentication type. Default: "none"; must be one of ["none", "basic", "credentialsSecret", "token", "textSecret", "oauth"]`,
 								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern "+regexp.MustCompile(`^/`).String()),
+									stringvalidator.OneOf(
+										"none",
+										"basic",
+										"credentialsSecret",
+										"token",
+										"textSecret",
+										"oauth",
+									),
 								},
 							},
-							"loki_auth": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"auth_header_expr": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`` + "`" + `Bearer ${token}` + "`" + ``),
-										Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `. Default: "` + "`" + `Bearer ${token}` + "`" + `"`,
-									},
-									"auth_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`none`),
-										Description: `Loki logs authentication type. Default: "none"; must be one of ["none", "basic", "credentialsSecret", "token", "textSecret", "oauth"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"basic",
-												"credentialsSecret",
-												"token",
-												"textSecret",
-												"oauth",
-											),
-										},
-									},
-									"credentials_secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Select or create a secret that references your credentials`,
-									},
-									"login_url": schema.StringAttribute{
-										Optional:    true,
-										Description: `URL for OAuth`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
-										},
-									},
-									"oauth_headers": schema.ListNestedAttribute{
-										Optional: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"name": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth header name`,
-												},
-												"value": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth header value`,
-												},
-											},
-										},
-										Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
-									},
-									"oauth_params": schema.ListNestedAttribute{
-										Optional: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"name": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth parameter name`,
-												},
-												"value": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth parameter value`,
-												},
-											},
-										},
-										Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
-									},
-									"password": schema.StringAttribute{
-										Optional: true,
-									},
-									"secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Secret parameter value to pass in request body`,
-									},
-									"secret_param_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `Secret parameter name to pass in request body`,
-									},
-									"text_secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Select or create a stored text secret`,
-									},
-									"token": schema.StringAttribute{
-										Optional:    true,
-										Description: `Bearer token to include in the authorization header`,
-									},
-									"token_attribute_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
-									},
-									"token_timeout_secs": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(3600),
-										Description: `How often the OAuth token should be refreshed. Default: 3600`,
-										Validators: []validator.Float64{
-											float64validator.Between(1, 300000),
-										},
-									},
-									"username": schema.StringAttribute{
-										Optional: true,
-									},
-								},
-							},
-							"max_active_req": schema.Float64Attribute{
-								Computed:    true,
+							"credentials_secret": schema.StringAttribute{
 								Optional:    true,
-								Default:     float64default.StaticFloat64(256),
-								Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
+								Description: `Select or create a secret that references your credentials`,
+							},
+							"login_url": schema.StringAttribute{
+								Optional:    true,
+								Description: `URL for OAuth`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
 								},
 							},
-							"max_requests_per_socket": schema.Int64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     int64default.StaticInt64(0),
-								Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
-							},
-							"metadata": schema.ListNestedAttribute{
+							"oauth_headers": schema.ListNestedAttribute{
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Required:    true,
+											Description: `OAuth header name`,
 										},
 										"value": schema.StringAttribute{
 											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Description: `OAuth header value`,
 										},
 									},
 								},
-								Description: `Fields to add to events from this input`,
+								Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 							},
-							"pipeline": schema.StringAttribute{
-								Optional:    true,
-								Description: `Pipeline to process data from this Source before sending it through the Routes`,
-							},
-							"port": schema.Float64Attribute{
-								Required:    true,
-								Description: `Port to listen on`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
-								},
-							},
-							"pq": schema.SingleNestedAttribute{
+							"oauth_params": schema.ListNestedAttribute{
 								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"commit_frequency": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(42),
-										Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(1),
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required:    true,
+											Description: `OAuth parameter name`,
 										},
-									},
-									"compress": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`none`),
-										Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"gzip",
-											),
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `OAuth parameter value`,
 										},
-									},
-									"max_buffer_size": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1000),
-										Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(42),
-										},
-									},
-									"max_file_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1 MB`),
-										Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"max_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`5GB`),
-										Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"smart",
-												"always",
-											),
-										},
-									},
-									"path": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
-										Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
 									},
 								},
+								Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 							},
-							"pq_enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
-							},
-							"prometheus_api": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/api/prom/push`),
-								Description: `Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' must be configured. Default: "/api/prom/push"`,
-								Validators: []validator.String{
-									stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern "+regexp.MustCompile(`^/`).String()),
-								},
-							},
-							"prometheus_auth": schema.SingleNestedAttribute{
+							"password": schema.StringAttribute{
 								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"auth_header_expr": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`` + "`" + `Bearer ${token}` + "`" + ``),
-										Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `. Default: "` + "`" + `Bearer ${token}` + "`" + `"`,
-									},
-									"auth_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`none`),
-										Description: `Remote Write authentication type. Default: "none"; must be one of ["none", "basic", "credentialsSecret", "token", "textSecret", "oauth"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"basic",
-												"credentialsSecret",
-												"token",
-												"textSecret",
-												"oauth",
-											),
-										},
-									},
-									"credentials_secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Select or create a secret that references your credentials`,
-									},
-									"login_url": schema.StringAttribute{
-										Optional:    true,
-										Description: `URL for OAuth`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
-										},
-									},
-									"oauth_headers": schema.ListNestedAttribute{
-										Optional: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"name": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth header name`,
-												},
-												"value": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth header value`,
-												},
-											},
-										},
-										Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
-									},
-									"oauth_params": schema.ListNestedAttribute{
-										Optional: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"name": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth parameter name`,
-												},
-												"value": schema.StringAttribute{
-													Required:    true,
-													Description: `OAuth parameter value`,
-												},
-											},
-										},
-										Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
-									},
-									"password": schema.StringAttribute{
-										Optional: true,
-									},
-									"secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Secret parameter value to pass in request body`,
-									},
-									"secret_param_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `Secret parameter name to pass in request body`,
-									},
-									"text_secret": schema.StringAttribute{
-										Optional:    true,
-										Description: `Select or create a stored text secret`,
-									},
-									"token": schema.StringAttribute{
-										Optional:    true,
-										Description: `Bearer token to include in the authorization header`,
-									},
-									"token_attribute_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
-									},
-									"token_timeout_secs": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(3600),
-										Description: `How often the OAuth token should be refreshed. Default: 3600`,
-										Validators: []validator.Float64{
-											float64validator.Between(1, 300000),
-										},
-									},
-									"username": schema.StringAttribute{
-										Optional: true,
-									},
-								},
 							},
-							"request_timeout": schema.Float64Attribute{
+							"secret": schema.StringAttribute{
+								Optional:    true,
+								Description: `Secret parameter value to pass in request body`,
+							},
+							"secret_param_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `Secret parameter name to pass in request body`,
+							},
+							"text_secret": schema.StringAttribute{
+								Optional:    true,
+								Description: `Select or create a stored text secret`,
+							},
+							"token": schema.StringAttribute{
+								Optional:    true,
+								Description: `Bearer token to include in the authorization header`,
+							},
+							"token_attribute_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+							},
+							"token_timeout_secs": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     float64default.StaticFloat64(0),
-								Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+								Default:     float64default.StaticFloat64(3600),
+								Description: `How often the OAuth token should be refreshed. Default: 3600`,
 								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
+									float64validator.Between(1, 300000),
 								},
 							},
-							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-							},
-							"socket_timeout": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(0),
-								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"streamtags": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}. Default: []`,
-							},
-							"tls": schema.SingleNestedAttribute{
+							"username": schema.StringAttribute{
 								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"ca_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"cert_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"certificate_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `The name of the predefined certificate`,
-									},
-									"common_name_regex": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Default: true`,
-									},
-									"max_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"min_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"passphrase": schema.StringAttribute{
-										Optional:    true,
-										Description: `Passphrase to use to decrypt private key`,
-									},
-									"priv_key_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"reject_unauthorized": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"request_cert": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
-									},
-								},
 							},
-							"type": schema.StringAttribute{
-								Optional:    true,
-								Description: `must be "grafana"`,
-								Validators: []validator.String{
-									stringvalidator.OneOf("grafana"),
+						},
+					},
+					"max_active_req": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(256),
+						Description: `Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput. Default: 256`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"max_requests_per_socket": schema.Int64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     int64default.StaticInt64(0),
+						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0`,
+					},
+					"metadata": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required: true,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 								},
 							},
 						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("input_grafana_grafana1"),
-							}...),
+						Description: `Fields to add to events from this input`,
+					},
+					"pipeline": schema.StringAttribute{
+						Optional:    true,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"port": schema.Float64Attribute{
+						Required:    true,
+						Description: `Port to listen on`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
+					},
+					"pq": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"commit_frequency": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(42),
+								Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(1),
+								},
+							},
+							"compress": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`none`),
+								Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"none",
+										"gzip",
+									),
+								},
+							},
+							"max_buffer_size": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(1000),
+								Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
+								Validators: []validator.Float64{
+									float64validator.AtLeast(42),
+								},
+							},
+							"max_file_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`1 MB`),
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"max_size": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`5GB`),
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
+								},
+							},
+							"mode": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`always`),
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"smart",
+										"always",
+									),
+								},
+							},
+							"path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
+							},
+						},
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
+					},
+					"prometheus_api": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/api/prom/push`),
+						Description: `Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' must be configured. Default: "/api/prom/push"`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^/`), "must match pattern "+regexp.MustCompile(`^/`).String()),
+						},
+					},
+					"prometheus_auth": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"auth_header_expr": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`` + "`" + `Bearer ${token}` + "`" + ``),
+								Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `. Default: "` + "`" + `Bearer ${token}` + "`" + `"`,
+							},
+							"auth_type": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`none`),
+								Description: `Remote Write authentication type. Default: "none"; must be one of ["none", "basic", "credentialsSecret", "token", "textSecret", "oauth"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"none",
+										"basic",
+										"credentialsSecret",
+										"token",
+										"textSecret",
+										"oauth",
+									),
+								},
+							},
+							"credentials_secret": schema.StringAttribute{
+								Optional:    true,
+								Description: `Select or create a secret that references your credentials`,
+							},
+							"login_url": schema.StringAttribute{
+								Optional:    true,
+								Description: `URL for OAuth`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
+								},
+							},
+							"oauth_headers": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required:    true,
+											Description: `OAuth header name`,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `OAuth header value`,
+										},
+									},
+								},
+								Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+							},
+							"oauth_params": schema.ListNestedAttribute{
+								Optional: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"name": schema.StringAttribute{
+											Required:    true,
+											Description: `OAuth parameter name`,
+										},
+										"value": schema.StringAttribute{
+											Required:    true,
+											Description: `OAuth parameter value`,
+										},
+									},
+								},
+								Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+							},
+							"password": schema.StringAttribute{
+								Optional: true,
+							},
+							"secret": schema.StringAttribute{
+								Optional:    true,
+								Description: `Secret parameter value to pass in request body`,
+							},
+							"secret_param_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `Secret parameter name to pass in request body`,
+							},
+							"text_secret": schema.StringAttribute{
+								Optional:    true,
+								Description: `Select or create a stored text secret`,
+							},
+							"token": schema.StringAttribute{
+								Optional:    true,
+								Description: `Bearer token to include in the authorization header`,
+							},
+							"token_attribute_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+							},
+							"token_timeout_secs": schema.Float64Attribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     float64default.StaticFloat64(3600),
+								Description: `How often the OAuth token should be refreshed. Default: 3600`,
+								Validators: []validator.Float64{
+									float64validator.Between(1, 300000),
+								},
+							},
+							"username": schema.StringAttribute{
+								Optional: true,
+							},
+						},
+					},
+					"request_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
+					},
+					"socket_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"ca_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
+								Optional:    true,
+								Description: `Parsed as JSON.`,
+							},
+							"disabled": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Default: true`,
+							},
+							"max_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"min_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"passphrase": schema.StringAttribute{
+								Optional:    true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
+								Optional:    true,
+								Description: `Parsed as JSON.`,
+							},
+							"request_cert": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
+							},
+						},
+					},
+					"type": schema.StringAttribute{
+						Optional:    true,
+						Description: `must be "grafana"`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("grafana"),
 						},
 					},
 				},
@@ -20725,734 +20165,359 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"input_syslog": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
-					"input_syslog_syslog1": schema.SingleNestedAttribute{
+					"allow_non_standard_app_name": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages. Default: false`,
+					},
+					"connections": schema.ListNestedAttribute{
 						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"allow_non_standard_app_name": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages. Default: false`,
-							},
-							"connections": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"output": schema.StringAttribute{
-											Required: true,
-										},
-										"pipeline": schema.StringAttribute{
-											Optional: true,
-										},
-									},
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"output": schema.StringAttribute{
+									Required: true,
 								},
-								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-							},
-							"description": schema.StringAttribute{
-								Optional: true,
-							},
-							"disabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Default: false`,
-							},
-							"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
-								Optional:    true,
-								Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
-							},
-							"enable_load_balancing": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Load balance traffic across all Worker Processes. Default: false`,
-							},
-							"enable_proxy_header": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2. Default: false`,
-							},
-							"environment": schema.StringAttribute{
-								Optional:    true,
-								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-							},
-							"host": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0.0.0.0`),
-								Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address. Default: "0.0.0.0"`,
-							},
-							"id": schema.StringAttribute{
-								Optional:    true,
-								Description: `Unique ID for this input`,
-							},
-							"infer_framing": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Enable if we should infer the syslog framing of the incoming messages. Default: true`,
-							},
-							"ip_whitelist_regex": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/.*/`),
-								Description: `Regex matching IP addresses that are allowed to send data. Default: "/.*/"`,
-							},
-							"keep_fields_list": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-								ElementType: types.StringType,
-								Description: `Wildcard list of fields to keep from source data; * = ALL (default). Default: []`,
-							},
-							"max_active_cxn": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1000),
-								Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited. Default: 1000`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"max_buffer_size": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1000),
-								Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"metadata": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"name": schema.StringAttribute{
-											Required: true,
-										},
-										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-										},
-									},
-								},
-								Description: `Fields to add to events from this input`,
-							},
-							"octet_counting": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Enable if incoming messages use octet counting per RFC 6587. Default: false`,
-							},
-							"pipeline": schema.StringAttribute{
-								Optional:    true,
-								Description: `Pipeline to process data from this Source before sending it through the Routes`,
-							},
-							"pq": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"commit_frequency": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(42),
-										Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(1),
-										},
-									},
-									"compress": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`none`),
-										Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"gzip",
-											),
-										},
-									},
-									"max_buffer_size": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1000),
-										Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(42),
-										},
-									},
-									"max_file_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1 MB`),
-										Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"max_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`5GB`),
-										Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"smart",
-												"always",
-											),
-										},
-									},
-									"path": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
-										Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
-									},
-								},
-							},
-							"pq_enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
-							},
-							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-							},
-							"single_msg_udp_packets": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Treat UDP packet data received as full syslog message. Default: false`,
-							},
-							"socket_ending_max_wait": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(30),
-								Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"socket_idle_timeout": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(0),
-								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"socket_max_lifespan": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(0),
-								Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"streamtags": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}. Default: []`,
-							},
-							"strictly_infer_octet_counting": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424. Default: true`,
-							},
-							"tcp_port": schema.Float64Attribute{
-								Optional:    true,
-								Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
-								},
-							},
-							"timestamp_timezone": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`local`),
-								Description: `Timezone to assign to timestamps without timezone info. Default: "local"`,
-							},
-							"tls": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"ca_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"cert_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"certificate_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `The name of the predefined certificate`,
-									},
-									"common_name_regex": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Default: true`,
-									},
-									"max_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"min_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"passphrase": schema.StringAttribute{
-										Optional:    true,
-										Description: `Passphrase to use to decrypt private key`,
-									},
-									"priv_key_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"reject_unauthorized": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"request_cert": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
-									},
-								},
-							},
-							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "syslog"`,
-								Validators: []validator.String{
-									stringvalidator.OneOf("syslog"),
-								},
-							},
-							"udp_port": schema.Float64Attribute{
-								Required:    true,
-								Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
-								},
-							},
-							"udp_socket_rx_buf_size": schema.Float64Attribute{
-								Optional:    true,
-								Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
-								Validators: []validator.Float64{
-									float64validator.Between(256, 4294967295),
+								"pipeline": schema.StringAttribute{
+									Optional: true,
 								},
 							},
 						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("input_syslog_syslog2"),
-							}...),
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+					},
+					"description": schema.StringAttribute{
+						Optional: true,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Default: false`,
+					},
+					"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
+						Optional:    true,
+						Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
+					},
+					"enable_load_balancing": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Load balance traffic across all Worker Processes. Default: false`,
+					},
+					"enable_proxy_header": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2. Default: false`,
+					},
+					"environment": schema.StringAttribute{
+						Optional:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"host": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`0.0.0.0`),
+						Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address. Default: "0.0.0.0"`,
+					},
+					"id": schema.StringAttribute{
+						Optional:    true,
+						Description: `Unique ID for this input`,
+					},
+					"infer_framing": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Enable if we should infer the syslog framing of the incoming messages. Default: true`,
+					},
+					"ip_whitelist_regex": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`/.*/`),
+						Description: `Regex matching IP addresses that are allowed to send data. Default: "/.*/"`,
+					},
+					"keep_fields_list": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Wildcard list of fields to keep from source data; * = ALL (default). Default: []`,
+					},
+					"max_active_cxn": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(1000),
+						Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
 						},
 					},
-					"input_syslog_syslog2": schema.SingleNestedAttribute{
+					"max_buffer_size": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(1000),
+						Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"metadata": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required: true,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+								},
+							},
+						},
+						Description: `Fields to add to events from this input`,
+					},
+					"octet_counting": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Enable if incoming messages use octet counting per RFC 6587. Default: false`,
+					},
+					"pipeline": schema.StringAttribute{
+						Optional:    true,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"pq": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"allow_non_standard_app_name": schema.BoolAttribute{
+							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages. Default: false`,
-							},
-							"connections": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"output": schema.StringAttribute{
-											Required: true,
-										},
-										"pipeline": schema.StringAttribute{
-											Optional: true,
-										},
-									},
-								},
-								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-							},
-							"description": schema.StringAttribute{
-								Optional: true,
-							},
-							"disabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Default: false`,
-							},
-							"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
-								Optional:    true,
-								Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
-							},
-							"enable_load_balancing": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Load balance traffic across all Worker Processes. Default: false`,
-							},
-							"enable_proxy_header": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2. Default: false`,
-							},
-							"environment": schema.StringAttribute{
-								Optional:    true,
-								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-							},
-							"host": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0.0.0.0`),
-								Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address. Default: "0.0.0.0"`,
-							},
-							"id": schema.StringAttribute{
-								Optional:    true,
-								Description: `Unique ID for this input`,
-							},
-							"infer_framing": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Enable if we should infer the syslog framing of the incoming messages. Default: true`,
-							},
-							"ip_whitelist_regex": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`/.*/`),
-								Description: `Regex matching IP addresses that are allowed to send data. Default: "/.*/"`,
-							},
-							"keep_fields_list": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-								ElementType: types.StringType,
-								Description: `Wildcard list of fields to keep from source data; * = ALL (default). Default: []`,
-							},
-							"max_active_cxn": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1000),
-								Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited. Default: 1000`,
+								Default:     float64default.StaticFloat64(42),
+								Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
 								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
+									float64validator.AtLeast(1),
+								},
+							},
+							"compress": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`none`),
+								Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"none",
+										"gzip",
+									),
 								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     float64default.StaticFloat64(1000),
-								Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000`,
+								Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
 								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
+									float64validator.AtLeast(42),
 								},
 							},
-							"metadata": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"name": schema.StringAttribute{
-											Required: true,
-										},
-										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-										},
-									},
-								},
-								Description: `Fields to add to events from this input`,
-							},
-							"octet_counting": schema.BoolAttribute{
+							"max_file_size": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Enable if incoming messages use octet counting per RFC 6587. Default: false`,
-							},
-							"pipeline": schema.StringAttribute{
-								Optional:    true,
-								Description: `Pipeline to process data from this Source before sending it through the Routes`,
-							},
-							"pq": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"commit_frequency": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(42),
-										Description: `The number of events to send downstream before committing that Stream has read them. Default: 42`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(1),
-										},
-									},
-									"compress": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`none`),
-										Description: `Codec to use to compress the persisted data. Default: "none"; must be one of ["none", "gzip"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"gzip",
-											),
-										},
-									},
-									"max_buffer_size": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1000),
-										Description: `The maximum number of events to hold in memory before writing the events to disk. Default: 1000`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(42),
-										},
-									},
-									"max_file_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1 MB`),
-										Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"max_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`5GB`),
-										Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`always`),
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"smart",
-												"always",
-											),
-										},
-									},
-									"path": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
-										Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
-									},
-								},
-							},
-							"pq_enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
-							},
-							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
-							},
-							"single_msg_udp_packets": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Treat UDP packet data received as full syslog message. Default: false`,
-							},
-							"socket_ending_max_wait": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(30),
-								Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"socket_idle_timeout": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(0),
-								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"socket_max_lifespan": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(0),
-								Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"streamtags": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}. Default: []`,
-							},
-							"strictly_infer_octet_counting": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424. Default: true`,
-							},
-							"tcp_port": schema.Float64Attribute{
-								Required:    true,
-								Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
-								},
-							},
-							"timestamp_timezone": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`local`),
-								Description: `Timezone to assign to timestamps without timezone info. Default: "local"`,
-							},
-							"tls": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"ca_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"cert_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"certificate_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `The name of the predefined certificate`,
-									},
-									"common_name_regex": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Default: true`,
-									},
-									"max_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"min_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"passphrase": schema.StringAttribute{
-										Optional:    true,
-										Description: `Passphrase to use to decrypt private key`,
-									},
-									"priv_key_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"reject_unauthorized": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"request_cert": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
-									},
-								},
-							},
-							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "syslog"`,
+								Default:     stringdefault.StaticString(`1 MB`),
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc. Default: "1 MB"`,
 								Validators: []validator.String{
-									stringvalidator.OneOf("syslog"),
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
 								},
 							},
-							"udp_port": schema.Float64Attribute{
+							"max_size": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
-								Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
+								Default:     stringdefault.StaticString(`5GB`),
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
 								},
 							},
-							"udp_socket_rx_buf_size": schema.Float64Attribute{
+							"mode": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
-								Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
-								Validators: []validator.Float64{
-									float64validator.Between(256, 4294967295),
+								Default:     stringdefault.StaticString(`always`),
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"smart",
+										"always",
+									),
 								},
+							},
+							"path": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     stringdefault.StaticString(`$CRIBL_HOME/state/queues`),
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"`,
 							},
 						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("input_syslog_syslog1"),
-							}...),
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false`,
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Select whether to send data to Routes, or directly to Destinations. Default: true`,
+					},
+					"single_msg_udp_packets": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Treat UDP packet data received as full syslog message. Default: false`,
+					},
+					"socket_ending_max_wait": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(30),
+						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring. Default: 30`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"socket_idle_timeout": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"socket_max_lifespan": schema.Float64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     float64default.StaticFloat64(0),
+						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}. Default: []`,
+					},
+					"strictly_infer_octet_counting": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424. Default: true`,
+					},
+					"tcp_port": schema.Float64Attribute{
+						Optional:    true,
+						Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
+					},
+					"timestamp_timezone": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     stringdefault.StaticString(`local`),
+						Description: `Timezone to assign to timestamps without timezone info. Default: "local"`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"ca_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"common_name_regex": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
+								Optional:    true,
+								Description: `Parsed as JSON.`,
+							},
+							"disabled": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Default: true`,
+							},
+							"max_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"min_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"passphrase": schema.StringAttribute{
+								Optional:    true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"reject_unauthorized": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
+								Optional:    true,
+								Description: `Parsed as JSON.`,
+							},
+							"request_cert": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false`,
+							},
+						},
+					},
+					"type": schema.StringAttribute{
+						Required:    true,
+						Description: `must be "syslog"`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("syslog"),
+						},
+					},
+					"udp_port": schema.Float64Attribute{
+						Optional:    true,
+						Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
+					},
+					"udp_socket_rx_buf_size": schema.Float64Attribute{
+						Optional:    true,
+						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+						Validators: []validator.Float64{
+							float64validator.Between(256, 4294967295),
 						},
 					},
 				},

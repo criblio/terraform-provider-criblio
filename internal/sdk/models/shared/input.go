@@ -947,6 +947,14 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var inputGrafana InputGrafana = InputGrafana{}
+	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputGrafana,
+			Value: &inputGrafana,
+		})
+	}
+
 	var inputLoki InputLoki = InputLoki{}
 	if err := utils.UnmarshalJSON(data, &inputLoki, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1043,6 +1051,14 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var inputSyslog InputSyslog = InputSyslog{}
+	if err := utils.UnmarshalJSON(data, &inputSyslog, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputSyslog,
+			Value: &inputSyslog,
+		})
+	}
+
 	var inputTCP InputTCP = InputTCP{}
 	if err := utils.UnmarshalJSON(data, &inputTCP, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1091,14 +1107,6 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		})
 	}
 
-	var inputGrafana InputGrafana = InputGrafana{}
-	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputTypeInputGrafana,
-			Value: &inputGrafana,
-		})
-	}
-
 	var inputPrometheus InputPrometheus = InputPrometheus{}
 	if err := utils.UnmarshalJSON(data, &inputPrometheus, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1144,14 +1152,6 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  InputTypeInputModelDrivenTelemetry,
 			Value: &inputModelDrivenTelemetry,
-		})
-	}
-
-	var inputSyslog InputSyslog = InputSyslog{}
-	if err := utils.UnmarshalJSON(data, &inputSyslog, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputTypeInputSyslog,
-			Value: &inputSyslog,
 		})
 	}
 
@@ -1275,6 +1275,9 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 	case InputTypeInputConfluentCloud:
 		u.InputConfluentCloud = best.Value.(*InputConfluentCloud)
 		return nil
+	case InputTypeInputGrafana:
+		u.InputGrafana = best.Value.(*InputGrafana)
+		return nil
 	case InputTypeInputLoki:
 		u.InputLoki = best.Value.(*InputLoki)
 		return nil
@@ -1311,6 +1314,9 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 	case InputTypeInputSqs:
 		u.InputSqs = best.Value.(*InputSqs)
 		return nil
+	case InputTypeInputSyslog:
+		u.InputSyslog = best.Value.(*InputSyslog)
+		return nil
 	case InputTypeInputTCP:
 		u.InputTCP = best.Value.(*InputTCP)
 		return nil
@@ -1329,9 +1335,6 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 	case InputTypeInputZscalerHec:
 		u.InputZscalerHec = best.Value.(*InputZscalerHec)
 		return nil
-	case InputTypeInputGrafana:
-		u.InputGrafana = best.Value.(*InputGrafana)
-		return nil
 	case InputTypeInputPrometheus:
 		u.InputPrometheus = best.Value.(*InputPrometheus)
 		return nil
@@ -1349,9 +1352,6 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		return nil
 	case InputTypeInputModelDrivenTelemetry:
 		u.InputModelDrivenTelemetry = best.Value.(*InputModelDrivenTelemetry)
-		return nil
-	case InputTypeInputSyslog:
-		u.InputSyslog = best.Value.(*InputSyslog)
 		return nil
 	case InputTypeInputNetflow:
 		u.InputNetflow = best.Value.(*InputNetflow)

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 24971828a9854ca135a148a59895411a
+  docChecksum: a4ccedc24d365068e461585a30382744
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
@@ -784,20 +784,12 @@ generatedFiles:
   - internal/provider/types/input_google_pubsub_metadatum.go
   - internal/provider/types/input_google_pubsub_pq.go
   - internal/provider/types/input_grafana.go
-  - internal/provider/types/input_grafana_connection1.go
-  - internal/provider/types/input_grafana_connection2.go
-  - internal/provider/types/input_grafana_grafana1.go
-  - internal/provider/types/input_grafana_grafana2.go
-  - internal/provider/types/input_grafana_loki_auth1.go
-  - internal/provider/types/input_grafana_loki_auth2.go
-  - internal/provider/types/input_grafana_metadatum1.go
-  - internal/provider/types/input_grafana_metadatum2.go
-  - internal/provider/types/input_grafana_pq1.go
-  - internal/provider/types/input_grafana_pq2.go
-  - internal/provider/types/input_grafana_prometheus_auth1.go
-  - internal/provider/types/input_grafana_prometheus_auth2.go
-  - internal/provider/types/input_grafana_tls_settings_server_side1.go
-  - internal/provider/types/input_grafana_tls_settings_server_side2.go
+  - internal/provider/types/input_grafana_connection.go
+  - internal/provider/types/input_grafana_loki_auth.go
+  - internal/provider/types/input_grafana_metadatum.go
+  - internal/provider/types/input_grafana_pq.go
+  - internal/provider/types/input_grafana_prometheus_auth.go
+  - internal/provider/types/input_grafana_tls_settings_server_side.go
   - internal/provider/types/input_http.go
   - internal/provider/types/input_http_auth_tokens_ext.go
   - internal/provider/types/input_http_auth_tokens_ext_metadatum.go
@@ -963,16 +955,10 @@ generatedFiles:
   - internal/provider/types/input_sqs_metadatum.go
   - internal/provider/types/input_sqs_pq.go
   - internal/provider/types/input_syslog.go
-  - internal/provider/types/input_syslog_connection1.go
-  - internal/provider/types/input_syslog_connection2.go
-  - internal/provider/types/input_syslog_metadatum1.go
-  - internal/provider/types/input_syslog_metadatum2.go
-  - internal/provider/types/input_syslog_pq1.go
-  - internal/provider/types/input_syslog_pq2.go
-  - internal/provider/types/input_syslog_syslog1.go
-  - internal/provider/types/input_syslog_syslog2.go
-  - internal/provider/types/input_syslog_tls_settings_server_side1.go
-  - internal/provider/types/input_syslog_tls_settings_server_side2.go
+  - internal/provider/types/input_syslog_connection.go
+  - internal/provider/types/input_syslog_metadatum.go
+  - internal/provider/types/input_syslog_pq.go
+  - internal/provider/types/input_syslog_tls_settings_server_side.go
   - internal/provider/types/input_system_metrics.go
   - internal/provider/types/input_system_metrics_connection.go
   - internal/provider/types/input_system_metrics_container.go
@@ -1065,10 +1051,8 @@ generatedFiles:
   - internal/provider/types/listening_ports.go
   - internal/provider/types/log_label.go
   - internal/provider/types/logged_in_users.go
-  - internal/provider/types/loki_auth_oauth_header1.go
-  - internal/provider/types/loki_auth_oauth_header2.go
-  - internal/provider/types/loki_auth_oauth_param1.go
-  - internal/provider/types/loki_auth_oauth_param2.go
+  - internal/provider/types/loki_auth_oauth_header.go
+  - internal/provider/types/loki_auth_oauth_param.go
   - internal/provider/types/mapping_ruleset.go
   - internal/provider/types/mapping_ruleset_conf.go
   - internal/provider/types/mapping_ruleset_function_conf.go
@@ -1201,22 +1185,13 @@ generatedFiles:
   - internal/provider/types/output_google_pubsub.go
   - internal/provider/types/output_google_pubsub_pq_controls.go
   - internal/provider/types/output_grafana_cloud.go
-  - internal/provider/types/output_grafana_cloud_extra_http_header1.go
-  - internal/provider/types/output_grafana_cloud_extra_http_header2.go
-  - internal/provider/types/output_grafana_cloud_grafana_cloud1.go
-  - internal/provider/types/output_grafana_cloud_grafana_cloud2.go
-  - internal/provider/types/output_grafana_cloud_label1.go
-  - internal/provider/types/output_grafana_cloud_label2.go
-  - internal/provider/types/output_grafana_cloud_loki_auth1.go
-  - internal/provider/types/output_grafana_cloud_loki_auth2.go
-  - internal/provider/types/output_grafana_cloud_pq_controls1.go
-  - internal/provider/types/output_grafana_cloud_pq_controls2.go
-  - internal/provider/types/output_grafana_cloud_prometheus_auth1.go
-  - internal/provider/types/output_grafana_cloud_prometheus_auth2.go
-  - internal/provider/types/output_grafana_cloud_response_retry_setting1.go
-  - internal/provider/types/output_grafana_cloud_response_retry_setting2.go
-  - internal/provider/types/output_grafana_cloud_timeout_retry_settings1.go
-  - internal/provider/types/output_grafana_cloud_timeout_retry_settings2.go
+  - internal/provider/types/output_grafana_cloud_extra_http_header.go
+  - internal/provider/types/output_grafana_cloud_label.go
+  - internal/provider/types/output_grafana_cloud_loki_auth.go
+  - internal/provider/types/output_grafana_cloud_pq_controls.go
+  - internal/provider/types/output_grafana_cloud_prometheus_auth.go
+  - internal/provider/types/output_grafana_cloud_response_retry_setting.go
+  - internal/provider/types/output_grafana_cloud_timeout_retry_settings.go
   - internal/provider/types/output_graphite.go
   - internal/provider/types/output_graphite_pq_controls.go
   - internal/provider/types/output_honeycomb.go
@@ -1386,10 +1361,8 @@ generatedFiles:
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
-  - internal/provider/types/prometheus_auth_oauth_header1.go
-  - internal/provider/types/prometheus_auth_oauth_header2.go
-  - internal/provider/types/prometheus_auth_oauth_param1.go
-  - internal/provider/types/prometheus_auth_oauth_param2.go
+  - internal/provider/types/prometheus_auth_oauth_header.go
+  - internal/provider/types/prometheus_auth_oauth_param.go
   - internal/provider/types/prometheus_dataset.go
   - internal/provider/types/prometheus_provider.go
   - internal/provider/types/redis_cache_limits.go
