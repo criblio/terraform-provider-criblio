@@ -7,7 +7,10 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
   rules = [
     {
       condition           = "/GET|POST|PUT|DELETE/.test(_raw)"
+      delimiter           = ","
+      delimiter_regex     = "/\\t/"
       disabled            = false
+      escape_char         = "\\"
       event_breaker_regex = "/\\n(?=\\S)/"
       fields = [
         {
@@ -15,9 +18,12 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
           value = "\"nginx_access\""
         }
       ]
+      fields_line_regex   = "/^#[Ff]ields[:]?\\s+(.*)/"
+      header_line_regex   = "/^#/"
       max_event_bytes     = 65536
       name                = "nginx-access"
       parser_enabled      = false
+      quote_char          = "\""
       should_use_data_raw = false
       timestamp = {
         format = "%d/%b/%Y:%H:%M:%S %z"
