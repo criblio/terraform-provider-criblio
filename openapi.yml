@@ -7019,6 +7019,42 @@ components:
                   - aws_vpcflow
                 default: regex
                 example: regex
+              delimiterRegex:
+                type: string
+                title: Delimiter regex
+                description: Regex used to split header fields when type is "header".
+                default: "/\\t/"
+                example: "/\\t/"
+              fieldsLineRegex:
+                type: string
+                title: Fields line regex
+                description: Regex that identifies and captures the fields line when type is "header".
+                default: "/^#[Ff]ields[:]?\\s+(.*)/"
+                example: "/^#[Ff]ields[:]?\\s+(.*)/"
+              headerLineRegex:
+                type: string
+                title: Header line regex
+                description: Regex used to identify header lines when type is "header".
+                default: "/^#/"
+                example: "/^#/"
+              delimiter:
+                type: string
+                title: Delimiter
+                description: Field delimiter used for CSV parsing when type is "csv".
+                default: ","
+                example: ","
+              quoteChar:
+                type: string
+                title: Quote character
+                description: Quote character used for CSV parsing when type is "csv".
+                default: "\""
+                example: "\""
+              escapeChar:
+                type: string
+                title: Escape character
+                description: Escape character used for CSV parsing when type is "csv".
+                default: "\\"
+                example: "\\"
               timestampAnchorRegex:
                 type: string
                 title: Timestamp anchor

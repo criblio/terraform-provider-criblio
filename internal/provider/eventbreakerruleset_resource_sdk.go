@@ -136,6 +136,42 @@ func (r *EventBreakerRulesetResourceModel) ToSharedEventBreakerRuleset(ctx conte
 		} else {
 			typeVar = nil
 		}
+		delimiterRegex := new(string)
+		if !r.Rules[rulesIndex].DelimiterRegex.IsUnknown() && !r.Rules[rulesIndex].DelimiterRegex.IsNull() {
+			*delimiterRegex = r.Rules[rulesIndex].DelimiterRegex.ValueString()
+		} else {
+			delimiterRegex = nil
+		}
+		fieldsLineRegex := new(string)
+		if !r.Rules[rulesIndex].FieldsLineRegex.IsUnknown() && !r.Rules[rulesIndex].FieldsLineRegex.IsNull() {
+			*fieldsLineRegex = r.Rules[rulesIndex].FieldsLineRegex.ValueString()
+		} else {
+			fieldsLineRegex = nil
+		}
+		headerLineRegex := new(string)
+		if !r.Rules[rulesIndex].HeaderLineRegex.IsUnknown() && !r.Rules[rulesIndex].HeaderLineRegex.IsNull() {
+			*headerLineRegex = r.Rules[rulesIndex].HeaderLineRegex.ValueString()
+		} else {
+			headerLineRegex = nil
+		}
+		delimiter := new(string)
+		if !r.Rules[rulesIndex].Delimiter.IsUnknown() && !r.Rules[rulesIndex].Delimiter.IsNull() {
+			*delimiter = r.Rules[rulesIndex].Delimiter.ValueString()
+		} else {
+			delimiter = nil
+		}
+		quoteChar := new(string)
+		if !r.Rules[rulesIndex].QuoteChar.IsUnknown() && !r.Rules[rulesIndex].QuoteChar.IsNull() {
+			*quoteChar = r.Rules[rulesIndex].QuoteChar.ValueString()
+		} else {
+			quoteChar = nil
+		}
+		escapeChar := new(string)
+		if !r.Rules[rulesIndex].EscapeChar.IsUnknown() && !r.Rules[rulesIndex].EscapeChar.IsNull() {
+			*escapeChar = r.Rules[rulesIndex].EscapeChar.ValueString()
+		} else {
+			escapeChar = nil
+		}
 		timestampAnchorRegex := new(string)
 		if !r.Rules[rulesIndex].TimestampAnchorRegex.IsUnknown() && !r.Rules[rulesIndex].TimestampAnchorRegex.IsNull() {
 			*timestampAnchorRegex = r.Rules[rulesIndex].TimestampAnchorRegex.ValueString()
@@ -233,6 +269,12 @@ func (r *EventBreakerRulesetResourceModel) ToSharedEventBreakerRuleset(ctx conte
 			Name:                 name,
 			Condition:            condition,
 			Type:                 typeVar,
+			DelimiterRegex:       delimiterRegex,
+			FieldsLineRegex:      fieldsLineRegex,
+			HeaderLineRegex:      headerLineRegex,
+			Delimiter:            delimiter,
+			QuoteChar:            quoteChar,
+			EscapeChar:           escapeChar,
 			TimestampAnchorRegex: timestampAnchorRegex,
 			EventBreakerRegex:    eventBreakerRegex,
 			Timestamp:            timestamp,

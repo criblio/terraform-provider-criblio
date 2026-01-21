@@ -23,7 +23,10 @@ resource "criblio_pack_breakers" "my_packbreakers" {
   rules = [
     {
       condition           = "/GET|POST|PUT|DELETE/.test(_raw)"
+      delimiter           = ","
+      delimiter_regex     = "/\\t/"
       disabled            = false
+      escape_char         = "\\"
       event_breaker_regex = "/\\n(?=\\S)/"
       fields = [
         {
@@ -31,9 +34,12 @@ resource "criblio_pack_breakers" "my_packbreakers" {
           value = "\"nginx_access\""
         }
       ]
+      fields_line_regex   = "/^#[Ff]ields[:]?\\s+(.*)/"
+      header_line_regex   = "/^#/"
       max_event_bytes     = 65536
       name                = "nginx-access"
       parser_enabled      = false
+      quote_char          = "\""
       should_use_data_raw = false
       timestamp = {
         format = "%d/%b/%Y:%H:%M:%S %z"
@@ -83,11 +89,17 @@ Required:
 Optional:
 
 - `condition` (String) JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events. Default: "true"
+- `delimiter` (String) Field delimiter used for CSV parsing when type is "csv". Default: ","
+- `delimiter_regex` (String) Regex used to split header fields when type is "header". Default: "/\\t/"
 - `disabled` (Boolean) Disable this breaker rule (enabled by default). Default: false
+- `escape_char` (String) Escape character used for CSV parsing when type is "csv". Default: "\\"
 - `event_breaker_regex` (String) The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"
 - `fields` (Attributes List) Key-value pairs to be added to each event (see [below for nested schema](#nestedatt--rules--fields))
+- `fields_line_regex` (String) Regex that identifies and captures the fields line when type is "header". Default: "/^#[Ff]ields[:]?\\s+(.*)/"
+- `header_line_regex` (String) Regex used to identify header lines when type is "header". Default: "/^#/"
 - `max_event_bytes` (Number) The maximum number of bytes in an event before it is flushed to the pipelines. Default: 51200
 - `parser_enabled` (Boolean) Default: false
+- `quote_char` (String) Quote character used for CSV parsing when type is "csv". Default: "\""
 - `should_use_data_raw` (Boolean) Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event. Default: false
 - `timestamp_anchor_regex` (String) The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/^/"
 - `timestamp_earliest` (String) The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time. Default: "-420weeks"

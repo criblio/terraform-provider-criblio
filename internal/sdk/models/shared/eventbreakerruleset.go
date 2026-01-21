@@ -171,6 +171,18 @@ type EventBreakerRulesetRule struct {
 	// JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events.
 	Condition *string           `default:"true" json:"condition"`
 	Type      *EventBreakerType `default:"regex" json:"type"`
+	// Regex used to split header fields when type is "header".
+	DelimiterRegex *string `default:"/\\t/" json:"delimiterRegex"`
+	// Regex that identifies and captures the fields line when type is "header".
+	FieldsLineRegex *string `default:"/^#[Ff]ields[:]?\\s+(.*)/" json:"fieldsLineRegex"`
+	// Regex used to identify header lines when type is "header".
+	HeaderLineRegex *string `default:"/^#/" json:"headerLineRegex"`
+	// Field delimiter used for CSV parsing when type is "csv".
+	Delimiter *string `default:"," json:"delimiter"`
+	// Quote character used for CSV parsing when type is "csv".
+	QuoteChar *string `default:"\"" json:"quoteChar"`
+	// Escape character used for CSV parsing when type is "csv".
+	EscapeChar *string `default:"\\" json:"escapeChar"`
 	// The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction.
 	TimestampAnchorRegex *string `default:"/^/" json:"timestampAnchorRegex"`
 	// The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction.
@@ -224,6 +236,48 @@ func (e *EventBreakerRulesetRule) GetType() *EventBreakerType {
 		return nil
 	}
 	return e.Type
+}
+
+func (e *EventBreakerRulesetRule) GetDelimiterRegex() *string {
+	if e == nil {
+		return nil
+	}
+	return e.DelimiterRegex
+}
+
+func (e *EventBreakerRulesetRule) GetFieldsLineRegex() *string {
+	if e == nil {
+		return nil
+	}
+	return e.FieldsLineRegex
+}
+
+func (e *EventBreakerRulesetRule) GetHeaderLineRegex() *string {
+	if e == nil {
+		return nil
+	}
+	return e.HeaderLineRegex
+}
+
+func (e *EventBreakerRulesetRule) GetDelimiter() *string {
+	if e == nil {
+		return nil
+	}
+	return e.Delimiter
+}
+
+func (e *EventBreakerRulesetRule) GetQuoteChar() *string {
+	if e == nil {
+		return nil
+	}
+	return e.QuoteChar
+}
+
+func (e *EventBreakerRulesetRule) GetEscapeChar() *string {
+	if e == nil {
+		return nil
+	}
+	return e.EscapeChar
 }
 
 func (e *EventBreakerRulesetRule) GetTimestampAnchorRegex() *string {
