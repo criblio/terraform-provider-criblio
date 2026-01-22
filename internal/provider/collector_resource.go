@@ -2027,7 +2027,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Optional: true,
 									},
 									"discovery": schema.SingleNestedAttribute{
-										Optional: true,
+										Required: true,
 										Attributes: map[string]schema.Attribute{
 											"discover_body": schema.StringAttribute{
 												Optional: true,
@@ -2037,7 +2037,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 											},
 											"discover_method": schema.StringAttribute{
 												Optional:    true,
-												Description: `must be one of ["get", "post", "post_with_body", "other"]`,
+												Description: `protocol used for http discovery, required for 'http' type. must be one of ["get", "post", "post_with_body", "other"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"get",
@@ -2067,14 +2067,20 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												},
 											},
 											"discover_type": schema.StringAttribute{
-												Optional:    true,
-												Description: `must be "http"`,
+												Required:    true,
+												Description: `must be one of ["http", "json", "list", "none"]`,
 												Validators: []validator.String{
-													stringvalidator.OneOf("http"),
+													stringvalidator.OneOf(
+														"http",
+														"json",
+														"list",
+														"none",
+													),
 												},
 											},
 											"discover_url": schema.StringAttribute{
-												Optional: true,
+												Optional:    true,
+												Description: `URL to hit for rest type collectors, required for 'http' discoverType`,
 											},
 											"enable_discover_code": schema.BoolAttribute{
 												Computed:    true,
@@ -2088,6 +2094,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 											"item_list": schema.ListAttribute{
 												Optional:    true,
 												ElementType: types.StringType,
+												Description: `comma separated list of strings to return from discovery section required for 'list' discoverType`,
+											},
+											"manual_discover_result": schema.StringAttribute{
+												Optional:    true,
+												Description: `json payload to return manually, required for 'json' discoverType`,
 											},
 											"pagination": schema.SingleNestedAttribute{
 												Optional: true,

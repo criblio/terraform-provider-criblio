@@ -1100,181 +1100,180 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			for safeHeadersIndex := range r.InputCollectorRest.Collector.Conf.SafeHeaders {
 				safeHeaders = append(safeHeaders, r.InputCollectorRest.Collector.Conf.SafeHeaders[safeHeadersIndex].ValueString())
 			}
-			var discovery *shared.DiscoveryConfiguration
-			if r.InputCollectorRest.Collector.Conf.Discovery != nil {
-				discoverType := new(shared.DiscoverType)
-				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverType.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverType.IsNull() {
-					*discoverType = shared.DiscoverType(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverType.ValueString())
+			discoverType := shared.DiscoverType(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverType.ValueString())
+			discoverMethod := new(shared.DiscoverMethod)
+			if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod.IsNull() {
+				*discoverMethod = shared.DiscoverMethod(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod.ValueString())
+			} else {
+				discoverMethod = nil
+			}
+			var pagination *shared.PaginationConfig
+			if r.InputCollectorRest.Collector.Conf.Discovery.Pagination != nil {
+				typeVar4 := new(shared.PaginationType)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.IsNull() {
+					*typeVar4 = shared.PaginationType(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.ValueString())
 				} else {
-					discoverType = nil
+					typeVar4 = nil
 				}
-				discoverMethod := new(shared.DiscoverMethod)
-				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod.IsNull() {
-					*discoverMethod = shared.DiscoverMethod(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod.ValueString())
+				offsetField := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField.IsNull() {
+					*offsetField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField.ValueString()
 				} else {
-					discoverMethod = nil
+					offsetField = nil
 				}
-				var pagination *shared.PaginationConfig
-				if r.InputCollectorRest.Collector.Conf.Discovery.Pagination != nil {
-					typeVar4 := new(shared.PaginationType)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.IsNull() {
-						*typeVar4 = shared.PaginationType(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.ValueString())
-					} else {
-						typeVar4 = nil
-					}
-					offsetField := new(string)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField.IsNull() {
-						*offsetField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField.ValueString()
-					} else {
-						offsetField = nil
-					}
-					limitField := new(string)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField.IsNull() {
-						*limitField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField.ValueString()
-					} else {
-						limitField = nil
-					}
-					limit := new(int64)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit.IsNull() {
-						*limit = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit.ValueInt64()
-					} else {
-						limit = nil
-					}
-					maxPages := new(int64)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages.IsNull() {
-						*maxPages = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages.ValueInt64()
-					} else {
-						maxPages = nil
-					}
-					zeroIndexed := new(bool)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed.IsNull() {
-						*zeroIndexed = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed.ValueBool()
-					} else {
-						zeroIndexed = nil
-					}
-					pageField := new(string)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField.IsNull() {
-						*pageField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField.ValueString()
-					} else {
-						pageField = nil
-					}
-					sizeField := new(string)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField.IsNull() {
-						*sizeField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField.ValueString()
-					} else {
-						sizeField = nil
-					}
-					size := new(int64)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size.IsNull() {
-						*size = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size.ValueInt64()
-					} else {
-						size = nil
-					}
-					attribute := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute))
-					for attributeIndex := range r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute {
-						attribute = append(attribute, r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute[attributeIndex].ValueString())
-					}
-					lastPageExpr := new(string)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.IsNull() {
-						*lastPageExpr = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.ValueString()
-					} else {
-						lastPageExpr = nil
-					}
-					offset := new(int64)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset.IsNull() {
-						*offset = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset.ValueInt64()
-					} else {
-						offset = nil
-					}
-					totalRecordField := new(string)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField.IsNull() {
-						*totalRecordField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField.ValueString()
-					} else {
-						totalRecordField = nil
-					}
-					pagination = &shared.PaginationConfig{
-						Type:             typeVar4,
-						OffsetField:      offsetField,
-						LimitField:       limitField,
-						Limit:            limit,
-						MaxPages:         maxPages,
-						ZeroIndexed:      zeroIndexed,
-						PageField:        pageField,
-						SizeField:        sizeField,
-						Size:             size,
-						Attribute:        attribute,
-						LastPageExpr:     lastPageExpr,
-						Offset:           offset,
-						TotalRecordField: totalRecordField,
-					}
-				}
-				enableDiscoverCode := new(bool)
-				if !r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode.IsNull() {
-					*enableDiscoverCode = r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode.ValueBool()
+				limitField := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField.IsNull() {
+					*limitField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField.ValueString()
 				} else {
-					enableDiscoverCode = nil
+					limitField = nil
 				}
-				itemList := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.ItemList))
-				for itemListIndex := range r.InputCollectorRest.Collector.Conf.Discovery.ItemList {
-					itemList = append(itemList, r.InputCollectorRest.Collector.Conf.Discovery.ItemList[itemListIndex].ValueString())
-				}
-				discoverURL := new(string)
-				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.IsNull() {
-					*discoverURL = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.ValueString()
+				limit := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit.IsNull() {
+					*limit = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit.ValueInt64()
 				} else {
-					discoverURL = nil
+					limit = nil
 				}
-				discoverRequestHeaders := make([]shared.DiscoverRequestHeader, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders))
-				for discoverRequestHeadersIndex := range r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders {
-					name6 := new(string)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Name.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Name.IsNull() {
-						*name6 = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Name.ValueString()
-					} else {
-						name6 = nil
-					}
-					value6 := new(string)
-					if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Value.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Value.IsNull() {
-						*value6 = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Value.ValueString()
-					} else {
-						value6 = nil
-					}
-					discoverRequestHeaders = append(discoverRequestHeaders, shared.DiscoverRequestHeader{
-						Name:  name6,
-						Value: value6,
-					})
-				}
-				discoverRequestParams := make([]shared.DiscoverRequestParam, len(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams))
-				discoverBody := new(string)
-				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.IsNull() {
-					*discoverBody = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.ValueString()
+				maxPages := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages.IsNull() {
+					*maxPages = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages.ValueInt64()
 				} else {
-					discoverBody = nil
+					maxPages = nil
 				}
-				formatResultCode := new(string)
-				if !r.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode.IsNull() {
-					*formatResultCode = r.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode.ValueString()
+				zeroIndexed := new(bool)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed.IsNull() {
+					*zeroIndexed = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed.ValueBool()
 				} else {
-					formatResultCode = nil
+					zeroIndexed = nil
 				}
-				discoverDataField := new(string)
-				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField.IsNull() {
-					*discoverDataField = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField.ValueString()
+				pageField := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField.IsNull() {
+					*pageField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField.ValueString()
 				} else {
-					discoverDataField = nil
+					pageField = nil
 				}
-				discovery = &shared.DiscoveryConfiguration{
-					DiscoverType:           discoverType,
-					DiscoverMethod:         discoverMethod,
-					Pagination:             pagination,
-					EnableDiscoverCode:     enableDiscoverCode,
-					ItemList:               itemList,
-					DiscoverURL:            discoverURL,
-					DiscoverRequestHeaders: discoverRequestHeaders,
-					DiscoverRequestParams:  discoverRequestParams,
-					DiscoverBody:           discoverBody,
-					FormatResultCode:       formatResultCode,
-					DiscoverDataField:      discoverDataField,
+				sizeField := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField.IsNull() {
+					*sizeField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField.ValueString()
+				} else {
+					sizeField = nil
 				}
+				size := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size.IsNull() {
+					*size = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size.ValueInt64()
+				} else {
+					size = nil
+				}
+				attribute := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute))
+				for attributeIndex := range r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute {
+					attribute = append(attribute, r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute[attributeIndex].ValueString())
+				}
+				lastPageExpr := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.IsNull() {
+					*lastPageExpr = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr.ValueString()
+				} else {
+					lastPageExpr = nil
+				}
+				offset := new(int64)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset.IsNull() {
+					*offset = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset.ValueInt64()
+				} else {
+					offset = nil
+				}
+				totalRecordField := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField.IsNull() {
+					*totalRecordField = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField.ValueString()
+				} else {
+					totalRecordField = nil
+				}
+				pagination = &shared.PaginationConfig{
+					Type:             typeVar4,
+					OffsetField:      offsetField,
+					LimitField:       limitField,
+					Limit:            limit,
+					MaxPages:         maxPages,
+					ZeroIndexed:      zeroIndexed,
+					PageField:        pageField,
+					SizeField:        sizeField,
+					Size:             size,
+					Attribute:        attribute,
+					LastPageExpr:     lastPageExpr,
+					Offset:           offset,
+					TotalRecordField: totalRecordField,
+				}
+			}
+			enableDiscoverCode := new(bool)
+			if !r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode.IsNull() {
+				*enableDiscoverCode = r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode.ValueBool()
+			} else {
+				enableDiscoverCode = nil
+			}
+			itemList := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.ItemList))
+			for itemListIndex := range r.InputCollectorRest.Collector.Conf.Discovery.ItemList {
+				itemList = append(itemList, r.InputCollectorRest.Collector.Conf.Discovery.ItemList[itemListIndex].ValueString())
+			}
+			discoverURL := new(string)
+			if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.IsNull() {
+				*discoverURL = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL.ValueString()
+			} else {
+				discoverURL = nil
+			}
+			discoverRequestHeaders := make([]shared.DiscoverRequestHeader, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders))
+			for discoverRequestHeadersIndex := range r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders {
+				name6 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Name.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Name.IsNull() {
+					*name6 = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Name.ValueString()
+				} else {
+					name6 = nil
+				}
+				value6 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Value.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Value.IsNull() {
+					*value6 = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders[discoverRequestHeadersIndex].Value.ValueString()
+				} else {
+					value6 = nil
+				}
+				discoverRequestHeaders = append(discoverRequestHeaders, shared.DiscoverRequestHeader{
+					Name:  name6,
+					Value: value6,
+				})
+			}
+			manualDiscoverResult := new(string)
+			if !r.InputCollectorRest.Collector.Conf.Discovery.ManualDiscoverResult.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.ManualDiscoverResult.IsNull() {
+				*manualDiscoverResult = r.InputCollectorRest.Collector.Conf.Discovery.ManualDiscoverResult.ValueString()
+			} else {
+				manualDiscoverResult = nil
+			}
+			discoverRequestParams := make([]shared.DiscoverRequestParam, len(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams))
+			discoverBody := new(string)
+			if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.IsNull() {
+				*discoverBody = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.ValueString()
+			} else {
+				discoverBody = nil
+			}
+			formatResultCode := new(string)
+			if !r.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode.IsNull() {
+				*formatResultCode = r.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode.ValueString()
+			} else {
+				formatResultCode = nil
+			}
+			discoverDataField := new(string)
+			if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField.IsNull() {
+				*discoverDataField = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField.ValueString()
+			} else {
+				discoverDataField = nil
+			}
+			discovery := shared.DiscoveryConfiguration{
+				DiscoverType:           discoverType,
+				DiscoverMethod:         discoverMethod,
+				Pagination:             pagination,
+				EnableDiscoverCode:     enableDiscoverCode,
+				ItemList:               itemList,
+				DiscoverURL:            discoverURL,
+				DiscoverRequestHeaders: discoverRequestHeaders,
+				ManualDiscoverResult:   manualDiscoverResult,
+				DiscoverRequestParams:  discoverRequestParams,
+				DiscoverBody:           discoverBody,
+				FormatResultCode:       formatResultCode,
+				DiscoverDataField:      discoverDataField,
 			}
 			var pagination1 *shared.PaginationConfig
 			if r.InputCollectorRest.Collector.Conf.Pagination != nil {

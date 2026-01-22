@@ -22,7 +22,7 @@ type InputCollectorRestConf struct {
 	CredentialsSecret     types.String             `tfsdk:"credentials_secret"`
 	DecodeURL             types.Bool               `tfsdk:"decode_url"`
 	DisableTimeFilter     types.Bool               `tfsdk:"disable_time_filter"`
-	Discovery             *DiscoveryConfiguration  `tfsdk:"discovery"`
+	Discovery             DiscoveryConfiguration   `tfsdk:"discovery"`
 	LoginBody             types.String             `tfsdk:"login_body"`
 	LoginURL              types.String             `tfsdk:"login_url"`
 	Pagination            *PaginationConfig        `tfsdk:"pagination"`

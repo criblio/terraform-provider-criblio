@@ -17,5 +17,6 @@ type DiscoveryConfiguration struct {
 	EnableDiscoverCode     types.Bool              `tfsdk:"enable_discover_code"`
 	FormatResultCode       types.String            `tfsdk:"format_result_code"`
 	ItemList               []types.String          `tfsdk:"item_list"`
+	ManualDiscoverResult   types.String            `tfsdk:"manual_discover_result"`
 	Pagination             *PaginationConfig       `tfsdk:"pagination"`
 }
