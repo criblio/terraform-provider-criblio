@@ -12704,7 +12704,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					},
 					"loki_url": schema.StringAttribute{
 						Optional:    true,
-						Description: `The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net`,
+						Description: `The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net. LokiUrl, PrometheusUrl, or both are required.`,
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://`), "must match pattern "+regexp.MustCompile(`^https?://`).String()),
 						},
@@ -12872,7 +12872,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 					},
 					"prometheus_url": schema.StringAttribute{
 						Optional:    true,
-						Description: `The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push`,
+						Description: `The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push. LokiUrl, PrometheusUrl, or both are required.`,
 						Validators: []validator.String{
 							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://`), "must match pattern "+regexp.MustCompile(`^https?://`).String()),
 						},
