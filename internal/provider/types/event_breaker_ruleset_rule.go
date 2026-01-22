@@ -8,12 +8,18 @@ import (
 
 type EventBreakerRulesetRule struct {
 	Condition            types.String                       `tfsdk:"condition"`
+	Delimiter            types.String                       `tfsdk:"delimiter"`
+	DelimiterRegex       types.String                       `tfsdk:"delimiter_regex"`
 	Disabled             types.Bool                         `tfsdk:"disabled"`
+	EscapeChar           types.String                       `tfsdk:"escape_char"`
 	EventBreakerRegex    types.String                       `tfsdk:"event_breaker_regex"`
 	Fields               []Field                            `tfsdk:"fields"`
+	FieldsLineRegex      types.String                       `tfsdk:"fields_line_regex"`
+	HeaderLineRegex      types.String                       `tfsdk:"header_line_regex"`
 	MaxEventBytes        types.Float64                      `tfsdk:"max_event_bytes"`
 	Name                 types.String                       `tfsdk:"name"`
 	ParserEnabled        types.Bool                         `tfsdk:"parser_enabled"`
+	QuoteChar            types.String                       `tfsdk:"quote_char"`
 	ShouldUseDataRaw     types.Bool                         `tfsdk:"should_use_data_raw"`
 	Timestamp            EventBreakerRulesetTimestampFormat `tfsdk:"timestamp"`
 	TimestampAnchorRegex types.String                       `tfsdk:"timestamp_anchor_regex"`

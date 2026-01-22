@@ -101,11 +101,29 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 							Default:     stringdefault.StaticString(`true`),
 							Description: `JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events. Default: "true"`,
 						},
+						"delimiter": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`,`),
+							Description: `Field delimiter used for CSV parsing when type is "csv". Default: ","`,
+						},
+						"delimiter_regex": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`/\t/`),
+							Description: `Regex used to split header fields when type is "header". Default: "/\\t/"`,
+						},
 						"disabled": schema.BoolAttribute{
 							Computed:    true,
 							Optional:    true,
 							Default:     booldefault.StaticBool(false),
 							Description: `Disable this breaker rule (enabled by default). Default: false`,
+						},
+						"escape_char": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`\`),
+							Description: `Escape character used for CSV parsing when type is "csv". Default: "\\"`,
 						},
 						"event_breaker_regex": schema.StringAttribute{
 							Computed:    true,
@@ -128,6 +146,18 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 							},
 							Description: `Key-value pairs to be added to each event`,
 						},
+						"fields_line_regex": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`/^#[Ff]ields[:]?\s+(.*)/`),
+							Description: `Regex that identifies and captures the fields line when type is "header". Default: "/^#[Ff]ields[:]?\\s+(.*)/"`,
+						},
+						"header_line_regex": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`/^#/`),
+							Description: `Regex used to identify header lines when type is "header". Default: "/^#/"`,
+						},
 						"max_event_bytes": schema.Float64Attribute{
 							Computed:    true,
 							Optional:    true,
@@ -145,6 +175,12 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 							Optional:    true,
 							Default:     booldefault.StaticBool(false),
 							Description: `Default: false`,
+						},
+						"quote_char": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`"`),
+							Description: `Quote character used for CSV parsing when type is "csv". Default: "\""`,
 						},
 						"should_use_data_raw": schema.BoolAttribute{
 							Computed:    true,
