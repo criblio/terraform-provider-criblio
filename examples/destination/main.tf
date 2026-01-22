@@ -251,6 +251,49 @@ resource "criblio_destination" "my_sentinel_one_ai_siem_destination" {
   }
 }
 
+resource "criblio_destination" "grafana_cloud" {
+  group_id = "default"
+  id       = "CriblCloud"
+  output_grafana_cloud = {
+    id                          = "CriblCloud"
+    type                        = "grafana_cloud"
+    concurrency                 = 1
+    failed_request_logging_mode = "none"
+    flush_period_sec            = 15
+    loki_auth = {
+      auth_type = "basic"
+      password  = "mySecureString"
+      username  = "001"
+    }
+    loki_url            = "https://foo.com"
+    max_payload_events  = 0
+    max_payload_size_kb = 4096
+    message_format      = "protobuf"
+    metric_rename_expr  = "name.replace(/[^a-zA-Z0-9_]/g, '_')"
+    on_backpressure     = "drop"
+    prometheus_auth = {
+      auth_type = "basic"
+      password  = "mySecureString"
+      username  = "001"
+    }
+    prometheus_url                    = "https://bar.com"
+    reject_unauthorized               = true
+    response_honor_retry_after_header = true
+    status = {
+      error = {
+        message = "There is an issue with the underlying destinations. Check cribl.log for more info."
+      }
+      health    = "Red"
+      timestamp = 1768418309923
+    }
+    timeout_retry_settings = {
+      timeout_retry = false
+    }
+    timeout_sec         = 30
+    use_round_robin_dns = false
+  }
+}
+
 /*
 data "criblio_destinations" "my_destinations" {
   group_id = "default"

@@ -1075,6 +1075,14 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var outputGrafanaCloud OutputGrafanaCloud = OutputGrafanaCloud{}
+	if err := utils.UnmarshalJSON(data, &outputGrafanaCloud, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  OutputTypeOutputGrafanaCloud,
+			Value: &outputGrafanaCloud,
+		})
+	}
+
 	var outputLoki OutputLoki = OutputLoki{}
 	if err := utils.UnmarshalJSON(data, &outputLoki, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1291,14 +1299,6 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		})
 	}
 
-	var outputGrafanaCloud OutputGrafanaCloud = OutputGrafanaCloud{}
-	if err := utils.UnmarshalJSON(data, &outputGrafanaCloud, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  OutputTypeOutputGrafanaCloud,
-			Value: &outputGrafanaCloud,
-		})
-	}
-
 	var outputHumioHec OutputHumioHec = OutputHumioHec{}
 	if err := utils.UnmarshalJSON(data, &outputHumioHec, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1442,6 +1442,9 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 	case OutputTypeOutputDatadog:
 		u.OutputDatadog = best.Value.(*OutputDatadog)
 		return nil
+	case OutputTypeOutputGrafanaCloud:
+		u.OutputGrafanaCloud = best.Value.(*OutputGrafanaCloud)
+		return nil
 	case OutputTypeOutputLoki:
 		u.OutputLoki = best.Value.(*OutputLoki)
 		return nil
@@ -1522,9 +1525,6 @@ func (u *Output) UnmarshalJSON(data []byte) error {
 		return nil
 	case OutputTypeOutputSentinelOneAiSiem:
 		u.OutputSentinelOneAiSiem = best.Value.(*OutputSentinelOneAiSiem)
-		return nil
-	case OutputTypeOutputGrafanaCloud:
-		u.OutputGrafanaCloud = best.Value.(*OutputGrafanaCloud)
 		return nil
 	case OutputTypeOutputHumioHec:
 		u.OutputHumioHec = best.Value.(*OutputHumioHec)

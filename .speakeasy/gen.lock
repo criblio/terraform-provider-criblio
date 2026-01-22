@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 1c2f66ea5a5fdfbaae22459911b04999
+  docChecksum: 6394c96164db55a2d22817980816b2b6
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.92
-  configChecksum: 4d2852bb810bae04b8db6e87f05065ba
+  releaseVersion: 1.20.93
+  configChecksum: 1d4bda67092fff1c40c96fab86b99892
   published: true
 features:
   terraform:
@@ -1201,22 +1201,13 @@ generatedFiles:
   - internal/provider/types/output_google_pubsub.go
   - internal/provider/types/output_google_pubsub_pq_controls.go
   - internal/provider/types/output_grafana_cloud.go
-  - internal/provider/types/output_grafana_cloud_extra_http_header1.go
-  - internal/provider/types/output_grafana_cloud_extra_http_header2.go
-  - internal/provider/types/output_grafana_cloud_grafana_cloud1.go
-  - internal/provider/types/output_grafana_cloud_grafana_cloud2.go
-  - internal/provider/types/output_grafana_cloud_label1.go
-  - internal/provider/types/output_grafana_cloud_label2.go
-  - internal/provider/types/output_grafana_cloud_loki_auth1.go
-  - internal/provider/types/output_grafana_cloud_loki_auth2.go
-  - internal/provider/types/output_grafana_cloud_pq_controls1.go
-  - internal/provider/types/output_grafana_cloud_pq_controls2.go
-  - internal/provider/types/output_grafana_cloud_prometheus_auth1.go
-  - internal/provider/types/output_grafana_cloud_prometheus_auth2.go
-  - internal/provider/types/output_grafana_cloud_response_retry_setting1.go
-  - internal/provider/types/output_grafana_cloud_response_retry_setting2.go
-  - internal/provider/types/output_grafana_cloud_timeout_retry_settings1.go
-  - internal/provider/types/output_grafana_cloud_timeout_retry_settings2.go
+  - internal/provider/types/output_grafana_cloud_extra_http_header.go
+  - internal/provider/types/output_grafana_cloud_label.go
+  - internal/provider/types/output_grafana_cloud_loki_auth.go
+  - internal/provider/types/output_grafana_cloud_pq_controls.go
+  - internal/provider/types/output_grafana_cloud_prometheus_auth.go
+  - internal/provider/types/output_grafana_cloud_response_retry_setting.go
+  - internal/provider/types/output_grafana_cloud_timeout_retry_settings.go
   - internal/provider/types/output_graphite.go
   - internal/provider/types/output_graphite_pq_controls.go
   - internal/provider/types/output_honeycomb.go

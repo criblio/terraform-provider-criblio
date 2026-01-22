@@ -1883,92 +1883,90 @@ resource "criblio_pack_destination" "my_packdestination" {
     type       = "google_pubsub"
   }
   output_grafana_cloud = {
-    output_grafana_cloud_grafana_cloud1 = {
-      compress    = true
-      concurrency = 2
-      description = "Send logs and metrics to Grafana Cloud Loki and Prometheus"
-      environment = "main"
-      extra_http_headers = [
-        {
-          name  = "X-Request-ID"
-          value = "123e4567-e89b-12d3-a456-426614174000"
-        }
-      ]
-      failed_request_logging_mode = "payloadAndHeaders"
-      flush_period_sec            = 10
-      id                          = "grafana_cloud_logs_prod"
-      labels = [
-        {
-          name  = "host"
-          value = "web-01"
-        }
-      ]
-      loki_auth = {
-        auth_type          = "basic"
-        credentials_secret = "grafana_loki_credentials"
-        password           = "glc_efgh5678"
-        text_secret        = "grafana_loki_token"
-        token              = "12345:glc_efgh5678"
-        username           = 12345
+    compress    = true
+    concurrency = 2
+    description = "Send logs and metrics to Grafana Cloud Loki and Prometheus"
+    environment = "main"
+    extra_http_headers = [
+      {
+        name  = "X-Request-ID"
+        value = "123e4567-e89b-12d3-a456-426614174000"
       }
-      loki_url            = "https://logs-prod-us-central1.grafana.net"
-      max_payload_events  = 1000
-      max_payload_size_kb = 2048
-      message             = "_raw"
-      message_format      = "protobuf"
-      metric_rename_expr  = "name.replace(/[^a-zA-Z0-9_]/g, '_')"
-      on_backpressure     = "block"
-      pipeline            = "main"
-      pq_compress         = "gzip"
-      pq_controls = {
-        # ...
+    ]
+    failed_request_logging_mode = "payloadAndHeaders"
+    flush_period_sec            = 10
+    id                          = "grafana_cloud_logs_prod"
+    labels = [
+      {
+        name  = "host"
+        value = "web-01"
       }
-      pq_max_file_size   = "100 MB"
-      pq_max_size        = "10GB"
-      pq_mode            = "backpressure"
-      pq_on_backpressure = "block"
-      pq_path            = "/opt/cribl/state/queues"
-      prometheus_auth = {
-        auth_type          = "basic"
-        credentials_secret = "grafana_prom_credentials"
-        password           = "glc_abcd1234"
-        text_secret        = "grafana_prom_token"
-        token              = "12345:glc_abcd1234"
-        username           = 12345
-      }
-      prometheus_url                    = "https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push"
-      reject_unauthorized               = true
-      response_honor_retry_after_header = true
-      response_retry_settings = [
-        {
-          backoff_rate    = 2
-          http_status     = 429
-          initial_backoff = 1000
-          max_backoff     = 30000
-        }
-      ]
-      safe_headers = [
-        "content-type",
-        "x-request-id",
-      ]
-      streamtags = [
-        "prod",
-        "grafana",
-      ]
-      system_fields = [
-        "cribl_host",
-        "cribl_wp",
-      ]
-      timeout_retry_settings = {
+    ]
+    loki_auth = {
+      auth_type          = "basic"
+      credentials_secret = "grafana_loki_credentials"
+      password           = "glc_efgh5678"
+      text_secret        = "grafana_loki_token"
+      token              = "12345:glc_efgh5678"
+      username           = 12345
+    }
+    loki_url            = "https://logs-prod-us-central1.grafana.net"
+    max_payload_events  = 1000
+    max_payload_size_kb = 2048
+    message             = "_raw"
+    message_format      = "protobuf"
+    metric_rename_expr  = "name.replace(/[^a-zA-Z0-9_]/g, '_')"
+    on_backpressure     = "block"
+    pipeline            = "main"
+    pq_compress         = "gzip"
+    pq_controls = {
+      # ...
+    }
+    pq_max_file_size   = "100 MB"
+    pq_max_size        = "10GB"
+    pq_mode            = "backpressure"
+    pq_on_backpressure = "block"
+    pq_path            = "/opt/cribl/state/queues"
+    prometheus_auth = {
+      auth_type          = "basic"
+      credentials_secret = "grafana_prom_credentials"
+      password           = "glc_abcd1234"
+      text_secret        = "grafana_prom_token"
+      token              = "12345:glc_abcd1234"
+      username           = 12345
+    }
+    prometheus_url                    = "https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push"
+    reject_unauthorized               = true
+    response_honor_retry_after_header = true
+    response_retry_settings = [
+      {
         backoff_rate    = 2
+        http_status     = 429
         initial_backoff = 1000
         max_backoff     = 30000
-        timeout_retry   = true
       }
-      timeout_sec         = 30
-      type                = "grafana_cloud"
-      use_round_robin_dns = true
+    ]
+    safe_headers = [
+      "content-type",
+      "x-request-id",
+    ]
+    streamtags = [
+      "prod",
+      "grafana",
+    ]
+    system_fields = [
+      "cribl_host",
+      "cribl_wp",
+    ]
+    timeout_retry_settings = {
+      backoff_rate    = 2
+      initial_backoff = 1000
+      max_backoff     = 30000
+      timeout_retry   = true
     }
+    timeout_sec         = 30
+    type                = "grafana_cloud"
+    use_round_robin_dns = true
   }
   output_graphite = {
     connection_timeout     = 10000

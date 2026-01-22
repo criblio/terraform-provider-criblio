@@ -47714,11 +47714,6 @@ components:
           title: ""
           example: {}
       type: object
-      anyOf:
-        - required:
-            - lokiUrl
-        - required:
-            - prometheusUrl
     OutputLoki:
       required:
         - url
