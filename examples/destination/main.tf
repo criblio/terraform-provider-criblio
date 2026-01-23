@@ -265,7 +265,6 @@ resource "criblio_destination" "grafana_cloud" {
       password  = "mySecureString"
       username  = "001"
     }
-    loki_url            = "https://foo.com"
     max_payload_events  = 0
     max_payload_size_kb = 4096
     message_format      = "protobuf"
@@ -277,6 +276,7 @@ resource "criblio_destination" "grafana_cloud" {
       username  = "001"
     }
     prometheus_url                    = "https://bar.com"
+    loki_url                          = "https://foo.com"
     reject_unauthorized               = true
     response_honor_retry_after_header = true
     status = {

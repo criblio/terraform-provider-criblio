@@ -72,6 +72,16 @@ func TestDestination(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_destination.my_sentinel_one_ai_siem_destination", "output_sentinel_one_ai_siem.description", "Send events to SentinelOne AI SIEM"),
 						resource.TestCheckResourceAttr("criblio_destination.my_sentinel_one_ai_siem_destination", "output_sentinel_one_ai_siem.base_url", "https://api.sentinelone.com"),
 						resource.TestCheckResourceAttr("criblio_destination.my_sentinel_one_ai_siem_destination", "output_sentinel_one_ai_siem.on_backpressure", "block"),
+
+						// Grafana Destination
+						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "id", "CriblCloud"),
+						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "output_grafana_cloud.id", "CriblCloud"),
+						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "output_grafana_cloud.type", "grafana_cloud"),
+						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "output_grafana_cloud.prometheus_url", "https://bar.com"),
+						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "output_grafana_cloud.loki_url", "https://foo.com"),
+						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "output_grafana_cloud.timeout_sec", "30"),
+
 					),
 				},
 			},

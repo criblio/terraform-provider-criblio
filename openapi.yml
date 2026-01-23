@@ -13481,12 +13481,12 @@ components:
           type: string
           title: Description
           example: Grafana listener supporting Prom remote write and Loki logs
-      type: object
       anyOf:
         - required:
             - prometheusAPI
         - required:
             - lokiAPI
+      type: object
     InputLoki:
       required:
         - host
@@ -47260,7 +47260,7 @@ components:
           type: string
           title: Loki URL
           description: The endpoint to send logs to, such as
-            https://logs-prod-us-central1.grafana.net. 
+            https://logs-prod-us-central1.grafana.net.
             LokiUrl, PrometheusUrl, or both are required.
           pattern: ^https?://
           example: https://logs-prod-us-central1.grafana.net
@@ -47268,8 +47268,8 @@ components:
           type: string
           title: Prometheus URL
           description: The remote_write endpoint to send Prometheus metrics to, such as
-            https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push. 
-            LokiUrl, PrometheusUrl, or both are required. 
+            https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push.
+            LokiUrl, PrometheusUrl, or both are required.
           pattern: ^https?://
           example: https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
         message:
