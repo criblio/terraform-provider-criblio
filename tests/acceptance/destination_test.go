@@ -81,7 +81,6 @@ func TestDestination(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "output_grafana_cloud.prometheus_url", "https://bar.com"),
 						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "output_grafana_cloud.loki_url", "https://foo.com"),
 						resource.TestCheckResourceAttr("criblio_destination.grafana_cloud", "output_grafana_cloud.timeout_sec", "30"),
-
 					),
 				},
 			},
