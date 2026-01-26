@@ -6,15 +6,59 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
     async_func_timeout = 9066
     description        = "my_description"
     functions = [
+      {
+        id     = "serde"
+        filter = "true"
+        conf = jsonencode({
+          mode      = "extract"
+          type      = "json"
+          src_field = "_raw"
+        })
+      },
+      {
+        id     = "eval"
+        filter = "true"
+        conf = jsonencode({
+          add = [
+            {
+              disabled = false
+              name     = "_value"
+              value    = "1"
+            }
+          ]
+          remove = [
+            "host",
+            "_raw",
+            "source",
+            "cribl_breaker",
+          ]
+        })
+      },
+      {
+        id     = "publish_metrics"
+        filter = "true"
+        conf = jsonencode({
+          overwrite = false
+          dimensions = [
+            "!_*",
+            "*",
+          ],
+          removeDimensions = ["cribl_pipe"]
+          fields = [
+            {
+              metricType   = "gauge"
+              inFieldName  = "_value"
+              outFieldExpr = "saas_env"
+            }
+          ]
+        })
+      },
     ]
     groups = {
-      key = {
-        description = "my_description"
-        disabled    = true
-        name        = "my_name"
+      default = {
+        name = "default"
       }
     }
-    output = "my_output"
     streamtags = [
       "tags"
     ]
