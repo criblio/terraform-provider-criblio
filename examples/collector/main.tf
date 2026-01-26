@@ -100,6 +100,10 @@ resource "criblio_collector" "rest_api_collector" {
           scope         = ""
         }
 
+        discovery = {
+          discover_type = "none"
+        }
+
         # Additional REST configuration
         authentication = "basic"
         body           = ""
@@ -178,6 +182,142 @@ resource "criblio_collector" "rest_api_collector" {
     ]
     ttl             = "2h"
     worker_affinity = false
+  }
+}
+
+resource "criblio_collector" "rest_api_collector_discovery_http" {
+  group_id = "default"
+  id       = "rest-api-demo-collector_discovery_http"
+  input_collector_rest = {
+    collector = {
+      type = "rest"
+      conf = {
+        # Mandatory REST collector parameters
+        base_url     = "https://api.demo.example.com"
+        auth_type    = "manual"
+        bearer_token = ""
+        oauth_config = {
+          client_id     = ""
+          client_secret = ""
+          token_url     = ""
+          scope         = ""
+        }
+        discovery = {
+          discover_type   = "http"
+          discover_method = "get"
+          discover_url    = "foobar.com"
+        }
+        # Additional REST configuration
+        authentication = "basic"
+        body           = ""
+        headers = {
+          "Content-Type" = "application/json"
+          "Accept"       = "application/json"
+        }
+        method              = "GET"
+        password            = "demo-password"
+        path                = "/api/v1/logs"
+        reject_unauthorized = false
+        timeout             = 30
+        url                 = "https://api.demo.example.com/api/v1/logs"
+        username            = "demo-user"
+        collect_method      = "get"
+        collect_url         = "api.demo.example.com/api/v1/logs"
+      }
+    }
+    environment             = "demo"
+    id                      = "rest-api-demo-collector_discovery_http"
+    ignore_group_jobs_limit = false
+  }
+}
+
+resource "criblio_collector" "rest_api_collector_discovery_json" {
+  group_id = "default"
+  id       = "rest-api-demo-collector_discovery_json"
+  input_collector_rest = {
+    collector = {
+      type = "rest"
+      conf = {
+        # Mandatory REST collector parameters
+        base_url     = "https://api.demo.example.com"
+        auth_type    = "manual"
+        bearer_token = ""
+        oauth_config = {
+          client_id     = ""
+          client_secret = ""
+          token_url     = ""
+          scope         = ""
+        }
+        discovery = {
+          discover_type          = "json"
+          manual_discover_result = "{\"result\":\"true\"}"
+        }
+        # Additional REST configuration
+        authentication = "basic"
+        body           = ""
+        headers = {
+          "Content-Type" = "application/json"
+          "Accept"       = "application/json"
+        }
+        method              = "GET"
+        password            = "demo-password"
+        path                = "/api/v1/logs"
+        reject_unauthorized = false
+        timeout             = 30
+        url                 = "https://api.demo.example.com/api/v1/logs"
+        username            = "demo-user"
+        collect_method      = "get"
+        collect_url         = "api.demo.example.com/api/v1/logs"
+      }
+    }
+    environment             = "demo"
+    id                      = "rest-api-demo-collector_discovery_json"
+    ignore_group_jobs_limit = false
+  }
+}
+
+resource "criblio_collector" "rest_api_collector_discovery_list" {
+  group_id = "default"
+  id       = "rest-api-demo-collector_discovery_list"
+  input_collector_rest = {
+    collector = {
+      type = "rest"
+      conf = {
+        # Mandatory REST collector parameters
+        base_url     = "https://api.demo.example.com"
+        auth_type    = "manual"
+        bearer_token = ""
+        oauth_config = {
+          client_id     = ""
+          client_secret = ""
+          token_url     = ""
+          scope         = ""
+        }
+        discovery = {
+          discover_type = "list"
+          item_list     = ["foo", "bar"]
+        }
+        # Additional REST configuration
+        authentication = "basic"
+        body           = ""
+        headers = {
+          "Content-Type" = "application/json"
+          "Accept"       = "application/json"
+        }
+        method              = "GET"
+        password            = "demo-password"
+        path                = "/api/v1/logs"
+        reject_unauthorized = false
+        timeout             = 30
+        url                 = "https://api.demo.example.com/api/v1/logs"
+        username            = "demo-user"
+        collect_method      = "get"
+        collect_url         = "api.demo.example.com/api/v1/logs"
+      }
+    }
+    environment             = "demo"
+    id                      = "rest-api-demo-collector_discovery_list"
+    ignore_group_jobs_limit = false
   }
 }
 
