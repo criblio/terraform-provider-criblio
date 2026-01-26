@@ -812,6 +812,9 @@ type DiscoverType string
 
 const (
 	DiscoverTypeHTTP DiscoverType = "http"
+	DiscoverTypeJSON DiscoverType = "json"
+	DiscoverTypeList DiscoverType = "list"
+	DiscoverTypeNone DiscoverType = "none"
 )
 
 func (e DiscoverType) ToPointer() *DiscoverType {
@@ -824,6 +827,12 @@ func (e *DiscoverType) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "http":
+		fallthrough
+	case "json":
+		fallthrough
+	case "list":
+		fallthrough
+	case "none":
 		*e = DiscoverType(v)
 		return nil
 	default:
@@ -831,6 +840,7 @@ func (e *DiscoverType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// DiscoverMethod - protocol used for http discovery, required for 'http' type
 type DiscoverMethod string
 
 const (
@@ -908,17 +918,22 @@ func (d *DiscoverRequestParam) UnmarshalJSON(data []byte) error {
 }
 
 type DiscoveryConfiguration struct {
-	DiscoverType           *DiscoverType           `json:"discoverType,omitempty"`
-	DiscoverMethod         *DiscoverMethod         `json:"discoverMethod,omitempty"`
-	Pagination             *PaginationConfig       `json:"pagination,omitempty"`
-	EnableDiscoverCode     *bool                   `default:"false" json:"enableDiscoverCode"`
-	ItemList               []string                `json:"itemList,omitempty"`
+	DiscoverType DiscoverType `json:"discoverType"`
+	// protocol used for http discovery, required for 'http' type
+	DiscoverMethod     *DiscoverMethod   `json:"discoverMethod,omitempty"`
+	Pagination         *PaginationConfig `json:"pagination,omitempty"`
+	EnableDiscoverCode *bool             `default:"false" json:"enableDiscoverCode"`
+	// comma separated list of strings to return from discovery section required for 'list' discoverType
+	ItemList []string `json:"itemList,omitempty"`
+	// URL to hit for rest type collectors, required for 'http' discoverType
 	DiscoverURL            *string                 `json:"discoverUrl,omitempty"`
 	DiscoverRequestHeaders []DiscoverRequestHeader `json:"discoverRequestHeaders,omitempty"`
-	DiscoverRequestParams  []DiscoverRequestParam  `json:"discoverRequestParams,omitempty"`
-	DiscoverBody           *string                 `json:"discoverBody,omitempty"`
-	FormatResultCode       *string                 `json:"formatResultCode,omitempty"`
-	DiscoverDataField      *string                 `json:"discoverDataField,omitempty"`
+	// json payload to return manually, required for 'json' discoverType
+	ManualDiscoverResult  *string                `json:"manualDiscoverResult,omitempty"`
+	DiscoverRequestParams []DiscoverRequestParam `json:"discoverRequestParams,omitempty"`
+	DiscoverBody          *string                `json:"discoverBody,omitempty"`
+	FormatResultCode      *string                `json:"formatResultCode,omitempty"`
+	DiscoverDataField     *string                `json:"discoverDataField,omitempty"`
 }
 
 func (d DiscoveryConfiguration) MarshalJSON() ([]byte, error) {
@@ -926,15 +941,15 @@ func (d DiscoveryConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DiscoveryConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"discoverType"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (d *DiscoveryConfiguration) GetDiscoverType() *DiscoverType {
+func (d *DiscoveryConfiguration) GetDiscoverType() DiscoverType {
 	if d == nil {
-		return nil
+		return DiscoverType("")
 	}
 	return d.DiscoverType
 }
@@ -979,6 +994,13 @@ func (d *DiscoveryConfiguration) GetDiscoverRequestHeaders() []DiscoverRequestHe
 		return nil
 	}
 	return d.DiscoverRequestHeaders
+}
+
+func (d *DiscoveryConfiguration) GetManualDiscoverResult() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ManualDiscoverResult
 }
 
 func (d *DiscoveryConfiguration) GetDiscoverRequestParams() []DiscoverRequestParam {
@@ -1197,7 +1219,7 @@ type InputCollectorRestConf struct {
 	RejectUnauthorized    *bool                            `json:"rejectUnauthorized,omitempty"`
 	CaptureHeaders        *bool                            `default:"false" json:"captureHeaders"`
 	SafeHeaders           []string                         `json:"safeHeaders,omitempty"`
-	Discovery             *DiscoveryConfiguration          `json:"discovery,omitempty"`
+	Discovery             DiscoveryConfiguration           `json:"discovery"`
 	Pagination            *PaginationConfig                `json:"pagination,omitempty"`
 	RetryRules            *RetryRulesConfiguration         `json:"retryRules,omitempty"`
 	Scheduling            *InternalScheduling              `json:"__scheduling,omitempty"`
@@ -1208,7 +1230,7 @@ func (i InputCollectorRestConf) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorRestConf) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"discovery"}); err != nil {
 		return err
 	}
 	return nil
@@ -1389,9 +1411,9 @@ func (i *InputCollectorRestConf) GetSafeHeaders() []string {
 	return i.SafeHeaders
 }
 
-func (i *InputCollectorRestConf) GetDiscovery() *DiscoveryConfiguration {
+func (i *InputCollectorRestConf) GetDiscovery() DiscoveryConfiguration {
 	if i == nil {
-		return nil
+		return DiscoveryConfiguration{}
 	}
 	return i.Discovery
 }

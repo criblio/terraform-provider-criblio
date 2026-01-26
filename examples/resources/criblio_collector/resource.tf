@@ -479,13 +479,14 @@ resource "criblio_collector" "my_collector" {
             }
           ]
           discover_type        = "http"
-          discover_url         = "https://api.example.com/discover"
+          discover_url         = "api.example.com/discover"
           enable_discover_code = true
           format_result_code   = "200"
           item_list = [
             "item1",
             "item2",
           ]
+          manual_discover_result = "{\"result\":\"true\"}"
           pagination = {
             attribute = [
               "records",
