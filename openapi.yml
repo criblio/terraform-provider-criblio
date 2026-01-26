@@ -1401,6 +1401,7 @@ components:
                   enum: [rest]
                   example: "rest"
                 conf:
+                  required: [discovery]
                   type: object
                   properties:
                     # Authentication Properties
@@ -1565,21 +1566,22 @@ components:
                         type: string
                         example: "Authorization"
                       example: ["Content-Type","Authorization"]
-                    # Discovery Configuration
                     discovery:
                       type: object
                       title: Discovery Configuration
+                      required: [discoverType]
                       properties:
                         discoverType:
                           type: string
                           title: Discover type
-                          enum: [http]
+                          enum: [http, json, list, none]
                           example: "http"
                         discoverMethod:
                           type: string
                           title: Discover method
                           enum: [get, post, post_with_body, other]
                           example: "get"
+                          description: protocol used for http discovery, required for 'http' type
                         pagination:
                           $ref: '#/components/schemas/PaginationConfig'
                         enableDiscoverCode:
@@ -1594,10 +1596,13 @@ components:
                             type: string
                             example: "item1"
                           example: ["item1","item2"]
+                          description: comma separated list of strings to return from discovery section
+                            required for 'list' discoverType
                         discoverUrl:
                           type: string
                           title: Discover URL
-                          example: "https://api.example.com/discover"
+                          example: "api.example.com/discover"
+                          description: URL to hit for rest type collectors, required for 'http' discoverType
                         discoverRequestHeaders:
                           type: array
                           title: Discover request headers
@@ -1613,6 +1618,11 @@ components:
                                 title: Header value
                                 example: "Bearer token"
                           example: [{"name": "Authorization", "value": "Bearer token"}]
+                        manualDiscoverResult:
+                          type: string
+                          title: Manual discovery result, stringified json payload
+                          example: '{"result":"true"}'
+                          description: json payload to return manually, required for 'json' discoverType
                         discoverRequestParams:
                           type: array
                           title: Discover request parameters

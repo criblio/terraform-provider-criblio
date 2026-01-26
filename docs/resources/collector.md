@@ -494,13 +494,14 @@ resource "criblio_collector" "my_collector" {
             }
           ]
           discover_type        = "http"
-          discover_url         = "https://api.example.com/discover"
+          discover_url         = "api.example.com/discover"
           enable_discover_code = true
           format_result_code   = "200"
           item_list = [
             "item1",
             "item2",
           ]
+          manual_discover_result = "{\"result\":\"true\"}"
           pagination = {
             attribute = [
               "records",
@@ -1645,6 +1646,10 @@ Optional:
 <a id="nestedatt--input_collector_rest--collector--conf"></a>
 ### Nested Schema for `input_collector_rest.collector.conf`
 
+Required:
+
+- `discovery` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery))
+
 Optional:
 
 - `auth_header_expr` (String) Expression for auth header value
@@ -1661,7 +1666,6 @@ Optional:
 - `credentials_secret` (String)
 - `decode_url` (Boolean) Default: false
 - `disable_time_filter` (Boolean)
-- `discovery` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery))
 - `login_body` (String) Body content for login request
 - `login_url` (String) URL for authentication login
 - `pagination` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--pagination))
@@ -1676,6 +1680,61 @@ Optional:
 - `token_secret` (String)
 - `use_round_robin_dns` (Boolean)
 - `username` (String)
+
+<a id="nestedatt--input_collector_rest--collector--conf--discovery"></a>
+### Nested Schema for `input_collector_rest.collector.conf.discovery`
+
+Required:
+
+- `discover_type` (String) must be one of ["http", "json", "list", "none"]
+
+Optional:
+
+- `discover_body` (String)
+- `discover_data_field` (String)
+- `discover_method` (String) protocol used for http discovery, required for 'http' type. must be one of ["get", "post", "post_with_body", "other"]
+- `discover_request_headers` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_headers))
+- `discover_request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_params))
+- `discover_url` (String) URL to hit for rest type collectors, required for 'http' discoverType
+- `enable_discover_code` (Boolean) Default: false
+- `format_result_code` (String)
+- `item_list` (List of String) comma separated list of strings to return from discovery section required for 'list' discoverType
+- `manual_discover_result` (String) json payload to return manually, required for 'json' discoverType
+- `pagination` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--pagination))
+
+<a id="nestedatt--input_collector_rest--collector--conf--discovery--discover_request_headers"></a>
+### Nested Schema for `input_collector_rest.collector.conf.discovery.discover_request_headers`
+
+Optional:
+
+- `name` (String)
+- `value` (String)
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--discovery--discover_request_params"></a>
+### Nested Schema for `input_collector_rest.collector.conf.discovery.discover_request_params`
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--discovery--pagination"></a>
+### Nested Schema for `input_collector_rest.collector.conf.discovery.pagination`
+
+Optional:
+
+- `attribute` (List of String)
+- `last_page_expr` (String)
+- `limit` (Number) Default: 100
+- `limit_field` (String)
+- `max_pages` (Number) Default: 0
+- `offset` (Number)
+- `offset_field` (String)
+- `page_field` (String)
+- `size` (Number) Default: 50
+- `size_field` (String)
+- `total_record_field` (String)
+- `type` (String) Default: "none"; must be one of ["none", "offset", "cursor", "page"]
+- `zero_indexed` (Boolean) Default: false
+
+
 
 <a id="nestedatt--input_collector_rest--collector--conf--auth_request_headers"></a>
 ### Nested Schema for `input_collector_rest.collector.conf.auth_request_headers`
@@ -1711,57 +1770,6 @@ Optional:
 
 - `name` (String)
 - `value` (String)
-
-
-<a id="nestedatt--input_collector_rest--collector--conf--discovery"></a>
-### Nested Schema for `input_collector_rest.collector.conf.discovery`
-
-Optional:
-
-- `discover_body` (String)
-- `discover_data_field` (String)
-- `discover_method` (String) must be one of ["get", "post", "post_with_body", "other"]
-- `discover_request_headers` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_headers))
-- `discover_request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_params))
-- `discover_type` (String) must be "http"
-- `discover_url` (String)
-- `enable_discover_code` (Boolean) Default: false
-- `format_result_code` (String)
-- `item_list` (List of String)
-- `pagination` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--pagination))
-
-<a id="nestedatt--input_collector_rest--collector--conf--discovery--discover_request_headers"></a>
-### Nested Schema for `input_collector_rest.collector.conf.discovery.discover_request_headers`
-
-Optional:
-
-- `name` (String)
-- `value` (String)
-
-
-<a id="nestedatt--input_collector_rest--collector--conf--discovery--discover_request_params"></a>
-### Nested Schema for `input_collector_rest.collector.conf.discovery.discover_request_params`
-
-
-<a id="nestedatt--input_collector_rest--collector--conf--discovery--pagination"></a>
-### Nested Schema for `input_collector_rest.collector.conf.discovery.pagination`
-
-Optional:
-
-- `attribute` (List of String)
-- `last_page_expr` (String)
-- `limit` (Number) Default: 100
-- `limit_field` (String)
-- `max_pages` (Number) Default: 0
-- `offset` (Number)
-- `offset_field` (String)
-- `page_field` (String)
-- `size` (Number) Default: 50
-- `size_field` (String)
-- `total_record_field` (String)
-- `type` (String) Default: "none"; must be one of ["none", "offset", "cursor", "page"]
-- `zero_indexed` (Boolean) Default: false
-
 
 
 <a id="nestedatt--input_collector_rest--collector--conf--pagination"></a>
