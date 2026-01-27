@@ -13184,7 +13184,7 @@ components:
           description: "Absolute path on which to listen for Grafana Agent's Remote Write
             requests. Defaults to /api/prom/push, which will expand as:
             'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this
-            field or 'Logs API endpoint' must be configured."
+            field or 'Logs API endpoint' (Loki) must be configured."
           default: /api/prom/push
           pattern: ^/
           example: /api/prom/push
@@ -13194,7 +13194,7 @@ components:
           description: "Absolute path on which to listen for Loki logs requests. Defaults
             to /loki/api/v1/push, which will (in this example) expand as:
             'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either
-            this field or 'Remote Write API endpoint' must be configured."
+            this field or 'Remote Write API endpoint' (Prometheus) must be configured."
           default: /loki/api/v1/push
           pattern: ^/
           example: /loki/api/v1/push
@@ -13491,11 +13491,6 @@ components:
           type: string
           title: Description
           example: Grafana listener supporting Prom remote write and Loki logs
-      anyOf:
-        - required:
-            - prometheusAPI
-        - required:
-            - lokiAPI
       type: object
     InputLoki:
       required:

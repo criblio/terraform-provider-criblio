@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type LokiAuthOauthParam2 struct {
-	Name  types.String `tfsdk:"name"`
-	Value types.String `tfsdk:"value"`
+type InputGrafanaConnection struct {
+	Output   types.String `tfsdk:"output"`
+	Pipeline types.String `tfsdk:"pipeline"`
 }

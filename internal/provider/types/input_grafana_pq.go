@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type InputGrafanaPq2 struct {
+type InputGrafanaPq struct {
 	CommitFrequency types.Float64 `tfsdk:"commit_frequency"`
 	Compress        types.String  `tfsdk:"compress"`
 	MaxBufferSize   types.Float64 `tfsdk:"max_buffer_size"`
