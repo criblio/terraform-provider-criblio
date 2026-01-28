@@ -55,3 +55,12 @@ resource "criblio_pipeline" "my_pipeline" {
     ]
   }
 }
+
+data "criblio_pipeline" "my_pipeline" {
+  group_id = "default"
+  id       = criblio_pipeline.my_pipeline.id
+}
+
+output "pipeline_conf" {
+  value = data.criblio_pipeline.my_pipeline.conf
+}
