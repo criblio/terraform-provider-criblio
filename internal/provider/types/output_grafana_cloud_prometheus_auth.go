@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type OutputGrafanaCloudLokiAuth2 struct {
+type OutputGrafanaCloudPrometheusAuth struct {
 	AuthType          types.String `tfsdk:"auth_type"`
 	CredentialsSecret types.String `tfsdk:"credentials_secret"`
 	Password          types.String `tfsdk:"password"`

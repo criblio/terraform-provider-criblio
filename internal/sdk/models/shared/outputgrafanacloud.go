@@ -4,46 +4,45 @@ package shared
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-type OutputGrafanaCloudType2 string
+type OutputGrafanaCloudType string
 
 const (
-	OutputGrafanaCloudType2GrafanaCloud OutputGrafanaCloudType2 = "grafana_cloud"
+	OutputGrafanaCloudTypeGrafanaCloud OutputGrafanaCloudType = "grafana_cloud"
 )
 
-func (e OutputGrafanaCloudType2) ToPointer() *OutputGrafanaCloudType2 {
+func (e OutputGrafanaCloudType) ToPointer() *OutputGrafanaCloudType {
 	return &e
 }
-func (e *OutputGrafanaCloudType2) UnmarshalJSON(data []byte) error {
+func (e *OutputGrafanaCloudType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "grafana_cloud":
-		*e = OutputGrafanaCloudType2(v)
+		*e = OutputGrafanaCloudType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudType2: %v", v)
+		return fmt.Errorf("invalid value for OutputGrafanaCloudType: %v", v)
 	}
 }
 
-// OutputGrafanaCloudMessageFormat2 - Format to use when sending logs to Loki (Protobuf or JSON)
-type OutputGrafanaCloudMessageFormat2 string
+// OutputGrafanaCloudMessageFormat - Format to use when sending logs to Loki (Protobuf or JSON)
+type OutputGrafanaCloudMessageFormat string
 
 const (
-	OutputGrafanaCloudMessageFormat2Protobuf OutputGrafanaCloudMessageFormat2 = "protobuf"
-	OutputGrafanaCloudMessageFormat2JSON     OutputGrafanaCloudMessageFormat2 = "json"
+	OutputGrafanaCloudMessageFormatProtobuf OutputGrafanaCloudMessageFormat = "protobuf"
+	OutputGrafanaCloudMessageFormatJSON     OutputGrafanaCloudMessageFormat = "json"
 )
 
-func (e OutputGrafanaCloudMessageFormat2) ToPointer() *OutputGrafanaCloudMessageFormat2 {
+func (e OutputGrafanaCloudMessageFormat) ToPointer() *OutputGrafanaCloudMessageFormat {
 	return &e
 }
-func (e *OutputGrafanaCloudMessageFormat2) UnmarshalJSON(data []byte) error {
+func (e *OutputGrafanaCloudMessageFormat) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -52,57 +51,57 @@ func (e *OutputGrafanaCloudMessageFormat2) UnmarshalJSON(data []byte) error {
 	case "protobuf":
 		fallthrough
 	case "json":
-		*e = OutputGrafanaCloudMessageFormat2(v)
+		*e = OutputGrafanaCloudMessageFormat(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudMessageFormat2: %v", v)
+		return fmt.Errorf("invalid value for OutputGrafanaCloudMessageFormat: %v", v)
 	}
 }
 
-type OutputGrafanaCloudLabel2 struct {
+type OutputGrafanaCloudLabel struct {
 	Name  *string `default:"" json:"name"`
 	Value string  `json:"value"`
 }
 
-func (o OutputGrafanaCloudLabel2) MarshalJSON() ([]byte, error) {
+func (o OutputGrafanaCloudLabel) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(o, "", false)
 }
 
-func (o *OutputGrafanaCloudLabel2) UnmarshalJSON(data []byte) error {
+func (o *OutputGrafanaCloudLabel) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputGrafanaCloudLabel2) GetName() *string {
+func (o *OutputGrafanaCloudLabel) GetName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Name
 }
 
-func (o *OutputGrafanaCloudLabel2) GetValue() string {
+func (o *OutputGrafanaCloudLabel) GetValue() string {
 	if o == nil {
 		return ""
 	}
 	return o.Value
 }
 
-type OutputGrafanaCloudPrometheusAuthAuthenticationType2 string
+type OutputGrafanaCloudPrometheusAuthAuthenticationType string
 
 const (
-	OutputGrafanaCloudPrometheusAuthAuthenticationType2None              OutputGrafanaCloudPrometheusAuthAuthenticationType2 = "none"
-	OutputGrafanaCloudPrometheusAuthAuthenticationType2Token             OutputGrafanaCloudPrometheusAuthAuthenticationType2 = "token"
-	OutputGrafanaCloudPrometheusAuthAuthenticationType2TextSecret        OutputGrafanaCloudPrometheusAuthAuthenticationType2 = "textSecret"
-	OutputGrafanaCloudPrometheusAuthAuthenticationType2Basic             OutputGrafanaCloudPrometheusAuthAuthenticationType2 = "basic"
-	OutputGrafanaCloudPrometheusAuthAuthenticationType2CredentialsSecret OutputGrafanaCloudPrometheusAuthAuthenticationType2 = "credentialsSecret"
+	OutputGrafanaCloudPrometheusAuthAuthenticationTypeNone              OutputGrafanaCloudPrometheusAuthAuthenticationType = "none"
+	OutputGrafanaCloudPrometheusAuthAuthenticationTypeToken             OutputGrafanaCloudPrometheusAuthAuthenticationType = "token"
+	OutputGrafanaCloudPrometheusAuthAuthenticationTypeTextSecret        OutputGrafanaCloudPrometheusAuthAuthenticationType = "textSecret"
+	OutputGrafanaCloudPrometheusAuthAuthenticationTypeBasic             OutputGrafanaCloudPrometheusAuthAuthenticationType = "basic"
+	OutputGrafanaCloudPrometheusAuthAuthenticationTypeCredentialsSecret OutputGrafanaCloudPrometheusAuthAuthenticationType = "credentialsSecret"
 )
 
-func (e OutputGrafanaCloudPrometheusAuthAuthenticationType2) ToPointer() *OutputGrafanaCloudPrometheusAuthAuthenticationType2 {
+func (e OutputGrafanaCloudPrometheusAuthAuthenticationType) ToPointer() *OutputGrafanaCloudPrometheusAuthAuthenticationType {
 	return &e
 }
-func (e *OutputGrafanaCloudPrometheusAuthAuthenticationType2) UnmarshalJSON(data []byte) error {
+func (e *OutputGrafanaCloudPrometheusAuthAuthenticationType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -117,15 +116,15 @@ func (e *OutputGrafanaCloudPrometheusAuthAuthenticationType2) UnmarshalJSON(data
 	case "basic":
 		fallthrough
 	case "credentialsSecret":
-		*e = OutputGrafanaCloudPrometheusAuthAuthenticationType2(v)
+		*e = OutputGrafanaCloudPrometheusAuthAuthenticationType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudPrometheusAuthAuthenticationType2: %v", v)
+		return fmt.Errorf("invalid value for OutputGrafanaCloudPrometheusAuthAuthenticationType: %v", v)
 	}
 }
 
-type OutputGrafanaCloudPrometheusAuth2 struct {
-	AuthType *OutputGrafanaCloudPrometheusAuthAuthenticationType2 `default:"basic" json:"authType"`
+type OutputGrafanaCloudPrometheusAuth struct {
+	AuthType *OutputGrafanaCloudPrometheusAuthAuthenticationType `default:"basic" json:"authType"`
 	// Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
 	Token *string `json:"token,omitempty"`
 	// Select or create a stored text secret
@@ -138,73 +137,73 @@ type OutputGrafanaCloudPrometheusAuth2 struct {
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
-func (o OutputGrafanaCloudPrometheusAuth2) MarshalJSON() ([]byte, error) {
+func (o OutputGrafanaCloudPrometheusAuth) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(o, "", false)
 }
 
-func (o *OutputGrafanaCloudPrometheusAuth2) UnmarshalJSON(data []byte) error {
+func (o *OutputGrafanaCloudPrometheusAuth) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputGrafanaCloudPrometheusAuth2) GetAuthType() *OutputGrafanaCloudPrometheusAuthAuthenticationType2 {
+func (o *OutputGrafanaCloudPrometheusAuth) GetAuthType() *OutputGrafanaCloudPrometheusAuthAuthenticationType {
 	if o == nil {
 		return nil
 	}
 	return o.AuthType
 }
 
-func (o *OutputGrafanaCloudPrometheusAuth2) GetToken() *string {
+func (o *OutputGrafanaCloudPrometheusAuth) GetToken() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Token
 }
 
-func (o *OutputGrafanaCloudPrometheusAuth2) GetTextSecret() *string {
+func (o *OutputGrafanaCloudPrometheusAuth) GetTextSecret() *string {
 	if o == nil {
 		return nil
 	}
 	return o.TextSecret
 }
 
-func (o *OutputGrafanaCloudPrometheusAuth2) GetUsername() *string {
+func (o *OutputGrafanaCloudPrometheusAuth) GetUsername() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Username
 }
 
-func (o *OutputGrafanaCloudPrometheusAuth2) GetPassword() *string {
+func (o *OutputGrafanaCloudPrometheusAuth) GetPassword() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Password
 }
 
-func (o *OutputGrafanaCloudPrometheusAuth2) GetCredentialsSecret() *string {
+func (o *OutputGrafanaCloudPrometheusAuth) GetCredentialsSecret() *string {
 	if o == nil {
 		return nil
 	}
 	return o.CredentialsSecret
 }
 
-type OutputGrafanaCloudLokiAuthAuthenticationType2 string
+type OutputGrafanaCloudLokiAuthAuthenticationType string
 
 const (
-	OutputGrafanaCloudLokiAuthAuthenticationType2None              OutputGrafanaCloudLokiAuthAuthenticationType2 = "none"
-	OutputGrafanaCloudLokiAuthAuthenticationType2Token             OutputGrafanaCloudLokiAuthAuthenticationType2 = "token"
-	OutputGrafanaCloudLokiAuthAuthenticationType2TextSecret        OutputGrafanaCloudLokiAuthAuthenticationType2 = "textSecret"
-	OutputGrafanaCloudLokiAuthAuthenticationType2Basic             OutputGrafanaCloudLokiAuthAuthenticationType2 = "basic"
-	OutputGrafanaCloudLokiAuthAuthenticationType2CredentialsSecret OutputGrafanaCloudLokiAuthAuthenticationType2 = "credentialsSecret"
+	OutputGrafanaCloudLokiAuthAuthenticationTypeNone              OutputGrafanaCloudLokiAuthAuthenticationType = "none"
+	OutputGrafanaCloudLokiAuthAuthenticationTypeToken             OutputGrafanaCloudLokiAuthAuthenticationType = "token"
+	OutputGrafanaCloudLokiAuthAuthenticationTypeTextSecret        OutputGrafanaCloudLokiAuthAuthenticationType = "textSecret"
+	OutputGrafanaCloudLokiAuthAuthenticationTypeBasic             OutputGrafanaCloudLokiAuthAuthenticationType = "basic"
+	OutputGrafanaCloudLokiAuthAuthenticationTypeCredentialsSecret OutputGrafanaCloudLokiAuthAuthenticationType = "credentialsSecret"
 )
 
-func (e OutputGrafanaCloudLokiAuthAuthenticationType2) ToPointer() *OutputGrafanaCloudLokiAuthAuthenticationType2 {
+func (e OutputGrafanaCloudLokiAuthAuthenticationType) ToPointer() *OutputGrafanaCloudLokiAuthAuthenticationType {
 	return &e
 }
-func (e *OutputGrafanaCloudLokiAuthAuthenticationType2) UnmarshalJSON(data []byte) error {
+func (e *OutputGrafanaCloudLokiAuthAuthenticationType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -219,15 +218,15 @@ func (e *OutputGrafanaCloudLokiAuthAuthenticationType2) UnmarshalJSON(data []byt
 	case "basic":
 		fallthrough
 	case "credentialsSecret":
-		*e = OutputGrafanaCloudLokiAuthAuthenticationType2(v)
+		*e = OutputGrafanaCloudLokiAuthAuthenticationType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudLokiAuthAuthenticationType2: %v", v)
+		return fmt.Errorf("invalid value for OutputGrafanaCloudLokiAuthAuthenticationType: %v", v)
 	}
 }
 
-type OutputGrafanaCloudLokiAuth2 struct {
-	AuthType *OutputGrafanaCloudLokiAuthAuthenticationType2 `default:"basic" json:"authType"`
+type OutputGrafanaCloudLokiAuth struct {
+	AuthType *OutputGrafanaCloudLokiAuthAuthenticationType `default:"basic" json:"authType"`
 	// Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
 	Token *string `json:"token,omitempty"`
 	// Select or create a stored text secret
@@ -240,102 +239,102 @@ type OutputGrafanaCloudLokiAuth2 struct {
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 }
 
-func (o OutputGrafanaCloudLokiAuth2) MarshalJSON() ([]byte, error) {
+func (o OutputGrafanaCloudLokiAuth) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(o, "", false)
 }
 
-func (o *OutputGrafanaCloudLokiAuth2) UnmarshalJSON(data []byte) error {
+func (o *OutputGrafanaCloudLokiAuth) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputGrafanaCloudLokiAuth2) GetAuthType() *OutputGrafanaCloudLokiAuthAuthenticationType2 {
+func (o *OutputGrafanaCloudLokiAuth) GetAuthType() *OutputGrafanaCloudLokiAuthAuthenticationType {
 	if o == nil {
 		return nil
 	}
 	return o.AuthType
 }
 
-func (o *OutputGrafanaCloudLokiAuth2) GetToken() *string {
+func (o *OutputGrafanaCloudLokiAuth) GetToken() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Token
 }
 
-func (o *OutputGrafanaCloudLokiAuth2) GetTextSecret() *string {
+func (o *OutputGrafanaCloudLokiAuth) GetTextSecret() *string {
 	if o == nil {
 		return nil
 	}
 	return o.TextSecret
 }
 
-func (o *OutputGrafanaCloudLokiAuth2) GetUsername() *string {
+func (o *OutputGrafanaCloudLokiAuth) GetUsername() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Username
 }
 
-func (o *OutputGrafanaCloudLokiAuth2) GetPassword() *string {
+func (o *OutputGrafanaCloudLokiAuth) GetPassword() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Password
 }
 
-func (o *OutputGrafanaCloudLokiAuth2) GetCredentialsSecret() *string {
+func (o *OutputGrafanaCloudLokiAuth) GetCredentialsSecret() *string {
 	if o == nil {
 		return nil
 	}
 	return o.CredentialsSecret
 }
 
-type OutputGrafanaCloudExtraHTTPHeader2 struct {
+type OutputGrafanaCloudExtraHTTPHeader struct {
 	Name  *string `json:"name,omitempty"`
 	Value string  `json:"value"`
 }
 
-func (o OutputGrafanaCloudExtraHTTPHeader2) MarshalJSON() ([]byte, error) {
+func (o OutputGrafanaCloudExtraHTTPHeader) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(o, "", false)
 }
 
-func (o *OutputGrafanaCloudExtraHTTPHeader2) UnmarshalJSON(data []byte) error {
+func (o *OutputGrafanaCloudExtraHTTPHeader) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputGrafanaCloudExtraHTTPHeader2) GetName() *string {
+func (o *OutputGrafanaCloudExtraHTTPHeader) GetName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Name
 }
 
-func (o *OutputGrafanaCloudExtraHTTPHeader2) GetValue() string {
+func (o *OutputGrafanaCloudExtraHTTPHeader) GetValue() string {
 	if o == nil {
 		return ""
 	}
 	return o.Value
 }
 
-// OutputGrafanaCloudFailedRequestLoggingMode2 - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputGrafanaCloudFailedRequestLoggingMode2 string
+// OutputGrafanaCloudFailedRequestLoggingMode - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
+type OutputGrafanaCloudFailedRequestLoggingMode string
 
 const (
-	OutputGrafanaCloudFailedRequestLoggingMode2Payload           OutputGrafanaCloudFailedRequestLoggingMode2 = "payload"
-	OutputGrafanaCloudFailedRequestLoggingMode2PayloadAndHeaders OutputGrafanaCloudFailedRequestLoggingMode2 = "payloadAndHeaders"
-	OutputGrafanaCloudFailedRequestLoggingMode2None              OutputGrafanaCloudFailedRequestLoggingMode2 = "none"
+	OutputGrafanaCloudFailedRequestLoggingModePayload           OutputGrafanaCloudFailedRequestLoggingMode = "payload"
+	OutputGrafanaCloudFailedRequestLoggingModePayloadAndHeaders OutputGrafanaCloudFailedRequestLoggingMode = "payloadAndHeaders"
+	OutputGrafanaCloudFailedRequestLoggingModeNone              OutputGrafanaCloudFailedRequestLoggingMode = "none"
 )
 
-func (e OutputGrafanaCloudFailedRequestLoggingMode2) ToPointer() *OutputGrafanaCloudFailedRequestLoggingMode2 {
+func (e OutputGrafanaCloudFailedRequestLoggingMode) ToPointer() *OutputGrafanaCloudFailedRequestLoggingMode {
 	return &e
 }
-func (e *OutputGrafanaCloudFailedRequestLoggingMode2) UnmarshalJSON(data []byte) error {
+func (e *OutputGrafanaCloudFailedRequestLoggingMode) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -346,14 +345,14 @@ func (e *OutputGrafanaCloudFailedRequestLoggingMode2) UnmarshalJSON(data []byte)
 	case "payloadAndHeaders":
 		fallthrough
 	case "none":
-		*e = OutputGrafanaCloudFailedRequestLoggingMode2(v)
+		*e = OutputGrafanaCloudFailedRequestLoggingMode(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudFailedRequestLoggingMode2: %v", v)
+		return fmt.Errorf("invalid value for OutputGrafanaCloudFailedRequestLoggingMode: %v", v)
 	}
 }
 
-type OutputGrafanaCloudResponseRetrySetting2 struct {
+type OutputGrafanaCloudResponseRetrySetting struct {
 	// The HTTP response status code that will trigger retries
 	HTTPStatus float64 `json:"httpStatus"`
 	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
@@ -364,46 +363,46 @@ type OutputGrafanaCloudResponseRetrySetting2 struct {
 	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
 }
 
-func (o OutputGrafanaCloudResponseRetrySetting2) MarshalJSON() ([]byte, error) {
+func (o OutputGrafanaCloudResponseRetrySetting) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(o, "", false)
 }
 
-func (o *OutputGrafanaCloudResponseRetrySetting2) UnmarshalJSON(data []byte) error {
+func (o *OutputGrafanaCloudResponseRetrySetting) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputGrafanaCloudResponseRetrySetting2) GetHTTPStatus() float64 {
+func (o *OutputGrafanaCloudResponseRetrySetting) GetHTTPStatus() float64 {
 	if o == nil {
 		return 0.0
 	}
 	return o.HTTPStatus
 }
 
-func (o *OutputGrafanaCloudResponseRetrySetting2) GetInitialBackoff() *float64 {
+func (o *OutputGrafanaCloudResponseRetrySetting) GetInitialBackoff() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.InitialBackoff
 }
 
-func (o *OutputGrafanaCloudResponseRetrySetting2) GetBackoffRate() *float64 {
+func (o *OutputGrafanaCloudResponseRetrySetting) GetBackoffRate() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.BackoffRate
 }
 
-func (o *OutputGrafanaCloudResponseRetrySetting2) GetMaxBackoff() *float64 {
+func (o *OutputGrafanaCloudResponseRetrySetting) GetMaxBackoff() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.MaxBackoff
 }
 
-type OutputGrafanaCloudTimeoutRetrySettings2 struct {
+type OutputGrafanaCloudTimeoutRetrySettings struct {
 	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
 	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
@@ -413,58 +412,58 @@ type OutputGrafanaCloudTimeoutRetrySettings2 struct {
 	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
 }
 
-func (o OutputGrafanaCloudTimeoutRetrySettings2) MarshalJSON() ([]byte, error) {
+func (o OutputGrafanaCloudTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(o, "", false)
 }
 
-func (o *OutputGrafanaCloudTimeoutRetrySettings2) UnmarshalJSON(data []byte) error {
+func (o *OutputGrafanaCloudTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputGrafanaCloudTimeoutRetrySettings2) GetTimeoutRetry() *bool {
+func (o *OutputGrafanaCloudTimeoutRetrySettings) GetTimeoutRetry() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.TimeoutRetry
 }
 
-func (o *OutputGrafanaCloudTimeoutRetrySettings2) GetInitialBackoff() *float64 {
+func (o *OutputGrafanaCloudTimeoutRetrySettings) GetInitialBackoff() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.InitialBackoff
 }
 
-func (o *OutputGrafanaCloudTimeoutRetrySettings2) GetBackoffRate() *float64 {
+func (o *OutputGrafanaCloudTimeoutRetrySettings) GetBackoffRate() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.BackoffRate
 }
 
-func (o *OutputGrafanaCloudTimeoutRetrySettings2) GetMaxBackoff() *float64 {
+func (o *OutputGrafanaCloudTimeoutRetrySettings) GetMaxBackoff() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.MaxBackoff
 }
 
-// OutputGrafanaCloudBackpressureBehavior2 - How to handle events when all receivers are exerting backpressure
-type OutputGrafanaCloudBackpressureBehavior2 string
+// OutputGrafanaCloudBackpressureBehavior - How to handle events when all receivers are exerting backpressure
+type OutputGrafanaCloudBackpressureBehavior string
 
 const (
-	OutputGrafanaCloudBackpressureBehavior2Block OutputGrafanaCloudBackpressureBehavior2 = "block"
-	OutputGrafanaCloudBackpressureBehavior2Drop  OutputGrafanaCloudBackpressureBehavior2 = "drop"
-	OutputGrafanaCloudBackpressureBehavior2Queue OutputGrafanaCloudBackpressureBehavior2 = "queue"
+	OutputGrafanaCloudBackpressureBehaviorBlock OutputGrafanaCloudBackpressureBehavior = "block"
+	OutputGrafanaCloudBackpressureBehaviorDrop  OutputGrafanaCloudBackpressureBehavior = "drop"
+	OutputGrafanaCloudBackpressureBehaviorQueue OutputGrafanaCloudBackpressureBehavior = "queue"
 )
 
-func (e OutputGrafanaCloudBackpressureBehavior2) ToPointer() *OutputGrafanaCloudBackpressureBehavior2 {
+func (e OutputGrafanaCloudBackpressureBehavior) ToPointer() *OutputGrafanaCloudBackpressureBehavior {
 	return &e
 }
-func (e *OutputGrafanaCloudBackpressureBehavior2) UnmarshalJSON(data []byte) error {
+func (e *OutputGrafanaCloudBackpressureBehavior) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -475,25 +474,25 @@ func (e *OutputGrafanaCloudBackpressureBehavior2) UnmarshalJSON(data []byte) err
 	case "drop":
 		fallthrough
 	case "queue":
-		*e = OutputGrafanaCloudBackpressureBehavior2(v)
+		*e = OutputGrafanaCloudBackpressureBehavior(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudBackpressureBehavior2: %v", v)
+		return fmt.Errorf("invalid value for OutputGrafanaCloudBackpressureBehavior: %v", v)
 	}
 }
 
-// OutputGrafanaCloudCompression2 - Codec to use to compress the persisted data
-type OutputGrafanaCloudCompression2 string
+// OutputGrafanaCloudCompression - Codec to use to compress the persisted data
+type OutputGrafanaCloudCompression string
 
 const (
-	OutputGrafanaCloudCompression2None OutputGrafanaCloudCompression2 = "none"
-	OutputGrafanaCloudCompression2Gzip OutputGrafanaCloudCompression2 = "gzip"
+	OutputGrafanaCloudCompressionNone OutputGrafanaCloudCompression = "none"
+	OutputGrafanaCloudCompressionGzip OutputGrafanaCloudCompression = "gzip"
 )
 
-func (e OutputGrafanaCloudCompression2) ToPointer() *OutputGrafanaCloudCompression2 {
+func (e OutputGrafanaCloudCompression) ToPointer() *OutputGrafanaCloudCompression {
 	return &e
 }
-func (e *OutputGrafanaCloudCompression2) UnmarshalJSON(data []byte) error {
+func (e *OutputGrafanaCloudCompression) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -502,25 +501,25 @@ func (e *OutputGrafanaCloudCompression2) UnmarshalJSON(data []byte) error {
 	case "none":
 		fallthrough
 	case "gzip":
-		*e = OutputGrafanaCloudCompression2(v)
+		*e = OutputGrafanaCloudCompression(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudCompression2: %v", v)
+		return fmt.Errorf("invalid value for OutputGrafanaCloudCompression: %v", v)
 	}
 }
 
-// OutputGrafanaCloudQueueFullBehavior2 - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputGrafanaCloudQueueFullBehavior2 string
+// OutputGrafanaCloudQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+type OutputGrafanaCloudQueueFullBehavior string
 
 const (
-	OutputGrafanaCloudQueueFullBehavior2Block OutputGrafanaCloudQueueFullBehavior2 = "block"
-	OutputGrafanaCloudQueueFullBehavior2Drop  OutputGrafanaCloudQueueFullBehavior2 = "drop"
+	OutputGrafanaCloudQueueFullBehaviorBlock OutputGrafanaCloudQueueFullBehavior = "block"
+	OutputGrafanaCloudQueueFullBehaviorDrop  OutputGrafanaCloudQueueFullBehavior = "drop"
 )
 
-func (e OutputGrafanaCloudQueueFullBehavior2) ToPointer() *OutputGrafanaCloudQueueFullBehavior2 {
+func (e OutputGrafanaCloudQueueFullBehavior) ToPointer() *OutputGrafanaCloudQueueFullBehavior {
 	return &e
 }
-func (e *OutputGrafanaCloudQueueFullBehavior2) UnmarshalJSON(data []byte) error {
+func (e *OutputGrafanaCloudQueueFullBehavior) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -529,26 +528,26 @@ func (e *OutputGrafanaCloudQueueFullBehavior2) UnmarshalJSON(data []byte) error 
 	case "block":
 		fallthrough
 	case "drop":
-		*e = OutputGrafanaCloudQueueFullBehavior2(v)
+		*e = OutputGrafanaCloudQueueFullBehavior(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudQueueFullBehavior2: %v", v)
+		return fmt.Errorf("invalid value for OutputGrafanaCloudQueueFullBehavior: %v", v)
 	}
 }
 
-// OutputGrafanaCloudMode2 - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputGrafanaCloudMode2 string
+// OutputGrafanaCloudMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
+type OutputGrafanaCloudMode string
 
 const (
-	OutputGrafanaCloudMode2Error        OutputGrafanaCloudMode2 = "error"
-	OutputGrafanaCloudMode2Backpressure OutputGrafanaCloudMode2 = "backpressure"
-	OutputGrafanaCloudMode2Always       OutputGrafanaCloudMode2 = "always"
+	OutputGrafanaCloudModeError        OutputGrafanaCloudMode = "error"
+	OutputGrafanaCloudModeBackpressure OutputGrafanaCloudMode = "backpressure"
+	OutputGrafanaCloudModeAlways       OutputGrafanaCloudMode = "always"
 )
 
-func (e OutputGrafanaCloudMode2) ToPointer() *OutputGrafanaCloudMode2 {
+func (e OutputGrafanaCloudMode) ToPointer() *OutputGrafanaCloudMode {
 	return &e
 }
-func (e *OutputGrafanaCloudMode2) UnmarshalJSON(data []byte) error {
+func (e *OutputGrafanaCloudMode) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -559,31 +558,31 @@ func (e *OutputGrafanaCloudMode2) UnmarshalJSON(data []byte) error {
 	case "backpressure":
 		fallthrough
 	case "always":
-		*e = OutputGrafanaCloudMode2(v)
+		*e = OutputGrafanaCloudMode(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudMode2: %v", v)
+		return fmt.Errorf("invalid value for OutputGrafanaCloudMode: %v", v)
 	}
 }
 
-type OutputGrafanaCloudPqControls2 struct {
+type OutputGrafanaCloudPqControls struct {
 }
 
-func (o OutputGrafanaCloudPqControls2) MarshalJSON() ([]byte, error) {
+func (o OutputGrafanaCloudPqControls) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(o, "", false)
 }
 
-func (o *OutputGrafanaCloudPqControls2) UnmarshalJSON(data []byte) error {
+func (o *OutputGrafanaCloudPqControls) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-type OutputGrafanaCloudGrafanaCloud2 struct {
+type OutputGrafanaCloud struct {
 	// Unique ID for this output
-	ID   string                  `json:"id"`
-	Type OutputGrafanaCloudType2 `json:"type"`
+	ID   string                 `json:"id"`
+	Type OutputGrafanaCloudType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
@@ -592,934 +591,20 @@ type OutputGrafanaCloudGrafanaCloud2 struct {
 	Environment *string `json:"environment,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
-	// The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net
+	// The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net. LokiUrl, PrometheusUrl, or both are required.
 	LokiURL *string `json:"lokiUrl,omitempty"`
-	// The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
-	PrometheusURL string `json:"prometheusUrl"`
-	// Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
-	Message *string `json:"message,omitempty"`
-	// Format to use when sending logs to Loki (Protobuf or JSON)
-	MessageFormat *OutputGrafanaCloudMessageFormat2 `default:"protobuf" json:"messageFormat"`
-	// List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}"
-	Labels []OutputGrafanaCloudLabel2 `json:"labels,omitempty"`
-	// JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
-	MetricRenameExpr *string                            `default:"name.replace(/[^a-zA-Z0-9_]/g, '_')" json:"metricRenameExpr"`
-	PrometheusAuth   *OutputGrafanaCloudPrometheusAuth2 `json:"prometheusAuth,omitempty"`
-	LokiAuth         *OutputGrafanaCloudLokiAuth2       `json:"lokiAuth,omitempty"`
-	// Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.
-	Concurrency *float64 `default:"1" json:"concurrency"`
-	// Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
-	MaxPayloadSizeKB *float64 `default:"4096" json:"maxPayloadSizeKB"`
-	// Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
-	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
-	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
-	//         that value will take precedence.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
-	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
-	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
-	FlushPeriodSec *float64 `default:"15" json:"flushPeriodSec"`
-	// Headers to add to all events
-	ExtraHTTPHeaders []OutputGrafanaCloudExtraHTTPHeader2 `json:"extraHttpHeaders,omitempty"`
-	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-	UseRoundRobinDNS *bool `default:"false" json:"useRoundRobinDns"`
-	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputGrafanaCloudFailedRequestLoggingMode2 `default:"none" json:"failedRequestLoggingMode"`
-	// List of headers that are safe to log in plain text
-	SafeHeaders []string `json:"safeHeaders,omitempty"`
-	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputGrafanaCloudResponseRetrySetting2 `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputGrafanaCloudTimeoutRetrySettings2  `json:"timeoutRetrySettings,omitempty"`
-	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
-	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputGrafanaCloudBackpressureBehavior2 `default:"block" json:"onBackpressure"`
-	Description    *string                                  `json:"description,omitempty"`
-	// Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.
-	Compress *bool `default:"true" json:"compress"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputGrafanaCloudCompression2 `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputGrafanaCloudQueueFullBehavior2 `default:"block" json:"pqOnBackpressure"`
-	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputGrafanaCloudMode2       `default:"error" json:"pqMode"`
-	PqControls *OutputGrafanaCloudPqControls2 `json:"pqControls,omitempty"`
-}
-
-func (o OutputGrafanaCloudGrafanaCloud2) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type", "prometheusUrl"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ID
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetType() OutputGrafanaCloudType2 {
-	if o == nil {
-		return OutputGrafanaCloudType2("")
-	}
-	return o.Type
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPipeline() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Pipeline
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetSystemFields() []string {
-	if o == nil {
-		return nil
-	}
-	return o.SystemFields
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetEnvironment() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Environment
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetStreamtags() []string {
-	if o == nil {
-		return nil
-	}
-	return o.Streamtags
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetLokiURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.LokiURL
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPrometheusURL() string {
-	if o == nil {
-		return ""
-	}
-	return o.PrometheusURL
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetMessage() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Message
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetMessageFormat() *OutputGrafanaCloudMessageFormat2 {
-	if o == nil {
-		return nil
-	}
-	return o.MessageFormat
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetLabels() []OutputGrafanaCloudLabel2 {
-	if o == nil {
-		return nil
-	}
-	return o.Labels
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetMetricRenameExpr() *string {
-	if o == nil {
-		return nil
-	}
-	return o.MetricRenameExpr
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPrometheusAuth() *OutputGrafanaCloudPrometheusAuth2 {
-	if o == nil {
-		return nil
-	}
-	return o.PrometheusAuth
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetLokiAuth() *OutputGrafanaCloudLokiAuth2 {
-	if o == nil {
-		return nil
-	}
-	return o.LokiAuth
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetConcurrency() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.Concurrency
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetMaxPayloadSizeKB() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxPayloadSizeKB
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetMaxPayloadEvents() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxPayloadEvents
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetRejectUnauthorized() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.RejectUnauthorized
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetTimeoutSec() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutSec
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetFlushPeriodSec() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.FlushPeriodSec
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetExtraHTTPHeaders() []OutputGrafanaCloudExtraHTTPHeader2 {
-	if o == nil {
-		return nil
-	}
-	return o.ExtraHTTPHeaders
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetUseRoundRobinDNS() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.UseRoundRobinDNS
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetFailedRequestLoggingMode() *OutputGrafanaCloudFailedRequestLoggingMode2 {
-	if o == nil {
-		return nil
-	}
-	return o.FailedRequestLoggingMode
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetSafeHeaders() []string {
-	if o == nil {
-		return nil
-	}
-	return o.SafeHeaders
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetResponseRetrySettings() []OutputGrafanaCloudResponseRetrySetting2 {
-	if o == nil {
-		return nil
-	}
-	return o.ResponseRetrySettings
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetTimeoutRetrySettings() *OutputGrafanaCloudTimeoutRetrySettings2 {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetrySettings
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetResponseHonorRetryAfterHeader() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.ResponseHonorRetryAfterHeader
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetOnBackpressure() *OutputGrafanaCloudBackpressureBehavior2 {
-	if o == nil {
-		return nil
-	}
-	return o.OnBackpressure
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetDescription() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Description
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetCompress() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Compress
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPqMaxFileSize() *string {
-	if o == nil {
-		return nil
-	}
-	return o.PqMaxFileSize
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPqMaxSize() *string {
-	if o == nil {
-		return nil
-	}
-	return o.PqMaxSize
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPqPath() *string {
-	if o == nil {
-		return nil
-	}
-	return o.PqPath
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPqCompress() *OutputGrafanaCloudCompression2 {
-	if o == nil {
-		return nil
-	}
-	return o.PqCompress
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPqOnBackpressure() *OutputGrafanaCloudQueueFullBehavior2 {
-	if o == nil {
-		return nil
-	}
-	return o.PqOnBackpressure
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPqMode() *OutputGrafanaCloudMode2 {
-	if o == nil {
-		return nil
-	}
-	return o.PqMode
-}
-
-func (o *OutputGrafanaCloudGrafanaCloud2) GetPqControls() *OutputGrafanaCloudPqControls2 {
-	if o == nil {
-		return nil
-	}
-	return o.PqControls
-}
-
-type OutputGrafanaCloudType1 string
-
-const (
-	OutputGrafanaCloudType1GrafanaCloud OutputGrafanaCloudType1 = "grafana_cloud"
-)
-
-func (e OutputGrafanaCloudType1) ToPointer() *OutputGrafanaCloudType1 {
-	return &e
-}
-func (e *OutputGrafanaCloudType1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "grafana_cloud":
-		*e = OutputGrafanaCloudType1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudType1: %v", v)
-	}
-}
-
-// OutputGrafanaCloudMessageFormat1 - Format to use when sending logs to Loki (Protobuf or JSON)
-type OutputGrafanaCloudMessageFormat1 string
-
-const (
-	OutputGrafanaCloudMessageFormat1Protobuf OutputGrafanaCloudMessageFormat1 = "protobuf"
-	OutputGrafanaCloudMessageFormat1JSON     OutputGrafanaCloudMessageFormat1 = "json"
-)
-
-func (e OutputGrafanaCloudMessageFormat1) ToPointer() *OutputGrafanaCloudMessageFormat1 {
-	return &e
-}
-func (e *OutputGrafanaCloudMessageFormat1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "protobuf":
-		fallthrough
-	case "json":
-		*e = OutputGrafanaCloudMessageFormat1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudMessageFormat1: %v", v)
-	}
-}
-
-type OutputGrafanaCloudLabel1 struct {
-	Name  *string `default:"" json:"name"`
-	Value string  `json:"value"`
-}
-
-func (o OutputGrafanaCloudLabel1) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputGrafanaCloudLabel1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputGrafanaCloudLabel1) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputGrafanaCloudLabel1) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-type OutputGrafanaCloudPrometheusAuthAuthenticationType1 string
-
-const (
-	OutputGrafanaCloudPrometheusAuthAuthenticationType1None              OutputGrafanaCloudPrometheusAuthAuthenticationType1 = "none"
-	OutputGrafanaCloudPrometheusAuthAuthenticationType1Token             OutputGrafanaCloudPrometheusAuthAuthenticationType1 = "token"
-	OutputGrafanaCloudPrometheusAuthAuthenticationType1TextSecret        OutputGrafanaCloudPrometheusAuthAuthenticationType1 = "textSecret"
-	OutputGrafanaCloudPrometheusAuthAuthenticationType1Basic             OutputGrafanaCloudPrometheusAuthAuthenticationType1 = "basic"
-	OutputGrafanaCloudPrometheusAuthAuthenticationType1CredentialsSecret OutputGrafanaCloudPrometheusAuthAuthenticationType1 = "credentialsSecret"
-)
-
-func (e OutputGrafanaCloudPrometheusAuthAuthenticationType1) ToPointer() *OutputGrafanaCloudPrometheusAuthAuthenticationType1 {
-	return &e
-}
-func (e *OutputGrafanaCloudPrometheusAuthAuthenticationType1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		*e = OutputGrafanaCloudPrometheusAuthAuthenticationType1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudPrometheusAuthAuthenticationType1: %v", v)
-	}
-}
-
-type OutputGrafanaCloudPrometheusAuth1 struct {
-	AuthType *OutputGrafanaCloudPrometheusAuthAuthenticationType1 `default:"basic" json:"authType"`
-	// Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
-	Token *string `json:"token,omitempty"`
-	// Select or create a stored text secret
-	TextSecret *string `json:"textSecret,omitempty"`
-	// Username for authentication
-	Username *string `json:"username,omitempty"`
-	// Password (API key in Grafana Cloud domain) for authentication
-	Password *string `json:"password,omitempty"`
-	// Select or create a secret that references your credentials
-	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
-}
-
-func (o OutputGrafanaCloudPrometheusAuth1) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputGrafanaCloudPrometheusAuth1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputGrafanaCloudPrometheusAuth1) GetAuthType() *OutputGrafanaCloudPrometheusAuthAuthenticationType1 {
-	if o == nil {
-		return nil
-	}
-	return o.AuthType
-}
-
-func (o *OutputGrafanaCloudPrometheusAuth1) GetToken() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Token
-}
-
-func (o *OutputGrafanaCloudPrometheusAuth1) GetTextSecret() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TextSecret
-}
-
-func (o *OutputGrafanaCloudPrometheusAuth1) GetUsername() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Username
-}
-
-func (o *OutputGrafanaCloudPrometheusAuth1) GetPassword() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Password
-}
-
-func (o *OutputGrafanaCloudPrometheusAuth1) GetCredentialsSecret() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CredentialsSecret
-}
-
-type OutputGrafanaCloudLokiAuthAuthenticationType1 string
-
-const (
-	OutputGrafanaCloudLokiAuthAuthenticationType1None              OutputGrafanaCloudLokiAuthAuthenticationType1 = "none"
-	OutputGrafanaCloudLokiAuthAuthenticationType1Token             OutputGrafanaCloudLokiAuthAuthenticationType1 = "token"
-	OutputGrafanaCloudLokiAuthAuthenticationType1TextSecret        OutputGrafanaCloudLokiAuthAuthenticationType1 = "textSecret"
-	OutputGrafanaCloudLokiAuthAuthenticationType1Basic             OutputGrafanaCloudLokiAuthAuthenticationType1 = "basic"
-	OutputGrafanaCloudLokiAuthAuthenticationType1CredentialsSecret OutputGrafanaCloudLokiAuthAuthenticationType1 = "credentialsSecret"
-)
-
-func (e OutputGrafanaCloudLokiAuthAuthenticationType1) ToPointer() *OutputGrafanaCloudLokiAuthAuthenticationType1 {
-	return &e
-}
-func (e *OutputGrafanaCloudLokiAuthAuthenticationType1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		*e = OutputGrafanaCloudLokiAuthAuthenticationType1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudLokiAuthAuthenticationType1: %v", v)
-	}
-}
-
-type OutputGrafanaCloudLokiAuth1 struct {
-	AuthType *OutputGrafanaCloudLokiAuthAuthenticationType1 `default:"basic" json:"authType"`
-	// Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
-	Token *string `json:"token,omitempty"`
-	// Select or create a stored text secret
-	TextSecret *string `json:"textSecret,omitempty"`
-	// Username for authentication
-	Username *string `json:"username,omitempty"`
-	// Password (API key in Grafana Cloud domain) for authentication
-	Password *string `json:"password,omitempty"`
-	// Select or create a secret that references your credentials
-	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
-}
-
-func (o OutputGrafanaCloudLokiAuth1) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputGrafanaCloudLokiAuth1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputGrafanaCloudLokiAuth1) GetAuthType() *OutputGrafanaCloudLokiAuthAuthenticationType1 {
-	if o == nil {
-		return nil
-	}
-	return o.AuthType
-}
-
-func (o *OutputGrafanaCloudLokiAuth1) GetToken() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Token
-}
-
-func (o *OutputGrafanaCloudLokiAuth1) GetTextSecret() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TextSecret
-}
-
-func (o *OutputGrafanaCloudLokiAuth1) GetUsername() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Username
-}
-
-func (o *OutputGrafanaCloudLokiAuth1) GetPassword() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Password
-}
-
-func (o *OutputGrafanaCloudLokiAuth1) GetCredentialsSecret() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CredentialsSecret
-}
-
-type OutputGrafanaCloudExtraHTTPHeader1 struct {
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
-}
-
-func (o OutputGrafanaCloudExtraHTTPHeader1) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputGrafanaCloudExtraHTTPHeader1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputGrafanaCloudExtraHTTPHeader1) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputGrafanaCloudExtraHTTPHeader1) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputGrafanaCloudFailedRequestLoggingMode1 - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputGrafanaCloudFailedRequestLoggingMode1 string
-
-const (
-	OutputGrafanaCloudFailedRequestLoggingMode1Payload           OutputGrafanaCloudFailedRequestLoggingMode1 = "payload"
-	OutputGrafanaCloudFailedRequestLoggingMode1PayloadAndHeaders OutputGrafanaCloudFailedRequestLoggingMode1 = "payloadAndHeaders"
-	OutputGrafanaCloudFailedRequestLoggingMode1None              OutputGrafanaCloudFailedRequestLoggingMode1 = "none"
-)
-
-func (e OutputGrafanaCloudFailedRequestLoggingMode1) ToPointer() *OutputGrafanaCloudFailedRequestLoggingMode1 {
-	return &e
-}
-func (e *OutputGrafanaCloudFailedRequestLoggingMode1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = OutputGrafanaCloudFailedRequestLoggingMode1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudFailedRequestLoggingMode1: %v", v)
-	}
-}
-
-type OutputGrafanaCloudResponseRetrySetting1 struct {
-	// The HTTP response status code that will trigger retries
-	HTTPStatus float64 `json:"httpStatus"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputGrafanaCloudResponseRetrySetting1) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputGrafanaCloudResponseRetrySetting1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputGrafanaCloudResponseRetrySetting1) GetHTTPStatus() float64 {
-	if o == nil {
-		return 0.0
-	}
-	return o.HTTPStatus
-}
-
-func (o *OutputGrafanaCloudResponseRetrySetting1) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputGrafanaCloudResponseRetrySetting1) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputGrafanaCloudResponseRetrySetting1) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-type OutputGrafanaCloudTimeoutRetrySettings1 struct {
-	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputGrafanaCloudTimeoutRetrySettings1) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputGrafanaCloudTimeoutRetrySettings1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputGrafanaCloudTimeoutRetrySettings1) GetTimeoutRetry() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetry
-}
-
-func (o *OutputGrafanaCloudTimeoutRetrySettings1) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputGrafanaCloudTimeoutRetrySettings1) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputGrafanaCloudTimeoutRetrySettings1) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-// OutputGrafanaCloudBackpressureBehavior1 - How to handle events when all receivers are exerting backpressure
-type OutputGrafanaCloudBackpressureBehavior1 string
-
-const (
-	OutputGrafanaCloudBackpressureBehavior1Block OutputGrafanaCloudBackpressureBehavior1 = "block"
-	OutputGrafanaCloudBackpressureBehavior1Drop  OutputGrafanaCloudBackpressureBehavior1 = "drop"
-	OutputGrafanaCloudBackpressureBehavior1Queue OutputGrafanaCloudBackpressureBehavior1 = "queue"
-)
-
-func (e OutputGrafanaCloudBackpressureBehavior1) ToPointer() *OutputGrafanaCloudBackpressureBehavior1 {
-	return &e
-}
-func (e *OutputGrafanaCloudBackpressureBehavior1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputGrafanaCloudBackpressureBehavior1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudBackpressureBehavior1: %v", v)
-	}
-}
-
-// OutputGrafanaCloudCompression1 - Codec to use to compress the persisted data
-type OutputGrafanaCloudCompression1 string
-
-const (
-	OutputGrafanaCloudCompression1None OutputGrafanaCloudCompression1 = "none"
-	OutputGrafanaCloudCompression1Gzip OutputGrafanaCloudCompression1 = "gzip"
-)
-
-func (e OutputGrafanaCloudCompression1) ToPointer() *OutputGrafanaCloudCompression1 {
-	return &e
-}
-func (e *OutputGrafanaCloudCompression1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputGrafanaCloudCompression1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudCompression1: %v", v)
-	}
-}
-
-// OutputGrafanaCloudQueueFullBehavior1 - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputGrafanaCloudQueueFullBehavior1 string
-
-const (
-	OutputGrafanaCloudQueueFullBehavior1Block OutputGrafanaCloudQueueFullBehavior1 = "block"
-	OutputGrafanaCloudQueueFullBehavior1Drop  OutputGrafanaCloudQueueFullBehavior1 = "drop"
-)
-
-func (e OutputGrafanaCloudQueueFullBehavior1) ToPointer() *OutputGrafanaCloudQueueFullBehavior1 {
-	return &e
-}
-func (e *OutputGrafanaCloudQueueFullBehavior1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputGrafanaCloudQueueFullBehavior1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudQueueFullBehavior1: %v", v)
-	}
-}
-
-// OutputGrafanaCloudMode1 - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputGrafanaCloudMode1 string
-
-const (
-	OutputGrafanaCloudMode1Error        OutputGrafanaCloudMode1 = "error"
-	OutputGrafanaCloudMode1Backpressure OutputGrafanaCloudMode1 = "backpressure"
-	OutputGrafanaCloudMode1Always       OutputGrafanaCloudMode1 = "always"
-)
-
-func (e OutputGrafanaCloudMode1) ToPointer() *OutputGrafanaCloudMode1 {
-	return &e
-}
-func (e *OutputGrafanaCloudMode1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputGrafanaCloudMode1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGrafanaCloudMode1: %v", v)
-	}
-}
-
-type OutputGrafanaCloudPqControls1 struct {
-}
-
-func (o OutputGrafanaCloudPqControls1) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputGrafanaCloudPqControls1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-type OutputGrafanaCloudGrafanaCloud1 struct {
-	// Unique ID for this output
-	ID   string                  `json:"id"`
-	Type OutputGrafanaCloudType1 `json:"type"`
-	// Pipeline to process data before sending out to this output
-	Pipeline *string `json:"pipeline,omitempty"`
-	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
-	SystemFields []string `json:"systemFields,omitempty"`
-	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-	Environment *string `json:"environment,omitempty"`
-	// Tags for filtering and grouping in @{product}
-	Streamtags []string `json:"streamtags,omitempty"`
-	// The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net
-	LokiURL string `json:"lokiUrl"`
-	// The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
+	// The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push. LokiUrl, PrometheusUrl, or both are required.
 	PrometheusURL *string `json:"prometheusUrl,omitempty"`
 	// Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
 	Message *string `json:"message,omitempty"`
 	// Format to use when sending logs to Loki (Protobuf or JSON)
-	MessageFormat *OutputGrafanaCloudMessageFormat1 `default:"protobuf" json:"messageFormat"`
+	MessageFormat *OutputGrafanaCloudMessageFormat `default:"protobuf" json:"messageFormat"`
 	// List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}"
-	Labels []OutputGrafanaCloudLabel1 `json:"labels,omitempty"`
+	Labels []OutputGrafanaCloudLabel `json:"labels,omitempty"`
 	// JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
-	MetricRenameExpr *string                            `default:"name.replace(/[^a-zA-Z0-9_]/g, '_')" json:"metricRenameExpr"`
-	PrometheusAuth   *OutputGrafanaCloudPrometheusAuth1 `json:"prometheusAuth,omitempty"`
-	LokiAuth         *OutputGrafanaCloudLokiAuth1       `json:"lokiAuth,omitempty"`
+	MetricRenameExpr *string                           `default:"name.replace(/[^a-zA-Z0-9_]/g, '_')" json:"metricRenameExpr"`
+	PrometheusAuth   *OutputGrafanaCloudPrometheusAuth `json:"prometheusAuth,omitempty"`
+	LokiAuth         *OutputGrafanaCloudLokiAuth       `json:"lokiAuth,omitempty"`
 	// Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.
 	Concurrency *float64 `default:"1" json:"concurrency"`
 	// Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
@@ -1535,21 +620,21 @@ type OutputGrafanaCloudGrafanaCloud1 struct {
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 	FlushPeriodSec *float64 `default:"15" json:"flushPeriodSec"`
 	// Headers to add to all events
-	ExtraHTTPHeaders []OutputGrafanaCloudExtraHTTPHeader1 `json:"extraHttpHeaders,omitempty"`
+	ExtraHTTPHeaders []OutputGrafanaCloudExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
 	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 	UseRoundRobinDNS *bool `default:"false" json:"useRoundRobinDns"`
 	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputGrafanaCloudFailedRequestLoggingMode1 `default:"none" json:"failedRequestLoggingMode"`
+	FailedRequestLoggingMode *OutputGrafanaCloudFailedRequestLoggingMode `default:"none" json:"failedRequestLoggingMode"`
 	// List of headers that are safe to log in plain text
 	SafeHeaders []string `json:"safeHeaders,omitempty"`
 	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputGrafanaCloudResponseRetrySetting1 `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputGrafanaCloudTimeoutRetrySettings1  `json:"timeoutRetrySettings,omitempty"`
+	ResponseRetrySettings []OutputGrafanaCloudResponseRetrySetting `json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings  *OutputGrafanaCloudTimeoutRetrySettings  `json:"timeoutRetrySettings,omitempty"`
 	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputGrafanaCloudBackpressureBehavior1 `default:"block" json:"onBackpressure"`
-	Description    *string                                  `json:"description,omitempty"`
+	OnBackpressure *OutputGrafanaCloudBackpressureBehavior `default:"block" json:"onBackpressure"`
+	Description    *string                                 `json:"description,omitempty"`
 	// Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.
 	Compress *bool `default:"true" json:"compress"`
 	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
@@ -1559,369 +644,280 @@ type OutputGrafanaCloudGrafanaCloud1 struct {
 	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
 	// Codec to use to compress the persisted data
-	PqCompress *OutputGrafanaCloudCompression1 `default:"none" json:"pqCompress"`
+	PqCompress *OutputGrafanaCloudCompression `default:"none" json:"pqCompress"`
 	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputGrafanaCloudQueueFullBehavior1 `default:"block" json:"pqOnBackpressure"`
+	PqOnBackpressure *OutputGrafanaCloudQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputGrafanaCloudMode1       `default:"error" json:"pqMode"`
-	PqControls *OutputGrafanaCloudPqControls1 `json:"pqControls,omitempty"`
+	PqMode     *OutputGrafanaCloudMode       `default:"error" json:"pqMode"`
+	PqControls *OutputGrafanaCloudPqControls `json:"pqControls,omitempty"`
 }
 
-func (o OutputGrafanaCloudGrafanaCloud1) MarshalJSON() ([]byte, error) {
+func (o OutputGrafanaCloud) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(o, "", false)
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type", "lokiUrl"}); err != nil {
+func (o *OutputGrafanaCloud) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetID() string {
+func (o *OutputGrafanaCloud) GetID() string {
 	if o == nil {
 		return ""
 	}
 	return o.ID
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetType() OutputGrafanaCloudType1 {
+func (o *OutputGrafanaCloud) GetType() OutputGrafanaCloudType {
 	if o == nil {
-		return OutputGrafanaCloudType1("")
+		return OutputGrafanaCloudType("")
 	}
 	return o.Type
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPipeline() *string {
+func (o *OutputGrafanaCloud) GetPipeline() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Pipeline
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetSystemFields() []string {
+func (o *OutputGrafanaCloud) GetSystemFields() []string {
 	if o == nil {
 		return nil
 	}
 	return o.SystemFields
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetEnvironment() *string {
+func (o *OutputGrafanaCloud) GetEnvironment() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Environment
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetStreamtags() []string {
+func (o *OutputGrafanaCloud) GetStreamtags() []string {
 	if o == nil {
 		return nil
 	}
 	return o.Streamtags
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetLokiURL() string {
+func (o *OutputGrafanaCloud) GetLokiURL() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.LokiURL
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPrometheusURL() *string {
+func (o *OutputGrafanaCloud) GetPrometheusURL() *string {
 	if o == nil {
 		return nil
 	}
 	return o.PrometheusURL
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetMessage() *string {
+func (o *OutputGrafanaCloud) GetMessage() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Message
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetMessageFormat() *OutputGrafanaCloudMessageFormat1 {
+func (o *OutputGrafanaCloud) GetMessageFormat() *OutputGrafanaCloudMessageFormat {
 	if o == nil {
 		return nil
 	}
 	return o.MessageFormat
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetLabels() []OutputGrafanaCloudLabel1 {
+func (o *OutputGrafanaCloud) GetLabels() []OutputGrafanaCloudLabel {
 	if o == nil {
 		return nil
 	}
 	return o.Labels
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetMetricRenameExpr() *string {
+func (o *OutputGrafanaCloud) GetMetricRenameExpr() *string {
 	if o == nil {
 		return nil
 	}
 	return o.MetricRenameExpr
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPrometheusAuth() *OutputGrafanaCloudPrometheusAuth1 {
+func (o *OutputGrafanaCloud) GetPrometheusAuth() *OutputGrafanaCloudPrometheusAuth {
 	if o == nil {
 		return nil
 	}
 	return o.PrometheusAuth
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetLokiAuth() *OutputGrafanaCloudLokiAuth1 {
+func (o *OutputGrafanaCloud) GetLokiAuth() *OutputGrafanaCloudLokiAuth {
 	if o == nil {
 		return nil
 	}
 	return o.LokiAuth
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetConcurrency() *float64 {
+func (o *OutputGrafanaCloud) GetConcurrency() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.Concurrency
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetMaxPayloadSizeKB() *float64 {
+func (o *OutputGrafanaCloud) GetMaxPayloadSizeKB() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.MaxPayloadSizeKB
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetMaxPayloadEvents() *float64 {
+func (o *OutputGrafanaCloud) GetMaxPayloadEvents() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.MaxPayloadEvents
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetRejectUnauthorized() *bool {
+func (o *OutputGrafanaCloud) GetRejectUnauthorized() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.RejectUnauthorized
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetTimeoutSec() *float64 {
+func (o *OutputGrafanaCloud) GetTimeoutSec() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.TimeoutSec
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetFlushPeriodSec() *float64 {
+func (o *OutputGrafanaCloud) GetFlushPeriodSec() *float64 {
 	if o == nil {
 		return nil
 	}
 	return o.FlushPeriodSec
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetExtraHTTPHeaders() []OutputGrafanaCloudExtraHTTPHeader1 {
+func (o *OutputGrafanaCloud) GetExtraHTTPHeaders() []OutputGrafanaCloudExtraHTTPHeader {
 	if o == nil {
 		return nil
 	}
 	return o.ExtraHTTPHeaders
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetUseRoundRobinDNS() *bool {
+func (o *OutputGrafanaCloud) GetUseRoundRobinDNS() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.UseRoundRobinDNS
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetFailedRequestLoggingMode() *OutputGrafanaCloudFailedRequestLoggingMode1 {
+func (o *OutputGrafanaCloud) GetFailedRequestLoggingMode() *OutputGrafanaCloudFailedRequestLoggingMode {
 	if o == nil {
 		return nil
 	}
 	return o.FailedRequestLoggingMode
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetSafeHeaders() []string {
+func (o *OutputGrafanaCloud) GetSafeHeaders() []string {
 	if o == nil {
 		return nil
 	}
 	return o.SafeHeaders
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetResponseRetrySettings() []OutputGrafanaCloudResponseRetrySetting1 {
+func (o *OutputGrafanaCloud) GetResponseRetrySettings() []OutputGrafanaCloudResponseRetrySetting {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseRetrySettings
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetTimeoutRetrySettings() *OutputGrafanaCloudTimeoutRetrySettings1 {
+func (o *OutputGrafanaCloud) GetTimeoutRetrySettings() *OutputGrafanaCloudTimeoutRetrySettings {
 	if o == nil {
 		return nil
 	}
 	return o.TimeoutRetrySettings
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetResponseHonorRetryAfterHeader() *bool {
+func (o *OutputGrafanaCloud) GetResponseHonorRetryAfterHeader() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseHonorRetryAfterHeader
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetOnBackpressure() *OutputGrafanaCloudBackpressureBehavior1 {
+func (o *OutputGrafanaCloud) GetOnBackpressure() *OutputGrafanaCloudBackpressureBehavior {
 	if o == nil {
 		return nil
 	}
 	return o.OnBackpressure
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetDescription() *string {
+func (o *OutputGrafanaCloud) GetDescription() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Description
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetCompress() *bool {
+func (o *OutputGrafanaCloud) GetCompress() *bool {
 	if o == nil {
 		return nil
 	}
 	return o.Compress
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPqMaxFileSize() *string {
+func (o *OutputGrafanaCloud) GetPqMaxFileSize() *string {
 	if o == nil {
 		return nil
 	}
 	return o.PqMaxFileSize
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPqMaxSize() *string {
+func (o *OutputGrafanaCloud) GetPqMaxSize() *string {
 	if o == nil {
 		return nil
 	}
 	return o.PqMaxSize
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPqPath() *string {
+func (o *OutputGrafanaCloud) GetPqPath() *string {
 	if o == nil {
 		return nil
 	}
 	return o.PqPath
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPqCompress() *OutputGrafanaCloudCompression1 {
+func (o *OutputGrafanaCloud) GetPqCompress() *OutputGrafanaCloudCompression {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPqOnBackpressure() *OutputGrafanaCloudQueueFullBehavior1 {
+func (o *OutputGrafanaCloud) GetPqOnBackpressure() *OutputGrafanaCloudQueueFullBehavior {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPqMode() *OutputGrafanaCloudMode1 {
+func (o *OutputGrafanaCloud) GetPqMode() *OutputGrafanaCloudMode {
 	if o == nil {
 		return nil
 	}
 	return o.PqMode
 }
 
-func (o *OutputGrafanaCloudGrafanaCloud1) GetPqControls() *OutputGrafanaCloudPqControls1 {
+func (o *OutputGrafanaCloud) GetPqControls() *OutputGrafanaCloudPqControls {
 	if o == nil {
 		return nil
 	}
 	return o.PqControls
-}
-
-type OutputGrafanaCloudType string
-
-const (
-	OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud1 OutputGrafanaCloudType = "OutputGrafanaCloud_GrafanaCloud_1"
-	OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud2 OutputGrafanaCloudType = "OutputGrafanaCloud_GrafanaCloud_2"
-)
-
-type OutputGrafanaCloud struct {
-	OutputGrafanaCloudGrafanaCloud1 *OutputGrafanaCloudGrafanaCloud1 `queryParam:"inline,name=OutputGrafanaCloud"`
-	OutputGrafanaCloudGrafanaCloud2 *OutputGrafanaCloudGrafanaCloud2 `queryParam:"inline,name=OutputGrafanaCloud"`
-
-	Type OutputGrafanaCloudType
-}
-
-func CreateOutputGrafanaCloudOutputGrafanaCloudGrafanaCloud1(outputGrafanaCloudGrafanaCloud1 OutputGrafanaCloudGrafanaCloud1) OutputGrafanaCloud {
-	typ := OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud1
-
-	return OutputGrafanaCloud{
-		OutputGrafanaCloudGrafanaCloud1: &outputGrafanaCloudGrafanaCloud1,
-		Type:                            typ,
-	}
-}
-
-func CreateOutputGrafanaCloudOutputGrafanaCloudGrafanaCloud2(outputGrafanaCloudGrafanaCloud2 OutputGrafanaCloudGrafanaCloud2) OutputGrafanaCloud {
-	typ := OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud2
-
-	return OutputGrafanaCloud{
-		OutputGrafanaCloudGrafanaCloud2: &outputGrafanaCloudGrafanaCloud2,
-		Type:                            typ,
-	}
-}
-
-func (u *OutputGrafanaCloud) UnmarshalJSON(data []byte) error {
-
-	var candidates []utils.UnionCandidate
-
-	// Collect all valid candidates
-	var outputGrafanaCloudGrafanaCloud1 OutputGrafanaCloudGrafanaCloud1 = OutputGrafanaCloudGrafanaCloud1{}
-	if err := utils.UnmarshalJSON(data, &outputGrafanaCloudGrafanaCloud1, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud1,
-			Value: &outputGrafanaCloudGrafanaCloud1,
-		})
-	}
-
-	var outputGrafanaCloudGrafanaCloud2 OutputGrafanaCloudGrafanaCloud2 = OutputGrafanaCloudGrafanaCloud2{}
-	if err := utils.UnmarshalJSON(data, &outputGrafanaCloudGrafanaCloud2, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud2,
-			Value: &outputGrafanaCloudGrafanaCloud2,
-		})
-	}
-
-	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for OutputGrafanaCloud", string(data))
-	}
-
-	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
-	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for OutputGrafanaCloud", string(data))
-	}
-
-	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(OutputGrafanaCloudType)
-	switch best.Type {
-	case OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud1:
-		u.OutputGrafanaCloudGrafanaCloud1 = best.Value.(*OutputGrafanaCloudGrafanaCloud1)
-		return nil
-	case OutputGrafanaCloudTypeOutputGrafanaCloudGrafanaCloud2:
-		u.OutputGrafanaCloudGrafanaCloud2 = best.Value.(*OutputGrafanaCloudGrafanaCloud2)
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for OutputGrafanaCloud", string(data))
-}
-
-func (u OutputGrafanaCloud) MarshalJSON() ([]byte, error) {
-	if u.OutputGrafanaCloudGrafanaCloud1 != nil {
-		return utils.MarshalJSON(u.OutputGrafanaCloudGrafanaCloud1, "", true)
-	}
-
-	if u.OutputGrafanaCloudGrafanaCloud2 != nil {
-		return utils.MarshalJSON(u.OutputGrafanaCloudGrafanaCloud2, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type OutputGrafanaCloud: all fields are null")
 }

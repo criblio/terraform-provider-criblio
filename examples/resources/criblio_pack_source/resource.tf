@@ -1300,236 +1300,119 @@ resource "criblio_pack_source" "my_packsource" {
     type              = "google_pubsub"
   }
   input_grafana = {
-    input_grafana_grafana1 = {
-      activity_log_sample_rate = 10
-      capture_headers          = true
-      connections = [
+    activity_log_sample_rate = 10
+    capture_headers          = true
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    description         = "Grafana listener supporting Prom remote write and Loki logs"
+    disabled            = false
+    enable_health_check = true
+    enable_proxy_header = false
+    environment         = "main"
+    host                = "0.0.0.0"
+    id                  = "grafana-listener"
+    ip_allowlist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
+    ip_denylist_regex   = "^192\\.168\\.0\\.\\d{1,3}$"
+    keep_alive_timeout  = 30
+    loki_api            = "/loki/api/v1/push"
+    loki_auth = {
+      auth_header_expr   = "`Bearer ${token}`"
+      auth_type          = "token"
+      credentials_secret = "loki-credentials"
+      login_url          = "https://loki.example.com/oauth/token"
+      oauth_headers = [
         {
-          output   = "...my_output..."
-          pipeline = "...my_pipeline..."
+          name  = "Accept"
+          value = "application/json"
         }
       ]
-      description         = "Grafana listener supporting Prom remote write and Loki logs"
-      disabled            = false
-      enable_health_check = true
-      enable_proxy_header = false
-      environment         = "main"
-      host                = "0.0.0.0"
-      id                  = "grafana-listener"
-      ip_allowlist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
-      ip_denylist_regex   = "^192\\.168\\.0\\.\\d{1,3}$"
-      keep_alive_timeout  = 30
-      loki_api            = "/loki/api/v1/push"
-      loki_auth = {
-        auth_header_expr   = "`Bearer ${token}`"
-        auth_type          = "token"
-        credentials_secret = "loki-credentials"
-        login_url          = "https://loki.example.com/oauth/token"
-        oauth_headers = [
-          {
-            name  = "Accept"
-            value = "application/json"
-          }
-        ]
-        oauth_params = [
-          {
-            name  = "grant_type"
-            value = "client_credentials"
-          }
-        ]
-        password             = "$${{secret:loki_password}"
-        secret               = "$${{secret:loki_oauth_secret}"
-        secret_param_name    = "client_secret"
-        text_secret          = "loki-token-secret"
-        token                = "$${{secret:loki_token}"
-        token_attribute_name = "access_token"
-        token_timeout_secs   = 3600
-        username             = "loki_user"
-      }
-      max_active_req          = 512
-      max_requests_per_socket = 1000
-      metadata = [
+      oauth_params = [
         {
-          name  = "source"
-          value = "\"grafana\""
+          name  = "grant_type"
+          value = "client_credentials"
         }
       ]
-      pipeline = "default"
-      port     = 4318
-      pq = {
-        commit_frequency = 100
-        compress         = "gzip"
-        max_buffer_size  = 5000
-        max_file_size    = "128 MB"
-        max_size         = "20GB"
-        mode             = "smart"
-        path             = "/opt/cribl/state/queues"
-      }
-      pq_enabled     = false
-      prometheus_api = "/api/prom/push"
-      prometheus_auth = {
-        auth_header_expr   = "`Bearer ${token}`"
-        auth_type          = "basic"
-        credentials_secret = "prom-credentials"
-        login_url          = "https://grafana.example.com/oauth/token"
-        oauth_headers = [
-          {
-            name  = "Accept"
-            value = "application/json"
-          }
-        ]
-        oauth_params = [
-          {
-            name  = "grant_type"
-            value = "client_credentials"
-          }
-        ]
-        password             = "$${{secret:prom_password}"
-        secret               = "$${{secret:prom_oauth_secret}"
-        secret_param_name    = "client_secret"
-        text_secret          = "prom-token-secret"
-        token                = "$${{secret:prom_token}"
-        token_attribute_name = "access_token"
-        token_timeout_secs   = 3600
-        username             = "grafana"
-      }
-      request_timeout = 30
-      send_to_routes  = true
-      socket_timeout  = 60
-      streamtags = [
-        "prod",
-        "grafana",
-      ]
-      tls = {
-        ca_path             = "/etc/ssl/certs/ca.pem"
-        cert_path           = "/etc/ssl/certs/server.crt"
-        certificate_name    = "grafana-listener-cert"
-        common_name_regex   = "{ \"see\": \"documentation\" }"
-        disabled            = true
-        max_version         = "TLSv1.3"
-        min_version         = "TLSv1.2"
-        passphrase          = "$${{secret:grafana_key_pass}"
-        priv_key_path       = "/etc/ssl/private/server.key"
-        reject_unauthorized = "{ \"see\": \"documentation\" }"
-        request_cert        = false
-      }
-      type = "grafana"
+      password             = "$${{secret:loki_password}"
+      secret               = "$${{secret:loki_oauth_secret}"
+      secret_param_name    = "client_secret"
+      text_secret          = "loki-token-secret"
+      token                = "$${{secret:loki_token}"
+      token_attribute_name = "access_token"
+      token_timeout_secs   = 3600
+      username             = "loki_user"
     }
-    input_grafana_grafana2 = {
-      activity_log_sample_rate = 10
-      capture_headers          = true
-      connections = [
-        {
-          output   = "...my_output..."
-          pipeline = "...my_pipeline..."
-        }
-      ]
-      description         = "Grafana listener supporting Prom remote write and Loki logs"
-      disabled            = false
-      enable_health_check = true
-      enable_proxy_header = false
-      environment         = "main"
-      host                = "0.0.0.0"
-      id                  = "grafana-listener"
-      ip_allowlist_regex  = "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$"
-      ip_denylist_regex   = "^192\\.168\\.0\\.\\d{1,3}$"
-      keep_alive_timeout  = 30
-      loki_api            = "/loki/api/v1/push"
-      loki_auth = {
-        auth_header_expr   = "`Bearer ${token}`"
-        auth_type          = "token"
-        credentials_secret = "loki-credentials"
-        login_url          = "https://loki.example.com/oauth/token"
-        oauth_headers = [
-          {
-            name  = "Accept"
-            value = "application/json"
-          }
-        ]
-        oauth_params = [
-          {
-            name  = "grant_type"
-            value = "client_credentials"
-          }
-        ]
-        password             = "$${{secret:loki_password}"
-        secret               = "$${{secret:loki_oauth_secret}"
-        secret_param_name    = "client_secret"
-        text_secret          = "loki-token-secret"
-        token                = "$${{secret:loki_token}"
-        token_attribute_name = "access_token"
-        token_timeout_secs   = 3600
-        username             = "loki_user"
+    max_active_req          = 512
+    max_requests_per_socket = 1000
+    metadata = [
+      {
+        name  = "source"
+        value = "\"grafana\""
       }
-      max_active_req          = 512
-      max_requests_per_socket = 1000
-      metadata = [
-        {
-          name  = "source"
-          value = "\"grafana\""
-        }
-      ]
-      pipeline = "default"
-      port     = 4318
-      pq = {
-        commit_frequency = 100
-        compress         = "gzip"
-        max_buffer_size  = 5000
-        max_file_size    = "128 MB"
-        max_size         = "20GB"
-        mode             = "smart"
-        path             = "/opt/cribl/state/queues"
-      }
-      pq_enabled     = false
-      prometheus_api = "/api/prom/push"
-      prometheus_auth = {
-        auth_header_expr   = "`Bearer ${token}`"
-        auth_type          = "basic"
-        credentials_secret = "prom-credentials"
-        login_url          = "https://grafana.example.com/oauth/token"
-        oauth_headers = [
-          {
-            name  = "Accept"
-            value = "application/json"
-          }
-        ]
-        oauth_params = [
-          {
-            name  = "grant_type"
-            value = "client_credentials"
-          }
-        ]
-        password             = "$${{secret:prom_password}"
-        secret               = "$${{secret:prom_oauth_secret}"
-        secret_param_name    = "client_secret"
-        text_secret          = "prom-token-secret"
-        token                = "$${{secret:prom_token}"
-        token_attribute_name = "access_token"
-        token_timeout_secs   = 3600
-        username             = "grafana"
-      }
-      request_timeout = 30
-      send_to_routes  = true
-      socket_timeout  = 60
-      streamtags = [
-        "prod",
-        "grafana",
-      ]
-      tls = {
-        ca_path             = "/etc/ssl/certs/ca.pem"
-        cert_path           = "/etc/ssl/certs/server.crt"
-        certificate_name    = "grafana-listener-cert"
-        common_name_regex   = "{ \"see\": \"documentation\" }"
-        disabled            = true
-        max_version         = "TLSv1.3"
-        min_version         = "TLSv1.2"
-        passphrase          = "$${{secret:grafana_key_pass}"
-        priv_key_path       = "/etc/ssl/private/server.key"
-        reject_unauthorized = "{ \"see\": \"documentation\" }"
-        request_cert        = false
-      }
-      type = "grafana"
+    ]
+    pipeline = "default"
+    port     = 4318
+    pq = {
+      commit_frequency = 100
+      compress         = "gzip"
+      max_buffer_size  = 5000
+      max_file_size    = "128 MB"
+      max_size         = "20GB"
+      mode             = "smart"
+      path             = "/opt/cribl/state/queues"
     }
+    pq_enabled     = false
+    prometheus_api = "/api/prom/push"
+    prometheus_auth = {
+      auth_header_expr   = "`Bearer ${token}`"
+      auth_type          = "basic"
+      credentials_secret = "prom-credentials"
+      login_url          = "https://grafana.example.com/oauth/token"
+      oauth_headers = [
+        {
+          name  = "Accept"
+          value = "application/json"
+        }
+      ]
+      oauth_params = [
+        {
+          name  = "grant_type"
+          value = "client_credentials"
+        }
+      ]
+      password             = "$${{secret:prom_password}"
+      secret               = "$${{secret:prom_oauth_secret}"
+      secret_param_name    = "client_secret"
+      text_secret          = "prom-token-secret"
+      token                = "$${{secret:prom_token}"
+      token_attribute_name = "access_token"
+      token_timeout_secs   = 3600
+      username             = "grafana"
+    }
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
+    streamtags = [
+      "prod",
+      "grafana",
+    ]
+    tls = {
+      ca_path             = "/etc/ssl/certs/ca.pem"
+      cert_path           = "/etc/ssl/certs/server.crt"
+      certificate_name    = "grafana-listener-cert"
+      common_name_regex   = "{ \"see\": \"documentation\" }"
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = "$${{secret:grafana_key_pass}"
+      priv_key_path       = "/etc/ssl/private/server.key"
+      reject_unauthorized = "{ \"see\": \"documentation\" }"
+      request_cert        = false
+    }
+    type = "grafana"
   }
   input_http = {
     activity_log_sample_rate = 10

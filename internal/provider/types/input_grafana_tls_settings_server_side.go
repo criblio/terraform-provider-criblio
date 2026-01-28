@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type InputGrafanaTLSSettingsServerSide2 struct {
+type InputGrafanaTLSSettingsServerSide struct {
 	CaPath             types.String         `tfsdk:"ca_path"`
 	CertificateName    types.String         `tfsdk:"certificate_name"`
 	CertPath           types.String         `tfsdk:"cert_path"`

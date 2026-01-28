@@ -2,5 +2,5 @@
 
 package types
 
-type OutputGrafanaCloudPqControls1 struct {
+type OutputGrafanaCloudPqControls struct {
 }

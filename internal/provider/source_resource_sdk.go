@@ -4417,1153 +4417,571 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputGrafana *shared.InputGrafana
 	if r.InputGrafana != nil {
-		var inputGrafanaGrafana1 *shared.InputGrafanaGrafana1
-		if r.InputGrafana.InputGrafanaGrafana1 != nil {
-			id10 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana1.ID.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.ID.IsNull() {
-				*id10 = r.InputGrafana.InputGrafanaGrafana1.ID.ValueString()
+		id10 := new(string)
+		if !r.InputGrafana.ID.IsUnknown() && !r.InputGrafana.ID.IsNull() {
+			*id10 = r.InputGrafana.ID.ValueString()
+		} else {
+			id10 = nil
+		}
+		typeVar11 := new(shared.InputGrafanaType)
+		if !r.InputGrafana.Type.IsUnknown() && !r.InputGrafana.Type.IsNull() {
+			*typeVar11 = shared.InputGrafanaType(r.InputGrafana.Type.ValueString())
+		} else {
+			typeVar11 = nil
+		}
+		disabled29 := new(bool)
+		if !r.InputGrafana.Disabled.IsUnknown() && !r.InputGrafana.Disabled.IsNull() {
+			*disabled29 = r.InputGrafana.Disabled.ValueBool()
+		} else {
+			disabled29 = nil
+		}
+		pipeline20 := new(string)
+		if !r.InputGrafana.Pipeline.IsUnknown() && !r.InputGrafana.Pipeline.IsNull() {
+			*pipeline20 = r.InputGrafana.Pipeline.ValueString()
+		} else {
+			pipeline20 = nil
+		}
+		sendToRoutes10 := new(bool)
+		if !r.InputGrafana.SendToRoutes.IsUnknown() && !r.InputGrafana.SendToRoutes.IsNull() {
+			*sendToRoutes10 = r.InputGrafana.SendToRoutes.ValueBool()
+		} else {
+			sendToRoutes10 = nil
+		}
+		environment10 := new(string)
+		if !r.InputGrafana.Environment.IsUnknown() && !r.InputGrafana.Environment.IsNull() {
+			*environment10 = r.InputGrafana.Environment.ValueString()
+		} else {
+			environment10 = nil
+		}
+		pqEnabled10 := new(bool)
+		if !r.InputGrafana.PqEnabled.IsUnknown() && !r.InputGrafana.PqEnabled.IsNull() {
+			*pqEnabled10 = r.InputGrafana.PqEnabled.ValueBool()
+		} else {
+			pqEnabled10 = nil
+		}
+		streamtags10 := make([]string, 0, len(r.InputGrafana.Streamtags))
+		for streamtagsIndex10 := range r.InputGrafana.Streamtags {
+			streamtags10 = append(streamtags10, r.InputGrafana.Streamtags[streamtagsIndex10].ValueString())
+		}
+		connections10 := make([]shared.InputGrafanaConnection, 0, len(r.InputGrafana.Connections))
+		for connectionsIndex10 := range r.InputGrafana.Connections {
+			pipeline21 := new(string)
+			if !r.InputGrafana.Connections[connectionsIndex10].Pipeline.IsUnknown() && !r.InputGrafana.Connections[connectionsIndex10].Pipeline.IsNull() {
+				*pipeline21 = r.InputGrafana.Connections[connectionsIndex10].Pipeline.ValueString()
 			} else {
-				id10 = nil
+				pipeline21 = nil
 			}
-			typeVar11 := new(shared.InputGrafanaType1)
-			if !r.InputGrafana.InputGrafanaGrafana1.Type.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Type.IsNull() {
-				*typeVar11 = shared.InputGrafanaType1(r.InputGrafana.InputGrafanaGrafana1.Type.ValueString())
-			} else {
-				typeVar11 = nil
-			}
-			disabled29 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana1.Disabled.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Disabled.IsNull() {
-				*disabled29 = r.InputGrafana.InputGrafanaGrafana1.Disabled.ValueBool()
-			} else {
-				disabled29 = nil
-			}
-			pipeline20 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana1.Pipeline.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Pipeline.IsNull() {
-				*pipeline20 = r.InputGrafana.InputGrafanaGrafana1.Pipeline.ValueString()
-			} else {
-				pipeline20 = nil
-			}
-			sendToRoutes10 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana1.SendToRoutes.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.SendToRoutes.IsNull() {
-				*sendToRoutes10 = r.InputGrafana.InputGrafanaGrafana1.SendToRoutes.ValueBool()
-			} else {
-				sendToRoutes10 = nil
-			}
-			environment10 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana1.Environment.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Environment.IsNull() {
-				*environment10 = r.InputGrafana.InputGrafanaGrafana1.Environment.ValueString()
-			} else {
-				environment10 = nil
-			}
-			pqEnabled10 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana1.PqEnabled.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PqEnabled.IsNull() {
-				*pqEnabled10 = r.InputGrafana.InputGrafanaGrafana1.PqEnabled.ValueBool()
-			} else {
-				pqEnabled10 = nil
-			}
-			streamtags10 := make([]string, 0, len(r.InputGrafana.InputGrafanaGrafana1.Streamtags))
-			for streamtagsIndex10 := range r.InputGrafana.InputGrafanaGrafana1.Streamtags {
-				streamtags10 = append(streamtags10, r.InputGrafana.InputGrafanaGrafana1.Streamtags[streamtagsIndex10].ValueString())
-			}
-			connections10 := make([]shared.InputGrafanaConnection1, 0, len(r.InputGrafana.InputGrafanaGrafana1.Connections))
-			for connectionsIndex10 := range r.InputGrafana.InputGrafanaGrafana1.Connections {
-				pipeline21 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.Connections[connectionsIndex10].Pipeline.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Connections[connectionsIndex10].Pipeline.IsNull() {
-					*pipeline21 = r.InputGrafana.InputGrafanaGrafana1.Connections[connectionsIndex10].Pipeline.ValueString()
-				} else {
-					pipeline21 = nil
-				}
-				var output11 string
-				output11 = r.InputGrafana.InputGrafanaGrafana1.Connections[connectionsIndex10].Output.ValueString()
+			var output11 string
+			output11 = r.InputGrafana.Connections[connectionsIndex10].Output.ValueString()
 
-				connections10 = append(connections10, shared.InputGrafanaConnection1{
-					Pipeline: pipeline21,
-					Output:   output11,
-				})
-			}
-			var pq10 *shared.InputGrafanaPq1
-			if r.InputGrafana.InputGrafanaGrafana1.Pq != nil {
-				mode10 := new(shared.InputGrafanaMode1)
-				if !r.InputGrafana.InputGrafanaGrafana1.Pq.Mode.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Pq.Mode.IsNull() {
-					*mode10 = shared.InputGrafanaMode1(r.InputGrafana.InputGrafanaGrafana1.Pq.Mode.ValueString())
-				} else {
-					mode10 = nil
-				}
-				maxBufferSize10 := new(float64)
-				if !r.InputGrafana.InputGrafanaGrafana1.Pq.MaxBufferSize.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Pq.MaxBufferSize.IsNull() {
-					*maxBufferSize10 = r.InputGrafana.InputGrafanaGrafana1.Pq.MaxBufferSize.ValueFloat64()
-				} else {
-					maxBufferSize10 = nil
-				}
-				commitFrequency10 := new(float64)
-				if !r.InputGrafana.InputGrafanaGrafana1.Pq.CommitFrequency.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Pq.CommitFrequency.IsNull() {
-					*commitFrequency10 = r.InputGrafana.InputGrafanaGrafana1.Pq.CommitFrequency.ValueFloat64()
-				} else {
-					commitFrequency10 = nil
-				}
-				maxFileSize10 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.Pq.MaxFileSize.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Pq.MaxFileSize.IsNull() {
-					*maxFileSize10 = r.InputGrafana.InputGrafanaGrafana1.Pq.MaxFileSize.ValueString()
-				} else {
-					maxFileSize10 = nil
-				}
-				maxSize10 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.Pq.MaxSize.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Pq.MaxSize.IsNull() {
-					*maxSize10 = r.InputGrafana.InputGrafanaGrafana1.Pq.MaxSize.ValueString()
-				} else {
-					maxSize10 = nil
-				}
-				path10 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.Pq.Path.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Pq.Path.IsNull() {
-					*path10 = r.InputGrafana.InputGrafanaGrafana1.Pq.Path.ValueString()
-				} else {
-					path10 = nil
-				}
-				compress11 := new(shared.InputGrafanaCompression1)
-				if !r.InputGrafana.InputGrafanaGrafana1.Pq.Compress.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Pq.Compress.IsNull() {
-					*compress11 = shared.InputGrafanaCompression1(r.InputGrafana.InputGrafanaGrafana1.Pq.Compress.ValueString())
-				} else {
-					compress11 = nil
-				}
-				pq10 = &shared.InputGrafanaPq1{
-					Mode:            mode10,
-					MaxBufferSize:   maxBufferSize10,
-					CommitFrequency: commitFrequency10,
-					MaxFileSize:     maxFileSize10,
-					MaxSize:         maxSize10,
-					Path:            path10,
-					Compress:        compress11,
-				}
-			}
-			host4 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana1.Host.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Host.IsNull() {
-				*host4 = r.InputGrafana.InputGrafanaGrafana1.Host.ValueString()
+			connections10 = append(connections10, shared.InputGrafanaConnection{
+				Pipeline: pipeline21,
+				Output:   output11,
+			})
+		}
+		var pq10 *shared.InputGrafanaPq
+		if r.InputGrafana.Pq != nil {
+			mode10 := new(shared.InputGrafanaMode)
+			if !r.InputGrafana.Pq.Mode.IsUnknown() && !r.InputGrafana.Pq.Mode.IsNull() {
+				*mode10 = shared.InputGrafanaMode(r.InputGrafana.Pq.Mode.ValueString())
 			} else {
-				host4 = nil
+				mode10 = nil
 			}
-			var port4 float64
-			port4 = r.InputGrafana.InputGrafanaGrafana1.Port.ValueFloat64()
-
-			var tls10 *shared.InputGrafanaTLSSettingsServerSide1
-			if r.InputGrafana.InputGrafanaGrafana1.TLS != nil {
-				disabled30 := new(bool)
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.Disabled.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.Disabled.IsNull() {
-					*disabled30 = r.InputGrafana.InputGrafanaGrafana1.TLS.Disabled.ValueBool()
-				} else {
-					disabled30 = nil
-				}
-				certificateName11 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.CertificateName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.CertificateName.IsNull() {
-					*certificateName11 = r.InputGrafana.InputGrafanaGrafana1.TLS.CertificateName.ValueString()
-				} else {
-					certificateName11 = nil
-				}
-				privKeyPath10 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.PrivKeyPath.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.PrivKeyPath.IsNull() {
-					*privKeyPath10 = r.InputGrafana.InputGrafanaGrafana1.TLS.PrivKeyPath.ValueString()
-				} else {
-					privKeyPath10 = nil
-				}
-				passphrase10 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.Passphrase.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.Passphrase.IsNull() {
-					*passphrase10 = r.InputGrafana.InputGrafanaGrafana1.TLS.Passphrase.ValueString()
-				} else {
-					passphrase10 = nil
-				}
-				certPath10 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.CertPath.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.CertPath.IsNull() {
-					*certPath10 = r.InputGrafana.InputGrafanaGrafana1.TLS.CertPath.ValueString()
-				} else {
-					certPath10 = nil
-				}
-				caPath10 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.CaPath.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.CaPath.IsNull() {
-					*caPath10 = r.InputGrafana.InputGrafanaGrafana1.TLS.CaPath.ValueString()
-				} else {
-					caPath10 = nil
-				}
-				requestCert4 := new(bool)
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.RequestCert.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.RequestCert.IsNull() {
-					*requestCert4 = r.InputGrafana.InputGrafanaGrafana1.TLS.RequestCert.ValueBool()
-				} else {
-					requestCert4 = nil
-				}
-				var rejectUnauthorized13 interface{}
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized.IsNull() {
-					_ = json.Unmarshal([]byte(r.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized13)
-				}
-				var commonNameRegex4 interface{}
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex.IsNull() {
-					_ = json.Unmarshal([]byte(r.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex.ValueString()), &commonNameRegex4)
-				}
-				minVersion10 := new(shared.InputGrafanaMinimumTLSVersion1)
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.MinVersion.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.MinVersion.IsNull() {
-					*minVersion10 = shared.InputGrafanaMinimumTLSVersion1(r.InputGrafana.InputGrafanaGrafana1.TLS.MinVersion.ValueString())
-				} else {
-					minVersion10 = nil
-				}
-				maxVersion10 := new(shared.InputGrafanaMaximumTLSVersion1)
-				if !r.InputGrafana.InputGrafanaGrafana1.TLS.MaxVersion.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.TLS.MaxVersion.IsNull() {
-					*maxVersion10 = shared.InputGrafanaMaximumTLSVersion1(r.InputGrafana.InputGrafanaGrafana1.TLS.MaxVersion.ValueString())
-				} else {
-					maxVersion10 = nil
-				}
-				tls10 = &shared.InputGrafanaTLSSettingsServerSide1{
-					Disabled:           disabled30,
-					CertificateName:    certificateName11,
-					PrivKeyPath:        privKeyPath10,
-					Passphrase:         passphrase10,
-					CertPath:           certPath10,
-					CaPath:             caPath10,
-					RequestCert:        requestCert4,
-					RejectUnauthorized: rejectUnauthorized13,
-					CommonNameRegex:    commonNameRegex4,
-					MinVersion:         minVersion10,
-					MaxVersion:         maxVersion10,
-				}
-			}
-			maxActiveReq3 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana1.MaxActiveReq.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.MaxActiveReq.IsNull() {
-				*maxActiveReq3 = r.InputGrafana.InputGrafanaGrafana1.MaxActiveReq.ValueFloat64()
+			maxBufferSize10 := new(float64)
+			if !r.InputGrafana.Pq.MaxBufferSize.IsUnknown() && !r.InputGrafana.Pq.MaxBufferSize.IsNull() {
+				*maxBufferSize10 = r.InputGrafana.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxActiveReq3 = nil
+				maxBufferSize10 = nil
 			}
-			maxRequestsPerSocket3 := new(int64)
-			if !r.InputGrafana.InputGrafanaGrafana1.MaxRequestsPerSocket.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.MaxRequestsPerSocket.IsNull() {
-				*maxRequestsPerSocket3 = r.InputGrafana.InputGrafanaGrafana1.MaxRequestsPerSocket.ValueInt64()
+			commitFrequency10 := new(float64)
+			if !r.InputGrafana.Pq.CommitFrequency.IsUnknown() && !r.InputGrafana.Pq.CommitFrequency.IsNull() {
+				*commitFrequency10 = r.InputGrafana.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				maxRequestsPerSocket3 = nil
+				commitFrequency10 = nil
 			}
-			enableProxyHeader4 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana1.EnableProxyHeader.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.EnableProxyHeader.IsNull() {
-				*enableProxyHeader4 = r.InputGrafana.InputGrafanaGrafana1.EnableProxyHeader.ValueBool()
+			maxFileSize10 := new(string)
+			if !r.InputGrafana.Pq.MaxFileSize.IsUnknown() && !r.InputGrafana.Pq.MaxFileSize.IsNull() {
+				*maxFileSize10 = r.InputGrafana.Pq.MaxFileSize.ValueString()
 			} else {
-				enableProxyHeader4 = nil
+				maxFileSize10 = nil
 			}
-			captureHeaders3 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana1.CaptureHeaders.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.CaptureHeaders.IsNull() {
-				*captureHeaders3 = r.InputGrafana.InputGrafanaGrafana1.CaptureHeaders.ValueBool()
+			maxSize10 := new(string)
+			if !r.InputGrafana.Pq.MaxSize.IsUnknown() && !r.InputGrafana.Pq.MaxSize.IsNull() {
+				*maxSize10 = r.InputGrafana.Pq.MaxSize.ValueString()
 			} else {
-				captureHeaders3 = nil
+				maxSize10 = nil
 			}
-			activityLogSampleRate3 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana1.ActivityLogSampleRate.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.ActivityLogSampleRate.IsNull() {
-				*activityLogSampleRate3 = r.InputGrafana.InputGrafanaGrafana1.ActivityLogSampleRate.ValueFloat64()
+			path10 := new(string)
+			if !r.InputGrafana.Pq.Path.IsUnknown() && !r.InputGrafana.Pq.Path.IsNull() {
+				*path10 = r.InputGrafana.Pq.Path.ValueString()
 			} else {
-				activityLogSampleRate3 = nil
+				path10 = nil
 			}
-			requestTimeout10 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana1.RequestTimeout.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.RequestTimeout.IsNull() {
-				*requestTimeout10 = r.InputGrafana.InputGrafanaGrafana1.RequestTimeout.ValueFloat64()
+			compress11 := new(shared.InputGrafanaCompression)
+			if !r.InputGrafana.Pq.Compress.IsUnknown() && !r.InputGrafana.Pq.Compress.IsNull() {
+				*compress11 = shared.InputGrafanaCompression(r.InputGrafana.Pq.Compress.ValueString())
 			} else {
-				requestTimeout10 = nil
+				compress11 = nil
 			}
-			socketTimeout3 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana1.SocketTimeout.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.SocketTimeout.IsNull() {
-				*socketTimeout3 = r.InputGrafana.InputGrafanaGrafana1.SocketTimeout.ValueFloat64()
-			} else {
-				socketTimeout3 = nil
-			}
-			keepAliveTimeout3 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana1.KeepAliveTimeout.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.KeepAliveTimeout.IsNull() {
-				*keepAliveTimeout3 = r.InputGrafana.InputGrafanaGrafana1.KeepAliveTimeout.ValueFloat64()
-			} else {
-				keepAliveTimeout3 = nil
-			}
-			enableHealthCheck3 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana1.EnableHealthCheck.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.EnableHealthCheck.IsNull() {
-				*enableHealthCheck3 = r.InputGrafana.InputGrafanaGrafana1.EnableHealthCheck.ValueBool()
-			} else {
-				enableHealthCheck3 = nil
-			}
-			ipAllowlistRegex3 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana1.IPAllowlistRegex.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.IPAllowlistRegex.IsNull() {
-				*ipAllowlistRegex3 = r.InputGrafana.InputGrafanaGrafana1.IPAllowlistRegex.ValueString()
-			} else {
-				ipAllowlistRegex3 = nil
-			}
-			ipDenylistRegex3 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana1.IPDenylistRegex.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.IPDenylistRegex.IsNull() {
-				*ipDenylistRegex3 = r.InputGrafana.InputGrafanaGrafana1.IPDenylistRegex.ValueString()
-			} else {
-				ipDenylistRegex3 = nil
-			}
-			prometheusAPI := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAPI.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAPI.IsNull() {
-				*prometheusAPI = r.InputGrafana.InputGrafanaGrafana1.PrometheusAPI.ValueString()
-			} else {
-				prometheusAPI = nil
-			}
-			lokiAPI := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana1.LokiAPI.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAPI.IsNull() {
-				*lokiAPI = r.InputGrafana.InputGrafanaGrafana1.LokiAPI.ValueString()
-			} else {
-				lokiAPI = nil
-			}
-			var prometheusAuth *shared.InputGrafanaPrometheusAuth1
-			if r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth != nil {
-				authType5 := new(shared.InputGrafanaPrometheusAuthAuthenticationType1)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType.IsNull() {
-					*authType5 = shared.InputGrafanaPrometheusAuthAuthenticationType1(r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType.ValueString())
-				} else {
-					authType5 = nil
-				}
-				username2 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Username.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Username.IsNull() {
-					*username2 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Username.ValueString()
-				} else {
-					username2 = nil
-				}
-				password2 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Password.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Password.IsNull() {
-					*password2 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Password.ValueString()
-				} else {
-					password2 = nil
-				}
-				token4 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Token.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Token.IsNull() {
-					*token4 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Token.ValueString()
-				} else {
-					token4 = nil
-				}
-				credentialsSecret5 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.CredentialsSecret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.CredentialsSecret.IsNull() {
-					*credentialsSecret5 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.CredentialsSecret.ValueString()
-				} else {
-					credentialsSecret5 = nil
-				}
-				textSecret2 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TextSecret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TextSecret.IsNull() {
-					*textSecret2 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TextSecret.ValueString()
-				} else {
-					textSecret2 = nil
-				}
-				loginUrl1 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.LoginURL.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.LoginURL.IsNull() {
-					*loginUrl1 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.LoginURL.ValueString()
-				} else {
-					loginUrl1 = nil
-				}
-				secretParamName1 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.SecretParamName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.SecretParamName.IsNull() {
-					*secretParamName1 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.SecretParamName.ValueString()
-				} else {
-					secretParamName1 = nil
-				}
-				secret1 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Secret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Secret.IsNull() {
-					*secret1 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Secret.ValueString()
-				} else {
-					secret1 = nil
-				}
-				tokenAttributeName1 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenAttributeName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenAttributeName.IsNull() {
-					*tokenAttributeName1 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenAttributeName.ValueString()
-				} else {
-					tokenAttributeName1 = nil
-				}
-				authHeaderExpr1 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthHeaderExpr.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthHeaderExpr.IsNull() {
-					*authHeaderExpr1 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthHeaderExpr.ValueString()
-				} else {
-					authHeaderExpr1 = nil
-				}
-				tokenTimeoutSecs1 := new(float64)
-				if !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenTimeoutSecs.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenTimeoutSecs.IsNull() {
-					*tokenTimeoutSecs1 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenTimeoutSecs.ValueFloat64()
-				} else {
-					tokenTimeoutSecs1 = nil
-				}
-				oauthParams1 := make([]shared.PrometheusAuthOauthParam1, 0, len(r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthParams))
-				for oauthParamsIndex1 := range r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthParams {
-					var name17 string
-					name17 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthParams[oauthParamsIndex1].Name.ValueString()
-
-					var value17 string
-					value17 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthParams[oauthParamsIndex1].Value.ValueString()
-
-					oauthParams1 = append(oauthParams1, shared.PrometheusAuthOauthParam1{
-						Name:  name17,
-						Value: value17,
-					})
-				}
-				oauthHeaders1 := make([]shared.PrometheusAuthOauthHeader1, 0, len(r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthHeaders))
-				for oauthHeadersIndex1 := range r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthHeaders {
-					var name18 string
-					name18 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthHeaders[oauthHeadersIndex1].Name.ValueString()
-
-					var value18 string
-					value18 = r.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthHeaders[oauthHeadersIndex1].Value.ValueString()
-
-					oauthHeaders1 = append(oauthHeaders1, shared.PrometheusAuthOauthHeader1{
-						Name:  name18,
-						Value: value18,
-					})
-				}
-				prometheusAuth = &shared.InputGrafanaPrometheusAuth1{
-					AuthType:           authType5,
-					Username:           username2,
-					Password:           password2,
-					Token:              token4,
-					CredentialsSecret:  credentialsSecret5,
-					TextSecret:         textSecret2,
-					LoginURL:           loginUrl1,
-					SecretParamName:    secretParamName1,
-					Secret:             secret1,
-					TokenAttributeName: tokenAttributeName1,
-					AuthHeaderExpr:     authHeaderExpr1,
-					TokenTimeoutSecs:   tokenTimeoutSecs1,
-					OauthParams:        oauthParams1,
-					OauthHeaders:       oauthHeaders1,
-				}
-			}
-			var lokiAuth *shared.InputGrafanaLokiAuth1
-			if r.InputGrafana.InputGrafanaGrafana1.LokiAuth != nil {
-				authType6 := new(shared.InputGrafanaLokiAuthAuthenticationType1)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType.IsNull() {
-					*authType6 = shared.InputGrafanaLokiAuthAuthenticationType1(r.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType.ValueString())
-				} else {
-					authType6 = nil
-				}
-				username3 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Username.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Username.IsNull() {
-					*username3 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Username.ValueString()
-				} else {
-					username3 = nil
-				}
-				password3 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Password.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Password.IsNull() {
-					*password3 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Password.ValueString()
-				} else {
-					password3 = nil
-				}
-				token5 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Token.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Token.IsNull() {
-					*token5 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Token.ValueString()
-				} else {
-					token5 = nil
-				}
-				credentialsSecret6 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.CredentialsSecret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.CredentialsSecret.IsNull() {
-					*credentialsSecret6 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.CredentialsSecret.ValueString()
-				} else {
-					credentialsSecret6 = nil
-				}
-				textSecret3 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.TextSecret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.TextSecret.IsNull() {
-					*textSecret3 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.TextSecret.ValueString()
-				} else {
-					textSecret3 = nil
-				}
-				loginUrl2 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.LoginURL.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.LoginURL.IsNull() {
-					*loginUrl2 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.LoginURL.ValueString()
-				} else {
-					loginUrl2 = nil
-				}
-				secretParamName2 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.SecretParamName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.SecretParamName.IsNull() {
-					*secretParamName2 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.SecretParamName.ValueString()
-				} else {
-					secretParamName2 = nil
-				}
-				secret2 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Secret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Secret.IsNull() {
-					*secret2 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.Secret.ValueString()
-				} else {
-					secret2 = nil
-				}
-				tokenAttributeName2 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenAttributeName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenAttributeName.IsNull() {
-					*tokenAttributeName2 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenAttributeName.ValueString()
-				} else {
-					tokenAttributeName2 = nil
-				}
-				authHeaderExpr2 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthHeaderExpr.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthHeaderExpr.IsNull() {
-					*authHeaderExpr2 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthHeaderExpr.ValueString()
-				} else {
-					authHeaderExpr2 = nil
-				}
-				tokenTimeoutSecs2 := new(float64)
-				if !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenTimeoutSecs.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenTimeoutSecs.IsNull() {
-					*tokenTimeoutSecs2 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenTimeoutSecs.ValueFloat64()
-				} else {
-					tokenTimeoutSecs2 = nil
-				}
-				oauthParams2 := make([]shared.LokiAuthOauthParam1, 0, len(r.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthParams))
-				for oauthParamsIndex2 := range r.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthParams {
-					var name19 string
-					name19 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthParams[oauthParamsIndex2].Name.ValueString()
-
-					var value19 string
-					value19 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthParams[oauthParamsIndex2].Value.ValueString()
-
-					oauthParams2 = append(oauthParams2, shared.LokiAuthOauthParam1{
-						Name:  name19,
-						Value: value19,
-					})
-				}
-				oauthHeaders2 := make([]shared.LokiAuthOauthHeader1, 0, len(r.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthHeaders))
-				for oauthHeadersIndex2 := range r.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthHeaders {
-					var name20 string
-					name20 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthHeaders[oauthHeadersIndex2].Name.ValueString()
-
-					var value20 string
-					value20 = r.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthHeaders[oauthHeadersIndex2].Value.ValueString()
-
-					oauthHeaders2 = append(oauthHeaders2, shared.LokiAuthOauthHeader1{
-						Name:  name20,
-						Value: value20,
-					})
-				}
-				lokiAuth = &shared.InputGrafanaLokiAuth1{
-					AuthType:           authType6,
-					Username:           username3,
-					Password:           password3,
-					Token:              token5,
-					CredentialsSecret:  credentialsSecret6,
-					TextSecret:         textSecret3,
-					LoginURL:           loginUrl2,
-					SecretParamName:    secretParamName2,
-					Secret:             secret2,
-					TokenAttributeName: tokenAttributeName2,
-					AuthHeaderExpr:     authHeaderExpr2,
-					TokenTimeoutSecs:   tokenTimeoutSecs2,
-					OauthParams:        oauthParams2,
-					OauthHeaders:       oauthHeaders2,
-				}
-			}
-			metadata12 := make([]shared.InputGrafanaMetadatum1, 0, len(r.InputGrafana.InputGrafanaGrafana1.Metadata))
-			for metadataIndex12 := range r.InputGrafana.InputGrafanaGrafana1.Metadata {
-				var name21 string
-				name21 = r.InputGrafana.InputGrafanaGrafana1.Metadata[metadataIndex12].Name.ValueString()
-
-				var value21 string
-				value21 = r.InputGrafana.InputGrafanaGrafana1.Metadata[metadataIndex12].Value.ValueString()
-
-				metadata12 = append(metadata12, shared.InputGrafanaMetadatum1{
-					Name:  name21,
-					Value: value21,
-				})
-			}
-			description12 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana1.Description.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana1.Description.IsNull() {
-				*description12 = r.InputGrafana.InputGrafanaGrafana1.Description.ValueString()
-			} else {
-				description12 = nil
-			}
-			inputGrafanaGrafana1 = &shared.InputGrafanaGrafana1{
-				ID:                    id10,
-				Type:                  typeVar11,
-				Disabled:              disabled29,
-				Pipeline:              pipeline20,
-				SendToRoutes:          sendToRoutes10,
-				Environment:           environment10,
-				PqEnabled:             pqEnabled10,
-				Streamtags:            streamtags10,
-				Connections:           connections10,
-				Pq:                    pq10,
-				Host:                  host4,
-				Port:                  port4,
-				TLS:                   tls10,
-				MaxActiveReq:          maxActiveReq3,
-				MaxRequestsPerSocket:  maxRequestsPerSocket3,
-				EnableProxyHeader:     enableProxyHeader4,
-				CaptureHeaders:        captureHeaders3,
-				ActivityLogSampleRate: activityLogSampleRate3,
-				RequestTimeout:        requestTimeout10,
-				SocketTimeout:         socketTimeout3,
-				KeepAliveTimeout:      keepAliveTimeout3,
-				EnableHealthCheck:     enableHealthCheck3,
-				IPAllowlistRegex:      ipAllowlistRegex3,
-				IPDenylistRegex:       ipDenylistRegex3,
-				PrometheusAPI:         prometheusAPI,
-				LokiAPI:               lokiAPI,
-				PrometheusAuth:        prometheusAuth,
-				LokiAuth:              lokiAuth,
-				Metadata:              metadata12,
-				Description:           description12,
+			pq10 = &shared.InputGrafanaPq{
+				Mode:            mode10,
+				MaxBufferSize:   maxBufferSize10,
+				CommitFrequency: commitFrequency10,
+				MaxFileSize:     maxFileSize10,
+				MaxSize:         maxSize10,
+				Path:            path10,
+				Compress:        compress11,
 			}
 		}
-		if inputGrafanaGrafana1 != nil {
-			inputGrafana = &shared.InputGrafana{
-				InputGrafanaGrafana1: inputGrafanaGrafana1,
+		host4 := new(string)
+		if !r.InputGrafana.Host.IsUnknown() && !r.InputGrafana.Host.IsNull() {
+			*host4 = r.InputGrafana.Host.ValueString()
+		} else {
+			host4 = nil
+		}
+		var port4 float64
+		port4 = r.InputGrafana.Port.ValueFloat64()
+
+		var tls10 *shared.InputGrafanaTLSSettingsServerSide
+		if r.InputGrafana.TLS != nil {
+			disabled30 := new(bool)
+			if !r.InputGrafana.TLS.Disabled.IsUnknown() && !r.InputGrafana.TLS.Disabled.IsNull() {
+				*disabled30 = r.InputGrafana.TLS.Disabled.ValueBool()
+			} else {
+				disabled30 = nil
+			}
+			certificateName11 := new(string)
+			if !r.InputGrafana.TLS.CertificateName.IsUnknown() && !r.InputGrafana.TLS.CertificateName.IsNull() {
+				*certificateName11 = r.InputGrafana.TLS.CertificateName.ValueString()
+			} else {
+				certificateName11 = nil
+			}
+			privKeyPath10 := new(string)
+			if !r.InputGrafana.TLS.PrivKeyPath.IsUnknown() && !r.InputGrafana.TLS.PrivKeyPath.IsNull() {
+				*privKeyPath10 = r.InputGrafana.TLS.PrivKeyPath.ValueString()
+			} else {
+				privKeyPath10 = nil
+			}
+			passphrase10 := new(string)
+			if !r.InputGrafana.TLS.Passphrase.IsUnknown() && !r.InputGrafana.TLS.Passphrase.IsNull() {
+				*passphrase10 = r.InputGrafana.TLS.Passphrase.ValueString()
+			} else {
+				passphrase10 = nil
+			}
+			certPath10 := new(string)
+			if !r.InputGrafana.TLS.CertPath.IsUnknown() && !r.InputGrafana.TLS.CertPath.IsNull() {
+				*certPath10 = r.InputGrafana.TLS.CertPath.ValueString()
+			} else {
+				certPath10 = nil
+			}
+			caPath10 := new(string)
+			if !r.InputGrafana.TLS.CaPath.IsUnknown() && !r.InputGrafana.TLS.CaPath.IsNull() {
+				*caPath10 = r.InputGrafana.TLS.CaPath.ValueString()
+			} else {
+				caPath10 = nil
+			}
+			requestCert4 := new(bool)
+			if !r.InputGrafana.TLS.RequestCert.IsUnknown() && !r.InputGrafana.TLS.RequestCert.IsNull() {
+				*requestCert4 = r.InputGrafana.TLS.RequestCert.ValueBool()
+			} else {
+				requestCert4 = nil
+			}
+			var rejectUnauthorized13 interface{}
+			if !r.InputGrafana.TLS.RejectUnauthorized.IsUnknown() && !r.InputGrafana.TLS.RejectUnauthorized.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputGrafana.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized13)
+			}
+			var commonNameRegex4 interface{}
+			if !r.InputGrafana.TLS.CommonNameRegex.IsUnknown() && !r.InputGrafana.TLS.CommonNameRegex.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputGrafana.TLS.CommonNameRegex.ValueString()), &commonNameRegex4)
+			}
+			minVersion10 := new(shared.InputGrafanaMinimumTLSVersion)
+			if !r.InputGrafana.TLS.MinVersion.IsUnknown() && !r.InputGrafana.TLS.MinVersion.IsNull() {
+				*minVersion10 = shared.InputGrafanaMinimumTLSVersion(r.InputGrafana.TLS.MinVersion.ValueString())
+			} else {
+				minVersion10 = nil
+			}
+			maxVersion10 := new(shared.InputGrafanaMaximumTLSVersion)
+			if !r.InputGrafana.TLS.MaxVersion.IsUnknown() && !r.InputGrafana.TLS.MaxVersion.IsNull() {
+				*maxVersion10 = shared.InputGrafanaMaximumTLSVersion(r.InputGrafana.TLS.MaxVersion.ValueString())
+			} else {
+				maxVersion10 = nil
+			}
+			tls10 = &shared.InputGrafanaTLSSettingsServerSide{
+				Disabled:           disabled30,
+				CertificateName:    certificateName11,
+				PrivKeyPath:        privKeyPath10,
+				Passphrase:         passphrase10,
+				CertPath:           certPath10,
+				CaPath:             caPath10,
+				RequestCert:        requestCert4,
+				RejectUnauthorized: rejectUnauthorized13,
+				CommonNameRegex:    commonNameRegex4,
+				MinVersion:         minVersion10,
+				MaxVersion:         maxVersion10,
 			}
 		}
-		var inputGrafanaGrafana2 *shared.InputGrafanaGrafana2
-		if r.InputGrafana.InputGrafanaGrafana2 != nil {
-			id11 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana2.ID.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.ID.IsNull() {
-				*id11 = r.InputGrafana.InputGrafanaGrafana2.ID.ValueString()
+		maxActiveReq3 := new(float64)
+		if !r.InputGrafana.MaxActiveReq.IsUnknown() && !r.InputGrafana.MaxActiveReq.IsNull() {
+			*maxActiveReq3 = r.InputGrafana.MaxActiveReq.ValueFloat64()
+		} else {
+			maxActiveReq3 = nil
+		}
+		maxRequestsPerSocket3 := new(int64)
+		if !r.InputGrafana.MaxRequestsPerSocket.IsUnknown() && !r.InputGrafana.MaxRequestsPerSocket.IsNull() {
+			*maxRequestsPerSocket3 = r.InputGrafana.MaxRequestsPerSocket.ValueInt64()
+		} else {
+			maxRequestsPerSocket3 = nil
+		}
+		enableProxyHeader4 := new(bool)
+		if !r.InputGrafana.EnableProxyHeader.IsUnknown() && !r.InputGrafana.EnableProxyHeader.IsNull() {
+			*enableProxyHeader4 = r.InputGrafana.EnableProxyHeader.ValueBool()
+		} else {
+			enableProxyHeader4 = nil
+		}
+		captureHeaders3 := new(bool)
+		if !r.InputGrafana.CaptureHeaders.IsUnknown() && !r.InputGrafana.CaptureHeaders.IsNull() {
+			*captureHeaders3 = r.InputGrafana.CaptureHeaders.ValueBool()
+		} else {
+			captureHeaders3 = nil
+		}
+		activityLogSampleRate3 := new(float64)
+		if !r.InputGrafana.ActivityLogSampleRate.IsUnknown() && !r.InputGrafana.ActivityLogSampleRate.IsNull() {
+			*activityLogSampleRate3 = r.InputGrafana.ActivityLogSampleRate.ValueFloat64()
+		} else {
+			activityLogSampleRate3 = nil
+		}
+		requestTimeout10 := new(float64)
+		if !r.InputGrafana.RequestTimeout.IsUnknown() && !r.InputGrafana.RequestTimeout.IsNull() {
+			*requestTimeout10 = r.InputGrafana.RequestTimeout.ValueFloat64()
+		} else {
+			requestTimeout10 = nil
+		}
+		socketTimeout3 := new(float64)
+		if !r.InputGrafana.SocketTimeout.IsUnknown() && !r.InputGrafana.SocketTimeout.IsNull() {
+			*socketTimeout3 = r.InputGrafana.SocketTimeout.ValueFloat64()
+		} else {
+			socketTimeout3 = nil
+		}
+		keepAliveTimeout3 := new(float64)
+		if !r.InputGrafana.KeepAliveTimeout.IsUnknown() && !r.InputGrafana.KeepAliveTimeout.IsNull() {
+			*keepAliveTimeout3 = r.InputGrafana.KeepAliveTimeout.ValueFloat64()
+		} else {
+			keepAliveTimeout3 = nil
+		}
+		enableHealthCheck3 := new(bool)
+		if !r.InputGrafana.EnableHealthCheck.IsUnknown() && !r.InputGrafana.EnableHealthCheck.IsNull() {
+			*enableHealthCheck3 = r.InputGrafana.EnableHealthCheck.ValueBool()
+		} else {
+			enableHealthCheck3 = nil
+		}
+		ipAllowlistRegex3 := new(string)
+		if !r.InputGrafana.IPAllowlistRegex.IsUnknown() && !r.InputGrafana.IPAllowlistRegex.IsNull() {
+			*ipAllowlistRegex3 = r.InputGrafana.IPAllowlistRegex.ValueString()
+		} else {
+			ipAllowlistRegex3 = nil
+		}
+		ipDenylistRegex3 := new(string)
+		if !r.InputGrafana.IPDenylistRegex.IsUnknown() && !r.InputGrafana.IPDenylistRegex.IsNull() {
+			*ipDenylistRegex3 = r.InputGrafana.IPDenylistRegex.ValueString()
+		} else {
+			ipDenylistRegex3 = nil
+		}
+		prometheusAPI := new(string)
+		if !r.InputGrafana.PrometheusAPI.IsUnknown() && !r.InputGrafana.PrometheusAPI.IsNull() {
+			*prometheusAPI = r.InputGrafana.PrometheusAPI.ValueString()
+		} else {
+			prometheusAPI = nil
+		}
+		lokiAPI := new(string)
+		if !r.InputGrafana.LokiAPI.IsUnknown() && !r.InputGrafana.LokiAPI.IsNull() {
+			*lokiAPI = r.InputGrafana.LokiAPI.ValueString()
+		} else {
+			lokiAPI = nil
+		}
+		var prometheusAuth *shared.InputGrafanaPrometheusAuth
+		if r.InputGrafana.PrometheusAuth != nil {
+			authType5 := new(shared.InputGrafanaPrometheusAuthAuthenticationType)
+			if !r.InputGrafana.PrometheusAuth.AuthType.IsUnknown() && !r.InputGrafana.PrometheusAuth.AuthType.IsNull() {
+				*authType5 = shared.InputGrafanaPrometheusAuthAuthenticationType(r.InputGrafana.PrometheusAuth.AuthType.ValueString())
 			} else {
-				id11 = nil
+				authType5 = nil
 			}
-			typeVar12 := new(shared.InputGrafanaType2)
-			if !r.InputGrafana.InputGrafanaGrafana2.Type.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Type.IsNull() {
-				*typeVar12 = shared.InputGrafanaType2(r.InputGrafana.InputGrafanaGrafana2.Type.ValueString())
+			username2 := new(string)
+			if !r.InputGrafana.PrometheusAuth.Username.IsUnknown() && !r.InputGrafana.PrometheusAuth.Username.IsNull() {
+				*username2 = r.InputGrafana.PrometheusAuth.Username.ValueString()
 			} else {
-				typeVar12 = nil
+				username2 = nil
 			}
-			disabled31 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana2.Disabled.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Disabled.IsNull() {
-				*disabled31 = r.InputGrafana.InputGrafanaGrafana2.Disabled.ValueBool()
+			password2 := new(string)
+			if !r.InputGrafana.PrometheusAuth.Password.IsUnknown() && !r.InputGrafana.PrometheusAuth.Password.IsNull() {
+				*password2 = r.InputGrafana.PrometheusAuth.Password.ValueString()
 			} else {
-				disabled31 = nil
+				password2 = nil
 			}
-			pipeline22 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana2.Pipeline.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Pipeline.IsNull() {
-				*pipeline22 = r.InputGrafana.InputGrafanaGrafana2.Pipeline.ValueString()
+			token4 := new(string)
+			if !r.InputGrafana.PrometheusAuth.Token.IsUnknown() && !r.InputGrafana.PrometheusAuth.Token.IsNull() {
+				*token4 = r.InputGrafana.PrometheusAuth.Token.ValueString()
 			} else {
-				pipeline22 = nil
+				token4 = nil
 			}
-			sendToRoutes11 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana2.SendToRoutes.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.SendToRoutes.IsNull() {
-				*sendToRoutes11 = r.InputGrafana.InputGrafanaGrafana2.SendToRoutes.ValueBool()
+			credentialsSecret5 := new(string)
+			if !r.InputGrafana.PrometheusAuth.CredentialsSecret.IsUnknown() && !r.InputGrafana.PrometheusAuth.CredentialsSecret.IsNull() {
+				*credentialsSecret5 = r.InputGrafana.PrometheusAuth.CredentialsSecret.ValueString()
 			} else {
-				sendToRoutes11 = nil
+				credentialsSecret5 = nil
 			}
-			environment11 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana2.Environment.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Environment.IsNull() {
-				*environment11 = r.InputGrafana.InputGrafanaGrafana2.Environment.ValueString()
+			textSecret2 := new(string)
+			if !r.InputGrafana.PrometheusAuth.TextSecret.IsUnknown() && !r.InputGrafana.PrometheusAuth.TextSecret.IsNull() {
+				*textSecret2 = r.InputGrafana.PrometheusAuth.TextSecret.ValueString()
 			} else {
-				environment11 = nil
+				textSecret2 = nil
 			}
-			pqEnabled11 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana2.PqEnabled.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PqEnabled.IsNull() {
-				*pqEnabled11 = r.InputGrafana.InputGrafanaGrafana2.PqEnabled.ValueBool()
+			loginUrl1 := new(string)
+			if !r.InputGrafana.PrometheusAuth.LoginURL.IsUnknown() && !r.InputGrafana.PrometheusAuth.LoginURL.IsNull() {
+				*loginUrl1 = r.InputGrafana.PrometheusAuth.LoginURL.ValueString()
 			} else {
-				pqEnabled11 = nil
+				loginUrl1 = nil
 			}
-			streamtags11 := make([]string, 0, len(r.InputGrafana.InputGrafanaGrafana2.Streamtags))
-			for streamtagsIndex11 := range r.InputGrafana.InputGrafanaGrafana2.Streamtags {
-				streamtags11 = append(streamtags11, r.InputGrafana.InputGrafanaGrafana2.Streamtags[streamtagsIndex11].ValueString())
+			secretParamName1 := new(string)
+			if !r.InputGrafana.PrometheusAuth.SecretParamName.IsUnknown() && !r.InputGrafana.PrometheusAuth.SecretParamName.IsNull() {
+				*secretParamName1 = r.InputGrafana.PrometheusAuth.SecretParamName.ValueString()
+			} else {
+				secretParamName1 = nil
 			}
-			connections11 := make([]shared.InputGrafanaConnection2, 0, len(r.InputGrafana.InputGrafanaGrafana2.Connections))
-			for connectionsIndex11 := range r.InputGrafana.InputGrafanaGrafana2.Connections {
-				pipeline23 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.Connections[connectionsIndex11].Pipeline.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Connections[connectionsIndex11].Pipeline.IsNull() {
-					*pipeline23 = r.InputGrafana.InputGrafanaGrafana2.Connections[connectionsIndex11].Pipeline.ValueString()
-				} else {
-					pipeline23 = nil
-				}
-				var output12 string
-				output12 = r.InputGrafana.InputGrafanaGrafana2.Connections[connectionsIndex11].Output.ValueString()
+			secret1 := new(string)
+			if !r.InputGrafana.PrometheusAuth.Secret.IsUnknown() && !r.InputGrafana.PrometheusAuth.Secret.IsNull() {
+				*secret1 = r.InputGrafana.PrometheusAuth.Secret.ValueString()
+			} else {
+				secret1 = nil
+			}
+			tokenAttributeName1 := new(string)
+			if !r.InputGrafana.PrometheusAuth.TokenAttributeName.IsUnknown() && !r.InputGrafana.PrometheusAuth.TokenAttributeName.IsNull() {
+				*tokenAttributeName1 = r.InputGrafana.PrometheusAuth.TokenAttributeName.ValueString()
+			} else {
+				tokenAttributeName1 = nil
+			}
+			authHeaderExpr1 := new(string)
+			if !r.InputGrafana.PrometheusAuth.AuthHeaderExpr.IsUnknown() && !r.InputGrafana.PrometheusAuth.AuthHeaderExpr.IsNull() {
+				*authHeaderExpr1 = r.InputGrafana.PrometheusAuth.AuthHeaderExpr.ValueString()
+			} else {
+				authHeaderExpr1 = nil
+			}
+			tokenTimeoutSecs1 := new(float64)
+			if !r.InputGrafana.PrometheusAuth.TokenTimeoutSecs.IsUnknown() && !r.InputGrafana.PrometheusAuth.TokenTimeoutSecs.IsNull() {
+				*tokenTimeoutSecs1 = r.InputGrafana.PrometheusAuth.TokenTimeoutSecs.ValueFloat64()
+			} else {
+				tokenTimeoutSecs1 = nil
+			}
+			oauthParams1 := make([]shared.PrometheusAuthOauthParam, 0, len(r.InputGrafana.PrometheusAuth.OauthParams))
+			for oauthParamsIndex1 := range r.InputGrafana.PrometheusAuth.OauthParams {
+				var name17 string
+				name17 = r.InputGrafana.PrometheusAuth.OauthParams[oauthParamsIndex1].Name.ValueString()
 
-				connections11 = append(connections11, shared.InputGrafanaConnection2{
-					Pipeline: pipeline23,
-					Output:   output12,
+				var value17 string
+				value17 = r.InputGrafana.PrometheusAuth.OauthParams[oauthParamsIndex1].Value.ValueString()
+
+				oauthParams1 = append(oauthParams1, shared.PrometheusAuthOauthParam{
+					Name:  name17,
+					Value: value17,
 				})
 			}
-			var pq11 *shared.InputGrafanaPq2
-			if r.InputGrafana.InputGrafanaGrafana2.Pq != nil {
-				mode11 := new(shared.InputGrafanaMode2)
-				if !r.InputGrafana.InputGrafanaGrafana2.Pq.Mode.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Pq.Mode.IsNull() {
-					*mode11 = shared.InputGrafanaMode2(r.InputGrafana.InputGrafanaGrafana2.Pq.Mode.ValueString())
-				} else {
-					mode11 = nil
-				}
-				maxBufferSize11 := new(float64)
-				if !r.InputGrafana.InputGrafanaGrafana2.Pq.MaxBufferSize.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Pq.MaxBufferSize.IsNull() {
-					*maxBufferSize11 = r.InputGrafana.InputGrafanaGrafana2.Pq.MaxBufferSize.ValueFloat64()
-				} else {
-					maxBufferSize11 = nil
-				}
-				commitFrequency11 := new(float64)
-				if !r.InputGrafana.InputGrafanaGrafana2.Pq.CommitFrequency.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Pq.CommitFrequency.IsNull() {
-					*commitFrequency11 = r.InputGrafana.InputGrafanaGrafana2.Pq.CommitFrequency.ValueFloat64()
-				} else {
-					commitFrequency11 = nil
-				}
-				maxFileSize11 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.Pq.MaxFileSize.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Pq.MaxFileSize.IsNull() {
-					*maxFileSize11 = r.InputGrafana.InputGrafanaGrafana2.Pq.MaxFileSize.ValueString()
-				} else {
-					maxFileSize11 = nil
-				}
-				maxSize11 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.Pq.MaxSize.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Pq.MaxSize.IsNull() {
-					*maxSize11 = r.InputGrafana.InputGrafanaGrafana2.Pq.MaxSize.ValueString()
-				} else {
-					maxSize11 = nil
-				}
-				path11 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.Pq.Path.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Pq.Path.IsNull() {
-					*path11 = r.InputGrafana.InputGrafanaGrafana2.Pq.Path.ValueString()
-				} else {
-					path11 = nil
-				}
-				compress12 := new(shared.InputGrafanaCompression2)
-				if !r.InputGrafana.InputGrafanaGrafana2.Pq.Compress.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Pq.Compress.IsNull() {
-					*compress12 = shared.InputGrafanaCompression2(r.InputGrafana.InputGrafanaGrafana2.Pq.Compress.ValueString())
-				} else {
-					compress12 = nil
-				}
-				pq11 = &shared.InputGrafanaPq2{
-					Mode:            mode11,
-					MaxBufferSize:   maxBufferSize11,
-					CommitFrequency: commitFrequency11,
-					MaxFileSize:     maxFileSize11,
-					MaxSize:         maxSize11,
-					Path:            path11,
-					Compress:        compress12,
-				}
-			}
-			host5 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana2.Host.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Host.IsNull() {
-				*host5 = r.InputGrafana.InputGrafanaGrafana2.Host.ValueString()
-			} else {
-				host5 = nil
-			}
-			var port5 float64
-			port5 = r.InputGrafana.InputGrafanaGrafana2.Port.ValueFloat64()
+			oauthHeaders1 := make([]shared.PrometheusAuthOauthHeader, 0, len(r.InputGrafana.PrometheusAuth.OauthHeaders))
+			for oauthHeadersIndex1 := range r.InputGrafana.PrometheusAuth.OauthHeaders {
+				var name18 string
+				name18 = r.InputGrafana.PrometheusAuth.OauthHeaders[oauthHeadersIndex1].Name.ValueString()
 
-			var tls11 *shared.InputGrafanaTLSSettingsServerSide2
-			if r.InputGrafana.InputGrafanaGrafana2.TLS != nil {
-				disabled32 := new(bool)
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.Disabled.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.Disabled.IsNull() {
-					*disabled32 = r.InputGrafana.InputGrafanaGrafana2.TLS.Disabled.ValueBool()
-				} else {
-					disabled32 = nil
-				}
-				certificateName12 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.CertificateName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.CertificateName.IsNull() {
-					*certificateName12 = r.InputGrafana.InputGrafanaGrafana2.TLS.CertificateName.ValueString()
-				} else {
-					certificateName12 = nil
-				}
-				privKeyPath11 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.PrivKeyPath.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.PrivKeyPath.IsNull() {
-					*privKeyPath11 = r.InputGrafana.InputGrafanaGrafana2.TLS.PrivKeyPath.ValueString()
-				} else {
-					privKeyPath11 = nil
-				}
-				passphrase11 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.Passphrase.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.Passphrase.IsNull() {
-					*passphrase11 = r.InputGrafana.InputGrafanaGrafana2.TLS.Passphrase.ValueString()
-				} else {
-					passphrase11 = nil
-				}
-				certPath11 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.CertPath.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.CertPath.IsNull() {
-					*certPath11 = r.InputGrafana.InputGrafanaGrafana2.TLS.CertPath.ValueString()
-				} else {
-					certPath11 = nil
-				}
-				caPath11 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.CaPath.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.CaPath.IsNull() {
-					*caPath11 = r.InputGrafana.InputGrafanaGrafana2.TLS.CaPath.ValueString()
-				} else {
-					caPath11 = nil
-				}
-				requestCert5 := new(bool)
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.RequestCert.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.RequestCert.IsNull() {
-					*requestCert5 = r.InputGrafana.InputGrafanaGrafana2.TLS.RequestCert.ValueBool()
-				} else {
-					requestCert5 = nil
-				}
-				var rejectUnauthorized14 interface{}
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized.IsNull() {
-					_ = json.Unmarshal([]byte(r.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized14)
-				}
-				var commonNameRegex5 interface{}
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex.IsNull() {
-					_ = json.Unmarshal([]byte(r.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex.ValueString()), &commonNameRegex5)
-				}
-				minVersion11 := new(shared.InputGrafanaMinimumTLSVersion2)
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.MinVersion.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.MinVersion.IsNull() {
-					*minVersion11 = shared.InputGrafanaMinimumTLSVersion2(r.InputGrafana.InputGrafanaGrafana2.TLS.MinVersion.ValueString())
-				} else {
-					minVersion11 = nil
-				}
-				maxVersion11 := new(shared.InputGrafanaMaximumTLSVersion2)
-				if !r.InputGrafana.InputGrafanaGrafana2.TLS.MaxVersion.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.TLS.MaxVersion.IsNull() {
-					*maxVersion11 = shared.InputGrafanaMaximumTLSVersion2(r.InputGrafana.InputGrafanaGrafana2.TLS.MaxVersion.ValueString())
-				} else {
-					maxVersion11 = nil
-				}
-				tls11 = &shared.InputGrafanaTLSSettingsServerSide2{
-					Disabled:           disabled32,
-					CertificateName:    certificateName12,
-					PrivKeyPath:        privKeyPath11,
-					Passphrase:         passphrase11,
-					CertPath:           certPath11,
-					CaPath:             caPath11,
-					RequestCert:        requestCert5,
-					RejectUnauthorized: rejectUnauthorized14,
-					CommonNameRegex:    commonNameRegex5,
-					MinVersion:         minVersion11,
-					MaxVersion:         maxVersion11,
-				}
-			}
-			maxActiveReq4 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana2.MaxActiveReq.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.MaxActiveReq.IsNull() {
-				*maxActiveReq4 = r.InputGrafana.InputGrafanaGrafana2.MaxActiveReq.ValueFloat64()
-			} else {
-				maxActiveReq4 = nil
-			}
-			maxRequestsPerSocket4 := new(int64)
-			if !r.InputGrafana.InputGrafanaGrafana2.MaxRequestsPerSocket.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.MaxRequestsPerSocket.IsNull() {
-				*maxRequestsPerSocket4 = r.InputGrafana.InputGrafanaGrafana2.MaxRequestsPerSocket.ValueInt64()
-			} else {
-				maxRequestsPerSocket4 = nil
-			}
-			enableProxyHeader5 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana2.EnableProxyHeader.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.EnableProxyHeader.IsNull() {
-				*enableProxyHeader5 = r.InputGrafana.InputGrafanaGrafana2.EnableProxyHeader.ValueBool()
-			} else {
-				enableProxyHeader5 = nil
-			}
-			captureHeaders4 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana2.CaptureHeaders.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.CaptureHeaders.IsNull() {
-				*captureHeaders4 = r.InputGrafana.InputGrafanaGrafana2.CaptureHeaders.ValueBool()
-			} else {
-				captureHeaders4 = nil
-			}
-			activityLogSampleRate4 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana2.ActivityLogSampleRate.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.ActivityLogSampleRate.IsNull() {
-				*activityLogSampleRate4 = r.InputGrafana.InputGrafanaGrafana2.ActivityLogSampleRate.ValueFloat64()
-			} else {
-				activityLogSampleRate4 = nil
-			}
-			requestTimeout11 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana2.RequestTimeout.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.RequestTimeout.IsNull() {
-				*requestTimeout11 = r.InputGrafana.InputGrafanaGrafana2.RequestTimeout.ValueFloat64()
-			} else {
-				requestTimeout11 = nil
-			}
-			socketTimeout4 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana2.SocketTimeout.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.SocketTimeout.IsNull() {
-				*socketTimeout4 = r.InputGrafana.InputGrafanaGrafana2.SocketTimeout.ValueFloat64()
-			} else {
-				socketTimeout4 = nil
-			}
-			keepAliveTimeout4 := new(float64)
-			if !r.InputGrafana.InputGrafanaGrafana2.KeepAliveTimeout.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.KeepAliveTimeout.IsNull() {
-				*keepAliveTimeout4 = r.InputGrafana.InputGrafanaGrafana2.KeepAliveTimeout.ValueFloat64()
-			} else {
-				keepAliveTimeout4 = nil
-			}
-			enableHealthCheck4 := new(bool)
-			if !r.InputGrafana.InputGrafanaGrafana2.EnableHealthCheck.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.EnableHealthCheck.IsNull() {
-				*enableHealthCheck4 = r.InputGrafana.InputGrafanaGrafana2.EnableHealthCheck.ValueBool()
-			} else {
-				enableHealthCheck4 = nil
-			}
-			ipAllowlistRegex4 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana2.IPAllowlistRegex.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.IPAllowlistRegex.IsNull() {
-				*ipAllowlistRegex4 = r.InputGrafana.InputGrafanaGrafana2.IPAllowlistRegex.ValueString()
-			} else {
-				ipAllowlistRegex4 = nil
-			}
-			ipDenylistRegex4 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana2.IPDenylistRegex.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.IPDenylistRegex.IsNull() {
-				*ipDenylistRegex4 = r.InputGrafana.InputGrafanaGrafana2.IPDenylistRegex.ValueString()
-			} else {
-				ipDenylistRegex4 = nil
-			}
-			prometheusApi1 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAPI.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAPI.IsNull() {
-				*prometheusApi1 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAPI.ValueString()
-			} else {
-				prometheusApi1 = nil
-			}
-			lokiApi1 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana2.LokiAPI.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAPI.IsNull() {
-				*lokiApi1 = r.InputGrafana.InputGrafanaGrafana2.LokiAPI.ValueString()
-			} else {
-				lokiApi1 = nil
-			}
-			var prometheusAuth1 *shared.InputGrafanaPrometheusAuth2
-			if r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth != nil {
-				authType7 := new(shared.InputGrafanaPrometheusAuthAuthenticationType2)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType.IsNull() {
-					*authType7 = shared.InputGrafanaPrometheusAuthAuthenticationType2(r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType.ValueString())
-				} else {
-					authType7 = nil
-				}
-				username4 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Username.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Username.IsNull() {
-					*username4 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Username.ValueString()
-				} else {
-					username4 = nil
-				}
-				password4 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Password.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Password.IsNull() {
-					*password4 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Password.ValueString()
-				} else {
-					password4 = nil
-				}
-				token6 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Token.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Token.IsNull() {
-					*token6 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Token.ValueString()
-				} else {
-					token6 = nil
-				}
-				credentialsSecret7 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.CredentialsSecret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.CredentialsSecret.IsNull() {
-					*credentialsSecret7 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.CredentialsSecret.ValueString()
-				} else {
-					credentialsSecret7 = nil
-				}
-				textSecret4 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TextSecret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TextSecret.IsNull() {
-					*textSecret4 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TextSecret.ValueString()
-				} else {
-					textSecret4 = nil
-				}
-				loginUrl3 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.LoginURL.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.LoginURL.IsNull() {
-					*loginUrl3 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.LoginURL.ValueString()
-				} else {
-					loginUrl3 = nil
-				}
-				secretParamName3 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.SecretParamName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.SecretParamName.IsNull() {
-					*secretParamName3 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.SecretParamName.ValueString()
-				} else {
-					secretParamName3 = nil
-				}
-				secret3 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Secret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Secret.IsNull() {
-					*secret3 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Secret.ValueString()
-				} else {
-					secret3 = nil
-				}
-				tokenAttributeName3 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenAttributeName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenAttributeName.IsNull() {
-					*tokenAttributeName3 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenAttributeName.ValueString()
-				} else {
-					tokenAttributeName3 = nil
-				}
-				authHeaderExpr3 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthHeaderExpr.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthHeaderExpr.IsNull() {
-					*authHeaderExpr3 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthHeaderExpr.ValueString()
-				} else {
-					authHeaderExpr3 = nil
-				}
-				tokenTimeoutSecs3 := new(float64)
-				if !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenTimeoutSecs.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenTimeoutSecs.IsNull() {
-					*tokenTimeoutSecs3 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenTimeoutSecs.ValueFloat64()
-				} else {
-					tokenTimeoutSecs3 = nil
-				}
-				oauthParams3 := make([]shared.PrometheusAuthOauthParam2, 0, len(r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthParams))
-				for oauthParamsIndex3 := range r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthParams {
-					var name22 string
-					name22 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthParams[oauthParamsIndex3].Name.ValueString()
+				var value18 string
+				value18 = r.InputGrafana.PrometheusAuth.OauthHeaders[oauthHeadersIndex1].Value.ValueString()
 
-					var value22 string
-					value22 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthParams[oauthParamsIndex3].Value.ValueString()
-
-					oauthParams3 = append(oauthParams3, shared.PrometheusAuthOauthParam2{
-						Name:  name22,
-						Value: value22,
-					})
-				}
-				oauthHeaders3 := make([]shared.PrometheusAuthOauthHeader2, 0, len(r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthHeaders))
-				for oauthHeadersIndex3 := range r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthHeaders {
-					var name23 string
-					name23 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthHeaders[oauthHeadersIndex3].Name.ValueString()
-
-					var value23 string
-					value23 = r.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthHeaders[oauthHeadersIndex3].Value.ValueString()
-
-					oauthHeaders3 = append(oauthHeaders3, shared.PrometheusAuthOauthHeader2{
-						Name:  name23,
-						Value: value23,
-					})
-				}
-				prometheusAuth1 = &shared.InputGrafanaPrometheusAuth2{
-					AuthType:           authType7,
-					Username:           username4,
-					Password:           password4,
-					Token:              token6,
-					CredentialsSecret:  credentialsSecret7,
-					TextSecret:         textSecret4,
-					LoginURL:           loginUrl3,
-					SecretParamName:    secretParamName3,
-					Secret:             secret3,
-					TokenAttributeName: tokenAttributeName3,
-					AuthHeaderExpr:     authHeaderExpr3,
-					TokenTimeoutSecs:   tokenTimeoutSecs3,
-					OauthParams:        oauthParams3,
-					OauthHeaders:       oauthHeaders3,
-				}
-			}
-			var lokiAuth1 *shared.InputGrafanaLokiAuth2
-			if r.InputGrafana.InputGrafanaGrafana2.LokiAuth != nil {
-				authType8 := new(shared.InputGrafanaLokiAuthAuthenticationType2)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType.IsNull() {
-					*authType8 = shared.InputGrafanaLokiAuthAuthenticationType2(r.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType.ValueString())
-				} else {
-					authType8 = nil
-				}
-				username5 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Username.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Username.IsNull() {
-					*username5 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Username.ValueString()
-				} else {
-					username5 = nil
-				}
-				password5 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Password.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Password.IsNull() {
-					*password5 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Password.ValueString()
-				} else {
-					password5 = nil
-				}
-				token7 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Token.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Token.IsNull() {
-					*token7 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Token.ValueString()
-				} else {
-					token7 = nil
-				}
-				credentialsSecret8 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.CredentialsSecret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.CredentialsSecret.IsNull() {
-					*credentialsSecret8 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.CredentialsSecret.ValueString()
-				} else {
-					credentialsSecret8 = nil
-				}
-				textSecret5 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.TextSecret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.TextSecret.IsNull() {
-					*textSecret5 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.TextSecret.ValueString()
-				} else {
-					textSecret5 = nil
-				}
-				loginUrl4 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.LoginURL.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.LoginURL.IsNull() {
-					*loginUrl4 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.LoginURL.ValueString()
-				} else {
-					loginUrl4 = nil
-				}
-				secretParamName4 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.SecretParamName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.SecretParamName.IsNull() {
-					*secretParamName4 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.SecretParamName.ValueString()
-				} else {
-					secretParamName4 = nil
-				}
-				secret4 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Secret.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Secret.IsNull() {
-					*secret4 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.Secret.ValueString()
-				} else {
-					secret4 = nil
-				}
-				tokenAttributeName4 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenAttributeName.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenAttributeName.IsNull() {
-					*tokenAttributeName4 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenAttributeName.ValueString()
-				} else {
-					tokenAttributeName4 = nil
-				}
-				authHeaderExpr4 := new(string)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthHeaderExpr.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthHeaderExpr.IsNull() {
-					*authHeaderExpr4 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthHeaderExpr.ValueString()
-				} else {
-					authHeaderExpr4 = nil
-				}
-				tokenTimeoutSecs4 := new(float64)
-				if !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenTimeoutSecs.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenTimeoutSecs.IsNull() {
-					*tokenTimeoutSecs4 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenTimeoutSecs.ValueFloat64()
-				} else {
-					tokenTimeoutSecs4 = nil
-				}
-				oauthParams4 := make([]shared.LokiAuthOauthParam2, 0, len(r.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthParams))
-				for oauthParamsIndex4 := range r.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthParams {
-					var name24 string
-					name24 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthParams[oauthParamsIndex4].Name.ValueString()
-
-					var value24 string
-					value24 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthParams[oauthParamsIndex4].Value.ValueString()
-
-					oauthParams4 = append(oauthParams4, shared.LokiAuthOauthParam2{
-						Name:  name24,
-						Value: value24,
-					})
-				}
-				oauthHeaders4 := make([]shared.LokiAuthOauthHeader2, 0, len(r.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthHeaders))
-				for oauthHeadersIndex4 := range r.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthHeaders {
-					var name25 string
-					name25 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthHeaders[oauthHeadersIndex4].Name.ValueString()
-
-					var value25 string
-					value25 = r.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthHeaders[oauthHeadersIndex4].Value.ValueString()
-
-					oauthHeaders4 = append(oauthHeaders4, shared.LokiAuthOauthHeader2{
-						Name:  name25,
-						Value: value25,
-					})
-				}
-				lokiAuth1 = &shared.InputGrafanaLokiAuth2{
-					AuthType:           authType8,
-					Username:           username5,
-					Password:           password5,
-					Token:              token7,
-					CredentialsSecret:  credentialsSecret8,
-					TextSecret:         textSecret5,
-					LoginURL:           loginUrl4,
-					SecretParamName:    secretParamName4,
-					Secret:             secret4,
-					TokenAttributeName: tokenAttributeName4,
-					AuthHeaderExpr:     authHeaderExpr4,
-					TokenTimeoutSecs:   tokenTimeoutSecs4,
-					OauthParams:        oauthParams4,
-					OauthHeaders:       oauthHeaders4,
-				}
-			}
-			metadata13 := make([]shared.InputGrafanaMetadatum2, 0, len(r.InputGrafana.InputGrafanaGrafana2.Metadata))
-			for metadataIndex13 := range r.InputGrafana.InputGrafanaGrafana2.Metadata {
-				var name26 string
-				name26 = r.InputGrafana.InputGrafanaGrafana2.Metadata[metadataIndex13].Name.ValueString()
-
-				var value26 string
-				value26 = r.InputGrafana.InputGrafanaGrafana2.Metadata[metadataIndex13].Value.ValueString()
-
-				metadata13 = append(metadata13, shared.InputGrafanaMetadatum2{
-					Name:  name26,
-					Value: value26,
+				oauthHeaders1 = append(oauthHeaders1, shared.PrometheusAuthOauthHeader{
+					Name:  name18,
+					Value: value18,
 				})
 			}
-			description13 := new(string)
-			if !r.InputGrafana.InputGrafanaGrafana2.Description.IsUnknown() && !r.InputGrafana.InputGrafanaGrafana2.Description.IsNull() {
-				*description13 = r.InputGrafana.InputGrafanaGrafana2.Description.ValueString()
-			} else {
-				description13 = nil
-			}
-			inputGrafanaGrafana2 = &shared.InputGrafanaGrafana2{
-				ID:                    id11,
-				Type:                  typeVar12,
-				Disabled:              disabled31,
-				Pipeline:              pipeline22,
-				SendToRoutes:          sendToRoutes11,
-				Environment:           environment11,
-				PqEnabled:             pqEnabled11,
-				Streamtags:            streamtags11,
-				Connections:           connections11,
-				Pq:                    pq11,
-				Host:                  host5,
-				Port:                  port5,
-				TLS:                   tls11,
-				MaxActiveReq:          maxActiveReq4,
-				MaxRequestsPerSocket:  maxRequestsPerSocket4,
-				EnableProxyHeader:     enableProxyHeader5,
-				CaptureHeaders:        captureHeaders4,
-				ActivityLogSampleRate: activityLogSampleRate4,
-				RequestTimeout:        requestTimeout11,
-				SocketTimeout:         socketTimeout4,
-				KeepAliveTimeout:      keepAliveTimeout4,
-				EnableHealthCheck:     enableHealthCheck4,
-				IPAllowlistRegex:      ipAllowlistRegex4,
-				IPDenylistRegex:       ipDenylistRegex4,
-				PrometheusAPI:         prometheusApi1,
-				LokiAPI:               lokiApi1,
-				PrometheusAuth:        prometheusAuth1,
-				LokiAuth:              lokiAuth1,
-				Metadata:              metadata13,
-				Description:           description13,
+			prometheusAuth = &shared.InputGrafanaPrometheusAuth{
+				AuthType:           authType5,
+				Username:           username2,
+				Password:           password2,
+				Token:              token4,
+				CredentialsSecret:  credentialsSecret5,
+				TextSecret:         textSecret2,
+				LoginURL:           loginUrl1,
+				SecretParamName:    secretParamName1,
+				Secret:             secret1,
+				TokenAttributeName: tokenAttributeName1,
+				AuthHeaderExpr:     authHeaderExpr1,
+				TokenTimeoutSecs:   tokenTimeoutSecs1,
+				OauthParams:        oauthParams1,
+				OauthHeaders:       oauthHeaders1,
 			}
 		}
-		if inputGrafanaGrafana2 != nil {
-			inputGrafana = &shared.InputGrafana{
-				InputGrafanaGrafana2: inputGrafanaGrafana2,
+		var lokiAuth *shared.InputGrafanaLokiAuth
+		if r.InputGrafana.LokiAuth != nil {
+			authType6 := new(shared.InputGrafanaLokiAuthAuthenticationType)
+			if !r.InputGrafana.LokiAuth.AuthType.IsUnknown() && !r.InputGrafana.LokiAuth.AuthType.IsNull() {
+				*authType6 = shared.InputGrafanaLokiAuthAuthenticationType(r.InputGrafana.LokiAuth.AuthType.ValueString())
+			} else {
+				authType6 = nil
 			}
+			username3 := new(string)
+			if !r.InputGrafana.LokiAuth.Username.IsUnknown() && !r.InputGrafana.LokiAuth.Username.IsNull() {
+				*username3 = r.InputGrafana.LokiAuth.Username.ValueString()
+			} else {
+				username3 = nil
+			}
+			password3 := new(string)
+			if !r.InputGrafana.LokiAuth.Password.IsUnknown() && !r.InputGrafana.LokiAuth.Password.IsNull() {
+				*password3 = r.InputGrafana.LokiAuth.Password.ValueString()
+			} else {
+				password3 = nil
+			}
+			token5 := new(string)
+			if !r.InputGrafana.LokiAuth.Token.IsUnknown() && !r.InputGrafana.LokiAuth.Token.IsNull() {
+				*token5 = r.InputGrafana.LokiAuth.Token.ValueString()
+			} else {
+				token5 = nil
+			}
+			credentialsSecret6 := new(string)
+			if !r.InputGrafana.LokiAuth.CredentialsSecret.IsUnknown() && !r.InputGrafana.LokiAuth.CredentialsSecret.IsNull() {
+				*credentialsSecret6 = r.InputGrafana.LokiAuth.CredentialsSecret.ValueString()
+			} else {
+				credentialsSecret6 = nil
+			}
+			textSecret3 := new(string)
+			if !r.InputGrafana.LokiAuth.TextSecret.IsUnknown() && !r.InputGrafana.LokiAuth.TextSecret.IsNull() {
+				*textSecret3 = r.InputGrafana.LokiAuth.TextSecret.ValueString()
+			} else {
+				textSecret3 = nil
+			}
+			loginUrl2 := new(string)
+			if !r.InputGrafana.LokiAuth.LoginURL.IsUnknown() && !r.InputGrafana.LokiAuth.LoginURL.IsNull() {
+				*loginUrl2 = r.InputGrafana.LokiAuth.LoginURL.ValueString()
+			} else {
+				loginUrl2 = nil
+			}
+			secretParamName2 := new(string)
+			if !r.InputGrafana.LokiAuth.SecretParamName.IsUnknown() && !r.InputGrafana.LokiAuth.SecretParamName.IsNull() {
+				*secretParamName2 = r.InputGrafana.LokiAuth.SecretParamName.ValueString()
+			} else {
+				secretParamName2 = nil
+			}
+			secret2 := new(string)
+			if !r.InputGrafana.LokiAuth.Secret.IsUnknown() && !r.InputGrafana.LokiAuth.Secret.IsNull() {
+				*secret2 = r.InputGrafana.LokiAuth.Secret.ValueString()
+			} else {
+				secret2 = nil
+			}
+			tokenAttributeName2 := new(string)
+			if !r.InputGrafana.LokiAuth.TokenAttributeName.IsUnknown() && !r.InputGrafana.LokiAuth.TokenAttributeName.IsNull() {
+				*tokenAttributeName2 = r.InputGrafana.LokiAuth.TokenAttributeName.ValueString()
+			} else {
+				tokenAttributeName2 = nil
+			}
+			authHeaderExpr2 := new(string)
+			if !r.InputGrafana.LokiAuth.AuthHeaderExpr.IsUnknown() && !r.InputGrafana.LokiAuth.AuthHeaderExpr.IsNull() {
+				*authHeaderExpr2 = r.InputGrafana.LokiAuth.AuthHeaderExpr.ValueString()
+			} else {
+				authHeaderExpr2 = nil
+			}
+			tokenTimeoutSecs2 := new(float64)
+			if !r.InputGrafana.LokiAuth.TokenTimeoutSecs.IsUnknown() && !r.InputGrafana.LokiAuth.TokenTimeoutSecs.IsNull() {
+				*tokenTimeoutSecs2 = r.InputGrafana.LokiAuth.TokenTimeoutSecs.ValueFloat64()
+			} else {
+				tokenTimeoutSecs2 = nil
+			}
+			oauthParams2 := make([]shared.LokiAuthOauthParam, 0, len(r.InputGrafana.LokiAuth.OauthParams))
+			for oauthParamsIndex2 := range r.InputGrafana.LokiAuth.OauthParams {
+				var name19 string
+				name19 = r.InputGrafana.LokiAuth.OauthParams[oauthParamsIndex2].Name.ValueString()
+
+				var value19 string
+				value19 = r.InputGrafana.LokiAuth.OauthParams[oauthParamsIndex2].Value.ValueString()
+
+				oauthParams2 = append(oauthParams2, shared.LokiAuthOauthParam{
+					Name:  name19,
+					Value: value19,
+				})
+			}
+			oauthHeaders2 := make([]shared.LokiAuthOauthHeader, 0, len(r.InputGrafana.LokiAuth.OauthHeaders))
+			for oauthHeadersIndex2 := range r.InputGrafana.LokiAuth.OauthHeaders {
+				var name20 string
+				name20 = r.InputGrafana.LokiAuth.OauthHeaders[oauthHeadersIndex2].Name.ValueString()
+
+				var value20 string
+				value20 = r.InputGrafana.LokiAuth.OauthHeaders[oauthHeadersIndex2].Value.ValueString()
+
+				oauthHeaders2 = append(oauthHeaders2, shared.LokiAuthOauthHeader{
+					Name:  name20,
+					Value: value20,
+				})
+			}
+			lokiAuth = &shared.InputGrafanaLokiAuth{
+				AuthType:           authType6,
+				Username:           username3,
+				Password:           password3,
+				Token:              token5,
+				CredentialsSecret:  credentialsSecret6,
+				TextSecret:         textSecret3,
+				LoginURL:           loginUrl2,
+				SecretParamName:    secretParamName2,
+				Secret:             secret2,
+				TokenAttributeName: tokenAttributeName2,
+				AuthHeaderExpr:     authHeaderExpr2,
+				TokenTimeoutSecs:   tokenTimeoutSecs2,
+				OauthParams:        oauthParams2,
+				OauthHeaders:       oauthHeaders2,
+			}
+		}
+		metadata12 := make([]shared.InputGrafanaMetadatum, 0, len(r.InputGrafana.Metadata))
+		for metadataIndex12 := range r.InputGrafana.Metadata {
+			var name21 string
+			name21 = r.InputGrafana.Metadata[metadataIndex12].Name.ValueString()
+
+			var value21 string
+			value21 = r.InputGrafana.Metadata[metadataIndex12].Value.ValueString()
+
+			metadata12 = append(metadata12, shared.InputGrafanaMetadatum{
+				Name:  name21,
+				Value: value21,
+			})
+		}
+		description12 := new(string)
+		if !r.InputGrafana.Description.IsUnknown() && !r.InputGrafana.Description.IsNull() {
+			*description12 = r.InputGrafana.Description.ValueString()
+		} else {
+			description12 = nil
+		}
+		inputGrafana = &shared.InputGrafana{
+			ID:                    id10,
+			Type:                  typeVar11,
+			Disabled:              disabled29,
+			Pipeline:              pipeline20,
+			SendToRoutes:          sendToRoutes10,
+			Environment:           environment10,
+			PqEnabled:             pqEnabled10,
+			Streamtags:            streamtags10,
+			Connections:           connections10,
+			Pq:                    pq10,
+			Host:                  host4,
+			Port:                  port4,
+			TLS:                   tls10,
+			MaxActiveReq:          maxActiveReq3,
+			MaxRequestsPerSocket:  maxRequestsPerSocket3,
+			EnableProxyHeader:     enableProxyHeader4,
+			CaptureHeaders:        captureHeaders3,
+			ActivityLogSampleRate: activityLogSampleRate3,
+			RequestTimeout:        requestTimeout10,
+			SocketTimeout:         socketTimeout3,
+			KeepAliveTimeout:      keepAliveTimeout3,
+			EnableHealthCheck:     enableHealthCheck3,
+			IPAllowlistRegex:      ipAllowlistRegex3,
+			IPDenylistRegex:       ipDenylistRegex3,
+			PrometheusAPI:         prometheusAPI,
+			LokiAPI:               lokiAPI,
+			PrometheusAuth:        prometheusAuth,
+			LokiAuth:              lokiAuth,
+			Metadata:              metadata12,
+			Description:           description12,
 		}
 	}
 	if inputGrafana != nil {
@@ -5573,113 +4991,556 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputLoki *shared.InputLoki
 	if r.InputLoki != nil {
-		id12 := new(string)
+		id11 := new(string)
 		if !r.InputLoki.ID.IsUnknown() && !r.InputLoki.ID.IsNull() {
-			*id12 = r.InputLoki.ID.ValueString()
+			*id11 = r.InputLoki.ID.ValueString()
+		} else {
+			id11 = nil
+		}
+		typeVar12 := new(shared.InputLokiType)
+		if !r.InputLoki.Type.IsUnknown() && !r.InputLoki.Type.IsNull() {
+			*typeVar12 = shared.InputLokiType(r.InputLoki.Type.ValueString())
+		} else {
+			typeVar12 = nil
+		}
+		disabled31 := new(bool)
+		if !r.InputLoki.Disabled.IsUnknown() && !r.InputLoki.Disabled.IsNull() {
+			*disabled31 = r.InputLoki.Disabled.ValueBool()
+		} else {
+			disabled31 = nil
+		}
+		pipeline22 := new(string)
+		if !r.InputLoki.Pipeline.IsUnknown() && !r.InputLoki.Pipeline.IsNull() {
+			*pipeline22 = r.InputLoki.Pipeline.ValueString()
+		} else {
+			pipeline22 = nil
+		}
+		sendToRoutes11 := new(bool)
+		if !r.InputLoki.SendToRoutes.IsUnknown() && !r.InputLoki.SendToRoutes.IsNull() {
+			*sendToRoutes11 = r.InputLoki.SendToRoutes.ValueBool()
+		} else {
+			sendToRoutes11 = nil
+		}
+		environment11 := new(string)
+		if !r.InputLoki.Environment.IsUnknown() && !r.InputLoki.Environment.IsNull() {
+			*environment11 = r.InputLoki.Environment.ValueString()
+		} else {
+			environment11 = nil
+		}
+		pqEnabled11 := new(bool)
+		if !r.InputLoki.PqEnabled.IsUnknown() && !r.InputLoki.PqEnabled.IsNull() {
+			*pqEnabled11 = r.InputLoki.PqEnabled.ValueBool()
+		} else {
+			pqEnabled11 = nil
+		}
+		streamtags11 := make([]string, 0, len(r.InputLoki.Streamtags))
+		for streamtagsIndex11 := range r.InputLoki.Streamtags {
+			streamtags11 = append(streamtags11, r.InputLoki.Streamtags[streamtagsIndex11].ValueString())
+		}
+		connections11 := make([]shared.InputLokiConnection, 0, len(r.InputLoki.Connections))
+		for connectionsIndex11 := range r.InputLoki.Connections {
+			pipeline23 := new(string)
+			if !r.InputLoki.Connections[connectionsIndex11].Pipeline.IsUnknown() && !r.InputLoki.Connections[connectionsIndex11].Pipeline.IsNull() {
+				*pipeline23 = r.InputLoki.Connections[connectionsIndex11].Pipeline.ValueString()
+			} else {
+				pipeline23 = nil
+			}
+			var output12 string
+			output12 = r.InputLoki.Connections[connectionsIndex11].Output.ValueString()
+
+			connections11 = append(connections11, shared.InputLokiConnection{
+				Pipeline: pipeline23,
+				Output:   output12,
+			})
+		}
+		var pq11 *shared.InputLokiPq
+		if r.InputLoki.Pq != nil {
+			mode11 := new(shared.InputLokiMode)
+			if !r.InputLoki.Pq.Mode.IsUnknown() && !r.InputLoki.Pq.Mode.IsNull() {
+				*mode11 = shared.InputLokiMode(r.InputLoki.Pq.Mode.ValueString())
+			} else {
+				mode11 = nil
+			}
+			maxBufferSize11 := new(float64)
+			if !r.InputLoki.Pq.MaxBufferSize.IsUnknown() && !r.InputLoki.Pq.MaxBufferSize.IsNull() {
+				*maxBufferSize11 = r.InputLoki.Pq.MaxBufferSize.ValueFloat64()
+			} else {
+				maxBufferSize11 = nil
+			}
+			commitFrequency11 := new(float64)
+			if !r.InputLoki.Pq.CommitFrequency.IsUnknown() && !r.InputLoki.Pq.CommitFrequency.IsNull() {
+				*commitFrequency11 = r.InputLoki.Pq.CommitFrequency.ValueFloat64()
+			} else {
+				commitFrequency11 = nil
+			}
+			maxFileSize11 := new(string)
+			if !r.InputLoki.Pq.MaxFileSize.IsUnknown() && !r.InputLoki.Pq.MaxFileSize.IsNull() {
+				*maxFileSize11 = r.InputLoki.Pq.MaxFileSize.ValueString()
+			} else {
+				maxFileSize11 = nil
+			}
+			maxSize11 := new(string)
+			if !r.InputLoki.Pq.MaxSize.IsUnknown() && !r.InputLoki.Pq.MaxSize.IsNull() {
+				*maxSize11 = r.InputLoki.Pq.MaxSize.ValueString()
+			} else {
+				maxSize11 = nil
+			}
+			path11 := new(string)
+			if !r.InputLoki.Pq.Path.IsUnknown() && !r.InputLoki.Pq.Path.IsNull() {
+				*path11 = r.InputLoki.Pq.Path.ValueString()
+			} else {
+				path11 = nil
+			}
+			compress12 := new(shared.InputLokiCompression)
+			if !r.InputLoki.Pq.Compress.IsUnknown() && !r.InputLoki.Pq.Compress.IsNull() {
+				*compress12 = shared.InputLokiCompression(r.InputLoki.Pq.Compress.ValueString())
+			} else {
+				compress12 = nil
+			}
+			pq11 = &shared.InputLokiPq{
+				Mode:            mode11,
+				MaxBufferSize:   maxBufferSize11,
+				CommitFrequency: commitFrequency11,
+				MaxFileSize:     maxFileSize11,
+				MaxSize:         maxSize11,
+				Path:            path11,
+				Compress:        compress12,
+			}
+		}
+		host5 := new(string)
+		if !r.InputLoki.Host.IsUnknown() && !r.InputLoki.Host.IsNull() {
+			*host5 = r.InputLoki.Host.ValueString()
+		} else {
+			host5 = nil
+		}
+		var port5 float64
+		port5 = r.InputLoki.Port.ValueFloat64()
+
+		var tls11 *shared.InputLokiTLSSettingsServerSide
+		if r.InputLoki.TLS != nil {
+			disabled32 := new(bool)
+			if !r.InputLoki.TLS.Disabled.IsUnknown() && !r.InputLoki.TLS.Disabled.IsNull() {
+				*disabled32 = r.InputLoki.TLS.Disabled.ValueBool()
+			} else {
+				disabled32 = nil
+			}
+			certificateName12 := new(string)
+			if !r.InputLoki.TLS.CertificateName.IsUnknown() && !r.InputLoki.TLS.CertificateName.IsNull() {
+				*certificateName12 = r.InputLoki.TLS.CertificateName.ValueString()
+			} else {
+				certificateName12 = nil
+			}
+			privKeyPath11 := new(string)
+			if !r.InputLoki.TLS.PrivKeyPath.IsUnknown() && !r.InputLoki.TLS.PrivKeyPath.IsNull() {
+				*privKeyPath11 = r.InputLoki.TLS.PrivKeyPath.ValueString()
+			} else {
+				privKeyPath11 = nil
+			}
+			passphrase11 := new(string)
+			if !r.InputLoki.TLS.Passphrase.IsUnknown() && !r.InputLoki.TLS.Passphrase.IsNull() {
+				*passphrase11 = r.InputLoki.TLS.Passphrase.ValueString()
+			} else {
+				passphrase11 = nil
+			}
+			certPath11 := new(string)
+			if !r.InputLoki.TLS.CertPath.IsUnknown() && !r.InputLoki.TLS.CertPath.IsNull() {
+				*certPath11 = r.InputLoki.TLS.CertPath.ValueString()
+			} else {
+				certPath11 = nil
+			}
+			caPath11 := new(string)
+			if !r.InputLoki.TLS.CaPath.IsUnknown() && !r.InputLoki.TLS.CaPath.IsNull() {
+				*caPath11 = r.InputLoki.TLS.CaPath.ValueString()
+			} else {
+				caPath11 = nil
+			}
+			requestCert5 := new(bool)
+			if !r.InputLoki.TLS.RequestCert.IsUnknown() && !r.InputLoki.TLS.RequestCert.IsNull() {
+				*requestCert5 = r.InputLoki.TLS.RequestCert.ValueBool()
+			} else {
+				requestCert5 = nil
+			}
+			var rejectUnauthorized14 interface{}
+			if !r.InputLoki.TLS.RejectUnauthorized.IsUnknown() && !r.InputLoki.TLS.RejectUnauthorized.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputLoki.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized14)
+			}
+			var commonNameRegex5 interface{}
+			if !r.InputLoki.TLS.CommonNameRegex.IsUnknown() && !r.InputLoki.TLS.CommonNameRegex.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputLoki.TLS.CommonNameRegex.ValueString()), &commonNameRegex5)
+			}
+			minVersion11 := new(shared.InputLokiMinimumTLSVersion)
+			if !r.InputLoki.TLS.MinVersion.IsUnknown() && !r.InputLoki.TLS.MinVersion.IsNull() {
+				*minVersion11 = shared.InputLokiMinimumTLSVersion(r.InputLoki.TLS.MinVersion.ValueString())
+			} else {
+				minVersion11 = nil
+			}
+			maxVersion11 := new(shared.InputLokiMaximumTLSVersion)
+			if !r.InputLoki.TLS.MaxVersion.IsUnknown() && !r.InputLoki.TLS.MaxVersion.IsNull() {
+				*maxVersion11 = shared.InputLokiMaximumTLSVersion(r.InputLoki.TLS.MaxVersion.ValueString())
+			} else {
+				maxVersion11 = nil
+			}
+			tls11 = &shared.InputLokiTLSSettingsServerSide{
+				Disabled:           disabled32,
+				CertificateName:    certificateName12,
+				PrivKeyPath:        privKeyPath11,
+				Passphrase:         passphrase11,
+				CertPath:           certPath11,
+				CaPath:             caPath11,
+				RequestCert:        requestCert5,
+				RejectUnauthorized: rejectUnauthorized14,
+				CommonNameRegex:    commonNameRegex5,
+				MinVersion:         minVersion11,
+				MaxVersion:         maxVersion11,
+			}
+		}
+		maxActiveReq4 := new(float64)
+		if !r.InputLoki.MaxActiveReq.IsUnknown() && !r.InputLoki.MaxActiveReq.IsNull() {
+			*maxActiveReq4 = r.InputLoki.MaxActiveReq.ValueFloat64()
+		} else {
+			maxActiveReq4 = nil
+		}
+		maxRequestsPerSocket4 := new(int64)
+		if !r.InputLoki.MaxRequestsPerSocket.IsUnknown() && !r.InputLoki.MaxRequestsPerSocket.IsNull() {
+			*maxRequestsPerSocket4 = r.InputLoki.MaxRequestsPerSocket.ValueInt64()
+		} else {
+			maxRequestsPerSocket4 = nil
+		}
+		enableProxyHeader5 := new(bool)
+		if !r.InputLoki.EnableProxyHeader.IsUnknown() && !r.InputLoki.EnableProxyHeader.IsNull() {
+			*enableProxyHeader5 = r.InputLoki.EnableProxyHeader.ValueBool()
+		} else {
+			enableProxyHeader5 = nil
+		}
+		captureHeaders4 := new(bool)
+		if !r.InputLoki.CaptureHeaders.IsUnknown() && !r.InputLoki.CaptureHeaders.IsNull() {
+			*captureHeaders4 = r.InputLoki.CaptureHeaders.ValueBool()
+		} else {
+			captureHeaders4 = nil
+		}
+		activityLogSampleRate4 := new(float64)
+		if !r.InputLoki.ActivityLogSampleRate.IsUnknown() && !r.InputLoki.ActivityLogSampleRate.IsNull() {
+			*activityLogSampleRate4 = r.InputLoki.ActivityLogSampleRate.ValueFloat64()
+		} else {
+			activityLogSampleRate4 = nil
+		}
+		requestTimeout11 := new(float64)
+		if !r.InputLoki.RequestTimeout.IsUnknown() && !r.InputLoki.RequestTimeout.IsNull() {
+			*requestTimeout11 = r.InputLoki.RequestTimeout.ValueFloat64()
+		} else {
+			requestTimeout11 = nil
+		}
+		socketTimeout4 := new(float64)
+		if !r.InputLoki.SocketTimeout.IsUnknown() && !r.InputLoki.SocketTimeout.IsNull() {
+			*socketTimeout4 = r.InputLoki.SocketTimeout.ValueFloat64()
+		} else {
+			socketTimeout4 = nil
+		}
+		keepAliveTimeout4 := new(float64)
+		if !r.InputLoki.KeepAliveTimeout.IsUnknown() && !r.InputLoki.KeepAliveTimeout.IsNull() {
+			*keepAliveTimeout4 = r.InputLoki.KeepAliveTimeout.ValueFloat64()
+		} else {
+			keepAliveTimeout4 = nil
+		}
+		enableHealthCheck4 := new(bool)
+		if !r.InputLoki.EnableHealthCheck.IsUnknown() && !r.InputLoki.EnableHealthCheck.IsNull() {
+			*enableHealthCheck4 = r.InputLoki.EnableHealthCheck.ValueBool()
+		} else {
+			enableHealthCheck4 = nil
+		}
+		ipAllowlistRegex4 := new(string)
+		if !r.InputLoki.IPAllowlistRegex.IsUnknown() && !r.InputLoki.IPAllowlistRegex.IsNull() {
+			*ipAllowlistRegex4 = r.InputLoki.IPAllowlistRegex.ValueString()
+		} else {
+			ipAllowlistRegex4 = nil
+		}
+		ipDenylistRegex4 := new(string)
+		if !r.InputLoki.IPDenylistRegex.IsUnknown() && !r.InputLoki.IPDenylistRegex.IsNull() {
+			*ipDenylistRegex4 = r.InputLoki.IPDenylistRegex.ValueString()
+		} else {
+			ipDenylistRegex4 = nil
+		}
+		lokiApi1 := new(string)
+		if !r.InputLoki.LokiAPI.IsUnknown() && !r.InputLoki.LokiAPI.IsNull() {
+			*lokiApi1 = r.InputLoki.LokiAPI.ValueString()
+		} else {
+			lokiApi1 = nil
+		}
+		authType7 := new(shared.InputLokiAuthenticationType)
+		if !r.InputLoki.AuthType.IsUnknown() && !r.InputLoki.AuthType.IsNull() {
+			*authType7 = shared.InputLokiAuthenticationType(r.InputLoki.AuthType.ValueString())
+		} else {
+			authType7 = nil
+		}
+		metadata13 := make([]shared.InputLokiMetadatum, 0, len(r.InputLoki.Metadata))
+		for metadataIndex13 := range r.InputLoki.Metadata {
+			var name22 string
+			name22 = r.InputLoki.Metadata[metadataIndex13].Name.ValueString()
+
+			var value22 string
+			value22 = r.InputLoki.Metadata[metadataIndex13].Value.ValueString()
+
+			metadata13 = append(metadata13, shared.InputLokiMetadatum{
+				Name:  name22,
+				Value: value22,
+			})
+		}
+		description13 := new(string)
+		if !r.InputLoki.Description.IsUnknown() && !r.InputLoki.Description.IsNull() {
+			*description13 = r.InputLoki.Description.ValueString()
+		} else {
+			description13 = nil
+		}
+		username4 := new(string)
+		if !r.InputLoki.Username.IsUnknown() && !r.InputLoki.Username.IsNull() {
+			*username4 = r.InputLoki.Username.ValueString()
+		} else {
+			username4 = nil
+		}
+		password4 := new(string)
+		if !r.InputLoki.Password.IsUnknown() && !r.InputLoki.Password.IsNull() {
+			*password4 = r.InputLoki.Password.ValueString()
+		} else {
+			password4 = nil
+		}
+		token6 := new(string)
+		if !r.InputLoki.Token.IsUnknown() && !r.InputLoki.Token.IsNull() {
+			*token6 = r.InputLoki.Token.ValueString()
+		} else {
+			token6 = nil
+		}
+		credentialsSecret7 := new(string)
+		if !r.InputLoki.CredentialsSecret.IsUnknown() && !r.InputLoki.CredentialsSecret.IsNull() {
+			*credentialsSecret7 = r.InputLoki.CredentialsSecret.ValueString()
+		} else {
+			credentialsSecret7 = nil
+		}
+		textSecret4 := new(string)
+		if !r.InputLoki.TextSecret.IsUnknown() && !r.InputLoki.TextSecret.IsNull() {
+			*textSecret4 = r.InputLoki.TextSecret.ValueString()
+		} else {
+			textSecret4 = nil
+		}
+		loginUrl3 := new(string)
+		if !r.InputLoki.LoginURL.IsUnknown() && !r.InputLoki.LoginURL.IsNull() {
+			*loginUrl3 = r.InputLoki.LoginURL.ValueString()
+		} else {
+			loginUrl3 = nil
+		}
+		secretParamName3 := new(string)
+		if !r.InputLoki.SecretParamName.IsUnknown() && !r.InputLoki.SecretParamName.IsNull() {
+			*secretParamName3 = r.InputLoki.SecretParamName.ValueString()
+		} else {
+			secretParamName3 = nil
+		}
+		secret3 := new(string)
+		if !r.InputLoki.Secret.IsUnknown() && !r.InputLoki.Secret.IsNull() {
+			*secret3 = r.InputLoki.Secret.ValueString()
+		} else {
+			secret3 = nil
+		}
+		tokenAttributeName3 := new(string)
+		if !r.InputLoki.TokenAttributeName.IsUnknown() && !r.InputLoki.TokenAttributeName.IsNull() {
+			*tokenAttributeName3 = r.InputLoki.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName3 = nil
+		}
+		authHeaderExpr3 := new(string)
+		if !r.InputLoki.AuthHeaderExpr.IsUnknown() && !r.InputLoki.AuthHeaderExpr.IsNull() {
+			*authHeaderExpr3 = r.InputLoki.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr3 = nil
+		}
+		tokenTimeoutSecs3 := new(float64)
+		if !r.InputLoki.TokenTimeoutSecs.IsUnknown() && !r.InputLoki.TokenTimeoutSecs.IsNull() {
+			*tokenTimeoutSecs3 = r.InputLoki.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs3 = nil
+		}
+		oauthParams3 := make([]shared.InputLokiOauthParam, 0, len(r.InputLoki.OauthParams))
+		for oauthParamsIndex3 := range r.InputLoki.OauthParams {
+			var name23 string
+			name23 = r.InputLoki.OauthParams[oauthParamsIndex3].Name.ValueString()
+
+			var value23 string
+			value23 = r.InputLoki.OauthParams[oauthParamsIndex3].Value.ValueString()
+
+			oauthParams3 = append(oauthParams3, shared.InputLokiOauthParam{
+				Name:  name23,
+				Value: value23,
+			})
+		}
+		oauthHeaders3 := make([]shared.InputLokiOauthHeader, 0, len(r.InputLoki.OauthHeaders))
+		for oauthHeadersIndex3 := range r.InputLoki.OauthHeaders {
+			var name24 string
+			name24 = r.InputLoki.OauthHeaders[oauthHeadersIndex3].Name.ValueString()
+
+			var value24 string
+			value24 = r.InputLoki.OauthHeaders[oauthHeadersIndex3].Value.ValueString()
+
+			oauthHeaders3 = append(oauthHeaders3, shared.InputLokiOauthHeader{
+				Name:  name24,
+				Value: value24,
+			})
+		}
+		inputLoki = &shared.InputLoki{
+			ID:                    id11,
+			Type:                  typeVar12,
+			Disabled:              disabled31,
+			Pipeline:              pipeline22,
+			SendToRoutes:          sendToRoutes11,
+			Environment:           environment11,
+			PqEnabled:             pqEnabled11,
+			Streamtags:            streamtags11,
+			Connections:           connections11,
+			Pq:                    pq11,
+			Host:                  host5,
+			Port:                  port5,
+			TLS:                   tls11,
+			MaxActiveReq:          maxActiveReq4,
+			MaxRequestsPerSocket:  maxRequestsPerSocket4,
+			EnableProxyHeader:     enableProxyHeader5,
+			CaptureHeaders:        captureHeaders4,
+			ActivityLogSampleRate: activityLogSampleRate4,
+			RequestTimeout:        requestTimeout11,
+			SocketTimeout:         socketTimeout4,
+			KeepAliveTimeout:      keepAliveTimeout4,
+			EnableHealthCheck:     enableHealthCheck4,
+			IPAllowlistRegex:      ipAllowlistRegex4,
+			IPDenylistRegex:       ipDenylistRegex4,
+			LokiAPI:               lokiApi1,
+			AuthType:              authType7,
+			Metadata:              metadata13,
+			Description:           description13,
+			Username:              username4,
+			Password:              password4,
+			Token:                 token6,
+			CredentialsSecret:     credentialsSecret7,
+			TextSecret:            textSecret4,
+			LoginURL:              loginUrl3,
+			SecretParamName:       secretParamName3,
+			Secret:                secret3,
+			TokenAttributeName:    tokenAttributeName3,
+			AuthHeaderExpr:        authHeaderExpr3,
+			TokenTimeoutSecs:      tokenTimeoutSecs3,
+			OauthParams:           oauthParams3,
+			OauthHeaders:          oauthHeaders3,
+		}
+	}
+	if inputLoki != nil {
+		out = shared.Input{
+			InputLoki: inputLoki,
+		}
+	}
+	var inputPrometheusRw *shared.InputPrometheusRw
+	if r.InputPrometheusRw != nil {
+		id12 := new(string)
+		if !r.InputPrometheusRw.ID.IsUnknown() && !r.InputPrometheusRw.ID.IsNull() {
+			*id12 = r.InputPrometheusRw.ID.ValueString()
 		} else {
 			id12 = nil
 		}
-		typeVar13 := new(shared.InputLokiType)
-		if !r.InputLoki.Type.IsUnknown() && !r.InputLoki.Type.IsNull() {
-			*typeVar13 = shared.InputLokiType(r.InputLoki.Type.ValueString())
+		typeVar13 := new(shared.InputPrometheusRwType)
+		if !r.InputPrometheusRw.Type.IsUnknown() && !r.InputPrometheusRw.Type.IsNull() {
+			*typeVar13 = shared.InputPrometheusRwType(r.InputPrometheusRw.Type.ValueString())
 		} else {
 			typeVar13 = nil
 		}
 		disabled33 := new(bool)
-		if !r.InputLoki.Disabled.IsUnknown() && !r.InputLoki.Disabled.IsNull() {
-			*disabled33 = r.InputLoki.Disabled.ValueBool()
+		if !r.InputPrometheusRw.Disabled.IsUnknown() && !r.InputPrometheusRw.Disabled.IsNull() {
+			*disabled33 = r.InputPrometheusRw.Disabled.ValueBool()
 		} else {
 			disabled33 = nil
 		}
 		pipeline24 := new(string)
-		if !r.InputLoki.Pipeline.IsUnknown() && !r.InputLoki.Pipeline.IsNull() {
-			*pipeline24 = r.InputLoki.Pipeline.ValueString()
+		if !r.InputPrometheusRw.Pipeline.IsUnknown() && !r.InputPrometheusRw.Pipeline.IsNull() {
+			*pipeline24 = r.InputPrometheusRw.Pipeline.ValueString()
 		} else {
 			pipeline24 = nil
 		}
 		sendToRoutes12 := new(bool)
-		if !r.InputLoki.SendToRoutes.IsUnknown() && !r.InputLoki.SendToRoutes.IsNull() {
-			*sendToRoutes12 = r.InputLoki.SendToRoutes.ValueBool()
+		if !r.InputPrometheusRw.SendToRoutes.IsUnknown() && !r.InputPrometheusRw.SendToRoutes.IsNull() {
+			*sendToRoutes12 = r.InputPrometheusRw.SendToRoutes.ValueBool()
 		} else {
 			sendToRoutes12 = nil
 		}
 		environment12 := new(string)
-		if !r.InputLoki.Environment.IsUnknown() && !r.InputLoki.Environment.IsNull() {
-			*environment12 = r.InputLoki.Environment.ValueString()
+		if !r.InputPrometheusRw.Environment.IsUnknown() && !r.InputPrometheusRw.Environment.IsNull() {
+			*environment12 = r.InputPrometheusRw.Environment.ValueString()
 		} else {
 			environment12 = nil
 		}
 		pqEnabled12 := new(bool)
-		if !r.InputLoki.PqEnabled.IsUnknown() && !r.InputLoki.PqEnabled.IsNull() {
-			*pqEnabled12 = r.InputLoki.PqEnabled.ValueBool()
+		if !r.InputPrometheusRw.PqEnabled.IsUnknown() && !r.InputPrometheusRw.PqEnabled.IsNull() {
+			*pqEnabled12 = r.InputPrometheusRw.PqEnabled.ValueBool()
 		} else {
 			pqEnabled12 = nil
 		}
-		streamtags12 := make([]string, 0, len(r.InputLoki.Streamtags))
-		for streamtagsIndex12 := range r.InputLoki.Streamtags {
-			streamtags12 = append(streamtags12, r.InputLoki.Streamtags[streamtagsIndex12].ValueString())
+		streamtags12 := make([]string, 0, len(r.InputPrometheusRw.Streamtags))
+		for streamtagsIndex12 := range r.InputPrometheusRw.Streamtags {
+			streamtags12 = append(streamtags12, r.InputPrometheusRw.Streamtags[streamtagsIndex12].ValueString())
 		}
-		connections12 := make([]shared.InputLokiConnection, 0, len(r.InputLoki.Connections))
-		for connectionsIndex12 := range r.InputLoki.Connections {
+		connections12 := make([]shared.InputPrometheusRwConnection, 0, len(r.InputPrometheusRw.Connections))
+		for connectionsIndex12 := range r.InputPrometheusRw.Connections {
 			pipeline25 := new(string)
-			if !r.InputLoki.Connections[connectionsIndex12].Pipeline.IsUnknown() && !r.InputLoki.Connections[connectionsIndex12].Pipeline.IsNull() {
-				*pipeline25 = r.InputLoki.Connections[connectionsIndex12].Pipeline.ValueString()
+			if !r.InputPrometheusRw.Connections[connectionsIndex12].Pipeline.IsUnknown() && !r.InputPrometheusRw.Connections[connectionsIndex12].Pipeline.IsNull() {
+				*pipeline25 = r.InputPrometheusRw.Connections[connectionsIndex12].Pipeline.ValueString()
 			} else {
 				pipeline25 = nil
 			}
 			var output13 string
-			output13 = r.InputLoki.Connections[connectionsIndex12].Output.ValueString()
+			output13 = r.InputPrometheusRw.Connections[connectionsIndex12].Output.ValueString()
 
-			connections12 = append(connections12, shared.InputLokiConnection{
+			connections12 = append(connections12, shared.InputPrometheusRwConnection{
 				Pipeline: pipeline25,
 				Output:   output13,
 			})
 		}
-		var pq12 *shared.InputLokiPq
-		if r.InputLoki.Pq != nil {
-			mode12 := new(shared.InputLokiMode)
-			if !r.InputLoki.Pq.Mode.IsUnknown() && !r.InputLoki.Pq.Mode.IsNull() {
-				*mode12 = shared.InputLokiMode(r.InputLoki.Pq.Mode.ValueString())
+		var pq12 *shared.InputPrometheusRwPq
+		if r.InputPrometheusRw.Pq != nil {
+			mode12 := new(shared.InputPrometheusRwMode)
+			if !r.InputPrometheusRw.Pq.Mode.IsUnknown() && !r.InputPrometheusRw.Pq.Mode.IsNull() {
+				*mode12 = shared.InputPrometheusRwMode(r.InputPrometheusRw.Pq.Mode.ValueString())
 			} else {
 				mode12 = nil
 			}
 			maxBufferSize12 := new(float64)
-			if !r.InputLoki.Pq.MaxBufferSize.IsUnknown() && !r.InputLoki.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize12 = r.InputLoki.Pq.MaxBufferSize.ValueFloat64()
+			if !r.InputPrometheusRw.Pq.MaxBufferSize.IsUnknown() && !r.InputPrometheusRw.Pq.MaxBufferSize.IsNull() {
+				*maxBufferSize12 = r.InputPrometheusRw.Pq.MaxBufferSize.ValueFloat64()
 			} else {
 				maxBufferSize12 = nil
 			}
 			commitFrequency12 := new(float64)
-			if !r.InputLoki.Pq.CommitFrequency.IsUnknown() && !r.InputLoki.Pq.CommitFrequency.IsNull() {
-				*commitFrequency12 = r.InputLoki.Pq.CommitFrequency.ValueFloat64()
+			if !r.InputPrometheusRw.Pq.CommitFrequency.IsUnknown() && !r.InputPrometheusRw.Pq.CommitFrequency.IsNull() {
+				*commitFrequency12 = r.InputPrometheusRw.Pq.CommitFrequency.ValueFloat64()
 			} else {
 				commitFrequency12 = nil
 			}
 			maxFileSize12 := new(string)
-			if !r.InputLoki.Pq.MaxFileSize.IsUnknown() && !r.InputLoki.Pq.MaxFileSize.IsNull() {
-				*maxFileSize12 = r.InputLoki.Pq.MaxFileSize.ValueString()
+			if !r.InputPrometheusRw.Pq.MaxFileSize.IsUnknown() && !r.InputPrometheusRw.Pq.MaxFileSize.IsNull() {
+				*maxFileSize12 = r.InputPrometheusRw.Pq.MaxFileSize.ValueString()
 			} else {
 				maxFileSize12 = nil
 			}
 			maxSize12 := new(string)
-			if !r.InputLoki.Pq.MaxSize.IsUnknown() && !r.InputLoki.Pq.MaxSize.IsNull() {
-				*maxSize12 = r.InputLoki.Pq.MaxSize.ValueString()
+			if !r.InputPrometheusRw.Pq.MaxSize.IsUnknown() && !r.InputPrometheusRw.Pq.MaxSize.IsNull() {
+				*maxSize12 = r.InputPrometheusRw.Pq.MaxSize.ValueString()
 			} else {
 				maxSize12 = nil
 			}
 			path12 := new(string)
-			if !r.InputLoki.Pq.Path.IsUnknown() && !r.InputLoki.Pq.Path.IsNull() {
-				*path12 = r.InputLoki.Pq.Path.ValueString()
+			if !r.InputPrometheusRw.Pq.Path.IsUnknown() && !r.InputPrometheusRw.Pq.Path.IsNull() {
+				*path12 = r.InputPrometheusRw.Pq.Path.ValueString()
 			} else {
 				path12 = nil
 			}
-			compress13 := new(shared.InputLokiCompression)
-			if !r.InputLoki.Pq.Compress.IsUnknown() && !r.InputLoki.Pq.Compress.IsNull() {
-				*compress13 = shared.InputLokiCompression(r.InputLoki.Pq.Compress.ValueString())
+			compress13 := new(shared.InputPrometheusRwCompression)
+			if !r.InputPrometheusRw.Pq.Compress.IsUnknown() && !r.InputPrometheusRw.Pq.Compress.IsNull() {
+				*compress13 = shared.InputPrometheusRwCompression(r.InputPrometheusRw.Pq.Compress.ValueString())
 			} else {
 				compress13 = nil
 			}
-			pq12 = &shared.InputLokiPq{
+			pq12 = &shared.InputPrometheusRwPq{
 				Mode:            mode12,
 				MaxBufferSize:   maxBufferSize12,
 				CommitFrequency: commitFrequency12,
@@ -5690,79 +5551,79 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			}
 		}
 		host6 := new(string)
-		if !r.InputLoki.Host.IsUnknown() && !r.InputLoki.Host.IsNull() {
-			*host6 = r.InputLoki.Host.ValueString()
+		if !r.InputPrometheusRw.Host.IsUnknown() && !r.InputPrometheusRw.Host.IsNull() {
+			*host6 = r.InputPrometheusRw.Host.ValueString()
 		} else {
 			host6 = nil
 		}
 		var port6 float64
-		port6 = r.InputLoki.Port.ValueFloat64()
+		port6 = r.InputPrometheusRw.Port.ValueFloat64()
 
-		var tls12 *shared.InputLokiTLSSettingsServerSide
-		if r.InputLoki.TLS != nil {
+		var tls12 *shared.InputPrometheusRwTLSSettingsServerSide
+		if r.InputPrometheusRw.TLS != nil {
 			disabled34 := new(bool)
-			if !r.InputLoki.TLS.Disabled.IsUnknown() && !r.InputLoki.TLS.Disabled.IsNull() {
-				*disabled34 = r.InputLoki.TLS.Disabled.ValueBool()
+			if !r.InputPrometheusRw.TLS.Disabled.IsUnknown() && !r.InputPrometheusRw.TLS.Disabled.IsNull() {
+				*disabled34 = r.InputPrometheusRw.TLS.Disabled.ValueBool()
 			} else {
 				disabled34 = nil
 			}
 			certificateName13 := new(string)
-			if !r.InputLoki.TLS.CertificateName.IsUnknown() && !r.InputLoki.TLS.CertificateName.IsNull() {
-				*certificateName13 = r.InputLoki.TLS.CertificateName.ValueString()
+			if !r.InputPrometheusRw.TLS.CertificateName.IsUnknown() && !r.InputPrometheusRw.TLS.CertificateName.IsNull() {
+				*certificateName13 = r.InputPrometheusRw.TLS.CertificateName.ValueString()
 			} else {
 				certificateName13 = nil
 			}
 			privKeyPath12 := new(string)
-			if !r.InputLoki.TLS.PrivKeyPath.IsUnknown() && !r.InputLoki.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath12 = r.InputLoki.TLS.PrivKeyPath.ValueString()
+			if !r.InputPrometheusRw.TLS.PrivKeyPath.IsUnknown() && !r.InputPrometheusRw.TLS.PrivKeyPath.IsNull() {
+				*privKeyPath12 = r.InputPrometheusRw.TLS.PrivKeyPath.ValueString()
 			} else {
 				privKeyPath12 = nil
 			}
 			passphrase12 := new(string)
-			if !r.InputLoki.TLS.Passphrase.IsUnknown() && !r.InputLoki.TLS.Passphrase.IsNull() {
-				*passphrase12 = r.InputLoki.TLS.Passphrase.ValueString()
+			if !r.InputPrometheusRw.TLS.Passphrase.IsUnknown() && !r.InputPrometheusRw.TLS.Passphrase.IsNull() {
+				*passphrase12 = r.InputPrometheusRw.TLS.Passphrase.ValueString()
 			} else {
 				passphrase12 = nil
 			}
 			certPath12 := new(string)
-			if !r.InputLoki.TLS.CertPath.IsUnknown() && !r.InputLoki.TLS.CertPath.IsNull() {
-				*certPath12 = r.InputLoki.TLS.CertPath.ValueString()
+			if !r.InputPrometheusRw.TLS.CertPath.IsUnknown() && !r.InputPrometheusRw.TLS.CertPath.IsNull() {
+				*certPath12 = r.InputPrometheusRw.TLS.CertPath.ValueString()
 			} else {
 				certPath12 = nil
 			}
 			caPath12 := new(string)
-			if !r.InputLoki.TLS.CaPath.IsUnknown() && !r.InputLoki.TLS.CaPath.IsNull() {
-				*caPath12 = r.InputLoki.TLS.CaPath.ValueString()
+			if !r.InputPrometheusRw.TLS.CaPath.IsUnknown() && !r.InputPrometheusRw.TLS.CaPath.IsNull() {
+				*caPath12 = r.InputPrometheusRw.TLS.CaPath.ValueString()
 			} else {
 				caPath12 = nil
 			}
 			requestCert6 := new(bool)
-			if !r.InputLoki.TLS.RequestCert.IsUnknown() && !r.InputLoki.TLS.RequestCert.IsNull() {
-				*requestCert6 = r.InputLoki.TLS.RequestCert.ValueBool()
+			if !r.InputPrometheusRw.TLS.RequestCert.IsUnknown() && !r.InputPrometheusRw.TLS.RequestCert.IsNull() {
+				*requestCert6 = r.InputPrometheusRw.TLS.RequestCert.ValueBool()
 			} else {
 				requestCert6 = nil
 			}
 			var rejectUnauthorized15 interface{}
-			if !r.InputLoki.TLS.RejectUnauthorized.IsUnknown() && !r.InputLoki.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputLoki.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized15)
+			if !r.InputPrometheusRw.TLS.RejectUnauthorized.IsUnknown() && !r.InputPrometheusRw.TLS.RejectUnauthorized.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputPrometheusRw.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized15)
 			}
 			var commonNameRegex6 interface{}
-			if !r.InputLoki.TLS.CommonNameRegex.IsUnknown() && !r.InputLoki.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputLoki.TLS.CommonNameRegex.ValueString()), &commonNameRegex6)
+			if !r.InputPrometheusRw.TLS.CommonNameRegex.IsUnknown() && !r.InputPrometheusRw.TLS.CommonNameRegex.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputPrometheusRw.TLS.CommonNameRegex.ValueString()), &commonNameRegex6)
 			}
-			minVersion12 := new(shared.InputLokiMinimumTLSVersion)
-			if !r.InputLoki.TLS.MinVersion.IsUnknown() && !r.InputLoki.TLS.MinVersion.IsNull() {
-				*minVersion12 = shared.InputLokiMinimumTLSVersion(r.InputLoki.TLS.MinVersion.ValueString())
+			minVersion12 := new(shared.InputPrometheusRwMinimumTLSVersion)
+			if !r.InputPrometheusRw.TLS.MinVersion.IsUnknown() && !r.InputPrometheusRw.TLS.MinVersion.IsNull() {
+				*minVersion12 = shared.InputPrometheusRwMinimumTLSVersion(r.InputPrometheusRw.TLS.MinVersion.ValueString())
 			} else {
 				minVersion12 = nil
 			}
-			maxVersion12 := new(shared.InputLokiMaximumTLSVersion)
-			if !r.InputLoki.TLS.MaxVersion.IsUnknown() && !r.InputLoki.TLS.MaxVersion.IsNull() {
-				*maxVersion12 = shared.InputLokiMaximumTLSVersion(r.InputLoki.TLS.MaxVersion.ValueString())
+			maxVersion12 := new(shared.InputPrometheusRwMaximumTLSVersion)
+			if !r.InputPrometheusRw.TLS.MaxVersion.IsUnknown() && !r.InputPrometheusRw.TLS.MaxVersion.IsNull() {
+				*maxVersion12 = shared.InputPrometheusRwMaximumTLSVersion(r.InputPrometheusRw.TLS.MaxVersion.ValueString())
 			} else {
 				maxVersion12 = nil
 			}
-			tls12 = &shared.InputLokiTLSSettingsServerSide{
+			tls12 = &shared.InputPrometheusRwTLSSettingsServerSide{
 				Disabled:           disabled34,
 				CertificateName:    certificateName13,
 				PrivKeyPath:        privKeyPath12,
@@ -5777,195 +5638,195 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			}
 		}
 		maxActiveReq5 := new(float64)
-		if !r.InputLoki.MaxActiveReq.IsUnknown() && !r.InputLoki.MaxActiveReq.IsNull() {
-			*maxActiveReq5 = r.InputLoki.MaxActiveReq.ValueFloat64()
+		if !r.InputPrometheusRw.MaxActiveReq.IsUnknown() && !r.InputPrometheusRw.MaxActiveReq.IsNull() {
+			*maxActiveReq5 = r.InputPrometheusRw.MaxActiveReq.ValueFloat64()
 		} else {
 			maxActiveReq5 = nil
 		}
 		maxRequestsPerSocket5 := new(int64)
-		if !r.InputLoki.MaxRequestsPerSocket.IsUnknown() && !r.InputLoki.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket5 = r.InputLoki.MaxRequestsPerSocket.ValueInt64()
+		if !r.InputPrometheusRw.MaxRequestsPerSocket.IsUnknown() && !r.InputPrometheusRw.MaxRequestsPerSocket.IsNull() {
+			*maxRequestsPerSocket5 = r.InputPrometheusRw.MaxRequestsPerSocket.ValueInt64()
 		} else {
 			maxRequestsPerSocket5 = nil
 		}
 		enableProxyHeader6 := new(bool)
-		if !r.InputLoki.EnableProxyHeader.IsUnknown() && !r.InputLoki.EnableProxyHeader.IsNull() {
-			*enableProxyHeader6 = r.InputLoki.EnableProxyHeader.ValueBool()
+		if !r.InputPrometheusRw.EnableProxyHeader.IsUnknown() && !r.InputPrometheusRw.EnableProxyHeader.IsNull() {
+			*enableProxyHeader6 = r.InputPrometheusRw.EnableProxyHeader.ValueBool()
 		} else {
 			enableProxyHeader6 = nil
 		}
 		captureHeaders5 := new(bool)
-		if !r.InputLoki.CaptureHeaders.IsUnknown() && !r.InputLoki.CaptureHeaders.IsNull() {
-			*captureHeaders5 = r.InputLoki.CaptureHeaders.ValueBool()
+		if !r.InputPrometheusRw.CaptureHeaders.IsUnknown() && !r.InputPrometheusRw.CaptureHeaders.IsNull() {
+			*captureHeaders5 = r.InputPrometheusRw.CaptureHeaders.ValueBool()
 		} else {
 			captureHeaders5 = nil
 		}
 		activityLogSampleRate5 := new(float64)
-		if !r.InputLoki.ActivityLogSampleRate.IsUnknown() && !r.InputLoki.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate5 = r.InputLoki.ActivityLogSampleRate.ValueFloat64()
+		if !r.InputPrometheusRw.ActivityLogSampleRate.IsUnknown() && !r.InputPrometheusRw.ActivityLogSampleRate.IsNull() {
+			*activityLogSampleRate5 = r.InputPrometheusRw.ActivityLogSampleRate.ValueFloat64()
 		} else {
 			activityLogSampleRate5 = nil
 		}
 		requestTimeout12 := new(float64)
-		if !r.InputLoki.RequestTimeout.IsUnknown() && !r.InputLoki.RequestTimeout.IsNull() {
-			*requestTimeout12 = r.InputLoki.RequestTimeout.ValueFloat64()
+		if !r.InputPrometheusRw.RequestTimeout.IsUnknown() && !r.InputPrometheusRw.RequestTimeout.IsNull() {
+			*requestTimeout12 = r.InputPrometheusRw.RequestTimeout.ValueFloat64()
 		} else {
 			requestTimeout12 = nil
 		}
 		socketTimeout5 := new(float64)
-		if !r.InputLoki.SocketTimeout.IsUnknown() && !r.InputLoki.SocketTimeout.IsNull() {
-			*socketTimeout5 = r.InputLoki.SocketTimeout.ValueFloat64()
+		if !r.InputPrometheusRw.SocketTimeout.IsUnknown() && !r.InputPrometheusRw.SocketTimeout.IsNull() {
+			*socketTimeout5 = r.InputPrometheusRw.SocketTimeout.ValueFloat64()
 		} else {
 			socketTimeout5 = nil
 		}
 		keepAliveTimeout5 := new(float64)
-		if !r.InputLoki.KeepAliveTimeout.IsUnknown() && !r.InputLoki.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout5 = r.InputLoki.KeepAliveTimeout.ValueFloat64()
+		if !r.InputPrometheusRw.KeepAliveTimeout.IsUnknown() && !r.InputPrometheusRw.KeepAliveTimeout.IsNull() {
+			*keepAliveTimeout5 = r.InputPrometheusRw.KeepAliveTimeout.ValueFloat64()
 		} else {
 			keepAliveTimeout5 = nil
 		}
 		enableHealthCheck5 := new(bool)
-		if !r.InputLoki.EnableHealthCheck.IsUnknown() && !r.InputLoki.EnableHealthCheck.IsNull() {
-			*enableHealthCheck5 = r.InputLoki.EnableHealthCheck.ValueBool()
+		if !r.InputPrometheusRw.EnableHealthCheck.IsUnknown() && !r.InputPrometheusRw.EnableHealthCheck.IsNull() {
+			*enableHealthCheck5 = r.InputPrometheusRw.EnableHealthCheck.ValueBool()
 		} else {
 			enableHealthCheck5 = nil
 		}
 		ipAllowlistRegex5 := new(string)
-		if !r.InputLoki.IPAllowlistRegex.IsUnknown() && !r.InputLoki.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex5 = r.InputLoki.IPAllowlistRegex.ValueString()
+		if !r.InputPrometheusRw.IPAllowlistRegex.IsUnknown() && !r.InputPrometheusRw.IPAllowlistRegex.IsNull() {
+			*ipAllowlistRegex5 = r.InputPrometheusRw.IPAllowlistRegex.ValueString()
 		} else {
 			ipAllowlistRegex5 = nil
 		}
 		ipDenylistRegex5 := new(string)
-		if !r.InputLoki.IPDenylistRegex.IsUnknown() && !r.InputLoki.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex5 = r.InputLoki.IPDenylistRegex.ValueString()
+		if !r.InputPrometheusRw.IPDenylistRegex.IsUnknown() && !r.InputPrometheusRw.IPDenylistRegex.IsNull() {
+			*ipDenylistRegex5 = r.InputPrometheusRw.IPDenylistRegex.ValueString()
 		} else {
 			ipDenylistRegex5 = nil
 		}
-		lokiApi2 := new(string)
-		if !r.InputLoki.LokiAPI.IsUnknown() && !r.InputLoki.LokiAPI.IsNull() {
-			*lokiApi2 = r.InputLoki.LokiAPI.ValueString()
+		prometheusApi1 := new(string)
+		if !r.InputPrometheusRw.PrometheusAPI.IsUnknown() && !r.InputPrometheusRw.PrometheusAPI.IsNull() {
+			*prometheusApi1 = r.InputPrometheusRw.PrometheusAPI.ValueString()
 		} else {
-			lokiApi2 = nil
+			prometheusApi1 = nil
 		}
-		authType9 := new(shared.InputLokiAuthenticationType)
-		if !r.InputLoki.AuthType.IsUnknown() && !r.InputLoki.AuthType.IsNull() {
-			*authType9 = shared.InputLokiAuthenticationType(r.InputLoki.AuthType.ValueString())
+		authType8 := new(shared.InputPrometheusRwAuthenticationType)
+		if !r.InputPrometheusRw.AuthType.IsUnknown() && !r.InputPrometheusRw.AuthType.IsNull() {
+			*authType8 = shared.InputPrometheusRwAuthenticationType(r.InputPrometheusRw.AuthType.ValueString())
 		} else {
-			authType9 = nil
+			authType8 = nil
 		}
-		metadata14 := make([]shared.InputLokiMetadatum, 0, len(r.InputLoki.Metadata))
-		for metadataIndex14 := range r.InputLoki.Metadata {
+		metadata14 := make([]shared.InputPrometheusRwMetadatum, 0, len(r.InputPrometheusRw.Metadata))
+		for metadataIndex14 := range r.InputPrometheusRw.Metadata {
+			var name25 string
+			name25 = r.InputPrometheusRw.Metadata[metadataIndex14].Name.ValueString()
+
+			var value25 string
+			value25 = r.InputPrometheusRw.Metadata[metadataIndex14].Value.ValueString()
+
+			metadata14 = append(metadata14, shared.InputPrometheusRwMetadatum{
+				Name:  name25,
+				Value: value25,
+			})
+		}
+		description14 := new(string)
+		if !r.InputPrometheusRw.Description.IsUnknown() && !r.InputPrometheusRw.Description.IsNull() {
+			*description14 = r.InputPrometheusRw.Description.ValueString()
+		} else {
+			description14 = nil
+		}
+		username5 := new(string)
+		if !r.InputPrometheusRw.Username.IsUnknown() && !r.InputPrometheusRw.Username.IsNull() {
+			*username5 = r.InputPrometheusRw.Username.ValueString()
+		} else {
+			username5 = nil
+		}
+		password5 := new(string)
+		if !r.InputPrometheusRw.Password.IsUnknown() && !r.InputPrometheusRw.Password.IsNull() {
+			*password5 = r.InputPrometheusRw.Password.ValueString()
+		} else {
+			password5 = nil
+		}
+		token7 := new(string)
+		if !r.InputPrometheusRw.Token.IsUnknown() && !r.InputPrometheusRw.Token.IsNull() {
+			*token7 = r.InputPrometheusRw.Token.ValueString()
+		} else {
+			token7 = nil
+		}
+		credentialsSecret8 := new(string)
+		if !r.InputPrometheusRw.CredentialsSecret.IsUnknown() && !r.InputPrometheusRw.CredentialsSecret.IsNull() {
+			*credentialsSecret8 = r.InputPrometheusRw.CredentialsSecret.ValueString()
+		} else {
+			credentialsSecret8 = nil
+		}
+		textSecret5 := new(string)
+		if !r.InputPrometheusRw.TextSecret.IsUnknown() && !r.InputPrometheusRw.TextSecret.IsNull() {
+			*textSecret5 = r.InputPrometheusRw.TextSecret.ValueString()
+		} else {
+			textSecret5 = nil
+		}
+		loginUrl4 := new(string)
+		if !r.InputPrometheusRw.LoginURL.IsUnknown() && !r.InputPrometheusRw.LoginURL.IsNull() {
+			*loginUrl4 = r.InputPrometheusRw.LoginURL.ValueString()
+		} else {
+			loginUrl4 = nil
+		}
+		secretParamName4 := new(string)
+		if !r.InputPrometheusRw.SecretParamName.IsUnknown() && !r.InputPrometheusRw.SecretParamName.IsNull() {
+			*secretParamName4 = r.InputPrometheusRw.SecretParamName.ValueString()
+		} else {
+			secretParamName4 = nil
+		}
+		secret4 := new(string)
+		if !r.InputPrometheusRw.Secret.IsUnknown() && !r.InputPrometheusRw.Secret.IsNull() {
+			*secret4 = r.InputPrometheusRw.Secret.ValueString()
+		} else {
+			secret4 = nil
+		}
+		tokenAttributeName4 := new(string)
+		if !r.InputPrometheusRw.TokenAttributeName.IsUnknown() && !r.InputPrometheusRw.TokenAttributeName.IsNull() {
+			*tokenAttributeName4 = r.InputPrometheusRw.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName4 = nil
+		}
+		authHeaderExpr4 := new(string)
+		if !r.InputPrometheusRw.AuthHeaderExpr.IsUnknown() && !r.InputPrometheusRw.AuthHeaderExpr.IsNull() {
+			*authHeaderExpr4 = r.InputPrometheusRw.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr4 = nil
+		}
+		tokenTimeoutSecs4 := new(float64)
+		if !r.InputPrometheusRw.TokenTimeoutSecs.IsUnknown() && !r.InputPrometheusRw.TokenTimeoutSecs.IsNull() {
+			*tokenTimeoutSecs4 = r.InputPrometheusRw.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs4 = nil
+		}
+		oauthParams4 := make([]shared.InputPrometheusRwOauthParam, 0, len(r.InputPrometheusRw.OauthParams))
+		for oauthParamsIndex4 := range r.InputPrometheusRw.OauthParams {
+			var name26 string
+			name26 = r.InputPrometheusRw.OauthParams[oauthParamsIndex4].Name.ValueString()
+
+			var value26 string
+			value26 = r.InputPrometheusRw.OauthParams[oauthParamsIndex4].Value.ValueString()
+
+			oauthParams4 = append(oauthParams4, shared.InputPrometheusRwOauthParam{
+				Name:  name26,
+				Value: value26,
+			})
+		}
+		oauthHeaders4 := make([]shared.InputPrometheusRwOauthHeader, 0, len(r.InputPrometheusRw.OauthHeaders))
+		for oauthHeadersIndex4 := range r.InputPrometheusRw.OauthHeaders {
 			var name27 string
-			name27 = r.InputLoki.Metadata[metadataIndex14].Name.ValueString()
+			name27 = r.InputPrometheusRw.OauthHeaders[oauthHeadersIndex4].Name.ValueString()
 
 			var value27 string
-			value27 = r.InputLoki.Metadata[metadataIndex14].Value.ValueString()
+			value27 = r.InputPrometheusRw.OauthHeaders[oauthHeadersIndex4].Value.ValueString()
 
-			metadata14 = append(metadata14, shared.InputLokiMetadatum{
+			oauthHeaders4 = append(oauthHeaders4, shared.InputPrometheusRwOauthHeader{
 				Name:  name27,
 				Value: value27,
 			})
 		}
-		description14 := new(string)
-		if !r.InputLoki.Description.IsUnknown() && !r.InputLoki.Description.IsNull() {
-			*description14 = r.InputLoki.Description.ValueString()
-		} else {
-			description14 = nil
-		}
-		username6 := new(string)
-		if !r.InputLoki.Username.IsUnknown() && !r.InputLoki.Username.IsNull() {
-			*username6 = r.InputLoki.Username.ValueString()
-		} else {
-			username6 = nil
-		}
-		password6 := new(string)
-		if !r.InputLoki.Password.IsUnknown() && !r.InputLoki.Password.IsNull() {
-			*password6 = r.InputLoki.Password.ValueString()
-		} else {
-			password6 = nil
-		}
-		token8 := new(string)
-		if !r.InputLoki.Token.IsUnknown() && !r.InputLoki.Token.IsNull() {
-			*token8 = r.InputLoki.Token.ValueString()
-		} else {
-			token8 = nil
-		}
-		credentialsSecret9 := new(string)
-		if !r.InputLoki.CredentialsSecret.IsUnknown() && !r.InputLoki.CredentialsSecret.IsNull() {
-			*credentialsSecret9 = r.InputLoki.CredentialsSecret.ValueString()
-		} else {
-			credentialsSecret9 = nil
-		}
-		textSecret6 := new(string)
-		if !r.InputLoki.TextSecret.IsUnknown() && !r.InputLoki.TextSecret.IsNull() {
-			*textSecret6 = r.InputLoki.TextSecret.ValueString()
-		} else {
-			textSecret6 = nil
-		}
-		loginUrl5 := new(string)
-		if !r.InputLoki.LoginURL.IsUnknown() && !r.InputLoki.LoginURL.IsNull() {
-			*loginUrl5 = r.InputLoki.LoginURL.ValueString()
-		} else {
-			loginUrl5 = nil
-		}
-		secretParamName5 := new(string)
-		if !r.InputLoki.SecretParamName.IsUnknown() && !r.InputLoki.SecretParamName.IsNull() {
-			*secretParamName5 = r.InputLoki.SecretParamName.ValueString()
-		} else {
-			secretParamName5 = nil
-		}
-		secret5 := new(string)
-		if !r.InputLoki.Secret.IsUnknown() && !r.InputLoki.Secret.IsNull() {
-			*secret5 = r.InputLoki.Secret.ValueString()
-		} else {
-			secret5 = nil
-		}
-		tokenAttributeName5 := new(string)
-		if !r.InputLoki.TokenAttributeName.IsUnknown() && !r.InputLoki.TokenAttributeName.IsNull() {
-			*tokenAttributeName5 = r.InputLoki.TokenAttributeName.ValueString()
-		} else {
-			tokenAttributeName5 = nil
-		}
-		authHeaderExpr5 := new(string)
-		if !r.InputLoki.AuthHeaderExpr.IsUnknown() && !r.InputLoki.AuthHeaderExpr.IsNull() {
-			*authHeaderExpr5 = r.InputLoki.AuthHeaderExpr.ValueString()
-		} else {
-			authHeaderExpr5 = nil
-		}
-		tokenTimeoutSecs5 := new(float64)
-		if !r.InputLoki.TokenTimeoutSecs.IsUnknown() && !r.InputLoki.TokenTimeoutSecs.IsNull() {
-			*tokenTimeoutSecs5 = r.InputLoki.TokenTimeoutSecs.ValueFloat64()
-		} else {
-			tokenTimeoutSecs5 = nil
-		}
-		oauthParams5 := make([]shared.InputLokiOauthParam, 0, len(r.InputLoki.OauthParams))
-		for oauthParamsIndex5 := range r.InputLoki.OauthParams {
-			var name28 string
-			name28 = r.InputLoki.OauthParams[oauthParamsIndex5].Name.ValueString()
-
-			var value28 string
-			value28 = r.InputLoki.OauthParams[oauthParamsIndex5].Value.ValueString()
-
-			oauthParams5 = append(oauthParams5, shared.InputLokiOauthParam{
-				Name:  name28,
-				Value: value28,
-			})
-		}
-		oauthHeaders5 := make([]shared.InputLokiOauthHeader, 0, len(r.InputLoki.OauthHeaders))
-		for oauthHeadersIndex5 := range r.InputLoki.OauthHeaders {
-			var name29 string
-			name29 = r.InputLoki.OauthHeaders[oauthHeadersIndex5].Name.ValueString()
-
-			var value29 string
-			value29 = r.InputLoki.OauthHeaders[oauthHeadersIndex5].Value.ValueString()
-
-			oauthHeaders5 = append(oauthHeaders5, shared.InputLokiOauthHeader{
-				Name:  name29,
-				Value: value29,
-			})
-		}
-		inputLoki = &shared.InputLoki{
+		inputPrometheusRw = &shared.InputPrometheusRw{
 			ID:                    id12,
 			Type:                  typeVar13,
 			Disabled:              disabled33,
@@ -5990,466 +5851,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			EnableHealthCheck:     enableHealthCheck5,
 			IPAllowlistRegex:      ipAllowlistRegex5,
 			IPDenylistRegex:       ipDenylistRegex5,
-			LokiAPI:               lokiApi2,
-			AuthType:              authType9,
+			PrometheusAPI:         prometheusApi1,
+			AuthType:              authType8,
 			Metadata:              metadata14,
 			Description:           description14,
-			Username:              username6,
-			Password:              password6,
-			Token:                 token8,
-			CredentialsSecret:     credentialsSecret9,
-			TextSecret:            textSecret6,
-			LoginURL:              loginUrl5,
-			SecretParamName:       secretParamName5,
-			Secret:                secret5,
-			TokenAttributeName:    tokenAttributeName5,
-			AuthHeaderExpr:        authHeaderExpr5,
-			TokenTimeoutSecs:      tokenTimeoutSecs5,
-			OauthParams:           oauthParams5,
-			OauthHeaders:          oauthHeaders5,
-		}
-	}
-	if inputLoki != nil {
-		out = shared.Input{
-			InputLoki: inputLoki,
-		}
-	}
-	var inputPrometheusRw *shared.InputPrometheusRw
-	if r.InputPrometheusRw != nil {
-		id13 := new(string)
-		if !r.InputPrometheusRw.ID.IsUnknown() && !r.InputPrometheusRw.ID.IsNull() {
-			*id13 = r.InputPrometheusRw.ID.ValueString()
-		} else {
-			id13 = nil
-		}
-		typeVar14 := new(shared.InputPrometheusRwType)
-		if !r.InputPrometheusRw.Type.IsUnknown() && !r.InputPrometheusRw.Type.IsNull() {
-			*typeVar14 = shared.InputPrometheusRwType(r.InputPrometheusRw.Type.ValueString())
-		} else {
-			typeVar14 = nil
-		}
-		disabled35 := new(bool)
-		if !r.InputPrometheusRw.Disabled.IsUnknown() && !r.InputPrometheusRw.Disabled.IsNull() {
-			*disabled35 = r.InputPrometheusRw.Disabled.ValueBool()
-		} else {
-			disabled35 = nil
-		}
-		pipeline26 := new(string)
-		if !r.InputPrometheusRw.Pipeline.IsUnknown() && !r.InputPrometheusRw.Pipeline.IsNull() {
-			*pipeline26 = r.InputPrometheusRw.Pipeline.ValueString()
-		} else {
-			pipeline26 = nil
-		}
-		sendToRoutes13 := new(bool)
-		if !r.InputPrometheusRw.SendToRoutes.IsUnknown() && !r.InputPrometheusRw.SendToRoutes.IsNull() {
-			*sendToRoutes13 = r.InputPrometheusRw.SendToRoutes.ValueBool()
-		} else {
-			sendToRoutes13 = nil
-		}
-		environment13 := new(string)
-		if !r.InputPrometheusRw.Environment.IsUnknown() && !r.InputPrometheusRw.Environment.IsNull() {
-			*environment13 = r.InputPrometheusRw.Environment.ValueString()
-		} else {
-			environment13 = nil
-		}
-		pqEnabled13 := new(bool)
-		if !r.InputPrometheusRw.PqEnabled.IsUnknown() && !r.InputPrometheusRw.PqEnabled.IsNull() {
-			*pqEnabled13 = r.InputPrometheusRw.PqEnabled.ValueBool()
-		} else {
-			pqEnabled13 = nil
-		}
-		streamtags13 := make([]string, 0, len(r.InputPrometheusRw.Streamtags))
-		for streamtagsIndex13 := range r.InputPrometheusRw.Streamtags {
-			streamtags13 = append(streamtags13, r.InputPrometheusRw.Streamtags[streamtagsIndex13].ValueString())
-		}
-		connections13 := make([]shared.InputPrometheusRwConnection, 0, len(r.InputPrometheusRw.Connections))
-		for connectionsIndex13 := range r.InputPrometheusRw.Connections {
-			pipeline27 := new(string)
-			if !r.InputPrometheusRw.Connections[connectionsIndex13].Pipeline.IsUnknown() && !r.InputPrometheusRw.Connections[connectionsIndex13].Pipeline.IsNull() {
-				*pipeline27 = r.InputPrometheusRw.Connections[connectionsIndex13].Pipeline.ValueString()
-			} else {
-				pipeline27 = nil
-			}
-			var output14 string
-			output14 = r.InputPrometheusRw.Connections[connectionsIndex13].Output.ValueString()
-
-			connections13 = append(connections13, shared.InputPrometheusRwConnection{
-				Pipeline: pipeline27,
-				Output:   output14,
-			})
-		}
-		var pq13 *shared.InputPrometheusRwPq
-		if r.InputPrometheusRw.Pq != nil {
-			mode13 := new(shared.InputPrometheusRwMode)
-			if !r.InputPrometheusRw.Pq.Mode.IsUnknown() && !r.InputPrometheusRw.Pq.Mode.IsNull() {
-				*mode13 = shared.InputPrometheusRwMode(r.InputPrometheusRw.Pq.Mode.ValueString())
-			} else {
-				mode13 = nil
-			}
-			maxBufferSize13 := new(float64)
-			if !r.InputPrometheusRw.Pq.MaxBufferSize.IsUnknown() && !r.InputPrometheusRw.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize13 = r.InputPrometheusRw.Pq.MaxBufferSize.ValueFloat64()
-			} else {
-				maxBufferSize13 = nil
-			}
-			commitFrequency13 := new(float64)
-			if !r.InputPrometheusRw.Pq.CommitFrequency.IsUnknown() && !r.InputPrometheusRw.Pq.CommitFrequency.IsNull() {
-				*commitFrequency13 = r.InputPrometheusRw.Pq.CommitFrequency.ValueFloat64()
-			} else {
-				commitFrequency13 = nil
-			}
-			maxFileSize13 := new(string)
-			if !r.InputPrometheusRw.Pq.MaxFileSize.IsUnknown() && !r.InputPrometheusRw.Pq.MaxFileSize.IsNull() {
-				*maxFileSize13 = r.InputPrometheusRw.Pq.MaxFileSize.ValueString()
-			} else {
-				maxFileSize13 = nil
-			}
-			maxSize13 := new(string)
-			if !r.InputPrometheusRw.Pq.MaxSize.IsUnknown() && !r.InputPrometheusRw.Pq.MaxSize.IsNull() {
-				*maxSize13 = r.InputPrometheusRw.Pq.MaxSize.ValueString()
-			} else {
-				maxSize13 = nil
-			}
-			path13 := new(string)
-			if !r.InputPrometheusRw.Pq.Path.IsUnknown() && !r.InputPrometheusRw.Pq.Path.IsNull() {
-				*path13 = r.InputPrometheusRw.Pq.Path.ValueString()
-			} else {
-				path13 = nil
-			}
-			compress14 := new(shared.InputPrometheusRwCompression)
-			if !r.InputPrometheusRw.Pq.Compress.IsUnknown() && !r.InputPrometheusRw.Pq.Compress.IsNull() {
-				*compress14 = shared.InputPrometheusRwCompression(r.InputPrometheusRw.Pq.Compress.ValueString())
-			} else {
-				compress14 = nil
-			}
-			pq13 = &shared.InputPrometheusRwPq{
-				Mode:            mode13,
-				MaxBufferSize:   maxBufferSize13,
-				CommitFrequency: commitFrequency13,
-				MaxFileSize:     maxFileSize13,
-				MaxSize:         maxSize13,
-				Path:            path13,
-				Compress:        compress14,
-			}
-		}
-		host7 := new(string)
-		if !r.InputPrometheusRw.Host.IsUnknown() && !r.InputPrometheusRw.Host.IsNull() {
-			*host7 = r.InputPrometheusRw.Host.ValueString()
-		} else {
-			host7 = nil
-		}
-		var port7 float64
-		port7 = r.InputPrometheusRw.Port.ValueFloat64()
-
-		var tls13 *shared.InputPrometheusRwTLSSettingsServerSide
-		if r.InputPrometheusRw.TLS != nil {
-			disabled36 := new(bool)
-			if !r.InputPrometheusRw.TLS.Disabled.IsUnknown() && !r.InputPrometheusRw.TLS.Disabled.IsNull() {
-				*disabled36 = r.InputPrometheusRw.TLS.Disabled.ValueBool()
-			} else {
-				disabled36 = nil
-			}
-			certificateName14 := new(string)
-			if !r.InputPrometheusRw.TLS.CertificateName.IsUnknown() && !r.InputPrometheusRw.TLS.CertificateName.IsNull() {
-				*certificateName14 = r.InputPrometheusRw.TLS.CertificateName.ValueString()
-			} else {
-				certificateName14 = nil
-			}
-			privKeyPath13 := new(string)
-			if !r.InputPrometheusRw.TLS.PrivKeyPath.IsUnknown() && !r.InputPrometheusRw.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath13 = r.InputPrometheusRw.TLS.PrivKeyPath.ValueString()
-			} else {
-				privKeyPath13 = nil
-			}
-			passphrase13 := new(string)
-			if !r.InputPrometheusRw.TLS.Passphrase.IsUnknown() && !r.InputPrometheusRw.TLS.Passphrase.IsNull() {
-				*passphrase13 = r.InputPrometheusRw.TLS.Passphrase.ValueString()
-			} else {
-				passphrase13 = nil
-			}
-			certPath13 := new(string)
-			if !r.InputPrometheusRw.TLS.CertPath.IsUnknown() && !r.InputPrometheusRw.TLS.CertPath.IsNull() {
-				*certPath13 = r.InputPrometheusRw.TLS.CertPath.ValueString()
-			} else {
-				certPath13 = nil
-			}
-			caPath13 := new(string)
-			if !r.InputPrometheusRw.TLS.CaPath.IsUnknown() && !r.InputPrometheusRw.TLS.CaPath.IsNull() {
-				*caPath13 = r.InputPrometheusRw.TLS.CaPath.ValueString()
-			} else {
-				caPath13 = nil
-			}
-			requestCert7 := new(bool)
-			if !r.InputPrometheusRw.TLS.RequestCert.IsUnknown() && !r.InputPrometheusRw.TLS.RequestCert.IsNull() {
-				*requestCert7 = r.InputPrometheusRw.TLS.RequestCert.ValueBool()
-			} else {
-				requestCert7 = nil
-			}
-			var rejectUnauthorized16 interface{}
-			if !r.InputPrometheusRw.TLS.RejectUnauthorized.IsUnknown() && !r.InputPrometheusRw.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputPrometheusRw.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized16)
-			}
-			var commonNameRegex7 interface{}
-			if !r.InputPrometheusRw.TLS.CommonNameRegex.IsUnknown() && !r.InputPrometheusRw.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputPrometheusRw.TLS.CommonNameRegex.ValueString()), &commonNameRegex7)
-			}
-			minVersion13 := new(shared.InputPrometheusRwMinimumTLSVersion)
-			if !r.InputPrometheusRw.TLS.MinVersion.IsUnknown() && !r.InputPrometheusRw.TLS.MinVersion.IsNull() {
-				*minVersion13 = shared.InputPrometheusRwMinimumTLSVersion(r.InputPrometheusRw.TLS.MinVersion.ValueString())
-			} else {
-				minVersion13 = nil
-			}
-			maxVersion13 := new(shared.InputPrometheusRwMaximumTLSVersion)
-			if !r.InputPrometheusRw.TLS.MaxVersion.IsUnknown() && !r.InputPrometheusRw.TLS.MaxVersion.IsNull() {
-				*maxVersion13 = shared.InputPrometheusRwMaximumTLSVersion(r.InputPrometheusRw.TLS.MaxVersion.ValueString())
-			} else {
-				maxVersion13 = nil
-			}
-			tls13 = &shared.InputPrometheusRwTLSSettingsServerSide{
-				Disabled:           disabled36,
-				CertificateName:    certificateName14,
-				PrivKeyPath:        privKeyPath13,
-				Passphrase:         passphrase13,
-				CertPath:           certPath13,
-				CaPath:             caPath13,
-				RequestCert:        requestCert7,
-				RejectUnauthorized: rejectUnauthorized16,
-				CommonNameRegex:    commonNameRegex7,
-				MinVersion:         minVersion13,
-				MaxVersion:         maxVersion13,
-			}
-		}
-		maxActiveReq6 := new(float64)
-		if !r.InputPrometheusRw.MaxActiveReq.IsUnknown() && !r.InputPrometheusRw.MaxActiveReq.IsNull() {
-			*maxActiveReq6 = r.InputPrometheusRw.MaxActiveReq.ValueFloat64()
-		} else {
-			maxActiveReq6 = nil
-		}
-		maxRequestsPerSocket6 := new(int64)
-		if !r.InputPrometheusRw.MaxRequestsPerSocket.IsUnknown() && !r.InputPrometheusRw.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket6 = r.InputPrometheusRw.MaxRequestsPerSocket.ValueInt64()
-		} else {
-			maxRequestsPerSocket6 = nil
-		}
-		enableProxyHeader7 := new(bool)
-		if !r.InputPrometheusRw.EnableProxyHeader.IsUnknown() && !r.InputPrometheusRw.EnableProxyHeader.IsNull() {
-			*enableProxyHeader7 = r.InputPrometheusRw.EnableProxyHeader.ValueBool()
-		} else {
-			enableProxyHeader7 = nil
-		}
-		captureHeaders6 := new(bool)
-		if !r.InputPrometheusRw.CaptureHeaders.IsUnknown() && !r.InputPrometheusRw.CaptureHeaders.IsNull() {
-			*captureHeaders6 = r.InputPrometheusRw.CaptureHeaders.ValueBool()
-		} else {
-			captureHeaders6 = nil
-		}
-		activityLogSampleRate6 := new(float64)
-		if !r.InputPrometheusRw.ActivityLogSampleRate.IsUnknown() && !r.InputPrometheusRw.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate6 = r.InputPrometheusRw.ActivityLogSampleRate.ValueFloat64()
-		} else {
-			activityLogSampleRate6 = nil
-		}
-		requestTimeout13 := new(float64)
-		if !r.InputPrometheusRw.RequestTimeout.IsUnknown() && !r.InputPrometheusRw.RequestTimeout.IsNull() {
-			*requestTimeout13 = r.InputPrometheusRw.RequestTimeout.ValueFloat64()
-		} else {
-			requestTimeout13 = nil
-		}
-		socketTimeout6 := new(float64)
-		if !r.InputPrometheusRw.SocketTimeout.IsUnknown() && !r.InputPrometheusRw.SocketTimeout.IsNull() {
-			*socketTimeout6 = r.InputPrometheusRw.SocketTimeout.ValueFloat64()
-		} else {
-			socketTimeout6 = nil
-		}
-		keepAliveTimeout6 := new(float64)
-		if !r.InputPrometheusRw.KeepAliveTimeout.IsUnknown() && !r.InputPrometheusRw.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout6 = r.InputPrometheusRw.KeepAliveTimeout.ValueFloat64()
-		} else {
-			keepAliveTimeout6 = nil
-		}
-		enableHealthCheck6 := new(bool)
-		if !r.InputPrometheusRw.EnableHealthCheck.IsUnknown() && !r.InputPrometheusRw.EnableHealthCheck.IsNull() {
-			*enableHealthCheck6 = r.InputPrometheusRw.EnableHealthCheck.ValueBool()
-		} else {
-			enableHealthCheck6 = nil
-		}
-		ipAllowlistRegex6 := new(string)
-		if !r.InputPrometheusRw.IPAllowlistRegex.IsUnknown() && !r.InputPrometheusRw.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex6 = r.InputPrometheusRw.IPAllowlistRegex.ValueString()
-		} else {
-			ipAllowlistRegex6 = nil
-		}
-		ipDenylistRegex6 := new(string)
-		if !r.InputPrometheusRw.IPDenylistRegex.IsUnknown() && !r.InputPrometheusRw.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex6 = r.InputPrometheusRw.IPDenylistRegex.ValueString()
-		} else {
-			ipDenylistRegex6 = nil
-		}
-		prometheusApi2 := new(string)
-		if !r.InputPrometheusRw.PrometheusAPI.IsUnknown() && !r.InputPrometheusRw.PrometheusAPI.IsNull() {
-			*prometheusApi2 = r.InputPrometheusRw.PrometheusAPI.ValueString()
-		} else {
-			prometheusApi2 = nil
-		}
-		authType10 := new(shared.InputPrometheusRwAuthenticationType)
-		if !r.InputPrometheusRw.AuthType.IsUnknown() && !r.InputPrometheusRw.AuthType.IsNull() {
-			*authType10 = shared.InputPrometheusRwAuthenticationType(r.InputPrometheusRw.AuthType.ValueString())
-		} else {
-			authType10 = nil
-		}
-		metadata15 := make([]shared.InputPrometheusRwMetadatum, 0, len(r.InputPrometheusRw.Metadata))
-		for metadataIndex15 := range r.InputPrometheusRw.Metadata {
-			var name30 string
-			name30 = r.InputPrometheusRw.Metadata[metadataIndex15].Name.ValueString()
-
-			var value30 string
-			value30 = r.InputPrometheusRw.Metadata[metadataIndex15].Value.ValueString()
-
-			metadata15 = append(metadata15, shared.InputPrometheusRwMetadatum{
-				Name:  name30,
-				Value: value30,
-			})
-		}
-		description15 := new(string)
-		if !r.InputPrometheusRw.Description.IsUnknown() && !r.InputPrometheusRw.Description.IsNull() {
-			*description15 = r.InputPrometheusRw.Description.ValueString()
-		} else {
-			description15 = nil
-		}
-		username7 := new(string)
-		if !r.InputPrometheusRw.Username.IsUnknown() && !r.InputPrometheusRw.Username.IsNull() {
-			*username7 = r.InputPrometheusRw.Username.ValueString()
-		} else {
-			username7 = nil
-		}
-		password7 := new(string)
-		if !r.InputPrometheusRw.Password.IsUnknown() && !r.InputPrometheusRw.Password.IsNull() {
-			*password7 = r.InputPrometheusRw.Password.ValueString()
-		} else {
-			password7 = nil
-		}
-		token9 := new(string)
-		if !r.InputPrometheusRw.Token.IsUnknown() && !r.InputPrometheusRw.Token.IsNull() {
-			*token9 = r.InputPrometheusRw.Token.ValueString()
-		} else {
-			token9 = nil
-		}
-		credentialsSecret10 := new(string)
-		if !r.InputPrometheusRw.CredentialsSecret.IsUnknown() && !r.InputPrometheusRw.CredentialsSecret.IsNull() {
-			*credentialsSecret10 = r.InputPrometheusRw.CredentialsSecret.ValueString()
-		} else {
-			credentialsSecret10 = nil
-		}
-		textSecret7 := new(string)
-		if !r.InputPrometheusRw.TextSecret.IsUnknown() && !r.InputPrometheusRw.TextSecret.IsNull() {
-			*textSecret7 = r.InputPrometheusRw.TextSecret.ValueString()
-		} else {
-			textSecret7 = nil
-		}
-		loginUrl6 := new(string)
-		if !r.InputPrometheusRw.LoginURL.IsUnknown() && !r.InputPrometheusRw.LoginURL.IsNull() {
-			*loginUrl6 = r.InputPrometheusRw.LoginURL.ValueString()
-		} else {
-			loginUrl6 = nil
-		}
-		secretParamName6 := new(string)
-		if !r.InputPrometheusRw.SecretParamName.IsUnknown() && !r.InputPrometheusRw.SecretParamName.IsNull() {
-			*secretParamName6 = r.InputPrometheusRw.SecretParamName.ValueString()
-		} else {
-			secretParamName6 = nil
-		}
-		secret6 := new(string)
-		if !r.InputPrometheusRw.Secret.IsUnknown() && !r.InputPrometheusRw.Secret.IsNull() {
-			*secret6 = r.InputPrometheusRw.Secret.ValueString()
-		} else {
-			secret6 = nil
-		}
-		tokenAttributeName6 := new(string)
-		if !r.InputPrometheusRw.TokenAttributeName.IsUnknown() && !r.InputPrometheusRw.TokenAttributeName.IsNull() {
-			*tokenAttributeName6 = r.InputPrometheusRw.TokenAttributeName.ValueString()
-		} else {
-			tokenAttributeName6 = nil
-		}
-		authHeaderExpr6 := new(string)
-		if !r.InputPrometheusRw.AuthHeaderExpr.IsUnknown() && !r.InputPrometheusRw.AuthHeaderExpr.IsNull() {
-			*authHeaderExpr6 = r.InputPrometheusRw.AuthHeaderExpr.ValueString()
-		} else {
-			authHeaderExpr6 = nil
-		}
-		tokenTimeoutSecs6 := new(float64)
-		if !r.InputPrometheusRw.TokenTimeoutSecs.IsUnknown() && !r.InputPrometheusRw.TokenTimeoutSecs.IsNull() {
-			*tokenTimeoutSecs6 = r.InputPrometheusRw.TokenTimeoutSecs.ValueFloat64()
-		} else {
-			tokenTimeoutSecs6 = nil
-		}
-		oauthParams6 := make([]shared.InputPrometheusRwOauthParam, 0, len(r.InputPrometheusRw.OauthParams))
-		for oauthParamsIndex6 := range r.InputPrometheusRw.OauthParams {
-			var name31 string
-			name31 = r.InputPrometheusRw.OauthParams[oauthParamsIndex6].Name.ValueString()
-
-			var value31 string
-			value31 = r.InputPrometheusRw.OauthParams[oauthParamsIndex6].Value.ValueString()
-
-			oauthParams6 = append(oauthParams6, shared.InputPrometheusRwOauthParam{
-				Name:  name31,
-				Value: value31,
-			})
-		}
-		oauthHeaders6 := make([]shared.InputPrometheusRwOauthHeader, 0, len(r.InputPrometheusRw.OauthHeaders))
-		for oauthHeadersIndex6 := range r.InputPrometheusRw.OauthHeaders {
-			var name32 string
-			name32 = r.InputPrometheusRw.OauthHeaders[oauthHeadersIndex6].Name.ValueString()
-
-			var value32 string
-			value32 = r.InputPrometheusRw.OauthHeaders[oauthHeadersIndex6].Value.ValueString()
-
-			oauthHeaders6 = append(oauthHeaders6, shared.InputPrometheusRwOauthHeader{
-				Name:  name32,
-				Value: value32,
-			})
-		}
-		inputPrometheusRw = &shared.InputPrometheusRw{
-			ID:                    id13,
-			Type:                  typeVar14,
-			Disabled:              disabled35,
-			Pipeline:              pipeline26,
-			SendToRoutes:          sendToRoutes13,
-			Environment:           environment13,
-			PqEnabled:             pqEnabled13,
-			Streamtags:            streamtags13,
-			Connections:           connections13,
-			Pq:                    pq13,
-			Host:                  host7,
-			Port:                  port7,
-			TLS:                   tls13,
-			MaxActiveReq:          maxActiveReq6,
-			MaxRequestsPerSocket:  maxRequestsPerSocket6,
-			EnableProxyHeader:     enableProxyHeader7,
-			CaptureHeaders:        captureHeaders6,
-			ActivityLogSampleRate: activityLogSampleRate6,
-			RequestTimeout:        requestTimeout13,
-			SocketTimeout:         socketTimeout6,
-			KeepAliveTimeout:      keepAliveTimeout6,
-			EnableHealthCheck:     enableHealthCheck6,
-			IPAllowlistRegex:      ipAllowlistRegex6,
-			IPDenylistRegex:       ipDenylistRegex6,
-			PrometheusAPI:         prometheusApi2,
-			AuthType:              authType10,
-			Metadata:              metadata15,
-			Description:           description15,
-			Username:              username7,
-			Password:              password7,
-			Token:                 token9,
-			CredentialsSecret:     credentialsSecret10,
-			TextSecret:            textSecret7,
-			LoginURL:              loginUrl6,
-			SecretParamName:       secretParamName6,
-			Secret:                secret6,
-			TokenAttributeName:    tokenAttributeName6,
-			AuthHeaderExpr:        authHeaderExpr6,
-			TokenTimeoutSecs:      tokenTimeoutSecs6,
-			OauthParams:           oauthParams6,
-			OauthHeaders:          oauthHeaders6,
+			Username:              username5,
+			Password:              password5,
+			Token:                 token7,
+			CredentialsSecret:     credentialsSecret8,
+			TextSecret:            textSecret5,
+			LoginURL:              loginUrl4,
+			SecretParamName:       secretParamName4,
+			Secret:                secret4,
+			TokenAttributeName:    tokenAttributeName4,
+			AuthHeaderExpr:        authHeaderExpr4,
+			TokenTimeoutSecs:      tokenTimeoutSecs4,
+			OauthParams:           oauthParams4,
+			OauthHeaders:          oauthHeaders4,
 		}
 	}
 	if inputPrometheusRw != nil {
@@ -6459,120 +5877,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputPrometheus *shared.InputPrometheus
 	if r.InputPrometheus != nil {
-		id14 := new(string)
+		id13 := new(string)
 		if !r.InputPrometheus.ID.IsUnknown() && !r.InputPrometheus.ID.IsNull() {
-			*id14 = r.InputPrometheus.ID.ValueString()
+			*id13 = r.InputPrometheus.ID.ValueString()
 		} else {
-			id14 = nil
+			id13 = nil
 		}
-		typeVar15 := new(shared.InputPrometheusType)
+		typeVar14 := new(shared.InputPrometheusType)
 		if !r.InputPrometheus.Type.IsUnknown() && !r.InputPrometheus.Type.IsNull() {
-			*typeVar15 = shared.InputPrometheusType(r.InputPrometheus.Type.ValueString())
+			*typeVar14 = shared.InputPrometheusType(r.InputPrometheus.Type.ValueString())
 		} else {
-			typeVar15 = nil
+			typeVar14 = nil
 		}
-		disabled37 := new(bool)
+		disabled35 := new(bool)
 		if !r.InputPrometheus.Disabled.IsUnknown() && !r.InputPrometheus.Disabled.IsNull() {
-			*disabled37 = r.InputPrometheus.Disabled.ValueBool()
+			*disabled35 = r.InputPrometheus.Disabled.ValueBool()
 		} else {
-			disabled37 = nil
+			disabled35 = nil
 		}
-		pipeline28 := new(string)
+		pipeline26 := new(string)
 		if !r.InputPrometheus.Pipeline.IsUnknown() && !r.InputPrometheus.Pipeline.IsNull() {
-			*pipeline28 = r.InputPrometheus.Pipeline.ValueString()
+			*pipeline26 = r.InputPrometheus.Pipeline.ValueString()
 		} else {
-			pipeline28 = nil
+			pipeline26 = nil
 		}
-		sendToRoutes14 := new(bool)
+		sendToRoutes13 := new(bool)
 		if !r.InputPrometheus.SendToRoutes.IsUnknown() && !r.InputPrometheus.SendToRoutes.IsNull() {
-			*sendToRoutes14 = r.InputPrometheus.SendToRoutes.ValueBool()
+			*sendToRoutes13 = r.InputPrometheus.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes14 = nil
+			sendToRoutes13 = nil
 		}
-		environment14 := new(string)
+		environment13 := new(string)
 		if !r.InputPrometheus.Environment.IsUnknown() && !r.InputPrometheus.Environment.IsNull() {
-			*environment14 = r.InputPrometheus.Environment.ValueString()
+			*environment13 = r.InputPrometheus.Environment.ValueString()
 		} else {
-			environment14 = nil
+			environment13 = nil
 		}
-		pqEnabled14 := new(bool)
+		pqEnabled13 := new(bool)
 		if !r.InputPrometheus.PqEnabled.IsUnknown() && !r.InputPrometheus.PqEnabled.IsNull() {
-			*pqEnabled14 = r.InputPrometheus.PqEnabled.ValueBool()
+			*pqEnabled13 = r.InputPrometheus.PqEnabled.ValueBool()
 		} else {
-			pqEnabled14 = nil
+			pqEnabled13 = nil
 		}
-		streamtags14 := make([]string, 0, len(r.InputPrometheus.Streamtags))
-		for streamtagsIndex14 := range r.InputPrometheus.Streamtags {
-			streamtags14 = append(streamtags14, r.InputPrometheus.Streamtags[streamtagsIndex14].ValueString())
+		streamtags13 := make([]string, 0, len(r.InputPrometheus.Streamtags))
+		for streamtagsIndex13 := range r.InputPrometheus.Streamtags {
+			streamtags13 = append(streamtags13, r.InputPrometheus.Streamtags[streamtagsIndex13].ValueString())
 		}
-		connections14 := make([]shared.InputPrometheusConnection, 0, len(r.InputPrometheus.Connections))
-		for connectionsIndex14 := range r.InputPrometheus.Connections {
-			pipeline29 := new(string)
-			if !r.InputPrometheus.Connections[connectionsIndex14].Pipeline.IsUnknown() && !r.InputPrometheus.Connections[connectionsIndex14].Pipeline.IsNull() {
-				*pipeline29 = r.InputPrometheus.Connections[connectionsIndex14].Pipeline.ValueString()
+		connections13 := make([]shared.InputPrometheusConnection, 0, len(r.InputPrometheus.Connections))
+		for connectionsIndex13 := range r.InputPrometheus.Connections {
+			pipeline27 := new(string)
+			if !r.InputPrometheus.Connections[connectionsIndex13].Pipeline.IsUnknown() && !r.InputPrometheus.Connections[connectionsIndex13].Pipeline.IsNull() {
+				*pipeline27 = r.InputPrometheus.Connections[connectionsIndex13].Pipeline.ValueString()
 			} else {
-				pipeline29 = nil
+				pipeline27 = nil
 			}
-			var output15 string
-			output15 = r.InputPrometheus.Connections[connectionsIndex14].Output.ValueString()
+			var output14 string
+			output14 = r.InputPrometheus.Connections[connectionsIndex13].Output.ValueString()
 
-			connections14 = append(connections14, shared.InputPrometheusConnection{
-				Pipeline: pipeline29,
-				Output:   output15,
+			connections13 = append(connections13, shared.InputPrometheusConnection{
+				Pipeline: pipeline27,
+				Output:   output14,
 			})
 		}
-		var pq14 *shared.InputPrometheusPq
+		var pq13 *shared.InputPrometheusPq
 		if r.InputPrometheus.Pq != nil {
-			mode14 := new(shared.InputPrometheusMode)
+			mode13 := new(shared.InputPrometheusMode)
 			if !r.InputPrometheus.Pq.Mode.IsUnknown() && !r.InputPrometheus.Pq.Mode.IsNull() {
-				*mode14 = shared.InputPrometheusMode(r.InputPrometheus.Pq.Mode.ValueString())
+				*mode13 = shared.InputPrometheusMode(r.InputPrometheus.Pq.Mode.ValueString())
 			} else {
-				mode14 = nil
+				mode13 = nil
 			}
-			maxBufferSize14 := new(float64)
+			maxBufferSize13 := new(float64)
 			if !r.InputPrometheus.Pq.MaxBufferSize.IsUnknown() && !r.InputPrometheus.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize14 = r.InputPrometheus.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize13 = r.InputPrometheus.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize14 = nil
+				maxBufferSize13 = nil
 			}
-			commitFrequency14 := new(float64)
+			commitFrequency13 := new(float64)
 			if !r.InputPrometheus.Pq.CommitFrequency.IsUnknown() && !r.InputPrometheus.Pq.CommitFrequency.IsNull() {
-				*commitFrequency14 = r.InputPrometheus.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency13 = r.InputPrometheus.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency14 = nil
+				commitFrequency13 = nil
 			}
-			maxFileSize14 := new(string)
+			maxFileSize13 := new(string)
 			if !r.InputPrometheus.Pq.MaxFileSize.IsUnknown() && !r.InputPrometheus.Pq.MaxFileSize.IsNull() {
-				*maxFileSize14 = r.InputPrometheus.Pq.MaxFileSize.ValueString()
+				*maxFileSize13 = r.InputPrometheus.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize14 = nil
+				maxFileSize13 = nil
 			}
-			maxSize14 := new(string)
+			maxSize13 := new(string)
 			if !r.InputPrometheus.Pq.MaxSize.IsUnknown() && !r.InputPrometheus.Pq.MaxSize.IsNull() {
-				*maxSize14 = r.InputPrometheus.Pq.MaxSize.ValueString()
+				*maxSize13 = r.InputPrometheus.Pq.MaxSize.ValueString()
 			} else {
-				maxSize14 = nil
+				maxSize13 = nil
 			}
-			path14 := new(string)
+			path13 := new(string)
 			if !r.InputPrometheus.Pq.Path.IsUnknown() && !r.InputPrometheus.Pq.Path.IsNull() {
-				*path14 = r.InputPrometheus.Pq.Path.ValueString()
+				*path13 = r.InputPrometheus.Pq.Path.ValueString()
 			} else {
-				path14 = nil
+				path13 = nil
 			}
-			compress15 := new(shared.InputPrometheusCompression)
+			compress14 := new(shared.InputPrometheusCompression)
 			if !r.InputPrometheus.Pq.Compress.IsUnknown() && !r.InputPrometheus.Pq.Compress.IsNull() {
-				*compress15 = shared.InputPrometheusCompression(r.InputPrometheus.Pq.Compress.ValueString())
+				*compress14 = shared.InputPrometheusCompression(r.InputPrometheus.Pq.Compress.ValueString())
 			} else {
-				compress15 = nil
+				compress14 = nil
 			}
-			pq14 = &shared.InputPrometheusPq{
-				Mode:            mode14,
-				MaxBufferSize:   maxBufferSize14,
-				CommitFrequency: commitFrequency14,
-				MaxFileSize:     maxFileSize14,
-				MaxSize:         maxSize14,
-				Path:            path14,
-				Compress:        compress15,
+			pq13 = &shared.InputPrometheusPq{
+				Mode:            mode13,
+				MaxBufferSize:   maxBufferSize13,
+				CommitFrequency: commitFrequency13,
+				MaxFileSize:     maxFileSize13,
+				MaxSize:         maxSize13,
+				Path:            path13,
+				Compress:        compress14,
 			}
 		}
 		dimensionList := make([]string, 0, len(r.InputPrometheus.DimensionList))
@@ -6597,11 +6015,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			logLevel1 = nil
 		}
-		rejectUnauthorized17 := new(bool)
+		rejectUnauthorized16 := new(bool)
 		if !r.InputPrometheus.RejectUnauthorized.IsUnknown() && !r.InputPrometheus.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized17 = r.InputPrometheus.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized16 = r.InputPrometheus.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized17 = nil
+			rejectUnauthorized16 = nil
 		}
 		keepAliveTime1 := new(float64)
 		if !r.InputPrometheus.KeepAliveTime.IsUnknown() && !r.InputPrometheus.KeepAliveTime.IsNull() {
@@ -6633,30 +6051,30 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			ignoreGroupJobsLimit1 = nil
 		}
-		metadata16 := make([]shared.InputPrometheusMetadatum, 0, len(r.InputPrometheus.Metadata))
-		for metadataIndex16 := range r.InputPrometheus.Metadata {
-			var name33 string
-			name33 = r.InputPrometheus.Metadata[metadataIndex16].Name.ValueString()
+		metadata15 := make([]shared.InputPrometheusMetadatum, 0, len(r.InputPrometheus.Metadata))
+		for metadataIndex15 := range r.InputPrometheus.Metadata {
+			var name28 string
+			name28 = r.InputPrometheus.Metadata[metadataIndex15].Name.ValueString()
 
-			var value33 string
-			value33 = r.InputPrometheus.Metadata[metadataIndex16].Value.ValueString()
+			var value28 string
+			value28 = r.InputPrometheus.Metadata[metadataIndex15].Value.ValueString()
 
-			metadata16 = append(metadata16, shared.InputPrometheusMetadatum{
-				Name:  name33,
-				Value: value33,
+			metadata15 = append(metadata15, shared.InputPrometheusMetadatum{
+				Name:  name28,
+				Value: value28,
 			})
 		}
-		authType11 := new(shared.InputPrometheusAuthTypeAuthenticationMethod)
+		authType9 := new(shared.InputPrometheusAuthTypeAuthenticationMethod)
 		if !r.InputPrometheus.AuthType.IsUnknown() && !r.InputPrometheus.AuthType.IsNull() {
-			*authType11 = shared.InputPrometheusAuthTypeAuthenticationMethod(r.InputPrometheus.AuthType.ValueString())
+			*authType9 = shared.InputPrometheusAuthTypeAuthenticationMethod(r.InputPrometheus.AuthType.ValueString())
 		} else {
-			authType11 = nil
+			authType9 = nil
 		}
-		description16 := new(string)
+		description15 := new(string)
 		if !r.InputPrometheus.Description.IsUnknown() && !r.InputPrometheus.Description.IsNull() {
-			*description16 = r.InputPrometheus.Description.ValueString()
+			*description15 = r.InputPrometheus.Description.ValueString()
 		} else {
-			description16 = nil
+			description15 = nil
 		}
 		targetList := make([]string, 0, len(r.InputPrometheus.TargetList))
 		for targetListIndex := range r.InputPrometheus.TargetList {
@@ -6698,15 +6116,15 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		searchFilter := make([]shared.InputPrometheusSearchFilter, 0, len(r.InputPrometheus.SearchFilter))
 		for searchFilterIndex := range r.InputPrometheus.SearchFilter {
-			var name34 string
-			name34 = r.InputPrometheus.SearchFilter[searchFilterIndex].Name.ValueString()
+			var name29 string
+			name29 = r.InputPrometheus.SearchFilter[searchFilterIndex].Name.ValueString()
 
 			values := make([]string, 0, len(r.InputPrometheus.SearchFilter[searchFilterIndex].Values))
 			for valuesIndex := range r.InputPrometheus.SearchFilter[searchFilterIndex].Values {
 				values = append(values, r.InputPrometheus.SearchFilter[searchFilterIndex].Values[valuesIndex].ValueString())
 			}
 			searchFilter = append(searchFilter, shared.InputPrometheusSearchFilter{
-				Name:   name34,
+				Name:   name29,
 				Values: values,
 			})
 		}
@@ -6770,48 +6188,48 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			durationSeconds1 = nil
 		}
-		username8 := new(string)
+		username6 := new(string)
 		if !r.InputPrometheus.Username.IsUnknown() && !r.InputPrometheus.Username.IsNull() {
-			*username8 = r.InputPrometheus.Username.ValueString()
+			*username6 = r.InputPrometheus.Username.ValueString()
 		} else {
-			username8 = nil
+			username6 = nil
 		}
-		password8 := new(string)
+		password6 := new(string)
 		if !r.InputPrometheus.Password.IsUnknown() && !r.InputPrometheus.Password.IsNull() {
-			*password8 = r.InputPrometheus.Password.ValueString()
+			*password6 = r.InputPrometheus.Password.ValueString()
 		} else {
-			password8 = nil
+			password6 = nil
 		}
-		credentialsSecret11 := new(string)
+		credentialsSecret9 := new(string)
 		if !r.InputPrometheus.CredentialsSecret.IsUnknown() && !r.InputPrometheus.CredentialsSecret.IsNull() {
-			*credentialsSecret11 = r.InputPrometheus.CredentialsSecret.ValueString()
+			*credentialsSecret9 = r.InputPrometheus.CredentialsSecret.ValueString()
 		} else {
-			credentialsSecret11 = nil
+			credentialsSecret9 = nil
 		}
 		inputPrometheus = &shared.InputPrometheus{
-			ID:                      id14,
-			Type:                    typeVar15,
-			Disabled:                disabled37,
-			Pipeline:                pipeline28,
-			SendToRoutes:            sendToRoutes14,
-			Environment:             environment14,
-			PqEnabled:               pqEnabled14,
-			Streamtags:              streamtags14,
-			Connections:             connections14,
-			Pq:                      pq14,
+			ID:                      id13,
+			Type:                    typeVar14,
+			Disabled:                disabled35,
+			Pipeline:                pipeline26,
+			SendToRoutes:            sendToRoutes13,
+			Environment:             environment13,
+			PqEnabled:               pqEnabled13,
+			Streamtags:              streamtags13,
+			Connections:             connections13,
+			Pq:                      pq13,
 			DimensionList:           dimensionList,
 			DiscoveryType:           discoveryType,
 			Interval:                interval1,
 			LogLevel:                logLevel1,
-			RejectUnauthorized:      rejectUnauthorized17,
+			RejectUnauthorized:      rejectUnauthorized16,
 			KeepAliveTime:           keepAliveTime1,
 			JobTimeout:              jobTimeout1,
 			MaxMissedKeepAlives:     maxMissedKeepAlives1,
 			TTL:                     ttl1,
 			IgnoreGroupJobsLimit:    ignoreGroupJobsLimit1,
-			Metadata:                metadata16,
-			AuthType:                authType11,
-			Description:             description16,
+			Metadata:                metadata15,
+			AuthType:                authType9,
+			Description:             description15,
 			TargetList:              targetList,
 			NameList:                nameList,
 			RecordType:              recordType,
@@ -6830,9 +6248,9 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			AssumeRoleArn:           assumeRoleArn1,
 			AssumeRoleExternalID:    assumeRoleExternalId1,
 			DurationSeconds:         durationSeconds1,
-			Username:                username8,
-			Password:                password8,
-			CredentialsSecret:       credentialsSecret11,
+			Username:                username6,
+			Password:                password6,
+			CredentialsSecret:       credentialsSecret9,
 		}
 	}
 	if inputPrometheus != nil {
@@ -6842,120 +6260,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputEdgePrometheus *shared.InputEdgePrometheus
 	if r.InputEdgePrometheus != nil {
-		id15 := new(string)
+		id14 := new(string)
 		if !r.InputEdgePrometheus.ID.IsUnknown() && !r.InputEdgePrometheus.ID.IsNull() {
-			*id15 = r.InputEdgePrometheus.ID.ValueString()
+			*id14 = r.InputEdgePrometheus.ID.ValueString()
 		} else {
-			id15 = nil
+			id14 = nil
 		}
-		typeVar16 := new(shared.InputEdgePrometheusType)
+		typeVar15 := new(shared.InputEdgePrometheusType)
 		if !r.InputEdgePrometheus.Type.IsUnknown() && !r.InputEdgePrometheus.Type.IsNull() {
-			*typeVar16 = shared.InputEdgePrometheusType(r.InputEdgePrometheus.Type.ValueString())
+			*typeVar15 = shared.InputEdgePrometheusType(r.InputEdgePrometheus.Type.ValueString())
 		} else {
-			typeVar16 = nil
+			typeVar15 = nil
 		}
-		disabled38 := new(bool)
+		disabled36 := new(bool)
 		if !r.InputEdgePrometheus.Disabled.IsUnknown() && !r.InputEdgePrometheus.Disabled.IsNull() {
-			*disabled38 = r.InputEdgePrometheus.Disabled.ValueBool()
+			*disabled36 = r.InputEdgePrometheus.Disabled.ValueBool()
 		} else {
-			disabled38 = nil
+			disabled36 = nil
 		}
-		pipeline30 := new(string)
+		pipeline28 := new(string)
 		if !r.InputEdgePrometheus.Pipeline.IsUnknown() && !r.InputEdgePrometheus.Pipeline.IsNull() {
-			*pipeline30 = r.InputEdgePrometheus.Pipeline.ValueString()
+			*pipeline28 = r.InputEdgePrometheus.Pipeline.ValueString()
 		} else {
-			pipeline30 = nil
+			pipeline28 = nil
 		}
-		sendToRoutes15 := new(bool)
+		sendToRoutes14 := new(bool)
 		if !r.InputEdgePrometheus.SendToRoutes.IsUnknown() && !r.InputEdgePrometheus.SendToRoutes.IsNull() {
-			*sendToRoutes15 = r.InputEdgePrometheus.SendToRoutes.ValueBool()
+			*sendToRoutes14 = r.InputEdgePrometheus.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes15 = nil
+			sendToRoutes14 = nil
 		}
-		environment15 := new(string)
+		environment14 := new(string)
 		if !r.InputEdgePrometheus.Environment.IsUnknown() && !r.InputEdgePrometheus.Environment.IsNull() {
-			*environment15 = r.InputEdgePrometheus.Environment.ValueString()
+			*environment14 = r.InputEdgePrometheus.Environment.ValueString()
 		} else {
-			environment15 = nil
+			environment14 = nil
 		}
-		pqEnabled15 := new(bool)
+		pqEnabled14 := new(bool)
 		if !r.InputEdgePrometheus.PqEnabled.IsUnknown() && !r.InputEdgePrometheus.PqEnabled.IsNull() {
-			*pqEnabled15 = r.InputEdgePrometheus.PqEnabled.ValueBool()
+			*pqEnabled14 = r.InputEdgePrometheus.PqEnabled.ValueBool()
 		} else {
-			pqEnabled15 = nil
+			pqEnabled14 = nil
 		}
-		streamtags15 := make([]string, 0, len(r.InputEdgePrometheus.Streamtags))
-		for streamtagsIndex15 := range r.InputEdgePrometheus.Streamtags {
-			streamtags15 = append(streamtags15, r.InputEdgePrometheus.Streamtags[streamtagsIndex15].ValueString())
+		streamtags14 := make([]string, 0, len(r.InputEdgePrometheus.Streamtags))
+		for streamtagsIndex14 := range r.InputEdgePrometheus.Streamtags {
+			streamtags14 = append(streamtags14, r.InputEdgePrometheus.Streamtags[streamtagsIndex14].ValueString())
 		}
-		connections15 := make([]shared.InputEdgePrometheusConnection, 0, len(r.InputEdgePrometheus.Connections))
-		for connectionsIndex15 := range r.InputEdgePrometheus.Connections {
-			pipeline31 := new(string)
-			if !r.InputEdgePrometheus.Connections[connectionsIndex15].Pipeline.IsUnknown() && !r.InputEdgePrometheus.Connections[connectionsIndex15].Pipeline.IsNull() {
-				*pipeline31 = r.InputEdgePrometheus.Connections[connectionsIndex15].Pipeline.ValueString()
+		connections14 := make([]shared.InputEdgePrometheusConnection, 0, len(r.InputEdgePrometheus.Connections))
+		for connectionsIndex14 := range r.InputEdgePrometheus.Connections {
+			pipeline29 := new(string)
+			if !r.InputEdgePrometheus.Connections[connectionsIndex14].Pipeline.IsUnknown() && !r.InputEdgePrometheus.Connections[connectionsIndex14].Pipeline.IsNull() {
+				*pipeline29 = r.InputEdgePrometheus.Connections[connectionsIndex14].Pipeline.ValueString()
 			} else {
-				pipeline31 = nil
+				pipeline29 = nil
 			}
-			var output16 string
-			output16 = r.InputEdgePrometheus.Connections[connectionsIndex15].Output.ValueString()
+			var output15 string
+			output15 = r.InputEdgePrometheus.Connections[connectionsIndex14].Output.ValueString()
 
-			connections15 = append(connections15, shared.InputEdgePrometheusConnection{
-				Pipeline: pipeline31,
-				Output:   output16,
+			connections14 = append(connections14, shared.InputEdgePrometheusConnection{
+				Pipeline: pipeline29,
+				Output:   output15,
 			})
 		}
-		var pq15 *shared.InputEdgePrometheusPq
+		var pq14 *shared.InputEdgePrometheusPq
 		if r.InputEdgePrometheus.Pq != nil {
-			mode15 := new(shared.InputEdgePrometheusMode)
+			mode14 := new(shared.InputEdgePrometheusMode)
 			if !r.InputEdgePrometheus.Pq.Mode.IsUnknown() && !r.InputEdgePrometheus.Pq.Mode.IsNull() {
-				*mode15 = shared.InputEdgePrometheusMode(r.InputEdgePrometheus.Pq.Mode.ValueString())
+				*mode14 = shared.InputEdgePrometheusMode(r.InputEdgePrometheus.Pq.Mode.ValueString())
 			} else {
-				mode15 = nil
+				mode14 = nil
 			}
-			maxBufferSize15 := new(float64)
+			maxBufferSize14 := new(float64)
 			if !r.InputEdgePrometheus.Pq.MaxBufferSize.IsUnknown() && !r.InputEdgePrometheus.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize15 = r.InputEdgePrometheus.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize14 = r.InputEdgePrometheus.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize15 = nil
+				maxBufferSize14 = nil
 			}
-			commitFrequency15 := new(float64)
+			commitFrequency14 := new(float64)
 			if !r.InputEdgePrometheus.Pq.CommitFrequency.IsUnknown() && !r.InputEdgePrometheus.Pq.CommitFrequency.IsNull() {
-				*commitFrequency15 = r.InputEdgePrometheus.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency14 = r.InputEdgePrometheus.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency15 = nil
+				commitFrequency14 = nil
 			}
-			maxFileSize15 := new(string)
+			maxFileSize14 := new(string)
 			if !r.InputEdgePrometheus.Pq.MaxFileSize.IsUnknown() && !r.InputEdgePrometheus.Pq.MaxFileSize.IsNull() {
-				*maxFileSize15 = r.InputEdgePrometheus.Pq.MaxFileSize.ValueString()
+				*maxFileSize14 = r.InputEdgePrometheus.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize15 = nil
+				maxFileSize14 = nil
 			}
-			maxSize15 := new(string)
+			maxSize14 := new(string)
 			if !r.InputEdgePrometheus.Pq.MaxSize.IsUnknown() && !r.InputEdgePrometheus.Pq.MaxSize.IsNull() {
-				*maxSize15 = r.InputEdgePrometheus.Pq.MaxSize.ValueString()
+				*maxSize14 = r.InputEdgePrometheus.Pq.MaxSize.ValueString()
 			} else {
-				maxSize15 = nil
+				maxSize14 = nil
 			}
-			path15 := new(string)
+			path14 := new(string)
 			if !r.InputEdgePrometheus.Pq.Path.IsUnknown() && !r.InputEdgePrometheus.Pq.Path.IsNull() {
-				*path15 = r.InputEdgePrometheus.Pq.Path.ValueString()
+				*path14 = r.InputEdgePrometheus.Pq.Path.ValueString()
 			} else {
-				path15 = nil
+				path14 = nil
 			}
-			compress16 := new(shared.InputEdgePrometheusPqCompression)
+			compress15 := new(shared.InputEdgePrometheusPqCompression)
 			if !r.InputEdgePrometheus.Pq.Compress.IsUnknown() && !r.InputEdgePrometheus.Pq.Compress.IsNull() {
-				*compress16 = shared.InputEdgePrometheusPqCompression(r.InputEdgePrometheus.Pq.Compress.ValueString())
+				*compress15 = shared.InputEdgePrometheusPqCompression(r.InputEdgePrometheus.Pq.Compress.ValueString())
 			} else {
-				compress16 = nil
+				compress15 = nil
 			}
-			pq15 = &shared.InputEdgePrometheusPq{
-				Mode:            mode15,
-				MaxBufferSize:   maxBufferSize15,
-				CommitFrequency: commitFrequency15,
-				MaxFileSize:     maxFileSize15,
-				MaxSize:         maxSize15,
-				Path:            path15,
-				Compress:        compress16,
+			pq14 = &shared.InputEdgePrometheusPq{
+				Mode:            mode14,
+				MaxBufferSize:   maxBufferSize14,
+				CommitFrequency: commitFrequency14,
+				MaxFileSize:     maxFileSize14,
+				MaxSize:         maxSize14,
+				Path:            path14,
+				Compress:        compress15,
 			}
 		}
 		dimensionList1 := make([]string, 0, len(r.InputEdgePrometheus.DimensionList))
@@ -7006,44 +6424,44 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				maxDataTime = nil
 			}
-			compress17 := new(shared.InputEdgePrometheusPersistenceCompression)
+			compress16 := new(shared.InputEdgePrometheusPersistenceCompression)
 			if !r.InputEdgePrometheus.Persistence.Compress.IsUnknown() && !r.InputEdgePrometheus.Persistence.Compress.IsNull() {
-				*compress17 = shared.InputEdgePrometheusPersistenceCompression(r.InputEdgePrometheus.Persistence.Compress.ValueString())
+				*compress16 = shared.InputEdgePrometheusPersistenceCompression(r.InputEdgePrometheus.Persistence.Compress.ValueString())
 			} else {
-				compress17 = nil
+				compress16 = nil
 			}
 			persistence = &shared.InputEdgePrometheusDiskSpooling{
 				Enable:      enable,
 				TimeWindow:  timeWindow,
 				MaxDataSize: maxDataSize,
 				MaxDataTime: maxDataTime,
-				Compress:    compress17,
+				Compress:    compress16,
 			}
 		}
-		metadata17 := make([]shared.InputEdgePrometheusMetadatum, 0, len(r.InputEdgePrometheus.Metadata))
-		for metadataIndex17 := range r.InputEdgePrometheus.Metadata {
-			var name35 string
-			name35 = r.InputEdgePrometheus.Metadata[metadataIndex17].Name.ValueString()
+		metadata16 := make([]shared.InputEdgePrometheusMetadatum, 0, len(r.InputEdgePrometheus.Metadata))
+		for metadataIndex16 := range r.InputEdgePrometheus.Metadata {
+			var name30 string
+			name30 = r.InputEdgePrometheus.Metadata[metadataIndex16].Name.ValueString()
 
-			var value34 string
-			value34 = r.InputEdgePrometheus.Metadata[metadataIndex17].Value.ValueString()
+			var value29 string
+			value29 = r.InputEdgePrometheus.Metadata[metadataIndex16].Value.ValueString()
 
-			metadata17 = append(metadata17, shared.InputEdgePrometheusMetadatum{
-				Name:  name35,
-				Value: value34,
+			metadata16 = append(metadata16, shared.InputEdgePrometheusMetadatum{
+				Name:  name30,
+				Value: value29,
 			})
 		}
-		authType12 := new(shared.InputEdgePrometheusAuthTypeAuthenticationMethod)
+		authType10 := new(shared.InputEdgePrometheusAuthTypeAuthenticationMethod)
 		if !r.InputEdgePrometheus.AuthType.IsUnknown() && !r.InputEdgePrometheus.AuthType.IsNull() {
-			*authType12 = shared.InputEdgePrometheusAuthTypeAuthenticationMethod(r.InputEdgePrometheus.AuthType.ValueString())
+			*authType10 = shared.InputEdgePrometheusAuthTypeAuthenticationMethod(r.InputEdgePrometheus.AuthType.ValueString())
 		} else {
-			authType12 = nil
+			authType10 = nil
 		}
-		description17 := new(string)
+		description16 := new(string)
 		if !r.InputEdgePrometheus.Description.IsUnknown() && !r.InputEdgePrometheus.Description.IsNull() {
-			*description17 = r.InputEdgePrometheus.Description.ValueString()
+			*description16 = r.InputEdgePrometheus.Description.ValueString()
 		} else {
-			description17 = nil
+			description16 = nil
 		}
 		targets := make([]shared.Target, 0, len(r.InputEdgePrometheus.Targets))
 		for targetsIndex := range r.InputEdgePrometheus.Targets {
@@ -7053,26 +6471,26 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				protocol = nil
 			}
-			var host8 string
-			host8 = r.InputEdgePrometheus.Targets[targetsIndex].Host.ValueString()
+			var host7 string
+			host7 = r.InputEdgePrometheus.Targets[targetsIndex].Host.ValueString()
 
-			port8 := new(float64)
+			port7 := new(float64)
 			if !r.InputEdgePrometheus.Targets[targetsIndex].Port.IsUnknown() && !r.InputEdgePrometheus.Targets[targetsIndex].Port.IsNull() {
-				*port8 = r.InputEdgePrometheus.Targets[targetsIndex].Port.ValueFloat64()
+				*port7 = r.InputEdgePrometheus.Targets[targetsIndex].Port.ValueFloat64()
 			} else {
-				port8 = nil
+				port7 = nil
 			}
-			path16 := new(string)
+			path15 := new(string)
 			if !r.InputEdgePrometheus.Targets[targetsIndex].Path.IsUnknown() && !r.InputEdgePrometheus.Targets[targetsIndex].Path.IsNull() {
-				*path16 = r.InputEdgePrometheus.Targets[targetsIndex].Path.ValueString()
+				*path15 = r.InputEdgePrometheus.Targets[targetsIndex].Path.ValueString()
 			} else {
-				path16 = nil
+				path15 = nil
 			}
 			targets = append(targets, shared.Target{
 				Protocol: protocol,
-				Host:     host8,
-				Port:     port8,
-				Path:     path16,
+				Host:     host7,
+				Port:     port7,
+				Path:     path15,
 			})
 		}
 		nameList1 := make([]string, 0, len(r.InputEdgePrometheus.NameList))
@@ -7111,15 +6529,15 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		searchFilter1 := make([]shared.InputEdgePrometheusSearchFilter, 0, len(r.InputEdgePrometheus.SearchFilter))
 		for searchFilterIndex1 := range r.InputEdgePrometheus.SearchFilter {
-			var name36 string
-			name36 = r.InputEdgePrometheus.SearchFilter[searchFilterIndex1].Name.ValueString()
+			var name31 string
+			name31 = r.InputEdgePrometheus.SearchFilter[searchFilterIndex1].Name.ValueString()
 
 			values1 := make([]string, 0, len(r.InputEdgePrometheus.SearchFilter[searchFilterIndex1].Values))
 			for valuesIndex1 := range r.InputEdgePrometheus.SearchFilter[searchFilterIndex1].Values {
 				values1 = append(values1, r.InputEdgePrometheus.SearchFilter[searchFilterIndex1].Values[valuesIndex1].ValueString())
 			}
 			searchFilter1 = append(searchFilter1, shared.InputEdgePrometheusSearchFilter{
-				Name:   name36,
+				Name:   name31,
 				Values: values1,
 			})
 		}
@@ -7159,11 +6577,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			reuseConnections2 = nil
 		}
-		rejectUnauthorized18 := new(bool)
+		rejectUnauthorized17 := new(bool)
 		if !r.InputEdgePrometheus.RejectUnauthorized.IsUnknown() && !r.InputEdgePrometheus.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized18 = r.InputEdgePrometheus.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized17 = r.InputEdgePrometheus.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized18 = nil
+			rejectUnauthorized17 = nil
 		}
 		enableAssumeRole2 := new(bool)
 		if !r.InputEdgePrometheus.EnableAssumeRole.IsUnknown() && !r.InputEdgePrometheus.EnableAssumeRole.IsNull() {
@@ -7212,54 +6630,54 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			var filter string
 			filter = r.InputEdgePrometheus.PodFilter[podFilterIndex].Filter.ValueString()
 
-			description18 := new(string)
+			description17 := new(string)
 			if !r.InputEdgePrometheus.PodFilter[podFilterIndex].Description.IsUnknown() && !r.InputEdgePrometheus.PodFilter[podFilterIndex].Description.IsNull() {
-				*description18 = r.InputEdgePrometheus.PodFilter[podFilterIndex].Description.ValueString()
+				*description17 = r.InputEdgePrometheus.PodFilter[podFilterIndex].Description.ValueString()
 			} else {
-				description18 = nil
+				description17 = nil
 			}
 			podFilter = append(podFilter, shared.PodFilter{
 				Filter:      filter,
-				Description: description18,
+				Description: description17,
 			})
 		}
-		username9 := new(string)
+		username7 := new(string)
 		if !r.InputEdgePrometheus.Username.IsUnknown() && !r.InputEdgePrometheus.Username.IsNull() {
-			*username9 = r.InputEdgePrometheus.Username.ValueString()
+			*username7 = r.InputEdgePrometheus.Username.ValueString()
 		} else {
-			username9 = nil
+			username7 = nil
 		}
-		password9 := new(string)
+		password7 := new(string)
 		if !r.InputEdgePrometheus.Password.IsUnknown() && !r.InputEdgePrometheus.Password.IsNull() {
-			*password9 = r.InputEdgePrometheus.Password.ValueString()
+			*password7 = r.InputEdgePrometheus.Password.ValueString()
 		} else {
-			password9 = nil
+			password7 = nil
 		}
-		credentialsSecret12 := new(string)
+		credentialsSecret10 := new(string)
 		if !r.InputEdgePrometheus.CredentialsSecret.IsUnknown() && !r.InputEdgePrometheus.CredentialsSecret.IsNull() {
-			*credentialsSecret12 = r.InputEdgePrometheus.CredentialsSecret.ValueString()
+			*credentialsSecret10 = r.InputEdgePrometheus.CredentialsSecret.ValueString()
 		} else {
-			credentialsSecret12 = nil
+			credentialsSecret10 = nil
 		}
 		inputEdgePrometheus = &shared.InputEdgePrometheus{
-			ID:                      id15,
-			Type:                    typeVar16,
-			Disabled:                disabled38,
-			Pipeline:                pipeline30,
-			SendToRoutes:            sendToRoutes15,
-			Environment:             environment15,
-			PqEnabled:               pqEnabled15,
-			Streamtags:              streamtags15,
-			Connections:             connections15,
-			Pq:                      pq15,
+			ID:                      id14,
+			Type:                    typeVar15,
+			Disabled:                disabled36,
+			Pipeline:                pipeline28,
+			SendToRoutes:            sendToRoutes14,
+			Environment:             environment14,
+			PqEnabled:               pqEnabled14,
+			Streamtags:              streamtags14,
+			Connections:             connections14,
+			Pq:                      pq14,
 			DimensionList:           dimensionList1,
 			DiscoveryType:           discoveryType1,
 			Interval:                interval2,
 			Timeout:                 timeout,
 			Persistence:             persistence,
-			Metadata:                metadata17,
-			AuthType:                authType12,
-			Description:             description17,
+			Metadata:                metadata16,
+			AuthType:                authType10,
+			Description:             description16,
 			Targets:                 targets,
 			NameList:                nameList1,
 			RecordType:              recordType1,
@@ -7274,7 +6692,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Endpoint:                endpoint3,
 			SignatureVersion:        signatureVersion2,
 			ReuseConnections:        reuseConnections2,
-			RejectUnauthorized:      rejectUnauthorized18,
+			RejectUnauthorized:      rejectUnauthorized17,
 			EnableAssumeRole:        enableAssumeRole2,
 			AssumeRoleArn:           assumeRoleArn2,
 			AssumeRoleExternalID:    assumeRoleExternalId2,
@@ -7283,9 +6701,9 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			ScrapePortExpr:          scrapePortExpr,
 			ScrapePathExpr:          scrapePathExpr,
 			PodFilter:               podFilter,
-			Username:                username9,
-			Password:                password9,
-			CredentialsSecret:       credentialsSecret12,
+			Username:                username7,
+			Password:                password7,
+			CredentialsSecret:       credentialsSecret10,
 		}
 	}
 	if inputEdgePrometheus != nil {
@@ -7295,120 +6713,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputOffice365Mgmt *shared.InputOffice365Mgmt
 	if r.InputOffice365Mgmt != nil {
-		id16 := new(string)
+		id15 := new(string)
 		if !r.InputOffice365Mgmt.ID.IsUnknown() && !r.InputOffice365Mgmt.ID.IsNull() {
-			*id16 = r.InputOffice365Mgmt.ID.ValueString()
+			*id15 = r.InputOffice365Mgmt.ID.ValueString()
 		} else {
-			id16 = nil
+			id15 = nil
 		}
-		typeVar17 := new(shared.InputOffice365MgmtType)
+		typeVar16 := new(shared.InputOffice365MgmtType)
 		if !r.InputOffice365Mgmt.Type.IsUnknown() && !r.InputOffice365Mgmt.Type.IsNull() {
-			*typeVar17 = shared.InputOffice365MgmtType(r.InputOffice365Mgmt.Type.ValueString())
+			*typeVar16 = shared.InputOffice365MgmtType(r.InputOffice365Mgmt.Type.ValueString())
 		} else {
-			typeVar17 = nil
+			typeVar16 = nil
 		}
-		disabled39 := new(bool)
+		disabled37 := new(bool)
 		if !r.InputOffice365Mgmt.Disabled.IsUnknown() && !r.InputOffice365Mgmt.Disabled.IsNull() {
-			*disabled39 = r.InputOffice365Mgmt.Disabled.ValueBool()
+			*disabled37 = r.InputOffice365Mgmt.Disabled.ValueBool()
 		} else {
-			disabled39 = nil
+			disabled37 = nil
 		}
-		pipeline32 := new(string)
+		pipeline30 := new(string)
 		if !r.InputOffice365Mgmt.Pipeline.IsUnknown() && !r.InputOffice365Mgmt.Pipeline.IsNull() {
-			*pipeline32 = r.InputOffice365Mgmt.Pipeline.ValueString()
+			*pipeline30 = r.InputOffice365Mgmt.Pipeline.ValueString()
 		} else {
-			pipeline32 = nil
+			pipeline30 = nil
 		}
-		sendToRoutes16 := new(bool)
+		sendToRoutes15 := new(bool)
 		if !r.InputOffice365Mgmt.SendToRoutes.IsUnknown() && !r.InputOffice365Mgmt.SendToRoutes.IsNull() {
-			*sendToRoutes16 = r.InputOffice365Mgmt.SendToRoutes.ValueBool()
+			*sendToRoutes15 = r.InputOffice365Mgmt.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes16 = nil
+			sendToRoutes15 = nil
 		}
-		environment16 := new(string)
+		environment15 := new(string)
 		if !r.InputOffice365Mgmt.Environment.IsUnknown() && !r.InputOffice365Mgmt.Environment.IsNull() {
-			*environment16 = r.InputOffice365Mgmt.Environment.ValueString()
+			*environment15 = r.InputOffice365Mgmt.Environment.ValueString()
 		} else {
-			environment16 = nil
+			environment15 = nil
 		}
-		pqEnabled16 := new(bool)
+		pqEnabled15 := new(bool)
 		if !r.InputOffice365Mgmt.PqEnabled.IsUnknown() && !r.InputOffice365Mgmt.PqEnabled.IsNull() {
-			*pqEnabled16 = r.InputOffice365Mgmt.PqEnabled.ValueBool()
+			*pqEnabled15 = r.InputOffice365Mgmt.PqEnabled.ValueBool()
 		} else {
-			pqEnabled16 = nil
+			pqEnabled15 = nil
 		}
-		streamtags16 := make([]string, 0, len(r.InputOffice365Mgmt.Streamtags))
-		for streamtagsIndex16 := range r.InputOffice365Mgmt.Streamtags {
-			streamtags16 = append(streamtags16, r.InputOffice365Mgmt.Streamtags[streamtagsIndex16].ValueString())
+		streamtags15 := make([]string, 0, len(r.InputOffice365Mgmt.Streamtags))
+		for streamtagsIndex15 := range r.InputOffice365Mgmt.Streamtags {
+			streamtags15 = append(streamtags15, r.InputOffice365Mgmt.Streamtags[streamtagsIndex15].ValueString())
 		}
-		connections16 := make([]shared.InputOffice365MgmtConnection, 0, len(r.InputOffice365Mgmt.Connections))
-		for connectionsIndex16 := range r.InputOffice365Mgmt.Connections {
-			pipeline33 := new(string)
-			if !r.InputOffice365Mgmt.Connections[connectionsIndex16].Pipeline.IsUnknown() && !r.InputOffice365Mgmt.Connections[connectionsIndex16].Pipeline.IsNull() {
-				*pipeline33 = r.InputOffice365Mgmt.Connections[connectionsIndex16].Pipeline.ValueString()
+		connections15 := make([]shared.InputOffice365MgmtConnection, 0, len(r.InputOffice365Mgmt.Connections))
+		for connectionsIndex15 := range r.InputOffice365Mgmt.Connections {
+			pipeline31 := new(string)
+			if !r.InputOffice365Mgmt.Connections[connectionsIndex15].Pipeline.IsUnknown() && !r.InputOffice365Mgmt.Connections[connectionsIndex15].Pipeline.IsNull() {
+				*pipeline31 = r.InputOffice365Mgmt.Connections[connectionsIndex15].Pipeline.ValueString()
 			} else {
-				pipeline33 = nil
+				pipeline31 = nil
 			}
-			var output17 string
-			output17 = r.InputOffice365Mgmt.Connections[connectionsIndex16].Output.ValueString()
+			var output16 string
+			output16 = r.InputOffice365Mgmt.Connections[connectionsIndex15].Output.ValueString()
 
-			connections16 = append(connections16, shared.InputOffice365MgmtConnection{
-				Pipeline: pipeline33,
-				Output:   output17,
+			connections15 = append(connections15, shared.InputOffice365MgmtConnection{
+				Pipeline: pipeline31,
+				Output:   output16,
 			})
 		}
-		var pq16 *shared.InputOffice365MgmtPq
+		var pq15 *shared.InputOffice365MgmtPq
 		if r.InputOffice365Mgmt.Pq != nil {
-			mode16 := new(shared.InputOffice365MgmtMode)
+			mode15 := new(shared.InputOffice365MgmtMode)
 			if !r.InputOffice365Mgmt.Pq.Mode.IsUnknown() && !r.InputOffice365Mgmt.Pq.Mode.IsNull() {
-				*mode16 = shared.InputOffice365MgmtMode(r.InputOffice365Mgmt.Pq.Mode.ValueString())
+				*mode15 = shared.InputOffice365MgmtMode(r.InputOffice365Mgmt.Pq.Mode.ValueString())
 			} else {
-				mode16 = nil
+				mode15 = nil
 			}
-			maxBufferSize16 := new(float64)
+			maxBufferSize15 := new(float64)
 			if !r.InputOffice365Mgmt.Pq.MaxBufferSize.IsUnknown() && !r.InputOffice365Mgmt.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize16 = r.InputOffice365Mgmt.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize15 = r.InputOffice365Mgmt.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize16 = nil
+				maxBufferSize15 = nil
 			}
-			commitFrequency16 := new(float64)
+			commitFrequency15 := new(float64)
 			if !r.InputOffice365Mgmt.Pq.CommitFrequency.IsUnknown() && !r.InputOffice365Mgmt.Pq.CommitFrequency.IsNull() {
-				*commitFrequency16 = r.InputOffice365Mgmt.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency15 = r.InputOffice365Mgmt.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency16 = nil
+				commitFrequency15 = nil
 			}
-			maxFileSize16 := new(string)
+			maxFileSize15 := new(string)
 			if !r.InputOffice365Mgmt.Pq.MaxFileSize.IsUnknown() && !r.InputOffice365Mgmt.Pq.MaxFileSize.IsNull() {
-				*maxFileSize16 = r.InputOffice365Mgmt.Pq.MaxFileSize.ValueString()
+				*maxFileSize15 = r.InputOffice365Mgmt.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize16 = nil
+				maxFileSize15 = nil
 			}
-			maxSize16 := new(string)
+			maxSize15 := new(string)
 			if !r.InputOffice365Mgmt.Pq.MaxSize.IsUnknown() && !r.InputOffice365Mgmt.Pq.MaxSize.IsNull() {
-				*maxSize16 = r.InputOffice365Mgmt.Pq.MaxSize.ValueString()
+				*maxSize15 = r.InputOffice365Mgmt.Pq.MaxSize.ValueString()
 			} else {
-				maxSize16 = nil
+				maxSize15 = nil
 			}
-			path17 := new(string)
+			path16 := new(string)
 			if !r.InputOffice365Mgmt.Pq.Path.IsUnknown() && !r.InputOffice365Mgmt.Pq.Path.IsNull() {
-				*path17 = r.InputOffice365Mgmt.Pq.Path.ValueString()
+				*path16 = r.InputOffice365Mgmt.Pq.Path.ValueString()
 			} else {
-				path17 = nil
+				path16 = nil
 			}
-			compress18 := new(shared.InputOffice365MgmtCompression)
+			compress17 := new(shared.InputOffice365MgmtCompression)
 			if !r.InputOffice365Mgmt.Pq.Compress.IsUnknown() && !r.InputOffice365Mgmt.Pq.Compress.IsNull() {
-				*compress18 = shared.InputOffice365MgmtCompression(r.InputOffice365Mgmt.Pq.Compress.ValueString())
+				*compress17 = shared.InputOffice365MgmtCompression(r.InputOffice365Mgmt.Pq.Compress.ValueString())
 			} else {
-				compress18 = nil
+				compress17 = nil
 			}
-			pq16 = &shared.InputOffice365MgmtPq{
-				Mode:            mode16,
-				MaxBufferSize:   maxBufferSize16,
-				CommitFrequency: commitFrequency16,
-				MaxFileSize:     maxFileSize16,
-				MaxSize:         maxSize16,
-				Path:            path17,
-				Compress:        compress18,
+			pq15 = &shared.InputOffice365MgmtPq{
+				Mode:            mode15,
+				MaxBufferSize:   maxBufferSize15,
+				CommitFrequency: commitFrequency15,
+				MaxFileSize:     maxFileSize15,
+				MaxSize:         maxSize15,
+				Path:            path16,
+				Compress:        compress17,
 			}
 		}
 		planType := new(shared.InputOffice365MgmtSubscriptionPlan)
@@ -7459,17 +6877,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			ignoreGroupJobsLimit2 = nil
 		}
-		metadata18 := make([]shared.InputOffice365MgmtMetadatum, 0, len(r.InputOffice365Mgmt.Metadata))
-		for metadataIndex18 := range r.InputOffice365Mgmt.Metadata {
-			var name37 string
-			name37 = r.InputOffice365Mgmt.Metadata[metadataIndex18].Name.ValueString()
+		metadata17 := make([]shared.InputOffice365MgmtMetadatum, 0, len(r.InputOffice365Mgmt.Metadata))
+		for metadataIndex17 := range r.InputOffice365Mgmt.Metadata {
+			var name32 string
+			name32 = r.InputOffice365Mgmt.Metadata[metadataIndex17].Name.ValueString()
 
-			var value35 string
-			value35 = r.InputOffice365Mgmt.Metadata[metadataIndex18].Value.ValueString()
+			var value30 string
+			value30 = r.InputOffice365Mgmt.Metadata[metadataIndex17].Value.ValueString()
 
-			metadata18 = append(metadata18, shared.InputOffice365MgmtMetadatum{
-				Name:  name37,
-				Value: value35,
+			metadata17 = append(metadata17, shared.InputOffice365MgmtMetadatum{
+				Name:  name32,
+				Value: value30,
 			})
 		}
 		publisherIdentifier := new(string)
@@ -7483,11 +6901,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			var contentType string
 			contentType = r.InputOffice365Mgmt.ContentConfig[contentConfigIndex].ContentType.ValueString()
 
-			description19 := new(string)
+			description18 := new(string)
 			if !r.InputOffice365Mgmt.ContentConfig[contentConfigIndex].Description.IsUnknown() && !r.InputOffice365Mgmt.ContentConfig[contentConfigIndex].Description.IsNull() {
-				*description19 = r.InputOffice365Mgmt.ContentConfig[contentConfigIndex].Description.ValueString()
+				*description18 = r.InputOffice365Mgmt.ContentConfig[contentConfigIndex].Description.ValueString()
 			} else {
-				description19 = nil
+				description18 = nil
 			}
 			var interval3 float64
 			interval3 = r.InputOffice365Mgmt.ContentConfig[contentConfigIndex].Interval.ValueFloat64()
@@ -7498,7 +6916,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 
 			contentConfig = append(contentConfig, shared.InputOffice365MgmtContentConfig{
 				ContentType: contentType,
-				Description: description19,
+				Description: description18,
 				Interval:    interval3,
 				LogLevel:    logLevel2,
 				Enabled:     enabled2,
@@ -7512,11 +6930,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var retryRules1 *shared.InputOffice365MgmtRetryRules
 		if r.InputOffice365Mgmt.RetryRules != nil {
-			typeVar18 := new(shared.InputOffice365MgmtRetryType)
+			typeVar17 := new(shared.InputOffice365MgmtRetryType)
 			if !r.InputOffice365Mgmt.RetryRules.Type.IsUnknown() && !r.InputOffice365Mgmt.RetryRules.Type.IsNull() {
-				*typeVar18 = shared.InputOffice365MgmtRetryType(r.InputOffice365Mgmt.RetryRules.Type.ValueString())
+				*typeVar17 = shared.InputOffice365MgmtRetryType(r.InputOffice365Mgmt.RetryRules.Type.ValueString())
 			} else {
-				typeVar18 = nil
+				typeVar17 = nil
 			}
 			interval4 := new(float64)
 			if !r.InputOffice365Mgmt.RetryRules.Interval.IsUnknown() && !r.InputOffice365Mgmt.RetryRules.Interval.IsNull() {
@@ -7559,7 +6977,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				retryConnectReset1 = nil
 			}
 			retryRules1 = &shared.InputOffice365MgmtRetryRules{
-				Type:                typeVar18,
+				Type:                typeVar17,
 				Interval:            interval4,
 				Limit:               limit1,
 				Multiplier:          multiplier1,
@@ -7569,17 +6987,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				RetryConnectReset:   retryConnectReset1,
 			}
 		}
-		authType13 := new(shared.InputOffice365MgmtAuthenticationMethod)
+		authType11 := new(shared.InputOffice365MgmtAuthenticationMethod)
 		if !r.InputOffice365Mgmt.AuthType.IsUnknown() && !r.InputOffice365Mgmt.AuthType.IsNull() {
-			*authType13 = shared.InputOffice365MgmtAuthenticationMethod(r.InputOffice365Mgmt.AuthType.ValueString())
+			*authType11 = shared.InputOffice365MgmtAuthenticationMethod(r.InputOffice365Mgmt.AuthType.ValueString())
 		} else {
-			authType13 = nil
+			authType11 = nil
 		}
-		description20 := new(string)
+		description19 := new(string)
 		if !r.InputOffice365Mgmt.Description.IsUnknown() && !r.InputOffice365Mgmt.Description.IsNull() {
-			*description20 = r.InputOffice365Mgmt.Description.ValueString()
+			*description19 = r.InputOffice365Mgmt.Description.ValueString()
 		} else {
-			description20 = nil
+			description19 = nil
 		}
 		clientSecret := new(string)
 		if !r.InputOffice365Mgmt.ClientSecret.IsUnknown() && !r.InputOffice365Mgmt.ClientSecret.IsNull() {
@@ -7587,23 +7005,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			clientSecret = nil
 		}
-		textSecret8 := new(string)
+		textSecret6 := new(string)
 		if !r.InputOffice365Mgmt.TextSecret.IsUnknown() && !r.InputOffice365Mgmt.TextSecret.IsNull() {
-			*textSecret8 = r.InputOffice365Mgmt.TextSecret.ValueString()
+			*textSecret6 = r.InputOffice365Mgmt.TextSecret.ValueString()
 		} else {
-			textSecret8 = nil
+			textSecret6 = nil
 		}
 		inputOffice365Mgmt = &shared.InputOffice365Mgmt{
-			ID:                   id16,
-			Type:                 typeVar17,
-			Disabled:             disabled39,
-			Pipeline:             pipeline32,
-			SendToRoutes:         sendToRoutes16,
-			Environment:          environment16,
-			PqEnabled:            pqEnabled16,
-			Streamtags:           streamtags16,
-			Connections:          connections16,
-			Pq:                   pq16,
+			ID:                   id15,
+			Type:                 typeVar16,
+			Disabled:             disabled37,
+			Pipeline:             pipeline30,
+			SendToRoutes:         sendToRoutes15,
+			Environment:          environment15,
+			PqEnabled:            pqEnabled15,
+			Streamtags:           streamtags15,
+			Connections:          connections15,
+			Pq:                   pq15,
 			PlanType:             planType,
 			TenantID:             tenantId1,
 			AppID:                appID,
@@ -7613,15 +7031,15 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			MaxMissedKeepAlives:  maxMissedKeepAlives2,
 			TTL:                  ttl2,
 			IgnoreGroupJobsLimit: ignoreGroupJobsLimit2,
-			Metadata:             metadata18,
+			Metadata:             metadata17,
 			PublisherIdentifier:  publisherIdentifier,
 			ContentConfig:        contentConfig,
 			IngestionLag:         ingestionLag,
 			RetryRules:           retryRules1,
-			AuthType:             authType13,
-			Description:          description20,
+			AuthType:             authType11,
+			Description:          description19,
 			ClientSecret:         clientSecret,
-			TextSecret:           textSecret8,
+			TextSecret:           textSecret6,
 		}
 	}
 	if inputOffice365Mgmt != nil {
@@ -7631,120 +7049,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputOffice365Service *shared.InputOffice365Service
 	if r.InputOffice365Service != nil {
-		id17 := new(string)
+		id16 := new(string)
 		if !r.InputOffice365Service.ID.IsUnknown() && !r.InputOffice365Service.ID.IsNull() {
-			*id17 = r.InputOffice365Service.ID.ValueString()
+			*id16 = r.InputOffice365Service.ID.ValueString()
 		} else {
-			id17 = nil
+			id16 = nil
 		}
-		typeVar19 := new(shared.InputOffice365ServiceType)
+		typeVar18 := new(shared.InputOffice365ServiceType)
 		if !r.InputOffice365Service.Type.IsUnknown() && !r.InputOffice365Service.Type.IsNull() {
-			*typeVar19 = shared.InputOffice365ServiceType(r.InputOffice365Service.Type.ValueString())
+			*typeVar18 = shared.InputOffice365ServiceType(r.InputOffice365Service.Type.ValueString())
 		} else {
-			typeVar19 = nil
+			typeVar18 = nil
 		}
-		disabled40 := new(bool)
+		disabled38 := new(bool)
 		if !r.InputOffice365Service.Disabled.IsUnknown() && !r.InputOffice365Service.Disabled.IsNull() {
-			*disabled40 = r.InputOffice365Service.Disabled.ValueBool()
+			*disabled38 = r.InputOffice365Service.Disabled.ValueBool()
 		} else {
-			disabled40 = nil
+			disabled38 = nil
 		}
-		pipeline34 := new(string)
+		pipeline32 := new(string)
 		if !r.InputOffice365Service.Pipeline.IsUnknown() && !r.InputOffice365Service.Pipeline.IsNull() {
-			*pipeline34 = r.InputOffice365Service.Pipeline.ValueString()
+			*pipeline32 = r.InputOffice365Service.Pipeline.ValueString()
 		} else {
-			pipeline34 = nil
+			pipeline32 = nil
 		}
-		sendToRoutes17 := new(bool)
+		sendToRoutes16 := new(bool)
 		if !r.InputOffice365Service.SendToRoutes.IsUnknown() && !r.InputOffice365Service.SendToRoutes.IsNull() {
-			*sendToRoutes17 = r.InputOffice365Service.SendToRoutes.ValueBool()
+			*sendToRoutes16 = r.InputOffice365Service.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes17 = nil
+			sendToRoutes16 = nil
 		}
-		environment17 := new(string)
+		environment16 := new(string)
 		if !r.InputOffice365Service.Environment.IsUnknown() && !r.InputOffice365Service.Environment.IsNull() {
-			*environment17 = r.InputOffice365Service.Environment.ValueString()
+			*environment16 = r.InputOffice365Service.Environment.ValueString()
 		} else {
-			environment17 = nil
+			environment16 = nil
 		}
-		pqEnabled17 := new(bool)
+		pqEnabled16 := new(bool)
 		if !r.InputOffice365Service.PqEnabled.IsUnknown() && !r.InputOffice365Service.PqEnabled.IsNull() {
-			*pqEnabled17 = r.InputOffice365Service.PqEnabled.ValueBool()
+			*pqEnabled16 = r.InputOffice365Service.PqEnabled.ValueBool()
 		} else {
-			pqEnabled17 = nil
+			pqEnabled16 = nil
 		}
-		streamtags17 := make([]string, 0, len(r.InputOffice365Service.Streamtags))
-		for streamtagsIndex17 := range r.InputOffice365Service.Streamtags {
-			streamtags17 = append(streamtags17, r.InputOffice365Service.Streamtags[streamtagsIndex17].ValueString())
+		streamtags16 := make([]string, 0, len(r.InputOffice365Service.Streamtags))
+		for streamtagsIndex16 := range r.InputOffice365Service.Streamtags {
+			streamtags16 = append(streamtags16, r.InputOffice365Service.Streamtags[streamtagsIndex16].ValueString())
 		}
-		connections17 := make([]shared.InputOffice365ServiceConnection, 0, len(r.InputOffice365Service.Connections))
-		for connectionsIndex17 := range r.InputOffice365Service.Connections {
-			pipeline35 := new(string)
-			if !r.InputOffice365Service.Connections[connectionsIndex17].Pipeline.IsUnknown() && !r.InputOffice365Service.Connections[connectionsIndex17].Pipeline.IsNull() {
-				*pipeline35 = r.InputOffice365Service.Connections[connectionsIndex17].Pipeline.ValueString()
+		connections16 := make([]shared.InputOffice365ServiceConnection, 0, len(r.InputOffice365Service.Connections))
+		for connectionsIndex16 := range r.InputOffice365Service.Connections {
+			pipeline33 := new(string)
+			if !r.InputOffice365Service.Connections[connectionsIndex16].Pipeline.IsUnknown() && !r.InputOffice365Service.Connections[connectionsIndex16].Pipeline.IsNull() {
+				*pipeline33 = r.InputOffice365Service.Connections[connectionsIndex16].Pipeline.ValueString()
 			} else {
-				pipeline35 = nil
+				pipeline33 = nil
 			}
-			var output18 string
-			output18 = r.InputOffice365Service.Connections[connectionsIndex17].Output.ValueString()
+			var output17 string
+			output17 = r.InputOffice365Service.Connections[connectionsIndex16].Output.ValueString()
 
-			connections17 = append(connections17, shared.InputOffice365ServiceConnection{
-				Pipeline: pipeline35,
-				Output:   output18,
+			connections16 = append(connections16, shared.InputOffice365ServiceConnection{
+				Pipeline: pipeline33,
+				Output:   output17,
 			})
 		}
-		var pq17 *shared.InputOffice365ServicePq
+		var pq16 *shared.InputOffice365ServicePq
 		if r.InputOffice365Service.Pq != nil {
-			mode17 := new(shared.InputOffice365ServiceMode)
+			mode16 := new(shared.InputOffice365ServiceMode)
 			if !r.InputOffice365Service.Pq.Mode.IsUnknown() && !r.InputOffice365Service.Pq.Mode.IsNull() {
-				*mode17 = shared.InputOffice365ServiceMode(r.InputOffice365Service.Pq.Mode.ValueString())
+				*mode16 = shared.InputOffice365ServiceMode(r.InputOffice365Service.Pq.Mode.ValueString())
 			} else {
-				mode17 = nil
+				mode16 = nil
 			}
-			maxBufferSize17 := new(float64)
+			maxBufferSize16 := new(float64)
 			if !r.InputOffice365Service.Pq.MaxBufferSize.IsUnknown() && !r.InputOffice365Service.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize17 = r.InputOffice365Service.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize16 = r.InputOffice365Service.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize17 = nil
+				maxBufferSize16 = nil
 			}
-			commitFrequency17 := new(float64)
+			commitFrequency16 := new(float64)
 			if !r.InputOffice365Service.Pq.CommitFrequency.IsUnknown() && !r.InputOffice365Service.Pq.CommitFrequency.IsNull() {
-				*commitFrequency17 = r.InputOffice365Service.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency16 = r.InputOffice365Service.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency17 = nil
+				commitFrequency16 = nil
 			}
-			maxFileSize17 := new(string)
+			maxFileSize16 := new(string)
 			if !r.InputOffice365Service.Pq.MaxFileSize.IsUnknown() && !r.InputOffice365Service.Pq.MaxFileSize.IsNull() {
-				*maxFileSize17 = r.InputOffice365Service.Pq.MaxFileSize.ValueString()
+				*maxFileSize16 = r.InputOffice365Service.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize17 = nil
+				maxFileSize16 = nil
 			}
-			maxSize17 := new(string)
+			maxSize16 := new(string)
 			if !r.InputOffice365Service.Pq.MaxSize.IsUnknown() && !r.InputOffice365Service.Pq.MaxSize.IsNull() {
-				*maxSize17 = r.InputOffice365Service.Pq.MaxSize.ValueString()
+				*maxSize16 = r.InputOffice365Service.Pq.MaxSize.ValueString()
 			} else {
-				maxSize17 = nil
+				maxSize16 = nil
 			}
-			path18 := new(string)
+			path17 := new(string)
 			if !r.InputOffice365Service.Pq.Path.IsUnknown() && !r.InputOffice365Service.Pq.Path.IsNull() {
-				*path18 = r.InputOffice365Service.Pq.Path.ValueString()
+				*path17 = r.InputOffice365Service.Pq.Path.ValueString()
 			} else {
-				path18 = nil
+				path17 = nil
 			}
-			compress19 := new(shared.InputOffice365ServiceCompression)
+			compress18 := new(shared.InputOffice365ServiceCompression)
 			if !r.InputOffice365Service.Pq.Compress.IsUnknown() && !r.InputOffice365Service.Pq.Compress.IsNull() {
-				*compress19 = shared.InputOffice365ServiceCompression(r.InputOffice365Service.Pq.Compress.ValueString())
+				*compress18 = shared.InputOffice365ServiceCompression(r.InputOffice365Service.Pq.Compress.ValueString())
 			} else {
-				compress19 = nil
+				compress18 = nil
 			}
-			pq17 = &shared.InputOffice365ServicePq{
-				Mode:            mode17,
-				MaxBufferSize:   maxBufferSize17,
-				CommitFrequency: commitFrequency17,
-				MaxFileSize:     maxFileSize17,
-				MaxSize:         maxSize17,
-				Path:            path18,
-				Compress:        compress19,
+			pq16 = &shared.InputOffice365ServicePq{
+				Mode:            mode16,
+				MaxBufferSize:   maxBufferSize16,
+				CommitFrequency: commitFrequency16,
+				MaxFileSize:     maxFileSize16,
+				MaxSize:         maxSize16,
+				Path:            path17,
+				Compress:        compress18,
 			}
 		}
 		planType1 := new(shared.InputOffice365ServiceSubscriptionPlan)
@@ -7795,17 +7213,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			ignoreGroupJobsLimit3 = nil
 		}
-		metadata19 := make([]shared.InputOffice365ServiceMetadatum, 0, len(r.InputOffice365Service.Metadata))
-		for metadataIndex19 := range r.InputOffice365Service.Metadata {
-			var name38 string
-			name38 = r.InputOffice365Service.Metadata[metadataIndex19].Name.ValueString()
+		metadata18 := make([]shared.InputOffice365ServiceMetadatum, 0, len(r.InputOffice365Service.Metadata))
+		for metadataIndex18 := range r.InputOffice365Service.Metadata {
+			var name33 string
+			name33 = r.InputOffice365Service.Metadata[metadataIndex18].Name.ValueString()
 
-			var value36 string
-			value36 = r.InputOffice365Service.Metadata[metadataIndex19].Value.ValueString()
+			var value31 string
+			value31 = r.InputOffice365Service.Metadata[metadataIndex18].Value.ValueString()
 
-			metadata19 = append(metadata19, shared.InputOffice365ServiceMetadatum{
-				Name:  name38,
-				Value: value36,
+			metadata18 = append(metadata18, shared.InputOffice365ServiceMetadatum{
+				Name:  name33,
+				Value: value31,
 			})
 		}
 		contentConfig1 := make([]shared.InputOffice365ServiceContentConfig, 0, len(r.InputOffice365Service.ContentConfig))
@@ -7816,11 +7234,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				contentType1 = nil
 			}
-			description21 := new(string)
+			description20 := new(string)
 			if !r.InputOffice365Service.ContentConfig[contentConfigIndex1].Description.IsUnknown() && !r.InputOffice365Service.ContentConfig[contentConfigIndex1].Description.IsNull() {
-				*description21 = r.InputOffice365Service.ContentConfig[contentConfigIndex1].Description.ValueString()
+				*description20 = r.InputOffice365Service.ContentConfig[contentConfigIndex1].Description.ValueString()
 			} else {
-				description21 = nil
+				description20 = nil
 			}
 			interval5 := new(float64)
 			if !r.InputOffice365Service.ContentConfig[contentConfigIndex1].Interval.IsUnknown() && !r.InputOffice365Service.ContentConfig[contentConfigIndex1].Interval.IsNull() {
@@ -7842,7 +7260,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			}
 			contentConfig1 = append(contentConfig1, shared.InputOffice365ServiceContentConfig{
 				ContentType: contentType1,
-				Description: description21,
+				Description: description20,
 				Interval:    interval5,
 				LogLevel:    logLevel3,
 				Enabled:     enabled3,
@@ -7850,11 +7268,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var retryRules2 *shared.InputOffice365ServiceRetryRules
 		if r.InputOffice365Service.RetryRules != nil {
-			typeVar20 := new(shared.InputOffice365ServiceRetryType)
+			typeVar19 := new(shared.InputOffice365ServiceRetryType)
 			if !r.InputOffice365Service.RetryRules.Type.IsUnknown() && !r.InputOffice365Service.RetryRules.Type.IsNull() {
-				*typeVar20 = shared.InputOffice365ServiceRetryType(r.InputOffice365Service.RetryRules.Type.ValueString())
+				*typeVar19 = shared.InputOffice365ServiceRetryType(r.InputOffice365Service.RetryRules.Type.ValueString())
 			} else {
-				typeVar20 = nil
+				typeVar19 = nil
 			}
 			interval6 := new(float64)
 			if !r.InputOffice365Service.RetryRules.Interval.IsUnknown() && !r.InputOffice365Service.RetryRules.Interval.IsNull() {
@@ -7897,7 +7315,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				retryConnectReset2 = nil
 			}
 			retryRules2 = &shared.InputOffice365ServiceRetryRules{
-				Type:                typeVar20,
+				Type:                typeVar19,
 				Interval:            interval6,
 				Limit:               limit2,
 				Multiplier:          multiplier2,
@@ -7907,17 +7325,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				RetryConnectReset:   retryConnectReset2,
 			}
 		}
-		authType14 := new(shared.InputOffice365ServiceAuthenticationMethod)
+		authType12 := new(shared.InputOffice365ServiceAuthenticationMethod)
 		if !r.InputOffice365Service.AuthType.IsUnknown() && !r.InputOffice365Service.AuthType.IsNull() {
-			*authType14 = shared.InputOffice365ServiceAuthenticationMethod(r.InputOffice365Service.AuthType.ValueString())
+			*authType12 = shared.InputOffice365ServiceAuthenticationMethod(r.InputOffice365Service.AuthType.ValueString())
 		} else {
-			authType14 = nil
+			authType12 = nil
 		}
-		description22 := new(string)
+		description21 := new(string)
 		if !r.InputOffice365Service.Description.IsUnknown() && !r.InputOffice365Service.Description.IsNull() {
-			*description22 = r.InputOffice365Service.Description.ValueString()
+			*description21 = r.InputOffice365Service.Description.ValueString()
 		} else {
-			description22 = nil
+			description21 = nil
 		}
 		clientSecret1 := new(string)
 		if !r.InputOffice365Service.ClientSecret.IsUnknown() && !r.InputOffice365Service.ClientSecret.IsNull() {
@@ -7925,23 +7343,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			clientSecret1 = nil
 		}
-		textSecret9 := new(string)
+		textSecret7 := new(string)
 		if !r.InputOffice365Service.TextSecret.IsUnknown() && !r.InputOffice365Service.TextSecret.IsNull() {
-			*textSecret9 = r.InputOffice365Service.TextSecret.ValueString()
+			*textSecret7 = r.InputOffice365Service.TextSecret.ValueString()
 		} else {
-			textSecret9 = nil
+			textSecret7 = nil
 		}
 		inputOffice365Service = &shared.InputOffice365Service{
-			ID:                   id17,
-			Type:                 typeVar19,
-			Disabled:             disabled40,
-			Pipeline:             pipeline34,
-			SendToRoutes:         sendToRoutes17,
-			Environment:          environment17,
-			PqEnabled:            pqEnabled17,
-			Streamtags:           streamtags17,
-			Connections:          connections17,
-			Pq:                   pq17,
+			ID:                   id16,
+			Type:                 typeVar18,
+			Disabled:             disabled38,
+			Pipeline:             pipeline32,
+			SendToRoutes:         sendToRoutes16,
+			Environment:          environment16,
+			PqEnabled:            pqEnabled16,
+			Streamtags:           streamtags16,
+			Connections:          connections16,
+			Pq:                   pq16,
 			PlanType:             planType1,
 			TenantID:             tenantId2,
 			AppID:                appId1,
@@ -7951,13 +7369,13 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			MaxMissedKeepAlives:  maxMissedKeepAlives3,
 			TTL:                  ttl3,
 			IgnoreGroupJobsLimit: ignoreGroupJobsLimit3,
-			Metadata:             metadata19,
+			Metadata:             metadata18,
 			ContentConfig:        contentConfig1,
 			RetryRules:           retryRules2,
-			AuthType:             authType14,
-			Description:          description22,
+			AuthType:             authType12,
+			Description:          description21,
 			ClientSecret:         clientSecret1,
-			TextSecret:           textSecret9,
+			TextSecret:           textSecret7,
 		}
 	}
 	if inputOffice365Service != nil {
@@ -7967,120 +7385,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputOffice365MsgTrace *shared.InputOffice365MsgTrace
 	if r.InputOffice365MsgTrace != nil {
-		id18 := new(string)
+		id17 := new(string)
 		if !r.InputOffice365MsgTrace.ID.IsUnknown() && !r.InputOffice365MsgTrace.ID.IsNull() {
-			*id18 = r.InputOffice365MsgTrace.ID.ValueString()
+			*id17 = r.InputOffice365MsgTrace.ID.ValueString()
 		} else {
-			id18 = nil
+			id17 = nil
 		}
-		typeVar21 := new(shared.InputOffice365MsgTraceType)
+		typeVar20 := new(shared.InputOffice365MsgTraceType)
 		if !r.InputOffice365MsgTrace.Type.IsUnknown() && !r.InputOffice365MsgTrace.Type.IsNull() {
-			*typeVar21 = shared.InputOffice365MsgTraceType(r.InputOffice365MsgTrace.Type.ValueString())
+			*typeVar20 = shared.InputOffice365MsgTraceType(r.InputOffice365MsgTrace.Type.ValueString())
 		} else {
-			typeVar21 = nil
+			typeVar20 = nil
 		}
-		disabled41 := new(bool)
+		disabled39 := new(bool)
 		if !r.InputOffice365MsgTrace.Disabled.IsUnknown() && !r.InputOffice365MsgTrace.Disabled.IsNull() {
-			*disabled41 = r.InputOffice365MsgTrace.Disabled.ValueBool()
+			*disabled39 = r.InputOffice365MsgTrace.Disabled.ValueBool()
 		} else {
-			disabled41 = nil
+			disabled39 = nil
 		}
-		pipeline36 := new(string)
+		pipeline34 := new(string)
 		if !r.InputOffice365MsgTrace.Pipeline.IsUnknown() && !r.InputOffice365MsgTrace.Pipeline.IsNull() {
-			*pipeline36 = r.InputOffice365MsgTrace.Pipeline.ValueString()
+			*pipeline34 = r.InputOffice365MsgTrace.Pipeline.ValueString()
 		} else {
-			pipeline36 = nil
+			pipeline34 = nil
 		}
-		sendToRoutes18 := new(bool)
+		sendToRoutes17 := new(bool)
 		if !r.InputOffice365MsgTrace.SendToRoutes.IsUnknown() && !r.InputOffice365MsgTrace.SendToRoutes.IsNull() {
-			*sendToRoutes18 = r.InputOffice365MsgTrace.SendToRoutes.ValueBool()
+			*sendToRoutes17 = r.InputOffice365MsgTrace.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes18 = nil
+			sendToRoutes17 = nil
 		}
-		environment18 := new(string)
+		environment17 := new(string)
 		if !r.InputOffice365MsgTrace.Environment.IsUnknown() && !r.InputOffice365MsgTrace.Environment.IsNull() {
-			*environment18 = r.InputOffice365MsgTrace.Environment.ValueString()
+			*environment17 = r.InputOffice365MsgTrace.Environment.ValueString()
 		} else {
-			environment18 = nil
+			environment17 = nil
 		}
-		pqEnabled18 := new(bool)
+		pqEnabled17 := new(bool)
 		if !r.InputOffice365MsgTrace.PqEnabled.IsUnknown() && !r.InputOffice365MsgTrace.PqEnabled.IsNull() {
-			*pqEnabled18 = r.InputOffice365MsgTrace.PqEnabled.ValueBool()
+			*pqEnabled17 = r.InputOffice365MsgTrace.PqEnabled.ValueBool()
 		} else {
-			pqEnabled18 = nil
+			pqEnabled17 = nil
 		}
-		streamtags18 := make([]string, 0, len(r.InputOffice365MsgTrace.Streamtags))
-		for streamtagsIndex18 := range r.InputOffice365MsgTrace.Streamtags {
-			streamtags18 = append(streamtags18, r.InputOffice365MsgTrace.Streamtags[streamtagsIndex18].ValueString())
+		streamtags17 := make([]string, 0, len(r.InputOffice365MsgTrace.Streamtags))
+		for streamtagsIndex17 := range r.InputOffice365MsgTrace.Streamtags {
+			streamtags17 = append(streamtags17, r.InputOffice365MsgTrace.Streamtags[streamtagsIndex17].ValueString())
 		}
-		connections18 := make([]shared.InputOffice365MsgTraceConnection, 0, len(r.InputOffice365MsgTrace.Connections))
-		for connectionsIndex18 := range r.InputOffice365MsgTrace.Connections {
-			pipeline37 := new(string)
-			if !r.InputOffice365MsgTrace.Connections[connectionsIndex18].Pipeline.IsUnknown() && !r.InputOffice365MsgTrace.Connections[connectionsIndex18].Pipeline.IsNull() {
-				*pipeline37 = r.InputOffice365MsgTrace.Connections[connectionsIndex18].Pipeline.ValueString()
+		connections17 := make([]shared.InputOffice365MsgTraceConnection, 0, len(r.InputOffice365MsgTrace.Connections))
+		for connectionsIndex17 := range r.InputOffice365MsgTrace.Connections {
+			pipeline35 := new(string)
+			if !r.InputOffice365MsgTrace.Connections[connectionsIndex17].Pipeline.IsUnknown() && !r.InputOffice365MsgTrace.Connections[connectionsIndex17].Pipeline.IsNull() {
+				*pipeline35 = r.InputOffice365MsgTrace.Connections[connectionsIndex17].Pipeline.ValueString()
 			} else {
-				pipeline37 = nil
+				pipeline35 = nil
 			}
-			var output19 string
-			output19 = r.InputOffice365MsgTrace.Connections[connectionsIndex18].Output.ValueString()
+			var output18 string
+			output18 = r.InputOffice365MsgTrace.Connections[connectionsIndex17].Output.ValueString()
 
-			connections18 = append(connections18, shared.InputOffice365MsgTraceConnection{
-				Pipeline: pipeline37,
-				Output:   output19,
+			connections17 = append(connections17, shared.InputOffice365MsgTraceConnection{
+				Pipeline: pipeline35,
+				Output:   output18,
 			})
 		}
-		var pq18 *shared.InputOffice365MsgTracePq
+		var pq17 *shared.InputOffice365MsgTracePq
 		if r.InputOffice365MsgTrace.Pq != nil {
-			mode18 := new(shared.InputOffice365MsgTraceMode)
+			mode17 := new(shared.InputOffice365MsgTraceMode)
 			if !r.InputOffice365MsgTrace.Pq.Mode.IsUnknown() && !r.InputOffice365MsgTrace.Pq.Mode.IsNull() {
-				*mode18 = shared.InputOffice365MsgTraceMode(r.InputOffice365MsgTrace.Pq.Mode.ValueString())
+				*mode17 = shared.InputOffice365MsgTraceMode(r.InputOffice365MsgTrace.Pq.Mode.ValueString())
 			} else {
-				mode18 = nil
+				mode17 = nil
 			}
-			maxBufferSize18 := new(float64)
+			maxBufferSize17 := new(float64)
 			if !r.InputOffice365MsgTrace.Pq.MaxBufferSize.IsUnknown() && !r.InputOffice365MsgTrace.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize18 = r.InputOffice365MsgTrace.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize17 = r.InputOffice365MsgTrace.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize18 = nil
+				maxBufferSize17 = nil
 			}
-			commitFrequency18 := new(float64)
+			commitFrequency17 := new(float64)
 			if !r.InputOffice365MsgTrace.Pq.CommitFrequency.IsUnknown() && !r.InputOffice365MsgTrace.Pq.CommitFrequency.IsNull() {
-				*commitFrequency18 = r.InputOffice365MsgTrace.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency17 = r.InputOffice365MsgTrace.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency18 = nil
+				commitFrequency17 = nil
 			}
-			maxFileSize18 := new(string)
+			maxFileSize17 := new(string)
 			if !r.InputOffice365MsgTrace.Pq.MaxFileSize.IsUnknown() && !r.InputOffice365MsgTrace.Pq.MaxFileSize.IsNull() {
-				*maxFileSize18 = r.InputOffice365MsgTrace.Pq.MaxFileSize.ValueString()
+				*maxFileSize17 = r.InputOffice365MsgTrace.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize18 = nil
+				maxFileSize17 = nil
 			}
-			maxSize18 := new(string)
+			maxSize17 := new(string)
 			if !r.InputOffice365MsgTrace.Pq.MaxSize.IsUnknown() && !r.InputOffice365MsgTrace.Pq.MaxSize.IsNull() {
-				*maxSize18 = r.InputOffice365MsgTrace.Pq.MaxSize.ValueString()
+				*maxSize17 = r.InputOffice365MsgTrace.Pq.MaxSize.ValueString()
 			} else {
-				maxSize18 = nil
+				maxSize17 = nil
 			}
-			path19 := new(string)
+			path18 := new(string)
 			if !r.InputOffice365MsgTrace.Pq.Path.IsUnknown() && !r.InputOffice365MsgTrace.Pq.Path.IsNull() {
-				*path19 = r.InputOffice365MsgTrace.Pq.Path.ValueString()
+				*path18 = r.InputOffice365MsgTrace.Pq.Path.ValueString()
 			} else {
-				path19 = nil
+				path18 = nil
 			}
-			compress20 := new(shared.InputOffice365MsgTraceCompression)
+			compress19 := new(shared.InputOffice365MsgTraceCompression)
 			if !r.InputOffice365MsgTrace.Pq.Compress.IsUnknown() && !r.InputOffice365MsgTrace.Pq.Compress.IsNull() {
-				*compress20 = shared.InputOffice365MsgTraceCompression(r.InputOffice365MsgTrace.Pq.Compress.ValueString())
+				*compress19 = shared.InputOffice365MsgTraceCompression(r.InputOffice365MsgTrace.Pq.Compress.ValueString())
 			} else {
-				compress20 = nil
+				compress19 = nil
 			}
-			pq18 = &shared.InputOffice365MsgTracePq{
-				Mode:            mode18,
-				MaxBufferSize:   maxBufferSize18,
-				CommitFrequency: commitFrequency18,
-				MaxFileSize:     maxFileSize18,
-				MaxSize:         maxSize18,
-				Path:            path19,
-				Compress:        compress20,
+			pq17 = &shared.InputOffice365MsgTracePq{
+				Mode:            mode17,
+				MaxBufferSize:   maxBufferSize17,
+				CommitFrequency: commitFrequency17,
+				MaxFileSize:     maxFileSize17,
+				MaxSize:         maxSize17,
+				Path:            path18,
+				Compress:        compress19,
 			}
 		}
 		url1 := new(string)
@@ -8119,11 +7537,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			disableTimeFilter = nil
 		}
-		authType15 := new(shared.InputOffice365MsgTraceAuthenticationMethod)
+		authType13 := new(shared.InputOffice365MsgTraceAuthenticationMethod)
 		if !r.InputOffice365MsgTrace.AuthType.IsUnknown() && !r.InputOffice365MsgTrace.AuthType.IsNull() {
-			*authType15 = shared.InputOffice365MsgTraceAuthenticationMethod(r.InputOffice365MsgTrace.AuthType.ValueString())
+			*authType13 = shared.InputOffice365MsgTraceAuthenticationMethod(r.InputOffice365MsgTrace.AuthType.ValueString())
 		} else {
-			authType15 = nil
+			authType13 = nil
 		}
 		rescheduleDroppedTasks := new(bool)
 		if !r.InputOffice365MsgTrace.RescheduleDroppedTasks.IsUnknown() && !r.InputOffice365MsgTrace.RescheduleDroppedTasks.IsNull() {
@@ -8173,26 +7591,26 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			ignoreGroupJobsLimit4 = nil
 		}
-		metadata20 := make([]shared.InputOffice365MsgTraceMetadatum, 0, len(r.InputOffice365MsgTrace.Metadata))
-		for metadataIndex20 := range r.InputOffice365MsgTrace.Metadata {
-			var name39 string
-			name39 = r.InputOffice365MsgTrace.Metadata[metadataIndex20].Name.ValueString()
+		metadata19 := make([]shared.InputOffice365MsgTraceMetadatum, 0, len(r.InputOffice365MsgTrace.Metadata))
+		for metadataIndex19 := range r.InputOffice365MsgTrace.Metadata {
+			var name34 string
+			name34 = r.InputOffice365MsgTrace.Metadata[metadataIndex19].Name.ValueString()
 
-			var value37 string
-			value37 = r.InputOffice365MsgTrace.Metadata[metadataIndex20].Value.ValueString()
+			var value32 string
+			value32 = r.InputOffice365MsgTrace.Metadata[metadataIndex19].Value.ValueString()
 
-			metadata20 = append(metadata20, shared.InputOffice365MsgTraceMetadatum{
-				Name:  name39,
-				Value: value37,
+			metadata19 = append(metadata19, shared.InputOffice365MsgTraceMetadatum{
+				Name:  name34,
+				Value: value32,
 			})
 		}
 		var retryRules3 *shared.InputOffice365MsgTraceRetryRules
 		if r.InputOffice365MsgTrace.RetryRules != nil {
-			typeVar22 := new(shared.InputOffice365MsgTraceRetryType)
+			typeVar21 := new(shared.InputOffice365MsgTraceRetryType)
 			if !r.InputOffice365MsgTrace.RetryRules.Type.IsUnknown() && !r.InputOffice365MsgTrace.RetryRules.Type.IsNull() {
-				*typeVar22 = shared.InputOffice365MsgTraceRetryType(r.InputOffice365MsgTrace.RetryRules.Type.ValueString())
+				*typeVar21 = shared.InputOffice365MsgTraceRetryType(r.InputOffice365MsgTrace.RetryRules.Type.ValueString())
 			} else {
-				typeVar22 = nil
+				typeVar21 = nil
 			}
 			interval8 := new(float64)
 			if !r.InputOffice365MsgTrace.RetryRules.Interval.IsUnknown() && !r.InputOffice365MsgTrace.RetryRules.Interval.IsNull() {
@@ -8235,7 +7653,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				retryConnectReset3 = nil
 			}
 			retryRules3 = &shared.InputOffice365MsgTraceRetryRules{
-				Type:                typeVar22,
+				Type:                typeVar21,
 				Interval:            interval8,
 				Limit:               limit3,
 				Multiplier:          multiplier3,
@@ -8245,29 +7663,29 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				RetryConnectReset:   retryConnectReset3,
 			}
 		}
-		description23 := new(string)
+		description22 := new(string)
 		if !r.InputOffice365MsgTrace.Description.IsUnknown() && !r.InputOffice365MsgTrace.Description.IsNull() {
-			*description23 = r.InputOffice365MsgTrace.Description.ValueString()
+			*description22 = r.InputOffice365MsgTrace.Description.ValueString()
 		} else {
-			description23 = nil
+			description22 = nil
 		}
-		username10 := new(string)
+		username8 := new(string)
 		if !r.InputOffice365MsgTrace.Username.IsUnknown() && !r.InputOffice365MsgTrace.Username.IsNull() {
-			*username10 = r.InputOffice365MsgTrace.Username.ValueString()
+			*username8 = r.InputOffice365MsgTrace.Username.ValueString()
 		} else {
-			username10 = nil
+			username8 = nil
 		}
-		password10 := new(string)
+		password8 := new(string)
 		if !r.InputOffice365MsgTrace.Password.IsUnknown() && !r.InputOffice365MsgTrace.Password.IsNull() {
-			*password10 = r.InputOffice365MsgTrace.Password.ValueString()
+			*password8 = r.InputOffice365MsgTrace.Password.ValueString()
 		} else {
-			password10 = nil
+			password8 = nil
 		}
-		credentialsSecret13 := new(string)
+		credentialsSecret11 := new(string)
 		if !r.InputOffice365MsgTrace.CredentialsSecret.IsUnknown() && !r.InputOffice365MsgTrace.CredentialsSecret.IsNull() {
-			*credentialsSecret13 = r.InputOffice365MsgTrace.CredentialsSecret.ValueString()
+			*credentialsSecret11 = r.InputOffice365MsgTrace.CredentialsSecret.ValueString()
 		} else {
-			credentialsSecret13 = nil
+			credentialsSecret11 = nil
 		}
 		clientSecret2 := new(string)
 		if !r.InputOffice365MsgTrace.ClientSecret.IsUnknown() && !r.InputOffice365MsgTrace.ClientSecret.IsNull() {
@@ -8299,57 +7717,57 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			planType2 = nil
 		}
-		textSecret10 := new(string)
+		textSecret8 := new(string)
 		if !r.InputOffice365MsgTrace.TextSecret.IsUnknown() && !r.InputOffice365MsgTrace.TextSecret.IsNull() {
-			*textSecret10 = r.InputOffice365MsgTrace.TextSecret.ValueString()
+			*textSecret8 = r.InputOffice365MsgTrace.TextSecret.ValueString()
 		} else {
-			textSecret10 = nil
+			textSecret8 = nil
 		}
 		var certOptions *shared.CertOptions
 		if r.InputOffice365MsgTrace.CertOptions != nil {
-			certificateName15 := new(string)
+			certificateName14 := new(string)
 			if !r.InputOffice365MsgTrace.CertOptions.CertificateName.IsUnknown() && !r.InputOffice365MsgTrace.CertOptions.CertificateName.IsNull() {
-				*certificateName15 = r.InputOffice365MsgTrace.CertOptions.CertificateName.ValueString()
+				*certificateName14 = r.InputOffice365MsgTrace.CertOptions.CertificateName.ValueString()
 			} else {
-				certificateName15 = nil
+				certificateName14 = nil
 			}
-			var privKeyPath14 string
-			privKeyPath14 = r.InputOffice365MsgTrace.CertOptions.PrivKeyPath.ValueString()
+			var privKeyPath13 string
+			privKeyPath13 = r.InputOffice365MsgTrace.CertOptions.PrivKeyPath.ValueString()
 
-			passphrase14 := new(string)
+			passphrase13 := new(string)
 			if !r.InputOffice365MsgTrace.CertOptions.Passphrase.IsUnknown() && !r.InputOffice365MsgTrace.CertOptions.Passphrase.IsNull() {
-				*passphrase14 = r.InputOffice365MsgTrace.CertOptions.Passphrase.ValueString()
+				*passphrase13 = r.InputOffice365MsgTrace.CertOptions.Passphrase.ValueString()
 			} else {
-				passphrase14 = nil
+				passphrase13 = nil
 			}
-			var certPath14 string
-			certPath14 = r.InputOffice365MsgTrace.CertOptions.CertPath.ValueString()
+			var certPath13 string
+			certPath13 = r.InputOffice365MsgTrace.CertOptions.CertPath.ValueString()
 
 			certOptions = &shared.CertOptions{
-				CertificateName: certificateName15,
-				PrivKeyPath:     privKeyPath14,
-				Passphrase:      passphrase14,
-				CertPath:        certPath14,
+				CertificateName: certificateName14,
+				PrivKeyPath:     privKeyPath13,
+				Passphrase:      passphrase13,
+				CertPath:        certPath13,
 			}
 		}
 		inputOffice365MsgTrace = &shared.InputOffice365MsgTrace{
-			ID:                     id18,
-			Type:                   typeVar21,
-			Disabled:               disabled41,
-			Pipeline:               pipeline36,
-			SendToRoutes:           sendToRoutes18,
-			Environment:            environment18,
-			PqEnabled:              pqEnabled18,
-			Streamtags:             streamtags18,
-			Connections:            connections18,
-			Pq:                     pq18,
+			ID:                     id17,
+			Type:                   typeVar20,
+			Disabled:               disabled39,
+			Pipeline:               pipeline34,
+			SendToRoutes:           sendToRoutes17,
+			Environment:            environment17,
+			PqEnabled:              pqEnabled17,
+			Streamtags:             streamtags17,
+			Connections:            connections17,
+			Pq:                     pq17,
 			URL:                    url1,
 			Interval:               interval7,
 			StartDate:              startDate,
 			EndDate:                endDate,
 			Timeout:                timeout3,
 			DisableTimeFilter:      disableTimeFilter,
-			AuthType:               authType15,
+			AuthType:               authType13,
 			RescheduleDroppedTasks: rescheduleDroppedTasks,
 			MaxTaskReschedule:      maxTaskReschedule,
 			LogLevel:               logLevel4,
@@ -8358,18 +7776,18 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			MaxMissedKeepAlives:    maxMissedKeepAlives4,
 			TTL:                    ttl4,
 			IgnoreGroupJobsLimit:   ignoreGroupJobsLimit4,
-			Metadata:               metadata20,
+			Metadata:               metadata19,
 			RetryRules:             retryRules3,
-			Description:            description23,
-			Username:               username10,
-			Password:               password10,
-			CredentialsSecret:      credentialsSecret13,
+			Description:            description22,
+			Username:               username8,
+			Password:               password8,
+			CredentialsSecret:      credentialsSecret11,
 			ClientSecret:           clientSecret2,
 			TenantID:               tenantId3,
 			ClientID:               clientId1,
 			Resource:               resource,
 			PlanType:               planType2,
-			TextSecret:             textSecret10,
+			TextSecret:             textSecret8,
 			CertOptions:            certOptions,
 		}
 	}
@@ -8380,120 +7798,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputEventhub *shared.InputEventhub
 	if r.InputEventhub != nil {
-		id19 := new(string)
+		id18 := new(string)
 		if !r.InputEventhub.ID.IsUnknown() && !r.InputEventhub.ID.IsNull() {
-			*id19 = r.InputEventhub.ID.ValueString()
+			*id18 = r.InputEventhub.ID.ValueString()
 		} else {
-			id19 = nil
+			id18 = nil
 		}
-		typeVar23 := new(shared.InputEventhubType)
+		typeVar22 := new(shared.InputEventhubType)
 		if !r.InputEventhub.Type.IsUnknown() && !r.InputEventhub.Type.IsNull() {
-			*typeVar23 = shared.InputEventhubType(r.InputEventhub.Type.ValueString())
+			*typeVar22 = shared.InputEventhubType(r.InputEventhub.Type.ValueString())
 		} else {
-			typeVar23 = nil
+			typeVar22 = nil
 		}
-		disabled42 := new(bool)
+		disabled40 := new(bool)
 		if !r.InputEventhub.Disabled.IsUnknown() && !r.InputEventhub.Disabled.IsNull() {
-			*disabled42 = r.InputEventhub.Disabled.ValueBool()
+			*disabled40 = r.InputEventhub.Disabled.ValueBool()
 		} else {
-			disabled42 = nil
+			disabled40 = nil
 		}
-		pipeline38 := new(string)
+		pipeline36 := new(string)
 		if !r.InputEventhub.Pipeline.IsUnknown() && !r.InputEventhub.Pipeline.IsNull() {
-			*pipeline38 = r.InputEventhub.Pipeline.ValueString()
+			*pipeline36 = r.InputEventhub.Pipeline.ValueString()
 		} else {
-			pipeline38 = nil
+			pipeline36 = nil
 		}
-		sendToRoutes19 := new(bool)
+		sendToRoutes18 := new(bool)
 		if !r.InputEventhub.SendToRoutes.IsUnknown() && !r.InputEventhub.SendToRoutes.IsNull() {
-			*sendToRoutes19 = r.InputEventhub.SendToRoutes.ValueBool()
+			*sendToRoutes18 = r.InputEventhub.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes19 = nil
+			sendToRoutes18 = nil
 		}
-		environment19 := new(string)
+		environment18 := new(string)
 		if !r.InputEventhub.Environment.IsUnknown() && !r.InputEventhub.Environment.IsNull() {
-			*environment19 = r.InputEventhub.Environment.ValueString()
+			*environment18 = r.InputEventhub.Environment.ValueString()
 		} else {
-			environment19 = nil
+			environment18 = nil
 		}
-		pqEnabled19 := new(bool)
+		pqEnabled18 := new(bool)
 		if !r.InputEventhub.PqEnabled.IsUnknown() && !r.InputEventhub.PqEnabled.IsNull() {
-			*pqEnabled19 = r.InputEventhub.PqEnabled.ValueBool()
+			*pqEnabled18 = r.InputEventhub.PqEnabled.ValueBool()
 		} else {
-			pqEnabled19 = nil
+			pqEnabled18 = nil
 		}
-		streamtags19 := make([]string, 0, len(r.InputEventhub.Streamtags))
-		for streamtagsIndex19 := range r.InputEventhub.Streamtags {
-			streamtags19 = append(streamtags19, r.InputEventhub.Streamtags[streamtagsIndex19].ValueString())
+		streamtags18 := make([]string, 0, len(r.InputEventhub.Streamtags))
+		for streamtagsIndex18 := range r.InputEventhub.Streamtags {
+			streamtags18 = append(streamtags18, r.InputEventhub.Streamtags[streamtagsIndex18].ValueString())
 		}
-		connections19 := make([]shared.InputEventhubConnection, 0, len(r.InputEventhub.Connections))
-		for connectionsIndex19 := range r.InputEventhub.Connections {
-			pipeline39 := new(string)
-			if !r.InputEventhub.Connections[connectionsIndex19].Pipeline.IsUnknown() && !r.InputEventhub.Connections[connectionsIndex19].Pipeline.IsNull() {
-				*pipeline39 = r.InputEventhub.Connections[connectionsIndex19].Pipeline.ValueString()
+		connections18 := make([]shared.InputEventhubConnection, 0, len(r.InputEventhub.Connections))
+		for connectionsIndex18 := range r.InputEventhub.Connections {
+			pipeline37 := new(string)
+			if !r.InputEventhub.Connections[connectionsIndex18].Pipeline.IsUnknown() && !r.InputEventhub.Connections[connectionsIndex18].Pipeline.IsNull() {
+				*pipeline37 = r.InputEventhub.Connections[connectionsIndex18].Pipeline.ValueString()
 			} else {
-				pipeline39 = nil
+				pipeline37 = nil
 			}
-			var output20 string
-			output20 = r.InputEventhub.Connections[connectionsIndex19].Output.ValueString()
+			var output19 string
+			output19 = r.InputEventhub.Connections[connectionsIndex18].Output.ValueString()
 
-			connections19 = append(connections19, shared.InputEventhubConnection{
-				Pipeline: pipeline39,
-				Output:   output20,
+			connections18 = append(connections18, shared.InputEventhubConnection{
+				Pipeline: pipeline37,
+				Output:   output19,
 			})
 		}
-		var pq19 *shared.InputEventhubPq
+		var pq18 *shared.InputEventhubPq
 		if r.InputEventhub.Pq != nil {
-			mode19 := new(shared.InputEventhubMode)
+			mode18 := new(shared.InputEventhubMode)
 			if !r.InputEventhub.Pq.Mode.IsUnknown() && !r.InputEventhub.Pq.Mode.IsNull() {
-				*mode19 = shared.InputEventhubMode(r.InputEventhub.Pq.Mode.ValueString())
+				*mode18 = shared.InputEventhubMode(r.InputEventhub.Pq.Mode.ValueString())
 			} else {
-				mode19 = nil
+				mode18 = nil
 			}
-			maxBufferSize19 := new(float64)
+			maxBufferSize18 := new(float64)
 			if !r.InputEventhub.Pq.MaxBufferSize.IsUnknown() && !r.InputEventhub.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize19 = r.InputEventhub.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize18 = r.InputEventhub.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize19 = nil
+				maxBufferSize18 = nil
 			}
-			commitFrequency19 := new(float64)
+			commitFrequency18 := new(float64)
 			if !r.InputEventhub.Pq.CommitFrequency.IsUnknown() && !r.InputEventhub.Pq.CommitFrequency.IsNull() {
-				*commitFrequency19 = r.InputEventhub.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency18 = r.InputEventhub.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency19 = nil
+				commitFrequency18 = nil
 			}
-			maxFileSize19 := new(string)
+			maxFileSize18 := new(string)
 			if !r.InputEventhub.Pq.MaxFileSize.IsUnknown() && !r.InputEventhub.Pq.MaxFileSize.IsNull() {
-				*maxFileSize19 = r.InputEventhub.Pq.MaxFileSize.ValueString()
+				*maxFileSize18 = r.InputEventhub.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize19 = nil
+				maxFileSize18 = nil
 			}
-			maxSize19 := new(string)
+			maxSize18 := new(string)
 			if !r.InputEventhub.Pq.MaxSize.IsUnknown() && !r.InputEventhub.Pq.MaxSize.IsNull() {
-				*maxSize19 = r.InputEventhub.Pq.MaxSize.ValueString()
+				*maxSize18 = r.InputEventhub.Pq.MaxSize.ValueString()
 			} else {
-				maxSize19 = nil
+				maxSize18 = nil
 			}
-			path20 := new(string)
+			path19 := new(string)
 			if !r.InputEventhub.Pq.Path.IsUnknown() && !r.InputEventhub.Pq.Path.IsNull() {
-				*path20 = r.InputEventhub.Pq.Path.ValueString()
+				*path19 = r.InputEventhub.Pq.Path.ValueString()
 			} else {
-				path20 = nil
+				path19 = nil
 			}
-			compress21 := new(shared.InputEventhubCompression)
+			compress20 := new(shared.InputEventhubCompression)
 			if !r.InputEventhub.Pq.Compress.IsUnknown() && !r.InputEventhub.Pq.Compress.IsNull() {
-				*compress21 = shared.InputEventhubCompression(r.InputEventhub.Pq.Compress.ValueString())
+				*compress20 = shared.InputEventhubCompression(r.InputEventhub.Pq.Compress.ValueString())
 			} else {
-				compress21 = nil
+				compress20 = nil
 			}
-			pq19 = &shared.InputEventhubPq{
-				Mode:            mode19,
-				MaxBufferSize:   maxBufferSize19,
-				CommitFrequency: commitFrequency19,
-				MaxFileSize:     maxFileSize19,
-				MaxSize:         maxSize19,
-				Path:            path20,
-				Compress:        compress21,
+			pq18 = &shared.InputEventhubPq{
+				Mode:            mode18,
+				MaxBufferSize:   maxBufferSize18,
+				CommitFrequency: commitFrequency18,
+				MaxFileSize:     maxFileSize18,
+				MaxSize:         maxSize18,
+				Path:            path19,
+				Compress:        compress20,
 			}
 		}
 		brokers3 := make([]string, 0, len(r.InputEventhub.Brokers))
@@ -8522,11 +7940,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			connectionTimeout6 = nil
 		}
-		requestTimeout14 := new(float64)
+		requestTimeout13 := new(float64)
 		if !r.InputEventhub.RequestTimeout.IsUnknown() && !r.InputEventhub.RequestTimeout.IsNull() {
-			*requestTimeout14 = r.InputEventhub.RequestTimeout.ValueFloat64()
+			*requestTimeout13 = r.InputEventhub.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout14 = nil
+			requestTimeout13 = nil
 		}
 		maxRetries6 := new(float64)
 		if !r.InputEventhub.MaxRetries.IsUnknown() && !r.InputEventhub.MaxRetries.IsNull() {
@@ -8566,11 +7984,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var sasl2 *shared.InputEventhubAuthentication
 		if r.InputEventhub.Sasl != nil {
-			disabled43 := new(bool)
+			disabled41 := new(bool)
 			if !r.InputEventhub.Sasl.Disabled.IsUnknown() && !r.InputEventhub.Sasl.Disabled.IsNull() {
-				*disabled43 = r.InputEventhub.Sasl.Disabled.ValueBool()
+				*disabled41 = r.InputEventhub.Sasl.Disabled.ValueBool()
 			} else {
-				disabled43 = nil
+				disabled41 = nil
 			}
 			mechanism2 := new(shared.InputEventhubSASLMechanism)
 			if !r.InputEventhub.Sasl.Mechanism.IsUnknown() && !r.InputEventhub.Sasl.Mechanism.IsNull() {
@@ -8579,27 +7997,27 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				mechanism2 = nil
 			}
 			sasl2 = &shared.InputEventhubAuthentication{
-				Disabled:  disabled43,
+				Disabled:  disabled41,
 				Mechanism: mechanism2,
 			}
 		}
-		var tls14 *shared.InputEventhubTLSSettingsClientSide
+		var tls13 *shared.InputEventhubTLSSettingsClientSide
 		if r.InputEventhub.TLS != nil {
-			disabled44 := new(bool)
+			disabled42 := new(bool)
 			if !r.InputEventhub.TLS.Disabled.IsUnknown() && !r.InputEventhub.TLS.Disabled.IsNull() {
-				*disabled44 = r.InputEventhub.TLS.Disabled.ValueBool()
+				*disabled42 = r.InputEventhub.TLS.Disabled.ValueBool()
 			} else {
-				disabled44 = nil
+				disabled42 = nil
 			}
-			rejectUnauthorized19 := new(bool)
+			rejectUnauthorized18 := new(bool)
 			if !r.InputEventhub.TLS.RejectUnauthorized.IsUnknown() && !r.InputEventhub.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized19 = r.InputEventhub.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized18 = r.InputEventhub.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized19 = nil
+				rejectUnauthorized18 = nil
 			}
-			tls14 = &shared.InputEventhubTLSSettingsClientSide{
-				Disabled:           disabled44,
-				RejectUnauthorized: rejectUnauthorized19,
+			tls13 = &shared.InputEventhubTLSSettingsClientSide{
+				Disabled:           disabled42,
+				RejectUnauthorized: rejectUnauthorized18,
 			}
 		}
 		sessionTimeout3 := new(float64)
@@ -8656,42 +8074,42 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			minimizeDuplicates = nil
 		}
-		metadata21 := make([]shared.InputEventhubMetadatum, 0, len(r.InputEventhub.Metadata))
-		for metadataIndex21 := range r.InputEventhub.Metadata {
-			var name40 string
-			name40 = r.InputEventhub.Metadata[metadataIndex21].Name.ValueString()
+		metadata20 := make([]shared.InputEventhubMetadatum, 0, len(r.InputEventhub.Metadata))
+		for metadataIndex20 := range r.InputEventhub.Metadata {
+			var name35 string
+			name35 = r.InputEventhub.Metadata[metadataIndex20].Name.ValueString()
 
-			var value38 string
-			value38 = r.InputEventhub.Metadata[metadataIndex21].Value.ValueString()
+			var value33 string
+			value33 = r.InputEventhub.Metadata[metadataIndex20].Value.ValueString()
 
-			metadata21 = append(metadata21, shared.InputEventhubMetadatum{
-				Name:  name40,
-				Value: value38,
+			metadata20 = append(metadata20, shared.InputEventhubMetadatum{
+				Name:  name35,
+				Value: value33,
 			})
 		}
-		description24 := new(string)
+		description23 := new(string)
 		if !r.InputEventhub.Description.IsUnknown() && !r.InputEventhub.Description.IsNull() {
-			*description24 = r.InputEventhub.Description.ValueString()
+			*description23 = r.InputEventhub.Description.ValueString()
 		} else {
-			description24 = nil
+			description23 = nil
 		}
 		inputEventhub = &shared.InputEventhub{
-			ID:                        id19,
-			Type:                      typeVar23,
-			Disabled:                  disabled42,
-			Pipeline:                  pipeline38,
-			SendToRoutes:              sendToRoutes19,
-			Environment:               environment19,
-			PqEnabled:                 pqEnabled19,
-			Streamtags:                streamtags19,
-			Connections:               connections19,
-			Pq:                        pq19,
+			ID:                        id18,
+			Type:                      typeVar22,
+			Disabled:                  disabled40,
+			Pipeline:                  pipeline36,
+			SendToRoutes:              sendToRoutes18,
+			Environment:               environment18,
+			PqEnabled:                 pqEnabled18,
+			Streamtags:                streamtags18,
+			Connections:               connections18,
+			Pq:                        pq18,
 			Brokers:                   brokers3,
 			Topics:                    topics3,
 			GroupID:                   groupId3,
 			FromBeginning:             fromBeginning3,
 			ConnectionTimeout:         connectionTimeout6,
-			RequestTimeout:            requestTimeout14,
+			RequestTimeout:            requestTimeout13,
 			MaxRetries:                maxRetries6,
 			MaxBackOff:                maxBackOff3,
 			InitialBackoff:            initialBackoff3,
@@ -8699,7 +8117,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			AuthenticationTimeout:     authenticationTimeout3,
 			ReauthenticationThreshold: reauthenticationThreshold3,
 			Sasl:                      sasl2,
-			TLS:                       tls14,
+			TLS:                       tls13,
 			SessionTimeout:            sessionTimeout3,
 			RebalanceTimeout:          rebalanceTimeout3,
 			HeartbeatInterval:         heartbeatInterval3,
@@ -8709,8 +8127,8 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			MaxBytes:                  maxBytes3,
 			MaxSocketErrors:           maxSocketErrors3,
 			MinimizeDuplicates:        minimizeDuplicates,
-			Metadata:                  metadata21,
-			Description:               description24,
+			Metadata:                  metadata20,
+			Description:               description23,
 		}
 	}
 	if inputEventhub != nil {
@@ -8720,115 +8138,115 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputExec *shared.InputExec
 	if r.InputExec != nil {
-		id20 := new(string)
+		id19 := new(string)
 		if !r.InputExec.ID.IsUnknown() && !r.InputExec.ID.IsNull() {
-			*id20 = r.InputExec.ID.ValueString()
+			*id19 = r.InputExec.ID.ValueString()
 		} else {
-			id20 = nil
+			id19 = nil
 		}
-		typeVar24 := shared.InputExecType(r.InputExec.Type.ValueString())
-		disabled45 := new(bool)
+		typeVar23 := shared.InputExecType(r.InputExec.Type.ValueString())
+		disabled43 := new(bool)
 		if !r.InputExec.Disabled.IsUnknown() && !r.InputExec.Disabled.IsNull() {
-			*disabled45 = r.InputExec.Disabled.ValueBool()
+			*disabled43 = r.InputExec.Disabled.ValueBool()
 		} else {
-			disabled45 = nil
+			disabled43 = nil
 		}
-		pipeline40 := new(string)
+		pipeline38 := new(string)
 		if !r.InputExec.Pipeline.IsUnknown() && !r.InputExec.Pipeline.IsNull() {
-			*pipeline40 = r.InputExec.Pipeline.ValueString()
+			*pipeline38 = r.InputExec.Pipeline.ValueString()
 		} else {
-			pipeline40 = nil
+			pipeline38 = nil
 		}
-		sendToRoutes20 := new(bool)
+		sendToRoutes19 := new(bool)
 		if !r.InputExec.SendToRoutes.IsUnknown() && !r.InputExec.SendToRoutes.IsNull() {
-			*sendToRoutes20 = r.InputExec.SendToRoutes.ValueBool()
+			*sendToRoutes19 = r.InputExec.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes20 = nil
+			sendToRoutes19 = nil
 		}
-		environment20 := new(string)
+		environment19 := new(string)
 		if !r.InputExec.Environment.IsUnknown() && !r.InputExec.Environment.IsNull() {
-			*environment20 = r.InputExec.Environment.ValueString()
+			*environment19 = r.InputExec.Environment.ValueString()
 		} else {
-			environment20 = nil
+			environment19 = nil
 		}
-		pqEnabled20 := new(bool)
+		pqEnabled19 := new(bool)
 		if !r.InputExec.PqEnabled.IsUnknown() && !r.InputExec.PqEnabled.IsNull() {
-			*pqEnabled20 = r.InputExec.PqEnabled.ValueBool()
+			*pqEnabled19 = r.InputExec.PqEnabled.ValueBool()
 		} else {
-			pqEnabled20 = nil
+			pqEnabled19 = nil
 		}
-		streamtags20 := make([]string, 0, len(r.InputExec.Streamtags))
-		for streamtagsIndex20 := range r.InputExec.Streamtags {
-			streamtags20 = append(streamtags20, r.InputExec.Streamtags[streamtagsIndex20].ValueString())
+		streamtags19 := make([]string, 0, len(r.InputExec.Streamtags))
+		for streamtagsIndex19 := range r.InputExec.Streamtags {
+			streamtags19 = append(streamtags19, r.InputExec.Streamtags[streamtagsIndex19].ValueString())
 		}
-		connections20 := make([]shared.InputExecConnection, 0, len(r.InputExec.Connections))
-		for connectionsIndex20 := range r.InputExec.Connections {
-			pipeline41 := new(string)
-			if !r.InputExec.Connections[connectionsIndex20].Pipeline.IsUnknown() && !r.InputExec.Connections[connectionsIndex20].Pipeline.IsNull() {
-				*pipeline41 = r.InputExec.Connections[connectionsIndex20].Pipeline.ValueString()
+		connections19 := make([]shared.InputExecConnection, 0, len(r.InputExec.Connections))
+		for connectionsIndex19 := range r.InputExec.Connections {
+			pipeline39 := new(string)
+			if !r.InputExec.Connections[connectionsIndex19].Pipeline.IsUnknown() && !r.InputExec.Connections[connectionsIndex19].Pipeline.IsNull() {
+				*pipeline39 = r.InputExec.Connections[connectionsIndex19].Pipeline.ValueString()
 			} else {
-				pipeline41 = nil
+				pipeline39 = nil
 			}
-			var output21 string
-			output21 = r.InputExec.Connections[connectionsIndex20].Output.ValueString()
+			var output20 string
+			output20 = r.InputExec.Connections[connectionsIndex19].Output.ValueString()
 
-			connections20 = append(connections20, shared.InputExecConnection{
-				Pipeline: pipeline41,
-				Output:   output21,
+			connections19 = append(connections19, shared.InputExecConnection{
+				Pipeline: pipeline39,
+				Output:   output20,
 			})
 		}
-		var pq20 *shared.InputExecPq
+		var pq19 *shared.InputExecPq
 		if r.InputExec.Pq != nil {
-			mode20 := new(shared.InputExecMode)
+			mode19 := new(shared.InputExecMode)
 			if !r.InputExec.Pq.Mode.IsUnknown() && !r.InputExec.Pq.Mode.IsNull() {
-				*mode20 = shared.InputExecMode(r.InputExec.Pq.Mode.ValueString())
+				*mode19 = shared.InputExecMode(r.InputExec.Pq.Mode.ValueString())
 			} else {
-				mode20 = nil
+				mode19 = nil
 			}
-			maxBufferSize20 := new(float64)
+			maxBufferSize19 := new(float64)
 			if !r.InputExec.Pq.MaxBufferSize.IsUnknown() && !r.InputExec.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize20 = r.InputExec.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize19 = r.InputExec.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize20 = nil
+				maxBufferSize19 = nil
 			}
-			commitFrequency20 := new(float64)
+			commitFrequency19 := new(float64)
 			if !r.InputExec.Pq.CommitFrequency.IsUnknown() && !r.InputExec.Pq.CommitFrequency.IsNull() {
-				*commitFrequency20 = r.InputExec.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency19 = r.InputExec.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency20 = nil
+				commitFrequency19 = nil
 			}
-			maxFileSize20 := new(string)
+			maxFileSize19 := new(string)
 			if !r.InputExec.Pq.MaxFileSize.IsUnknown() && !r.InputExec.Pq.MaxFileSize.IsNull() {
-				*maxFileSize20 = r.InputExec.Pq.MaxFileSize.ValueString()
+				*maxFileSize19 = r.InputExec.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize20 = nil
+				maxFileSize19 = nil
 			}
-			maxSize20 := new(string)
+			maxSize19 := new(string)
 			if !r.InputExec.Pq.MaxSize.IsUnknown() && !r.InputExec.Pq.MaxSize.IsNull() {
-				*maxSize20 = r.InputExec.Pq.MaxSize.ValueString()
+				*maxSize19 = r.InputExec.Pq.MaxSize.ValueString()
 			} else {
-				maxSize20 = nil
+				maxSize19 = nil
 			}
-			path21 := new(string)
+			path20 := new(string)
 			if !r.InputExec.Pq.Path.IsUnknown() && !r.InputExec.Pq.Path.IsNull() {
-				*path21 = r.InputExec.Pq.Path.ValueString()
+				*path20 = r.InputExec.Pq.Path.ValueString()
 			} else {
-				path21 = nil
+				path20 = nil
 			}
-			compress22 := new(shared.InputExecCompression)
+			compress21 := new(shared.InputExecCompression)
 			if !r.InputExec.Pq.Compress.IsUnknown() && !r.InputExec.Pq.Compress.IsNull() {
-				*compress22 = shared.InputExecCompression(r.InputExec.Pq.Compress.ValueString())
+				*compress21 = shared.InputExecCompression(r.InputExec.Pq.Compress.ValueString())
 			} else {
-				compress22 = nil
+				compress21 = nil
 			}
-			pq20 = &shared.InputExecPq{
-				Mode:            mode20,
-				MaxBufferSize:   maxBufferSize20,
-				CommitFrequency: commitFrequency20,
-				MaxFileSize:     maxFileSize20,
-				MaxSize:         maxSize20,
-				Path:            path21,
-				Compress:        compress22,
+			pq19 = &shared.InputExecPq{
+				Mode:            mode19,
+				MaxBufferSize:   maxBufferSize19,
+				CommitFrequency: commitFrequency19,
+				MaxFileSize:     maxFileSize19,
+				MaxSize:         maxSize19,
+				Path:            path20,
+				Compress:        compress21,
 			}
 		}
 		var command1 string
@@ -8856,24 +8274,24 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			staleChannelFlushMs5 = nil
 		}
-		metadata22 := make([]shared.InputExecMetadatum, 0, len(r.InputExec.Metadata))
-		for metadataIndex22 := range r.InputExec.Metadata {
-			var name41 string
-			name41 = r.InputExec.Metadata[metadataIndex22].Name.ValueString()
+		metadata21 := make([]shared.InputExecMetadatum, 0, len(r.InputExec.Metadata))
+		for metadataIndex21 := range r.InputExec.Metadata {
+			var name36 string
+			name36 = r.InputExec.Metadata[metadataIndex21].Name.ValueString()
 
-			var value39 string
-			value39 = r.InputExec.Metadata[metadataIndex22].Value.ValueString()
+			var value34 string
+			value34 = r.InputExec.Metadata[metadataIndex21].Value.ValueString()
 
-			metadata22 = append(metadata22, shared.InputExecMetadatum{
-				Name:  name41,
-				Value: value39,
+			metadata21 = append(metadata21, shared.InputExecMetadatum{
+				Name:  name36,
+				Value: value34,
 			})
 		}
-		description25 := new(string)
+		description24 := new(string)
 		if !r.InputExec.Description.IsUnknown() && !r.InputExec.Description.IsNull() {
-			*description25 = r.InputExec.Description.ValueString()
+			*description24 = r.InputExec.Description.ValueString()
 		} else {
-			description25 = nil
+			description24 = nil
 		}
 		interval9 := new(float64)
 		if !r.InputExec.Interval.IsUnknown() && !r.InputExec.Interval.IsNull() {
@@ -8888,23 +8306,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			cronSchedule1 = nil
 		}
 		inputExec = &shared.InputExec{
-			ID:                  id20,
-			Type:                typeVar24,
-			Disabled:            disabled45,
-			Pipeline:            pipeline40,
-			SendToRoutes:        sendToRoutes20,
-			Environment:         environment20,
-			PqEnabled:           pqEnabled20,
-			Streamtags:          streamtags20,
-			Connections:         connections20,
-			Pq:                  pq20,
+			ID:                  id19,
+			Type:                typeVar23,
+			Disabled:            disabled43,
+			Pipeline:            pipeline38,
+			SendToRoutes:        sendToRoutes19,
+			Environment:         environment19,
+			PqEnabled:           pqEnabled19,
+			Streamtags:          streamtags19,
+			Connections:         connections19,
+			Pq:                  pq19,
 			Command:             command1,
 			Retries:             retries,
 			ScheduleType:        scheduleType,
 			BreakerRulesets:     breakerRulesets5,
 			StaleChannelFlushMs: staleChannelFlushMs5,
-			Metadata:            metadata22,
-			Description:         description25,
+			Metadata:            metadata21,
+			Description:         description24,
 			Interval:            interval9,
 			CronSchedule:        cronSchedule1,
 		}
@@ -8916,326 +8334,326 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputFirehose *shared.InputFirehose
 	if r.InputFirehose != nil {
-		id21 := new(string)
+		id20 := new(string)
 		if !r.InputFirehose.ID.IsUnknown() && !r.InputFirehose.ID.IsNull() {
-			*id21 = r.InputFirehose.ID.ValueString()
+			*id20 = r.InputFirehose.ID.ValueString()
 		} else {
-			id21 = nil
+			id20 = nil
 		}
-		typeVar25 := new(shared.InputFirehoseType)
+		typeVar24 := new(shared.InputFirehoseType)
 		if !r.InputFirehose.Type.IsUnknown() && !r.InputFirehose.Type.IsNull() {
-			*typeVar25 = shared.InputFirehoseType(r.InputFirehose.Type.ValueString())
+			*typeVar24 = shared.InputFirehoseType(r.InputFirehose.Type.ValueString())
 		} else {
-			typeVar25 = nil
+			typeVar24 = nil
 		}
-		disabled46 := new(bool)
+		disabled44 := new(bool)
 		if !r.InputFirehose.Disabled.IsUnknown() && !r.InputFirehose.Disabled.IsNull() {
-			*disabled46 = r.InputFirehose.Disabled.ValueBool()
+			*disabled44 = r.InputFirehose.Disabled.ValueBool()
 		} else {
-			disabled46 = nil
+			disabled44 = nil
 		}
-		pipeline42 := new(string)
+		pipeline40 := new(string)
 		if !r.InputFirehose.Pipeline.IsUnknown() && !r.InputFirehose.Pipeline.IsNull() {
-			*pipeline42 = r.InputFirehose.Pipeline.ValueString()
+			*pipeline40 = r.InputFirehose.Pipeline.ValueString()
 		} else {
-			pipeline42 = nil
+			pipeline40 = nil
 		}
-		sendToRoutes21 := new(bool)
+		sendToRoutes20 := new(bool)
 		if !r.InputFirehose.SendToRoutes.IsUnknown() && !r.InputFirehose.SendToRoutes.IsNull() {
-			*sendToRoutes21 = r.InputFirehose.SendToRoutes.ValueBool()
+			*sendToRoutes20 = r.InputFirehose.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes21 = nil
+			sendToRoutes20 = nil
 		}
-		environment21 := new(string)
+		environment20 := new(string)
 		if !r.InputFirehose.Environment.IsUnknown() && !r.InputFirehose.Environment.IsNull() {
-			*environment21 = r.InputFirehose.Environment.ValueString()
+			*environment20 = r.InputFirehose.Environment.ValueString()
 		} else {
-			environment21 = nil
+			environment20 = nil
 		}
-		pqEnabled21 := new(bool)
+		pqEnabled20 := new(bool)
 		if !r.InputFirehose.PqEnabled.IsUnknown() && !r.InputFirehose.PqEnabled.IsNull() {
-			*pqEnabled21 = r.InputFirehose.PqEnabled.ValueBool()
+			*pqEnabled20 = r.InputFirehose.PqEnabled.ValueBool()
 		} else {
-			pqEnabled21 = nil
+			pqEnabled20 = nil
 		}
-		streamtags21 := make([]string, 0, len(r.InputFirehose.Streamtags))
-		for streamtagsIndex21 := range r.InputFirehose.Streamtags {
-			streamtags21 = append(streamtags21, r.InputFirehose.Streamtags[streamtagsIndex21].ValueString())
+		streamtags20 := make([]string, 0, len(r.InputFirehose.Streamtags))
+		for streamtagsIndex20 := range r.InputFirehose.Streamtags {
+			streamtags20 = append(streamtags20, r.InputFirehose.Streamtags[streamtagsIndex20].ValueString())
 		}
-		connections21 := make([]shared.InputFirehoseConnection, 0, len(r.InputFirehose.Connections))
-		for connectionsIndex21 := range r.InputFirehose.Connections {
-			pipeline43 := new(string)
-			if !r.InputFirehose.Connections[connectionsIndex21].Pipeline.IsUnknown() && !r.InputFirehose.Connections[connectionsIndex21].Pipeline.IsNull() {
-				*pipeline43 = r.InputFirehose.Connections[connectionsIndex21].Pipeline.ValueString()
+		connections20 := make([]shared.InputFirehoseConnection, 0, len(r.InputFirehose.Connections))
+		for connectionsIndex20 := range r.InputFirehose.Connections {
+			pipeline41 := new(string)
+			if !r.InputFirehose.Connections[connectionsIndex20].Pipeline.IsUnknown() && !r.InputFirehose.Connections[connectionsIndex20].Pipeline.IsNull() {
+				*pipeline41 = r.InputFirehose.Connections[connectionsIndex20].Pipeline.ValueString()
 			} else {
-				pipeline43 = nil
+				pipeline41 = nil
 			}
-			var output22 string
-			output22 = r.InputFirehose.Connections[connectionsIndex21].Output.ValueString()
+			var output21 string
+			output21 = r.InputFirehose.Connections[connectionsIndex20].Output.ValueString()
 
-			connections21 = append(connections21, shared.InputFirehoseConnection{
-				Pipeline: pipeline43,
-				Output:   output22,
+			connections20 = append(connections20, shared.InputFirehoseConnection{
+				Pipeline: pipeline41,
+				Output:   output21,
 			})
 		}
-		var pq21 *shared.InputFirehosePq
+		var pq20 *shared.InputFirehosePq
 		if r.InputFirehose.Pq != nil {
-			mode21 := new(shared.InputFirehoseMode)
+			mode20 := new(shared.InputFirehoseMode)
 			if !r.InputFirehose.Pq.Mode.IsUnknown() && !r.InputFirehose.Pq.Mode.IsNull() {
-				*mode21 = shared.InputFirehoseMode(r.InputFirehose.Pq.Mode.ValueString())
+				*mode20 = shared.InputFirehoseMode(r.InputFirehose.Pq.Mode.ValueString())
 			} else {
-				mode21 = nil
+				mode20 = nil
 			}
-			maxBufferSize21 := new(float64)
+			maxBufferSize20 := new(float64)
 			if !r.InputFirehose.Pq.MaxBufferSize.IsUnknown() && !r.InputFirehose.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize21 = r.InputFirehose.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize20 = r.InputFirehose.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize21 = nil
+				maxBufferSize20 = nil
 			}
-			commitFrequency21 := new(float64)
+			commitFrequency20 := new(float64)
 			if !r.InputFirehose.Pq.CommitFrequency.IsUnknown() && !r.InputFirehose.Pq.CommitFrequency.IsNull() {
-				*commitFrequency21 = r.InputFirehose.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency20 = r.InputFirehose.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency21 = nil
+				commitFrequency20 = nil
 			}
-			maxFileSize21 := new(string)
+			maxFileSize20 := new(string)
 			if !r.InputFirehose.Pq.MaxFileSize.IsUnknown() && !r.InputFirehose.Pq.MaxFileSize.IsNull() {
-				*maxFileSize21 = r.InputFirehose.Pq.MaxFileSize.ValueString()
+				*maxFileSize20 = r.InputFirehose.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize21 = nil
+				maxFileSize20 = nil
 			}
-			maxSize21 := new(string)
+			maxSize20 := new(string)
 			if !r.InputFirehose.Pq.MaxSize.IsUnknown() && !r.InputFirehose.Pq.MaxSize.IsNull() {
-				*maxSize21 = r.InputFirehose.Pq.MaxSize.ValueString()
+				*maxSize20 = r.InputFirehose.Pq.MaxSize.ValueString()
 			} else {
-				maxSize21 = nil
+				maxSize20 = nil
 			}
-			path22 := new(string)
+			path21 := new(string)
 			if !r.InputFirehose.Pq.Path.IsUnknown() && !r.InputFirehose.Pq.Path.IsNull() {
-				*path22 = r.InputFirehose.Pq.Path.ValueString()
+				*path21 = r.InputFirehose.Pq.Path.ValueString()
 			} else {
-				path22 = nil
+				path21 = nil
 			}
-			compress23 := new(shared.InputFirehoseCompression)
+			compress22 := new(shared.InputFirehoseCompression)
 			if !r.InputFirehose.Pq.Compress.IsUnknown() && !r.InputFirehose.Pq.Compress.IsNull() {
-				*compress23 = shared.InputFirehoseCompression(r.InputFirehose.Pq.Compress.ValueString())
+				*compress22 = shared.InputFirehoseCompression(r.InputFirehose.Pq.Compress.ValueString())
 			} else {
-				compress23 = nil
+				compress22 = nil
 			}
-			pq21 = &shared.InputFirehosePq{
-				Mode:            mode21,
-				MaxBufferSize:   maxBufferSize21,
-				CommitFrequency: commitFrequency21,
-				MaxFileSize:     maxFileSize21,
-				MaxSize:         maxSize21,
-				Path:            path22,
-				Compress:        compress23,
+			pq20 = &shared.InputFirehosePq{
+				Mode:            mode20,
+				MaxBufferSize:   maxBufferSize20,
+				CommitFrequency: commitFrequency20,
+				MaxFileSize:     maxFileSize20,
+				MaxSize:         maxSize20,
+				Path:            path21,
+				Compress:        compress22,
 			}
 		}
-		host9 := new(string)
+		host8 := new(string)
 		if !r.InputFirehose.Host.IsUnknown() && !r.InputFirehose.Host.IsNull() {
-			*host9 = r.InputFirehose.Host.ValueString()
+			*host8 = r.InputFirehose.Host.ValueString()
 		} else {
-			host9 = nil
+			host8 = nil
 		}
-		var port9 float64
-		port9 = r.InputFirehose.Port.ValueFloat64()
+		var port8 float64
+		port8 = r.InputFirehose.Port.ValueFloat64()
 
 		authTokens4 := make([]string, 0, len(r.InputFirehose.AuthTokens))
 		for authTokensIndex4 := range r.InputFirehose.AuthTokens {
 			authTokens4 = append(authTokens4, r.InputFirehose.AuthTokens[authTokensIndex4].ValueString())
 		}
-		var tls15 *shared.InputFirehoseTLSSettingsServerSide
+		var tls14 *shared.InputFirehoseTLSSettingsServerSide
 		if r.InputFirehose.TLS != nil {
-			disabled47 := new(bool)
+			disabled45 := new(bool)
 			if !r.InputFirehose.TLS.Disabled.IsUnknown() && !r.InputFirehose.TLS.Disabled.IsNull() {
-				*disabled47 = r.InputFirehose.TLS.Disabled.ValueBool()
+				*disabled45 = r.InputFirehose.TLS.Disabled.ValueBool()
 			} else {
-				disabled47 = nil
+				disabled45 = nil
 			}
-			certificateName16 := new(string)
+			certificateName15 := new(string)
 			if !r.InputFirehose.TLS.CertificateName.IsUnknown() && !r.InputFirehose.TLS.CertificateName.IsNull() {
-				*certificateName16 = r.InputFirehose.TLS.CertificateName.ValueString()
+				*certificateName15 = r.InputFirehose.TLS.CertificateName.ValueString()
 			} else {
-				certificateName16 = nil
+				certificateName15 = nil
 			}
-			privKeyPath15 := new(string)
+			privKeyPath14 := new(string)
 			if !r.InputFirehose.TLS.PrivKeyPath.IsUnknown() && !r.InputFirehose.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath15 = r.InputFirehose.TLS.PrivKeyPath.ValueString()
+				*privKeyPath14 = r.InputFirehose.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath15 = nil
+				privKeyPath14 = nil
 			}
-			passphrase15 := new(string)
+			passphrase14 := new(string)
 			if !r.InputFirehose.TLS.Passphrase.IsUnknown() && !r.InputFirehose.TLS.Passphrase.IsNull() {
-				*passphrase15 = r.InputFirehose.TLS.Passphrase.ValueString()
+				*passphrase14 = r.InputFirehose.TLS.Passphrase.ValueString()
 			} else {
-				passphrase15 = nil
+				passphrase14 = nil
 			}
-			certPath15 := new(string)
+			certPath14 := new(string)
 			if !r.InputFirehose.TLS.CertPath.IsUnknown() && !r.InputFirehose.TLS.CertPath.IsNull() {
-				*certPath15 = r.InputFirehose.TLS.CertPath.ValueString()
+				*certPath14 = r.InputFirehose.TLS.CertPath.ValueString()
 			} else {
-				certPath15 = nil
+				certPath14 = nil
 			}
-			caPath14 := new(string)
+			caPath13 := new(string)
 			if !r.InputFirehose.TLS.CaPath.IsUnknown() && !r.InputFirehose.TLS.CaPath.IsNull() {
-				*caPath14 = r.InputFirehose.TLS.CaPath.ValueString()
+				*caPath13 = r.InputFirehose.TLS.CaPath.ValueString()
 			} else {
-				caPath14 = nil
+				caPath13 = nil
 			}
-			requestCert8 := new(bool)
+			requestCert7 := new(bool)
 			if !r.InputFirehose.TLS.RequestCert.IsUnknown() && !r.InputFirehose.TLS.RequestCert.IsNull() {
-				*requestCert8 = r.InputFirehose.TLS.RequestCert.ValueBool()
+				*requestCert7 = r.InputFirehose.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert8 = nil
+				requestCert7 = nil
 			}
-			var rejectUnauthorized20 interface{}
+			var rejectUnauthorized19 interface{}
 			if !r.InputFirehose.TLS.RejectUnauthorized.IsUnknown() && !r.InputFirehose.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputFirehose.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized20)
+				_ = json.Unmarshal([]byte(r.InputFirehose.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized19)
 			}
-			var commonNameRegex8 interface{}
+			var commonNameRegex7 interface{}
 			if !r.InputFirehose.TLS.CommonNameRegex.IsUnknown() && !r.InputFirehose.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputFirehose.TLS.CommonNameRegex.ValueString()), &commonNameRegex8)
+				_ = json.Unmarshal([]byte(r.InputFirehose.TLS.CommonNameRegex.ValueString()), &commonNameRegex7)
 			}
-			minVersion14 := new(shared.InputFirehoseMinimumTLSVersion)
+			minVersion13 := new(shared.InputFirehoseMinimumTLSVersion)
 			if !r.InputFirehose.TLS.MinVersion.IsUnknown() && !r.InputFirehose.TLS.MinVersion.IsNull() {
-				*minVersion14 = shared.InputFirehoseMinimumTLSVersion(r.InputFirehose.TLS.MinVersion.ValueString())
+				*minVersion13 = shared.InputFirehoseMinimumTLSVersion(r.InputFirehose.TLS.MinVersion.ValueString())
 			} else {
-				minVersion14 = nil
+				minVersion13 = nil
 			}
-			maxVersion14 := new(shared.InputFirehoseMaximumTLSVersion)
+			maxVersion13 := new(shared.InputFirehoseMaximumTLSVersion)
 			if !r.InputFirehose.TLS.MaxVersion.IsUnknown() && !r.InputFirehose.TLS.MaxVersion.IsNull() {
-				*maxVersion14 = shared.InputFirehoseMaximumTLSVersion(r.InputFirehose.TLS.MaxVersion.ValueString())
+				*maxVersion13 = shared.InputFirehoseMaximumTLSVersion(r.InputFirehose.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion14 = nil
+				maxVersion13 = nil
 			}
-			tls15 = &shared.InputFirehoseTLSSettingsServerSide{
-				Disabled:           disabled47,
-				CertificateName:    certificateName16,
-				PrivKeyPath:        privKeyPath15,
-				Passphrase:         passphrase15,
-				CertPath:           certPath15,
-				CaPath:             caPath14,
-				RequestCert:        requestCert8,
-				RejectUnauthorized: rejectUnauthorized20,
-				CommonNameRegex:    commonNameRegex8,
-				MinVersion:         minVersion14,
-				MaxVersion:         maxVersion14,
+			tls14 = &shared.InputFirehoseTLSSettingsServerSide{
+				Disabled:           disabled45,
+				CertificateName:    certificateName15,
+				PrivKeyPath:        privKeyPath14,
+				Passphrase:         passphrase14,
+				CertPath:           certPath14,
+				CaPath:             caPath13,
+				RequestCert:        requestCert7,
+				RejectUnauthorized: rejectUnauthorized19,
+				CommonNameRegex:    commonNameRegex7,
+				MinVersion:         minVersion13,
+				MaxVersion:         maxVersion13,
 			}
 		}
-		maxActiveReq7 := new(float64)
+		maxActiveReq6 := new(float64)
 		if !r.InputFirehose.MaxActiveReq.IsUnknown() && !r.InputFirehose.MaxActiveReq.IsNull() {
-			*maxActiveReq7 = r.InputFirehose.MaxActiveReq.ValueFloat64()
+			*maxActiveReq6 = r.InputFirehose.MaxActiveReq.ValueFloat64()
 		} else {
-			maxActiveReq7 = nil
+			maxActiveReq6 = nil
 		}
-		maxRequestsPerSocket7 := new(int64)
+		maxRequestsPerSocket6 := new(int64)
 		if !r.InputFirehose.MaxRequestsPerSocket.IsUnknown() && !r.InputFirehose.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket7 = r.InputFirehose.MaxRequestsPerSocket.ValueInt64()
+			*maxRequestsPerSocket6 = r.InputFirehose.MaxRequestsPerSocket.ValueInt64()
 		} else {
-			maxRequestsPerSocket7 = nil
+			maxRequestsPerSocket6 = nil
 		}
-		enableProxyHeader8 := new(bool)
+		enableProxyHeader7 := new(bool)
 		if !r.InputFirehose.EnableProxyHeader.IsUnknown() && !r.InputFirehose.EnableProxyHeader.IsNull() {
-			*enableProxyHeader8 = r.InputFirehose.EnableProxyHeader.ValueBool()
+			*enableProxyHeader7 = r.InputFirehose.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader8 = nil
+			enableProxyHeader7 = nil
 		}
-		captureHeaders7 := new(bool)
+		captureHeaders6 := new(bool)
 		if !r.InputFirehose.CaptureHeaders.IsUnknown() && !r.InputFirehose.CaptureHeaders.IsNull() {
-			*captureHeaders7 = r.InputFirehose.CaptureHeaders.ValueBool()
+			*captureHeaders6 = r.InputFirehose.CaptureHeaders.ValueBool()
 		} else {
-			captureHeaders7 = nil
+			captureHeaders6 = nil
 		}
-		activityLogSampleRate7 := new(float64)
+		activityLogSampleRate6 := new(float64)
 		if !r.InputFirehose.ActivityLogSampleRate.IsUnknown() && !r.InputFirehose.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate7 = r.InputFirehose.ActivityLogSampleRate.ValueFloat64()
+			*activityLogSampleRate6 = r.InputFirehose.ActivityLogSampleRate.ValueFloat64()
 		} else {
-			activityLogSampleRate7 = nil
+			activityLogSampleRate6 = nil
 		}
-		requestTimeout15 := new(float64)
+		requestTimeout14 := new(float64)
 		if !r.InputFirehose.RequestTimeout.IsUnknown() && !r.InputFirehose.RequestTimeout.IsNull() {
-			*requestTimeout15 = r.InputFirehose.RequestTimeout.ValueFloat64()
+			*requestTimeout14 = r.InputFirehose.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout15 = nil
+			requestTimeout14 = nil
 		}
-		socketTimeout7 := new(float64)
+		socketTimeout6 := new(float64)
 		if !r.InputFirehose.SocketTimeout.IsUnknown() && !r.InputFirehose.SocketTimeout.IsNull() {
-			*socketTimeout7 = r.InputFirehose.SocketTimeout.ValueFloat64()
+			*socketTimeout6 = r.InputFirehose.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout7 = nil
+			socketTimeout6 = nil
 		}
-		keepAliveTimeout7 := new(float64)
+		keepAliveTimeout6 := new(float64)
 		if !r.InputFirehose.KeepAliveTimeout.IsUnknown() && !r.InputFirehose.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout7 = r.InputFirehose.KeepAliveTimeout.ValueFloat64()
+			*keepAliveTimeout6 = r.InputFirehose.KeepAliveTimeout.ValueFloat64()
 		} else {
-			keepAliveTimeout7 = nil
+			keepAliveTimeout6 = nil
 		}
-		enableHealthCheck7 := new(bool)
+		enableHealthCheck6 := new(bool)
 		if !r.InputFirehose.EnableHealthCheck.IsUnknown() && !r.InputFirehose.EnableHealthCheck.IsNull() {
-			*enableHealthCheck7 = r.InputFirehose.EnableHealthCheck.ValueBool()
+			*enableHealthCheck6 = r.InputFirehose.EnableHealthCheck.ValueBool()
 		} else {
-			enableHealthCheck7 = nil
+			enableHealthCheck6 = nil
 		}
-		ipAllowlistRegex7 := new(string)
+		ipAllowlistRegex6 := new(string)
 		if !r.InputFirehose.IPAllowlistRegex.IsUnknown() && !r.InputFirehose.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex7 = r.InputFirehose.IPAllowlistRegex.ValueString()
+			*ipAllowlistRegex6 = r.InputFirehose.IPAllowlistRegex.ValueString()
 		} else {
-			ipAllowlistRegex7 = nil
+			ipAllowlistRegex6 = nil
 		}
-		ipDenylistRegex7 := new(string)
+		ipDenylistRegex6 := new(string)
 		if !r.InputFirehose.IPDenylistRegex.IsUnknown() && !r.InputFirehose.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex7 = r.InputFirehose.IPDenylistRegex.ValueString()
+			*ipDenylistRegex6 = r.InputFirehose.IPDenylistRegex.ValueString()
 		} else {
-			ipDenylistRegex7 = nil
+			ipDenylistRegex6 = nil
 		}
-		metadata23 := make([]shared.InputFirehoseMetadatum, 0, len(r.InputFirehose.Metadata))
-		for metadataIndex23 := range r.InputFirehose.Metadata {
-			var name42 string
-			name42 = r.InputFirehose.Metadata[metadataIndex23].Name.ValueString()
+		metadata22 := make([]shared.InputFirehoseMetadatum, 0, len(r.InputFirehose.Metadata))
+		for metadataIndex22 := range r.InputFirehose.Metadata {
+			var name37 string
+			name37 = r.InputFirehose.Metadata[metadataIndex22].Name.ValueString()
 
-			var value40 string
-			value40 = r.InputFirehose.Metadata[metadataIndex23].Value.ValueString()
+			var value35 string
+			value35 = r.InputFirehose.Metadata[metadataIndex22].Value.ValueString()
 
-			metadata23 = append(metadata23, shared.InputFirehoseMetadatum{
-				Name:  name42,
-				Value: value40,
+			metadata22 = append(metadata22, shared.InputFirehoseMetadatum{
+				Name:  name37,
+				Value: value35,
 			})
 		}
-		description26 := new(string)
+		description25 := new(string)
 		if !r.InputFirehose.Description.IsUnknown() && !r.InputFirehose.Description.IsNull() {
-			*description26 = r.InputFirehose.Description.ValueString()
+			*description25 = r.InputFirehose.Description.ValueString()
 		} else {
-			description26 = nil
+			description25 = nil
 		}
 		inputFirehose = &shared.InputFirehose{
-			ID:                    id21,
-			Type:                  typeVar25,
-			Disabled:              disabled46,
-			Pipeline:              pipeline42,
-			SendToRoutes:          sendToRoutes21,
-			Environment:           environment21,
-			PqEnabled:             pqEnabled21,
-			Streamtags:            streamtags21,
-			Connections:           connections21,
-			Pq:                    pq21,
-			Host:                  host9,
-			Port:                  port9,
+			ID:                    id20,
+			Type:                  typeVar24,
+			Disabled:              disabled44,
+			Pipeline:              pipeline40,
+			SendToRoutes:          sendToRoutes20,
+			Environment:           environment20,
+			PqEnabled:             pqEnabled20,
+			Streamtags:            streamtags20,
+			Connections:           connections20,
+			Pq:                    pq20,
+			Host:                  host8,
+			Port:                  port8,
 			AuthTokens:            authTokens4,
-			TLS:                   tls15,
-			MaxActiveReq:          maxActiveReq7,
-			MaxRequestsPerSocket:  maxRequestsPerSocket7,
-			EnableProxyHeader:     enableProxyHeader8,
-			CaptureHeaders:        captureHeaders7,
-			ActivityLogSampleRate: activityLogSampleRate7,
-			RequestTimeout:        requestTimeout15,
-			SocketTimeout:         socketTimeout7,
-			KeepAliveTimeout:      keepAliveTimeout7,
-			EnableHealthCheck:     enableHealthCheck7,
-			IPAllowlistRegex:      ipAllowlistRegex7,
-			IPDenylistRegex:       ipDenylistRegex7,
-			Metadata:              metadata23,
-			Description:           description26,
+			TLS:                   tls14,
+			MaxActiveReq:          maxActiveReq6,
+			MaxRequestsPerSocket:  maxRequestsPerSocket6,
+			EnableProxyHeader:     enableProxyHeader7,
+			CaptureHeaders:        captureHeaders6,
+			ActivityLogSampleRate: activityLogSampleRate6,
+			RequestTimeout:        requestTimeout14,
+			SocketTimeout:         socketTimeout6,
+			KeepAliveTimeout:      keepAliveTimeout6,
+			EnableHealthCheck:     enableHealthCheck6,
+			IPAllowlistRegex:      ipAllowlistRegex6,
+			IPDenylistRegex:       ipDenylistRegex6,
+			Metadata:              metadata22,
+			Description:           description25,
 		}
 	}
 	if inputFirehose != nil {
@@ -9245,120 +8663,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputGooglePubsub *shared.InputGooglePubsub
 	if r.InputGooglePubsub != nil {
-		id22 := new(string)
+		id21 := new(string)
 		if !r.InputGooglePubsub.ID.IsUnknown() && !r.InputGooglePubsub.ID.IsNull() {
-			*id22 = r.InputGooglePubsub.ID.ValueString()
+			*id21 = r.InputGooglePubsub.ID.ValueString()
 		} else {
-			id22 = nil
+			id21 = nil
 		}
-		typeVar26 := new(shared.InputGooglePubsubType)
+		typeVar25 := new(shared.InputGooglePubsubType)
 		if !r.InputGooglePubsub.Type.IsUnknown() && !r.InputGooglePubsub.Type.IsNull() {
-			*typeVar26 = shared.InputGooglePubsubType(r.InputGooglePubsub.Type.ValueString())
+			*typeVar25 = shared.InputGooglePubsubType(r.InputGooglePubsub.Type.ValueString())
 		} else {
-			typeVar26 = nil
+			typeVar25 = nil
 		}
-		disabled48 := new(bool)
+		disabled46 := new(bool)
 		if !r.InputGooglePubsub.Disabled.IsUnknown() && !r.InputGooglePubsub.Disabled.IsNull() {
-			*disabled48 = r.InputGooglePubsub.Disabled.ValueBool()
+			*disabled46 = r.InputGooglePubsub.Disabled.ValueBool()
 		} else {
-			disabled48 = nil
+			disabled46 = nil
 		}
-		pipeline44 := new(string)
+		pipeline42 := new(string)
 		if !r.InputGooglePubsub.Pipeline.IsUnknown() && !r.InputGooglePubsub.Pipeline.IsNull() {
-			*pipeline44 = r.InputGooglePubsub.Pipeline.ValueString()
+			*pipeline42 = r.InputGooglePubsub.Pipeline.ValueString()
 		} else {
-			pipeline44 = nil
+			pipeline42 = nil
 		}
-		sendToRoutes22 := new(bool)
+		sendToRoutes21 := new(bool)
 		if !r.InputGooglePubsub.SendToRoutes.IsUnknown() && !r.InputGooglePubsub.SendToRoutes.IsNull() {
-			*sendToRoutes22 = r.InputGooglePubsub.SendToRoutes.ValueBool()
+			*sendToRoutes21 = r.InputGooglePubsub.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes22 = nil
+			sendToRoutes21 = nil
 		}
-		environment22 := new(string)
+		environment21 := new(string)
 		if !r.InputGooglePubsub.Environment.IsUnknown() && !r.InputGooglePubsub.Environment.IsNull() {
-			*environment22 = r.InputGooglePubsub.Environment.ValueString()
+			*environment21 = r.InputGooglePubsub.Environment.ValueString()
 		} else {
-			environment22 = nil
+			environment21 = nil
 		}
-		pqEnabled22 := new(bool)
+		pqEnabled21 := new(bool)
 		if !r.InputGooglePubsub.PqEnabled.IsUnknown() && !r.InputGooglePubsub.PqEnabled.IsNull() {
-			*pqEnabled22 = r.InputGooglePubsub.PqEnabled.ValueBool()
+			*pqEnabled21 = r.InputGooglePubsub.PqEnabled.ValueBool()
 		} else {
-			pqEnabled22 = nil
+			pqEnabled21 = nil
 		}
-		streamtags22 := make([]string, 0, len(r.InputGooglePubsub.Streamtags))
-		for streamtagsIndex22 := range r.InputGooglePubsub.Streamtags {
-			streamtags22 = append(streamtags22, r.InputGooglePubsub.Streamtags[streamtagsIndex22].ValueString())
+		streamtags21 := make([]string, 0, len(r.InputGooglePubsub.Streamtags))
+		for streamtagsIndex21 := range r.InputGooglePubsub.Streamtags {
+			streamtags21 = append(streamtags21, r.InputGooglePubsub.Streamtags[streamtagsIndex21].ValueString())
 		}
-		connections22 := make([]shared.InputGooglePubsubConnection, 0, len(r.InputGooglePubsub.Connections))
-		for connectionsIndex22 := range r.InputGooglePubsub.Connections {
-			pipeline45 := new(string)
-			if !r.InputGooglePubsub.Connections[connectionsIndex22].Pipeline.IsUnknown() && !r.InputGooglePubsub.Connections[connectionsIndex22].Pipeline.IsNull() {
-				*pipeline45 = r.InputGooglePubsub.Connections[connectionsIndex22].Pipeline.ValueString()
+		connections21 := make([]shared.InputGooglePubsubConnection, 0, len(r.InputGooglePubsub.Connections))
+		for connectionsIndex21 := range r.InputGooglePubsub.Connections {
+			pipeline43 := new(string)
+			if !r.InputGooglePubsub.Connections[connectionsIndex21].Pipeline.IsUnknown() && !r.InputGooglePubsub.Connections[connectionsIndex21].Pipeline.IsNull() {
+				*pipeline43 = r.InputGooglePubsub.Connections[connectionsIndex21].Pipeline.ValueString()
 			} else {
-				pipeline45 = nil
+				pipeline43 = nil
 			}
-			var output23 string
-			output23 = r.InputGooglePubsub.Connections[connectionsIndex22].Output.ValueString()
+			var output22 string
+			output22 = r.InputGooglePubsub.Connections[connectionsIndex21].Output.ValueString()
 
-			connections22 = append(connections22, shared.InputGooglePubsubConnection{
-				Pipeline: pipeline45,
-				Output:   output23,
+			connections21 = append(connections21, shared.InputGooglePubsubConnection{
+				Pipeline: pipeline43,
+				Output:   output22,
 			})
 		}
-		var pq22 *shared.InputGooglePubsubPq
+		var pq21 *shared.InputGooglePubsubPq
 		if r.InputGooglePubsub.Pq != nil {
-			mode22 := new(shared.InputGooglePubsubMode)
+			mode21 := new(shared.InputGooglePubsubMode)
 			if !r.InputGooglePubsub.Pq.Mode.IsUnknown() && !r.InputGooglePubsub.Pq.Mode.IsNull() {
-				*mode22 = shared.InputGooglePubsubMode(r.InputGooglePubsub.Pq.Mode.ValueString())
+				*mode21 = shared.InputGooglePubsubMode(r.InputGooglePubsub.Pq.Mode.ValueString())
 			} else {
-				mode22 = nil
+				mode21 = nil
 			}
-			maxBufferSize22 := new(float64)
+			maxBufferSize21 := new(float64)
 			if !r.InputGooglePubsub.Pq.MaxBufferSize.IsUnknown() && !r.InputGooglePubsub.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize22 = r.InputGooglePubsub.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize21 = r.InputGooglePubsub.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize22 = nil
+				maxBufferSize21 = nil
 			}
-			commitFrequency22 := new(float64)
+			commitFrequency21 := new(float64)
 			if !r.InputGooglePubsub.Pq.CommitFrequency.IsUnknown() && !r.InputGooglePubsub.Pq.CommitFrequency.IsNull() {
-				*commitFrequency22 = r.InputGooglePubsub.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency21 = r.InputGooglePubsub.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency22 = nil
+				commitFrequency21 = nil
 			}
-			maxFileSize22 := new(string)
+			maxFileSize21 := new(string)
 			if !r.InputGooglePubsub.Pq.MaxFileSize.IsUnknown() && !r.InputGooglePubsub.Pq.MaxFileSize.IsNull() {
-				*maxFileSize22 = r.InputGooglePubsub.Pq.MaxFileSize.ValueString()
+				*maxFileSize21 = r.InputGooglePubsub.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize22 = nil
+				maxFileSize21 = nil
 			}
-			maxSize22 := new(string)
+			maxSize21 := new(string)
 			if !r.InputGooglePubsub.Pq.MaxSize.IsUnknown() && !r.InputGooglePubsub.Pq.MaxSize.IsNull() {
-				*maxSize22 = r.InputGooglePubsub.Pq.MaxSize.ValueString()
+				*maxSize21 = r.InputGooglePubsub.Pq.MaxSize.ValueString()
 			} else {
-				maxSize22 = nil
+				maxSize21 = nil
 			}
-			path23 := new(string)
+			path22 := new(string)
 			if !r.InputGooglePubsub.Pq.Path.IsUnknown() && !r.InputGooglePubsub.Pq.Path.IsNull() {
-				*path23 = r.InputGooglePubsub.Pq.Path.ValueString()
+				*path22 = r.InputGooglePubsub.Pq.Path.ValueString()
 			} else {
-				path23 = nil
+				path22 = nil
 			}
-			compress24 := new(shared.InputGooglePubsubCompression)
+			compress23 := new(shared.InputGooglePubsubCompression)
 			if !r.InputGooglePubsub.Pq.Compress.IsUnknown() && !r.InputGooglePubsub.Pq.Compress.IsNull() {
-				*compress24 = shared.InputGooglePubsubCompression(r.InputGooglePubsub.Pq.Compress.ValueString())
+				*compress23 = shared.InputGooglePubsubCompression(r.InputGooglePubsub.Pq.Compress.ValueString())
 			} else {
-				compress24 = nil
+				compress23 = nil
 			}
-			pq22 = &shared.InputGooglePubsubPq{
-				Mode:            mode22,
-				MaxBufferSize:   maxBufferSize22,
-				CommitFrequency: commitFrequency22,
-				MaxFileSize:     maxFileSize22,
-				MaxSize:         maxSize22,
-				Path:            path23,
-				Compress:        compress24,
+			pq21 = &shared.InputGooglePubsubPq{
+				Mode:            mode21,
+				MaxBufferSize:   maxBufferSize21,
+				CommitFrequency: commitFrequency21,
+				MaxFileSize:     maxFileSize21,
+				MaxSize:         maxSize21,
+				Path:            path22,
+				Compress:        compress23,
 			}
 		}
 		var topicName string
@@ -9397,11 +8815,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			serviceAccountCredentials = nil
 		}
-		secret7 := new(string)
+		secret5 := new(string)
 		if !r.InputGooglePubsub.Secret.IsUnknown() && !r.InputGooglePubsub.Secret.IsNull() {
-			*secret7 = r.InputGooglePubsub.Secret.ValueString()
+			*secret5 = r.InputGooglePubsub.Secret.ValueString()
 		} else {
-			secret7 = nil
+			secret5 = nil
 		}
 		maxBacklog := new(float64)
 		if !r.InputGooglePubsub.MaxBacklog.IsUnknown() && !r.InputGooglePubsub.MaxBacklog.IsNull() {
@@ -9415,30 +8833,30 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			concurrency = nil
 		}
-		requestTimeout16 := new(float64)
+		requestTimeout15 := new(float64)
 		if !r.InputGooglePubsub.RequestTimeout.IsUnknown() && !r.InputGooglePubsub.RequestTimeout.IsNull() {
-			*requestTimeout16 = r.InputGooglePubsub.RequestTimeout.ValueFloat64()
+			*requestTimeout15 = r.InputGooglePubsub.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout16 = nil
+			requestTimeout15 = nil
 		}
-		metadata24 := make([]shared.InputGooglePubsubMetadatum, 0, len(r.InputGooglePubsub.Metadata))
-		for metadataIndex24 := range r.InputGooglePubsub.Metadata {
-			var name43 string
-			name43 = r.InputGooglePubsub.Metadata[metadataIndex24].Name.ValueString()
+		metadata23 := make([]shared.InputGooglePubsubMetadatum, 0, len(r.InputGooglePubsub.Metadata))
+		for metadataIndex23 := range r.InputGooglePubsub.Metadata {
+			var name38 string
+			name38 = r.InputGooglePubsub.Metadata[metadataIndex23].Name.ValueString()
 
-			var value41 string
-			value41 = r.InputGooglePubsub.Metadata[metadataIndex24].Value.ValueString()
+			var value36 string
+			value36 = r.InputGooglePubsub.Metadata[metadataIndex23].Value.ValueString()
 
-			metadata24 = append(metadata24, shared.InputGooglePubsubMetadatum{
-				Name:  name43,
-				Value: value41,
+			metadata23 = append(metadata23, shared.InputGooglePubsubMetadatum{
+				Name:  name38,
+				Value: value36,
 			})
 		}
-		description27 := new(string)
+		description26 := new(string)
 		if !r.InputGooglePubsub.Description.IsUnknown() && !r.InputGooglePubsub.Description.IsNull() {
-			*description27 = r.InputGooglePubsub.Description.ValueString()
+			*description26 = r.InputGooglePubsub.Description.ValueString()
 		} else {
-			description27 = nil
+			description26 = nil
 		}
 		orderedDelivery := new(bool)
 		if !r.InputGooglePubsub.OrderedDelivery.IsUnknown() && !r.InputGooglePubsub.OrderedDelivery.IsNull() {
@@ -9447,16 +8865,16 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			orderedDelivery = nil
 		}
 		inputGooglePubsub = &shared.InputGooglePubsub{
-			ID:                        id22,
-			Type:                      typeVar26,
-			Disabled:                  disabled48,
-			Pipeline:                  pipeline44,
-			SendToRoutes:              sendToRoutes22,
-			Environment:               environment22,
-			PqEnabled:                 pqEnabled22,
-			Streamtags:                streamtags22,
-			Connections:               connections22,
-			Pq:                        pq22,
+			ID:                        id21,
+			Type:                      typeVar25,
+			Disabled:                  disabled46,
+			Pipeline:                  pipeline42,
+			SendToRoutes:              sendToRoutes21,
+			Environment:               environment21,
+			PqEnabled:                 pqEnabled21,
+			Streamtags:                streamtags21,
+			Connections:               connections21,
+			Pq:                        pq21,
 			TopicName:                 topicName,
 			SubscriptionName:          subscriptionName,
 			CreateTopic:               createTopic,
@@ -9464,12 +8882,12 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Region:                    region3,
 			GoogleAuthMethod:          googleAuthMethod,
 			ServiceAccountCredentials: serviceAccountCredentials,
-			Secret:                    secret7,
+			Secret:                    secret5,
 			MaxBacklog:                maxBacklog,
 			Concurrency:               concurrency,
-			RequestTimeout:            requestTimeout16,
-			Metadata:                  metadata24,
-			Description:               description27,
+			RequestTimeout:            requestTimeout15,
+			Metadata:                  metadata23,
+			Description:               description26,
 			OrderedDelivery:           orderedDelivery,
 		}
 	}
@@ -9480,112 +8898,112 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputCribl *shared.InputCribl
 	if r.InputCribl != nil {
-		var id23 string
-		id23 = r.InputCribl.ID.ValueString()
+		var id22 string
+		id22 = r.InputCribl.ID.ValueString()
 
-		typeVar27 := shared.InputCriblType(r.InputCribl.Type.ValueString())
-		disabled49 := new(bool)
+		typeVar26 := shared.InputCriblType(r.InputCribl.Type.ValueString())
+		disabled47 := new(bool)
 		if !r.InputCribl.Disabled.IsUnknown() && !r.InputCribl.Disabled.IsNull() {
-			*disabled49 = r.InputCribl.Disabled.ValueBool()
+			*disabled47 = r.InputCribl.Disabled.ValueBool()
 		} else {
-			disabled49 = nil
+			disabled47 = nil
 		}
-		pipeline46 := new(string)
+		pipeline44 := new(string)
 		if !r.InputCribl.Pipeline.IsUnknown() && !r.InputCribl.Pipeline.IsNull() {
-			*pipeline46 = r.InputCribl.Pipeline.ValueString()
+			*pipeline44 = r.InputCribl.Pipeline.ValueString()
 		} else {
-			pipeline46 = nil
+			pipeline44 = nil
 		}
-		sendToRoutes23 := new(bool)
+		sendToRoutes22 := new(bool)
 		if !r.InputCribl.SendToRoutes.IsUnknown() && !r.InputCribl.SendToRoutes.IsNull() {
-			*sendToRoutes23 = r.InputCribl.SendToRoutes.ValueBool()
+			*sendToRoutes22 = r.InputCribl.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes23 = nil
+			sendToRoutes22 = nil
 		}
-		environment23 := new(string)
+		environment22 := new(string)
 		if !r.InputCribl.Environment.IsUnknown() && !r.InputCribl.Environment.IsNull() {
-			*environment23 = r.InputCribl.Environment.ValueString()
+			*environment22 = r.InputCribl.Environment.ValueString()
 		} else {
-			environment23 = nil
+			environment22 = nil
 		}
-		pqEnabled23 := new(bool)
+		pqEnabled22 := new(bool)
 		if !r.InputCribl.PqEnabled.IsUnknown() && !r.InputCribl.PqEnabled.IsNull() {
-			*pqEnabled23 = r.InputCribl.PqEnabled.ValueBool()
+			*pqEnabled22 = r.InputCribl.PqEnabled.ValueBool()
 		} else {
-			pqEnabled23 = nil
+			pqEnabled22 = nil
 		}
-		streamtags23 := make([]string, 0, len(r.InputCribl.Streamtags))
-		for streamtagsIndex23 := range r.InputCribl.Streamtags {
-			streamtags23 = append(streamtags23, r.InputCribl.Streamtags[streamtagsIndex23].ValueString())
+		streamtags22 := make([]string, 0, len(r.InputCribl.Streamtags))
+		for streamtagsIndex22 := range r.InputCribl.Streamtags {
+			streamtags22 = append(streamtags22, r.InputCribl.Streamtags[streamtagsIndex22].ValueString())
 		}
-		connections23 := make([]shared.InputCriblConnection, 0, len(r.InputCribl.Connections))
-		for connectionsIndex23 := range r.InputCribl.Connections {
-			pipeline47 := new(string)
-			if !r.InputCribl.Connections[connectionsIndex23].Pipeline.IsUnknown() && !r.InputCribl.Connections[connectionsIndex23].Pipeline.IsNull() {
-				*pipeline47 = r.InputCribl.Connections[connectionsIndex23].Pipeline.ValueString()
+		connections22 := make([]shared.InputCriblConnection, 0, len(r.InputCribl.Connections))
+		for connectionsIndex22 := range r.InputCribl.Connections {
+			pipeline45 := new(string)
+			if !r.InputCribl.Connections[connectionsIndex22].Pipeline.IsUnknown() && !r.InputCribl.Connections[connectionsIndex22].Pipeline.IsNull() {
+				*pipeline45 = r.InputCribl.Connections[connectionsIndex22].Pipeline.ValueString()
 			} else {
-				pipeline47 = nil
+				pipeline45 = nil
 			}
-			var output24 string
-			output24 = r.InputCribl.Connections[connectionsIndex23].Output.ValueString()
+			var output23 string
+			output23 = r.InputCribl.Connections[connectionsIndex22].Output.ValueString()
 
-			connections23 = append(connections23, shared.InputCriblConnection{
-				Pipeline: pipeline47,
-				Output:   output24,
+			connections22 = append(connections22, shared.InputCriblConnection{
+				Pipeline: pipeline45,
+				Output:   output23,
 			})
 		}
-		var pq23 *shared.InputCriblPq
+		var pq22 *shared.InputCriblPq
 		if r.InputCribl.Pq != nil {
-			mode23 := new(shared.InputCriblMode)
+			mode22 := new(shared.InputCriblMode)
 			if !r.InputCribl.Pq.Mode.IsUnknown() && !r.InputCribl.Pq.Mode.IsNull() {
-				*mode23 = shared.InputCriblMode(r.InputCribl.Pq.Mode.ValueString())
+				*mode22 = shared.InputCriblMode(r.InputCribl.Pq.Mode.ValueString())
 			} else {
-				mode23 = nil
+				mode22 = nil
 			}
-			maxBufferSize23 := new(float64)
+			maxBufferSize22 := new(float64)
 			if !r.InputCribl.Pq.MaxBufferSize.IsUnknown() && !r.InputCribl.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize23 = r.InputCribl.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize22 = r.InputCribl.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize23 = nil
+				maxBufferSize22 = nil
 			}
-			commitFrequency23 := new(float64)
+			commitFrequency22 := new(float64)
 			if !r.InputCribl.Pq.CommitFrequency.IsUnknown() && !r.InputCribl.Pq.CommitFrequency.IsNull() {
-				*commitFrequency23 = r.InputCribl.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency22 = r.InputCribl.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency23 = nil
+				commitFrequency22 = nil
 			}
-			maxFileSize23 := new(string)
+			maxFileSize22 := new(string)
 			if !r.InputCribl.Pq.MaxFileSize.IsUnknown() && !r.InputCribl.Pq.MaxFileSize.IsNull() {
-				*maxFileSize23 = r.InputCribl.Pq.MaxFileSize.ValueString()
+				*maxFileSize22 = r.InputCribl.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize23 = nil
+				maxFileSize22 = nil
 			}
-			maxSize23 := new(string)
+			maxSize22 := new(string)
 			if !r.InputCribl.Pq.MaxSize.IsUnknown() && !r.InputCribl.Pq.MaxSize.IsNull() {
-				*maxSize23 = r.InputCribl.Pq.MaxSize.ValueString()
+				*maxSize22 = r.InputCribl.Pq.MaxSize.ValueString()
 			} else {
-				maxSize23 = nil
+				maxSize22 = nil
 			}
-			path24 := new(string)
+			path23 := new(string)
 			if !r.InputCribl.Pq.Path.IsUnknown() && !r.InputCribl.Pq.Path.IsNull() {
-				*path24 = r.InputCribl.Pq.Path.ValueString()
+				*path23 = r.InputCribl.Pq.Path.ValueString()
 			} else {
-				path24 = nil
+				path23 = nil
 			}
-			compress25 := new(shared.InputCriblCompression)
+			compress24 := new(shared.InputCriblCompression)
 			if !r.InputCribl.Pq.Compress.IsUnknown() && !r.InputCribl.Pq.Compress.IsNull() {
-				*compress25 = shared.InputCriblCompression(r.InputCribl.Pq.Compress.ValueString())
+				*compress24 = shared.InputCriblCompression(r.InputCribl.Pq.Compress.ValueString())
 			} else {
-				compress25 = nil
+				compress24 = nil
 			}
-			pq23 = &shared.InputCriblPq{
-				Mode:            mode23,
-				MaxBufferSize:   maxBufferSize23,
-				CommitFrequency: commitFrequency23,
-				MaxFileSize:     maxFileSize23,
-				MaxSize:         maxSize23,
-				Path:            path24,
-				Compress:        compress25,
+			pq22 = &shared.InputCriblPq{
+				Mode:            mode22,
+				MaxBufferSize:   maxBufferSize22,
+				CommitFrequency: commitFrequency22,
+				MaxFileSize:     maxFileSize22,
+				MaxSize:         maxSize22,
+				Path:            path23,
+				Compress:        compress24,
 			}
 		}
 		filter1 := new(string)
@@ -9594,39 +9012,39 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			filter1 = nil
 		}
-		metadata25 := make([]shared.InputCriblMetadatum, 0, len(r.InputCribl.Metadata))
-		for metadataIndex25 := range r.InputCribl.Metadata {
-			var name44 string
-			name44 = r.InputCribl.Metadata[metadataIndex25].Name.ValueString()
+		metadata24 := make([]shared.InputCriblMetadatum, 0, len(r.InputCribl.Metadata))
+		for metadataIndex24 := range r.InputCribl.Metadata {
+			var name39 string
+			name39 = r.InputCribl.Metadata[metadataIndex24].Name.ValueString()
 
-			var value42 string
-			value42 = r.InputCribl.Metadata[metadataIndex25].Value.ValueString()
+			var value37 string
+			value37 = r.InputCribl.Metadata[metadataIndex24].Value.ValueString()
 
-			metadata25 = append(metadata25, shared.InputCriblMetadatum{
-				Name:  name44,
-				Value: value42,
+			metadata24 = append(metadata24, shared.InputCriblMetadatum{
+				Name:  name39,
+				Value: value37,
 			})
 		}
-		description28 := new(string)
+		description27 := new(string)
 		if !r.InputCribl.Description.IsUnknown() && !r.InputCribl.Description.IsNull() {
-			*description28 = r.InputCribl.Description.ValueString()
+			*description27 = r.InputCribl.Description.ValueString()
 		} else {
-			description28 = nil
+			description27 = nil
 		}
 		inputCribl = &shared.InputCribl{
-			ID:           id23,
-			Type:         typeVar27,
-			Disabled:     disabled49,
-			Pipeline:     pipeline46,
-			SendToRoutes: sendToRoutes23,
-			Environment:  environment23,
-			PqEnabled:    pqEnabled23,
-			Streamtags:   streamtags23,
-			Connections:  connections23,
-			Pq:           pq23,
+			ID:           id22,
+			Type:         typeVar26,
+			Disabled:     disabled47,
+			Pipeline:     pipeline44,
+			SendToRoutes: sendToRoutes22,
+			Environment:  environment22,
+			PqEnabled:    pqEnabled22,
+			Streamtags:   streamtags22,
+			Connections:  connections22,
+			Pq:           pq22,
 			Filter:       filter1,
-			Metadata:     metadata25,
-			Description:  description28,
+			Metadata:     metadata24,
+			Description:  description27,
 		}
 	}
 	if inputCribl != nil {
@@ -9636,207 +9054,207 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputCriblTCP *shared.InputCriblTCP
 	if r.InputCriblTCP != nil {
-		id24 := new(string)
+		id23 := new(string)
 		if !r.InputCriblTCP.ID.IsUnknown() && !r.InputCriblTCP.ID.IsNull() {
-			*id24 = r.InputCriblTCP.ID.ValueString()
+			*id23 = r.InputCriblTCP.ID.ValueString()
 		} else {
-			id24 = nil
+			id23 = nil
 		}
-		typeVar28 := new(shared.InputCriblTCPType)
+		typeVar27 := new(shared.InputCriblTCPType)
 		if !r.InputCriblTCP.Type.IsUnknown() && !r.InputCriblTCP.Type.IsNull() {
-			*typeVar28 = shared.InputCriblTCPType(r.InputCriblTCP.Type.ValueString())
+			*typeVar27 = shared.InputCriblTCPType(r.InputCriblTCP.Type.ValueString())
 		} else {
-			typeVar28 = nil
+			typeVar27 = nil
 		}
-		disabled50 := new(bool)
+		disabled48 := new(bool)
 		if !r.InputCriblTCP.Disabled.IsUnknown() && !r.InputCriblTCP.Disabled.IsNull() {
-			*disabled50 = r.InputCriblTCP.Disabled.ValueBool()
+			*disabled48 = r.InputCriblTCP.Disabled.ValueBool()
 		} else {
-			disabled50 = nil
+			disabled48 = nil
 		}
-		pipeline48 := new(string)
+		pipeline46 := new(string)
 		if !r.InputCriblTCP.Pipeline.IsUnknown() && !r.InputCriblTCP.Pipeline.IsNull() {
-			*pipeline48 = r.InputCriblTCP.Pipeline.ValueString()
+			*pipeline46 = r.InputCriblTCP.Pipeline.ValueString()
 		} else {
-			pipeline48 = nil
+			pipeline46 = nil
 		}
-		sendToRoutes24 := new(bool)
+		sendToRoutes23 := new(bool)
 		if !r.InputCriblTCP.SendToRoutes.IsUnknown() && !r.InputCriblTCP.SendToRoutes.IsNull() {
-			*sendToRoutes24 = r.InputCriblTCP.SendToRoutes.ValueBool()
+			*sendToRoutes23 = r.InputCriblTCP.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes24 = nil
+			sendToRoutes23 = nil
 		}
-		environment24 := new(string)
+		environment23 := new(string)
 		if !r.InputCriblTCP.Environment.IsUnknown() && !r.InputCriblTCP.Environment.IsNull() {
-			*environment24 = r.InputCriblTCP.Environment.ValueString()
+			*environment23 = r.InputCriblTCP.Environment.ValueString()
 		} else {
-			environment24 = nil
+			environment23 = nil
 		}
-		pqEnabled24 := new(bool)
+		pqEnabled23 := new(bool)
 		if !r.InputCriblTCP.PqEnabled.IsUnknown() && !r.InputCriblTCP.PqEnabled.IsNull() {
-			*pqEnabled24 = r.InputCriblTCP.PqEnabled.ValueBool()
+			*pqEnabled23 = r.InputCriblTCP.PqEnabled.ValueBool()
 		} else {
-			pqEnabled24 = nil
+			pqEnabled23 = nil
 		}
-		streamtags24 := make([]string, 0, len(r.InputCriblTCP.Streamtags))
-		for streamtagsIndex24 := range r.InputCriblTCP.Streamtags {
-			streamtags24 = append(streamtags24, r.InputCriblTCP.Streamtags[streamtagsIndex24].ValueString())
+		streamtags23 := make([]string, 0, len(r.InputCriblTCP.Streamtags))
+		for streamtagsIndex23 := range r.InputCriblTCP.Streamtags {
+			streamtags23 = append(streamtags23, r.InputCriblTCP.Streamtags[streamtagsIndex23].ValueString())
 		}
-		connections24 := make([]shared.InputCriblTCPConnection, 0, len(r.InputCriblTCP.Connections))
-		for connectionsIndex24 := range r.InputCriblTCP.Connections {
-			pipeline49 := new(string)
-			if !r.InputCriblTCP.Connections[connectionsIndex24].Pipeline.IsUnknown() && !r.InputCriblTCP.Connections[connectionsIndex24].Pipeline.IsNull() {
-				*pipeline49 = r.InputCriblTCP.Connections[connectionsIndex24].Pipeline.ValueString()
+		connections23 := make([]shared.InputCriblTCPConnection, 0, len(r.InputCriblTCP.Connections))
+		for connectionsIndex23 := range r.InputCriblTCP.Connections {
+			pipeline47 := new(string)
+			if !r.InputCriblTCP.Connections[connectionsIndex23].Pipeline.IsUnknown() && !r.InputCriblTCP.Connections[connectionsIndex23].Pipeline.IsNull() {
+				*pipeline47 = r.InputCriblTCP.Connections[connectionsIndex23].Pipeline.ValueString()
 			} else {
-				pipeline49 = nil
+				pipeline47 = nil
 			}
-			var output25 string
-			output25 = r.InputCriblTCP.Connections[connectionsIndex24].Output.ValueString()
+			var output24 string
+			output24 = r.InputCriblTCP.Connections[connectionsIndex23].Output.ValueString()
 
-			connections24 = append(connections24, shared.InputCriblTCPConnection{
-				Pipeline: pipeline49,
-				Output:   output25,
+			connections23 = append(connections23, shared.InputCriblTCPConnection{
+				Pipeline: pipeline47,
+				Output:   output24,
 			})
 		}
-		var pq24 *shared.InputCriblTCPPq
+		var pq23 *shared.InputCriblTCPPq
 		if r.InputCriblTCP.Pq != nil {
-			mode24 := new(shared.InputCriblTCPMode)
+			mode23 := new(shared.InputCriblTCPMode)
 			if !r.InputCriblTCP.Pq.Mode.IsUnknown() && !r.InputCriblTCP.Pq.Mode.IsNull() {
-				*mode24 = shared.InputCriblTCPMode(r.InputCriblTCP.Pq.Mode.ValueString())
+				*mode23 = shared.InputCriblTCPMode(r.InputCriblTCP.Pq.Mode.ValueString())
 			} else {
-				mode24 = nil
+				mode23 = nil
 			}
-			maxBufferSize24 := new(float64)
+			maxBufferSize23 := new(float64)
 			if !r.InputCriblTCP.Pq.MaxBufferSize.IsUnknown() && !r.InputCriblTCP.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize24 = r.InputCriblTCP.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize23 = r.InputCriblTCP.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize24 = nil
+				maxBufferSize23 = nil
 			}
-			commitFrequency24 := new(float64)
+			commitFrequency23 := new(float64)
 			if !r.InputCriblTCP.Pq.CommitFrequency.IsUnknown() && !r.InputCriblTCP.Pq.CommitFrequency.IsNull() {
-				*commitFrequency24 = r.InputCriblTCP.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency23 = r.InputCriblTCP.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency24 = nil
+				commitFrequency23 = nil
 			}
-			maxFileSize24 := new(string)
+			maxFileSize23 := new(string)
 			if !r.InputCriblTCP.Pq.MaxFileSize.IsUnknown() && !r.InputCriblTCP.Pq.MaxFileSize.IsNull() {
-				*maxFileSize24 = r.InputCriblTCP.Pq.MaxFileSize.ValueString()
+				*maxFileSize23 = r.InputCriblTCP.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize24 = nil
+				maxFileSize23 = nil
 			}
-			maxSize24 := new(string)
+			maxSize23 := new(string)
 			if !r.InputCriblTCP.Pq.MaxSize.IsUnknown() && !r.InputCriblTCP.Pq.MaxSize.IsNull() {
-				*maxSize24 = r.InputCriblTCP.Pq.MaxSize.ValueString()
+				*maxSize23 = r.InputCriblTCP.Pq.MaxSize.ValueString()
 			} else {
-				maxSize24 = nil
+				maxSize23 = nil
 			}
-			path25 := new(string)
+			path24 := new(string)
 			if !r.InputCriblTCP.Pq.Path.IsUnknown() && !r.InputCriblTCP.Pq.Path.IsNull() {
-				*path25 = r.InputCriblTCP.Pq.Path.ValueString()
+				*path24 = r.InputCriblTCP.Pq.Path.ValueString()
 			} else {
-				path25 = nil
+				path24 = nil
 			}
-			compress26 := new(shared.InputCriblTCPCompression)
+			compress25 := new(shared.InputCriblTCPCompression)
 			if !r.InputCriblTCP.Pq.Compress.IsUnknown() && !r.InputCriblTCP.Pq.Compress.IsNull() {
-				*compress26 = shared.InputCriblTCPCompression(r.InputCriblTCP.Pq.Compress.ValueString())
+				*compress25 = shared.InputCriblTCPCompression(r.InputCriblTCP.Pq.Compress.ValueString())
 			} else {
-				compress26 = nil
+				compress25 = nil
 			}
-			pq24 = &shared.InputCriblTCPPq{
-				Mode:            mode24,
-				MaxBufferSize:   maxBufferSize24,
-				CommitFrequency: commitFrequency24,
-				MaxFileSize:     maxFileSize24,
-				MaxSize:         maxSize24,
-				Path:            path25,
-				Compress:        compress26,
+			pq23 = &shared.InputCriblTCPPq{
+				Mode:            mode23,
+				MaxBufferSize:   maxBufferSize23,
+				CommitFrequency: commitFrequency23,
+				MaxFileSize:     maxFileSize23,
+				MaxSize:         maxSize23,
+				Path:            path24,
+				Compress:        compress25,
 			}
 		}
-		host10 := new(string)
+		host9 := new(string)
 		if !r.InputCriblTCP.Host.IsUnknown() && !r.InputCriblTCP.Host.IsNull() {
-			*host10 = r.InputCriblTCP.Host.ValueString()
+			*host9 = r.InputCriblTCP.Host.ValueString()
 		} else {
-			host10 = nil
+			host9 = nil
 		}
-		var port10 float64
-		port10 = r.InputCriblTCP.Port.ValueFloat64()
+		var port9 float64
+		port9 = r.InputCriblTCP.Port.ValueFloat64()
 
-		var tls16 *shared.InputCriblTCPTLSSettingsServerSide
+		var tls15 *shared.InputCriblTCPTLSSettingsServerSide
 		if r.InputCriblTCP.TLS != nil {
-			disabled51 := new(bool)
+			disabled49 := new(bool)
 			if !r.InputCriblTCP.TLS.Disabled.IsUnknown() && !r.InputCriblTCP.TLS.Disabled.IsNull() {
-				*disabled51 = r.InputCriblTCP.TLS.Disabled.ValueBool()
+				*disabled49 = r.InputCriblTCP.TLS.Disabled.ValueBool()
 			} else {
-				disabled51 = nil
+				disabled49 = nil
 			}
-			certificateName17 := new(string)
+			certificateName16 := new(string)
 			if !r.InputCriblTCP.TLS.CertificateName.IsUnknown() && !r.InputCriblTCP.TLS.CertificateName.IsNull() {
-				*certificateName17 = r.InputCriblTCP.TLS.CertificateName.ValueString()
+				*certificateName16 = r.InputCriblTCP.TLS.CertificateName.ValueString()
 			} else {
-				certificateName17 = nil
+				certificateName16 = nil
 			}
-			privKeyPath16 := new(string)
+			privKeyPath15 := new(string)
 			if !r.InputCriblTCP.TLS.PrivKeyPath.IsUnknown() && !r.InputCriblTCP.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath16 = r.InputCriblTCP.TLS.PrivKeyPath.ValueString()
+				*privKeyPath15 = r.InputCriblTCP.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath16 = nil
+				privKeyPath15 = nil
 			}
-			passphrase16 := new(string)
+			passphrase15 := new(string)
 			if !r.InputCriblTCP.TLS.Passphrase.IsUnknown() && !r.InputCriblTCP.TLS.Passphrase.IsNull() {
-				*passphrase16 = r.InputCriblTCP.TLS.Passphrase.ValueString()
+				*passphrase15 = r.InputCriblTCP.TLS.Passphrase.ValueString()
 			} else {
-				passphrase16 = nil
+				passphrase15 = nil
 			}
-			certPath16 := new(string)
+			certPath15 := new(string)
 			if !r.InputCriblTCP.TLS.CertPath.IsUnknown() && !r.InputCriblTCP.TLS.CertPath.IsNull() {
-				*certPath16 = r.InputCriblTCP.TLS.CertPath.ValueString()
+				*certPath15 = r.InputCriblTCP.TLS.CertPath.ValueString()
 			} else {
-				certPath16 = nil
+				certPath15 = nil
 			}
-			caPath15 := new(string)
+			caPath14 := new(string)
 			if !r.InputCriblTCP.TLS.CaPath.IsUnknown() && !r.InputCriblTCP.TLS.CaPath.IsNull() {
-				*caPath15 = r.InputCriblTCP.TLS.CaPath.ValueString()
+				*caPath14 = r.InputCriblTCP.TLS.CaPath.ValueString()
 			} else {
-				caPath15 = nil
+				caPath14 = nil
 			}
-			requestCert9 := new(bool)
+			requestCert8 := new(bool)
 			if !r.InputCriblTCP.TLS.RequestCert.IsUnknown() && !r.InputCriblTCP.TLS.RequestCert.IsNull() {
-				*requestCert9 = r.InputCriblTCP.TLS.RequestCert.ValueBool()
+				*requestCert8 = r.InputCriblTCP.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert9 = nil
+				requestCert8 = nil
 			}
-			var rejectUnauthorized21 interface{}
+			var rejectUnauthorized20 interface{}
 			if !r.InputCriblTCP.TLS.RejectUnauthorized.IsUnknown() && !r.InputCriblTCP.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputCriblTCP.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized21)
+				_ = json.Unmarshal([]byte(r.InputCriblTCP.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized20)
 			}
-			var commonNameRegex9 interface{}
+			var commonNameRegex8 interface{}
 			if !r.InputCriblTCP.TLS.CommonNameRegex.IsUnknown() && !r.InputCriblTCP.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputCriblTCP.TLS.CommonNameRegex.ValueString()), &commonNameRegex9)
+				_ = json.Unmarshal([]byte(r.InputCriblTCP.TLS.CommonNameRegex.ValueString()), &commonNameRegex8)
 			}
-			minVersion15 := new(shared.InputCriblTCPMinimumTLSVersion)
+			minVersion14 := new(shared.InputCriblTCPMinimumTLSVersion)
 			if !r.InputCriblTCP.TLS.MinVersion.IsUnknown() && !r.InputCriblTCP.TLS.MinVersion.IsNull() {
-				*minVersion15 = shared.InputCriblTCPMinimumTLSVersion(r.InputCriblTCP.TLS.MinVersion.ValueString())
+				*minVersion14 = shared.InputCriblTCPMinimumTLSVersion(r.InputCriblTCP.TLS.MinVersion.ValueString())
 			} else {
-				minVersion15 = nil
+				minVersion14 = nil
 			}
-			maxVersion15 := new(shared.InputCriblTCPMaximumTLSVersion)
+			maxVersion14 := new(shared.InputCriblTCPMaximumTLSVersion)
 			if !r.InputCriblTCP.TLS.MaxVersion.IsUnknown() && !r.InputCriblTCP.TLS.MaxVersion.IsNull() {
-				*maxVersion15 = shared.InputCriblTCPMaximumTLSVersion(r.InputCriblTCP.TLS.MaxVersion.ValueString())
+				*maxVersion14 = shared.InputCriblTCPMaximumTLSVersion(r.InputCriblTCP.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion15 = nil
+				maxVersion14 = nil
 			}
-			tls16 = &shared.InputCriblTCPTLSSettingsServerSide{
-				Disabled:           disabled51,
-				CertificateName:    certificateName17,
-				PrivKeyPath:        privKeyPath16,
-				Passphrase:         passphrase16,
-				CertPath:           certPath16,
-				CaPath:             caPath15,
-				RequestCert:        requestCert9,
-				RejectUnauthorized: rejectUnauthorized21,
-				CommonNameRegex:    commonNameRegex9,
-				MinVersion:         minVersion15,
-				MaxVersion:         maxVersion15,
+			tls15 = &shared.InputCriblTCPTLSSettingsServerSide{
+				Disabled:           disabled49,
+				CertificateName:    certificateName16,
+				PrivKeyPath:        privKeyPath15,
+				Passphrase:         passphrase15,
+				CertPath:           certPath15,
+				CaPath:             caPath14,
+				RequestCert:        requestCert8,
+				RejectUnauthorized: rejectUnauthorized20,
+				CommonNameRegex:    commonNameRegex8,
+				MinVersion:         minVersion14,
+				MaxVersion:         maxVersion14,
 			}
 		}
 		maxActiveCxn1 := new(float64)
@@ -9863,23 +9281,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			socketMaxLifespan1 = nil
 		}
-		enableProxyHeader9 := new(bool)
+		enableProxyHeader8 := new(bool)
 		if !r.InputCriblTCP.EnableProxyHeader.IsUnknown() && !r.InputCriblTCP.EnableProxyHeader.IsNull() {
-			*enableProxyHeader9 = r.InputCriblTCP.EnableProxyHeader.ValueBool()
+			*enableProxyHeader8 = r.InputCriblTCP.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader9 = nil
+			enableProxyHeader8 = nil
 		}
-		metadata26 := make([]shared.InputCriblTCPMetadatum, 0, len(r.InputCriblTCP.Metadata))
-		for metadataIndex26 := range r.InputCriblTCP.Metadata {
-			var name45 string
-			name45 = r.InputCriblTCP.Metadata[metadataIndex26].Name.ValueString()
+		metadata25 := make([]shared.InputCriblTCPMetadatum, 0, len(r.InputCriblTCP.Metadata))
+		for metadataIndex25 := range r.InputCriblTCP.Metadata {
+			var name40 string
+			name40 = r.InputCriblTCP.Metadata[metadataIndex25].Name.ValueString()
 
-			var value43 string
-			value43 = r.InputCriblTCP.Metadata[metadataIndex26].Value.ValueString()
+			var value38 string
+			value38 = r.InputCriblTCP.Metadata[metadataIndex25].Value.ValueString()
 
-			metadata26 = append(metadata26, shared.InputCriblTCPMetadatum{
-				Name:  name45,
-				Value: value43,
+			metadata25 = append(metadata25, shared.InputCriblTCPMetadatum{
+				Name:  name40,
+				Value: value38,
 			})
 		}
 		enableLoadBalancing := new(bool)
@@ -9888,34 +9306,34 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			enableLoadBalancing = nil
 		}
-		description29 := new(string)
+		description28 := new(string)
 		if !r.InputCriblTCP.Description.IsUnknown() && !r.InputCriblTCP.Description.IsNull() {
-			*description29 = r.InputCriblTCP.Description.ValueString()
+			*description28 = r.InputCriblTCP.Description.ValueString()
 		} else {
-			description29 = nil
+			description28 = nil
 		}
 		inputCriblTCP = &shared.InputCriblTCP{
-			ID:                  id24,
-			Type:                typeVar28,
-			Disabled:            disabled50,
-			Pipeline:            pipeline48,
-			SendToRoutes:        sendToRoutes24,
-			Environment:         environment24,
-			PqEnabled:           pqEnabled24,
-			Streamtags:          streamtags24,
-			Connections:         connections24,
-			Pq:                  pq24,
-			Host:                host10,
-			Port:                port10,
-			TLS:                 tls16,
+			ID:                  id23,
+			Type:                typeVar27,
+			Disabled:            disabled48,
+			Pipeline:            pipeline46,
+			SendToRoutes:        sendToRoutes23,
+			Environment:         environment23,
+			PqEnabled:           pqEnabled23,
+			Streamtags:          streamtags23,
+			Connections:         connections23,
+			Pq:                  pq23,
+			Host:                host9,
+			Port:                port9,
+			TLS:                 tls15,
 			MaxActiveCxn:        maxActiveCxn1,
 			SocketIdleTimeout:   socketIdleTimeout1,
 			SocketEndingMaxWait: socketEndingMaxWait1,
 			SocketMaxLifespan:   socketMaxLifespan1,
-			EnableProxyHeader:   enableProxyHeader9,
-			Metadata:            metadata26,
+			EnableProxyHeader:   enableProxyHeader8,
+			Metadata:            metadata25,
 			EnableLoadBalancing: enableLoadBalancing,
-			Description:         description29,
+			Description:         description28,
 		}
 	}
 	if inputCriblTCP != nil {
@@ -9925,113 +9343,442 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputCriblHTTP *shared.InputCriblHTTP
 	if r.InputCriblHTTP != nil {
-		id25 := new(string)
+		id24 := new(string)
 		if !r.InputCriblHTTP.ID.IsUnknown() && !r.InputCriblHTTP.ID.IsNull() {
-			*id25 = r.InputCriblHTTP.ID.ValueString()
+			*id24 = r.InputCriblHTTP.ID.ValueString()
+		} else {
+			id24 = nil
+		}
+		typeVar28 := new(shared.InputCriblHTTPType)
+		if !r.InputCriblHTTP.Type.IsUnknown() && !r.InputCriblHTTP.Type.IsNull() {
+			*typeVar28 = shared.InputCriblHTTPType(r.InputCriblHTTP.Type.ValueString())
+		} else {
+			typeVar28 = nil
+		}
+		disabled50 := new(bool)
+		if !r.InputCriblHTTP.Disabled.IsUnknown() && !r.InputCriblHTTP.Disabled.IsNull() {
+			*disabled50 = r.InputCriblHTTP.Disabled.ValueBool()
+		} else {
+			disabled50 = nil
+		}
+		pipeline48 := new(string)
+		if !r.InputCriblHTTP.Pipeline.IsUnknown() && !r.InputCriblHTTP.Pipeline.IsNull() {
+			*pipeline48 = r.InputCriblHTTP.Pipeline.ValueString()
+		} else {
+			pipeline48 = nil
+		}
+		sendToRoutes24 := new(bool)
+		if !r.InputCriblHTTP.SendToRoutes.IsUnknown() && !r.InputCriblHTTP.SendToRoutes.IsNull() {
+			*sendToRoutes24 = r.InputCriblHTTP.SendToRoutes.ValueBool()
+		} else {
+			sendToRoutes24 = nil
+		}
+		environment24 := new(string)
+		if !r.InputCriblHTTP.Environment.IsUnknown() && !r.InputCriblHTTP.Environment.IsNull() {
+			*environment24 = r.InputCriblHTTP.Environment.ValueString()
+		} else {
+			environment24 = nil
+		}
+		pqEnabled24 := new(bool)
+		if !r.InputCriblHTTP.PqEnabled.IsUnknown() && !r.InputCriblHTTP.PqEnabled.IsNull() {
+			*pqEnabled24 = r.InputCriblHTTP.PqEnabled.ValueBool()
+		} else {
+			pqEnabled24 = nil
+		}
+		streamtags24 := make([]string, 0, len(r.InputCriblHTTP.Streamtags))
+		for streamtagsIndex24 := range r.InputCriblHTTP.Streamtags {
+			streamtags24 = append(streamtags24, r.InputCriblHTTP.Streamtags[streamtagsIndex24].ValueString())
+		}
+		connections24 := make([]shared.InputCriblHTTPConnection, 0, len(r.InputCriblHTTP.Connections))
+		for connectionsIndex24 := range r.InputCriblHTTP.Connections {
+			pipeline49 := new(string)
+			if !r.InputCriblHTTP.Connections[connectionsIndex24].Pipeline.IsUnknown() && !r.InputCriblHTTP.Connections[connectionsIndex24].Pipeline.IsNull() {
+				*pipeline49 = r.InputCriblHTTP.Connections[connectionsIndex24].Pipeline.ValueString()
+			} else {
+				pipeline49 = nil
+			}
+			var output25 string
+			output25 = r.InputCriblHTTP.Connections[connectionsIndex24].Output.ValueString()
+
+			connections24 = append(connections24, shared.InputCriblHTTPConnection{
+				Pipeline: pipeline49,
+				Output:   output25,
+			})
+		}
+		var pq24 *shared.InputCriblHTTPPq
+		if r.InputCriblHTTP.Pq != nil {
+			mode24 := new(shared.InputCriblHTTPMode)
+			if !r.InputCriblHTTP.Pq.Mode.IsUnknown() && !r.InputCriblHTTP.Pq.Mode.IsNull() {
+				*mode24 = shared.InputCriblHTTPMode(r.InputCriblHTTP.Pq.Mode.ValueString())
+			} else {
+				mode24 = nil
+			}
+			maxBufferSize24 := new(float64)
+			if !r.InputCriblHTTP.Pq.MaxBufferSize.IsUnknown() && !r.InputCriblHTTP.Pq.MaxBufferSize.IsNull() {
+				*maxBufferSize24 = r.InputCriblHTTP.Pq.MaxBufferSize.ValueFloat64()
+			} else {
+				maxBufferSize24 = nil
+			}
+			commitFrequency24 := new(float64)
+			if !r.InputCriblHTTP.Pq.CommitFrequency.IsUnknown() && !r.InputCriblHTTP.Pq.CommitFrequency.IsNull() {
+				*commitFrequency24 = r.InputCriblHTTP.Pq.CommitFrequency.ValueFloat64()
+			} else {
+				commitFrequency24 = nil
+			}
+			maxFileSize24 := new(string)
+			if !r.InputCriblHTTP.Pq.MaxFileSize.IsUnknown() && !r.InputCriblHTTP.Pq.MaxFileSize.IsNull() {
+				*maxFileSize24 = r.InputCriblHTTP.Pq.MaxFileSize.ValueString()
+			} else {
+				maxFileSize24 = nil
+			}
+			maxSize24 := new(string)
+			if !r.InputCriblHTTP.Pq.MaxSize.IsUnknown() && !r.InputCriblHTTP.Pq.MaxSize.IsNull() {
+				*maxSize24 = r.InputCriblHTTP.Pq.MaxSize.ValueString()
+			} else {
+				maxSize24 = nil
+			}
+			path25 := new(string)
+			if !r.InputCriblHTTP.Pq.Path.IsUnknown() && !r.InputCriblHTTP.Pq.Path.IsNull() {
+				*path25 = r.InputCriblHTTP.Pq.Path.ValueString()
+			} else {
+				path25 = nil
+			}
+			compress26 := new(shared.InputCriblHTTPCompression)
+			if !r.InputCriblHTTP.Pq.Compress.IsUnknown() && !r.InputCriblHTTP.Pq.Compress.IsNull() {
+				*compress26 = shared.InputCriblHTTPCompression(r.InputCriblHTTP.Pq.Compress.ValueString())
+			} else {
+				compress26 = nil
+			}
+			pq24 = &shared.InputCriblHTTPPq{
+				Mode:            mode24,
+				MaxBufferSize:   maxBufferSize24,
+				CommitFrequency: commitFrequency24,
+				MaxFileSize:     maxFileSize24,
+				MaxSize:         maxSize24,
+				Path:            path25,
+				Compress:        compress26,
+			}
+		}
+		host10 := new(string)
+		if !r.InputCriblHTTP.Host.IsUnknown() && !r.InputCriblHTTP.Host.IsNull() {
+			*host10 = r.InputCriblHTTP.Host.ValueString()
+		} else {
+			host10 = nil
+		}
+		var port10 float64
+		port10 = r.InputCriblHTTP.Port.ValueFloat64()
+
+		authTokens5 := make([]string, 0, len(r.InputCriblHTTP.AuthTokens))
+		for authTokensIndex5 := range r.InputCriblHTTP.AuthTokens {
+			authTokens5 = append(authTokens5, r.InputCriblHTTP.AuthTokens[authTokensIndex5].ValueString())
+		}
+		var tls16 *shared.InputCriblHTTPTLSSettingsServerSide
+		if r.InputCriblHTTP.TLS != nil {
+			disabled51 := new(bool)
+			if !r.InputCriblHTTP.TLS.Disabled.IsUnknown() && !r.InputCriblHTTP.TLS.Disabled.IsNull() {
+				*disabled51 = r.InputCriblHTTP.TLS.Disabled.ValueBool()
+			} else {
+				disabled51 = nil
+			}
+			certificateName17 := new(string)
+			if !r.InputCriblHTTP.TLS.CertificateName.IsUnknown() && !r.InputCriblHTTP.TLS.CertificateName.IsNull() {
+				*certificateName17 = r.InputCriblHTTP.TLS.CertificateName.ValueString()
+			} else {
+				certificateName17 = nil
+			}
+			privKeyPath16 := new(string)
+			if !r.InputCriblHTTP.TLS.PrivKeyPath.IsUnknown() && !r.InputCriblHTTP.TLS.PrivKeyPath.IsNull() {
+				*privKeyPath16 = r.InputCriblHTTP.TLS.PrivKeyPath.ValueString()
+			} else {
+				privKeyPath16 = nil
+			}
+			passphrase16 := new(string)
+			if !r.InputCriblHTTP.TLS.Passphrase.IsUnknown() && !r.InputCriblHTTP.TLS.Passphrase.IsNull() {
+				*passphrase16 = r.InputCriblHTTP.TLS.Passphrase.ValueString()
+			} else {
+				passphrase16 = nil
+			}
+			certPath16 := new(string)
+			if !r.InputCriblHTTP.TLS.CertPath.IsUnknown() && !r.InputCriblHTTP.TLS.CertPath.IsNull() {
+				*certPath16 = r.InputCriblHTTP.TLS.CertPath.ValueString()
+			} else {
+				certPath16 = nil
+			}
+			caPath15 := new(string)
+			if !r.InputCriblHTTP.TLS.CaPath.IsUnknown() && !r.InputCriblHTTP.TLS.CaPath.IsNull() {
+				*caPath15 = r.InputCriblHTTP.TLS.CaPath.ValueString()
+			} else {
+				caPath15 = nil
+			}
+			requestCert9 := new(bool)
+			if !r.InputCriblHTTP.TLS.RequestCert.IsUnknown() && !r.InputCriblHTTP.TLS.RequestCert.IsNull() {
+				*requestCert9 = r.InputCriblHTTP.TLS.RequestCert.ValueBool()
+			} else {
+				requestCert9 = nil
+			}
+			var rejectUnauthorized21 interface{}
+			if !r.InputCriblHTTP.TLS.RejectUnauthorized.IsUnknown() && !r.InputCriblHTTP.TLS.RejectUnauthorized.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputCriblHTTP.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized21)
+			}
+			var commonNameRegex9 interface{}
+			if !r.InputCriblHTTP.TLS.CommonNameRegex.IsUnknown() && !r.InputCriblHTTP.TLS.CommonNameRegex.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputCriblHTTP.TLS.CommonNameRegex.ValueString()), &commonNameRegex9)
+			}
+			minVersion15 := new(shared.InputCriblHTTPMinimumTLSVersion)
+			if !r.InputCriblHTTP.TLS.MinVersion.IsUnknown() && !r.InputCriblHTTP.TLS.MinVersion.IsNull() {
+				*minVersion15 = shared.InputCriblHTTPMinimumTLSVersion(r.InputCriblHTTP.TLS.MinVersion.ValueString())
+			} else {
+				minVersion15 = nil
+			}
+			maxVersion15 := new(shared.InputCriblHTTPMaximumTLSVersion)
+			if !r.InputCriblHTTP.TLS.MaxVersion.IsUnknown() && !r.InputCriblHTTP.TLS.MaxVersion.IsNull() {
+				*maxVersion15 = shared.InputCriblHTTPMaximumTLSVersion(r.InputCriblHTTP.TLS.MaxVersion.ValueString())
+			} else {
+				maxVersion15 = nil
+			}
+			tls16 = &shared.InputCriblHTTPTLSSettingsServerSide{
+				Disabled:           disabled51,
+				CertificateName:    certificateName17,
+				PrivKeyPath:        privKeyPath16,
+				Passphrase:         passphrase16,
+				CertPath:           certPath16,
+				CaPath:             caPath15,
+				RequestCert:        requestCert9,
+				RejectUnauthorized: rejectUnauthorized21,
+				CommonNameRegex:    commonNameRegex9,
+				MinVersion:         minVersion15,
+				MaxVersion:         maxVersion15,
+			}
+		}
+		maxActiveReq7 := new(float64)
+		if !r.InputCriblHTTP.MaxActiveReq.IsUnknown() && !r.InputCriblHTTP.MaxActiveReq.IsNull() {
+			*maxActiveReq7 = r.InputCriblHTTP.MaxActiveReq.ValueFloat64()
+		} else {
+			maxActiveReq7 = nil
+		}
+		maxRequestsPerSocket7 := new(int64)
+		if !r.InputCriblHTTP.MaxRequestsPerSocket.IsUnknown() && !r.InputCriblHTTP.MaxRequestsPerSocket.IsNull() {
+			*maxRequestsPerSocket7 = r.InputCriblHTTP.MaxRequestsPerSocket.ValueInt64()
+		} else {
+			maxRequestsPerSocket7 = nil
+		}
+		enableProxyHeader9 := new(bool)
+		if !r.InputCriblHTTP.EnableProxyHeader.IsUnknown() && !r.InputCriblHTTP.EnableProxyHeader.IsNull() {
+			*enableProxyHeader9 = r.InputCriblHTTP.EnableProxyHeader.ValueBool()
+		} else {
+			enableProxyHeader9 = nil
+		}
+		captureHeaders7 := new(bool)
+		if !r.InputCriblHTTP.CaptureHeaders.IsUnknown() && !r.InputCriblHTTP.CaptureHeaders.IsNull() {
+			*captureHeaders7 = r.InputCriblHTTP.CaptureHeaders.ValueBool()
+		} else {
+			captureHeaders7 = nil
+		}
+		activityLogSampleRate7 := new(float64)
+		if !r.InputCriblHTTP.ActivityLogSampleRate.IsUnknown() && !r.InputCriblHTTP.ActivityLogSampleRate.IsNull() {
+			*activityLogSampleRate7 = r.InputCriblHTTP.ActivityLogSampleRate.ValueFloat64()
+		} else {
+			activityLogSampleRate7 = nil
+		}
+		requestTimeout16 := new(float64)
+		if !r.InputCriblHTTP.RequestTimeout.IsUnknown() && !r.InputCriblHTTP.RequestTimeout.IsNull() {
+			*requestTimeout16 = r.InputCriblHTTP.RequestTimeout.ValueFloat64()
+		} else {
+			requestTimeout16 = nil
+		}
+		socketTimeout7 := new(float64)
+		if !r.InputCriblHTTP.SocketTimeout.IsUnknown() && !r.InputCriblHTTP.SocketTimeout.IsNull() {
+			*socketTimeout7 = r.InputCriblHTTP.SocketTimeout.ValueFloat64()
+		} else {
+			socketTimeout7 = nil
+		}
+		keepAliveTimeout7 := new(float64)
+		if !r.InputCriblHTTP.KeepAliveTimeout.IsUnknown() && !r.InputCriblHTTP.KeepAliveTimeout.IsNull() {
+			*keepAliveTimeout7 = r.InputCriblHTTP.KeepAliveTimeout.ValueFloat64()
+		} else {
+			keepAliveTimeout7 = nil
+		}
+		enableHealthCheck7 := new(bool)
+		if !r.InputCriblHTTP.EnableHealthCheck.IsUnknown() && !r.InputCriblHTTP.EnableHealthCheck.IsNull() {
+			*enableHealthCheck7 = r.InputCriblHTTP.EnableHealthCheck.ValueBool()
+		} else {
+			enableHealthCheck7 = nil
+		}
+		ipAllowlistRegex7 := new(string)
+		if !r.InputCriblHTTP.IPAllowlistRegex.IsUnknown() && !r.InputCriblHTTP.IPAllowlistRegex.IsNull() {
+			*ipAllowlistRegex7 = r.InputCriblHTTP.IPAllowlistRegex.ValueString()
+		} else {
+			ipAllowlistRegex7 = nil
+		}
+		ipDenylistRegex7 := new(string)
+		if !r.InputCriblHTTP.IPDenylistRegex.IsUnknown() && !r.InputCriblHTTP.IPDenylistRegex.IsNull() {
+			*ipDenylistRegex7 = r.InputCriblHTTP.IPDenylistRegex.ValueString()
+		} else {
+			ipDenylistRegex7 = nil
+		}
+		metadata26 := make([]shared.InputCriblHTTPMetadatum, 0, len(r.InputCriblHTTP.Metadata))
+		for metadataIndex26 := range r.InputCriblHTTP.Metadata {
+			var name41 string
+			name41 = r.InputCriblHTTP.Metadata[metadataIndex26].Name.ValueString()
+
+			var value39 string
+			value39 = r.InputCriblHTTP.Metadata[metadataIndex26].Value.ValueString()
+
+			metadata26 = append(metadata26, shared.InputCriblHTTPMetadatum{
+				Name:  name41,
+				Value: value39,
+			})
+		}
+		description29 := new(string)
+		if !r.InputCriblHTTP.Description.IsUnknown() && !r.InputCriblHTTP.Description.IsNull() {
+			*description29 = r.InputCriblHTTP.Description.ValueString()
+		} else {
+			description29 = nil
+		}
+		inputCriblHTTP = &shared.InputCriblHTTP{
+			ID:                    id24,
+			Type:                  typeVar28,
+			Disabled:              disabled50,
+			Pipeline:              pipeline48,
+			SendToRoutes:          sendToRoutes24,
+			Environment:           environment24,
+			PqEnabled:             pqEnabled24,
+			Streamtags:            streamtags24,
+			Connections:           connections24,
+			Pq:                    pq24,
+			Host:                  host10,
+			Port:                  port10,
+			AuthTokens:            authTokens5,
+			TLS:                   tls16,
+			MaxActiveReq:          maxActiveReq7,
+			MaxRequestsPerSocket:  maxRequestsPerSocket7,
+			EnableProxyHeader:     enableProxyHeader9,
+			CaptureHeaders:        captureHeaders7,
+			ActivityLogSampleRate: activityLogSampleRate7,
+			RequestTimeout:        requestTimeout16,
+			SocketTimeout:         socketTimeout7,
+			KeepAliveTimeout:      keepAliveTimeout7,
+			EnableHealthCheck:     enableHealthCheck7,
+			IPAllowlistRegex:      ipAllowlistRegex7,
+			IPDenylistRegex:       ipDenylistRegex7,
+			Metadata:              metadata26,
+			Description:           description29,
+		}
+	}
+	if inputCriblHTTP != nil {
+		out = shared.Input{
+			InputCriblHTTP: inputCriblHTTP,
+		}
+	}
+	var inputCriblLakeHTTP *shared.InputCriblLakeHTTP
+	if r.InputCriblLakeHTTP != nil {
+		id25 := new(string)
+		if !r.InputCriblLakeHTTP.ID.IsUnknown() && !r.InputCriblLakeHTTP.ID.IsNull() {
+			*id25 = r.InputCriblLakeHTTP.ID.ValueString()
 		} else {
 			id25 = nil
 		}
-		typeVar29 := new(shared.InputCriblHTTPType)
-		if !r.InputCriblHTTP.Type.IsUnknown() && !r.InputCriblHTTP.Type.IsNull() {
-			*typeVar29 = shared.InputCriblHTTPType(r.InputCriblHTTP.Type.ValueString())
+		typeVar29 := new(shared.InputCriblLakeHTTPType)
+		if !r.InputCriblLakeHTTP.Type.IsUnknown() && !r.InputCriblLakeHTTP.Type.IsNull() {
+			*typeVar29 = shared.InputCriblLakeHTTPType(r.InputCriblLakeHTTP.Type.ValueString())
 		} else {
 			typeVar29 = nil
 		}
 		disabled52 := new(bool)
-		if !r.InputCriblHTTP.Disabled.IsUnknown() && !r.InputCriblHTTP.Disabled.IsNull() {
-			*disabled52 = r.InputCriblHTTP.Disabled.ValueBool()
+		if !r.InputCriblLakeHTTP.Disabled.IsUnknown() && !r.InputCriblLakeHTTP.Disabled.IsNull() {
+			*disabled52 = r.InputCriblLakeHTTP.Disabled.ValueBool()
 		} else {
 			disabled52 = nil
 		}
 		pipeline50 := new(string)
-		if !r.InputCriblHTTP.Pipeline.IsUnknown() && !r.InputCriblHTTP.Pipeline.IsNull() {
-			*pipeline50 = r.InputCriblHTTP.Pipeline.ValueString()
+		if !r.InputCriblLakeHTTP.Pipeline.IsUnknown() && !r.InputCriblLakeHTTP.Pipeline.IsNull() {
+			*pipeline50 = r.InputCriblLakeHTTP.Pipeline.ValueString()
 		} else {
 			pipeline50 = nil
 		}
 		sendToRoutes25 := new(bool)
-		if !r.InputCriblHTTP.SendToRoutes.IsUnknown() && !r.InputCriblHTTP.SendToRoutes.IsNull() {
-			*sendToRoutes25 = r.InputCriblHTTP.SendToRoutes.ValueBool()
+		if !r.InputCriblLakeHTTP.SendToRoutes.IsUnknown() && !r.InputCriblLakeHTTP.SendToRoutes.IsNull() {
+			*sendToRoutes25 = r.InputCriblLakeHTTP.SendToRoutes.ValueBool()
 		} else {
 			sendToRoutes25 = nil
 		}
 		environment25 := new(string)
-		if !r.InputCriblHTTP.Environment.IsUnknown() && !r.InputCriblHTTP.Environment.IsNull() {
-			*environment25 = r.InputCriblHTTP.Environment.ValueString()
+		if !r.InputCriblLakeHTTP.Environment.IsUnknown() && !r.InputCriblLakeHTTP.Environment.IsNull() {
+			*environment25 = r.InputCriblLakeHTTP.Environment.ValueString()
 		} else {
 			environment25 = nil
 		}
 		pqEnabled25 := new(bool)
-		if !r.InputCriblHTTP.PqEnabled.IsUnknown() && !r.InputCriblHTTP.PqEnabled.IsNull() {
-			*pqEnabled25 = r.InputCriblHTTP.PqEnabled.ValueBool()
+		if !r.InputCriblLakeHTTP.PqEnabled.IsUnknown() && !r.InputCriblLakeHTTP.PqEnabled.IsNull() {
+			*pqEnabled25 = r.InputCriblLakeHTTP.PqEnabled.ValueBool()
 		} else {
 			pqEnabled25 = nil
 		}
-		streamtags25 := make([]string, 0, len(r.InputCriblHTTP.Streamtags))
-		for streamtagsIndex25 := range r.InputCriblHTTP.Streamtags {
-			streamtags25 = append(streamtags25, r.InputCriblHTTP.Streamtags[streamtagsIndex25].ValueString())
+		streamtags25 := make([]string, 0, len(r.InputCriblLakeHTTP.Streamtags))
+		for streamtagsIndex25 := range r.InputCriblLakeHTTP.Streamtags {
+			streamtags25 = append(streamtags25, r.InputCriblLakeHTTP.Streamtags[streamtagsIndex25].ValueString())
 		}
-		connections25 := make([]shared.InputCriblHTTPConnection, 0, len(r.InputCriblHTTP.Connections))
-		for connectionsIndex25 := range r.InputCriblHTTP.Connections {
+		connections25 := make([]shared.InputCriblLakeHTTPConnection, 0, len(r.InputCriblLakeHTTP.Connections))
+		for connectionsIndex25 := range r.InputCriblLakeHTTP.Connections {
 			pipeline51 := new(string)
-			if !r.InputCriblHTTP.Connections[connectionsIndex25].Pipeline.IsUnknown() && !r.InputCriblHTTP.Connections[connectionsIndex25].Pipeline.IsNull() {
-				*pipeline51 = r.InputCriblHTTP.Connections[connectionsIndex25].Pipeline.ValueString()
+			if !r.InputCriblLakeHTTP.Connections[connectionsIndex25].Pipeline.IsUnknown() && !r.InputCriblLakeHTTP.Connections[connectionsIndex25].Pipeline.IsNull() {
+				*pipeline51 = r.InputCriblLakeHTTP.Connections[connectionsIndex25].Pipeline.ValueString()
 			} else {
 				pipeline51 = nil
 			}
 			var output26 string
-			output26 = r.InputCriblHTTP.Connections[connectionsIndex25].Output.ValueString()
+			output26 = r.InputCriblLakeHTTP.Connections[connectionsIndex25].Output.ValueString()
 
-			connections25 = append(connections25, shared.InputCriblHTTPConnection{
+			connections25 = append(connections25, shared.InputCriblLakeHTTPConnection{
 				Pipeline: pipeline51,
 				Output:   output26,
 			})
 		}
-		var pq25 *shared.InputCriblHTTPPq
-		if r.InputCriblHTTP.Pq != nil {
-			mode25 := new(shared.InputCriblHTTPMode)
-			if !r.InputCriblHTTP.Pq.Mode.IsUnknown() && !r.InputCriblHTTP.Pq.Mode.IsNull() {
-				*mode25 = shared.InputCriblHTTPMode(r.InputCriblHTTP.Pq.Mode.ValueString())
+		var pq25 *shared.InputCriblLakeHTTPPq
+		if r.InputCriblLakeHTTP.Pq != nil {
+			mode25 := new(shared.InputCriblLakeHTTPMode)
+			if !r.InputCriblLakeHTTP.Pq.Mode.IsUnknown() && !r.InputCriblLakeHTTP.Pq.Mode.IsNull() {
+				*mode25 = shared.InputCriblLakeHTTPMode(r.InputCriblLakeHTTP.Pq.Mode.ValueString())
 			} else {
 				mode25 = nil
 			}
 			maxBufferSize25 := new(float64)
-			if !r.InputCriblHTTP.Pq.MaxBufferSize.IsUnknown() && !r.InputCriblHTTP.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize25 = r.InputCriblHTTP.Pq.MaxBufferSize.ValueFloat64()
+			if !r.InputCriblLakeHTTP.Pq.MaxBufferSize.IsUnknown() && !r.InputCriblLakeHTTP.Pq.MaxBufferSize.IsNull() {
+				*maxBufferSize25 = r.InputCriblLakeHTTP.Pq.MaxBufferSize.ValueFloat64()
 			} else {
 				maxBufferSize25 = nil
 			}
 			commitFrequency25 := new(float64)
-			if !r.InputCriblHTTP.Pq.CommitFrequency.IsUnknown() && !r.InputCriblHTTP.Pq.CommitFrequency.IsNull() {
-				*commitFrequency25 = r.InputCriblHTTP.Pq.CommitFrequency.ValueFloat64()
+			if !r.InputCriblLakeHTTP.Pq.CommitFrequency.IsUnknown() && !r.InputCriblLakeHTTP.Pq.CommitFrequency.IsNull() {
+				*commitFrequency25 = r.InputCriblLakeHTTP.Pq.CommitFrequency.ValueFloat64()
 			} else {
 				commitFrequency25 = nil
 			}
 			maxFileSize25 := new(string)
-			if !r.InputCriblHTTP.Pq.MaxFileSize.IsUnknown() && !r.InputCriblHTTP.Pq.MaxFileSize.IsNull() {
-				*maxFileSize25 = r.InputCriblHTTP.Pq.MaxFileSize.ValueString()
+			if !r.InputCriblLakeHTTP.Pq.MaxFileSize.IsUnknown() && !r.InputCriblLakeHTTP.Pq.MaxFileSize.IsNull() {
+				*maxFileSize25 = r.InputCriblLakeHTTP.Pq.MaxFileSize.ValueString()
 			} else {
 				maxFileSize25 = nil
 			}
 			maxSize25 := new(string)
-			if !r.InputCriblHTTP.Pq.MaxSize.IsUnknown() && !r.InputCriblHTTP.Pq.MaxSize.IsNull() {
-				*maxSize25 = r.InputCriblHTTP.Pq.MaxSize.ValueString()
+			if !r.InputCriblLakeHTTP.Pq.MaxSize.IsUnknown() && !r.InputCriblLakeHTTP.Pq.MaxSize.IsNull() {
+				*maxSize25 = r.InputCriblLakeHTTP.Pq.MaxSize.ValueString()
 			} else {
 				maxSize25 = nil
 			}
 			path26 := new(string)
-			if !r.InputCriblHTTP.Pq.Path.IsUnknown() && !r.InputCriblHTTP.Pq.Path.IsNull() {
-				*path26 = r.InputCriblHTTP.Pq.Path.ValueString()
+			if !r.InputCriblLakeHTTP.Pq.Path.IsUnknown() && !r.InputCriblLakeHTTP.Pq.Path.IsNull() {
+				*path26 = r.InputCriblLakeHTTP.Pq.Path.ValueString()
 			} else {
 				path26 = nil
 			}
-			compress27 := new(shared.InputCriblHTTPCompression)
-			if !r.InputCriblHTTP.Pq.Compress.IsUnknown() && !r.InputCriblHTTP.Pq.Compress.IsNull() {
-				*compress27 = shared.InputCriblHTTPCompression(r.InputCriblHTTP.Pq.Compress.ValueString())
+			compress27 := new(shared.InputCriblLakeHTTPCompression)
+			if !r.InputCriblLakeHTTP.Pq.Compress.IsUnknown() && !r.InputCriblLakeHTTP.Pq.Compress.IsNull() {
+				*compress27 = shared.InputCriblLakeHTTPCompression(r.InputCriblLakeHTTP.Pq.Compress.ValueString())
 			} else {
 				compress27 = nil
 			}
-			pq25 = &shared.InputCriblHTTPPq{
+			pq25 = &shared.InputCriblLakeHTTPPq{
 				Mode:            mode25,
 				MaxBufferSize:   maxBufferSize25,
 				CommitFrequency: commitFrequency25,
@@ -10042,83 +9789,83 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			}
 		}
 		host11 := new(string)
-		if !r.InputCriblHTTP.Host.IsUnknown() && !r.InputCriblHTTP.Host.IsNull() {
-			*host11 = r.InputCriblHTTP.Host.ValueString()
+		if !r.InputCriblLakeHTTP.Host.IsUnknown() && !r.InputCriblLakeHTTP.Host.IsNull() {
+			*host11 = r.InputCriblLakeHTTP.Host.ValueString()
 		} else {
 			host11 = nil
 		}
 		var port11 float64
-		port11 = r.InputCriblHTTP.Port.ValueFloat64()
+		port11 = r.InputCriblLakeHTTP.Port.ValueFloat64()
 
-		authTokens5 := make([]string, 0, len(r.InputCriblHTTP.AuthTokens))
-		for authTokensIndex5 := range r.InputCriblHTTP.AuthTokens {
-			authTokens5 = append(authTokens5, r.InputCriblHTTP.AuthTokens[authTokensIndex5].ValueString())
+		authTokens6 := make([]string, 0, len(r.InputCriblLakeHTTP.AuthTokens))
+		for authTokensIndex6 := range r.InputCriblLakeHTTP.AuthTokens {
+			authTokens6 = append(authTokens6, r.InputCriblLakeHTTP.AuthTokens[authTokensIndex6].ValueString())
 		}
-		var tls17 *shared.InputCriblHTTPTLSSettingsServerSide
-		if r.InputCriblHTTP.TLS != nil {
+		var tls17 *shared.InputCriblLakeHTTPTLSSettingsServerSide
+		if r.InputCriblLakeHTTP.TLS != nil {
 			disabled53 := new(bool)
-			if !r.InputCriblHTTP.TLS.Disabled.IsUnknown() && !r.InputCriblHTTP.TLS.Disabled.IsNull() {
-				*disabled53 = r.InputCriblHTTP.TLS.Disabled.ValueBool()
+			if !r.InputCriblLakeHTTP.TLS.Disabled.IsUnknown() && !r.InputCriblLakeHTTP.TLS.Disabled.IsNull() {
+				*disabled53 = r.InputCriblLakeHTTP.TLS.Disabled.ValueBool()
 			} else {
 				disabled53 = nil
 			}
 			certificateName18 := new(string)
-			if !r.InputCriblHTTP.TLS.CertificateName.IsUnknown() && !r.InputCriblHTTP.TLS.CertificateName.IsNull() {
-				*certificateName18 = r.InputCriblHTTP.TLS.CertificateName.ValueString()
+			if !r.InputCriblLakeHTTP.TLS.CertificateName.IsUnknown() && !r.InputCriblLakeHTTP.TLS.CertificateName.IsNull() {
+				*certificateName18 = r.InputCriblLakeHTTP.TLS.CertificateName.ValueString()
 			} else {
 				certificateName18 = nil
 			}
 			privKeyPath17 := new(string)
-			if !r.InputCriblHTTP.TLS.PrivKeyPath.IsUnknown() && !r.InputCriblHTTP.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath17 = r.InputCriblHTTP.TLS.PrivKeyPath.ValueString()
+			if !r.InputCriblLakeHTTP.TLS.PrivKeyPath.IsUnknown() && !r.InputCriblLakeHTTP.TLS.PrivKeyPath.IsNull() {
+				*privKeyPath17 = r.InputCriblLakeHTTP.TLS.PrivKeyPath.ValueString()
 			} else {
 				privKeyPath17 = nil
 			}
 			passphrase17 := new(string)
-			if !r.InputCriblHTTP.TLS.Passphrase.IsUnknown() && !r.InputCriblHTTP.TLS.Passphrase.IsNull() {
-				*passphrase17 = r.InputCriblHTTP.TLS.Passphrase.ValueString()
+			if !r.InputCriblLakeHTTP.TLS.Passphrase.IsUnknown() && !r.InputCriblLakeHTTP.TLS.Passphrase.IsNull() {
+				*passphrase17 = r.InputCriblLakeHTTP.TLS.Passphrase.ValueString()
 			} else {
 				passphrase17 = nil
 			}
 			certPath17 := new(string)
-			if !r.InputCriblHTTP.TLS.CertPath.IsUnknown() && !r.InputCriblHTTP.TLS.CertPath.IsNull() {
-				*certPath17 = r.InputCriblHTTP.TLS.CertPath.ValueString()
+			if !r.InputCriblLakeHTTP.TLS.CertPath.IsUnknown() && !r.InputCriblLakeHTTP.TLS.CertPath.IsNull() {
+				*certPath17 = r.InputCriblLakeHTTP.TLS.CertPath.ValueString()
 			} else {
 				certPath17 = nil
 			}
 			caPath16 := new(string)
-			if !r.InputCriblHTTP.TLS.CaPath.IsUnknown() && !r.InputCriblHTTP.TLS.CaPath.IsNull() {
-				*caPath16 = r.InputCriblHTTP.TLS.CaPath.ValueString()
+			if !r.InputCriblLakeHTTP.TLS.CaPath.IsUnknown() && !r.InputCriblLakeHTTP.TLS.CaPath.IsNull() {
+				*caPath16 = r.InputCriblLakeHTTP.TLS.CaPath.ValueString()
 			} else {
 				caPath16 = nil
 			}
 			requestCert10 := new(bool)
-			if !r.InputCriblHTTP.TLS.RequestCert.IsUnknown() && !r.InputCriblHTTP.TLS.RequestCert.IsNull() {
-				*requestCert10 = r.InputCriblHTTP.TLS.RequestCert.ValueBool()
+			if !r.InputCriblLakeHTTP.TLS.RequestCert.IsUnknown() && !r.InputCriblLakeHTTP.TLS.RequestCert.IsNull() {
+				*requestCert10 = r.InputCriblLakeHTTP.TLS.RequestCert.ValueBool()
 			} else {
 				requestCert10 = nil
 			}
 			var rejectUnauthorized22 interface{}
-			if !r.InputCriblHTTP.TLS.RejectUnauthorized.IsUnknown() && !r.InputCriblHTTP.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputCriblHTTP.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized22)
+			if !r.InputCriblLakeHTTP.TLS.RejectUnauthorized.IsUnknown() && !r.InputCriblLakeHTTP.TLS.RejectUnauthorized.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputCriblLakeHTTP.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized22)
 			}
 			var commonNameRegex10 interface{}
-			if !r.InputCriblHTTP.TLS.CommonNameRegex.IsUnknown() && !r.InputCriblHTTP.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputCriblHTTP.TLS.CommonNameRegex.ValueString()), &commonNameRegex10)
+			if !r.InputCriblLakeHTTP.TLS.CommonNameRegex.IsUnknown() && !r.InputCriblLakeHTTP.TLS.CommonNameRegex.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputCriblLakeHTTP.TLS.CommonNameRegex.ValueString()), &commonNameRegex10)
 			}
-			minVersion16 := new(shared.InputCriblHTTPMinimumTLSVersion)
-			if !r.InputCriblHTTP.TLS.MinVersion.IsUnknown() && !r.InputCriblHTTP.TLS.MinVersion.IsNull() {
-				*minVersion16 = shared.InputCriblHTTPMinimumTLSVersion(r.InputCriblHTTP.TLS.MinVersion.ValueString())
+			minVersion16 := new(shared.InputCriblLakeHTTPMinimumTLSVersion)
+			if !r.InputCriblLakeHTTP.TLS.MinVersion.IsUnknown() && !r.InputCriblLakeHTTP.TLS.MinVersion.IsNull() {
+				*minVersion16 = shared.InputCriblLakeHTTPMinimumTLSVersion(r.InputCriblLakeHTTP.TLS.MinVersion.ValueString())
 			} else {
 				minVersion16 = nil
 			}
-			maxVersion16 := new(shared.InputCriblHTTPMaximumTLSVersion)
-			if !r.InputCriblHTTP.TLS.MaxVersion.IsUnknown() && !r.InputCriblHTTP.TLS.MaxVersion.IsNull() {
-				*maxVersion16 = shared.InputCriblHTTPMaximumTLSVersion(r.InputCriblHTTP.TLS.MaxVersion.ValueString())
+			maxVersion16 := new(shared.InputCriblLakeHTTPMaximumTLSVersion)
+			if !r.InputCriblLakeHTTP.TLS.MaxVersion.IsUnknown() && !r.InputCriblLakeHTTP.TLS.MaxVersion.IsNull() {
+				*maxVersion16 = shared.InputCriblLakeHTTPMaximumTLSVersion(r.InputCriblLakeHTTP.TLS.MaxVersion.ValueString())
 			} else {
 				maxVersion16 = nil
 			}
-			tls17 = &shared.InputCriblHTTPTLSSettingsServerSide{
+			tls17 = &shared.InputCriblLakeHTTPTLSSettingsServerSide{
 				Disabled:           disabled53,
 				CertificateName:    certificateName18,
 				PrivKeyPath:        privKeyPath17,
@@ -10133,91 +9880,91 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			}
 		}
 		maxActiveReq8 := new(float64)
-		if !r.InputCriblHTTP.MaxActiveReq.IsUnknown() && !r.InputCriblHTTP.MaxActiveReq.IsNull() {
-			*maxActiveReq8 = r.InputCriblHTTP.MaxActiveReq.ValueFloat64()
+		if !r.InputCriblLakeHTTP.MaxActiveReq.IsUnknown() && !r.InputCriblLakeHTTP.MaxActiveReq.IsNull() {
+			*maxActiveReq8 = r.InputCriblLakeHTTP.MaxActiveReq.ValueFloat64()
 		} else {
 			maxActiveReq8 = nil
 		}
 		maxRequestsPerSocket8 := new(int64)
-		if !r.InputCriblHTTP.MaxRequestsPerSocket.IsUnknown() && !r.InputCriblHTTP.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket8 = r.InputCriblHTTP.MaxRequestsPerSocket.ValueInt64()
+		if !r.InputCriblLakeHTTP.MaxRequestsPerSocket.IsUnknown() && !r.InputCriblLakeHTTP.MaxRequestsPerSocket.IsNull() {
+			*maxRequestsPerSocket8 = r.InputCriblLakeHTTP.MaxRequestsPerSocket.ValueInt64()
 		} else {
 			maxRequestsPerSocket8 = nil
 		}
 		enableProxyHeader10 := new(bool)
-		if !r.InputCriblHTTP.EnableProxyHeader.IsUnknown() && !r.InputCriblHTTP.EnableProxyHeader.IsNull() {
-			*enableProxyHeader10 = r.InputCriblHTTP.EnableProxyHeader.ValueBool()
+		if !r.InputCriblLakeHTTP.EnableProxyHeader.IsUnknown() && !r.InputCriblLakeHTTP.EnableProxyHeader.IsNull() {
+			*enableProxyHeader10 = r.InputCriblLakeHTTP.EnableProxyHeader.ValueBool()
 		} else {
 			enableProxyHeader10 = nil
 		}
 		captureHeaders8 := new(bool)
-		if !r.InputCriblHTTP.CaptureHeaders.IsUnknown() && !r.InputCriblHTTP.CaptureHeaders.IsNull() {
-			*captureHeaders8 = r.InputCriblHTTP.CaptureHeaders.ValueBool()
+		if !r.InputCriblLakeHTTP.CaptureHeaders.IsUnknown() && !r.InputCriblLakeHTTP.CaptureHeaders.IsNull() {
+			*captureHeaders8 = r.InputCriblLakeHTTP.CaptureHeaders.ValueBool()
 		} else {
 			captureHeaders8 = nil
 		}
 		activityLogSampleRate8 := new(float64)
-		if !r.InputCriblHTTP.ActivityLogSampleRate.IsUnknown() && !r.InputCriblHTTP.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate8 = r.InputCriblHTTP.ActivityLogSampleRate.ValueFloat64()
+		if !r.InputCriblLakeHTTP.ActivityLogSampleRate.IsUnknown() && !r.InputCriblLakeHTTP.ActivityLogSampleRate.IsNull() {
+			*activityLogSampleRate8 = r.InputCriblLakeHTTP.ActivityLogSampleRate.ValueFloat64()
 		} else {
 			activityLogSampleRate8 = nil
 		}
 		requestTimeout17 := new(float64)
-		if !r.InputCriblHTTP.RequestTimeout.IsUnknown() && !r.InputCriblHTTP.RequestTimeout.IsNull() {
-			*requestTimeout17 = r.InputCriblHTTP.RequestTimeout.ValueFloat64()
+		if !r.InputCriblLakeHTTP.RequestTimeout.IsUnknown() && !r.InputCriblLakeHTTP.RequestTimeout.IsNull() {
+			*requestTimeout17 = r.InputCriblLakeHTTP.RequestTimeout.ValueFloat64()
 		} else {
 			requestTimeout17 = nil
 		}
 		socketTimeout8 := new(float64)
-		if !r.InputCriblHTTP.SocketTimeout.IsUnknown() && !r.InputCriblHTTP.SocketTimeout.IsNull() {
-			*socketTimeout8 = r.InputCriblHTTP.SocketTimeout.ValueFloat64()
+		if !r.InputCriblLakeHTTP.SocketTimeout.IsUnknown() && !r.InputCriblLakeHTTP.SocketTimeout.IsNull() {
+			*socketTimeout8 = r.InputCriblLakeHTTP.SocketTimeout.ValueFloat64()
 		} else {
 			socketTimeout8 = nil
 		}
 		keepAliveTimeout8 := new(float64)
-		if !r.InputCriblHTTP.KeepAliveTimeout.IsUnknown() && !r.InputCriblHTTP.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout8 = r.InputCriblHTTP.KeepAliveTimeout.ValueFloat64()
+		if !r.InputCriblLakeHTTP.KeepAliveTimeout.IsUnknown() && !r.InputCriblLakeHTTP.KeepAliveTimeout.IsNull() {
+			*keepAliveTimeout8 = r.InputCriblLakeHTTP.KeepAliveTimeout.ValueFloat64()
 		} else {
 			keepAliveTimeout8 = nil
 		}
 		enableHealthCheck8 := new(bool)
-		if !r.InputCriblHTTP.EnableHealthCheck.IsUnknown() && !r.InputCriblHTTP.EnableHealthCheck.IsNull() {
-			*enableHealthCheck8 = r.InputCriblHTTP.EnableHealthCheck.ValueBool()
+		if !r.InputCriblLakeHTTP.EnableHealthCheck.IsUnknown() && !r.InputCriblLakeHTTP.EnableHealthCheck.IsNull() {
+			*enableHealthCheck8 = r.InputCriblLakeHTTP.EnableHealthCheck.ValueBool()
 		} else {
 			enableHealthCheck8 = nil
 		}
 		ipAllowlistRegex8 := new(string)
-		if !r.InputCriblHTTP.IPAllowlistRegex.IsUnknown() && !r.InputCriblHTTP.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex8 = r.InputCriblHTTP.IPAllowlistRegex.ValueString()
+		if !r.InputCriblLakeHTTP.IPAllowlistRegex.IsUnknown() && !r.InputCriblLakeHTTP.IPAllowlistRegex.IsNull() {
+			*ipAllowlistRegex8 = r.InputCriblLakeHTTP.IPAllowlistRegex.ValueString()
 		} else {
 			ipAllowlistRegex8 = nil
 		}
 		ipDenylistRegex8 := new(string)
-		if !r.InputCriblHTTP.IPDenylistRegex.IsUnknown() && !r.InputCriblHTTP.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex8 = r.InputCriblHTTP.IPDenylistRegex.ValueString()
+		if !r.InputCriblLakeHTTP.IPDenylistRegex.IsUnknown() && !r.InputCriblLakeHTTP.IPDenylistRegex.IsNull() {
+			*ipDenylistRegex8 = r.InputCriblLakeHTTP.IPDenylistRegex.ValueString()
 		} else {
 			ipDenylistRegex8 = nil
 		}
-		metadata27 := make([]shared.InputCriblHTTPMetadatum, 0, len(r.InputCriblHTTP.Metadata))
-		for metadataIndex27 := range r.InputCriblHTTP.Metadata {
-			var name46 string
-			name46 = r.InputCriblHTTP.Metadata[metadataIndex27].Name.ValueString()
+		metadata27 := make([]shared.InputCriblLakeHTTPMetadatum, 0, len(r.InputCriblLakeHTTP.Metadata))
+		for metadataIndex27 := range r.InputCriblLakeHTTP.Metadata {
+			var name42 string
+			name42 = r.InputCriblLakeHTTP.Metadata[metadataIndex27].Name.ValueString()
 
-			var value44 string
-			value44 = r.InputCriblHTTP.Metadata[metadataIndex27].Value.ValueString()
+			var value40 string
+			value40 = r.InputCriblLakeHTTP.Metadata[metadataIndex27].Value.ValueString()
 
-			metadata27 = append(metadata27, shared.InputCriblHTTPMetadatum{
-				Name:  name46,
-				Value: value44,
+			metadata27 = append(metadata27, shared.InputCriblLakeHTTPMetadatum{
+				Name:  name42,
+				Value: value40,
 			})
 		}
 		description30 := new(string)
-		if !r.InputCriblHTTP.Description.IsUnknown() && !r.InputCriblHTTP.Description.IsNull() {
-			*description30 = r.InputCriblHTTP.Description.ValueString()
+		if !r.InputCriblLakeHTTP.Description.IsUnknown() && !r.InputCriblLakeHTTP.Description.IsNull() {
+			*description30 = r.InputCriblLakeHTTP.Description.ValueString()
 		} else {
 			description30 = nil
 		}
-		inputCriblHTTP = &shared.InputCriblHTTP{
+		inputCriblLakeHTTP = &shared.InputCriblLakeHTTP{
 			ID:                    id25,
 			Type:                  typeVar29,
 			Disabled:              disabled52,
@@ -10230,7 +9977,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Pq:                    pq25,
 			Host:                  host11,
 			Port:                  port11,
-			AuthTokens:            authTokens5,
+			AuthTokens:            authTokens6,
 			TLS:                   tls17,
 			MaxActiveReq:          maxActiveReq8,
 			MaxRequestsPerSocket:  maxRequestsPerSocket8,
@@ -10247,120 +9994,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Description:           description30,
 		}
 	}
-	if inputCriblHTTP != nil {
+	if inputCriblLakeHTTP != nil {
 		out = shared.Input{
-			InputCriblHTTP: inputCriblHTTP,
+			InputCriblLakeHTTP: inputCriblLakeHTTP,
 		}
 	}
-	var inputCriblLakeHTTP *shared.InputCriblLakeHTTP
-	if r.InputCriblLakeHTTP != nil {
+	var inputTcpjson *shared.InputTcpjson
+	if r.InputTcpjson != nil {
 		id26 := new(string)
-		if !r.InputCriblLakeHTTP.ID.IsUnknown() && !r.InputCriblLakeHTTP.ID.IsNull() {
-			*id26 = r.InputCriblLakeHTTP.ID.ValueString()
+		if !r.InputTcpjson.ID.IsUnknown() && !r.InputTcpjson.ID.IsNull() {
+			*id26 = r.InputTcpjson.ID.ValueString()
 		} else {
 			id26 = nil
 		}
-		typeVar30 := new(shared.InputCriblLakeHTTPType)
-		if !r.InputCriblLakeHTTP.Type.IsUnknown() && !r.InputCriblLakeHTTP.Type.IsNull() {
-			*typeVar30 = shared.InputCriblLakeHTTPType(r.InputCriblLakeHTTP.Type.ValueString())
+		typeVar30 := new(shared.InputTcpjsonType)
+		if !r.InputTcpjson.Type.IsUnknown() && !r.InputTcpjson.Type.IsNull() {
+			*typeVar30 = shared.InputTcpjsonType(r.InputTcpjson.Type.ValueString())
 		} else {
 			typeVar30 = nil
 		}
 		disabled54 := new(bool)
-		if !r.InputCriblLakeHTTP.Disabled.IsUnknown() && !r.InputCriblLakeHTTP.Disabled.IsNull() {
-			*disabled54 = r.InputCriblLakeHTTP.Disabled.ValueBool()
+		if !r.InputTcpjson.Disabled.IsUnknown() && !r.InputTcpjson.Disabled.IsNull() {
+			*disabled54 = r.InputTcpjson.Disabled.ValueBool()
 		} else {
 			disabled54 = nil
 		}
 		pipeline52 := new(string)
-		if !r.InputCriblLakeHTTP.Pipeline.IsUnknown() && !r.InputCriblLakeHTTP.Pipeline.IsNull() {
-			*pipeline52 = r.InputCriblLakeHTTP.Pipeline.ValueString()
+		if !r.InputTcpjson.Pipeline.IsUnknown() && !r.InputTcpjson.Pipeline.IsNull() {
+			*pipeline52 = r.InputTcpjson.Pipeline.ValueString()
 		} else {
 			pipeline52 = nil
 		}
 		sendToRoutes26 := new(bool)
-		if !r.InputCriblLakeHTTP.SendToRoutes.IsUnknown() && !r.InputCriblLakeHTTP.SendToRoutes.IsNull() {
-			*sendToRoutes26 = r.InputCriblLakeHTTP.SendToRoutes.ValueBool()
+		if !r.InputTcpjson.SendToRoutes.IsUnknown() && !r.InputTcpjson.SendToRoutes.IsNull() {
+			*sendToRoutes26 = r.InputTcpjson.SendToRoutes.ValueBool()
 		} else {
 			sendToRoutes26 = nil
 		}
 		environment26 := new(string)
-		if !r.InputCriblLakeHTTP.Environment.IsUnknown() && !r.InputCriblLakeHTTP.Environment.IsNull() {
-			*environment26 = r.InputCriblLakeHTTP.Environment.ValueString()
+		if !r.InputTcpjson.Environment.IsUnknown() && !r.InputTcpjson.Environment.IsNull() {
+			*environment26 = r.InputTcpjson.Environment.ValueString()
 		} else {
 			environment26 = nil
 		}
 		pqEnabled26 := new(bool)
-		if !r.InputCriblLakeHTTP.PqEnabled.IsUnknown() && !r.InputCriblLakeHTTP.PqEnabled.IsNull() {
-			*pqEnabled26 = r.InputCriblLakeHTTP.PqEnabled.ValueBool()
+		if !r.InputTcpjson.PqEnabled.IsUnknown() && !r.InputTcpjson.PqEnabled.IsNull() {
+			*pqEnabled26 = r.InputTcpjson.PqEnabled.ValueBool()
 		} else {
 			pqEnabled26 = nil
 		}
-		streamtags26 := make([]string, 0, len(r.InputCriblLakeHTTP.Streamtags))
-		for streamtagsIndex26 := range r.InputCriblLakeHTTP.Streamtags {
-			streamtags26 = append(streamtags26, r.InputCriblLakeHTTP.Streamtags[streamtagsIndex26].ValueString())
+		streamtags26 := make([]string, 0, len(r.InputTcpjson.Streamtags))
+		for streamtagsIndex26 := range r.InputTcpjson.Streamtags {
+			streamtags26 = append(streamtags26, r.InputTcpjson.Streamtags[streamtagsIndex26].ValueString())
 		}
-		connections26 := make([]shared.InputCriblLakeHTTPConnection, 0, len(r.InputCriblLakeHTTP.Connections))
-		for connectionsIndex26 := range r.InputCriblLakeHTTP.Connections {
+		connections26 := make([]shared.InputTcpjsonConnection, 0, len(r.InputTcpjson.Connections))
+		for connectionsIndex26 := range r.InputTcpjson.Connections {
 			pipeline53 := new(string)
-			if !r.InputCriblLakeHTTP.Connections[connectionsIndex26].Pipeline.IsUnknown() && !r.InputCriblLakeHTTP.Connections[connectionsIndex26].Pipeline.IsNull() {
-				*pipeline53 = r.InputCriblLakeHTTP.Connections[connectionsIndex26].Pipeline.ValueString()
+			if !r.InputTcpjson.Connections[connectionsIndex26].Pipeline.IsUnknown() && !r.InputTcpjson.Connections[connectionsIndex26].Pipeline.IsNull() {
+				*pipeline53 = r.InputTcpjson.Connections[connectionsIndex26].Pipeline.ValueString()
 			} else {
 				pipeline53 = nil
 			}
 			var output27 string
-			output27 = r.InputCriblLakeHTTP.Connections[connectionsIndex26].Output.ValueString()
+			output27 = r.InputTcpjson.Connections[connectionsIndex26].Output.ValueString()
 
-			connections26 = append(connections26, shared.InputCriblLakeHTTPConnection{
+			connections26 = append(connections26, shared.InputTcpjsonConnection{
 				Pipeline: pipeline53,
 				Output:   output27,
 			})
 		}
-		var pq26 *shared.InputCriblLakeHTTPPq
-		if r.InputCriblLakeHTTP.Pq != nil {
-			mode26 := new(shared.InputCriblLakeHTTPMode)
-			if !r.InputCriblLakeHTTP.Pq.Mode.IsUnknown() && !r.InputCriblLakeHTTP.Pq.Mode.IsNull() {
-				*mode26 = shared.InputCriblLakeHTTPMode(r.InputCriblLakeHTTP.Pq.Mode.ValueString())
+		var pq26 *shared.InputTcpjsonPq
+		if r.InputTcpjson.Pq != nil {
+			mode26 := new(shared.InputTcpjsonMode)
+			if !r.InputTcpjson.Pq.Mode.IsUnknown() && !r.InputTcpjson.Pq.Mode.IsNull() {
+				*mode26 = shared.InputTcpjsonMode(r.InputTcpjson.Pq.Mode.ValueString())
 			} else {
 				mode26 = nil
 			}
 			maxBufferSize26 := new(float64)
-			if !r.InputCriblLakeHTTP.Pq.MaxBufferSize.IsUnknown() && !r.InputCriblLakeHTTP.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize26 = r.InputCriblLakeHTTP.Pq.MaxBufferSize.ValueFloat64()
+			if !r.InputTcpjson.Pq.MaxBufferSize.IsUnknown() && !r.InputTcpjson.Pq.MaxBufferSize.IsNull() {
+				*maxBufferSize26 = r.InputTcpjson.Pq.MaxBufferSize.ValueFloat64()
 			} else {
 				maxBufferSize26 = nil
 			}
 			commitFrequency26 := new(float64)
-			if !r.InputCriblLakeHTTP.Pq.CommitFrequency.IsUnknown() && !r.InputCriblLakeHTTP.Pq.CommitFrequency.IsNull() {
-				*commitFrequency26 = r.InputCriblLakeHTTP.Pq.CommitFrequency.ValueFloat64()
+			if !r.InputTcpjson.Pq.CommitFrequency.IsUnknown() && !r.InputTcpjson.Pq.CommitFrequency.IsNull() {
+				*commitFrequency26 = r.InputTcpjson.Pq.CommitFrequency.ValueFloat64()
 			} else {
 				commitFrequency26 = nil
 			}
 			maxFileSize26 := new(string)
-			if !r.InputCriblLakeHTTP.Pq.MaxFileSize.IsUnknown() && !r.InputCriblLakeHTTP.Pq.MaxFileSize.IsNull() {
-				*maxFileSize26 = r.InputCriblLakeHTTP.Pq.MaxFileSize.ValueString()
+			if !r.InputTcpjson.Pq.MaxFileSize.IsUnknown() && !r.InputTcpjson.Pq.MaxFileSize.IsNull() {
+				*maxFileSize26 = r.InputTcpjson.Pq.MaxFileSize.ValueString()
 			} else {
 				maxFileSize26 = nil
 			}
 			maxSize26 := new(string)
-			if !r.InputCriblLakeHTTP.Pq.MaxSize.IsUnknown() && !r.InputCriblLakeHTTP.Pq.MaxSize.IsNull() {
-				*maxSize26 = r.InputCriblLakeHTTP.Pq.MaxSize.ValueString()
+			if !r.InputTcpjson.Pq.MaxSize.IsUnknown() && !r.InputTcpjson.Pq.MaxSize.IsNull() {
+				*maxSize26 = r.InputTcpjson.Pq.MaxSize.ValueString()
 			} else {
 				maxSize26 = nil
 			}
 			path27 := new(string)
-			if !r.InputCriblLakeHTTP.Pq.Path.IsUnknown() && !r.InputCriblLakeHTTP.Pq.Path.IsNull() {
-				*path27 = r.InputCriblLakeHTTP.Pq.Path.ValueString()
+			if !r.InputTcpjson.Pq.Path.IsUnknown() && !r.InputTcpjson.Pq.Path.IsNull() {
+				*path27 = r.InputTcpjson.Pq.Path.ValueString()
 			} else {
 				path27 = nil
 			}
-			compress28 := new(shared.InputCriblLakeHTTPCompression)
-			if !r.InputCriblLakeHTTP.Pq.Compress.IsUnknown() && !r.InputCriblLakeHTTP.Pq.Compress.IsNull() {
-				*compress28 = shared.InputCriblLakeHTTPCompression(r.InputCriblLakeHTTP.Pq.Compress.ValueString())
+			compress28 := new(shared.InputTcpjsonCompression)
+			if !r.InputTcpjson.Pq.Compress.IsUnknown() && !r.InputTcpjson.Pq.Compress.IsNull() {
+				*compress28 = shared.InputTcpjsonCompression(r.InputTcpjson.Pq.Compress.ValueString())
 			} else {
 				compress28 = nil
 			}
-			pq26 = &shared.InputCriblLakeHTTPPq{
+			pq26 = &shared.InputTcpjsonPq{
 				Mode:            mode26,
 				MaxBufferSize:   maxBufferSize26,
 				CommitFrequency: commitFrequency26,
@@ -10371,83 +10118,79 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			}
 		}
 		host12 := new(string)
-		if !r.InputCriblLakeHTTP.Host.IsUnknown() && !r.InputCriblLakeHTTP.Host.IsNull() {
-			*host12 = r.InputCriblLakeHTTP.Host.ValueString()
+		if !r.InputTcpjson.Host.IsUnknown() && !r.InputTcpjson.Host.IsNull() {
+			*host12 = r.InputTcpjson.Host.ValueString()
 		} else {
 			host12 = nil
 		}
 		var port12 float64
-		port12 = r.InputCriblLakeHTTP.Port.ValueFloat64()
+		port12 = r.InputTcpjson.Port.ValueFloat64()
 
-		authTokens6 := make([]string, 0, len(r.InputCriblLakeHTTP.AuthTokens))
-		for authTokensIndex6 := range r.InputCriblLakeHTTP.AuthTokens {
-			authTokens6 = append(authTokens6, r.InputCriblLakeHTTP.AuthTokens[authTokensIndex6].ValueString())
-		}
-		var tls18 *shared.InputCriblLakeHTTPTLSSettingsServerSide
-		if r.InputCriblLakeHTTP.TLS != nil {
+		var tls18 *shared.InputTcpjsonTLSSettingsServerSide
+		if r.InputTcpjson.TLS != nil {
 			disabled55 := new(bool)
-			if !r.InputCriblLakeHTTP.TLS.Disabled.IsUnknown() && !r.InputCriblLakeHTTP.TLS.Disabled.IsNull() {
-				*disabled55 = r.InputCriblLakeHTTP.TLS.Disabled.ValueBool()
+			if !r.InputTcpjson.TLS.Disabled.IsUnknown() && !r.InputTcpjson.TLS.Disabled.IsNull() {
+				*disabled55 = r.InputTcpjson.TLS.Disabled.ValueBool()
 			} else {
 				disabled55 = nil
 			}
 			certificateName19 := new(string)
-			if !r.InputCriblLakeHTTP.TLS.CertificateName.IsUnknown() && !r.InputCriblLakeHTTP.TLS.CertificateName.IsNull() {
-				*certificateName19 = r.InputCriblLakeHTTP.TLS.CertificateName.ValueString()
+			if !r.InputTcpjson.TLS.CertificateName.IsUnknown() && !r.InputTcpjson.TLS.CertificateName.IsNull() {
+				*certificateName19 = r.InputTcpjson.TLS.CertificateName.ValueString()
 			} else {
 				certificateName19 = nil
 			}
 			privKeyPath18 := new(string)
-			if !r.InputCriblLakeHTTP.TLS.PrivKeyPath.IsUnknown() && !r.InputCriblLakeHTTP.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath18 = r.InputCriblLakeHTTP.TLS.PrivKeyPath.ValueString()
+			if !r.InputTcpjson.TLS.PrivKeyPath.IsUnknown() && !r.InputTcpjson.TLS.PrivKeyPath.IsNull() {
+				*privKeyPath18 = r.InputTcpjson.TLS.PrivKeyPath.ValueString()
 			} else {
 				privKeyPath18 = nil
 			}
 			passphrase18 := new(string)
-			if !r.InputCriblLakeHTTP.TLS.Passphrase.IsUnknown() && !r.InputCriblLakeHTTP.TLS.Passphrase.IsNull() {
-				*passphrase18 = r.InputCriblLakeHTTP.TLS.Passphrase.ValueString()
+			if !r.InputTcpjson.TLS.Passphrase.IsUnknown() && !r.InputTcpjson.TLS.Passphrase.IsNull() {
+				*passphrase18 = r.InputTcpjson.TLS.Passphrase.ValueString()
 			} else {
 				passphrase18 = nil
 			}
 			certPath18 := new(string)
-			if !r.InputCriblLakeHTTP.TLS.CertPath.IsUnknown() && !r.InputCriblLakeHTTP.TLS.CertPath.IsNull() {
-				*certPath18 = r.InputCriblLakeHTTP.TLS.CertPath.ValueString()
+			if !r.InputTcpjson.TLS.CertPath.IsUnknown() && !r.InputTcpjson.TLS.CertPath.IsNull() {
+				*certPath18 = r.InputTcpjson.TLS.CertPath.ValueString()
 			} else {
 				certPath18 = nil
 			}
 			caPath17 := new(string)
-			if !r.InputCriblLakeHTTP.TLS.CaPath.IsUnknown() && !r.InputCriblLakeHTTP.TLS.CaPath.IsNull() {
-				*caPath17 = r.InputCriblLakeHTTP.TLS.CaPath.ValueString()
+			if !r.InputTcpjson.TLS.CaPath.IsUnknown() && !r.InputTcpjson.TLS.CaPath.IsNull() {
+				*caPath17 = r.InputTcpjson.TLS.CaPath.ValueString()
 			} else {
 				caPath17 = nil
 			}
 			requestCert11 := new(bool)
-			if !r.InputCriblLakeHTTP.TLS.RequestCert.IsUnknown() && !r.InputCriblLakeHTTP.TLS.RequestCert.IsNull() {
-				*requestCert11 = r.InputCriblLakeHTTP.TLS.RequestCert.ValueBool()
+			if !r.InputTcpjson.TLS.RequestCert.IsUnknown() && !r.InputTcpjson.TLS.RequestCert.IsNull() {
+				*requestCert11 = r.InputTcpjson.TLS.RequestCert.ValueBool()
 			} else {
 				requestCert11 = nil
 			}
 			var rejectUnauthorized23 interface{}
-			if !r.InputCriblLakeHTTP.TLS.RejectUnauthorized.IsUnknown() && !r.InputCriblLakeHTTP.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputCriblLakeHTTP.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized23)
+			if !r.InputTcpjson.TLS.RejectUnauthorized.IsUnknown() && !r.InputTcpjson.TLS.RejectUnauthorized.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputTcpjson.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized23)
 			}
 			var commonNameRegex11 interface{}
-			if !r.InputCriblLakeHTTP.TLS.CommonNameRegex.IsUnknown() && !r.InputCriblLakeHTTP.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputCriblLakeHTTP.TLS.CommonNameRegex.ValueString()), &commonNameRegex11)
+			if !r.InputTcpjson.TLS.CommonNameRegex.IsUnknown() && !r.InputTcpjson.TLS.CommonNameRegex.IsNull() {
+				_ = json.Unmarshal([]byte(r.InputTcpjson.TLS.CommonNameRegex.ValueString()), &commonNameRegex11)
 			}
-			minVersion17 := new(shared.InputCriblLakeHTTPMinimumTLSVersion)
-			if !r.InputCriblLakeHTTP.TLS.MinVersion.IsUnknown() && !r.InputCriblLakeHTTP.TLS.MinVersion.IsNull() {
-				*minVersion17 = shared.InputCriblLakeHTTPMinimumTLSVersion(r.InputCriblLakeHTTP.TLS.MinVersion.ValueString())
+			minVersion17 := new(shared.InputTcpjsonMinimumTLSVersion)
+			if !r.InputTcpjson.TLS.MinVersion.IsUnknown() && !r.InputTcpjson.TLS.MinVersion.IsNull() {
+				*minVersion17 = shared.InputTcpjsonMinimumTLSVersion(r.InputTcpjson.TLS.MinVersion.ValueString())
 			} else {
 				minVersion17 = nil
 			}
-			maxVersion17 := new(shared.InputCriblLakeHTTPMaximumTLSVersion)
-			if !r.InputCriblLakeHTTP.TLS.MaxVersion.IsUnknown() && !r.InputCriblLakeHTTP.TLS.MaxVersion.IsNull() {
-				*maxVersion17 = shared.InputCriblLakeHTTPMaximumTLSVersion(r.InputCriblLakeHTTP.TLS.MaxVersion.ValueString())
+			maxVersion17 := new(shared.InputTcpjsonMaximumTLSVersion)
+			if !r.InputTcpjson.TLS.MaxVersion.IsUnknown() && !r.InputTcpjson.TLS.MaxVersion.IsNull() {
+				*maxVersion17 = shared.InputTcpjsonMaximumTLSVersion(r.InputTcpjson.TLS.MaxVersion.ValueString())
 			} else {
 				maxVersion17 = nil
 			}
-			tls18 = &shared.InputCriblLakeHTTPTLSSettingsServerSide{
+			tls18 = &shared.InputTcpjsonTLSSettingsServerSide{
 				Disabled:           disabled55,
 				CertificateName:    certificateName19,
 				PrivKeyPath:        privKeyPath18,
@@ -10459,331 +10202,6 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				CommonNameRegex:    commonNameRegex11,
 				MinVersion:         minVersion17,
 				MaxVersion:         maxVersion17,
-			}
-		}
-		maxActiveReq9 := new(float64)
-		if !r.InputCriblLakeHTTP.MaxActiveReq.IsUnknown() && !r.InputCriblLakeHTTP.MaxActiveReq.IsNull() {
-			*maxActiveReq9 = r.InputCriblLakeHTTP.MaxActiveReq.ValueFloat64()
-		} else {
-			maxActiveReq9 = nil
-		}
-		maxRequestsPerSocket9 := new(int64)
-		if !r.InputCriblLakeHTTP.MaxRequestsPerSocket.IsUnknown() && !r.InputCriblLakeHTTP.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket9 = r.InputCriblLakeHTTP.MaxRequestsPerSocket.ValueInt64()
-		} else {
-			maxRequestsPerSocket9 = nil
-		}
-		enableProxyHeader11 := new(bool)
-		if !r.InputCriblLakeHTTP.EnableProxyHeader.IsUnknown() && !r.InputCriblLakeHTTP.EnableProxyHeader.IsNull() {
-			*enableProxyHeader11 = r.InputCriblLakeHTTP.EnableProxyHeader.ValueBool()
-		} else {
-			enableProxyHeader11 = nil
-		}
-		captureHeaders9 := new(bool)
-		if !r.InputCriblLakeHTTP.CaptureHeaders.IsUnknown() && !r.InputCriblLakeHTTP.CaptureHeaders.IsNull() {
-			*captureHeaders9 = r.InputCriblLakeHTTP.CaptureHeaders.ValueBool()
-		} else {
-			captureHeaders9 = nil
-		}
-		activityLogSampleRate9 := new(float64)
-		if !r.InputCriblLakeHTTP.ActivityLogSampleRate.IsUnknown() && !r.InputCriblLakeHTTP.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate9 = r.InputCriblLakeHTTP.ActivityLogSampleRate.ValueFloat64()
-		} else {
-			activityLogSampleRate9 = nil
-		}
-		requestTimeout18 := new(float64)
-		if !r.InputCriblLakeHTTP.RequestTimeout.IsUnknown() && !r.InputCriblLakeHTTP.RequestTimeout.IsNull() {
-			*requestTimeout18 = r.InputCriblLakeHTTP.RequestTimeout.ValueFloat64()
-		} else {
-			requestTimeout18 = nil
-		}
-		socketTimeout9 := new(float64)
-		if !r.InputCriblLakeHTTP.SocketTimeout.IsUnknown() && !r.InputCriblLakeHTTP.SocketTimeout.IsNull() {
-			*socketTimeout9 = r.InputCriblLakeHTTP.SocketTimeout.ValueFloat64()
-		} else {
-			socketTimeout9 = nil
-		}
-		keepAliveTimeout9 := new(float64)
-		if !r.InputCriblLakeHTTP.KeepAliveTimeout.IsUnknown() && !r.InputCriblLakeHTTP.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout9 = r.InputCriblLakeHTTP.KeepAliveTimeout.ValueFloat64()
-		} else {
-			keepAliveTimeout9 = nil
-		}
-		enableHealthCheck9 := new(bool)
-		if !r.InputCriblLakeHTTP.EnableHealthCheck.IsUnknown() && !r.InputCriblLakeHTTP.EnableHealthCheck.IsNull() {
-			*enableHealthCheck9 = r.InputCriblLakeHTTP.EnableHealthCheck.ValueBool()
-		} else {
-			enableHealthCheck9 = nil
-		}
-		ipAllowlistRegex9 := new(string)
-		if !r.InputCriblLakeHTTP.IPAllowlistRegex.IsUnknown() && !r.InputCriblLakeHTTP.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex9 = r.InputCriblLakeHTTP.IPAllowlistRegex.ValueString()
-		} else {
-			ipAllowlistRegex9 = nil
-		}
-		ipDenylistRegex9 := new(string)
-		if !r.InputCriblLakeHTTP.IPDenylistRegex.IsUnknown() && !r.InputCriblLakeHTTP.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex9 = r.InputCriblLakeHTTP.IPDenylistRegex.ValueString()
-		} else {
-			ipDenylistRegex9 = nil
-		}
-		metadata28 := make([]shared.InputCriblLakeHTTPMetadatum, 0, len(r.InputCriblLakeHTTP.Metadata))
-		for metadataIndex28 := range r.InputCriblLakeHTTP.Metadata {
-			var name47 string
-			name47 = r.InputCriblLakeHTTP.Metadata[metadataIndex28].Name.ValueString()
-
-			var value45 string
-			value45 = r.InputCriblLakeHTTP.Metadata[metadataIndex28].Value.ValueString()
-
-			metadata28 = append(metadata28, shared.InputCriblLakeHTTPMetadatum{
-				Name:  name47,
-				Value: value45,
-			})
-		}
-		description31 := new(string)
-		if !r.InputCriblLakeHTTP.Description.IsUnknown() && !r.InputCriblLakeHTTP.Description.IsNull() {
-			*description31 = r.InputCriblLakeHTTP.Description.ValueString()
-		} else {
-			description31 = nil
-		}
-		inputCriblLakeHTTP = &shared.InputCriblLakeHTTP{
-			ID:                    id26,
-			Type:                  typeVar30,
-			Disabled:              disabled54,
-			Pipeline:              pipeline52,
-			SendToRoutes:          sendToRoutes26,
-			Environment:           environment26,
-			PqEnabled:             pqEnabled26,
-			Streamtags:            streamtags26,
-			Connections:           connections26,
-			Pq:                    pq26,
-			Host:                  host12,
-			Port:                  port12,
-			AuthTokens:            authTokens6,
-			TLS:                   tls18,
-			MaxActiveReq:          maxActiveReq9,
-			MaxRequestsPerSocket:  maxRequestsPerSocket9,
-			EnableProxyHeader:     enableProxyHeader11,
-			CaptureHeaders:        captureHeaders9,
-			ActivityLogSampleRate: activityLogSampleRate9,
-			RequestTimeout:        requestTimeout18,
-			SocketTimeout:         socketTimeout9,
-			KeepAliveTimeout:      keepAliveTimeout9,
-			EnableHealthCheck:     enableHealthCheck9,
-			IPAllowlistRegex:      ipAllowlistRegex9,
-			IPDenylistRegex:       ipDenylistRegex9,
-			Metadata:              metadata28,
-			Description:           description31,
-		}
-	}
-	if inputCriblLakeHTTP != nil {
-		out = shared.Input{
-			InputCriblLakeHTTP: inputCriblLakeHTTP,
-		}
-	}
-	var inputTcpjson *shared.InputTcpjson
-	if r.InputTcpjson != nil {
-		id27 := new(string)
-		if !r.InputTcpjson.ID.IsUnknown() && !r.InputTcpjson.ID.IsNull() {
-			*id27 = r.InputTcpjson.ID.ValueString()
-		} else {
-			id27 = nil
-		}
-		typeVar31 := new(shared.InputTcpjsonType)
-		if !r.InputTcpjson.Type.IsUnknown() && !r.InputTcpjson.Type.IsNull() {
-			*typeVar31 = shared.InputTcpjsonType(r.InputTcpjson.Type.ValueString())
-		} else {
-			typeVar31 = nil
-		}
-		disabled56 := new(bool)
-		if !r.InputTcpjson.Disabled.IsUnknown() && !r.InputTcpjson.Disabled.IsNull() {
-			*disabled56 = r.InputTcpjson.Disabled.ValueBool()
-		} else {
-			disabled56 = nil
-		}
-		pipeline54 := new(string)
-		if !r.InputTcpjson.Pipeline.IsUnknown() && !r.InputTcpjson.Pipeline.IsNull() {
-			*pipeline54 = r.InputTcpjson.Pipeline.ValueString()
-		} else {
-			pipeline54 = nil
-		}
-		sendToRoutes27 := new(bool)
-		if !r.InputTcpjson.SendToRoutes.IsUnknown() && !r.InputTcpjson.SendToRoutes.IsNull() {
-			*sendToRoutes27 = r.InputTcpjson.SendToRoutes.ValueBool()
-		} else {
-			sendToRoutes27 = nil
-		}
-		environment27 := new(string)
-		if !r.InputTcpjson.Environment.IsUnknown() && !r.InputTcpjson.Environment.IsNull() {
-			*environment27 = r.InputTcpjson.Environment.ValueString()
-		} else {
-			environment27 = nil
-		}
-		pqEnabled27 := new(bool)
-		if !r.InputTcpjson.PqEnabled.IsUnknown() && !r.InputTcpjson.PqEnabled.IsNull() {
-			*pqEnabled27 = r.InputTcpjson.PqEnabled.ValueBool()
-		} else {
-			pqEnabled27 = nil
-		}
-		streamtags27 := make([]string, 0, len(r.InputTcpjson.Streamtags))
-		for streamtagsIndex27 := range r.InputTcpjson.Streamtags {
-			streamtags27 = append(streamtags27, r.InputTcpjson.Streamtags[streamtagsIndex27].ValueString())
-		}
-		connections27 := make([]shared.InputTcpjsonConnection, 0, len(r.InputTcpjson.Connections))
-		for connectionsIndex27 := range r.InputTcpjson.Connections {
-			pipeline55 := new(string)
-			if !r.InputTcpjson.Connections[connectionsIndex27].Pipeline.IsUnknown() && !r.InputTcpjson.Connections[connectionsIndex27].Pipeline.IsNull() {
-				*pipeline55 = r.InputTcpjson.Connections[connectionsIndex27].Pipeline.ValueString()
-			} else {
-				pipeline55 = nil
-			}
-			var output28 string
-			output28 = r.InputTcpjson.Connections[connectionsIndex27].Output.ValueString()
-
-			connections27 = append(connections27, shared.InputTcpjsonConnection{
-				Pipeline: pipeline55,
-				Output:   output28,
-			})
-		}
-		var pq27 *shared.InputTcpjsonPq
-		if r.InputTcpjson.Pq != nil {
-			mode27 := new(shared.InputTcpjsonMode)
-			if !r.InputTcpjson.Pq.Mode.IsUnknown() && !r.InputTcpjson.Pq.Mode.IsNull() {
-				*mode27 = shared.InputTcpjsonMode(r.InputTcpjson.Pq.Mode.ValueString())
-			} else {
-				mode27 = nil
-			}
-			maxBufferSize27 := new(float64)
-			if !r.InputTcpjson.Pq.MaxBufferSize.IsUnknown() && !r.InputTcpjson.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize27 = r.InputTcpjson.Pq.MaxBufferSize.ValueFloat64()
-			} else {
-				maxBufferSize27 = nil
-			}
-			commitFrequency27 := new(float64)
-			if !r.InputTcpjson.Pq.CommitFrequency.IsUnknown() && !r.InputTcpjson.Pq.CommitFrequency.IsNull() {
-				*commitFrequency27 = r.InputTcpjson.Pq.CommitFrequency.ValueFloat64()
-			} else {
-				commitFrequency27 = nil
-			}
-			maxFileSize27 := new(string)
-			if !r.InputTcpjson.Pq.MaxFileSize.IsUnknown() && !r.InputTcpjson.Pq.MaxFileSize.IsNull() {
-				*maxFileSize27 = r.InputTcpjson.Pq.MaxFileSize.ValueString()
-			} else {
-				maxFileSize27 = nil
-			}
-			maxSize27 := new(string)
-			if !r.InputTcpjson.Pq.MaxSize.IsUnknown() && !r.InputTcpjson.Pq.MaxSize.IsNull() {
-				*maxSize27 = r.InputTcpjson.Pq.MaxSize.ValueString()
-			} else {
-				maxSize27 = nil
-			}
-			path28 := new(string)
-			if !r.InputTcpjson.Pq.Path.IsUnknown() && !r.InputTcpjson.Pq.Path.IsNull() {
-				*path28 = r.InputTcpjson.Pq.Path.ValueString()
-			} else {
-				path28 = nil
-			}
-			compress29 := new(shared.InputTcpjsonCompression)
-			if !r.InputTcpjson.Pq.Compress.IsUnknown() && !r.InputTcpjson.Pq.Compress.IsNull() {
-				*compress29 = shared.InputTcpjsonCompression(r.InputTcpjson.Pq.Compress.ValueString())
-			} else {
-				compress29 = nil
-			}
-			pq27 = &shared.InputTcpjsonPq{
-				Mode:            mode27,
-				MaxBufferSize:   maxBufferSize27,
-				CommitFrequency: commitFrequency27,
-				MaxFileSize:     maxFileSize27,
-				MaxSize:         maxSize27,
-				Path:            path28,
-				Compress:        compress29,
-			}
-		}
-		host13 := new(string)
-		if !r.InputTcpjson.Host.IsUnknown() && !r.InputTcpjson.Host.IsNull() {
-			*host13 = r.InputTcpjson.Host.ValueString()
-		} else {
-			host13 = nil
-		}
-		var port13 float64
-		port13 = r.InputTcpjson.Port.ValueFloat64()
-
-		var tls19 *shared.InputTcpjsonTLSSettingsServerSide
-		if r.InputTcpjson.TLS != nil {
-			disabled57 := new(bool)
-			if !r.InputTcpjson.TLS.Disabled.IsUnknown() && !r.InputTcpjson.TLS.Disabled.IsNull() {
-				*disabled57 = r.InputTcpjson.TLS.Disabled.ValueBool()
-			} else {
-				disabled57 = nil
-			}
-			certificateName20 := new(string)
-			if !r.InputTcpjson.TLS.CertificateName.IsUnknown() && !r.InputTcpjson.TLS.CertificateName.IsNull() {
-				*certificateName20 = r.InputTcpjson.TLS.CertificateName.ValueString()
-			} else {
-				certificateName20 = nil
-			}
-			privKeyPath19 := new(string)
-			if !r.InputTcpjson.TLS.PrivKeyPath.IsUnknown() && !r.InputTcpjson.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath19 = r.InputTcpjson.TLS.PrivKeyPath.ValueString()
-			} else {
-				privKeyPath19 = nil
-			}
-			passphrase19 := new(string)
-			if !r.InputTcpjson.TLS.Passphrase.IsUnknown() && !r.InputTcpjson.TLS.Passphrase.IsNull() {
-				*passphrase19 = r.InputTcpjson.TLS.Passphrase.ValueString()
-			} else {
-				passphrase19 = nil
-			}
-			certPath19 := new(string)
-			if !r.InputTcpjson.TLS.CertPath.IsUnknown() && !r.InputTcpjson.TLS.CertPath.IsNull() {
-				*certPath19 = r.InputTcpjson.TLS.CertPath.ValueString()
-			} else {
-				certPath19 = nil
-			}
-			caPath18 := new(string)
-			if !r.InputTcpjson.TLS.CaPath.IsUnknown() && !r.InputTcpjson.TLS.CaPath.IsNull() {
-				*caPath18 = r.InputTcpjson.TLS.CaPath.ValueString()
-			} else {
-				caPath18 = nil
-			}
-			requestCert12 := new(bool)
-			if !r.InputTcpjson.TLS.RequestCert.IsUnknown() && !r.InputTcpjson.TLS.RequestCert.IsNull() {
-				*requestCert12 = r.InputTcpjson.TLS.RequestCert.ValueBool()
-			} else {
-				requestCert12 = nil
-			}
-			var rejectUnauthorized24 interface{}
-			if !r.InputTcpjson.TLS.RejectUnauthorized.IsUnknown() && !r.InputTcpjson.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputTcpjson.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized24)
-			}
-			var commonNameRegex12 interface{}
-			if !r.InputTcpjson.TLS.CommonNameRegex.IsUnknown() && !r.InputTcpjson.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputTcpjson.TLS.CommonNameRegex.ValueString()), &commonNameRegex12)
-			}
-			minVersion18 := new(shared.InputTcpjsonMinimumTLSVersion)
-			if !r.InputTcpjson.TLS.MinVersion.IsUnknown() && !r.InputTcpjson.TLS.MinVersion.IsNull() {
-				*minVersion18 = shared.InputTcpjsonMinimumTLSVersion(r.InputTcpjson.TLS.MinVersion.ValueString())
-			} else {
-				minVersion18 = nil
-			}
-			maxVersion18 := new(shared.InputTcpjsonMaximumTLSVersion)
-			if !r.InputTcpjson.TLS.MaxVersion.IsUnknown() && !r.InputTcpjson.TLS.MaxVersion.IsNull() {
-				*maxVersion18 = shared.InputTcpjsonMaximumTLSVersion(r.InputTcpjson.TLS.MaxVersion.ValueString())
-			} else {
-				maxVersion18 = nil
-			}
-			tls19 = &shared.InputTcpjsonTLSSettingsServerSide{
-				Disabled:           disabled57,
-				CertificateName:    certificateName20,
-				PrivKeyPath:        privKeyPath19,
-				Passphrase:         passphrase19,
-				CertPath:           certPath19,
-				CaPath:             caPath18,
-				RequestCert:        requestCert12,
-				RejectUnauthorized: rejectUnauthorized24,
-				CommonNameRegex:    commonNameRegex12,
-				MinVersion:         minVersion18,
-				MaxVersion:         maxVersion18,
 			}
 		}
 		ipWhitelistRegex1 := new(string)
@@ -10816,23 +10234,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			socketMaxLifespan2 = nil
 		}
-		enableProxyHeader12 := new(bool)
+		enableProxyHeader11 := new(bool)
 		if !r.InputTcpjson.EnableProxyHeader.IsUnknown() && !r.InputTcpjson.EnableProxyHeader.IsNull() {
-			*enableProxyHeader12 = r.InputTcpjson.EnableProxyHeader.ValueBool()
+			*enableProxyHeader11 = r.InputTcpjson.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader12 = nil
+			enableProxyHeader11 = nil
 		}
-		metadata29 := make([]shared.InputTcpjsonMetadatum, 0, len(r.InputTcpjson.Metadata))
-		for metadataIndex29 := range r.InputTcpjson.Metadata {
-			var name48 string
-			name48 = r.InputTcpjson.Metadata[metadataIndex29].Name.ValueString()
+		metadata28 := make([]shared.InputTcpjsonMetadatum, 0, len(r.InputTcpjson.Metadata))
+		for metadataIndex28 := range r.InputTcpjson.Metadata {
+			var name43 string
+			name43 = r.InputTcpjson.Metadata[metadataIndex28].Name.ValueString()
 
-			var value46 string
-			value46 = r.InputTcpjson.Metadata[metadataIndex29].Value.ValueString()
+			var value41 string
+			value41 = r.InputTcpjson.Metadata[metadataIndex28].Value.ValueString()
 
-			metadata29 = append(metadata29, shared.InputTcpjsonMetadatum{
-				Name:  name48,
-				Value: value46,
+			metadata28 = append(metadata28, shared.InputTcpjsonMetadatum{
+				Name:  name43,
+				Value: value41,
 			})
 		}
 		enableLoadBalancing1 := new(bool)
@@ -10841,17 +10259,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			enableLoadBalancing1 = nil
 		}
-		authType16 := new(shared.InputTcpjsonAuthenticationMethod)
+		authType14 := new(shared.InputTcpjsonAuthenticationMethod)
 		if !r.InputTcpjson.AuthType.IsUnknown() && !r.InputTcpjson.AuthType.IsNull() {
-			*authType16 = shared.InputTcpjsonAuthenticationMethod(r.InputTcpjson.AuthType.ValueString())
+			*authType14 = shared.InputTcpjsonAuthenticationMethod(r.InputTcpjson.AuthType.ValueString())
 		} else {
-			authType16 = nil
+			authType14 = nil
 		}
-		description32 := new(string)
+		description31 := new(string)
 		if !r.InputTcpjson.Description.IsUnknown() && !r.InputTcpjson.Description.IsNull() {
-			*description32 = r.InputTcpjson.Description.ValueString()
+			*description31 = r.InputTcpjson.Description.ValueString()
 		} else {
-			description32 = nil
+			description31 = nil
 		}
 		authToken := new(string)
 		if !r.InputTcpjson.AuthToken.IsUnknown() && !r.InputTcpjson.AuthToken.IsNull() {
@@ -10859,38 +10277,38 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			authToken = nil
 		}
-		textSecret11 := new(string)
+		textSecret9 := new(string)
 		if !r.InputTcpjson.TextSecret.IsUnknown() && !r.InputTcpjson.TextSecret.IsNull() {
-			*textSecret11 = r.InputTcpjson.TextSecret.ValueString()
+			*textSecret9 = r.InputTcpjson.TextSecret.ValueString()
 		} else {
-			textSecret11 = nil
+			textSecret9 = nil
 		}
 		inputTcpjson = &shared.InputTcpjson{
-			ID:                  id27,
-			Type:                typeVar31,
-			Disabled:            disabled56,
-			Pipeline:            pipeline54,
-			SendToRoutes:        sendToRoutes27,
-			Environment:         environment27,
-			PqEnabled:           pqEnabled27,
-			Streamtags:          streamtags27,
-			Connections:         connections27,
-			Pq:                  pq27,
-			Host:                host13,
-			Port:                port13,
-			TLS:                 tls19,
+			ID:                  id26,
+			Type:                typeVar30,
+			Disabled:            disabled54,
+			Pipeline:            pipeline52,
+			SendToRoutes:        sendToRoutes26,
+			Environment:         environment26,
+			PqEnabled:           pqEnabled26,
+			Streamtags:          streamtags26,
+			Connections:         connections26,
+			Pq:                  pq26,
+			Host:                host12,
+			Port:                port12,
+			TLS:                 tls18,
 			IPWhitelistRegex:    ipWhitelistRegex1,
 			MaxActiveCxn:        maxActiveCxn2,
 			SocketIdleTimeout:   socketIdleTimeout2,
 			SocketEndingMaxWait: socketEndingMaxWait2,
 			SocketMaxLifespan:   socketMaxLifespan2,
-			EnableProxyHeader:   enableProxyHeader12,
-			Metadata:            metadata29,
+			EnableProxyHeader:   enableProxyHeader11,
+			Metadata:            metadata28,
 			EnableLoadBalancing: enableLoadBalancing1,
-			AuthType:            authType16,
-			Description:         description32,
+			AuthType:            authType14,
+			Description:         description31,
 			AuthToken:           authToken,
-			TextSecret:          textSecret11,
+			TextSecret:          textSecret9,
 		}
 	}
 	if inputTcpjson != nil {
@@ -10900,112 +10318,112 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputSystemMetrics *shared.InputSystemMetrics
 	if r.InputSystemMetrics != nil {
-		var id28 string
-		id28 = r.InputSystemMetrics.ID.ValueString()
+		var id27 string
+		id27 = r.InputSystemMetrics.ID.ValueString()
 
-		typeVar32 := shared.InputSystemMetricsType(r.InputSystemMetrics.Type.ValueString())
-		disabled58 := new(bool)
+		typeVar31 := shared.InputSystemMetricsType(r.InputSystemMetrics.Type.ValueString())
+		disabled56 := new(bool)
 		if !r.InputSystemMetrics.Disabled.IsUnknown() && !r.InputSystemMetrics.Disabled.IsNull() {
-			*disabled58 = r.InputSystemMetrics.Disabled.ValueBool()
+			*disabled56 = r.InputSystemMetrics.Disabled.ValueBool()
 		} else {
-			disabled58 = nil
+			disabled56 = nil
 		}
-		pipeline56 := new(string)
+		pipeline54 := new(string)
 		if !r.InputSystemMetrics.Pipeline.IsUnknown() && !r.InputSystemMetrics.Pipeline.IsNull() {
-			*pipeline56 = r.InputSystemMetrics.Pipeline.ValueString()
+			*pipeline54 = r.InputSystemMetrics.Pipeline.ValueString()
 		} else {
-			pipeline56 = nil
+			pipeline54 = nil
 		}
-		sendToRoutes28 := new(bool)
+		sendToRoutes27 := new(bool)
 		if !r.InputSystemMetrics.SendToRoutes.IsUnknown() && !r.InputSystemMetrics.SendToRoutes.IsNull() {
-			*sendToRoutes28 = r.InputSystemMetrics.SendToRoutes.ValueBool()
+			*sendToRoutes27 = r.InputSystemMetrics.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes28 = nil
+			sendToRoutes27 = nil
 		}
-		environment28 := new(string)
+		environment27 := new(string)
 		if !r.InputSystemMetrics.Environment.IsUnknown() && !r.InputSystemMetrics.Environment.IsNull() {
-			*environment28 = r.InputSystemMetrics.Environment.ValueString()
+			*environment27 = r.InputSystemMetrics.Environment.ValueString()
 		} else {
-			environment28 = nil
+			environment27 = nil
 		}
-		pqEnabled28 := new(bool)
+		pqEnabled27 := new(bool)
 		if !r.InputSystemMetrics.PqEnabled.IsUnknown() && !r.InputSystemMetrics.PqEnabled.IsNull() {
-			*pqEnabled28 = r.InputSystemMetrics.PqEnabled.ValueBool()
+			*pqEnabled27 = r.InputSystemMetrics.PqEnabled.ValueBool()
 		} else {
-			pqEnabled28 = nil
+			pqEnabled27 = nil
 		}
-		streamtags28 := make([]string, 0, len(r.InputSystemMetrics.Streamtags))
-		for streamtagsIndex28 := range r.InputSystemMetrics.Streamtags {
-			streamtags28 = append(streamtags28, r.InputSystemMetrics.Streamtags[streamtagsIndex28].ValueString())
+		streamtags27 := make([]string, 0, len(r.InputSystemMetrics.Streamtags))
+		for streamtagsIndex27 := range r.InputSystemMetrics.Streamtags {
+			streamtags27 = append(streamtags27, r.InputSystemMetrics.Streamtags[streamtagsIndex27].ValueString())
 		}
-		connections28 := make([]shared.InputSystemMetricsConnection, 0, len(r.InputSystemMetrics.Connections))
-		for connectionsIndex28 := range r.InputSystemMetrics.Connections {
-			pipeline57 := new(string)
-			if !r.InputSystemMetrics.Connections[connectionsIndex28].Pipeline.IsUnknown() && !r.InputSystemMetrics.Connections[connectionsIndex28].Pipeline.IsNull() {
-				*pipeline57 = r.InputSystemMetrics.Connections[connectionsIndex28].Pipeline.ValueString()
+		connections27 := make([]shared.InputSystemMetricsConnection, 0, len(r.InputSystemMetrics.Connections))
+		for connectionsIndex27 := range r.InputSystemMetrics.Connections {
+			pipeline55 := new(string)
+			if !r.InputSystemMetrics.Connections[connectionsIndex27].Pipeline.IsUnknown() && !r.InputSystemMetrics.Connections[connectionsIndex27].Pipeline.IsNull() {
+				*pipeline55 = r.InputSystemMetrics.Connections[connectionsIndex27].Pipeline.ValueString()
 			} else {
-				pipeline57 = nil
+				pipeline55 = nil
 			}
-			var output29 string
-			output29 = r.InputSystemMetrics.Connections[connectionsIndex28].Output.ValueString()
+			var output28 string
+			output28 = r.InputSystemMetrics.Connections[connectionsIndex27].Output.ValueString()
 
-			connections28 = append(connections28, shared.InputSystemMetricsConnection{
-				Pipeline: pipeline57,
-				Output:   output29,
+			connections27 = append(connections27, shared.InputSystemMetricsConnection{
+				Pipeline: pipeline55,
+				Output:   output28,
 			})
 		}
-		var pq28 *shared.InputSystemMetricsPq
+		var pq27 *shared.InputSystemMetricsPq
 		if r.InputSystemMetrics.Pq != nil {
-			mode28 := new(shared.InputSystemMetricsPqMode)
+			mode27 := new(shared.InputSystemMetricsPqMode)
 			if !r.InputSystemMetrics.Pq.Mode.IsUnknown() && !r.InputSystemMetrics.Pq.Mode.IsNull() {
-				*mode28 = shared.InputSystemMetricsPqMode(r.InputSystemMetrics.Pq.Mode.ValueString())
+				*mode27 = shared.InputSystemMetricsPqMode(r.InputSystemMetrics.Pq.Mode.ValueString())
 			} else {
-				mode28 = nil
+				mode27 = nil
 			}
-			maxBufferSize28 := new(float64)
+			maxBufferSize27 := new(float64)
 			if !r.InputSystemMetrics.Pq.MaxBufferSize.IsUnknown() && !r.InputSystemMetrics.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize28 = r.InputSystemMetrics.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize27 = r.InputSystemMetrics.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize28 = nil
+				maxBufferSize27 = nil
 			}
-			commitFrequency28 := new(float64)
+			commitFrequency27 := new(float64)
 			if !r.InputSystemMetrics.Pq.CommitFrequency.IsUnknown() && !r.InputSystemMetrics.Pq.CommitFrequency.IsNull() {
-				*commitFrequency28 = r.InputSystemMetrics.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency27 = r.InputSystemMetrics.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency28 = nil
+				commitFrequency27 = nil
 			}
-			maxFileSize28 := new(string)
+			maxFileSize27 := new(string)
 			if !r.InputSystemMetrics.Pq.MaxFileSize.IsUnknown() && !r.InputSystemMetrics.Pq.MaxFileSize.IsNull() {
-				*maxFileSize28 = r.InputSystemMetrics.Pq.MaxFileSize.ValueString()
+				*maxFileSize27 = r.InputSystemMetrics.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize28 = nil
+				maxFileSize27 = nil
 			}
-			maxSize28 := new(string)
+			maxSize27 := new(string)
 			if !r.InputSystemMetrics.Pq.MaxSize.IsUnknown() && !r.InputSystemMetrics.Pq.MaxSize.IsNull() {
-				*maxSize28 = r.InputSystemMetrics.Pq.MaxSize.ValueString()
+				*maxSize27 = r.InputSystemMetrics.Pq.MaxSize.ValueString()
 			} else {
-				maxSize28 = nil
+				maxSize27 = nil
 			}
-			path29 := new(string)
+			path28 := new(string)
 			if !r.InputSystemMetrics.Pq.Path.IsUnknown() && !r.InputSystemMetrics.Pq.Path.IsNull() {
-				*path29 = r.InputSystemMetrics.Pq.Path.ValueString()
+				*path28 = r.InputSystemMetrics.Pq.Path.ValueString()
 			} else {
-				path29 = nil
+				path28 = nil
 			}
-			compress30 := new(shared.InputSystemMetricsCompression)
+			compress29 := new(shared.InputSystemMetricsCompression)
 			if !r.InputSystemMetrics.Pq.Compress.IsUnknown() && !r.InputSystemMetrics.Pq.Compress.IsNull() {
-				*compress30 = shared.InputSystemMetricsCompression(r.InputSystemMetrics.Pq.Compress.ValueString())
+				*compress29 = shared.InputSystemMetricsCompression(r.InputSystemMetrics.Pq.Compress.ValueString())
 			} else {
-				compress30 = nil
+				compress29 = nil
 			}
-			pq28 = &shared.InputSystemMetricsPq{
-				Mode:            mode28,
-				MaxBufferSize:   maxBufferSize28,
-				CommitFrequency: commitFrequency28,
-				MaxFileSize:     maxFileSize28,
-				MaxSize:         maxSize28,
-				Path:            path29,
-				Compress:        compress30,
+			pq27 = &shared.InputSystemMetricsPq{
+				Mode:            mode27,
+				MaxBufferSize:   maxBufferSize27,
+				CommitFrequency: commitFrequency27,
+				MaxFileSize:     maxFileSize27,
+				MaxSize:         maxSize27,
+				Path:            path28,
+				Compress:        compress29,
 			}
 		}
 		interval10 := new(float64)
@@ -11014,23 +10432,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			interval10 = nil
 		}
-		var host14 *shared.InputSystemMetricsHost
+		var host13 *shared.InputSystemMetricsHost
 		if r.InputSystemMetrics.Host != nil {
-			mode29 := new(shared.InputSystemMetricsHostMode)
+			mode28 := new(shared.InputSystemMetricsHostMode)
 			if !r.InputSystemMetrics.Host.Mode.IsUnknown() && !r.InputSystemMetrics.Host.Mode.IsNull() {
-				*mode29 = shared.InputSystemMetricsHostMode(r.InputSystemMetrics.Host.Mode.ValueString())
+				*mode28 = shared.InputSystemMetricsHostMode(r.InputSystemMetrics.Host.Mode.ValueString())
 			} else {
-				mode29 = nil
+				mode28 = nil
 			}
 			var custom *shared.InputSystemMetricsCustom
 			if r.InputSystemMetrics.Host.Custom != nil {
 				var system *shared.InputSystemMetricsSystem
 				if r.InputSystemMetrics.Host.Custom.System != nil {
-					mode30 := new(shared.InputSystemMetricsSystemMode)
+					mode29 := new(shared.InputSystemMetricsSystemMode)
 					if !r.InputSystemMetrics.Host.Custom.System.Mode.IsUnknown() && !r.InputSystemMetrics.Host.Custom.System.Mode.IsNull() {
-						*mode30 = shared.InputSystemMetricsSystemMode(r.InputSystemMetrics.Host.Custom.System.Mode.ValueString())
+						*mode29 = shared.InputSystemMetricsSystemMode(r.InputSystemMetrics.Host.Custom.System.Mode.ValueString())
 					} else {
-						mode30 = nil
+						mode29 = nil
 					}
 					processes := new(bool)
 					if !r.InputSystemMetrics.Host.Custom.System.Processes.IsUnknown() && !r.InputSystemMetrics.Host.Custom.System.Processes.IsNull() {
@@ -11039,17 +10457,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						processes = nil
 					}
 					system = &shared.InputSystemMetricsSystem{
-						Mode:      mode30,
+						Mode:      mode29,
 						Processes: processes,
 					}
 				}
 				var cpu *shared.InputSystemMetricsCPU
 				if r.InputSystemMetrics.Host.Custom.CPU != nil {
-					mode31 := new(shared.InputSystemMetricsCPUMode)
+					mode30 := new(shared.InputSystemMetricsCPUMode)
 					if !r.InputSystemMetrics.Host.Custom.CPU.Mode.IsUnknown() && !r.InputSystemMetrics.Host.Custom.CPU.Mode.IsNull() {
-						*mode31 = shared.InputSystemMetricsCPUMode(r.InputSystemMetrics.Host.Custom.CPU.Mode.ValueString())
+						*mode30 = shared.InputSystemMetricsCPUMode(r.InputSystemMetrics.Host.Custom.CPU.Mode.ValueString())
 					} else {
-						mode31 = nil
+						mode30 = nil
 					}
 					perCPU := new(bool)
 					if !r.InputSystemMetrics.Host.Custom.CPU.PerCPU.IsUnknown() && !r.InputSystemMetrics.Host.Custom.CPU.PerCPU.IsNull() {
@@ -11070,7 +10488,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						timeVar = nil
 					}
 					cpu = &shared.InputSystemMetricsCPU{
-						Mode:   mode31,
+						Mode:   mode30,
 						PerCPU: perCPU,
 						Detail: detail,
 						Time:   timeVar,
@@ -11078,11 +10496,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				}
 				var memory *shared.InputSystemMetricsMemory
 				if r.InputSystemMetrics.Host.Custom.Memory != nil {
-					mode32 := new(shared.InputSystemMetricsMemoryMode)
+					mode31 := new(shared.InputSystemMetricsMemoryMode)
 					if !r.InputSystemMetrics.Host.Custom.Memory.Mode.IsUnknown() && !r.InputSystemMetrics.Host.Custom.Memory.Mode.IsNull() {
-						*mode32 = shared.InputSystemMetricsMemoryMode(r.InputSystemMetrics.Host.Custom.Memory.Mode.ValueString())
+						*mode31 = shared.InputSystemMetricsMemoryMode(r.InputSystemMetrics.Host.Custom.Memory.Mode.ValueString())
 					} else {
-						mode32 = nil
+						mode31 = nil
 					}
 					detail1 := new(bool)
 					if !r.InputSystemMetrics.Host.Custom.Memory.Detail.IsUnknown() && !r.InputSystemMetrics.Host.Custom.Memory.Detail.IsNull() {
@@ -11091,17 +10509,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						detail1 = nil
 					}
 					memory = &shared.InputSystemMetricsMemory{
-						Mode:   mode32,
+						Mode:   mode31,
 						Detail: detail1,
 					}
 				}
 				var network *shared.InputSystemMetricsNetwork
 				if r.InputSystemMetrics.Host.Custom.Network != nil {
-					mode33 := new(shared.InputSystemMetricsNetworkMode)
+					mode32 := new(shared.InputSystemMetricsNetworkMode)
 					if !r.InputSystemMetrics.Host.Custom.Network.Mode.IsUnknown() && !r.InputSystemMetrics.Host.Custom.Network.Mode.IsNull() {
-						*mode33 = shared.InputSystemMetricsNetworkMode(r.InputSystemMetrics.Host.Custom.Network.Mode.ValueString())
+						*mode32 = shared.InputSystemMetricsNetworkMode(r.InputSystemMetrics.Host.Custom.Network.Mode.ValueString())
 					} else {
-						mode33 = nil
+						mode32 = nil
 					}
 					devices := make([]string, 0, len(r.InputSystemMetrics.Host.Custom.Network.Devices))
 					for devicesIndex := range r.InputSystemMetrics.Host.Custom.Network.Devices {
@@ -11120,7 +10538,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						detail2 = nil
 					}
 					network = &shared.InputSystemMetricsNetwork{
-						Mode:         mode33,
+						Mode:         mode32,
 						Devices:      devices,
 						PerInterface: perInterface,
 						Detail:       detail2,
@@ -11128,11 +10546,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				}
 				var disk *shared.InputSystemMetricsDisk
 				if r.InputSystemMetrics.Host.Custom.Disk != nil {
-					mode34 := new(shared.InputSystemMetricsDiskMode)
+					mode33 := new(shared.InputSystemMetricsDiskMode)
 					if !r.InputSystemMetrics.Host.Custom.Disk.Mode.IsUnknown() && !r.InputSystemMetrics.Host.Custom.Disk.Mode.IsNull() {
-						*mode34 = shared.InputSystemMetricsDiskMode(r.InputSystemMetrics.Host.Custom.Disk.Mode.ValueString())
+						*mode33 = shared.InputSystemMetricsDiskMode(r.InputSystemMetrics.Host.Custom.Disk.Mode.ValueString())
 					} else {
-						mode34 = nil
+						mode33 = nil
 					}
 					devices1 := make([]string, 0, len(r.InputSystemMetrics.Host.Custom.Disk.Devices))
 					for devicesIndex1 := range r.InputSystemMetrics.Host.Custom.Disk.Devices {
@@ -11159,7 +10577,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						detail3 = nil
 					}
 					disk = &shared.InputSystemMetricsDisk{
-						Mode:        mode34,
+						Mode:        mode33,
 						Devices:     devices1,
 						Mountpoints: mountpoints,
 						Fstypes:     fstypes,
@@ -11175,8 +10593,8 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 					Disk:    disk,
 				}
 			}
-			host14 = &shared.InputSystemMetricsHost{
-				Mode:   mode29,
+			host13 = &shared.InputSystemMetricsHost{
+				Mode:   mode28,
 				Custom: custom,
 			}
 		}
@@ -11184,8 +10602,8 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		if r.InputSystemMetrics.Process != nil {
 			sets := make([]shared.InputSystemMetricsSet, 0, len(r.InputSystemMetrics.Process.Sets))
 			for setsIndex := range r.InputSystemMetrics.Process.Sets {
-				var name49 string
-				name49 = r.InputSystemMetrics.Process.Sets[setsIndex].Name.ValueString()
+				var name44 string
+				name44 = r.InputSystemMetrics.Process.Sets[setsIndex].Name.ValueString()
 
 				var filter2 string
 				filter2 = r.InputSystemMetrics.Process.Sets[setsIndex].Filter.ValueString()
@@ -11197,7 +10615,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 					includeChildren = nil
 				}
 				sets = append(sets, shared.InputSystemMetricsSet{
-					Name:            name49,
+					Name:            name44,
 					Filter:          filter2,
 					IncludeChildren: includeChildren,
 				})
@@ -11208,11 +10626,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var container *shared.InputSystemMetricsContainer
 		if r.InputSystemMetrics.Container != nil {
-			mode35 := new(shared.ContainerMode)
+			mode34 := new(shared.ContainerMode)
 			if !r.InputSystemMetrics.Container.Mode.IsUnknown() && !r.InputSystemMetrics.Container.Mode.IsNull() {
-				*mode35 = shared.ContainerMode(r.InputSystemMetrics.Container.Mode.ValueString())
+				*mode34 = shared.ContainerMode(r.InputSystemMetrics.Container.Mode.ValueString())
 			} else {
-				mode35 = nil
+				mode34 = nil
 			}
 			dockerSocket := make([]string, 0, len(r.InputSystemMetrics.Container.DockerSocket))
 			for dockerSocketIndex := range r.InputSystemMetrics.Container.DockerSocket {
@@ -11252,7 +10670,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				detail4 = nil
 			}
 			container = &shared.InputSystemMetricsContainer{
-				Mode:          mode35,
+				Mode:          mode34,
 				DockerSocket:  dockerSocket,
 				DockerTimeout: dockerTimeout,
 				Filters:       filters,
@@ -11261,17 +10679,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				Detail:        detail4,
 			}
 		}
-		metadata30 := make([]shared.InputSystemMetricsMetadatum, 0, len(r.InputSystemMetrics.Metadata))
-		for metadataIndex30 := range r.InputSystemMetrics.Metadata {
-			var name50 string
-			name50 = r.InputSystemMetrics.Metadata[metadataIndex30].Name.ValueString()
+		metadata29 := make([]shared.InputSystemMetricsMetadatum, 0, len(r.InputSystemMetrics.Metadata))
+		for metadataIndex29 := range r.InputSystemMetrics.Metadata {
+			var name45 string
+			name45 = r.InputSystemMetrics.Metadata[metadataIndex29].Name.ValueString()
 
-			var value47 string
-			value47 = r.InputSystemMetrics.Metadata[metadataIndex30].Value.ValueString()
+			var value42 string
+			value42 = r.InputSystemMetrics.Metadata[metadataIndex29].Value.ValueString()
 
-			metadata30 = append(metadata30, shared.InputSystemMetricsMetadatum{
-				Name:  name50,
-				Value: value47,
+			metadata29 = append(metadata29, shared.InputSystemMetricsMetadatum{
+				Name:  name45,
+				Value: value42,
 			})
 		}
 		var persistence1 *shared.InputSystemMetricsPersistence
@@ -11300,11 +10718,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				maxDataTime1 = nil
 			}
-			compress31 := new(shared.InputSystemMetricsDataCompressionFormat)
+			compress30 := new(shared.InputSystemMetricsDataCompressionFormat)
 			if !r.InputSystemMetrics.Persistence.Compress.IsUnknown() && !r.InputSystemMetrics.Persistence.Compress.IsNull() {
-				*compress31 = shared.InputSystemMetricsDataCompressionFormat(r.InputSystemMetrics.Persistence.Compress.ValueString())
+				*compress30 = shared.InputSystemMetricsDataCompressionFormat(r.InputSystemMetrics.Persistence.Compress.ValueString())
 			} else {
-				compress31 = nil
+				compress30 = nil
 			}
 			destPath := new(string)
 			if !r.InputSystemMetrics.Persistence.DestPath.IsUnknown() && !r.InputSystemMetrics.Persistence.DestPath.IsNull() {
@@ -11317,34 +10735,34 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				TimeWindow:  timeWindow1,
 				MaxDataSize: maxDataSize1,
 				MaxDataTime: maxDataTime1,
-				Compress:    compress31,
+				Compress:    compress30,
 				DestPath:    destPath,
 			}
 		}
-		description33 := new(string)
+		description32 := new(string)
 		if !r.InputSystemMetrics.Description.IsUnknown() && !r.InputSystemMetrics.Description.IsNull() {
-			*description33 = r.InputSystemMetrics.Description.ValueString()
+			*description32 = r.InputSystemMetrics.Description.ValueString()
 		} else {
-			description33 = nil
+			description32 = nil
 		}
 		inputSystemMetrics = &shared.InputSystemMetrics{
-			ID:           id28,
-			Type:         typeVar32,
-			Disabled:     disabled58,
-			Pipeline:     pipeline56,
-			SendToRoutes: sendToRoutes28,
-			Environment:  environment28,
-			PqEnabled:    pqEnabled28,
-			Streamtags:   streamtags28,
-			Connections:  connections28,
-			Pq:           pq28,
+			ID:           id27,
+			Type:         typeVar31,
+			Disabled:     disabled56,
+			Pipeline:     pipeline54,
+			SendToRoutes: sendToRoutes27,
+			Environment:  environment27,
+			PqEnabled:    pqEnabled27,
+			Streamtags:   streamtags27,
+			Connections:  connections27,
+			Pq:           pq27,
 			Interval:     interval10,
-			Host:         host14,
+			Host:         host13,
 			Process:      process,
 			Container:    container,
-			Metadata:     metadata30,
+			Metadata:     metadata29,
 			Persistence:  persistence1,
-			Description:  description33,
+			Description:  description32,
 		}
 	}
 	if inputSystemMetrics != nil {
@@ -11354,112 +10772,112 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputSystemState *shared.InputSystemState
 	if r.InputSystemState != nil {
-		var id29 string
-		id29 = r.InputSystemState.ID.ValueString()
+		var id28 string
+		id28 = r.InputSystemState.ID.ValueString()
 
-		typeVar33 := shared.InputSystemStateType(r.InputSystemState.Type.ValueString())
-		disabled59 := new(bool)
+		typeVar32 := shared.InputSystemStateType(r.InputSystemState.Type.ValueString())
+		disabled57 := new(bool)
 		if !r.InputSystemState.Disabled.IsUnknown() && !r.InputSystemState.Disabled.IsNull() {
-			*disabled59 = r.InputSystemState.Disabled.ValueBool()
+			*disabled57 = r.InputSystemState.Disabled.ValueBool()
 		} else {
-			disabled59 = nil
+			disabled57 = nil
 		}
-		pipeline58 := new(string)
+		pipeline56 := new(string)
 		if !r.InputSystemState.Pipeline.IsUnknown() && !r.InputSystemState.Pipeline.IsNull() {
-			*pipeline58 = r.InputSystemState.Pipeline.ValueString()
+			*pipeline56 = r.InputSystemState.Pipeline.ValueString()
 		} else {
-			pipeline58 = nil
+			pipeline56 = nil
 		}
-		sendToRoutes29 := new(bool)
+		sendToRoutes28 := new(bool)
 		if !r.InputSystemState.SendToRoutes.IsUnknown() && !r.InputSystemState.SendToRoutes.IsNull() {
-			*sendToRoutes29 = r.InputSystemState.SendToRoutes.ValueBool()
+			*sendToRoutes28 = r.InputSystemState.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes29 = nil
+			sendToRoutes28 = nil
 		}
-		environment29 := new(string)
+		environment28 := new(string)
 		if !r.InputSystemState.Environment.IsUnknown() && !r.InputSystemState.Environment.IsNull() {
-			*environment29 = r.InputSystemState.Environment.ValueString()
+			*environment28 = r.InputSystemState.Environment.ValueString()
 		} else {
-			environment29 = nil
+			environment28 = nil
 		}
-		pqEnabled29 := new(bool)
+		pqEnabled28 := new(bool)
 		if !r.InputSystemState.PqEnabled.IsUnknown() && !r.InputSystemState.PqEnabled.IsNull() {
-			*pqEnabled29 = r.InputSystemState.PqEnabled.ValueBool()
+			*pqEnabled28 = r.InputSystemState.PqEnabled.ValueBool()
 		} else {
-			pqEnabled29 = nil
+			pqEnabled28 = nil
 		}
-		streamtags29 := make([]string, 0, len(r.InputSystemState.Streamtags))
-		for streamtagsIndex29 := range r.InputSystemState.Streamtags {
-			streamtags29 = append(streamtags29, r.InputSystemState.Streamtags[streamtagsIndex29].ValueString())
+		streamtags28 := make([]string, 0, len(r.InputSystemState.Streamtags))
+		for streamtagsIndex28 := range r.InputSystemState.Streamtags {
+			streamtags28 = append(streamtags28, r.InputSystemState.Streamtags[streamtagsIndex28].ValueString())
 		}
-		connections29 := make([]shared.InputSystemStateConnection, 0, len(r.InputSystemState.Connections))
-		for connectionsIndex29 := range r.InputSystemState.Connections {
-			pipeline59 := new(string)
-			if !r.InputSystemState.Connections[connectionsIndex29].Pipeline.IsUnknown() && !r.InputSystemState.Connections[connectionsIndex29].Pipeline.IsNull() {
-				*pipeline59 = r.InputSystemState.Connections[connectionsIndex29].Pipeline.ValueString()
+		connections28 := make([]shared.InputSystemStateConnection, 0, len(r.InputSystemState.Connections))
+		for connectionsIndex28 := range r.InputSystemState.Connections {
+			pipeline57 := new(string)
+			if !r.InputSystemState.Connections[connectionsIndex28].Pipeline.IsUnknown() && !r.InputSystemState.Connections[connectionsIndex28].Pipeline.IsNull() {
+				*pipeline57 = r.InputSystemState.Connections[connectionsIndex28].Pipeline.ValueString()
 			} else {
-				pipeline59 = nil
+				pipeline57 = nil
 			}
-			var output30 string
-			output30 = r.InputSystemState.Connections[connectionsIndex29].Output.ValueString()
+			var output29 string
+			output29 = r.InputSystemState.Connections[connectionsIndex28].Output.ValueString()
 
-			connections29 = append(connections29, shared.InputSystemStateConnection{
-				Pipeline: pipeline59,
-				Output:   output30,
+			connections28 = append(connections28, shared.InputSystemStateConnection{
+				Pipeline: pipeline57,
+				Output:   output29,
 			})
 		}
-		var pq29 *shared.InputSystemStatePq
+		var pq28 *shared.InputSystemStatePq
 		if r.InputSystemState.Pq != nil {
-			mode36 := new(shared.InputSystemStateMode)
+			mode35 := new(shared.InputSystemStateMode)
 			if !r.InputSystemState.Pq.Mode.IsUnknown() && !r.InputSystemState.Pq.Mode.IsNull() {
-				*mode36 = shared.InputSystemStateMode(r.InputSystemState.Pq.Mode.ValueString())
+				*mode35 = shared.InputSystemStateMode(r.InputSystemState.Pq.Mode.ValueString())
 			} else {
-				mode36 = nil
+				mode35 = nil
 			}
-			maxBufferSize29 := new(float64)
+			maxBufferSize28 := new(float64)
 			if !r.InputSystemState.Pq.MaxBufferSize.IsUnknown() && !r.InputSystemState.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize29 = r.InputSystemState.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize28 = r.InputSystemState.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize29 = nil
+				maxBufferSize28 = nil
 			}
-			commitFrequency29 := new(float64)
+			commitFrequency28 := new(float64)
 			if !r.InputSystemState.Pq.CommitFrequency.IsUnknown() && !r.InputSystemState.Pq.CommitFrequency.IsNull() {
-				*commitFrequency29 = r.InputSystemState.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency28 = r.InputSystemState.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency29 = nil
+				commitFrequency28 = nil
 			}
-			maxFileSize29 := new(string)
+			maxFileSize28 := new(string)
 			if !r.InputSystemState.Pq.MaxFileSize.IsUnknown() && !r.InputSystemState.Pq.MaxFileSize.IsNull() {
-				*maxFileSize29 = r.InputSystemState.Pq.MaxFileSize.ValueString()
+				*maxFileSize28 = r.InputSystemState.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize29 = nil
+				maxFileSize28 = nil
 			}
-			maxSize29 := new(string)
+			maxSize28 := new(string)
 			if !r.InputSystemState.Pq.MaxSize.IsUnknown() && !r.InputSystemState.Pq.MaxSize.IsNull() {
-				*maxSize29 = r.InputSystemState.Pq.MaxSize.ValueString()
+				*maxSize28 = r.InputSystemState.Pq.MaxSize.ValueString()
 			} else {
-				maxSize29 = nil
+				maxSize28 = nil
 			}
-			path30 := new(string)
+			path29 := new(string)
 			if !r.InputSystemState.Pq.Path.IsUnknown() && !r.InputSystemState.Pq.Path.IsNull() {
-				*path30 = r.InputSystemState.Pq.Path.ValueString()
+				*path29 = r.InputSystemState.Pq.Path.ValueString()
 			} else {
-				path30 = nil
+				path29 = nil
 			}
-			compress32 := new(shared.InputSystemStateCompression)
+			compress31 := new(shared.InputSystemStateCompression)
 			if !r.InputSystemState.Pq.Compress.IsUnknown() && !r.InputSystemState.Pq.Compress.IsNull() {
-				*compress32 = shared.InputSystemStateCompression(r.InputSystemState.Pq.Compress.ValueString())
+				*compress31 = shared.InputSystemStateCompression(r.InputSystemState.Pq.Compress.ValueString())
 			} else {
-				compress32 = nil
+				compress31 = nil
 			}
-			pq29 = &shared.InputSystemStatePq{
-				Mode:            mode36,
-				MaxBufferSize:   maxBufferSize29,
-				CommitFrequency: commitFrequency29,
-				MaxFileSize:     maxFileSize29,
-				MaxSize:         maxSize29,
-				Path:            path30,
-				Compress:        compress32,
+			pq28 = &shared.InputSystemStatePq{
+				Mode:            mode35,
+				MaxBufferSize:   maxBufferSize28,
+				CommitFrequency: commitFrequency28,
+				MaxFileSize:     maxFileSize28,
+				MaxSize:         maxSize28,
+				Path:            path29,
+				Compress:        compress31,
 			}
 		}
 		interval11 := new(float64)
@@ -11468,17 +10886,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			interval11 = nil
 		}
-		metadata31 := make([]shared.InputSystemStateMetadatum, 0, len(r.InputSystemState.Metadata))
-		for metadataIndex31 := range r.InputSystemState.Metadata {
-			var name51 string
-			name51 = r.InputSystemState.Metadata[metadataIndex31].Name.ValueString()
+		metadata30 := make([]shared.InputSystemStateMetadatum, 0, len(r.InputSystemState.Metadata))
+		for metadataIndex30 := range r.InputSystemState.Metadata {
+			var name46 string
+			name46 = r.InputSystemState.Metadata[metadataIndex30].Name.ValueString()
 
-			var value48 string
-			value48 = r.InputSystemState.Metadata[metadataIndex31].Value.ValueString()
+			var value43 string
+			value43 = r.InputSystemState.Metadata[metadataIndex30].Value.ValueString()
 
-			metadata31 = append(metadata31, shared.InputSystemStateMetadatum{
-				Name:  name51,
-				Value: value48,
+			metadata30 = append(metadata30, shared.InputSystemStateMetadatum{
+				Name:  name46,
+				Value: value43,
 			})
 		}
 		var collectors *shared.Collectors
@@ -11519,7 +10937,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 					Enable: enable4,
 				}
 			}
-			var metadata32 *shared.HostInfo
+			var metadata31 *shared.HostInfo
 			if r.InputSystemState.Collectors.Metadata != nil {
 				enable5 := new(bool)
 				if !r.InputSystemState.Collectors.Metadata.Enable.IsUnknown() && !r.InputSystemState.Collectors.Metadata.Enable.IsNull() {
@@ -11527,7 +10945,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				} else {
 					enable5 = nil
 				}
-				metadata32 = &shared.HostInfo{
+				metadata31 = &shared.HostInfo{
 					Enable: enable5,
 				}
 			}
@@ -11619,7 +11037,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				Hostsfile:  hostsfile,
 				Interfaces: interfaces,
 				Disk:       disk1,
-				Metadata:   metadata32,
+				Metadata:   metadata31,
 				Routes:     routes,
 				DNS:        dns,
 				User:       user,
@@ -11655,11 +11073,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				maxDataTime2 = nil
 			}
-			compress33 := new(shared.InputSystemStateDataCompressionFormat)
+			compress32 := new(shared.InputSystemStateDataCompressionFormat)
 			if !r.InputSystemState.Persistence.Compress.IsUnknown() && !r.InputSystemState.Persistence.Compress.IsNull() {
-				*compress33 = shared.InputSystemStateDataCompressionFormat(r.InputSystemState.Persistence.Compress.ValueString())
+				*compress32 = shared.InputSystemStateDataCompressionFormat(r.InputSystemState.Persistence.Compress.ValueString())
 			} else {
-				compress33 = nil
+				compress32 = nil
 			}
 			destPath1 := new(string)
 			if !r.InputSystemState.Persistence.DestPath.IsUnknown() && !r.InputSystemState.Persistence.DestPath.IsNull() {
@@ -11672,7 +11090,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				TimeWindow:  timeWindow2,
 				MaxDataSize: maxDataSize2,
 				MaxDataTime: maxDataTime2,
-				Compress:    compress33,
+				Compress:    compress32,
 				DestPath:    destPath1,
 			}
 		}
@@ -11682,29 +11100,29 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			disableNativeModule = nil
 		}
-		description34 := new(string)
+		description33 := new(string)
 		if !r.InputSystemState.Description.IsUnknown() && !r.InputSystemState.Description.IsNull() {
-			*description34 = r.InputSystemState.Description.ValueString()
+			*description33 = r.InputSystemState.Description.ValueString()
 		} else {
-			description34 = nil
+			description33 = nil
 		}
 		inputSystemState = &shared.InputSystemState{
-			ID:                  id29,
-			Type:                typeVar33,
-			Disabled:            disabled59,
-			Pipeline:            pipeline58,
-			SendToRoutes:        sendToRoutes29,
-			Environment:         environment29,
-			PqEnabled:           pqEnabled29,
-			Streamtags:          streamtags29,
-			Connections:         connections29,
-			Pq:                  pq29,
+			ID:                  id28,
+			Type:                typeVar32,
+			Disabled:            disabled57,
+			Pipeline:            pipeline56,
+			SendToRoutes:        sendToRoutes28,
+			Environment:         environment28,
+			PqEnabled:           pqEnabled28,
+			Streamtags:          streamtags28,
+			Connections:         connections28,
+			Pq:                  pq28,
 			Interval:            interval11,
-			Metadata:            metadata31,
+			Metadata:            metadata30,
 			Collectors:          collectors,
 			Persistence:         persistence2,
 			DisableNativeModule: disableNativeModule,
-			Description:         description34,
+			Description:         description33,
 		}
 	}
 	if inputSystemState != nil {
@@ -11714,112 +11132,112 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputKubeMetrics *shared.InputKubeMetrics
 	if r.InputKubeMetrics != nil {
-		var id30 string
-		id30 = r.InputKubeMetrics.ID.ValueString()
+		var id29 string
+		id29 = r.InputKubeMetrics.ID.ValueString()
 
-		typeVar34 := shared.InputKubeMetricsType(r.InputKubeMetrics.Type.ValueString())
-		disabled60 := new(bool)
+		typeVar33 := shared.InputKubeMetricsType(r.InputKubeMetrics.Type.ValueString())
+		disabled58 := new(bool)
 		if !r.InputKubeMetrics.Disabled.IsUnknown() && !r.InputKubeMetrics.Disabled.IsNull() {
-			*disabled60 = r.InputKubeMetrics.Disabled.ValueBool()
+			*disabled58 = r.InputKubeMetrics.Disabled.ValueBool()
 		} else {
-			disabled60 = nil
+			disabled58 = nil
 		}
-		pipeline60 := new(string)
+		pipeline58 := new(string)
 		if !r.InputKubeMetrics.Pipeline.IsUnknown() && !r.InputKubeMetrics.Pipeline.IsNull() {
-			*pipeline60 = r.InputKubeMetrics.Pipeline.ValueString()
+			*pipeline58 = r.InputKubeMetrics.Pipeline.ValueString()
 		} else {
-			pipeline60 = nil
+			pipeline58 = nil
 		}
-		sendToRoutes30 := new(bool)
+		sendToRoutes29 := new(bool)
 		if !r.InputKubeMetrics.SendToRoutes.IsUnknown() && !r.InputKubeMetrics.SendToRoutes.IsNull() {
-			*sendToRoutes30 = r.InputKubeMetrics.SendToRoutes.ValueBool()
+			*sendToRoutes29 = r.InputKubeMetrics.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes30 = nil
+			sendToRoutes29 = nil
 		}
-		environment30 := new(string)
+		environment29 := new(string)
 		if !r.InputKubeMetrics.Environment.IsUnknown() && !r.InputKubeMetrics.Environment.IsNull() {
-			*environment30 = r.InputKubeMetrics.Environment.ValueString()
+			*environment29 = r.InputKubeMetrics.Environment.ValueString()
 		} else {
-			environment30 = nil
+			environment29 = nil
 		}
-		pqEnabled30 := new(bool)
+		pqEnabled29 := new(bool)
 		if !r.InputKubeMetrics.PqEnabled.IsUnknown() && !r.InputKubeMetrics.PqEnabled.IsNull() {
-			*pqEnabled30 = r.InputKubeMetrics.PqEnabled.ValueBool()
+			*pqEnabled29 = r.InputKubeMetrics.PqEnabled.ValueBool()
 		} else {
-			pqEnabled30 = nil
+			pqEnabled29 = nil
 		}
-		streamtags30 := make([]string, 0, len(r.InputKubeMetrics.Streamtags))
-		for streamtagsIndex30 := range r.InputKubeMetrics.Streamtags {
-			streamtags30 = append(streamtags30, r.InputKubeMetrics.Streamtags[streamtagsIndex30].ValueString())
+		streamtags29 := make([]string, 0, len(r.InputKubeMetrics.Streamtags))
+		for streamtagsIndex29 := range r.InputKubeMetrics.Streamtags {
+			streamtags29 = append(streamtags29, r.InputKubeMetrics.Streamtags[streamtagsIndex29].ValueString())
 		}
-		connections30 := make([]shared.InputKubeMetricsConnection, 0, len(r.InputKubeMetrics.Connections))
-		for connectionsIndex30 := range r.InputKubeMetrics.Connections {
-			pipeline61 := new(string)
-			if !r.InputKubeMetrics.Connections[connectionsIndex30].Pipeline.IsUnknown() && !r.InputKubeMetrics.Connections[connectionsIndex30].Pipeline.IsNull() {
-				*pipeline61 = r.InputKubeMetrics.Connections[connectionsIndex30].Pipeline.ValueString()
+		connections29 := make([]shared.InputKubeMetricsConnection, 0, len(r.InputKubeMetrics.Connections))
+		for connectionsIndex29 := range r.InputKubeMetrics.Connections {
+			pipeline59 := new(string)
+			if !r.InputKubeMetrics.Connections[connectionsIndex29].Pipeline.IsUnknown() && !r.InputKubeMetrics.Connections[connectionsIndex29].Pipeline.IsNull() {
+				*pipeline59 = r.InputKubeMetrics.Connections[connectionsIndex29].Pipeline.ValueString()
 			} else {
-				pipeline61 = nil
+				pipeline59 = nil
 			}
-			var output31 string
-			output31 = r.InputKubeMetrics.Connections[connectionsIndex30].Output.ValueString()
+			var output30 string
+			output30 = r.InputKubeMetrics.Connections[connectionsIndex29].Output.ValueString()
 
-			connections30 = append(connections30, shared.InputKubeMetricsConnection{
-				Pipeline: pipeline61,
-				Output:   output31,
+			connections29 = append(connections29, shared.InputKubeMetricsConnection{
+				Pipeline: pipeline59,
+				Output:   output30,
 			})
 		}
-		var pq30 *shared.InputKubeMetricsPq
+		var pq29 *shared.InputKubeMetricsPq
 		if r.InputKubeMetrics.Pq != nil {
-			mode37 := new(shared.InputKubeMetricsMode)
+			mode36 := new(shared.InputKubeMetricsMode)
 			if !r.InputKubeMetrics.Pq.Mode.IsUnknown() && !r.InputKubeMetrics.Pq.Mode.IsNull() {
-				*mode37 = shared.InputKubeMetricsMode(r.InputKubeMetrics.Pq.Mode.ValueString())
+				*mode36 = shared.InputKubeMetricsMode(r.InputKubeMetrics.Pq.Mode.ValueString())
 			} else {
-				mode37 = nil
+				mode36 = nil
 			}
-			maxBufferSize30 := new(float64)
+			maxBufferSize29 := new(float64)
 			if !r.InputKubeMetrics.Pq.MaxBufferSize.IsUnknown() && !r.InputKubeMetrics.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize30 = r.InputKubeMetrics.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize29 = r.InputKubeMetrics.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize30 = nil
+				maxBufferSize29 = nil
 			}
-			commitFrequency30 := new(float64)
+			commitFrequency29 := new(float64)
 			if !r.InputKubeMetrics.Pq.CommitFrequency.IsUnknown() && !r.InputKubeMetrics.Pq.CommitFrequency.IsNull() {
-				*commitFrequency30 = r.InputKubeMetrics.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency29 = r.InputKubeMetrics.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency30 = nil
+				commitFrequency29 = nil
 			}
-			maxFileSize30 := new(string)
+			maxFileSize29 := new(string)
 			if !r.InputKubeMetrics.Pq.MaxFileSize.IsUnknown() && !r.InputKubeMetrics.Pq.MaxFileSize.IsNull() {
-				*maxFileSize30 = r.InputKubeMetrics.Pq.MaxFileSize.ValueString()
+				*maxFileSize29 = r.InputKubeMetrics.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize30 = nil
+				maxFileSize29 = nil
 			}
-			maxSize30 := new(string)
+			maxSize29 := new(string)
 			if !r.InputKubeMetrics.Pq.MaxSize.IsUnknown() && !r.InputKubeMetrics.Pq.MaxSize.IsNull() {
-				*maxSize30 = r.InputKubeMetrics.Pq.MaxSize.ValueString()
+				*maxSize29 = r.InputKubeMetrics.Pq.MaxSize.ValueString()
 			} else {
-				maxSize30 = nil
+				maxSize29 = nil
 			}
-			path31 := new(string)
+			path30 := new(string)
 			if !r.InputKubeMetrics.Pq.Path.IsUnknown() && !r.InputKubeMetrics.Pq.Path.IsNull() {
-				*path31 = r.InputKubeMetrics.Pq.Path.ValueString()
+				*path30 = r.InputKubeMetrics.Pq.Path.ValueString()
 			} else {
-				path31 = nil
+				path30 = nil
 			}
-			compress34 := new(shared.InputKubeMetricsCompression)
+			compress33 := new(shared.InputKubeMetricsCompression)
 			if !r.InputKubeMetrics.Pq.Compress.IsUnknown() && !r.InputKubeMetrics.Pq.Compress.IsNull() {
-				*compress34 = shared.InputKubeMetricsCompression(r.InputKubeMetrics.Pq.Compress.ValueString())
+				*compress33 = shared.InputKubeMetricsCompression(r.InputKubeMetrics.Pq.Compress.ValueString())
 			} else {
-				compress34 = nil
+				compress33 = nil
 			}
-			pq30 = &shared.InputKubeMetricsPq{
-				Mode:            mode37,
-				MaxBufferSize:   maxBufferSize30,
-				CommitFrequency: commitFrequency30,
-				MaxFileSize:     maxFileSize30,
-				MaxSize:         maxSize30,
-				Path:            path31,
-				Compress:        compress34,
+			pq29 = &shared.InputKubeMetricsPq{
+				Mode:            mode36,
+				MaxBufferSize:   maxBufferSize29,
+				CommitFrequency: commitFrequency29,
+				MaxFileSize:     maxFileSize29,
+				MaxSize:         maxSize29,
+				Path:            path30,
+				Compress:        compress33,
 			}
 		}
 		interval12 := new(float64)
@@ -11833,28 +11251,28 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			var filter3 string
 			filter3 = r.InputKubeMetrics.Rules[rulesIndex].Filter.ValueString()
 
-			description35 := new(string)
+			description34 := new(string)
 			if !r.InputKubeMetrics.Rules[rulesIndex].Description.IsUnknown() && !r.InputKubeMetrics.Rules[rulesIndex].Description.IsNull() {
-				*description35 = r.InputKubeMetrics.Rules[rulesIndex].Description.ValueString()
+				*description34 = r.InputKubeMetrics.Rules[rulesIndex].Description.ValueString()
 			} else {
-				description35 = nil
+				description34 = nil
 			}
 			rules = append(rules, shared.InputKubeMetricsRule{
 				Filter:      filter3,
-				Description: description35,
+				Description: description34,
 			})
 		}
-		metadata33 := make([]shared.InputKubeMetricsMetadatum, 0, len(r.InputKubeMetrics.Metadata))
-		for metadataIndex32 := range r.InputKubeMetrics.Metadata {
-			var name52 string
-			name52 = r.InputKubeMetrics.Metadata[metadataIndex32].Name.ValueString()
+		metadata32 := make([]shared.InputKubeMetricsMetadatum, 0, len(r.InputKubeMetrics.Metadata))
+		for metadataIndex31 := range r.InputKubeMetrics.Metadata {
+			var name47 string
+			name47 = r.InputKubeMetrics.Metadata[metadataIndex31].Name.ValueString()
 
-			var value49 string
-			value49 = r.InputKubeMetrics.Metadata[metadataIndex32].Value.ValueString()
+			var value44 string
+			value44 = r.InputKubeMetrics.Metadata[metadataIndex31].Value.ValueString()
 
-			metadata33 = append(metadata33, shared.InputKubeMetricsMetadatum{
-				Name:  name52,
-				Value: value49,
+			metadata32 = append(metadata32, shared.InputKubeMetricsMetadatum{
+				Name:  name47,
+				Value: value44,
 			})
 		}
 		var persistence3 *shared.InputKubeMetricsPersistence
@@ -11883,11 +11301,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				maxDataTime3 = nil
 			}
-			compress35 := new(shared.InputKubeMetricsDataCompressionFormat)
+			compress34 := new(shared.InputKubeMetricsDataCompressionFormat)
 			if !r.InputKubeMetrics.Persistence.Compress.IsUnknown() && !r.InputKubeMetrics.Persistence.Compress.IsNull() {
-				*compress35 = shared.InputKubeMetricsDataCompressionFormat(r.InputKubeMetrics.Persistence.Compress.ValueString())
+				*compress34 = shared.InputKubeMetricsDataCompressionFormat(r.InputKubeMetrics.Persistence.Compress.ValueString())
 			} else {
-				compress35 = nil
+				compress34 = nil
 			}
 			destPath2 := new(string)
 			if !r.InputKubeMetrics.Persistence.DestPath.IsUnknown() && !r.InputKubeMetrics.Persistence.DestPath.IsNull() {
@@ -11900,32 +11318,32 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				TimeWindow:  timeWindow3,
 				MaxDataSize: maxDataSize3,
 				MaxDataTime: maxDataTime3,
-				Compress:    compress35,
+				Compress:    compress34,
 				DestPath:    destPath2,
 			}
 		}
-		description36 := new(string)
+		description35 := new(string)
 		if !r.InputKubeMetrics.Description.IsUnknown() && !r.InputKubeMetrics.Description.IsNull() {
-			*description36 = r.InputKubeMetrics.Description.ValueString()
+			*description35 = r.InputKubeMetrics.Description.ValueString()
 		} else {
-			description36 = nil
+			description35 = nil
 		}
 		inputKubeMetrics = &shared.InputKubeMetrics{
-			ID:           id30,
-			Type:         typeVar34,
-			Disabled:     disabled60,
-			Pipeline:     pipeline60,
-			SendToRoutes: sendToRoutes30,
-			Environment:  environment30,
-			PqEnabled:    pqEnabled30,
-			Streamtags:   streamtags30,
-			Connections:  connections30,
-			Pq:           pq30,
+			ID:           id29,
+			Type:         typeVar33,
+			Disabled:     disabled58,
+			Pipeline:     pipeline58,
+			SendToRoutes: sendToRoutes29,
+			Environment:  environment29,
+			PqEnabled:    pqEnabled29,
+			Streamtags:   streamtags29,
+			Connections:  connections29,
+			Pq:           pq29,
 			Interval:     interval12,
 			Rules:        rules,
-			Metadata:     metadata33,
+			Metadata:     metadata32,
 			Persistence:  persistence3,
-			Description:  description36,
+			Description:  description35,
 		}
 	}
 	if inputKubeMetrics != nil {
@@ -11935,112 +11353,112 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputKubeLogs *shared.InputKubeLogs
 	if r.InputKubeLogs != nil {
-		var id31 string
-		id31 = r.InputKubeLogs.ID.ValueString()
+		var id30 string
+		id30 = r.InputKubeLogs.ID.ValueString()
 
-		typeVar35 := shared.InputKubeLogsType(r.InputKubeLogs.Type.ValueString())
-		disabled61 := new(bool)
+		typeVar34 := shared.InputKubeLogsType(r.InputKubeLogs.Type.ValueString())
+		disabled59 := new(bool)
 		if !r.InputKubeLogs.Disabled.IsUnknown() && !r.InputKubeLogs.Disabled.IsNull() {
-			*disabled61 = r.InputKubeLogs.Disabled.ValueBool()
+			*disabled59 = r.InputKubeLogs.Disabled.ValueBool()
 		} else {
-			disabled61 = nil
+			disabled59 = nil
 		}
-		pipeline62 := new(string)
+		pipeline60 := new(string)
 		if !r.InputKubeLogs.Pipeline.IsUnknown() && !r.InputKubeLogs.Pipeline.IsNull() {
-			*pipeline62 = r.InputKubeLogs.Pipeline.ValueString()
+			*pipeline60 = r.InputKubeLogs.Pipeline.ValueString()
 		} else {
-			pipeline62 = nil
+			pipeline60 = nil
 		}
-		sendToRoutes31 := new(bool)
+		sendToRoutes30 := new(bool)
 		if !r.InputKubeLogs.SendToRoutes.IsUnknown() && !r.InputKubeLogs.SendToRoutes.IsNull() {
-			*sendToRoutes31 = r.InputKubeLogs.SendToRoutes.ValueBool()
+			*sendToRoutes30 = r.InputKubeLogs.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes31 = nil
+			sendToRoutes30 = nil
 		}
-		environment31 := new(string)
+		environment30 := new(string)
 		if !r.InputKubeLogs.Environment.IsUnknown() && !r.InputKubeLogs.Environment.IsNull() {
-			*environment31 = r.InputKubeLogs.Environment.ValueString()
+			*environment30 = r.InputKubeLogs.Environment.ValueString()
 		} else {
-			environment31 = nil
+			environment30 = nil
 		}
-		pqEnabled31 := new(bool)
+		pqEnabled30 := new(bool)
 		if !r.InputKubeLogs.PqEnabled.IsUnknown() && !r.InputKubeLogs.PqEnabled.IsNull() {
-			*pqEnabled31 = r.InputKubeLogs.PqEnabled.ValueBool()
+			*pqEnabled30 = r.InputKubeLogs.PqEnabled.ValueBool()
 		} else {
-			pqEnabled31 = nil
+			pqEnabled30 = nil
 		}
-		streamtags31 := make([]string, 0, len(r.InputKubeLogs.Streamtags))
-		for streamtagsIndex31 := range r.InputKubeLogs.Streamtags {
-			streamtags31 = append(streamtags31, r.InputKubeLogs.Streamtags[streamtagsIndex31].ValueString())
+		streamtags30 := make([]string, 0, len(r.InputKubeLogs.Streamtags))
+		for streamtagsIndex30 := range r.InputKubeLogs.Streamtags {
+			streamtags30 = append(streamtags30, r.InputKubeLogs.Streamtags[streamtagsIndex30].ValueString())
 		}
-		connections31 := make([]shared.InputKubeLogsConnection, 0, len(r.InputKubeLogs.Connections))
-		for connectionsIndex31 := range r.InputKubeLogs.Connections {
-			pipeline63 := new(string)
-			if !r.InputKubeLogs.Connections[connectionsIndex31].Pipeline.IsUnknown() && !r.InputKubeLogs.Connections[connectionsIndex31].Pipeline.IsNull() {
-				*pipeline63 = r.InputKubeLogs.Connections[connectionsIndex31].Pipeline.ValueString()
+		connections30 := make([]shared.InputKubeLogsConnection, 0, len(r.InputKubeLogs.Connections))
+		for connectionsIndex30 := range r.InputKubeLogs.Connections {
+			pipeline61 := new(string)
+			if !r.InputKubeLogs.Connections[connectionsIndex30].Pipeline.IsUnknown() && !r.InputKubeLogs.Connections[connectionsIndex30].Pipeline.IsNull() {
+				*pipeline61 = r.InputKubeLogs.Connections[connectionsIndex30].Pipeline.ValueString()
 			} else {
-				pipeline63 = nil
+				pipeline61 = nil
 			}
-			var output32 string
-			output32 = r.InputKubeLogs.Connections[connectionsIndex31].Output.ValueString()
+			var output31 string
+			output31 = r.InputKubeLogs.Connections[connectionsIndex30].Output.ValueString()
 
-			connections31 = append(connections31, shared.InputKubeLogsConnection{
-				Pipeline: pipeline63,
-				Output:   output32,
+			connections30 = append(connections30, shared.InputKubeLogsConnection{
+				Pipeline: pipeline61,
+				Output:   output31,
 			})
 		}
-		var pq31 *shared.InputKubeLogsPq
+		var pq30 *shared.InputKubeLogsPq
 		if r.InputKubeLogs.Pq != nil {
-			mode38 := new(shared.InputKubeLogsMode)
+			mode37 := new(shared.InputKubeLogsMode)
 			if !r.InputKubeLogs.Pq.Mode.IsUnknown() && !r.InputKubeLogs.Pq.Mode.IsNull() {
-				*mode38 = shared.InputKubeLogsMode(r.InputKubeLogs.Pq.Mode.ValueString())
+				*mode37 = shared.InputKubeLogsMode(r.InputKubeLogs.Pq.Mode.ValueString())
 			} else {
-				mode38 = nil
+				mode37 = nil
 			}
-			maxBufferSize31 := new(float64)
+			maxBufferSize30 := new(float64)
 			if !r.InputKubeLogs.Pq.MaxBufferSize.IsUnknown() && !r.InputKubeLogs.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize31 = r.InputKubeLogs.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize30 = r.InputKubeLogs.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize31 = nil
+				maxBufferSize30 = nil
 			}
-			commitFrequency31 := new(float64)
+			commitFrequency30 := new(float64)
 			if !r.InputKubeLogs.Pq.CommitFrequency.IsUnknown() && !r.InputKubeLogs.Pq.CommitFrequency.IsNull() {
-				*commitFrequency31 = r.InputKubeLogs.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency30 = r.InputKubeLogs.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency31 = nil
+				commitFrequency30 = nil
 			}
-			maxFileSize31 := new(string)
+			maxFileSize30 := new(string)
 			if !r.InputKubeLogs.Pq.MaxFileSize.IsUnknown() && !r.InputKubeLogs.Pq.MaxFileSize.IsNull() {
-				*maxFileSize31 = r.InputKubeLogs.Pq.MaxFileSize.ValueString()
+				*maxFileSize30 = r.InputKubeLogs.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize31 = nil
+				maxFileSize30 = nil
 			}
-			maxSize31 := new(string)
+			maxSize30 := new(string)
 			if !r.InputKubeLogs.Pq.MaxSize.IsUnknown() && !r.InputKubeLogs.Pq.MaxSize.IsNull() {
-				*maxSize31 = r.InputKubeLogs.Pq.MaxSize.ValueString()
+				*maxSize30 = r.InputKubeLogs.Pq.MaxSize.ValueString()
 			} else {
-				maxSize31 = nil
+				maxSize30 = nil
 			}
-			path32 := new(string)
+			path31 := new(string)
 			if !r.InputKubeLogs.Pq.Path.IsUnknown() && !r.InputKubeLogs.Pq.Path.IsNull() {
-				*path32 = r.InputKubeLogs.Pq.Path.ValueString()
+				*path31 = r.InputKubeLogs.Pq.Path.ValueString()
 			} else {
-				path32 = nil
+				path31 = nil
 			}
-			compress36 := new(shared.InputKubeLogsPqCompression)
+			compress35 := new(shared.InputKubeLogsPqCompression)
 			if !r.InputKubeLogs.Pq.Compress.IsUnknown() && !r.InputKubeLogs.Pq.Compress.IsNull() {
-				*compress36 = shared.InputKubeLogsPqCompression(r.InputKubeLogs.Pq.Compress.ValueString())
+				*compress35 = shared.InputKubeLogsPqCompression(r.InputKubeLogs.Pq.Compress.ValueString())
 			} else {
-				compress36 = nil
+				compress35 = nil
 			}
-			pq31 = &shared.InputKubeLogsPq{
-				Mode:            mode38,
-				MaxBufferSize:   maxBufferSize31,
-				CommitFrequency: commitFrequency31,
-				MaxFileSize:     maxFileSize31,
-				MaxSize:         maxSize31,
-				Path:            path32,
-				Compress:        compress36,
+			pq30 = &shared.InputKubeLogsPq{
+				Mode:            mode37,
+				MaxBufferSize:   maxBufferSize30,
+				CommitFrequency: commitFrequency30,
+				MaxFileSize:     maxFileSize30,
+				MaxSize:         maxSize30,
+				Path:            path31,
+				Compress:        compress35,
 			}
 		}
 		interval13 := new(float64)
@@ -12054,15 +11472,15 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			var filter4 string
 			filter4 = r.InputKubeLogs.Rules[rulesIndex1].Filter.ValueString()
 
-			description37 := new(string)
+			description36 := new(string)
 			if !r.InputKubeLogs.Rules[rulesIndex1].Description.IsUnknown() && !r.InputKubeLogs.Rules[rulesIndex1].Description.IsNull() {
-				*description37 = r.InputKubeLogs.Rules[rulesIndex1].Description.ValueString()
+				*description36 = r.InputKubeLogs.Rules[rulesIndex1].Description.ValueString()
 			} else {
-				description37 = nil
+				description36 = nil
 			}
 			rules1 = append(rules1, shared.InputKubeLogsRule{
 				Filter:      filter4,
-				Description: description37,
+				Description: description36,
 			})
 		}
 		timestamps := new(bool)
@@ -12071,17 +11489,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			timestamps = nil
 		}
-		metadata34 := make([]shared.InputKubeLogsMetadatum, 0, len(r.InputKubeLogs.Metadata))
-		for metadataIndex33 := range r.InputKubeLogs.Metadata {
-			var name53 string
-			name53 = r.InputKubeLogs.Metadata[metadataIndex33].Name.ValueString()
+		metadata33 := make([]shared.InputKubeLogsMetadatum, 0, len(r.InputKubeLogs.Metadata))
+		for metadataIndex32 := range r.InputKubeLogs.Metadata {
+			var name48 string
+			name48 = r.InputKubeLogs.Metadata[metadataIndex32].Name.ValueString()
 
-			var value50 string
-			value50 = r.InputKubeLogs.Metadata[metadataIndex33].Value.ValueString()
+			var value45 string
+			value45 = r.InputKubeLogs.Metadata[metadataIndex32].Value.ValueString()
 
-			metadata34 = append(metadata34, shared.InputKubeLogsMetadatum{
-				Name:  name53,
-				Value: value50,
+			metadata33 = append(metadata33, shared.InputKubeLogsMetadatum{
+				Name:  name48,
+				Value: value45,
 			})
 		}
 		var persistence4 *shared.InputKubeLogsDiskSpooling
@@ -12110,18 +11528,18 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				maxDataTime4 = nil
 			}
-			compress37 := new(shared.InputKubeLogsPersistenceCompression)
+			compress36 := new(shared.InputKubeLogsPersistenceCompression)
 			if !r.InputKubeLogs.Persistence.Compress.IsUnknown() && !r.InputKubeLogs.Persistence.Compress.IsNull() {
-				*compress37 = shared.InputKubeLogsPersistenceCompression(r.InputKubeLogs.Persistence.Compress.ValueString())
+				*compress36 = shared.InputKubeLogsPersistenceCompression(r.InputKubeLogs.Persistence.Compress.ValueString())
 			} else {
-				compress37 = nil
+				compress36 = nil
 			}
 			persistence4 = &shared.InputKubeLogsDiskSpooling{
 				Enable:      enable15,
 				TimeWindow:  timeWindow4,
 				MaxDataSize: maxDataSize4,
 				MaxDataTime: maxDataTime4,
-				Compress:    compress37,
+				Compress:    compress36,
 			}
 		}
 		breakerRulesets6 := make([]string, 0, len(r.InputKubeLogs.BreakerRulesets))
@@ -12140,32 +11558,32 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			enableLoadBalancing2 = nil
 		}
-		description38 := new(string)
+		description37 := new(string)
 		if !r.InputKubeLogs.Description.IsUnknown() && !r.InputKubeLogs.Description.IsNull() {
-			*description38 = r.InputKubeLogs.Description.ValueString()
+			*description37 = r.InputKubeLogs.Description.ValueString()
 		} else {
-			description38 = nil
+			description37 = nil
 		}
 		inputKubeLogs = &shared.InputKubeLogs{
-			ID:                  id31,
-			Type:                typeVar35,
-			Disabled:            disabled61,
-			Pipeline:            pipeline62,
-			SendToRoutes:        sendToRoutes31,
-			Environment:         environment31,
-			PqEnabled:           pqEnabled31,
-			Streamtags:          streamtags31,
-			Connections:         connections31,
-			Pq:                  pq31,
+			ID:                  id30,
+			Type:                typeVar34,
+			Disabled:            disabled59,
+			Pipeline:            pipeline60,
+			SendToRoutes:        sendToRoutes30,
+			Environment:         environment30,
+			PqEnabled:           pqEnabled30,
+			Streamtags:          streamtags30,
+			Connections:         connections30,
+			Pq:                  pq30,
 			Interval:            interval13,
 			Rules:               rules1,
 			Timestamps:          timestamps,
-			Metadata:            metadata34,
+			Metadata:            metadata33,
 			Persistence:         persistence4,
 			BreakerRulesets:     breakerRulesets6,
 			StaleChannelFlushMs: staleChannelFlushMs6,
 			EnableLoadBalancing: enableLoadBalancing2,
-			Description:         description38,
+			Description:         description37,
 		}
 	}
 	if inputKubeLogs != nil {
@@ -12175,112 +11593,112 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputKubeEvents *shared.InputKubeEvents
 	if r.InputKubeEvents != nil {
-		var id32 string
-		id32 = r.InputKubeEvents.ID.ValueString()
+		var id31 string
+		id31 = r.InputKubeEvents.ID.ValueString()
 
-		typeVar36 := shared.InputKubeEventsType(r.InputKubeEvents.Type.ValueString())
-		disabled62 := new(bool)
+		typeVar35 := shared.InputKubeEventsType(r.InputKubeEvents.Type.ValueString())
+		disabled60 := new(bool)
 		if !r.InputKubeEvents.Disabled.IsUnknown() && !r.InputKubeEvents.Disabled.IsNull() {
-			*disabled62 = r.InputKubeEvents.Disabled.ValueBool()
+			*disabled60 = r.InputKubeEvents.Disabled.ValueBool()
 		} else {
-			disabled62 = nil
+			disabled60 = nil
 		}
-		pipeline64 := new(string)
+		pipeline62 := new(string)
 		if !r.InputKubeEvents.Pipeline.IsUnknown() && !r.InputKubeEvents.Pipeline.IsNull() {
-			*pipeline64 = r.InputKubeEvents.Pipeline.ValueString()
+			*pipeline62 = r.InputKubeEvents.Pipeline.ValueString()
 		} else {
-			pipeline64 = nil
+			pipeline62 = nil
 		}
-		sendToRoutes32 := new(bool)
+		sendToRoutes31 := new(bool)
 		if !r.InputKubeEvents.SendToRoutes.IsUnknown() && !r.InputKubeEvents.SendToRoutes.IsNull() {
-			*sendToRoutes32 = r.InputKubeEvents.SendToRoutes.ValueBool()
+			*sendToRoutes31 = r.InputKubeEvents.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes32 = nil
+			sendToRoutes31 = nil
 		}
-		environment32 := new(string)
+		environment31 := new(string)
 		if !r.InputKubeEvents.Environment.IsUnknown() && !r.InputKubeEvents.Environment.IsNull() {
-			*environment32 = r.InputKubeEvents.Environment.ValueString()
+			*environment31 = r.InputKubeEvents.Environment.ValueString()
 		} else {
-			environment32 = nil
+			environment31 = nil
 		}
-		pqEnabled32 := new(bool)
+		pqEnabled31 := new(bool)
 		if !r.InputKubeEvents.PqEnabled.IsUnknown() && !r.InputKubeEvents.PqEnabled.IsNull() {
-			*pqEnabled32 = r.InputKubeEvents.PqEnabled.ValueBool()
+			*pqEnabled31 = r.InputKubeEvents.PqEnabled.ValueBool()
 		} else {
-			pqEnabled32 = nil
+			pqEnabled31 = nil
 		}
-		streamtags32 := make([]string, 0, len(r.InputKubeEvents.Streamtags))
-		for streamtagsIndex32 := range r.InputKubeEvents.Streamtags {
-			streamtags32 = append(streamtags32, r.InputKubeEvents.Streamtags[streamtagsIndex32].ValueString())
+		streamtags31 := make([]string, 0, len(r.InputKubeEvents.Streamtags))
+		for streamtagsIndex31 := range r.InputKubeEvents.Streamtags {
+			streamtags31 = append(streamtags31, r.InputKubeEvents.Streamtags[streamtagsIndex31].ValueString())
 		}
-		connections32 := make([]shared.InputKubeEventsConnection, 0, len(r.InputKubeEvents.Connections))
-		for connectionsIndex32 := range r.InputKubeEvents.Connections {
-			pipeline65 := new(string)
-			if !r.InputKubeEvents.Connections[connectionsIndex32].Pipeline.IsUnknown() && !r.InputKubeEvents.Connections[connectionsIndex32].Pipeline.IsNull() {
-				*pipeline65 = r.InputKubeEvents.Connections[connectionsIndex32].Pipeline.ValueString()
+		connections31 := make([]shared.InputKubeEventsConnection, 0, len(r.InputKubeEvents.Connections))
+		for connectionsIndex31 := range r.InputKubeEvents.Connections {
+			pipeline63 := new(string)
+			if !r.InputKubeEvents.Connections[connectionsIndex31].Pipeline.IsUnknown() && !r.InputKubeEvents.Connections[connectionsIndex31].Pipeline.IsNull() {
+				*pipeline63 = r.InputKubeEvents.Connections[connectionsIndex31].Pipeline.ValueString()
 			} else {
-				pipeline65 = nil
+				pipeline63 = nil
 			}
-			var output33 string
-			output33 = r.InputKubeEvents.Connections[connectionsIndex32].Output.ValueString()
+			var output32 string
+			output32 = r.InputKubeEvents.Connections[connectionsIndex31].Output.ValueString()
 
-			connections32 = append(connections32, shared.InputKubeEventsConnection{
-				Pipeline: pipeline65,
-				Output:   output33,
+			connections31 = append(connections31, shared.InputKubeEventsConnection{
+				Pipeline: pipeline63,
+				Output:   output32,
 			})
 		}
-		var pq32 *shared.InputKubeEventsPq
+		var pq31 *shared.InputKubeEventsPq
 		if r.InputKubeEvents.Pq != nil {
-			mode39 := new(shared.InputKubeEventsMode)
+			mode38 := new(shared.InputKubeEventsMode)
 			if !r.InputKubeEvents.Pq.Mode.IsUnknown() && !r.InputKubeEvents.Pq.Mode.IsNull() {
-				*mode39 = shared.InputKubeEventsMode(r.InputKubeEvents.Pq.Mode.ValueString())
+				*mode38 = shared.InputKubeEventsMode(r.InputKubeEvents.Pq.Mode.ValueString())
 			} else {
-				mode39 = nil
+				mode38 = nil
 			}
-			maxBufferSize32 := new(float64)
+			maxBufferSize31 := new(float64)
 			if !r.InputKubeEvents.Pq.MaxBufferSize.IsUnknown() && !r.InputKubeEvents.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize32 = r.InputKubeEvents.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize31 = r.InputKubeEvents.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize32 = nil
+				maxBufferSize31 = nil
 			}
-			commitFrequency32 := new(float64)
+			commitFrequency31 := new(float64)
 			if !r.InputKubeEvents.Pq.CommitFrequency.IsUnknown() && !r.InputKubeEvents.Pq.CommitFrequency.IsNull() {
-				*commitFrequency32 = r.InputKubeEvents.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency31 = r.InputKubeEvents.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency32 = nil
+				commitFrequency31 = nil
 			}
-			maxFileSize32 := new(string)
+			maxFileSize31 := new(string)
 			if !r.InputKubeEvents.Pq.MaxFileSize.IsUnknown() && !r.InputKubeEvents.Pq.MaxFileSize.IsNull() {
-				*maxFileSize32 = r.InputKubeEvents.Pq.MaxFileSize.ValueString()
+				*maxFileSize31 = r.InputKubeEvents.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize32 = nil
+				maxFileSize31 = nil
 			}
-			maxSize32 := new(string)
+			maxSize31 := new(string)
 			if !r.InputKubeEvents.Pq.MaxSize.IsUnknown() && !r.InputKubeEvents.Pq.MaxSize.IsNull() {
-				*maxSize32 = r.InputKubeEvents.Pq.MaxSize.ValueString()
+				*maxSize31 = r.InputKubeEvents.Pq.MaxSize.ValueString()
 			} else {
-				maxSize32 = nil
+				maxSize31 = nil
 			}
-			path33 := new(string)
+			path32 := new(string)
 			if !r.InputKubeEvents.Pq.Path.IsUnknown() && !r.InputKubeEvents.Pq.Path.IsNull() {
-				*path33 = r.InputKubeEvents.Pq.Path.ValueString()
+				*path32 = r.InputKubeEvents.Pq.Path.ValueString()
 			} else {
-				path33 = nil
+				path32 = nil
 			}
-			compress38 := new(shared.InputKubeEventsCompression)
+			compress37 := new(shared.InputKubeEventsCompression)
 			if !r.InputKubeEvents.Pq.Compress.IsUnknown() && !r.InputKubeEvents.Pq.Compress.IsNull() {
-				*compress38 = shared.InputKubeEventsCompression(r.InputKubeEvents.Pq.Compress.ValueString())
+				*compress37 = shared.InputKubeEventsCompression(r.InputKubeEvents.Pq.Compress.ValueString())
 			} else {
-				compress38 = nil
+				compress37 = nil
 			}
-			pq32 = &shared.InputKubeEventsPq{
-				Mode:            mode39,
-				MaxBufferSize:   maxBufferSize32,
-				CommitFrequency: commitFrequency32,
-				MaxFileSize:     maxFileSize32,
-				MaxSize:         maxSize32,
-				Path:            path33,
-				Compress:        compress38,
+			pq31 = &shared.InputKubeEventsPq{
+				Mode:            mode38,
+				MaxBufferSize:   maxBufferSize31,
+				CommitFrequency: commitFrequency31,
+				MaxFileSize:     maxFileSize31,
+				MaxSize:         maxSize31,
+				Path:            path32,
+				Compress:        compress37,
 			}
 		}
 		rules2 := make([]shared.InputKubeEventsRule, 0, len(r.InputKubeEvents.Rules))
@@ -12288,50 +11706,50 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			var filter5 string
 			filter5 = r.InputKubeEvents.Rules[rulesIndex2].Filter.ValueString()
 
-			description39 := new(string)
+			description38 := new(string)
 			if !r.InputKubeEvents.Rules[rulesIndex2].Description.IsUnknown() && !r.InputKubeEvents.Rules[rulesIndex2].Description.IsNull() {
-				*description39 = r.InputKubeEvents.Rules[rulesIndex2].Description.ValueString()
+				*description38 = r.InputKubeEvents.Rules[rulesIndex2].Description.ValueString()
 			} else {
-				description39 = nil
+				description38 = nil
 			}
 			rules2 = append(rules2, shared.InputKubeEventsRule{
 				Filter:      filter5,
-				Description: description39,
+				Description: description38,
 			})
 		}
-		metadata35 := make([]shared.InputKubeEventsMetadatum, 0, len(r.InputKubeEvents.Metadata))
-		for metadataIndex34 := range r.InputKubeEvents.Metadata {
-			var name54 string
-			name54 = r.InputKubeEvents.Metadata[metadataIndex34].Name.ValueString()
+		metadata34 := make([]shared.InputKubeEventsMetadatum, 0, len(r.InputKubeEvents.Metadata))
+		for metadataIndex33 := range r.InputKubeEvents.Metadata {
+			var name49 string
+			name49 = r.InputKubeEvents.Metadata[metadataIndex33].Name.ValueString()
 
-			var value51 string
-			value51 = r.InputKubeEvents.Metadata[metadataIndex34].Value.ValueString()
+			var value46 string
+			value46 = r.InputKubeEvents.Metadata[metadataIndex33].Value.ValueString()
 
-			metadata35 = append(metadata35, shared.InputKubeEventsMetadatum{
-				Name:  name54,
-				Value: value51,
+			metadata34 = append(metadata34, shared.InputKubeEventsMetadatum{
+				Name:  name49,
+				Value: value46,
 			})
 		}
-		description40 := new(string)
+		description39 := new(string)
 		if !r.InputKubeEvents.Description.IsUnknown() && !r.InputKubeEvents.Description.IsNull() {
-			*description40 = r.InputKubeEvents.Description.ValueString()
+			*description39 = r.InputKubeEvents.Description.ValueString()
 		} else {
-			description40 = nil
+			description39 = nil
 		}
 		inputKubeEvents = &shared.InputKubeEvents{
-			ID:           id32,
-			Type:         typeVar36,
-			Disabled:     disabled62,
-			Pipeline:     pipeline64,
-			SendToRoutes: sendToRoutes32,
-			Environment:  environment32,
-			PqEnabled:    pqEnabled32,
-			Streamtags:   streamtags32,
-			Connections:  connections32,
-			Pq:           pq32,
+			ID:           id31,
+			Type:         typeVar35,
+			Disabled:     disabled60,
+			Pipeline:     pipeline62,
+			SendToRoutes: sendToRoutes31,
+			Environment:  environment31,
+			PqEnabled:    pqEnabled31,
+			Streamtags:   streamtags31,
+			Connections:  connections31,
+			Pq:           pq31,
 			Rules:        rules2,
-			Metadata:     metadata35,
-			Description:  description40,
+			Metadata:     metadata34,
+			Description:  description39,
 		}
 	}
 	if inputKubeEvents != nil {
@@ -12341,112 +11759,112 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputWindowsMetrics *shared.InputWindowsMetrics
 	if r.InputWindowsMetrics != nil {
-		var id33 string
-		id33 = r.InputWindowsMetrics.ID.ValueString()
+		var id32 string
+		id32 = r.InputWindowsMetrics.ID.ValueString()
 
-		typeVar37 := shared.InputWindowsMetricsType(r.InputWindowsMetrics.Type.ValueString())
-		disabled63 := new(bool)
+		typeVar36 := shared.InputWindowsMetricsType(r.InputWindowsMetrics.Type.ValueString())
+		disabled61 := new(bool)
 		if !r.InputWindowsMetrics.Disabled.IsUnknown() && !r.InputWindowsMetrics.Disabled.IsNull() {
-			*disabled63 = r.InputWindowsMetrics.Disabled.ValueBool()
+			*disabled61 = r.InputWindowsMetrics.Disabled.ValueBool()
 		} else {
-			disabled63 = nil
+			disabled61 = nil
 		}
-		pipeline66 := new(string)
+		pipeline64 := new(string)
 		if !r.InputWindowsMetrics.Pipeline.IsUnknown() && !r.InputWindowsMetrics.Pipeline.IsNull() {
-			*pipeline66 = r.InputWindowsMetrics.Pipeline.ValueString()
+			*pipeline64 = r.InputWindowsMetrics.Pipeline.ValueString()
 		} else {
-			pipeline66 = nil
+			pipeline64 = nil
 		}
-		sendToRoutes33 := new(bool)
+		sendToRoutes32 := new(bool)
 		if !r.InputWindowsMetrics.SendToRoutes.IsUnknown() && !r.InputWindowsMetrics.SendToRoutes.IsNull() {
-			*sendToRoutes33 = r.InputWindowsMetrics.SendToRoutes.ValueBool()
+			*sendToRoutes32 = r.InputWindowsMetrics.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes33 = nil
+			sendToRoutes32 = nil
 		}
-		environment33 := new(string)
+		environment32 := new(string)
 		if !r.InputWindowsMetrics.Environment.IsUnknown() && !r.InputWindowsMetrics.Environment.IsNull() {
-			*environment33 = r.InputWindowsMetrics.Environment.ValueString()
+			*environment32 = r.InputWindowsMetrics.Environment.ValueString()
 		} else {
-			environment33 = nil
+			environment32 = nil
 		}
-		pqEnabled33 := new(bool)
+		pqEnabled32 := new(bool)
 		if !r.InputWindowsMetrics.PqEnabled.IsUnknown() && !r.InputWindowsMetrics.PqEnabled.IsNull() {
-			*pqEnabled33 = r.InputWindowsMetrics.PqEnabled.ValueBool()
+			*pqEnabled32 = r.InputWindowsMetrics.PqEnabled.ValueBool()
 		} else {
-			pqEnabled33 = nil
+			pqEnabled32 = nil
 		}
-		streamtags33 := make([]string, 0, len(r.InputWindowsMetrics.Streamtags))
-		for streamtagsIndex33 := range r.InputWindowsMetrics.Streamtags {
-			streamtags33 = append(streamtags33, r.InputWindowsMetrics.Streamtags[streamtagsIndex33].ValueString())
+		streamtags32 := make([]string, 0, len(r.InputWindowsMetrics.Streamtags))
+		for streamtagsIndex32 := range r.InputWindowsMetrics.Streamtags {
+			streamtags32 = append(streamtags32, r.InputWindowsMetrics.Streamtags[streamtagsIndex32].ValueString())
 		}
-		connections33 := make([]shared.InputWindowsMetricsConnection, 0, len(r.InputWindowsMetrics.Connections))
-		for connectionsIndex33 := range r.InputWindowsMetrics.Connections {
-			pipeline67 := new(string)
-			if !r.InputWindowsMetrics.Connections[connectionsIndex33].Pipeline.IsUnknown() && !r.InputWindowsMetrics.Connections[connectionsIndex33].Pipeline.IsNull() {
-				*pipeline67 = r.InputWindowsMetrics.Connections[connectionsIndex33].Pipeline.ValueString()
+		connections32 := make([]shared.InputWindowsMetricsConnection, 0, len(r.InputWindowsMetrics.Connections))
+		for connectionsIndex32 := range r.InputWindowsMetrics.Connections {
+			pipeline65 := new(string)
+			if !r.InputWindowsMetrics.Connections[connectionsIndex32].Pipeline.IsUnknown() && !r.InputWindowsMetrics.Connections[connectionsIndex32].Pipeline.IsNull() {
+				*pipeline65 = r.InputWindowsMetrics.Connections[connectionsIndex32].Pipeline.ValueString()
 			} else {
-				pipeline67 = nil
+				pipeline65 = nil
 			}
-			var output34 string
-			output34 = r.InputWindowsMetrics.Connections[connectionsIndex33].Output.ValueString()
+			var output33 string
+			output33 = r.InputWindowsMetrics.Connections[connectionsIndex32].Output.ValueString()
 
-			connections33 = append(connections33, shared.InputWindowsMetricsConnection{
-				Pipeline: pipeline67,
-				Output:   output34,
+			connections32 = append(connections32, shared.InputWindowsMetricsConnection{
+				Pipeline: pipeline65,
+				Output:   output33,
 			})
 		}
-		var pq33 *shared.InputWindowsMetricsPq
+		var pq32 *shared.InputWindowsMetricsPq
 		if r.InputWindowsMetrics.Pq != nil {
-			mode40 := new(shared.InputWindowsMetricsPqMode)
+			mode39 := new(shared.InputWindowsMetricsPqMode)
 			if !r.InputWindowsMetrics.Pq.Mode.IsUnknown() && !r.InputWindowsMetrics.Pq.Mode.IsNull() {
-				*mode40 = shared.InputWindowsMetricsPqMode(r.InputWindowsMetrics.Pq.Mode.ValueString())
+				*mode39 = shared.InputWindowsMetricsPqMode(r.InputWindowsMetrics.Pq.Mode.ValueString())
 			} else {
-				mode40 = nil
+				mode39 = nil
 			}
-			maxBufferSize33 := new(float64)
+			maxBufferSize32 := new(float64)
 			if !r.InputWindowsMetrics.Pq.MaxBufferSize.IsUnknown() && !r.InputWindowsMetrics.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize33 = r.InputWindowsMetrics.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize32 = r.InputWindowsMetrics.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize33 = nil
+				maxBufferSize32 = nil
 			}
-			commitFrequency33 := new(float64)
+			commitFrequency32 := new(float64)
 			if !r.InputWindowsMetrics.Pq.CommitFrequency.IsUnknown() && !r.InputWindowsMetrics.Pq.CommitFrequency.IsNull() {
-				*commitFrequency33 = r.InputWindowsMetrics.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency32 = r.InputWindowsMetrics.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency33 = nil
+				commitFrequency32 = nil
 			}
-			maxFileSize33 := new(string)
+			maxFileSize32 := new(string)
 			if !r.InputWindowsMetrics.Pq.MaxFileSize.IsUnknown() && !r.InputWindowsMetrics.Pq.MaxFileSize.IsNull() {
-				*maxFileSize33 = r.InputWindowsMetrics.Pq.MaxFileSize.ValueString()
+				*maxFileSize32 = r.InputWindowsMetrics.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize33 = nil
+				maxFileSize32 = nil
 			}
-			maxSize33 := new(string)
+			maxSize32 := new(string)
 			if !r.InputWindowsMetrics.Pq.MaxSize.IsUnknown() && !r.InputWindowsMetrics.Pq.MaxSize.IsNull() {
-				*maxSize33 = r.InputWindowsMetrics.Pq.MaxSize.ValueString()
+				*maxSize32 = r.InputWindowsMetrics.Pq.MaxSize.ValueString()
 			} else {
-				maxSize33 = nil
+				maxSize32 = nil
 			}
-			path34 := new(string)
+			path33 := new(string)
 			if !r.InputWindowsMetrics.Pq.Path.IsUnknown() && !r.InputWindowsMetrics.Pq.Path.IsNull() {
-				*path34 = r.InputWindowsMetrics.Pq.Path.ValueString()
+				*path33 = r.InputWindowsMetrics.Pq.Path.ValueString()
 			} else {
-				path34 = nil
+				path33 = nil
 			}
-			compress39 := new(shared.InputWindowsMetricsCompression)
+			compress38 := new(shared.InputWindowsMetricsCompression)
 			if !r.InputWindowsMetrics.Pq.Compress.IsUnknown() && !r.InputWindowsMetrics.Pq.Compress.IsNull() {
-				*compress39 = shared.InputWindowsMetricsCompression(r.InputWindowsMetrics.Pq.Compress.ValueString())
+				*compress38 = shared.InputWindowsMetricsCompression(r.InputWindowsMetrics.Pq.Compress.ValueString())
 			} else {
-				compress39 = nil
+				compress38 = nil
 			}
-			pq33 = &shared.InputWindowsMetricsPq{
-				Mode:            mode40,
-				MaxBufferSize:   maxBufferSize33,
-				CommitFrequency: commitFrequency33,
-				MaxFileSize:     maxFileSize33,
-				MaxSize:         maxSize33,
-				Path:            path34,
-				Compress:        compress39,
+			pq32 = &shared.InputWindowsMetricsPq{
+				Mode:            mode39,
+				MaxBufferSize:   maxBufferSize32,
+				CommitFrequency: commitFrequency32,
+				MaxFileSize:     maxFileSize32,
+				MaxSize:         maxSize32,
+				Path:            path33,
+				Compress:        compress38,
 			}
 		}
 		interval14 := new(float64)
@@ -12455,23 +11873,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			interval14 = nil
 		}
-		var host15 *shared.InputWindowsMetricsHost
+		var host14 *shared.InputWindowsMetricsHost
 		if r.InputWindowsMetrics.Host != nil {
-			mode41 := new(shared.InputWindowsMetricsHostMode)
+			mode40 := new(shared.InputWindowsMetricsHostMode)
 			if !r.InputWindowsMetrics.Host.Mode.IsUnknown() && !r.InputWindowsMetrics.Host.Mode.IsNull() {
-				*mode41 = shared.InputWindowsMetricsHostMode(r.InputWindowsMetrics.Host.Mode.ValueString())
+				*mode40 = shared.InputWindowsMetricsHostMode(r.InputWindowsMetrics.Host.Mode.ValueString())
 			} else {
-				mode41 = nil
+				mode40 = nil
 			}
 			var custom1 *shared.InputWindowsMetricsCustom
 			if r.InputWindowsMetrics.Host.Custom != nil {
 				var system1 *shared.InputWindowsMetricsSystem
 				if r.InputWindowsMetrics.Host.Custom.System != nil {
-					mode42 := new(shared.InputWindowsMetricsSystemMode)
+					mode41 := new(shared.InputWindowsMetricsSystemMode)
 					if !r.InputWindowsMetrics.Host.Custom.System.Mode.IsUnknown() && !r.InputWindowsMetrics.Host.Custom.System.Mode.IsNull() {
-						*mode42 = shared.InputWindowsMetricsSystemMode(r.InputWindowsMetrics.Host.Custom.System.Mode.ValueString())
+						*mode41 = shared.InputWindowsMetricsSystemMode(r.InputWindowsMetrics.Host.Custom.System.Mode.ValueString())
 					} else {
-						mode42 = nil
+						mode41 = nil
 					}
 					detail5 := new(bool)
 					if !r.InputWindowsMetrics.Host.Custom.System.Detail.IsUnknown() && !r.InputWindowsMetrics.Host.Custom.System.Detail.IsNull() {
@@ -12480,17 +11898,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						detail5 = nil
 					}
 					system1 = &shared.InputWindowsMetricsSystem{
-						Mode:   mode42,
+						Mode:   mode41,
 						Detail: detail5,
 					}
 				}
 				var cpu1 *shared.InputWindowsMetricsCPU
 				if r.InputWindowsMetrics.Host.Custom.CPU != nil {
-					mode43 := new(shared.InputWindowsMetricsCPUMode)
+					mode42 := new(shared.InputWindowsMetricsCPUMode)
 					if !r.InputWindowsMetrics.Host.Custom.CPU.Mode.IsUnknown() && !r.InputWindowsMetrics.Host.Custom.CPU.Mode.IsNull() {
-						*mode43 = shared.InputWindowsMetricsCPUMode(r.InputWindowsMetrics.Host.Custom.CPU.Mode.ValueString())
+						*mode42 = shared.InputWindowsMetricsCPUMode(r.InputWindowsMetrics.Host.Custom.CPU.Mode.ValueString())
 					} else {
-						mode43 = nil
+						mode42 = nil
 					}
 					perCpu1 := new(bool)
 					if !r.InputWindowsMetrics.Host.Custom.CPU.PerCPU.IsUnknown() && !r.InputWindowsMetrics.Host.Custom.CPU.PerCPU.IsNull() {
@@ -12511,7 +11929,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						timeVar1 = nil
 					}
 					cpu1 = &shared.InputWindowsMetricsCPU{
-						Mode:   mode43,
+						Mode:   mode42,
 						PerCPU: perCpu1,
 						Detail: detail6,
 						Time:   timeVar1,
@@ -12519,11 +11937,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				}
 				var memory1 *shared.InputWindowsMetricsMemory
 				if r.InputWindowsMetrics.Host.Custom.Memory != nil {
-					mode44 := new(shared.InputWindowsMetricsMemoryMode)
+					mode43 := new(shared.InputWindowsMetricsMemoryMode)
 					if !r.InputWindowsMetrics.Host.Custom.Memory.Mode.IsUnknown() && !r.InputWindowsMetrics.Host.Custom.Memory.Mode.IsNull() {
-						*mode44 = shared.InputWindowsMetricsMemoryMode(r.InputWindowsMetrics.Host.Custom.Memory.Mode.ValueString())
+						*mode43 = shared.InputWindowsMetricsMemoryMode(r.InputWindowsMetrics.Host.Custom.Memory.Mode.ValueString())
 					} else {
-						mode44 = nil
+						mode43 = nil
 					}
 					detail7 := new(bool)
 					if !r.InputWindowsMetrics.Host.Custom.Memory.Detail.IsUnknown() && !r.InputWindowsMetrics.Host.Custom.Memory.Detail.IsNull() {
@@ -12532,17 +11950,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						detail7 = nil
 					}
 					memory1 = &shared.InputWindowsMetricsMemory{
-						Mode:   mode44,
+						Mode:   mode43,
 						Detail: detail7,
 					}
 				}
 				var network1 *shared.InputWindowsMetricsNetwork
 				if r.InputWindowsMetrics.Host.Custom.Network != nil {
-					mode45 := new(shared.InputWindowsMetricsNetworkMode)
+					mode44 := new(shared.InputWindowsMetricsNetworkMode)
 					if !r.InputWindowsMetrics.Host.Custom.Network.Mode.IsUnknown() && !r.InputWindowsMetrics.Host.Custom.Network.Mode.IsNull() {
-						*mode45 = shared.InputWindowsMetricsNetworkMode(r.InputWindowsMetrics.Host.Custom.Network.Mode.ValueString())
+						*mode44 = shared.InputWindowsMetricsNetworkMode(r.InputWindowsMetrics.Host.Custom.Network.Mode.ValueString())
 					} else {
-						mode45 = nil
+						mode44 = nil
 					}
 					devices2 := make([]string, 0, len(r.InputWindowsMetrics.Host.Custom.Network.Devices))
 					for devicesIndex2 := range r.InputWindowsMetrics.Host.Custom.Network.Devices {
@@ -12561,7 +11979,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						detail8 = nil
 					}
 					network1 = &shared.InputWindowsMetricsNetwork{
-						Mode:         mode45,
+						Mode:         mode44,
 						Devices:      devices2,
 						PerInterface: perInterface1,
 						Detail:       detail8,
@@ -12569,11 +11987,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				}
 				var disk2 *shared.InputWindowsMetricsDisk
 				if r.InputWindowsMetrics.Host.Custom.Disk != nil {
-					mode46 := new(shared.InputWindowsMetricsDiskMode)
+					mode45 := new(shared.InputWindowsMetricsDiskMode)
 					if !r.InputWindowsMetrics.Host.Custom.Disk.Mode.IsUnknown() && !r.InputWindowsMetrics.Host.Custom.Disk.Mode.IsNull() {
-						*mode46 = shared.InputWindowsMetricsDiskMode(r.InputWindowsMetrics.Host.Custom.Disk.Mode.ValueString())
+						*mode45 = shared.InputWindowsMetricsDiskMode(r.InputWindowsMetrics.Host.Custom.Disk.Mode.ValueString())
 					} else {
-						mode46 = nil
+						mode45 = nil
 					}
 					volumes := make([]string, 0, len(r.InputWindowsMetrics.Host.Custom.Disk.Volumes))
 					for volumesIndex := range r.InputWindowsMetrics.Host.Custom.Disk.Volumes {
@@ -12586,7 +12004,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 						perVolume = nil
 					}
 					disk2 = &shared.InputWindowsMetricsDisk{
-						Mode:      mode46,
+						Mode:      mode45,
 						Volumes:   volumes,
 						PerVolume: perVolume,
 					}
@@ -12599,8 +12017,8 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 					Disk:    disk2,
 				}
 			}
-			host15 = &shared.InputWindowsMetricsHost{
-				Mode:   mode41,
+			host14 = &shared.InputWindowsMetricsHost{
+				Mode:   mode40,
 				Custom: custom1,
 			}
 		}
@@ -12608,8 +12026,8 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		if r.InputWindowsMetrics.Process != nil {
 			sets1 := make([]shared.InputWindowsMetricsSet, 0, len(r.InputWindowsMetrics.Process.Sets))
 			for setsIndex1 := range r.InputWindowsMetrics.Process.Sets {
-				var name55 string
-				name55 = r.InputWindowsMetrics.Process.Sets[setsIndex1].Name.ValueString()
+				var name50 string
+				name50 = r.InputWindowsMetrics.Process.Sets[setsIndex1].Name.ValueString()
 
 				var filter6 string
 				filter6 = r.InputWindowsMetrics.Process.Sets[setsIndex1].Filter.ValueString()
@@ -12621,7 +12039,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 					includeChildren1 = nil
 				}
 				sets1 = append(sets1, shared.InputWindowsMetricsSet{
-					Name:            name55,
+					Name:            name50,
 					Filter:          filter6,
 					IncludeChildren: includeChildren1,
 				})
@@ -12630,17 +12048,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				Sets: sets1,
 			}
 		}
-		metadata36 := make([]shared.InputWindowsMetricsMetadatum, 0, len(r.InputWindowsMetrics.Metadata))
-		for metadataIndex35 := range r.InputWindowsMetrics.Metadata {
-			var name56 string
-			name56 = r.InputWindowsMetrics.Metadata[metadataIndex35].Name.ValueString()
+		metadata35 := make([]shared.InputWindowsMetricsMetadatum, 0, len(r.InputWindowsMetrics.Metadata))
+		for metadataIndex34 := range r.InputWindowsMetrics.Metadata {
+			var name51 string
+			name51 = r.InputWindowsMetrics.Metadata[metadataIndex34].Name.ValueString()
 
-			var value52 string
-			value52 = r.InputWindowsMetrics.Metadata[metadataIndex35].Value.ValueString()
+			var value47 string
+			value47 = r.InputWindowsMetrics.Metadata[metadataIndex34].Value.ValueString()
 
-			metadata36 = append(metadata36, shared.InputWindowsMetricsMetadatum{
-				Name:  name56,
-				Value: value52,
+			metadata35 = append(metadata35, shared.InputWindowsMetricsMetadatum{
+				Name:  name51,
+				Value: value47,
 			})
 		}
 		var persistence5 *shared.InputWindowsMetricsPersistence
@@ -12669,11 +12087,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				maxDataTime5 = nil
 			}
-			compress40 := new(shared.InputWindowsMetricsDataCompressionFormat)
+			compress39 := new(shared.InputWindowsMetricsDataCompressionFormat)
 			if !r.InputWindowsMetrics.Persistence.Compress.IsUnknown() && !r.InputWindowsMetrics.Persistence.Compress.IsNull() {
-				*compress40 = shared.InputWindowsMetricsDataCompressionFormat(r.InputWindowsMetrics.Persistence.Compress.ValueString())
+				*compress39 = shared.InputWindowsMetricsDataCompressionFormat(r.InputWindowsMetrics.Persistence.Compress.ValueString())
 			} else {
-				compress40 = nil
+				compress39 = nil
 			}
 			destPath3 := new(string)
 			if !r.InputWindowsMetrics.Persistence.DestPath.IsUnknown() && !r.InputWindowsMetrics.Persistence.DestPath.IsNull() {
@@ -12686,7 +12104,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				TimeWindow:  timeWindow5,
 				MaxDataSize: maxDataSize5,
 				MaxDataTime: maxDataTime5,
-				Compress:    compress40,
+				Compress:    compress39,
 				DestPath:    destPath3,
 			}
 		}
@@ -12696,30 +12114,30 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			disableNativeModule1 = nil
 		}
-		description41 := new(string)
+		description40 := new(string)
 		if !r.InputWindowsMetrics.Description.IsUnknown() && !r.InputWindowsMetrics.Description.IsNull() {
-			*description41 = r.InputWindowsMetrics.Description.ValueString()
+			*description40 = r.InputWindowsMetrics.Description.ValueString()
 		} else {
-			description41 = nil
+			description40 = nil
 		}
 		inputWindowsMetrics = &shared.InputWindowsMetrics{
-			ID:                  id33,
-			Type:                typeVar37,
-			Disabled:            disabled63,
-			Pipeline:            pipeline66,
-			SendToRoutes:        sendToRoutes33,
-			Environment:         environment33,
-			PqEnabled:           pqEnabled33,
-			Streamtags:          streamtags33,
-			Connections:         connections33,
-			Pq:                  pq33,
+			ID:                  id32,
+			Type:                typeVar36,
+			Disabled:            disabled61,
+			Pipeline:            pipeline64,
+			SendToRoutes:        sendToRoutes32,
+			Environment:         environment32,
+			PqEnabled:           pqEnabled32,
+			Streamtags:          streamtags32,
+			Connections:         connections32,
+			Pq:                  pq32,
 			Interval:            interval14,
-			Host:                host15,
+			Host:                host14,
 			Process:             process1,
-			Metadata:            metadata36,
+			Metadata:            metadata35,
 			Persistence:         persistence5,
 			DisableNativeModule: disableNativeModule1,
-			Description:         description41,
+			Description:         description40,
 		}
 	}
 	if inputWindowsMetrics != nil {
@@ -12729,115 +12147,115 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputCrowdstrike *shared.InputCrowdstrike
 	if r.InputCrowdstrike != nil {
-		id34 := new(string)
+		id33 := new(string)
 		if !r.InputCrowdstrike.ID.IsUnknown() && !r.InputCrowdstrike.ID.IsNull() {
-			*id34 = r.InputCrowdstrike.ID.ValueString()
+			*id33 = r.InputCrowdstrike.ID.ValueString()
 		} else {
-			id34 = nil
+			id33 = nil
 		}
-		typeVar38 := shared.InputCrowdstrikeType(r.InputCrowdstrike.Type.ValueString())
-		disabled64 := new(bool)
+		typeVar37 := shared.InputCrowdstrikeType(r.InputCrowdstrike.Type.ValueString())
+		disabled62 := new(bool)
 		if !r.InputCrowdstrike.Disabled.IsUnknown() && !r.InputCrowdstrike.Disabled.IsNull() {
-			*disabled64 = r.InputCrowdstrike.Disabled.ValueBool()
+			*disabled62 = r.InputCrowdstrike.Disabled.ValueBool()
 		} else {
-			disabled64 = nil
+			disabled62 = nil
 		}
-		pipeline68 := new(string)
+		pipeline66 := new(string)
 		if !r.InputCrowdstrike.Pipeline.IsUnknown() && !r.InputCrowdstrike.Pipeline.IsNull() {
-			*pipeline68 = r.InputCrowdstrike.Pipeline.ValueString()
+			*pipeline66 = r.InputCrowdstrike.Pipeline.ValueString()
 		} else {
-			pipeline68 = nil
+			pipeline66 = nil
 		}
-		sendToRoutes34 := new(bool)
+		sendToRoutes33 := new(bool)
 		if !r.InputCrowdstrike.SendToRoutes.IsUnknown() && !r.InputCrowdstrike.SendToRoutes.IsNull() {
-			*sendToRoutes34 = r.InputCrowdstrike.SendToRoutes.ValueBool()
+			*sendToRoutes33 = r.InputCrowdstrike.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes34 = nil
+			sendToRoutes33 = nil
 		}
-		environment34 := new(string)
+		environment33 := new(string)
 		if !r.InputCrowdstrike.Environment.IsUnknown() && !r.InputCrowdstrike.Environment.IsNull() {
-			*environment34 = r.InputCrowdstrike.Environment.ValueString()
+			*environment33 = r.InputCrowdstrike.Environment.ValueString()
 		} else {
-			environment34 = nil
+			environment33 = nil
 		}
-		pqEnabled34 := new(bool)
+		pqEnabled33 := new(bool)
 		if !r.InputCrowdstrike.PqEnabled.IsUnknown() && !r.InputCrowdstrike.PqEnabled.IsNull() {
-			*pqEnabled34 = r.InputCrowdstrike.PqEnabled.ValueBool()
+			*pqEnabled33 = r.InputCrowdstrike.PqEnabled.ValueBool()
 		} else {
-			pqEnabled34 = nil
+			pqEnabled33 = nil
 		}
-		streamtags34 := make([]string, 0, len(r.InputCrowdstrike.Streamtags))
-		for streamtagsIndex34 := range r.InputCrowdstrike.Streamtags {
-			streamtags34 = append(streamtags34, r.InputCrowdstrike.Streamtags[streamtagsIndex34].ValueString())
+		streamtags33 := make([]string, 0, len(r.InputCrowdstrike.Streamtags))
+		for streamtagsIndex33 := range r.InputCrowdstrike.Streamtags {
+			streamtags33 = append(streamtags33, r.InputCrowdstrike.Streamtags[streamtagsIndex33].ValueString())
 		}
-		connections34 := make([]shared.InputCrowdstrikeConnection, 0, len(r.InputCrowdstrike.Connections))
-		for connectionsIndex34 := range r.InputCrowdstrike.Connections {
-			pipeline69 := new(string)
-			if !r.InputCrowdstrike.Connections[connectionsIndex34].Pipeline.IsUnknown() && !r.InputCrowdstrike.Connections[connectionsIndex34].Pipeline.IsNull() {
-				*pipeline69 = r.InputCrowdstrike.Connections[connectionsIndex34].Pipeline.ValueString()
+		connections33 := make([]shared.InputCrowdstrikeConnection, 0, len(r.InputCrowdstrike.Connections))
+		for connectionsIndex33 := range r.InputCrowdstrike.Connections {
+			pipeline67 := new(string)
+			if !r.InputCrowdstrike.Connections[connectionsIndex33].Pipeline.IsUnknown() && !r.InputCrowdstrike.Connections[connectionsIndex33].Pipeline.IsNull() {
+				*pipeline67 = r.InputCrowdstrike.Connections[connectionsIndex33].Pipeline.ValueString()
 			} else {
-				pipeline69 = nil
+				pipeline67 = nil
 			}
-			var output35 string
-			output35 = r.InputCrowdstrike.Connections[connectionsIndex34].Output.ValueString()
+			var output34 string
+			output34 = r.InputCrowdstrike.Connections[connectionsIndex33].Output.ValueString()
 
-			connections34 = append(connections34, shared.InputCrowdstrikeConnection{
-				Pipeline: pipeline69,
-				Output:   output35,
+			connections33 = append(connections33, shared.InputCrowdstrikeConnection{
+				Pipeline: pipeline67,
+				Output:   output34,
 			})
 		}
-		var pq34 *shared.InputCrowdstrikePq
+		var pq33 *shared.InputCrowdstrikePq
 		if r.InputCrowdstrike.Pq != nil {
-			mode47 := new(shared.InputCrowdstrikeMode)
+			mode46 := new(shared.InputCrowdstrikeMode)
 			if !r.InputCrowdstrike.Pq.Mode.IsUnknown() && !r.InputCrowdstrike.Pq.Mode.IsNull() {
-				*mode47 = shared.InputCrowdstrikeMode(r.InputCrowdstrike.Pq.Mode.ValueString())
+				*mode46 = shared.InputCrowdstrikeMode(r.InputCrowdstrike.Pq.Mode.ValueString())
 			} else {
-				mode47 = nil
+				mode46 = nil
 			}
-			maxBufferSize34 := new(float64)
+			maxBufferSize33 := new(float64)
 			if !r.InputCrowdstrike.Pq.MaxBufferSize.IsUnknown() && !r.InputCrowdstrike.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize34 = r.InputCrowdstrike.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize33 = r.InputCrowdstrike.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize34 = nil
+				maxBufferSize33 = nil
 			}
-			commitFrequency34 := new(float64)
+			commitFrequency33 := new(float64)
 			if !r.InputCrowdstrike.Pq.CommitFrequency.IsUnknown() && !r.InputCrowdstrike.Pq.CommitFrequency.IsNull() {
-				*commitFrequency34 = r.InputCrowdstrike.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency33 = r.InputCrowdstrike.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency34 = nil
+				commitFrequency33 = nil
 			}
-			maxFileSize34 := new(string)
+			maxFileSize33 := new(string)
 			if !r.InputCrowdstrike.Pq.MaxFileSize.IsUnknown() && !r.InputCrowdstrike.Pq.MaxFileSize.IsNull() {
-				*maxFileSize34 = r.InputCrowdstrike.Pq.MaxFileSize.ValueString()
+				*maxFileSize33 = r.InputCrowdstrike.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize34 = nil
+				maxFileSize33 = nil
 			}
-			maxSize34 := new(string)
+			maxSize33 := new(string)
 			if !r.InputCrowdstrike.Pq.MaxSize.IsUnknown() && !r.InputCrowdstrike.Pq.MaxSize.IsNull() {
-				*maxSize34 = r.InputCrowdstrike.Pq.MaxSize.ValueString()
+				*maxSize33 = r.InputCrowdstrike.Pq.MaxSize.ValueString()
 			} else {
-				maxSize34 = nil
+				maxSize33 = nil
 			}
-			path35 := new(string)
+			path34 := new(string)
 			if !r.InputCrowdstrike.Pq.Path.IsUnknown() && !r.InputCrowdstrike.Pq.Path.IsNull() {
-				*path35 = r.InputCrowdstrike.Pq.Path.ValueString()
+				*path34 = r.InputCrowdstrike.Pq.Path.ValueString()
 			} else {
-				path35 = nil
+				path34 = nil
 			}
-			compress41 := new(shared.InputCrowdstrikeCompression)
+			compress40 := new(shared.InputCrowdstrikeCompression)
 			if !r.InputCrowdstrike.Pq.Compress.IsUnknown() && !r.InputCrowdstrike.Pq.Compress.IsNull() {
-				*compress41 = shared.InputCrowdstrikeCompression(r.InputCrowdstrike.Pq.Compress.ValueString())
+				*compress40 = shared.InputCrowdstrikeCompression(r.InputCrowdstrike.Pq.Compress.ValueString())
 			} else {
-				compress41 = nil
+				compress40 = nil
 			}
-			pq34 = &shared.InputCrowdstrikePq{
-				Mode:            mode47,
-				MaxBufferSize:   maxBufferSize34,
-				CommitFrequency: commitFrequency34,
-				MaxFileSize:     maxFileSize34,
-				MaxSize:         maxSize34,
-				Path:            path35,
-				Compress:        compress41,
+			pq33 = &shared.InputCrowdstrikePq{
+				Mode:            mode46,
+				MaxBufferSize:   maxBufferSize33,
+				CommitFrequency: commitFrequency33,
+				MaxFileSize:     maxFileSize33,
+				MaxSize:         maxSize33,
+				Path:            path34,
+				Compress:        compress40,
 			}
 		}
 		var queueName1 string
@@ -12891,11 +12309,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			reuseConnections3 = nil
 		}
-		rejectUnauthorized25 := new(bool)
+		rejectUnauthorized24 := new(bool)
 		if !r.InputCrowdstrike.RejectUnauthorized.IsUnknown() && !r.InputCrowdstrike.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized25 = r.InputCrowdstrike.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized24 = r.InputCrowdstrike.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized25 = nil
+			rejectUnauthorized24 = nil
 		}
 		breakerRulesets7 := make([]string, 0, len(r.InputCrowdstrike.BreakerRulesets))
 		for breakerRulesetsIndex7 := range r.InputCrowdstrike.BreakerRulesets {
@@ -12925,11 +12343,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			numReceivers1 = nil
 		}
-		socketTimeout10 := new(float64)
+		socketTimeout9 := new(float64)
 		if !r.InputCrowdstrike.SocketTimeout.IsUnknown() && !r.InputCrowdstrike.SocketTimeout.IsNull() {
-			*socketTimeout10 = r.InputCrowdstrike.SocketTimeout.ValueFloat64()
+			*socketTimeout9 = r.InputCrowdstrike.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout10 = nil
+			socketTimeout9 = nil
 		}
 		skipOnError1 := new(bool)
 		if !r.InputCrowdstrike.SkipOnError.IsUnknown() && !r.InputCrowdstrike.SkipOnError.IsNull() {
@@ -12969,11 +12387,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var preprocess1 *shared.InputCrowdstrikePreprocess
 		if r.InputCrowdstrike.Preprocess != nil {
-			disabled65 := new(bool)
+			disabled63 := new(bool)
 			if !r.InputCrowdstrike.Preprocess.Disabled.IsUnknown() && !r.InputCrowdstrike.Preprocess.Disabled.IsNull() {
-				*disabled65 = r.InputCrowdstrike.Preprocess.Disabled.ValueBool()
+				*disabled63 = r.InputCrowdstrike.Preprocess.Disabled.ValueBool()
 			} else {
-				disabled65 = nil
+				disabled63 = nil
 			}
 			command2 := new(string)
 			if !r.InputCrowdstrike.Preprocess.Command.IsUnknown() && !r.InputCrowdstrike.Preprocess.Command.IsNull() {
@@ -12986,22 +12404,22 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				args1 = append(args1, r.InputCrowdstrike.Preprocess.Args[argsIndex1].ValueString())
 			}
 			preprocess1 = &shared.InputCrowdstrikePreprocess{
-				Disabled: disabled65,
+				Disabled: disabled63,
 				Command:  command2,
 				Args:     args1,
 			}
 		}
-		metadata37 := make([]shared.InputCrowdstrikeMetadatum, 0, len(r.InputCrowdstrike.Metadata))
-		for metadataIndex36 := range r.InputCrowdstrike.Metadata {
-			var name57 string
-			name57 = r.InputCrowdstrike.Metadata[metadataIndex36].Name.ValueString()
+		metadata36 := make([]shared.InputCrowdstrikeMetadatum, 0, len(r.InputCrowdstrike.Metadata))
+		for metadataIndex35 := range r.InputCrowdstrike.Metadata {
+			var name52 string
+			name52 = r.InputCrowdstrike.Metadata[metadataIndex35].Name.ValueString()
 
-			var value53 string
-			value53 = r.InputCrowdstrike.Metadata[metadataIndex36].Value.ValueString()
+			var value48 string
+			value48 = r.InputCrowdstrike.Metadata[metadataIndex35].Value.ValueString()
 
-			metadata37 = append(metadata37, shared.InputCrowdstrikeMetadatum{
-				Name:  name57,
-				Value: value53,
+			metadata36 = append(metadata36, shared.InputCrowdstrikeMetadatum{
+				Name:  name52,
+				Value: value48,
 			})
 		}
 		var checkpointing *shared.InputCrowdstrikeCheckpointing
@@ -13035,11 +12453,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			encoding1 = nil
 		}
-		description42 := new(string)
+		description41 := new(string)
 		if !r.InputCrowdstrike.Description.IsUnknown() && !r.InputCrowdstrike.Description.IsNull() {
-			*description42 = r.InputCrowdstrike.Description.ValueString()
+			*description41 = r.InputCrowdstrike.Description.ValueString()
 		} else {
-			description42 = nil
+			description41 = nil
 		}
 		awsAPIKey1 := new(string)
 		if !r.InputCrowdstrike.AwsAPIKey.IsUnknown() && !r.InputCrowdstrike.AwsAPIKey.IsNull() {
@@ -13072,16 +12490,16 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			processedTagValue = nil
 		}
 		inputCrowdstrike = &shared.InputCrowdstrike{
-			ID:                      id34,
-			Type:                    typeVar38,
-			Disabled:                disabled64,
-			Pipeline:                pipeline68,
-			SendToRoutes:            sendToRoutes34,
-			Environment:             environment34,
-			PqEnabled:               pqEnabled34,
-			Streamtags:              streamtags34,
-			Connections:             connections34,
-			Pq:                      pq34,
+			ID:                      id33,
+			Type:                    typeVar37,
+			Disabled:                disabled62,
+			Pipeline:                pipeline66,
+			SendToRoutes:            sendToRoutes33,
+			Environment:             environment33,
+			PqEnabled:               pqEnabled33,
+			Streamtags:              streamtags33,
+			Connections:             connections33,
+			Pq:                      pq33,
 			QueueName:               queueName1,
 			FileFilter:              fileFilter1,
 			AwsAccountID:            awsAccountID,
@@ -13091,13 +12509,13 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Endpoint:                endpoint4,
 			SignatureVersion:        signatureVersion3,
 			ReuseConnections:        reuseConnections3,
-			RejectUnauthorized:      rejectUnauthorized25,
+			RejectUnauthorized:      rejectUnauthorized24,
 			BreakerRulesets:         breakerRulesets7,
 			StaleChannelFlushMs:     staleChannelFlushMs7,
 			MaxMessages:             maxMessages1,
 			VisibilityTimeout:       visibilityTimeout1,
 			NumReceivers:            numReceivers1,
-			SocketTimeout:           socketTimeout10,
+			SocketTimeout:           socketTimeout9,
 			SkipOnError:             skipOnError1,
 			EnableAssumeRole:        enableAssumeRole3,
 			AssumeRoleArn:           assumeRoleArn3,
@@ -13105,11 +12523,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			DurationSeconds:         durationSeconds3,
 			EnableSQSAssumeRole:     enableSQSAssumeRole,
 			Preprocess:              preprocess1,
-			Metadata:                metadata37,
+			Metadata:                metadata36,
 			Checkpointing:           checkpointing,
 			PollTimeout:             pollTimeout,
 			Encoding:                encoding1,
-			Description:             description42,
+			Description:             description41,
 			AwsAPIKey:               awsAPIKey1,
 			AwsSecret:               awsSecret1,
 			TagAfterProcessing:      tagAfterProcessing,
@@ -13124,274 +12542,274 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputDatadogAgent *shared.InputDatadogAgent
 	if r.InputDatadogAgent != nil {
-		id35 := new(string)
+		id34 := new(string)
 		if !r.InputDatadogAgent.ID.IsUnknown() && !r.InputDatadogAgent.ID.IsNull() {
-			*id35 = r.InputDatadogAgent.ID.ValueString()
+			*id34 = r.InputDatadogAgent.ID.ValueString()
 		} else {
-			id35 = nil
+			id34 = nil
 		}
-		typeVar39 := new(shared.InputDatadogAgentType)
+		typeVar38 := new(shared.InputDatadogAgentType)
 		if !r.InputDatadogAgent.Type.IsUnknown() && !r.InputDatadogAgent.Type.IsNull() {
-			*typeVar39 = shared.InputDatadogAgentType(r.InputDatadogAgent.Type.ValueString())
+			*typeVar38 = shared.InputDatadogAgentType(r.InputDatadogAgent.Type.ValueString())
 		} else {
-			typeVar39 = nil
+			typeVar38 = nil
 		}
-		disabled66 := new(bool)
+		disabled64 := new(bool)
 		if !r.InputDatadogAgent.Disabled.IsUnknown() && !r.InputDatadogAgent.Disabled.IsNull() {
-			*disabled66 = r.InputDatadogAgent.Disabled.ValueBool()
+			*disabled64 = r.InputDatadogAgent.Disabled.ValueBool()
 		} else {
-			disabled66 = nil
+			disabled64 = nil
 		}
-		pipeline70 := new(string)
+		pipeline68 := new(string)
 		if !r.InputDatadogAgent.Pipeline.IsUnknown() && !r.InputDatadogAgent.Pipeline.IsNull() {
-			*pipeline70 = r.InputDatadogAgent.Pipeline.ValueString()
+			*pipeline68 = r.InputDatadogAgent.Pipeline.ValueString()
 		} else {
-			pipeline70 = nil
+			pipeline68 = nil
 		}
-		sendToRoutes35 := new(bool)
+		sendToRoutes34 := new(bool)
 		if !r.InputDatadogAgent.SendToRoutes.IsUnknown() && !r.InputDatadogAgent.SendToRoutes.IsNull() {
-			*sendToRoutes35 = r.InputDatadogAgent.SendToRoutes.ValueBool()
+			*sendToRoutes34 = r.InputDatadogAgent.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes35 = nil
+			sendToRoutes34 = nil
 		}
-		environment35 := new(string)
+		environment34 := new(string)
 		if !r.InputDatadogAgent.Environment.IsUnknown() && !r.InputDatadogAgent.Environment.IsNull() {
-			*environment35 = r.InputDatadogAgent.Environment.ValueString()
+			*environment34 = r.InputDatadogAgent.Environment.ValueString()
 		} else {
-			environment35 = nil
+			environment34 = nil
 		}
-		pqEnabled35 := new(bool)
+		pqEnabled34 := new(bool)
 		if !r.InputDatadogAgent.PqEnabled.IsUnknown() && !r.InputDatadogAgent.PqEnabled.IsNull() {
-			*pqEnabled35 = r.InputDatadogAgent.PqEnabled.ValueBool()
+			*pqEnabled34 = r.InputDatadogAgent.PqEnabled.ValueBool()
 		} else {
-			pqEnabled35 = nil
+			pqEnabled34 = nil
 		}
-		streamtags35 := make([]string, 0, len(r.InputDatadogAgent.Streamtags))
-		for streamtagsIndex35 := range r.InputDatadogAgent.Streamtags {
-			streamtags35 = append(streamtags35, r.InputDatadogAgent.Streamtags[streamtagsIndex35].ValueString())
+		streamtags34 := make([]string, 0, len(r.InputDatadogAgent.Streamtags))
+		for streamtagsIndex34 := range r.InputDatadogAgent.Streamtags {
+			streamtags34 = append(streamtags34, r.InputDatadogAgent.Streamtags[streamtagsIndex34].ValueString())
 		}
-		connections35 := make([]shared.InputDatadogAgentConnection, 0, len(r.InputDatadogAgent.Connections))
-		for connectionsIndex35 := range r.InputDatadogAgent.Connections {
-			pipeline71 := new(string)
-			if !r.InputDatadogAgent.Connections[connectionsIndex35].Pipeline.IsUnknown() && !r.InputDatadogAgent.Connections[connectionsIndex35].Pipeline.IsNull() {
-				*pipeline71 = r.InputDatadogAgent.Connections[connectionsIndex35].Pipeline.ValueString()
+		connections34 := make([]shared.InputDatadogAgentConnection, 0, len(r.InputDatadogAgent.Connections))
+		for connectionsIndex34 := range r.InputDatadogAgent.Connections {
+			pipeline69 := new(string)
+			if !r.InputDatadogAgent.Connections[connectionsIndex34].Pipeline.IsUnknown() && !r.InputDatadogAgent.Connections[connectionsIndex34].Pipeline.IsNull() {
+				*pipeline69 = r.InputDatadogAgent.Connections[connectionsIndex34].Pipeline.ValueString()
 			} else {
-				pipeline71 = nil
+				pipeline69 = nil
 			}
-			var output36 string
-			output36 = r.InputDatadogAgent.Connections[connectionsIndex35].Output.ValueString()
+			var output35 string
+			output35 = r.InputDatadogAgent.Connections[connectionsIndex34].Output.ValueString()
 
-			connections35 = append(connections35, shared.InputDatadogAgentConnection{
-				Pipeline: pipeline71,
-				Output:   output36,
+			connections34 = append(connections34, shared.InputDatadogAgentConnection{
+				Pipeline: pipeline69,
+				Output:   output35,
 			})
 		}
-		var pq35 *shared.InputDatadogAgentPq
+		var pq34 *shared.InputDatadogAgentPq
 		if r.InputDatadogAgent.Pq != nil {
-			mode48 := new(shared.InputDatadogAgentMode)
+			mode47 := new(shared.InputDatadogAgentMode)
 			if !r.InputDatadogAgent.Pq.Mode.IsUnknown() && !r.InputDatadogAgent.Pq.Mode.IsNull() {
-				*mode48 = shared.InputDatadogAgentMode(r.InputDatadogAgent.Pq.Mode.ValueString())
+				*mode47 = shared.InputDatadogAgentMode(r.InputDatadogAgent.Pq.Mode.ValueString())
 			} else {
-				mode48 = nil
+				mode47 = nil
 			}
-			maxBufferSize35 := new(float64)
+			maxBufferSize34 := new(float64)
 			if !r.InputDatadogAgent.Pq.MaxBufferSize.IsUnknown() && !r.InputDatadogAgent.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize35 = r.InputDatadogAgent.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize34 = r.InputDatadogAgent.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize35 = nil
+				maxBufferSize34 = nil
 			}
-			commitFrequency35 := new(float64)
+			commitFrequency34 := new(float64)
 			if !r.InputDatadogAgent.Pq.CommitFrequency.IsUnknown() && !r.InputDatadogAgent.Pq.CommitFrequency.IsNull() {
-				*commitFrequency35 = r.InputDatadogAgent.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency34 = r.InputDatadogAgent.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency35 = nil
+				commitFrequency34 = nil
 			}
-			maxFileSize35 := new(string)
+			maxFileSize34 := new(string)
 			if !r.InputDatadogAgent.Pq.MaxFileSize.IsUnknown() && !r.InputDatadogAgent.Pq.MaxFileSize.IsNull() {
-				*maxFileSize35 = r.InputDatadogAgent.Pq.MaxFileSize.ValueString()
+				*maxFileSize34 = r.InputDatadogAgent.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize35 = nil
+				maxFileSize34 = nil
 			}
-			maxSize35 := new(string)
+			maxSize34 := new(string)
 			if !r.InputDatadogAgent.Pq.MaxSize.IsUnknown() && !r.InputDatadogAgent.Pq.MaxSize.IsNull() {
-				*maxSize35 = r.InputDatadogAgent.Pq.MaxSize.ValueString()
+				*maxSize34 = r.InputDatadogAgent.Pq.MaxSize.ValueString()
 			} else {
-				maxSize35 = nil
+				maxSize34 = nil
 			}
-			path36 := new(string)
+			path35 := new(string)
 			if !r.InputDatadogAgent.Pq.Path.IsUnknown() && !r.InputDatadogAgent.Pq.Path.IsNull() {
-				*path36 = r.InputDatadogAgent.Pq.Path.ValueString()
+				*path35 = r.InputDatadogAgent.Pq.Path.ValueString()
 			} else {
-				path36 = nil
+				path35 = nil
 			}
-			compress42 := new(shared.InputDatadogAgentCompression)
+			compress41 := new(shared.InputDatadogAgentCompression)
 			if !r.InputDatadogAgent.Pq.Compress.IsUnknown() && !r.InputDatadogAgent.Pq.Compress.IsNull() {
-				*compress42 = shared.InputDatadogAgentCompression(r.InputDatadogAgent.Pq.Compress.ValueString())
+				*compress41 = shared.InputDatadogAgentCompression(r.InputDatadogAgent.Pq.Compress.ValueString())
 			} else {
-				compress42 = nil
+				compress41 = nil
 			}
-			pq35 = &shared.InputDatadogAgentPq{
-				Mode:            mode48,
-				MaxBufferSize:   maxBufferSize35,
-				CommitFrequency: commitFrequency35,
-				MaxFileSize:     maxFileSize35,
-				MaxSize:         maxSize35,
-				Path:            path36,
-				Compress:        compress42,
+			pq34 = &shared.InputDatadogAgentPq{
+				Mode:            mode47,
+				MaxBufferSize:   maxBufferSize34,
+				CommitFrequency: commitFrequency34,
+				MaxFileSize:     maxFileSize34,
+				MaxSize:         maxSize34,
+				Path:            path35,
+				Compress:        compress41,
 			}
 		}
-		host16 := new(string)
+		host15 := new(string)
 		if !r.InputDatadogAgent.Host.IsUnknown() && !r.InputDatadogAgent.Host.IsNull() {
-			*host16 = r.InputDatadogAgent.Host.ValueString()
+			*host15 = r.InputDatadogAgent.Host.ValueString()
 		} else {
-			host16 = nil
+			host15 = nil
 		}
-		var port14 float64
-		port14 = r.InputDatadogAgent.Port.ValueFloat64()
+		var port13 float64
+		port13 = r.InputDatadogAgent.Port.ValueFloat64()
 
-		var tls20 *shared.InputDatadogAgentTLSSettingsServerSide
+		var tls19 *shared.InputDatadogAgentTLSSettingsServerSide
 		if r.InputDatadogAgent.TLS != nil {
-			disabled67 := new(bool)
+			disabled65 := new(bool)
 			if !r.InputDatadogAgent.TLS.Disabled.IsUnknown() && !r.InputDatadogAgent.TLS.Disabled.IsNull() {
-				*disabled67 = r.InputDatadogAgent.TLS.Disabled.ValueBool()
+				*disabled65 = r.InputDatadogAgent.TLS.Disabled.ValueBool()
 			} else {
-				disabled67 = nil
+				disabled65 = nil
 			}
-			certificateName21 := new(string)
+			certificateName20 := new(string)
 			if !r.InputDatadogAgent.TLS.CertificateName.IsUnknown() && !r.InputDatadogAgent.TLS.CertificateName.IsNull() {
-				*certificateName21 = r.InputDatadogAgent.TLS.CertificateName.ValueString()
+				*certificateName20 = r.InputDatadogAgent.TLS.CertificateName.ValueString()
 			} else {
-				certificateName21 = nil
+				certificateName20 = nil
 			}
-			privKeyPath20 := new(string)
+			privKeyPath19 := new(string)
 			if !r.InputDatadogAgent.TLS.PrivKeyPath.IsUnknown() && !r.InputDatadogAgent.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath20 = r.InputDatadogAgent.TLS.PrivKeyPath.ValueString()
+				*privKeyPath19 = r.InputDatadogAgent.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath20 = nil
+				privKeyPath19 = nil
 			}
-			passphrase20 := new(string)
+			passphrase19 := new(string)
 			if !r.InputDatadogAgent.TLS.Passphrase.IsUnknown() && !r.InputDatadogAgent.TLS.Passphrase.IsNull() {
-				*passphrase20 = r.InputDatadogAgent.TLS.Passphrase.ValueString()
+				*passphrase19 = r.InputDatadogAgent.TLS.Passphrase.ValueString()
 			} else {
-				passphrase20 = nil
+				passphrase19 = nil
 			}
-			certPath20 := new(string)
+			certPath19 := new(string)
 			if !r.InputDatadogAgent.TLS.CertPath.IsUnknown() && !r.InputDatadogAgent.TLS.CertPath.IsNull() {
-				*certPath20 = r.InputDatadogAgent.TLS.CertPath.ValueString()
+				*certPath19 = r.InputDatadogAgent.TLS.CertPath.ValueString()
 			} else {
-				certPath20 = nil
+				certPath19 = nil
 			}
-			caPath19 := new(string)
+			caPath18 := new(string)
 			if !r.InputDatadogAgent.TLS.CaPath.IsUnknown() && !r.InputDatadogAgent.TLS.CaPath.IsNull() {
-				*caPath19 = r.InputDatadogAgent.TLS.CaPath.ValueString()
+				*caPath18 = r.InputDatadogAgent.TLS.CaPath.ValueString()
 			} else {
-				caPath19 = nil
+				caPath18 = nil
 			}
-			requestCert13 := new(bool)
+			requestCert12 := new(bool)
 			if !r.InputDatadogAgent.TLS.RequestCert.IsUnknown() && !r.InputDatadogAgent.TLS.RequestCert.IsNull() {
-				*requestCert13 = r.InputDatadogAgent.TLS.RequestCert.ValueBool()
+				*requestCert12 = r.InputDatadogAgent.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert13 = nil
+				requestCert12 = nil
 			}
-			var rejectUnauthorized26 interface{}
+			var rejectUnauthorized25 interface{}
 			if !r.InputDatadogAgent.TLS.RejectUnauthorized.IsUnknown() && !r.InputDatadogAgent.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputDatadogAgent.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized26)
+				_ = json.Unmarshal([]byte(r.InputDatadogAgent.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized25)
 			}
-			var commonNameRegex13 interface{}
+			var commonNameRegex12 interface{}
 			if !r.InputDatadogAgent.TLS.CommonNameRegex.IsUnknown() && !r.InputDatadogAgent.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputDatadogAgent.TLS.CommonNameRegex.ValueString()), &commonNameRegex13)
+				_ = json.Unmarshal([]byte(r.InputDatadogAgent.TLS.CommonNameRegex.ValueString()), &commonNameRegex12)
 			}
-			minVersion19 := new(shared.InputDatadogAgentMinimumTLSVersion)
+			minVersion18 := new(shared.InputDatadogAgentMinimumTLSVersion)
 			if !r.InputDatadogAgent.TLS.MinVersion.IsUnknown() && !r.InputDatadogAgent.TLS.MinVersion.IsNull() {
-				*minVersion19 = shared.InputDatadogAgentMinimumTLSVersion(r.InputDatadogAgent.TLS.MinVersion.ValueString())
+				*minVersion18 = shared.InputDatadogAgentMinimumTLSVersion(r.InputDatadogAgent.TLS.MinVersion.ValueString())
 			} else {
-				minVersion19 = nil
+				minVersion18 = nil
 			}
-			maxVersion19 := new(shared.InputDatadogAgentMaximumTLSVersion)
+			maxVersion18 := new(shared.InputDatadogAgentMaximumTLSVersion)
 			if !r.InputDatadogAgent.TLS.MaxVersion.IsUnknown() && !r.InputDatadogAgent.TLS.MaxVersion.IsNull() {
-				*maxVersion19 = shared.InputDatadogAgentMaximumTLSVersion(r.InputDatadogAgent.TLS.MaxVersion.ValueString())
+				*maxVersion18 = shared.InputDatadogAgentMaximumTLSVersion(r.InputDatadogAgent.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion19 = nil
+				maxVersion18 = nil
 			}
-			tls20 = &shared.InputDatadogAgentTLSSettingsServerSide{
-				Disabled:           disabled67,
-				CertificateName:    certificateName21,
-				PrivKeyPath:        privKeyPath20,
-				Passphrase:         passphrase20,
-				CertPath:           certPath20,
-				CaPath:             caPath19,
-				RequestCert:        requestCert13,
-				RejectUnauthorized: rejectUnauthorized26,
-				CommonNameRegex:    commonNameRegex13,
-				MinVersion:         minVersion19,
-				MaxVersion:         maxVersion19,
+			tls19 = &shared.InputDatadogAgentTLSSettingsServerSide{
+				Disabled:           disabled65,
+				CertificateName:    certificateName20,
+				PrivKeyPath:        privKeyPath19,
+				Passphrase:         passphrase19,
+				CertPath:           certPath19,
+				CaPath:             caPath18,
+				RequestCert:        requestCert12,
+				RejectUnauthorized: rejectUnauthorized25,
+				CommonNameRegex:    commonNameRegex12,
+				MinVersion:         minVersion18,
+				MaxVersion:         maxVersion18,
 			}
 		}
-		maxActiveReq10 := new(float64)
+		maxActiveReq9 := new(float64)
 		if !r.InputDatadogAgent.MaxActiveReq.IsUnknown() && !r.InputDatadogAgent.MaxActiveReq.IsNull() {
-			*maxActiveReq10 = r.InputDatadogAgent.MaxActiveReq.ValueFloat64()
+			*maxActiveReq9 = r.InputDatadogAgent.MaxActiveReq.ValueFloat64()
 		} else {
-			maxActiveReq10 = nil
+			maxActiveReq9 = nil
 		}
-		maxRequestsPerSocket10 := new(int64)
+		maxRequestsPerSocket9 := new(int64)
 		if !r.InputDatadogAgent.MaxRequestsPerSocket.IsUnknown() && !r.InputDatadogAgent.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket10 = r.InputDatadogAgent.MaxRequestsPerSocket.ValueInt64()
+			*maxRequestsPerSocket9 = r.InputDatadogAgent.MaxRequestsPerSocket.ValueInt64()
 		} else {
-			maxRequestsPerSocket10 = nil
+			maxRequestsPerSocket9 = nil
 		}
-		enableProxyHeader13 := new(bool)
+		enableProxyHeader12 := new(bool)
 		if !r.InputDatadogAgent.EnableProxyHeader.IsUnknown() && !r.InputDatadogAgent.EnableProxyHeader.IsNull() {
-			*enableProxyHeader13 = r.InputDatadogAgent.EnableProxyHeader.ValueBool()
+			*enableProxyHeader12 = r.InputDatadogAgent.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader13 = nil
+			enableProxyHeader12 = nil
 		}
-		captureHeaders10 := new(bool)
+		captureHeaders9 := new(bool)
 		if !r.InputDatadogAgent.CaptureHeaders.IsUnknown() && !r.InputDatadogAgent.CaptureHeaders.IsNull() {
-			*captureHeaders10 = r.InputDatadogAgent.CaptureHeaders.ValueBool()
+			*captureHeaders9 = r.InputDatadogAgent.CaptureHeaders.ValueBool()
 		} else {
-			captureHeaders10 = nil
+			captureHeaders9 = nil
 		}
-		activityLogSampleRate10 := new(float64)
+		activityLogSampleRate9 := new(float64)
 		if !r.InputDatadogAgent.ActivityLogSampleRate.IsUnknown() && !r.InputDatadogAgent.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate10 = r.InputDatadogAgent.ActivityLogSampleRate.ValueFloat64()
+			*activityLogSampleRate9 = r.InputDatadogAgent.ActivityLogSampleRate.ValueFloat64()
 		} else {
-			activityLogSampleRate10 = nil
+			activityLogSampleRate9 = nil
 		}
-		requestTimeout19 := new(float64)
+		requestTimeout18 := new(float64)
 		if !r.InputDatadogAgent.RequestTimeout.IsUnknown() && !r.InputDatadogAgent.RequestTimeout.IsNull() {
-			*requestTimeout19 = r.InputDatadogAgent.RequestTimeout.ValueFloat64()
+			*requestTimeout18 = r.InputDatadogAgent.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout19 = nil
+			requestTimeout18 = nil
 		}
-		socketTimeout11 := new(float64)
+		socketTimeout10 := new(float64)
 		if !r.InputDatadogAgent.SocketTimeout.IsUnknown() && !r.InputDatadogAgent.SocketTimeout.IsNull() {
-			*socketTimeout11 = r.InputDatadogAgent.SocketTimeout.ValueFloat64()
+			*socketTimeout10 = r.InputDatadogAgent.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout11 = nil
+			socketTimeout10 = nil
 		}
-		keepAliveTimeout10 := new(float64)
+		keepAliveTimeout9 := new(float64)
 		if !r.InputDatadogAgent.KeepAliveTimeout.IsUnknown() && !r.InputDatadogAgent.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout10 = r.InputDatadogAgent.KeepAliveTimeout.ValueFloat64()
+			*keepAliveTimeout9 = r.InputDatadogAgent.KeepAliveTimeout.ValueFloat64()
 		} else {
-			keepAliveTimeout10 = nil
+			keepAliveTimeout9 = nil
 		}
-		enableHealthCheck10 := new(bool)
+		enableHealthCheck9 := new(bool)
 		if !r.InputDatadogAgent.EnableHealthCheck.IsUnknown() && !r.InputDatadogAgent.EnableHealthCheck.IsNull() {
-			*enableHealthCheck10 = r.InputDatadogAgent.EnableHealthCheck.ValueBool()
+			*enableHealthCheck9 = r.InputDatadogAgent.EnableHealthCheck.ValueBool()
 		} else {
-			enableHealthCheck10 = nil
+			enableHealthCheck9 = nil
 		}
-		ipAllowlistRegex10 := new(string)
+		ipAllowlistRegex9 := new(string)
 		if !r.InputDatadogAgent.IPAllowlistRegex.IsUnknown() && !r.InputDatadogAgent.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex10 = r.InputDatadogAgent.IPAllowlistRegex.ValueString()
+			*ipAllowlistRegex9 = r.InputDatadogAgent.IPAllowlistRegex.ValueString()
 		} else {
-			ipAllowlistRegex10 = nil
+			ipAllowlistRegex9 = nil
 		}
-		ipDenylistRegex10 := new(string)
+		ipDenylistRegex9 := new(string)
 		if !r.InputDatadogAgent.IPDenylistRegex.IsUnknown() && !r.InputDatadogAgent.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex10 = r.InputDatadogAgent.IPDenylistRegex.ValueString()
+			*ipDenylistRegex9 = r.InputDatadogAgent.IPDenylistRegex.ValueString()
 		} else {
-			ipDenylistRegex10 = nil
+			ipDenylistRegex9 = nil
 		}
 		extractMetrics2 := new(bool)
 		if !r.InputDatadogAgent.ExtractMetrics.IsUnknown() && !r.InputDatadogAgent.ExtractMetrics.IsNull() {
@@ -13399,17 +12817,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			extractMetrics2 = nil
 		}
-		metadata38 := make([]shared.InputDatadogAgentMetadatum, 0, len(r.InputDatadogAgent.Metadata))
-		for metadataIndex37 := range r.InputDatadogAgent.Metadata {
-			var name58 string
-			name58 = r.InputDatadogAgent.Metadata[metadataIndex37].Name.ValueString()
+		metadata37 := make([]shared.InputDatadogAgentMetadatum, 0, len(r.InputDatadogAgent.Metadata))
+		for metadataIndex36 := range r.InputDatadogAgent.Metadata {
+			var name53 string
+			name53 = r.InputDatadogAgent.Metadata[metadataIndex36].Name.ValueString()
 
-			var value54 string
-			value54 = r.InputDatadogAgent.Metadata[metadataIndex37].Value.ValueString()
+			var value49 string
+			value49 = r.InputDatadogAgent.Metadata[metadataIndex36].Value.ValueString()
 
-			metadata38 = append(metadata38, shared.InputDatadogAgentMetadatum{
-				Name:  name58,
-				Value: value54,
+			metadata37 = append(metadata37, shared.InputDatadogAgentMetadatum{
+				Name:  name53,
+				Value: value49,
 			})
 		}
 		var proxyMode1 *shared.InputDatadogAgentProxyMode
@@ -13420,52 +12838,52 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				enabled5 = nil
 			}
-			rejectUnauthorized27 := new(bool)
+			rejectUnauthorized26 := new(bool)
 			if !r.InputDatadogAgent.ProxyMode.RejectUnauthorized.IsUnknown() && !r.InputDatadogAgent.ProxyMode.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized27 = r.InputDatadogAgent.ProxyMode.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized26 = r.InputDatadogAgent.ProxyMode.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized27 = nil
+				rejectUnauthorized26 = nil
 			}
 			proxyMode1 = &shared.InputDatadogAgentProxyMode{
 				Enabled:            enabled5,
-				RejectUnauthorized: rejectUnauthorized27,
+				RejectUnauthorized: rejectUnauthorized26,
 			}
 		}
-		description43 := new(string)
+		description42 := new(string)
 		if !r.InputDatadogAgent.Description.IsUnknown() && !r.InputDatadogAgent.Description.IsNull() {
-			*description43 = r.InputDatadogAgent.Description.ValueString()
+			*description42 = r.InputDatadogAgent.Description.ValueString()
 		} else {
-			description43 = nil
+			description42 = nil
 		}
 		inputDatadogAgent = &shared.InputDatadogAgent{
-			ID:                    id35,
-			Type:                  typeVar39,
-			Disabled:              disabled66,
-			Pipeline:              pipeline70,
-			SendToRoutes:          sendToRoutes35,
-			Environment:           environment35,
-			PqEnabled:             pqEnabled35,
-			Streamtags:            streamtags35,
-			Connections:           connections35,
-			Pq:                    pq35,
-			Host:                  host16,
-			Port:                  port14,
-			TLS:                   tls20,
-			MaxActiveReq:          maxActiveReq10,
-			MaxRequestsPerSocket:  maxRequestsPerSocket10,
-			EnableProxyHeader:     enableProxyHeader13,
-			CaptureHeaders:        captureHeaders10,
-			ActivityLogSampleRate: activityLogSampleRate10,
-			RequestTimeout:        requestTimeout19,
-			SocketTimeout:         socketTimeout11,
-			KeepAliveTimeout:      keepAliveTimeout10,
-			EnableHealthCheck:     enableHealthCheck10,
-			IPAllowlistRegex:      ipAllowlistRegex10,
-			IPDenylistRegex:       ipDenylistRegex10,
+			ID:                    id34,
+			Type:                  typeVar38,
+			Disabled:              disabled64,
+			Pipeline:              pipeline68,
+			SendToRoutes:          sendToRoutes34,
+			Environment:           environment34,
+			PqEnabled:             pqEnabled34,
+			Streamtags:            streamtags34,
+			Connections:           connections34,
+			Pq:                    pq34,
+			Host:                  host15,
+			Port:                  port13,
+			TLS:                   tls19,
+			MaxActiveReq:          maxActiveReq9,
+			MaxRequestsPerSocket:  maxRequestsPerSocket9,
+			EnableProxyHeader:     enableProxyHeader12,
+			CaptureHeaders:        captureHeaders9,
+			ActivityLogSampleRate: activityLogSampleRate9,
+			RequestTimeout:        requestTimeout18,
+			SocketTimeout:         socketTimeout10,
+			KeepAliveTimeout:      keepAliveTimeout9,
+			EnableHealthCheck:     enableHealthCheck9,
+			IPAllowlistRegex:      ipAllowlistRegex9,
+			IPDenylistRegex:       ipDenylistRegex9,
 			ExtractMetrics:        extractMetrics2,
-			Metadata:              metadata38,
+			Metadata:              metadata37,
 			ProxyMode:             proxyMode1,
-			Description:           description43,
+			Description:           description42,
 		}
 	}
 	if inputDatadogAgent != nil {
@@ -13475,115 +12893,115 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputDatagen *shared.InputDatagen
 	if r.InputDatagen != nil {
-		id36 := new(string)
+		id35 := new(string)
 		if !r.InputDatagen.ID.IsUnknown() && !r.InputDatagen.ID.IsNull() {
-			*id36 = r.InputDatagen.ID.ValueString()
+			*id35 = r.InputDatagen.ID.ValueString()
 		} else {
-			id36 = nil
+			id35 = nil
 		}
-		typeVar40 := shared.InputDatagenType(r.InputDatagen.Type.ValueString())
-		disabled68 := new(bool)
+		typeVar39 := shared.InputDatagenType(r.InputDatagen.Type.ValueString())
+		disabled66 := new(bool)
 		if !r.InputDatagen.Disabled.IsUnknown() && !r.InputDatagen.Disabled.IsNull() {
-			*disabled68 = r.InputDatagen.Disabled.ValueBool()
+			*disabled66 = r.InputDatagen.Disabled.ValueBool()
 		} else {
-			disabled68 = nil
+			disabled66 = nil
 		}
-		pipeline72 := new(string)
+		pipeline70 := new(string)
 		if !r.InputDatagen.Pipeline.IsUnknown() && !r.InputDatagen.Pipeline.IsNull() {
-			*pipeline72 = r.InputDatagen.Pipeline.ValueString()
+			*pipeline70 = r.InputDatagen.Pipeline.ValueString()
 		} else {
-			pipeline72 = nil
+			pipeline70 = nil
 		}
-		sendToRoutes36 := new(bool)
+		sendToRoutes35 := new(bool)
 		if !r.InputDatagen.SendToRoutes.IsUnknown() && !r.InputDatagen.SendToRoutes.IsNull() {
-			*sendToRoutes36 = r.InputDatagen.SendToRoutes.ValueBool()
+			*sendToRoutes35 = r.InputDatagen.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes36 = nil
+			sendToRoutes35 = nil
 		}
-		environment36 := new(string)
+		environment35 := new(string)
 		if !r.InputDatagen.Environment.IsUnknown() && !r.InputDatagen.Environment.IsNull() {
-			*environment36 = r.InputDatagen.Environment.ValueString()
+			*environment35 = r.InputDatagen.Environment.ValueString()
 		} else {
-			environment36 = nil
+			environment35 = nil
 		}
-		pqEnabled36 := new(bool)
+		pqEnabled35 := new(bool)
 		if !r.InputDatagen.PqEnabled.IsUnknown() && !r.InputDatagen.PqEnabled.IsNull() {
-			*pqEnabled36 = r.InputDatagen.PqEnabled.ValueBool()
+			*pqEnabled35 = r.InputDatagen.PqEnabled.ValueBool()
 		} else {
-			pqEnabled36 = nil
+			pqEnabled35 = nil
 		}
-		streamtags36 := make([]string, 0, len(r.InputDatagen.Streamtags))
-		for streamtagsIndex36 := range r.InputDatagen.Streamtags {
-			streamtags36 = append(streamtags36, r.InputDatagen.Streamtags[streamtagsIndex36].ValueString())
+		streamtags35 := make([]string, 0, len(r.InputDatagen.Streamtags))
+		for streamtagsIndex35 := range r.InputDatagen.Streamtags {
+			streamtags35 = append(streamtags35, r.InputDatagen.Streamtags[streamtagsIndex35].ValueString())
 		}
-		connections36 := make([]shared.InputDatagenConnection, 0, len(r.InputDatagen.Connections))
-		for connectionsIndex36 := range r.InputDatagen.Connections {
-			pipeline73 := new(string)
-			if !r.InputDatagen.Connections[connectionsIndex36].Pipeline.IsUnknown() && !r.InputDatagen.Connections[connectionsIndex36].Pipeline.IsNull() {
-				*pipeline73 = r.InputDatagen.Connections[connectionsIndex36].Pipeline.ValueString()
+		connections35 := make([]shared.InputDatagenConnection, 0, len(r.InputDatagen.Connections))
+		for connectionsIndex35 := range r.InputDatagen.Connections {
+			pipeline71 := new(string)
+			if !r.InputDatagen.Connections[connectionsIndex35].Pipeline.IsUnknown() && !r.InputDatagen.Connections[connectionsIndex35].Pipeline.IsNull() {
+				*pipeline71 = r.InputDatagen.Connections[connectionsIndex35].Pipeline.ValueString()
 			} else {
-				pipeline73 = nil
+				pipeline71 = nil
 			}
-			var output37 string
-			output37 = r.InputDatagen.Connections[connectionsIndex36].Output.ValueString()
+			var output36 string
+			output36 = r.InputDatagen.Connections[connectionsIndex35].Output.ValueString()
 
-			connections36 = append(connections36, shared.InputDatagenConnection{
-				Pipeline: pipeline73,
-				Output:   output37,
+			connections35 = append(connections35, shared.InputDatagenConnection{
+				Pipeline: pipeline71,
+				Output:   output36,
 			})
 		}
-		var pq36 *shared.InputDatagenPq
+		var pq35 *shared.InputDatagenPq
 		if r.InputDatagen.Pq != nil {
-			mode49 := new(shared.InputDatagenMode)
+			mode48 := new(shared.InputDatagenMode)
 			if !r.InputDatagen.Pq.Mode.IsUnknown() && !r.InputDatagen.Pq.Mode.IsNull() {
-				*mode49 = shared.InputDatagenMode(r.InputDatagen.Pq.Mode.ValueString())
+				*mode48 = shared.InputDatagenMode(r.InputDatagen.Pq.Mode.ValueString())
 			} else {
-				mode49 = nil
+				mode48 = nil
 			}
-			maxBufferSize36 := new(float64)
+			maxBufferSize35 := new(float64)
 			if !r.InputDatagen.Pq.MaxBufferSize.IsUnknown() && !r.InputDatagen.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize36 = r.InputDatagen.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize35 = r.InputDatagen.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize36 = nil
+				maxBufferSize35 = nil
 			}
-			commitFrequency36 := new(float64)
+			commitFrequency35 := new(float64)
 			if !r.InputDatagen.Pq.CommitFrequency.IsUnknown() && !r.InputDatagen.Pq.CommitFrequency.IsNull() {
-				*commitFrequency36 = r.InputDatagen.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency35 = r.InputDatagen.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency36 = nil
+				commitFrequency35 = nil
 			}
-			maxFileSize36 := new(string)
+			maxFileSize35 := new(string)
 			if !r.InputDatagen.Pq.MaxFileSize.IsUnknown() && !r.InputDatagen.Pq.MaxFileSize.IsNull() {
-				*maxFileSize36 = r.InputDatagen.Pq.MaxFileSize.ValueString()
+				*maxFileSize35 = r.InputDatagen.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize36 = nil
+				maxFileSize35 = nil
 			}
-			maxSize36 := new(string)
+			maxSize35 := new(string)
 			if !r.InputDatagen.Pq.MaxSize.IsUnknown() && !r.InputDatagen.Pq.MaxSize.IsNull() {
-				*maxSize36 = r.InputDatagen.Pq.MaxSize.ValueString()
+				*maxSize35 = r.InputDatagen.Pq.MaxSize.ValueString()
 			} else {
-				maxSize36 = nil
+				maxSize35 = nil
 			}
-			path37 := new(string)
+			path36 := new(string)
 			if !r.InputDatagen.Pq.Path.IsUnknown() && !r.InputDatagen.Pq.Path.IsNull() {
-				*path37 = r.InputDatagen.Pq.Path.ValueString()
+				*path36 = r.InputDatagen.Pq.Path.ValueString()
 			} else {
-				path37 = nil
+				path36 = nil
 			}
-			compress43 := new(shared.InputDatagenCompression)
+			compress42 := new(shared.InputDatagenCompression)
 			if !r.InputDatagen.Pq.Compress.IsUnknown() && !r.InputDatagen.Pq.Compress.IsNull() {
-				*compress43 = shared.InputDatagenCompression(r.InputDatagen.Pq.Compress.ValueString())
+				*compress42 = shared.InputDatagenCompression(r.InputDatagen.Pq.Compress.ValueString())
 			} else {
-				compress43 = nil
+				compress42 = nil
 			}
-			pq36 = &shared.InputDatagenPq{
-				Mode:            mode49,
-				MaxBufferSize:   maxBufferSize36,
-				CommitFrequency: commitFrequency36,
-				MaxFileSize:     maxFileSize36,
-				MaxSize:         maxSize36,
-				Path:            path37,
-				Compress:        compress43,
+			pq35 = &shared.InputDatagenPq{
+				Mode:            mode48,
+				MaxBufferSize:   maxBufferSize35,
+				CommitFrequency: commitFrequency35,
+				MaxFileSize:     maxFileSize35,
+				MaxSize:         maxSize35,
+				Path:            path36,
+				Compress:        compress42,
 			}
 		}
 		samples := make([]shared.Sample, 0, len(r.InputDatagen.Samples))
@@ -13602,39 +13020,39 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				EventsPerSec: eventsPerSec,
 			})
 		}
-		metadata39 := make([]shared.InputDatagenMetadatum, 0, len(r.InputDatagen.Metadata))
-		for metadataIndex38 := range r.InputDatagen.Metadata {
-			var name59 string
-			name59 = r.InputDatagen.Metadata[metadataIndex38].Name.ValueString()
+		metadata38 := make([]shared.InputDatagenMetadatum, 0, len(r.InputDatagen.Metadata))
+		for metadataIndex37 := range r.InputDatagen.Metadata {
+			var name54 string
+			name54 = r.InputDatagen.Metadata[metadataIndex37].Name.ValueString()
 
-			var value55 string
-			value55 = r.InputDatagen.Metadata[metadataIndex38].Value.ValueString()
+			var value50 string
+			value50 = r.InputDatagen.Metadata[metadataIndex37].Value.ValueString()
 
-			metadata39 = append(metadata39, shared.InputDatagenMetadatum{
-				Name:  name59,
-				Value: value55,
+			metadata38 = append(metadata38, shared.InputDatagenMetadatum{
+				Name:  name54,
+				Value: value50,
 			})
 		}
-		description44 := new(string)
+		description43 := new(string)
 		if !r.InputDatagen.Description.IsUnknown() && !r.InputDatagen.Description.IsNull() {
-			*description44 = r.InputDatagen.Description.ValueString()
+			*description43 = r.InputDatagen.Description.ValueString()
 		} else {
-			description44 = nil
+			description43 = nil
 		}
 		inputDatagen = &shared.InputDatagen{
-			ID:           id36,
-			Type:         typeVar40,
-			Disabled:     disabled68,
-			Pipeline:     pipeline72,
-			SendToRoutes: sendToRoutes36,
-			Environment:  environment36,
-			PqEnabled:    pqEnabled36,
-			Streamtags:   streamtags36,
-			Connections:  connections36,
-			Pq:           pq36,
+			ID:           id35,
+			Type:         typeVar39,
+			Disabled:     disabled66,
+			Pipeline:     pipeline70,
+			SendToRoutes: sendToRoutes35,
+			Environment:  environment35,
+			PqEnabled:    pqEnabled35,
+			Streamtags:   streamtags35,
+			Connections:  connections35,
+			Pq:           pq35,
 			Samples:      samples,
-			Metadata:     metadata39,
-			Description:  description44,
+			Metadata:     metadata38,
+			Description:  description43,
 		}
 	}
 	if inputDatagen != nil {
@@ -13644,278 +13062,278 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputHTTPRaw *shared.InputHTTPRaw
 	if r.InputHTTPRaw != nil {
-		id37 := new(string)
+		id36 := new(string)
 		if !r.InputHTTPRaw.ID.IsUnknown() && !r.InputHTTPRaw.ID.IsNull() {
-			*id37 = r.InputHTTPRaw.ID.ValueString()
+			*id36 = r.InputHTTPRaw.ID.ValueString()
 		} else {
-			id37 = nil
+			id36 = nil
 		}
-		typeVar41 := new(shared.InputHTTPRawType)
+		typeVar40 := new(shared.InputHTTPRawType)
 		if !r.InputHTTPRaw.Type.IsUnknown() && !r.InputHTTPRaw.Type.IsNull() {
-			*typeVar41 = shared.InputHTTPRawType(r.InputHTTPRaw.Type.ValueString())
+			*typeVar40 = shared.InputHTTPRawType(r.InputHTTPRaw.Type.ValueString())
 		} else {
-			typeVar41 = nil
+			typeVar40 = nil
 		}
-		disabled69 := new(bool)
+		disabled67 := new(bool)
 		if !r.InputHTTPRaw.Disabled.IsUnknown() && !r.InputHTTPRaw.Disabled.IsNull() {
-			*disabled69 = r.InputHTTPRaw.Disabled.ValueBool()
+			*disabled67 = r.InputHTTPRaw.Disabled.ValueBool()
 		} else {
-			disabled69 = nil
+			disabled67 = nil
 		}
-		pipeline74 := new(string)
+		pipeline72 := new(string)
 		if !r.InputHTTPRaw.Pipeline.IsUnknown() && !r.InputHTTPRaw.Pipeline.IsNull() {
-			*pipeline74 = r.InputHTTPRaw.Pipeline.ValueString()
+			*pipeline72 = r.InputHTTPRaw.Pipeline.ValueString()
 		} else {
-			pipeline74 = nil
+			pipeline72 = nil
 		}
-		sendToRoutes37 := new(bool)
+		sendToRoutes36 := new(bool)
 		if !r.InputHTTPRaw.SendToRoutes.IsUnknown() && !r.InputHTTPRaw.SendToRoutes.IsNull() {
-			*sendToRoutes37 = r.InputHTTPRaw.SendToRoutes.ValueBool()
+			*sendToRoutes36 = r.InputHTTPRaw.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes37 = nil
+			sendToRoutes36 = nil
 		}
-		environment37 := new(string)
+		environment36 := new(string)
 		if !r.InputHTTPRaw.Environment.IsUnknown() && !r.InputHTTPRaw.Environment.IsNull() {
-			*environment37 = r.InputHTTPRaw.Environment.ValueString()
+			*environment36 = r.InputHTTPRaw.Environment.ValueString()
 		} else {
-			environment37 = nil
+			environment36 = nil
 		}
-		pqEnabled37 := new(bool)
+		pqEnabled36 := new(bool)
 		if !r.InputHTTPRaw.PqEnabled.IsUnknown() && !r.InputHTTPRaw.PqEnabled.IsNull() {
-			*pqEnabled37 = r.InputHTTPRaw.PqEnabled.ValueBool()
+			*pqEnabled36 = r.InputHTTPRaw.PqEnabled.ValueBool()
 		} else {
-			pqEnabled37 = nil
+			pqEnabled36 = nil
 		}
-		streamtags37 := make([]string, 0, len(r.InputHTTPRaw.Streamtags))
-		for streamtagsIndex37 := range r.InputHTTPRaw.Streamtags {
-			streamtags37 = append(streamtags37, r.InputHTTPRaw.Streamtags[streamtagsIndex37].ValueString())
+		streamtags36 := make([]string, 0, len(r.InputHTTPRaw.Streamtags))
+		for streamtagsIndex36 := range r.InputHTTPRaw.Streamtags {
+			streamtags36 = append(streamtags36, r.InputHTTPRaw.Streamtags[streamtagsIndex36].ValueString())
 		}
-		connections37 := make([]shared.InputHTTPRawConnection, 0, len(r.InputHTTPRaw.Connections))
-		for connectionsIndex37 := range r.InputHTTPRaw.Connections {
-			pipeline75 := new(string)
-			if !r.InputHTTPRaw.Connections[connectionsIndex37].Pipeline.IsUnknown() && !r.InputHTTPRaw.Connections[connectionsIndex37].Pipeline.IsNull() {
-				*pipeline75 = r.InputHTTPRaw.Connections[connectionsIndex37].Pipeline.ValueString()
+		connections36 := make([]shared.InputHTTPRawConnection, 0, len(r.InputHTTPRaw.Connections))
+		for connectionsIndex36 := range r.InputHTTPRaw.Connections {
+			pipeline73 := new(string)
+			if !r.InputHTTPRaw.Connections[connectionsIndex36].Pipeline.IsUnknown() && !r.InputHTTPRaw.Connections[connectionsIndex36].Pipeline.IsNull() {
+				*pipeline73 = r.InputHTTPRaw.Connections[connectionsIndex36].Pipeline.ValueString()
 			} else {
-				pipeline75 = nil
+				pipeline73 = nil
 			}
-			var output38 string
-			output38 = r.InputHTTPRaw.Connections[connectionsIndex37].Output.ValueString()
+			var output37 string
+			output37 = r.InputHTTPRaw.Connections[connectionsIndex36].Output.ValueString()
 
-			connections37 = append(connections37, shared.InputHTTPRawConnection{
-				Pipeline: pipeline75,
-				Output:   output38,
+			connections36 = append(connections36, shared.InputHTTPRawConnection{
+				Pipeline: pipeline73,
+				Output:   output37,
 			})
 		}
-		var pq37 *shared.InputHTTPRawPq
+		var pq36 *shared.InputHTTPRawPq
 		if r.InputHTTPRaw.Pq != nil {
-			mode50 := new(shared.InputHTTPRawMode)
+			mode49 := new(shared.InputHTTPRawMode)
 			if !r.InputHTTPRaw.Pq.Mode.IsUnknown() && !r.InputHTTPRaw.Pq.Mode.IsNull() {
-				*mode50 = shared.InputHTTPRawMode(r.InputHTTPRaw.Pq.Mode.ValueString())
+				*mode49 = shared.InputHTTPRawMode(r.InputHTTPRaw.Pq.Mode.ValueString())
 			} else {
-				mode50 = nil
+				mode49 = nil
 			}
-			maxBufferSize37 := new(float64)
+			maxBufferSize36 := new(float64)
 			if !r.InputHTTPRaw.Pq.MaxBufferSize.IsUnknown() && !r.InputHTTPRaw.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize37 = r.InputHTTPRaw.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize36 = r.InputHTTPRaw.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize37 = nil
+				maxBufferSize36 = nil
 			}
-			commitFrequency37 := new(float64)
+			commitFrequency36 := new(float64)
 			if !r.InputHTTPRaw.Pq.CommitFrequency.IsUnknown() && !r.InputHTTPRaw.Pq.CommitFrequency.IsNull() {
-				*commitFrequency37 = r.InputHTTPRaw.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency36 = r.InputHTTPRaw.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency37 = nil
+				commitFrequency36 = nil
 			}
-			maxFileSize37 := new(string)
+			maxFileSize36 := new(string)
 			if !r.InputHTTPRaw.Pq.MaxFileSize.IsUnknown() && !r.InputHTTPRaw.Pq.MaxFileSize.IsNull() {
-				*maxFileSize37 = r.InputHTTPRaw.Pq.MaxFileSize.ValueString()
+				*maxFileSize36 = r.InputHTTPRaw.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize37 = nil
+				maxFileSize36 = nil
 			}
-			maxSize37 := new(string)
+			maxSize36 := new(string)
 			if !r.InputHTTPRaw.Pq.MaxSize.IsUnknown() && !r.InputHTTPRaw.Pq.MaxSize.IsNull() {
-				*maxSize37 = r.InputHTTPRaw.Pq.MaxSize.ValueString()
+				*maxSize36 = r.InputHTTPRaw.Pq.MaxSize.ValueString()
 			} else {
-				maxSize37 = nil
+				maxSize36 = nil
 			}
-			path38 := new(string)
+			path37 := new(string)
 			if !r.InputHTTPRaw.Pq.Path.IsUnknown() && !r.InputHTTPRaw.Pq.Path.IsNull() {
-				*path38 = r.InputHTTPRaw.Pq.Path.ValueString()
+				*path37 = r.InputHTTPRaw.Pq.Path.ValueString()
 			} else {
-				path38 = nil
+				path37 = nil
 			}
-			compress44 := new(shared.InputHTTPRawCompression)
+			compress43 := new(shared.InputHTTPRawCompression)
 			if !r.InputHTTPRaw.Pq.Compress.IsUnknown() && !r.InputHTTPRaw.Pq.Compress.IsNull() {
-				*compress44 = shared.InputHTTPRawCompression(r.InputHTTPRaw.Pq.Compress.ValueString())
+				*compress43 = shared.InputHTTPRawCompression(r.InputHTTPRaw.Pq.Compress.ValueString())
 			} else {
-				compress44 = nil
+				compress43 = nil
 			}
-			pq37 = &shared.InputHTTPRawPq{
-				Mode:            mode50,
-				MaxBufferSize:   maxBufferSize37,
-				CommitFrequency: commitFrequency37,
-				MaxFileSize:     maxFileSize37,
-				MaxSize:         maxSize37,
-				Path:            path38,
-				Compress:        compress44,
+			pq36 = &shared.InputHTTPRawPq{
+				Mode:            mode49,
+				MaxBufferSize:   maxBufferSize36,
+				CommitFrequency: commitFrequency36,
+				MaxFileSize:     maxFileSize36,
+				MaxSize:         maxSize36,
+				Path:            path37,
+				Compress:        compress43,
 			}
 		}
-		host17 := new(string)
+		host16 := new(string)
 		if !r.InputHTTPRaw.Host.IsUnknown() && !r.InputHTTPRaw.Host.IsNull() {
-			*host17 = r.InputHTTPRaw.Host.ValueString()
+			*host16 = r.InputHTTPRaw.Host.ValueString()
 		} else {
-			host17 = nil
+			host16 = nil
 		}
-		var port15 float64
-		port15 = r.InputHTTPRaw.Port.ValueFloat64()
+		var port14 float64
+		port14 = r.InputHTTPRaw.Port.ValueFloat64()
 
 		authTokens7 := make([]string, 0, len(r.InputHTTPRaw.AuthTokens))
 		for authTokensIndex7 := range r.InputHTTPRaw.AuthTokens {
 			authTokens7 = append(authTokens7, r.InputHTTPRaw.AuthTokens[authTokensIndex7].ValueString())
 		}
-		var tls21 *shared.InputHTTPRawTLSSettingsServerSide
+		var tls20 *shared.InputHTTPRawTLSSettingsServerSide
 		if r.InputHTTPRaw.TLS != nil {
-			disabled70 := new(bool)
+			disabled68 := new(bool)
 			if !r.InputHTTPRaw.TLS.Disabled.IsUnknown() && !r.InputHTTPRaw.TLS.Disabled.IsNull() {
-				*disabled70 = r.InputHTTPRaw.TLS.Disabled.ValueBool()
+				*disabled68 = r.InputHTTPRaw.TLS.Disabled.ValueBool()
 			} else {
-				disabled70 = nil
+				disabled68 = nil
 			}
-			certificateName22 := new(string)
+			certificateName21 := new(string)
 			if !r.InputHTTPRaw.TLS.CertificateName.IsUnknown() && !r.InputHTTPRaw.TLS.CertificateName.IsNull() {
-				*certificateName22 = r.InputHTTPRaw.TLS.CertificateName.ValueString()
+				*certificateName21 = r.InputHTTPRaw.TLS.CertificateName.ValueString()
 			} else {
-				certificateName22 = nil
+				certificateName21 = nil
 			}
-			privKeyPath21 := new(string)
+			privKeyPath20 := new(string)
 			if !r.InputHTTPRaw.TLS.PrivKeyPath.IsUnknown() && !r.InputHTTPRaw.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath21 = r.InputHTTPRaw.TLS.PrivKeyPath.ValueString()
+				*privKeyPath20 = r.InputHTTPRaw.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath21 = nil
+				privKeyPath20 = nil
 			}
-			passphrase21 := new(string)
+			passphrase20 := new(string)
 			if !r.InputHTTPRaw.TLS.Passphrase.IsUnknown() && !r.InputHTTPRaw.TLS.Passphrase.IsNull() {
-				*passphrase21 = r.InputHTTPRaw.TLS.Passphrase.ValueString()
+				*passphrase20 = r.InputHTTPRaw.TLS.Passphrase.ValueString()
 			} else {
-				passphrase21 = nil
+				passphrase20 = nil
 			}
-			certPath21 := new(string)
+			certPath20 := new(string)
 			if !r.InputHTTPRaw.TLS.CertPath.IsUnknown() && !r.InputHTTPRaw.TLS.CertPath.IsNull() {
-				*certPath21 = r.InputHTTPRaw.TLS.CertPath.ValueString()
+				*certPath20 = r.InputHTTPRaw.TLS.CertPath.ValueString()
 			} else {
-				certPath21 = nil
+				certPath20 = nil
 			}
-			caPath20 := new(string)
+			caPath19 := new(string)
 			if !r.InputHTTPRaw.TLS.CaPath.IsUnknown() && !r.InputHTTPRaw.TLS.CaPath.IsNull() {
-				*caPath20 = r.InputHTTPRaw.TLS.CaPath.ValueString()
+				*caPath19 = r.InputHTTPRaw.TLS.CaPath.ValueString()
 			} else {
-				caPath20 = nil
+				caPath19 = nil
 			}
-			requestCert14 := new(bool)
+			requestCert13 := new(bool)
 			if !r.InputHTTPRaw.TLS.RequestCert.IsUnknown() && !r.InputHTTPRaw.TLS.RequestCert.IsNull() {
-				*requestCert14 = r.InputHTTPRaw.TLS.RequestCert.ValueBool()
+				*requestCert13 = r.InputHTTPRaw.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert14 = nil
+				requestCert13 = nil
 			}
-			var rejectUnauthorized28 interface{}
+			var rejectUnauthorized27 interface{}
 			if !r.InputHTTPRaw.TLS.RejectUnauthorized.IsUnknown() && !r.InputHTTPRaw.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputHTTPRaw.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized28)
+				_ = json.Unmarshal([]byte(r.InputHTTPRaw.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized27)
 			}
-			var commonNameRegex14 interface{}
+			var commonNameRegex13 interface{}
 			if !r.InputHTTPRaw.TLS.CommonNameRegex.IsUnknown() && !r.InputHTTPRaw.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputHTTPRaw.TLS.CommonNameRegex.ValueString()), &commonNameRegex14)
+				_ = json.Unmarshal([]byte(r.InputHTTPRaw.TLS.CommonNameRegex.ValueString()), &commonNameRegex13)
 			}
-			minVersion20 := new(shared.InputHTTPRawMinimumTLSVersion)
+			minVersion19 := new(shared.InputHTTPRawMinimumTLSVersion)
 			if !r.InputHTTPRaw.TLS.MinVersion.IsUnknown() && !r.InputHTTPRaw.TLS.MinVersion.IsNull() {
-				*minVersion20 = shared.InputHTTPRawMinimumTLSVersion(r.InputHTTPRaw.TLS.MinVersion.ValueString())
+				*minVersion19 = shared.InputHTTPRawMinimumTLSVersion(r.InputHTTPRaw.TLS.MinVersion.ValueString())
 			} else {
-				minVersion20 = nil
+				minVersion19 = nil
 			}
-			maxVersion20 := new(shared.InputHTTPRawMaximumTLSVersion)
+			maxVersion19 := new(shared.InputHTTPRawMaximumTLSVersion)
 			if !r.InputHTTPRaw.TLS.MaxVersion.IsUnknown() && !r.InputHTTPRaw.TLS.MaxVersion.IsNull() {
-				*maxVersion20 = shared.InputHTTPRawMaximumTLSVersion(r.InputHTTPRaw.TLS.MaxVersion.ValueString())
+				*maxVersion19 = shared.InputHTTPRawMaximumTLSVersion(r.InputHTTPRaw.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion20 = nil
+				maxVersion19 = nil
 			}
-			tls21 = &shared.InputHTTPRawTLSSettingsServerSide{
-				Disabled:           disabled70,
-				CertificateName:    certificateName22,
-				PrivKeyPath:        privKeyPath21,
-				Passphrase:         passphrase21,
-				CertPath:           certPath21,
-				CaPath:             caPath20,
-				RequestCert:        requestCert14,
-				RejectUnauthorized: rejectUnauthorized28,
-				CommonNameRegex:    commonNameRegex14,
-				MinVersion:         minVersion20,
-				MaxVersion:         maxVersion20,
+			tls20 = &shared.InputHTTPRawTLSSettingsServerSide{
+				Disabled:           disabled68,
+				CertificateName:    certificateName21,
+				PrivKeyPath:        privKeyPath20,
+				Passphrase:         passphrase20,
+				CertPath:           certPath20,
+				CaPath:             caPath19,
+				RequestCert:        requestCert13,
+				RejectUnauthorized: rejectUnauthorized27,
+				CommonNameRegex:    commonNameRegex13,
+				MinVersion:         minVersion19,
+				MaxVersion:         maxVersion19,
 			}
 		}
-		maxActiveReq11 := new(float64)
+		maxActiveReq10 := new(float64)
 		if !r.InputHTTPRaw.MaxActiveReq.IsUnknown() && !r.InputHTTPRaw.MaxActiveReq.IsNull() {
-			*maxActiveReq11 = r.InputHTTPRaw.MaxActiveReq.ValueFloat64()
+			*maxActiveReq10 = r.InputHTTPRaw.MaxActiveReq.ValueFloat64()
 		} else {
-			maxActiveReq11 = nil
+			maxActiveReq10 = nil
 		}
-		maxRequestsPerSocket11 := new(int64)
+		maxRequestsPerSocket10 := new(int64)
 		if !r.InputHTTPRaw.MaxRequestsPerSocket.IsUnknown() && !r.InputHTTPRaw.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket11 = r.InputHTTPRaw.MaxRequestsPerSocket.ValueInt64()
+			*maxRequestsPerSocket10 = r.InputHTTPRaw.MaxRequestsPerSocket.ValueInt64()
 		} else {
-			maxRequestsPerSocket11 = nil
+			maxRequestsPerSocket10 = nil
 		}
-		enableProxyHeader14 := new(bool)
+		enableProxyHeader13 := new(bool)
 		if !r.InputHTTPRaw.EnableProxyHeader.IsUnknown() && !r.InputHTTPRaw.EnableProxyHeader.IsNull() {
-			*enableProxyHeader14 = r.InputHTTPRaw.EnableProxyHeader.ValueBool()
+			*enableProxyHeader13 = r.InputHTTPRaw.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader14 = nil
+			enableProxyHeader13 = nil
 		}
-		captureHeaders11 := new(bool)
+		captureHeaders10 := new(bool)
 		if !r.InputHTTPRaw.CaptureHeaders.IsUnknown() && !r.InputHTTPRaw.CaptureHeaders.IsNull() {
-			*captureHeaders11 = r.InputHTTPRaw.CaptureHeaders.ValueBool()
+			*captureHeaders10 = r.InputHTTPRaw.CaptureHeaders.ValueBool()
 		} else {
-			captureHeaders11 = nil
+			captureHeaders10 = nil
 		}
-		activityLogSampleRate11 := new(float64)
+		activityLogSampleRate10 := new(float64)
 		if !r.InputHTTPRaw.ActivityLogSampleRate.IsUnknown() && !r.InputHTTPRaw.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate11 = r.InputHTTPRaw.ActivityLogSampleRate.ValueFloat64()
+			*activityLogSampleRate10 = r.InputHTTPRaw.ActivityLogSampleRate.ValueFloat64()
 		} else {
-			activityLogSampleRate11 = nil
+			activityLogSampleRate10 = nil
 		}
-		requestTimeout20 := new(float64)
+		requestTimeout19 := new(float64)
 		if !r.InputHTTPRaw.RequestTimeout.IsUnknown() && !r.InputHTTPRaw.RequestTimeout.IsNull() {
-			*requestTimeout20 = r.InputHTTPRaw.RequestTimeout.ValueFloat64()
+			*requestTimeout19 = r.InputHTTPRaw.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout20 = nil
+			requestTimeout19 = nil
 		}
-		socketTimeout12 := new(float64)
+		socketTimeout11 := new(float64)
 		if !r.InputHTTPRaw.SocketTimeout.IsUnknown() && !r.InputHTTPRaw.SocketTimeout.IsNull() {
-			*socketTimeout12 = r.InputHTTPRaw.SocketTimeout.ValueFloat64()
+			*socketTimeout11 = r.InputHTTPRaw.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout12 = nil
+			socketTimeout11 = nil
 		}
-		keepAliveTimeout11 := new(float64)
+		keepAliveTimeout10 := new(float64)
 		if !r.InputHTTPRaw.KeepAliveTimeout.IsUnknown() && !r.InputHTTPRaw.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout11 = r.InputHTTPRaw.KeepAliveTimeout.ValueFloat64()
+			*keepAliveTimeout10 = r.InputHTTPRaw.KeepAliveTimeout.ValueFloat64()
 		} else {
-			keepAliveTimeout11 = nil
+			keepAliveTimeout10 = nil
 		}
-		enableHealthCheck11 := new(bool)
+		enableHealthCheck10 := new(bool)
 		if !r.InputHTTPRaw.EnableHealthCheck.IsUnknown() && !r.InputHTTPRaw.EnableHealthCheck.IsNull() {
-			*enableHealthCheck11 = r.InputHTTPRaw.EnableHealthCheck.ValueBool()
+			*enableHealthCheck10 = r.InputHTTPRaw.EnableHealthCheck.ValueBool()
 		} else {
-			enableHealthCheck11 = nil
+			enableHealthCheck10 = nil
 		}
-		ipAllowlistRegex11 := new(string)
+		ipAllowlistRegex10 := new(string)
 		if !r.InputHTTPRaw.IPAllowlistRegex.IsUnknown() && !r.InputHTTPRaw.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex11 = r.InputHTTPRaw.IPAllowlistRegex.ValueString()
+			*ipAllowlistRegex10 = r.InputHTTPRaw.IPAllowlistRegex.ValueString()
 		} else {
-			ipAllowlistRegex11 = nil
+			ipAllowlistRegex10 = nil
 		}
-		ipDenylistRegex11 := new(string)
+		ipDenylistRegex10 := new(string)
 		if !r.InputHTTPRaw.IPDenylistRegex.IsUnknown() && !r.InputHTTPRaw.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex11 = r.InputHTTPRaw.IPDenylistRegex.ValueString()
+			*ipDenylistRegex10 = r.InputHTTPRaw.IPDenylistRegex.ValueString()
 		} else {
-			ipDenylistRegex11 = nil
+			ipDenylistRegex10 = nil
 		}
 		breakerRulesets8 := make([]string, 0, len(r.InputHTTPRaw.BreakerRulesets))
 		for breakerRulesetsIndex8 := range r.InputHTTPRaw.BreakerRulesets {
@@ -13927,17 +13345,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			staleChannelFlushMs8 = nil
 		}
-		metadata40 := make([]shared.InputHTTPRawMetadatum, 0, len(r.InputHTTPRaw.Metadata))
-		for metadataIndex39 := range r.InputHTTPRaw.Metadata {
-			var name60 string
-			name60 = r.InputHTTPRaw.Metadata[metadataIndex39].Name.ValueString()
+		metadata39 := make([]shared.InputHTTPRawMetadatum, 0, len(r.InputHTTPRaw.Metadata))
+		for metadataIndex38 := range r.InputHTTPRaw.Metadata {
+			var name55 string
+			name55 = r.InputHTTPRaw.Metadata[metadataIndex38].Name.ValueString()
 
-			var value56 string
-			value56 = r.InputHTTPRaw.Metadata[metadataIndex39].Value.ValueString()
+			var value51 string
+			value51 = r.InputHTTPRaw.Metadata[metadataIndex38].Value.ValueString()
 
-			metadata40 = append(metadata40, shared.InputHTTPRawMetadatum{
-				Name:  name60,
-				Value: value56,
+			metadata39 = append(metadata39, shared.InputHTTPRawMetadatum{
+				Name:  name55,
+				Value: value51,
 			})
 		}
 		allowedPaths := make([]string, 0, len(r.InputHTTPRaw.AllowedPaths))
@@ -13950,73 +13368,73 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		authTokensExt1 := make([]shared.InputHTTPRawAuthTokensExt, 0, len(r.InputHTTPRaw.AuthTokensExt))
 		for authTokensExtIndex1 := range r.InputHTTPRaw.AuthTokensExt {
-			var token10 string
-			token10 = r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Token.ValueString()
+			var token8 string
+			token8 = r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Token.ValueString()
 
-			description45 := new(string)
+			description44 := new(string)
 			if !r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Description.IsUnknown() && !r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Description.IsNull() {
-				*description45 = r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Description.ValueString()
+				*description44 = r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Description.ValueString()
 			} else {
-				description45 = nil
+				description44 = nil
 			}
-			metadata41 := make([]shared.InputHTTPRawAuthTokensExtMetadatum, 0, len(r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Metadata))
-			for metadataIndex40 := range r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Metadata {
-				var name61 string
-				name61 = r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Metadata[metadataIndex40].Name.ValueString()
+			metadata40 := make([]shared.InputHTTPRawAuthTokensExtMetadatum, 0, len(r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Metadata))
+			for metadataIndex39 := range r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Metadata {
+				var name56 string
+				name56 = r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Metadata[metadataIndex39].Name.ValueString()
 
-				var value57 string
-				value57 = r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Metadata[metadataIndex40].Value.ValueString()
+				var value52 string
+				value52 = r.InputHTTPRaw.AuthTokensExt[authTokensExtIndex1].Metadata[metadataIndex39].Value.ValueString()
 
-				metadata41 = append(metadata41, shared.InputHTTPRawAuthTokensExtMetadatum{
-					Name:  name61,
-					Value: value57,
+				metadata40 = append(metadata40, shared.InputHTTPRawAuthTokensExtMetadatum{
+					Name:  name56,
+					Value: value52,
 				})
 			}
 			authTokensExt1 = append(authTokensExt1, shared.InputHTTPRawAuthTokensExt{
-				Token:       token10,
-				Description: description45,
-				Metadata:    metadata41,
+				Token:       token8,
+				Description: description44,
+				Metadata:    metadata40,
 			})
 		}
-		description46 := new(string)
+		description45 := new(string)
 		if !r.InputHTTPRaw.Description.IsUnknown() && !r.InputHTTPRaw.Description.IsNull() {
-			*description46 = r.InputHTTPRaw.Description.ValueString()
+			*description45 = r.InputHTTPRaw.Description.ValueString()
 		} else {
-			description46 = nil
+			description45 = nil
 		}
 		inputHTTPRaw = &shared.InputHTTPRaw{
-			ID:                    id37,
-			Type:                  typeVar41,
-			Disabled:              disabled69,
-			Pipeline:              pipeline74,
-			SendToRoutes:          sendToRoutes37,
-			Environment:           environment37,
-			PqEnabled:             pqEnabled37,
-			Streamtags:            streamtags37,
-			Connections:           connections37,
-			Pq:                    pq37,
-			Host:                  host17,
-			Port:                  port15,
+			ID:                    id36,
+			Type:                  typeVar40,
+			Disabled:              disabled67,
+			Pipeline:              pipeline72,
+			SendToRoutes:          sendToRoutes36,
+			Environment:           environment36,
+			PqEnabled:             pqEnabled36,
+			Streamtags:            streamtags36,
+			Connections:           connections36,
+			Pq:                    pq36,
+			Host:                  host16,
+			Port:                  port14,
 			AuthTokens:            authTokens7,
-			TLS:                   tls21,
-			MaxActiveReq:          maxActiveReq11,
-			MaxRequestsPerSocket:  maxRequestsPerSocket11,
-			EnableProxyHeader:     enableProxyHeader14,
-			CaptureHeaders:        captureHeaders11,
-			ActivityLogSampleRate: activityLogSampleRate11,
-			RequestTimeout:        requestTimeout20,
-			SocketTimeout:         socketTimeout12,
-			KeepAliveTimeout:      keepAliveTimeout11,
-			EnableHealthCheck:     enableHealthCheck11,
-			IPAllowlistRegex:      ipAllowlistRegex11,
-			IPDenylistRegex:       ipDenylistRegex11,
+			TLS:                   tls20,
+			MaxActiveReq:          maxActiveReq10,
+			MaxRequestsPerSocket:  maxRequestsPerSocket10,
+			EnableProxyHeader:     enableProxyHeader13,
+			CaptureHeaders:        captureHeaders10,
+			ActivityLogSampleRate: activityLogSampleRate10,
+			RequestTimeout:        requestTimeout19,
+			SocketTimeout:         socketTimeout11,
+			KeepAliveTimeout:      keepAliveTimeout10,
+			EnableHealthCheck:     enableHealthCheck10,
+			IPAllowlistRegex:      ipAllowlistRegex10,
+			IPDenylistRegex:       ipDenylistRegex10,
 			BreakerRulesets:       breakerRulesets8,
 			StaleChannelFlushMs:   staleChannelFlushMs8,
-			Metadata:              metadata40,
+			Metadata:              metadata39,
 			AllowedPaths:          allowedPaths,
 			AllowedMethods:        allowedMethods,
 			AuthTokensExt:         authTokensExt1,
-			Description:           description46,
+			Description:           description45,
 		}
 	}
 	if inputHTTPRaw != nil {
@@ -14026,120 +13444,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputKinesis *shared.InputKinesis
 	if r.InputKinesis != nil {
-		id38 := new(string)
+		id37 := new(string)
 		if !r.InputKinesis.ID.IsUnknown() && !r.InputKinesis.ID.IsNull() {
-			*id38 = r.InputKinesis.ID.ValueString()
+			*id37 = r.InputKinesis.ID.ValueString()
 		} else {
-			id38 = nil
+			id37 = nil
 		}
-		typeVar42 := new(shared.InputKinesisType)
+		typeVar41 := new(shared.InputKinesisType)
 		if !r.InputKinesis.Type.IsUnknown() && !r.InputKinesis.Type.IsNull() {
-			*typeVar42 = shared.InputKinesisType(r.InputKinesis.Type.ValueString())
+			*typeVar41 = shared.InputKinesisType(r.InputKinesis.Type.ValueString())
 		} else {
-			typeVar42 = nil
+			typeVar41 = nil
 		}
-		disabled71 := new(bool)
+		disabled69 := new(bool)
 		if !r.InputKinesis.Disabled.IsUnknown() && !r.InputKinesis.Disabled.IsNull() {
-			*disabled71 = r.InputKinesis.Disabled.ValueBool()
+			*disabled69 = r.InputKinesis.Disabled.ValueBool()
 		} else {
-			disabled71 = nil
+			disabled69 = nil
 		}
-		pipeline76 := new(string)
+		pipeline74 := new(string)
 		if !r.InputKinesis.Pipeline.IsUnknown() && !r.InputKinesis.Pipeline.IsNull() {
-			*pipeline76 = r.InputKinesis.Pipeline.ValueString()
+			*pipeline74 = r.InputKinesis.Pipeline.ValueString()
 		} else {
-			pipeline76 = nil
+			pipeline74 = nil
 		}
-		sendToRoutes38 := new(bool)
+		sendToRoutes37 := new(bool)
 		if !r.InputKinesis.SendToRoutes.IsUnknown() && !r.InputKinesis.SendToRoutes.IsNull() {
-			*sendToRoutes38 = r.InputKinesis.SendToRoutes.ValueBool()
+			*sendToRoutes37 = r.InputKinesis.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes38 = nil
+			sendToRoutes37 = nil
 		}
-		environment38 := new(string)
+		environment37 := new(string)
 		if !r.InputKinesis.Environment.IsUnknown() && !r.InputKinesis.Environment.IsNull() {
-			*environment38 = r.InputKinesis.Environment.ValueString()
+			*environment37 = r.InputKinesis.Environment.ValueString()
 		} else {
-			environment38 = nil
+			environment37 = nil
 		}
-		pqEnabled38 := new(bool)
+		pqEnabled37 := new(bool)
 		if !r.InputKinesis.PqEnabled.IsUnknown() && !r.InputKinesis.PqEnabled.IsNull() {
-			*pqEnabled38 = r.InputKinesis.PqEnabled.ValueBool()
+			*pqEnabled37 = r.InputKinesis.PqEnabled.ValueBool()
 		} else {
-			pqEnabled38 = nil
+			pqEnabled37 = nil
 		}
-		streamtags38 := make([]string, 0, len(r.InputKinesis.Streamtags))
-		for streamtagsIndex38 := range r.InputKinesis.Streamtags {
-			streamtags38 = append(streamtags38, r.InputKinesis.Streamtags[streamtagsIndex38].ValueString())
+		streamtags37 := make([]string, 0, len(r.InputKinesis.Streamtags))
+		for streamtagsIndex37 := range r.InputKinesis.Streamtags {
+			streamtags37 = append(streamtags37, r.InputKinesis.Streamtags[streamtagsIndex37].ValueString())
 		}
-		connections38 := make([]shared.InputKinesisConnection, 0, len(r.InputKinesis.Connections))
-		for connectionsIndex38 := range r.InputKinesis.Connections {
-			pipeline77 := new(string)
-			if !r.InputKinesis.Connections[connectionsIndex38].Pipeline.IsUnknown() && !r.InputKinesis.Connections[connectionsIndex38].Pipeline.IsNull() {
-				*pipeline77 = r.InputKinesis.Connections[connectionsIndex38].Pipeline.ValueString()
+		connections37 := make([]shared.InputKinesisConnection, 0, len(r.InputKinesis.Connections))
+		for connectionsIndex37 := range r.InputKinesis.Connections {
+			pipeline75 := new(string)
+			if !r.InputKinesis.Connections[connectionsIndex37].Pipeline.IsUnknown() && !r.InputKinesis.Connections[connectionsIndex37].Pipeline.IsNull() {
+				*pipeline75 = r.InputKinesis.Connections[connectionsIndex37].Pipeline.ValueString()
 			} else {
-				pipeline77 = nil
+				pipeline75 = nil
 			}
-			var output39 string
-			output39 = r.InputKinesis.Connections[connectionsIndex38].Output.ValueString()
+			var output38 string
+			output38 = r.InputKinesis.Connections[connectionsIndex37].Output.ValueString()
 
-			connections38 = append(connections38, shared.InputKinesisConnection{
-				Pipeline: pipeline77,
-				Output:   output39,
+			connections37 = append(connections37, shared.InputKinesisConnection{
+				Pipeline: pipeline75,
+				Output:   output38,
 			})
 		}
-		var pq38 *shared.InputKinesisPq
+		var pq37 *shared.InputKinesisPq
 		if r.InputKinesis.Pq != nil {
-			mode51 := new(shared.InputKinesisMode)
+			mode50 := new(shared.InputKinesisMode)
 			if !r.InputKinesis.Pq.Mode.IsUnknown() && !r.InputKinesis.Pq.Mode.IsNull() {
-				*mode51 = shared.InputKinesisMode(r.InputKinesis.Pq.Mode.ValueString())
+				*mode50 = shared.InputKinesisMode(r.InputKinesis.Pq.Mode.ValueString())
 			} else {
-				mode51 = nil
+				mode50 = nil
 			}
-			maxBufferSize38 := new(float64)
+			maxBufferSize37 := new(float64)
 			if !r.InputKinesis.Pq.MaxBufferSize.IsUnknown() && !r.InputKinesis.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize38 = r.InputKinesis.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize37 = r.InputKinesis.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize38 = nil
+				maxBufferSize37 = nil
 			}
-			commitFrequency38 := new(float64)
+			commitFrequency37 := new(float64)
 			if !r.InputKinesis.Pq.CommitFrequency.IsUnknown() && !r.InputKinesis.Pq.CommitFrequency.IsNull() {
-				*commitFrequency38 = r.InputKinesis.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency37 = r.InputKinesis.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency38 = nil
+				commitFrequency37 = nil
 			}
-			maxFileSize38 := new(string)
+			maxFileSize37 := new(string)
 			if !r.InputKinesis.Pq.MaxFileSize.IsUnknown() && !r.InputKinesis.Pq.MaxFileSize.IsNull() {
-				*maxFileSize38 = r.InputKinesis.Pq.MaxFileSize.ValueString()
+				*maxFileSize37 = r.InputKinesis.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize38 = nil
+				maxFileSize37 = nil
 			}
-			maxSize38 := new(string)
+			maxSize37 := new(string)
 			if !r.InputKinesis.Pq.MaxSize.IsUnknown() && !r.InputKinesis.Pq.MaxSize.IsNull() {
-				*maxSize38 = r.InputKinesis.Pq.MaxSize.ValueString()
+				*maxSize37 = r.InputKinesis.Pq.MaxSize.ValueString()
 			} else {
-				maxSize38 = nil
+				maxSize37 = nil
 			}
-			path39 := new(string)
+			path38 := new(string)
 			if !r.InputKinesis.Pq.Path.IsUnknown() && !r.InputKinesis.Pq.Path.IsNull() {
-				*path39 = r.InputKinesis.Pq.Path.ValueString()
+				*path38 = r.InputKinesis.Pq.Path.ValueString()
 			} else {
-				path39 = nil
+				path38 = nil
 			}
-			compress45 := new(shared.InputKinesisCompression)
+			compress44 := new(shared.InputKinesisCompression)
 			if !r.InputKinesis.Pq.Compress.IsUnknown() && !r.InputKinesis.Pq.Compress.IsNull() {
-				*compress45 = shared.InputKinesisCompression(r.InputKinesis.Pq.Compress.ValueString())
+				*compress44 = shared.InputKinesisCompression(r.InputKinesis.Pq.Compress.ValueString())
 			} else {
-				compress45 = nil
+				compress44 = nil
 			}
-			pq38 = &shared.InputKinesisPq{
-				Mode:            mode51,
-				MaxBufferSize:   maxBufferSize38,
-				CommitFrequency: commitFrequency38,
-				MaxFileSize:     maxFileSize38,
-				MaxSize:         maxSize38,
-				Path:            path39,
-				Compress:        compress45,
+			pq37 = &shared.InputKinesisPq{
+				Mode:            mode50,
+				MaxBufferSize:   maxBufferSize37,
+				CommitFrequency: commitFrequency37,
+				MaxFileSize:     maxFileSize37,
+				MaxSize:         maxSize37,
+				Path:            path38,
+				Compress:        compress44,
 			}
 		}
 		var streamName string
@@ -14220,11 +13638,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			reuseConnections4 = nil
 		}
-		rejectUnauthorized29 := new(bool)
+		rejectUnauthorized28 := new(bool)
 		if !r.InputKinesis.RejectUnauthorized.IsUnknown() && !r.InputKinesis.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized29 = r.InputKinesis.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized28 = r.InputKinesis.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized29 = nil
+			rejectUnauthorized28 = nil
 		}
 		enableAssumeRole4 := new(bool)
 		if !r.InputKinesis.EnableAssumeRole.IsUnknown() && !r.InputKinesis.EnableAssumeRole.IsNull() {
@@ -14262,24 +13680,24 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			avoidDuplicates = nil
 		}
-		metadata42 := make([]shared.InputKinesisMetadatum, 0, len(r.InputKinesis.Metadata))
-		for metadataIndex41 := range r.InputKinesis.Metadata {
-			var name62 string
-			name62 = r.InputKinesis.Metadata[metadataIndex41].Name.ValueString()
+		metadata41 := make([]shared.InputKinesisMetadatum, 0, len(r.InputKinesis.Metadata))
+		for metadataIndex40 := range r.InputKinesis.Metadata {
+			var name57 string
+			name57 = r.InputKinesis.Metadata[metadataIndex40].Name.ValueString()
 
-			var value58 string
-			value58 = r.InputKinesis.Metadata[metadataIndex41].Value.ValueString()
+			var value53 string
+			value53 = r.InputKinesis.Metadata[metadataIndex40].Value.ValueString()
 
-			metadata42 = append(metadata42, shared.InputKinesisMetadatum{
-				Name:  name62,
-				Value: value58,
+			metadata41 = append(metadata41, shared.InputKinesisMetadatum{
+				Name:  name57,
+				Value: value53,
 			})
 		}
-		description47 := new(string)
+		description46 := new(string)
 		if !r.InputKinesis.Description.IsUnknown() && !r.InputKinesis.Description.IsNull() {
-			*description47 = r.InputKinesis.Description.ValueString()
+			*description46 = r.InputKinesis.Description.ValueString()
 		} else {
-			description47 = nil
+			description46 = nil
 		}
 		awsAPIKey2 := new(string)
 		if !r.InputKinesis.AwsAPIKey.IsUnknown() && !r.InputKinesis.AwsAPIKey.IsNull() {
@@ -14294,16 +13712,16 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			awsSecret2 = nil
 		}
 		inputKinesis = &shared.InputKinesis{
-			ID:                      id38,
-			Type:                    typeVar42,
-			Disabled:                disabled71,
-			Pipeline:                pipeline76,
-			SendToRoutes:            sendToRoutes38,
-			Environment:             environment38,
-			PqEnabled:               pqEnabled38,
-			Streamtags:              streamtags38,
-			Connections:             connections38,
-			Pq:                      pq38,
+			ID:                      id37,
+			Type:                    typeVar41,
+			Disabled:                disabled69,
+			Pipeline:                pipeline74,
+			SendToRoutes:            sendToRoutes37,
+			Environment:             environment37,
+			PqEnabled:               pqEnabled37,
+			Streamtags:              streamtags37,
+			Connections:             connections37,
+			Pq:                      pq37,
 			StreamName:              streamName,
 			ServiceInterval:         serviceInterval,
 			ShardExpr:               shardExpr,
@@ -14318,15 +13736,15 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Endpoint:                endpoint5,
 			SignatureVersion:        signatureVersion4,
 			ReuseConnections:        reuseConnections4,
-			RejectUnauthorized:      rejectUnauthorized29,
+			RejectUnauthorized:      rejectUnauthorized28,
 			EnableAssumeRole:        enableAssumeRole4,
 			AssumeRoleArn:           assumeRoleArn4,
 			AssumeRoleExternalID:    assumeRoleExternalId4,
 			DurationSeconds:         durationSeconds4,
 			VerifyKPLCheckSums:      verifyKPLCheckSums,
 			AvoidDuplicates:         avoidDuplicates,
-			Metadata:                metadata42,
-			Description:             description47,
+			Metadata:                metadata41,
+			Description:             description46,
 			AwsAPIKey:               awsAPIKey2,
 			AwsSecret:               awsSecret2,
 		}
@@ -14338,112 +13756,112 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputCriblmetrics *shared.InputCriblmetrics
 	if r.InputCriblmetrics != nil {
-		var id39 string
-		id39 = r.InputCriblmetrics.ID.ValueString()
+		var id38 string
+		id38 = r.InputCriblmetrics.ID.ValueString()
 
-		typeVar43 := shared.InputCriblmetricsType(r.InputCriblmetrics.Type.ValueString())
-		disabled72 := new(bool)
+		typeVar42 := shared.InputCriblmetricsType(r.InputCriblmetrics.Type.ValueString())
+		disabled70 := new(bool)
 		if !r.InputCriblmetrics.Disabled.IsUnknown() && !r.InputCriblmetrics.Disabled.IsNull() {
-			*disabled72 = r.InputCriblmetrics.Disabled.ValueBool()
+			*disabled70 = r.InputCriblmetrics.Disabled.ValueBool()
 		} else {
-			disabled72 = nil
+			disabled70 = nil
 		}
-		pipeline78 := new(string)
+		pipeline76 := new(string)
 		if !r.InputCriblmetrics.Pipeline.IsUnknown() && !r.InputCriblmetrics.Pipeline.IsNull() {
-			*pipeline78 = r.InputCriblmetrics.Pipeline.ValueString()
+			*pipeline76 = r.InputCriblmetrics.Pipeline.ValueString()
 		} else {
-			pipeline78 = nil
+			pipeline76 = nil
 		}
-		sendToRoutes39 := new(bool)
+		sendToRoutes38 := new(bool)
 		if !r.InputCriblmetrics.SendToRoutes.IsUnknown() && !r.InputCriblmetrics.SendToRoutes.IsNull() {
-			*sendToRoutes39 = r.InputCriblmetrics.SendToRoutes.ValueBool()
+			*sendToRoutes38 = r.InputCriblmetrics.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes39 = nil
+			sendToRoutes38 = nil
 		}
-		environment39 := new(string)
+		environment38 := new(string)
 		if !r.InputCriblmetrics.Environment.IsUnknown() && !r.InputCriblmetrics.Environment.IsNull() {
-			*environment39 = r.InputCriblmetrics.Environment.ValueString()
+			*environment38 = r.InputCriblmetrics.Environment.ValueString()
 		} else {
-			environment39 = nil
+			environment38 = nil
 		}
-		pqEnabled39 := new(bool)
+		pqEnabled38 := new(bool)
 		if !r.InputCriblmetrics.PqEnabled.IsUnknown() && !r.InputCriblmetrics.PqEnabled.IsNull() {
-			*pqEnabled39 = r.InputCriblmetrics.PqEnabled.ValueBool()
+			*pqEnabled38 = r.InputCriblmetrics.PqEnabled.ValueBool()
 		} else {
-			pqEnabled39 = nil
+			pqEnabled38 = nil
 		}
-		streamtags39 := make([]string, 0, len(r.InputCriblmetrics.Streamtags))
-		for streamtagsIndex39 := range r.InputCriblmetrics.Streamtags {
-			streamtags39 = append(streamtags39, r.InputCriblmetrics.Streamtags[streamtagsIndex39].ValueString())
+		streamtags38 := make([]string, 0, len(r.InputCriblmetrics.Streamtags))
+		for streamtagsIndex38 := range r.InputCriblmetrics.Streamtags {
+			streamtags38 = append(streamtags38, r.InputCriblmetrics.Streamtags[streamtagsIndex38].ValueString())
 		}
-		connections39 := make([]shared.InputCriblmetricsConnection, 0, len(r.InputCriblmetrics.Connections))
-		for connectionsIndex39 := range r.InputCriblmetrics.Connections {
-			pipeline79 := new(string)
-			if !r.InputCriblmetrics.Connections[connectionsIndex39].Pipeline.IsUnknown() && !r.InputCriblmetrics.Connections[connectionsIndex39].Pipeline.IsNull() {
-				*pipeline79 = r.InputCriblmetrics.Connections[connectionsIndex39].Pipeline.ValueString()
+		connections38 := make([]shared.InputCriblmetricsConnection, 0, len(r.InputCriblmetrics.Connections))
+		for connectionsIndex38 := range r.InputCriblmetrics.Connections {
+			pipeline77 := new(string)
+			if !r.InputCriblmetrics.Connections[connectionsIndex38].Pipeline.IsUnknown() && !r.InputCriblmetrics.Connections[connectionsIndex38].Pipeline.IsNull() {
+				*pipeline77 = r.InputCriblmetrics.Connections[connectionsIndex38].Pipeline.ValueString()
 			} else {
-				pipeline79 = nil
+				pipeline77 = nil
 			}
-			var output40 string
-			output40 = r.InputCriblmetrics.Connections[connectionsIndex39].Output.ValueString()
+			var output39 string
+			output39 = r.InputCriblmetrics.Connections[connectionsIndex38].Output.ValueString()
 
-			connections39 = append(connections39, shared.InputCriblmetricsConnection{
-				Pipeline: pipeline79,
-				Output:   output40,
+			connections38 = append(connections38, shared.InputCriblmetricsConnection{
+				Pipeline: pipeline77,
+				Output:   output39,
 			})
 		}
-		var pq39 *shared.InputCriblmetricsPq
+		var pq38 *shared.InputCriblmetricsPq
 		if r.InputCriblmetrics.Pq != nil {
-			mode52 := new(shared.InputCriblmetricsMode)
+			mode51 := new(shared.InputCriblmetricsMode)
 			if !r.InputCriblmetrics.Pq.Mode.IsUnknown() && !r.InputCriblmetrics.Pq.Mode.IsNull() {
-				*mode52 = shared.InputCriblmetricsMode(r.InputCriblmetrics.Pq.Mode.ValueString())
+				*mode51 = shared.InputCriblmetricsMode(r.InputCriblmetrics.Pq.Mode.ValueString())
 			} else {
-				mode52 = nil
+				mode51 = nil
 			}
-			maxBufferSize39 := new(float64)
+			maxBufferSize38 := new(float64)
 			if !r.InputCriblmetrics.Pq.MaxBufferSize.IsUnknown() && !r.InputCriblmetrics.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize39 = r.InputCriblmetrics.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize38 = r.InputCriblmetrics.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize39 = nil
+				maxBufferSize38 = nil
 			}
-			commitFrequency39 := new(float64)
+			commitFrequency38 := new(float64)
 			if !r.InputCriblmetrics.Pq.CommitFrequency.IsUnknown() && !r.InputCriblmetrics.Pq.CommitFrequency.IsNull() {
-				*commitFrequency39 = r.InputCriblmetrics.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency38 = r.InputCriblmetrics.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency39 = nil
+				commitFrequency38 = nil
 			}
-			maxFileSize39 := new(string)
+			maxFileSize38 := new(string)
 			if !r.InputCriblmetrics.Pq.MaxFileSize.IsUnknown() && !r.InputCriblmetrics.Pq.MaxFileSize.IsNull() {
-				*maxFileSize39 = r.InputCriblmetrics.Pq.MaxFileSize.ValueString()
+				*maxFileSize38 = r.InputCriblmetrics.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize39 = nil
+				maxFileSize38 = nil
 			}
-			maxSize39 := new(string)
+			maxSize38 := new(string)
 			if !r.InputCriblmetrics.Pq.MaxSize.IsUnknown() && !r.InputCriblmetrics.Pq.MaxSize.IsNull() {
-				*maxSize39 = r.InputCriblmetrics.Pq.MaxSize.ValueString()
+				*maxSize38 = r.InputCriblmetrics.Pq.MaxSize.ValueString()
 			} else {
-				maxSize39 = nil
+				maxSize38 = nil
 			}
-			path40 := new(string)
+			path39 := new(string)
 			if !r.InputCriblmetrics.Pq.Path.IsUnknown() && !r.InputCriblmetrics.Pq.Path.IsNull() {
-				*path40 = r.InputCriblmetrics.Pq.Path.ValueString()
+				*path39 = r.InputCriblmetrics.Pq.Path.ValueString()
 			} else {
-				path40 = nil
+				path39 = nil
 			}
-			compress46 := new(shared.InputCriblmetricsCompression)
+			compress45 := new(shared.InputCriblmetricsCompression)
 			if !r.InputCriblmetrics.Pq.Compress.IsUnknown() && !r.InputCriblmetrics.Pq.Compress.IsNull() {
-				*compress46 = shared.InputCriblmetricsCompression(r.InputCriblmetrics.Pq.Compress.ValueString())
+				*compress45 = shared.InputCriblmetricsCompression(r.InputCriblmetrics.Pq.Compress.ValueString())
 			} else {
-				compress46 = nil
+				compress45 = nil
 			}
-			pq39 = &shared.InputCriblmetricsPq{
-				Mode:            mode52,
-				MaxBufferSize:   maxBufferSize39,
-				CommitFrequency: commitFrequency39,
-				MaxFileSize:     maxFileSize39,
-				MaxSize:         maxSize39,
-				Path:            path40,
-				Compress:        compress46,
+			pq38 = &shared.InputCriblmetricsPq{
+				Mode:            mode51,
+				MaxBufferSize:   maxBufferSize38,
+				CommitFrequency: commitFrequency38,
+				MaxFileSize:     maxFileSize38,
+				MaxSize:         maxSize38,
+				Path:            path39,
+				Compress:        compress45,
 			}
 		}
 		prefix := new(string)
@@ -14458,40 +13876,40 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			fullFidelity = nil
 		}
-		metadata43 := make([]shared.InputCriblmetricsMetadatum, 0, len(r.InputCriblmetrics.Metadata))
-		for metadataIndex42 := range r.InputCriblmetrics.Metadata {
-			var name63 string
-			name63 = r.InputCriblmetrics.Metadata[metadataIndex42].Name.ValueString()
+		metadata42 := make([]shared.InputCriblmetricsMetadatum, 0, len(r.InputCriblmetrics.Metadata))
+		for metadataIndex41 := range r.InputCriblmetrics.Metadata {
+			var name58 string
+			name58 = r.InputCriblmetrics.Metadata[metadataIndex41].Name.ValueString()
 
-			var value59 string
-			value59 = r.InputCriblmetrics.Metadata[metadataIndex42].Value.ValueString()
+			var value54 string
+			value54 = r.InputCriblmetrics.Metadata[metadataIndex41].Value.ValueString()
 
-			metadata43 = append(metadata43, shared.InputCriblmetricsMetadatum{
-				Name:  name63,
-				Value: value59,
+			metadata42 = append(metadata42, shared.InputCriblmetricsMetadatum{
+				Name:  name58,
+				Value: value54,
 			})
 		}
-		description48 := new(string)
+		description47 := new(string)
 		if !r.InputCriblmetrics.Description.IsUnknown() && !r.InputCriblmetrics.Description.IsNull() {
-			*description48 = r.InputCriblmetrics.Description.ValueString()
+			*description47 = r.InputCriblmetrics.Description.ValueString()
 		} else {
-			description48 = nil
+			description47 = nil
 		}
 		inputCriblmetrics = &shared.InputCriblmetrics{
-			ID:           id39,
-			Type:         typeVar43,
-			Disabled:     disabled72,
-			Pipeline:     pipeline78,
-			SendToRoutes: sendToRoutes39,
-			Environment:  environment39,
-			PqEnabled:    pqEnabled39,
-			Streamtags:   streamtags39,
-			Connections:  connections39,
-			Pq:           pq39,
+			ID:           id38,
+			Type:         typeVar42,
+			Disabled:     disabled70,
+			Pipeline:     pipeline76,
+			SendToRoutes: sendToRoutes38,
+			Environment:  environment38,
+			PqEnabled:    pqEnabled38,
+			Streamtags:   streamtags38,
+			Connections:  connections38,
+			Pq:           pq38,
 			Prefix:       prefix,
 			FullFidelity: fullFidelity,
-			Metadata:     metadata43,
-			Description:  description48,
+			Metadata:     metadata42,
+			Description:  description47,
 		}
 	}
 	if inputCriblmetrics != nil {
@@ -14501,122 +13919,122 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputMetrics *shared.InputMetrics
 	if r.InputMetrics != nil {
-		id40 := new(string)
+		id39 := new(string)
 		if !r.InputMetrics.ID.IsUnknown() && !r.InputMetrics.ID.IsNull() {
-			*id40 = r.InputMetrics.ID.ValueString()
+			*id39 = r.InputMetrics.ID.ValueString()
 		} else {
-			id40 = nil
+			id39 = nil
 		}
-		typeVar44 := shared.InputMetricsType(r.InputMetrics.Type.ValueString())
-		disabled73 := new(bool)
+		typeVar43 := shared.InputMetricsType(r.InputMetrics.Type.ValueString())
+		disabled71 := new(bool)
 		if !r.InputMetrics.Disabled.IsUnknown() && !r.InputMetrics.Disabled.IsNull() {
-			*disabled73 = r.InputMetrics.Disabled.ValueBool()
+			*disabled71 = r.InputMetrics.Disabled.ValueBool()
 		} else {
-			disabled73 = nil
+			disabled71 = nil
 		}
-		pipeline80 := new(string)
+		pipeline78 := new(string)
 		if !r.InputMetrics.Pipeline.IsUnknown() && !r.InputMetrics.Pipeline.IsNull() {
-			*pipeline80 = r.InputMetrics.Pipeline.ValueString()
+			*pipeline78 = r.InputMetrics.Pipeline.ValueString()
 		} else {
-			pipeline80 = nil
+			pipeline78 = nil
 		}
-		sendToRoutes40 := new(bool)
+		sendToRoutes39 := new(bool)
 		if !r.InputMetrics.SendToRoutes.IsUnknown() && !r.InputMetrics.SendToRoutes.IsNull() {
-			*sendToRoutes40 = r.InputMetrics.SendToRoutes.ValueBool()
+			*sendToRoutes39 = r.InputMetrics.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes40 = nil
+			sendToRoutes39 = nil
 		}
-		environment40 := new(string)
+		environment39 := new(string)
 		if !r.InputMetrics.Environment.IsUnknown() && !r.InputMetrics.Environment.IsNull() {
-			*environment40 = r.InputMetrics.Environment.ValueString()
+			*environment39 = r.InputMetrics.Environment.ValueString()
 		} else {
-			environment40 = nil
+			environment39 = nil
 		}
-		pqEnabled40 := new(bool)
+		pqEnabled39 := new(bool)
 		if !r.InputMetrics.PqEnabled.IsUnknown() && !r.InputMetrics.PqEnabled.IsNull() {
-			*pqEnabled40 = r.InputMetrics.PqEnabled.ValueBool()
+			*pqEnabled39 = r.InputMetrics.PqEnabled.ValueBool()
 		} else {
-			pqEnabled40 = nil
+			pqEnabled39 = nil
 		}
-		streamtags40 := make([]string, 0, len(r.InputMetrics.Streamtags))
-		for streamtagsIndex40 := range r.InputMetrics.Streamtags {
-			streamtags40 = append(streamtags40, r.InputMetrics.Streamtags[streamtagsIndex40].ValueString())
+		streamtags39 := make([]string, 0, len(r.InputMetrics.Streamtags))
+		for streamtagsIndex39 := range r.InputMetrics.Streamtags {
+			streamtags39 = append(streamtags39, r.InputMetrics.Streamtags[streamtagsIndex39].ValueString())
 		}
-		connections40 := make([]shared.InputMetricsConnection, 0, len(r.InputMetrics.Connections))
-		for connectionsIndex40 := range r.InputMetrics.Connections {
-			pipeline81 := new(string)
-			if !r.InputMetrics.Connections[connectionsIndex40].Pipeline.IsUnknown() && !r.InputMetrics.Connections[connectionsIndex40].Pipeline.IsNull() {
-				*pipeline81 = r.InputMetrics.Connections[connectionsIndex40].Pipeline.ValueString()
+		connections39 := make([]shared.InputMetricsConnection, 0, len(r.InputMetrics.Connections))
+		for connectionsIndex39 := range r.InputMetrics.Connections {
+			pipeline79 := new(string)
+			if !r.InputMetrics.Connections[connectionsIndex39].Pipeline.IsUnknown() && !r.InputMetrics.Connections[connectionsIndex39].Pipeline.IsNull() {
+				*pipeline79 = r.InputMetrics.Connections[connectionsIndex39].Pipeline.ValueString()
 			} else {
-				pipeline81 = nil
+				pipeline79 = nil
 			}
-			var output41 string
-			output41 = r.InputMetrics.Connections[connectionsIndex40].Output.ValueString()
+			var output40 string
+			output40 = r.InputMetrics.Connections[connectionsIndex39].Output.ValueString()
 
-			connections40 = append(connections40, shared.InputMetricsConnection{
-				Pipeline: pipeline81,
-				Output:   output41,
+			connections39 = append(connections39, shared.InputMetricsConnection{
+				Pipeline: pipeline79,
+				Output:   output40,
 			})
 		}
-		var pq40 *shared.InputMetricsPq
+		var pq39 *shared.InputMetricsPq
 		if r.InputMetrics.Pq != nil {
-			mode53 := new(shared.InputMetricsMode)
+			mode52 := new(shared.InputMetricsMode)
 			if !r.InputMetrics.Pq.Mode.IsUnknown() && !r.InputMetrics.Pq.Mode.IsNull() {
-				*mode53 = shared.InputMetricsMode(r.InputMetrics.Pq.Mode.ValueString())
+				*mode52 = shared.InputMetricsMode(r.InputMetrics.Pq.Mode.ValueString())
 			} else {
-				mode53 = nil
+				mode52 = nil
 			}
-			maxBufferSize40 := new(float64)
+			maxBufferSize39 := new(float64)
 			if !r.InputMetrics.Pq.MaxBufferSize.IsUnknown() && !r.InputMetrics.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize40 = r.InputMetrics.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize39 = r.InputMetrics.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize40 = nil
+				maxBufferSize39 = nil
 			}
-			commitFrequency40 := new(float64)
+			commitFrequency39 := new(float64)
 			if !r.InputMetrics.Pq.CommitFrequency.IsUnknown() && !r.InputMetrics.Pq.CommitFrequency.IsNull() {
-				*commitFrequency40 = r.InputMetrics.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency39 = r.InputMetrics.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency40 = nil
+				commitFrequency39 = nil
 			}
-			maxFileSize40 := new(string)
+			maxFileSize39 := new(string)
 			if !r.InputMetrics.Pq.MaxFileSize.IsUnknown() && !r.InputMetrics.Pq.MaxFileSize.IsNull() {
-				*maxFileSize40 = r.InputMetrics.Pq.MaxFileSize.ValueString()
+				*maxFileSize39 = r.InputMetrics.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize40 = nil
+				maxFileSize39 = nil
 			}
-			maxSize40 := new(string)
+			maxSize39 := new(string)
 			if !r.InputMetrics.Pq.MaxSize.IsUnknown() && !r.InputMetrics.Pq.MaxSize.IsNull() {
-				*maxSize40 = r.InputMetrics.Pq.MaxSize.ValueString()
+				*maxSize39 = r.InputMetrics.Pq.MaxSize.ValueString()
 			} else {
-				maxSize40 = nil
+				maxSize39 = nil
 			}
-			path41 := new(string)
+			path40 := new(string)
 			if !r.InputMetrics.Pq.Path.IsUnknown() && !r.InputMetrics.Pq.Path.IsNull() {
-				*path41 = r.InputMetrics.Pq.Path.ValueString()
+				*path40 = r.InputMetrics.Pq.Path.ValueString()
 			} else {
-				path41 = nil
+				path40 = nil
 			}
-			compress47 := new(shared.InputMetricsCompression)
+			compress46 := new(shared.InputMetricsCompression)
 			if !r.InputMetrics.Pq.Compress.IsUnknown() && !r.InputMetrics.Pq.Compress.IsNull() {
-				*compress47 = shared.InputMetricsCompression(r.InputMetrics.Pq.Compress.ValueString())
+				*compress46 = shared.InputMetricsCompression(r.InputMetrics.Pq.Compress.ValueString())
 			} else {
-				compress47 = nil
+				compress46 = nil
 			}
-			pq40 = &shared.InputMetricsPq{
-				Mode:            mode53,
-				MaxBufferSize:   maxBufferSize40,
-				CommitFrequency: commitFrequency40,
-				MaxFileSize:     maxFileSize40,
-				MaxSize:         maxSize40,
-				Path:            path41,
-				Compress:        compress47,
+			pq39 = &shared.InputMetricsPq{
+				Mode:            mode52,
+				MaxBufferSize:   maxBufferSize39,
+				CommitFrequency: commitFrequency39,
+				MaxFileSize:     maxFileSize39,
+				MaxSize:         maxSize39,
+				Path:            path40,
+				Compress:        compress46,
 			}
 		}
-		host18 := new(string)
+		host17 := new(string)
 		if !r.InputMetrics.Host.IsUnknown() && !r.InputMetrics.Host.IsNull() {
-			*host18 = r.InputMetrics.Host.ValueString()
+			*host17 = r.InputMetrics.Host.ValueString()
 		} else {
-			host18 = nil
+			host17 = nil
 		}
 		udpPort := new(float64)
 		if !r.InputMetrics.UDPPort.IsUnknown() && !r.InputMetrics.UDPPort.IsNull() {
@@ -14630,11 +14048,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			tcpPort = nil
 		}
-		maxBufferSize41 := new(float64)
+		maxBufferSize40 := new(float64)
 		if !r.InputMetrics.MaxBufferSize.IsUnknown() && !r.InputMetrics.MaxBufferSize.IsNull() {
-			*maxBufferSize41 = r.InputMetrics.MaxBufferSize.ValueFloat64()
+			*maxBufferSize40 = r.InputMetrics.MaxBufferSize.ValueFloat64()
 		} else {
-			maxBufferSize41 = nil
+			maxBufferSize40 = nil
 		}
 		ipWhitelistRegex2 := new(string)
 		if !r.InputMetrics.IPWhitelistRegex.IsUnknown() && !r.InputMetrics.IPWhitelistRegex.IsNull() {
@@ -14642,101 +14060,101 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			ipWhitelistRegex2 = nil
 		}
-		enableProxyHeader15 := new(bool)
+		enableProxyHeader14 := new(bool)
 		if !r.InputMetrics.EnableProxyHeader.IsUnknown() && !r.InputMetrics.EnableProxyHeader.IsNull() {
-			*enableProxyHeader15 = r.InputMetrics.EnableProxyHeader.ValueBool()
+			*enableProxyHeader14 = r.InputMetrics.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader15 = nil
+			enableProxyHeader14 = nil
 		}
-		var tls22 *shared.InputMetricsTLSSettingsServerSide
+		var tls21 *shared.InputMetricsTLSSettingsServerSide
 		if r.InputMetrics.TLS != nil {
-			disabled74 := new(bool)
+			disabled72 := new(bool)
 			if !r.InputMetrics.TLS.Disabled.IsUnknown() && !r.InputMetrics.TLS.Disabled.IsNull() {
-				*disabled74 = r.InputMetrics.TLS.Disabled.ValueBool()
+				*disabled72 = r.InputMetrics.TLS.Disabled.ValueBool()
 			} else {
-				disabled74 = nil
+				disabled72 = nil
 			}
-			certificateName23 := new(string)
+			certificateName22 := new(string)
 			if !r.InputMetrics.TLS.CertificateName.IsUnknown() && !r.InputMetrics.TLS.CertificateName.IsNull() {
-				*certificateName23 = r.InputMetrics.TLS.CertificateName.ValueString()
+				*certificateName22 = r.InputMetrics.TLS.CertificateName.ValueString()
 			} else {
-				certificateName23 = nil
+				certificateName22 = nil
 			}
-			privKeyPath22 := new(string)
+			privKeyPath21 := new(string)
 			if !r.InputMetrics.TLS.PrivKeyPath.IsUnknown() && !r.InputMetrics.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath22 = r.InputMetrics.TLS.PrivKeyPath.ValueString()
+				*privKeyPath21 = r.InputMetrics.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath22 = nil
+				privKeyPath21 = nil
 			}
-			passphrase22 := new(string)
+			passphrase21 := new(string)
 			if !r.InputMetrics.TLS.Passphrase.IsUnknown() && !r.InputMetrics.TLS.Passphrase.IsNull() {
-				*passphrase22 = r.InputMetrics.TLS.Passphrase.ValueString()
+				*passphrase21 = r.InputMetrics.TLS.Passphrase.ValueString()
 			} else {
-				passphrase22 = nil
+				passphrase21 = nil
 			}
-			certPath22 := new(string)
+			certPath21 := new(string)
 			if !r.InputMetrics.TLS.CertPath.IsUnknown() && !r.InputMetrics.TLS.CertPath.IsNull() {
-				*certPath22 = r.InputMetrics.TLS.CertPath.ValueString()
+				*certPath21 = r.InputMetrics.TLS.CertPath.ValueString()
 			} else {
-				certPath22 = nil
+				certPath21 = nil
 			}
-			caPath21 := new(string)
+			caPath20 := new(string)
 			if !r.InputMetrics.TLS.CaPath.IsUnknown() && !r.InputMetrics.TLS.CaPath.IsNull() {
-				*caPath21 = r.InputMetrics.TLS.CaPath.ValueString()
+				*caPath20 = r.InputMetrics.TLS.CaPath.ValueString()
 			} else {
-				caPath21 = nil
+				caPath20 = nil
 			}
-			requestCert15 := new(bool)
+			requestCert14 := new(bool)
 			if !r.InputMetrics.TLS.RequestCert.IsUnknown() && !r.InputMetrics.TLS.RequestCert.IsNull() {
-				*requestCert15 = r.InputMetrics.TLS.RequestCert.ValueBool()
+				*requestCert14 = r.InputMetrics.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert15 = nil
+				requestCert14 = nil
 			}
-			var rejectUnauthorized30 interface{}
+			var rejectUnauthorized29 interface{}
 			if !r.InputMetrics.TLS.RejectUnauthorized.IsUnknown() && !r.InputMetrics.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputMetrics.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized30)
+				_ = json.Unmarshal([]byte(r.InputMetrics.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized29)
 			}
-			var commonNameRegex15 interface{}
+			var commonNameRegex14 interface{}
 			if !r.InputMetrics.TLS.CommonNameRegex.IsUnknown() && !r.InputMetrics.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputMetrics.TLS.CommonNameRegex.ValueString()), &commonNameRegex15)
+				_ = json.Unmarshal([]byte(r.InputMetrics.TLS.CommonNameRegex.ValueString()), &commonNameRegex14)
 			}
-			minVersion21 := new(shared.InputMetricsMinimumTLSVersion)
+			minVersion20 := new(shared.InputMetricsMinimumTLSVersion)
 			if !r.InputMetrics.TLS.MinVersion.IsUnknown() && !r.InputMetrics.TLS.MinVersion.IsNull() {
-				*minVersion21 = shared.InputMetricsMinimumTLSVersion(r.InputMetrics.TLS.MinVersion.ValueString())
+				*minVersion20 = shared.InputMetricsMinimumTLSVersion(r.InputMetrics.TLS.MinVersion.ValueString())
 			} else {
-				minVersion21 = nil
+				minVersion20 = nil
 			}
-			maxVersion21 := new(shared.InputMetricsMaximumTLSVersion)
+			maxVersion20 := new(shared.InputMetricsMaximumTLSVersion)
 			if !r.InputMetrics.TLS.MaxVersion.IsUnknown() && !r.InputMetrics.TLS.MaxVersion.IsNull() {
-				*maxVersion21 = shared.InputMetricsMaximumTLSVersion(r.InputMetrics.TLS.MaxVersion.ValueString())
+				*maxVersion20 = shared.InputMetricsMaximumTLSVersion(r.InputMetrics.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion21 = nil
+				maxVersion20 = nil
 			}
-			tls22 = &shared.InputMetricsTLSSettingsServerSide{
-				Disabled:           disabled74,
-				CertificateName:    certificateName23,
-				PrivKeyPath:        privKeyPath22,
-				Passphrase:         passphrase22,
-				CertPath:           certPath22,
-				CaPath:             caPath21,
-				RequestCert:        requestCert15,
-				RejectUnauthorized: rejectUnauthorized30,
-				CommonNameRegex:    commonNameRegex15,
-				MinVersion:         minVersion21,
-				MaxVersion:         maxVersion21,
+			tls21 = &shared.InputMetricsTLSSettingsServerSide{
+				Disabled:           disabled72,
+				CertificateName:    certificateName22,
+				PrivKeyPath:        privKeyPath21,
+				Passphrase:         passphrase21,
+				CertPath:           certPath21,
+				CaPath:             caPath20,
+				RequestCert:        requestCert14,
+				RejectUnauthorized: rejectUnauthorized29,
+				CommonNameRegex:    commonNameRegex14,
+				MinVersion:         minVersion20,
+				MaxVersion:         maxVersion20,
 			}
 		}
-		metadata44 := make([]shared.InputMetricsMetadatum, 0, len(r.InputMetrics.Metadata))
-		for metadataIndex43 := range r.InputMetrics.Metadata {
-			var name64 string
-			name64 = r.InputMetrics.Metadata[metadataIndex43].Name.ValueString()
+		metadata43 := make([]shared.InputMetricsMetadatum, 0, len(r.InputMetrics.Metadata))
+		for metadataIndex42 := range r.InputMetrics.Metadata {
+			var name59 string
+			name59 = r.InputMetrics.Metadata[metadataIndex42].Name.ValueString()
 
-			var value60 string
-			value60 = r.InputMetrics.Metadata[metadataIndex43].Value.ValueString()
+			var value55 string
+			value55 = r.InputMetrics.Metadata[metadataIndex42].Value.ValueString()
 
-			metadata44 = append(metadata44, shared.InputMetricsMetadatum{
-				Name:  name64,
-				Value: value60,
+			metadata43 = append(metadata43, shared.InputMetricsMetadatum{
+				Name:  name59,
+				Value: value55,
 			})
 		}
 		udpSocketRxBufSize := new(float64)
@@ -14745,33 +14163,33 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			udpSocketRxBufSize = nil
 		}
-		description49 := new(string)
+		description48 := new(string)
 		if !r.InputMetrics.Description.IsUnknown() && !r.InputMetrics.Description.IsNull() {
-			*description49 = r.InputMetrics.Description.ValueString()
+			*description48 = r.InputMetrics.Description.ValueString()
 		} else {
-			description49 = nil
+			description48 = nil
 		}
 		inputMetrics = &shared.InputMetrics{
-			ID:                 id40,
-			Type:               typeVar44,
-			Disabled:           disabled73,
-			Pipeline:           pipeline80,
-			SendToRoutes:       sendToRoutes40,
-			Environment:        environment40,
-			PqEnabled:          pqEnabled40,
-			Streamtags:         streamtags40,
-			Connections:        connections40,
-			Pq:                 pq40,
-			Host:               host18,
+			ID:                 id39,
+			Type:               typeVar43,
+			Disabled:           disabled71,
+			Pipeline:           pipeline78,
+			SendToRoutes:       sendToRoutes39,
+			Environment:        environment39,
+			PqEnabled:          pqEnabled39,
+			Streamtags:         streamtags39,
+			Connections:        connections39,
+			Pq:                 pq39,
+			Host:               host17,
 			UDPPort:            udpPort,
 			TCPPort:            tcpPort,
-			MaxBufferSize:      maxBufferSize41,
+			MaxBufferSize:      maxBufferSize40,
 			IPWhitelistRegex:   ipWhitelistRegex2,
-			EnableProxyHeader:  enableProxyHeader15,
-			TLS:                tls22,
-			Metadata:           metadata44,
+			EnableProxyHeader:  enableProxyHeader14,
+			TLS:                tls21,
+			Metadata:           metadata43,
 			UDPSocketRxBufSize: udpSocketRxBufSize,
-			Description:        description49,
+			Description:        description48,
 		}
 	}
 	if inputMetrics != nil {
@@ -14781,115 +14199,115 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputS3 *shared.InputS3
 	if r.InputS3 != nil {
-		id41 := new(string)
+		id40 := new(string)
 		if !r.InputS3.ID.IsUnknown() && !r.InputS3.ID.IsNull() {
-			*id41 = r.InputS3.ID.ValueString()
+			*id40 = r.InputS3.ID.ValueString()
 		} else {
-			id41 = nil
+			id40 = nil
 		}
-		typeVar45 := shared.InputS3Type(r.InputS3.Type.ValueString())
-		disabled75 := new(bool)
+		typeVar44 := shared.InputS3Type(r.InputS3.Type.ValueString())
+		disabled73 := new(bool)
 		if !r.InputS3.Disabled.IsUnknown() && !r.InputS3.Disabled.IsNull() {
-			*disabled75 = r.InputS3.Disabled.ValueBool()
+			*disabled73 = r.InputS3.Disabled.ValueBool()
 		} else {
-			disabled75 = nil
+			disabled73 = nil
 		}
-		pipeline82 := new(string)
+		pipeline80 := new(string)
 		if !r.InputS3.Pipeline.IsUnknown() && !r.InputS3.Pipeline.IsNull() {
-			*pipeline82 = r.InputS3.Pipeline.ValueString()
+			*pipeline80 = r.InputS3.Pipeline.ValueString()
 		} else {
-			pipeline82 = nil
+			pipeline80 = nil
 		}
-		sendToRoutes41 := new(bool)
+		sendToRoutes40 := new(bool)
 		if !r.InputS3.SendToRoutes.IsUnknown() && !r.InputS3.SendToRoutes.IsNull() {
-			*sendToRoutes41 = r.InputS3.SendToRoutes.ValueBool()
+			*sendToRoutes40 = r.InputS3.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes41 = nil
+			sendToRoutes40 = nil
 		}
-		environment41 := new(string)
+		environment40 := new(string)
 		if !r.InputS3.Environment.IsUnknown() && !r.InputS3.Environment.IsNull() {
-			*environment41 = r.InputS3.Environment.ValueString()
+			*environment40 = r.InputS3.Environment.ValueString()
 		} else {
-			environment41 = nil
+			environment40 = nil
 		}
-		pqEnabled41 := new(bool)
+		pqEnabled40 := new(bool)
 		if !r.InputS3.PqEnabled.IsUnknown() && !r.InputS3.PqEnabled.IsNull() {
-			*pqEnabled41 = r.InputS3.PqEnabled.ValueBool()
+			*pqEnabled40 = r.InputS3.PqEnabled.ValueBool()
 		} else {
-			pqEnabled41 = nil
+			pqEnabled40 = nil
 		}
-		streamtags41 := make([]string, 0, len(r.InputS3.Streamtags))
-		for streamtagsIndex41 := range r.InputS3.Streamtags {
-			streamtags41 = append(streamtags41, r.InputS3.Streamtags[streamtagsIndex41].ValueString())
+		streamtags40 := make([]string, 0, len(r.InputS3.Streamtags))
+		for streamtagsIndex40 := range r.InputS3.Streamtags {
+			streamtags40 = append(streamtags40, r.InputS3.Streamtags[streamtagsIndex40].ValueString())
 		}
-		connections41 := make([]shared.InputS3Connection, 0, len(r.InputS3.Connections))
-		for connectionsIndex41 := range r.InputS3.Connections {
-			pipeline83 := new(string)
-			if !r.InputS3.Connections[connectionsIndex41].Pipeline.IsUnknown() && !r.InputS3.Connections[connectionsIndex41].Pipeline.IsNull() {
-				*pipeline83 = r.InputS3.Connections[connectionsIndex41].Pipeline.ValueString()
+		connections40 := make([]shared.InputS3Connection, 0, len(r.InputS3.Connections))
+		for connectionsIndex40 := range r.InputS3.Connections {
+			pipeline81 := new(string)
+			if !r.InputS3.Connections[connectionsIndex40].Pipeline.IsUnknown() && !r.InputS3.Connections[connectionsIndex40].Pipeline.IsNull() {
+				*pipeline81 = r.InputS3.Connections[connectionsIndex40].Pipeline.ValueString()
 			} else {
-				pipeline83 = nil
+				pipeline81 = nil
 			}
-			var output42 string
-			output42 = r.InputS3.Connections[connectionsIndex41].Output.ValueString()
+			var output41 string
+			output41 = r.InputS3.Connections[connectionsIndex40].Output.ValueString()
 
-			connections41 = append(connections41, shared.InputS3Connection{
-				Pipeline: pipeline83,
-				Output:   output42,
+			connections40 = append(connections40, shared.InputS3Connection{
+				Pipeline: pipeline81,
+				Output:   output41,
 			})
 		}
-		var pq41 *shared.InputS3Pq
+		var pq40 *shared.InputS3Pq
 		if r.InputS3.Pq != nil {
-			mode54 := new(shared.InputS3Mode)
+			mode53 := new(shared.InputS3Mode)
 			if !r.InputS3.Pq.Mode.IsUnknown() && !r.InputS3.Pq.Mode.IsNull() {
-				*mode54 = shared.InputS3Mode(r.InputS3.Pq.Mode.ValueString())
+				*mode53 = shared.InputS3Mode(r.InputS3.Pq.Mode.ValueString())
 			} else {
-				mode54 = nil
+				mode53 = nil
 			}
-			maxBufferSize42 := new(float64)
+			maxBufferSize41 := new(float64)
 			if !r.InputS3.Pq.MaxBufferSize.IsUnknown() && !r.InputS3.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize42 = r.InputS3.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize41 = r.InputS3.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize42 = nil
+				maxBufferSize41 = nil
 			}
-			commitFrequency41 := new(float64)
+			commitFrequency40 := new(float64)
 			if !r.InputS3.Pq.CommitFrequency.IsUnknown() && !r.InputS3.Pq.CommitFrequency.IsNull() {
-				*commitFrequency41 = r.InputS3.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency40 = r.InputS3.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency41 = nil
+				commitFrequency40 = nil
 			}
-			maxFileSize41 := new(string)
+			maxFileSize40 := new(string)
 			if !r.InputS3.Pq.MaxFileSize.IsUnknown() && !r.InputS3.Pq.MaxFileSize.IsNull() {
-				*maxFileSize41 = r.InputS3.Pq.MaxFileSize.ValueString()
+				*maxFileSize40 = r.InputS3.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize41 = nil
+				maxFileSize40 = nil
 			}
-			maxSize41 := new(string)
+			maxSize40 := new(string)
 			if !r.InputS3.Pq.MaxSize.IsUnknown() && !r.InputS3.Pq.MaxSize.IsNull() {
-				*maxSize41 = r.InputS3.Pq.MaxSize.ValueString()
+				*maxSize40 = r.InputS3.Pq.MaxSize.ValueString()
 			} else {
-				maxSize41 = nil
+				maxSize40 = nil
 			}
-			path42 := new(string)
+			path41 := new(string)
 			if !r.InputS3.Pq.Path.IsUnknown() && !r.InputS3.Pq.Path.IsNull() {
-				*path42 = r.InputS3.Pq.Path.ValueString()
+				*path41 = r.InputS3.Pq.Path.ValueString()
 			} else {
-				path42 = nil
+				path41 = nil
 			}
-			compress48 := new(shared.InputS3Compression)
+			compress47 := new(shared.InputS3Compression)
 			if !r.InputS3.Pq.Compress.IsUnknown() && !r.InputS3.Pq.Compress.IsNull() {
-				*compress48 = shared.InputS3Compression(r.InputS3.Pq.Compress.ValueString())
+				*compress47 = shared.InputS3Compression(r.InputS3.Pq.Compress.ValueString())
 			} else {
-				compress48 = nil
+				compress47 = nil
 			}
-			pq41 = &shared.InputS3Pq{
-				Mode:            mode54,
-				MaxBufferSize:   maxBufferSize42,
-				CommitFrequency: commitFrequency41,
-				MaxFileSize:     maxFileSize41,
-				MaxSize:         maxSize41,
-				Path:            path42,
-				Compress:        compress48,
+			pq40 = &shared.InputS3Pq{
+				Mode:            mode53,
+				MaxBufferSize:   maxBufferSize41,
+				CommitFrequency: commitFrequency40,
+				MaxFileSize:     maxFileSize40,
+				MaxSize:         maxSize40,
+				Path:            path41,
+				Compress:        compress47,
 			}
 		}
 		var queueName2 string
@@ -14943,11 +14361,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			reuseConnections5 = nil
 		}
-		rejectUnauthorized31 := new(bool)
+		rejectUnauthorized30 := new(bool)
 		if !r.InputS3.RejectUnauthorized.IsUnknown() && !r.InputS3.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized31 = r.InputS3.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized30 = r.InputS3.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized31 = nil
+			rejectUnauthorized30 = nil
 		}
 		breakerRulesets9 := make([]string, 0, len(r.InputS3.BreakerRulesets))
 		for breakerRulesetsIndex9 := range r.InputS3.BreakerRulesets {
@@ -14977,11 +14395,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			numReceivers2 = nil
 		}
-		socketTimeout13 := new(float64)
+		socketTimeout12 := new(float64)
 		if !r.InputS3.SocketTimeout.IsUnknown() && !r.InputS3.SocketTimeout.IsNull() {
-			*socketTimeout13 = r.InputS3.SocketTimeout.ValueFloat64()
+			*socketTimeout12 = r.InputS3.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout13 = nil
+			socketTimeout12 = nil
 		}
 		skipOnError2 := new(bool)
 		if !r.InputS3.SkipOnError.IsUnknown() && !r.InputS3.SkipOnError.IsNull() {
@@ -15021,11 +14439,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var preprocess2 *shared.InputS3Preprocess
 		if r.InputS3.Preprocess != nil {
-			disabled76 := new(bool)
+			disabled74 := new(bool)
 			if !r.InputS3.Preprocess.Disabled.IsUnknown() && !r.InputS3.Preprocess.Disabled.IsNull() {
-				*disabled76 = r.InputS3.Preprocess.Disabled.ValueBool()
+				*disabled74 = r.InputS3.Preprocess.Disabled.ValueBool()
 			} else {
-				disabled76 = nil
+				disabled74 = nil
 			}
 			command3 := new(string)
 			if !r.InputS3.Preprocess.Command.IsUnknown() && !r.InputS3.Preprocess.Command.IsNull() {
@@ -15038,22 +14456,22 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				args2 = append(args2, r.InputS3.Preprocess.Args[argsIndex2].ValueString())
 			}
 			preprocess2 = &shared.InputS3Preprocess{
-				Disabled: disabled76,
+				Disabled: disabled74,
 				Command:  command3,
 				Args:     args2,
 			}
 		}
-		metadata45 := make([]shared.InputS3Metadatum, 0, len(r.InputS3.Metadata))
-		for metadataIndex44 := range r.InputS3.Metadata {
-			var name65 string
-			name65 = r.InputS3.Metadata[metadataIndex44].Name.ValueString()
+		metadata44 := make([]shared.InputS3Metadatum, 0, len(r.InputS3.Metadata))
+		for metadataIndex43 := range r.InputS3.Metadata {
+			var name60 string
+			name60 = r.InputS3.Metadata[metadataIndex43].Name.ValueString()
 
-			var value61 string
-			value61 = r.InputS3.Metadata[metadataIndex44].Value.ValueString()
+			var value56 string
+			value56 = r.InputS3.Metadata[metadataIndex43].Value.ValueString()
 
-			metadata45 = append(metadata45, shared.InputS3Metadatum{
-				Name:  name65,
-				Value: value61,
+			metadata44 = append(metadata44, shared.InputS3Metadatum{
+				Name:  name60,
+				Value: value56,
 			})
 		}
 		parquetChunkSizeMb1 := new(float64)
@@ -15105,11 +14523,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			tagAfterProcessing1 = nil
 		}
-		description50 := new(string)
+		description49 := new(string)
 		if !r.InputS3.Description.IsUnknown() && !r.InputS3.Description.IsNull() {
-			*description50 = r.InputS3.Description.ValueString()
+			*description49 = r.InputS3.Description.ValueString()
 		} else {
-			description50 = nil
+			description49 = nil
 		}
 		awsAPIKey3 := new(string)
 		if !r.InputS3.AwsAPIKey.IsUnknown() && !r.InputS3.AwsAPIKey.IsNull() {
@@ -15136,16 +14554,16 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			processedTagValue1 = nil
 		}
 		inputS3 = &shared.InputS3{
-			ID:                          id41,
-			Type:                        typeVar45,
-			Disabled:                    disabled75,
-			Pipeline:                    pipeline82,
-			SendToRoutes:                sendToRoutes41,
-			Environment:                 environment41,
-			PqEnabled:                   pqEnabled41,
-			Streamtags:                  streamtags41,
-			Connections:                 connections41,
-			Pq:                          pq41,
+			ID:                          id40,
+			Type:                        typeVar44,
+			Disabled:                    disabled73,
+			Pipeline:                    pipeline80,
+			SendToRoutes:                sendToRoutes40,
+			Environment:                 environment40,
+			PqEnabled:                   pqEnabled40,
+			Streamtags:                  streamtags40,
+			Connections:                 connections40,
+			Pq:                          pq40,
 			QueueName:                   queueName2,
 			FileFilter:                  fileFilter2,
 			AwsAccountID:                awsAccountId1,
@@ -15155,13 +14573,13 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Endpoint:                    endpoint6,
 			SignatureVersion:            signatureVersion5,
 			ReuseConnections:            reuseConnections5,
-			RejectUnauthorized:          rejectUnauthorized31,
+			RejectUnauthorized:          rejectUnauthorized30,
 			BreakerRulesets:             breakerRulesets9,
 			StaleChannelFlushMs:         staleChannelFlushMs9,
 			MaxMessages:                 maxMessages2,
 			VisibilityTimeout:           visibilityTimeout2,
 			NumReceivers:                numReceivers2,
-			SocketTimeout:               socketTimeout13,
+			SocketTimeout:               socketTimeout12,
 			SkipOnError:                 skipOnError2,
 			EnableAssumeRole:            enableAssumeRole5,
 			AssumeRoleArn:               assumeRoleArn5,
@@ -15169,14 +14587,14 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			DurationSeconds:             durationSeconds5,
 			EnableSQSAssumeRole:         enableSQSAssumeRole1,
 			Preprocess:                  preprocess2,
-			Metadata:                    metadata45,
+			Metadata:                    metadata44,
 			ParquetChunkSizeMB:          parquetChunkSizeMb1,
 			ParquetChunkDownloadTimeout: parquetChunkDownloadTimeout1,
 			Checkpointing:               checkpointing1,
 			PollTimeout:                 pollTimeout1,
 			Encoding:                    encoding2,
 			TagAfterProcessing:          tagAfterProcessing1,
-			Description:                 description50,
+			Description:                 description49,
 			AwsAPIKey:                   awsAPIKey3,
 			AwsSecret:                   awsSecret3,
 			ProcessedTagKey:             processedTagKey1,
@@ -15190,115 +14608,115 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputS3Inventory *shared.InputS3Inventory
 	if r.InputS3Inventory != nil {
-		id42 := new(string)
+		id41 := new(string)
 		if !r.InputS3Inventory.ID.IsUnknown() && !r.InputS3Inventory.ID.IsNull() {
-			*id42 = r.InputS3Inventory.ID.ValueString()
+			*id41 = r.InputS3Inventory.ID.ValueString()
 		} else {
-			id42 = nil
+			id41 = nil
 		}
-		typeVar46 := shared.InputS3InventoryType(r.InputS3Inventory.Type.ValueString())
-		disabled77 := new(bool)
+		typeVar45 := shared.InputS3InventoryType(r.InputS3Inventory.Type.ValueString())
+		disabled75 := new(bool)
 		if !r.InputS3Inventory.Disabled.IsUnknown() && !r.InputS3Inventory.Disabled.IsNull() {
-			*disabled77 = r.InputS3Inventory.Disabled.ValueBool()
+			*disabled75 = r.InputS3Inventory.Disabled.ValueBool()
 		} else {
-			disabled77 = nil
+			disabled75 = nil
 		}
-		pipeline84 := new(string)
+		pipeline82 := new(string)
 		if !r.InputS3Inventory.Pipeline.IsUnknown() && !r.InputS3Inventory.Pipeline.IsNull() {
-			*pipeline84 = r.InputS3Inventory.Pipeline.ValueString()
+			*pipeline82 = r.InputS3Inventory.Pipeline.ValueString()
 		} else {
-			pipeline84 = nil
+			pipeline82 = nil
 		}
-		sendToRoutes42 := new(bool)
+		sendToRoutes41 := new(bool)
 		if !r.InputS3Inventory.SendToRoutes.IsUnknown() && !r.InputS3Inventory.SendToRoutes.IsNull() {
-			*sendToRoutes42 = r.InputS3Inventory.SendToRoutes.ValueBool()
+			*sendToRoutes41 = r.InputS3Inventory.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes42 = nil
+			sendToRoutes41 = nil
 		}
-		environment42 := new(string)
+		environment41 := new(string)
 		if !r.InputS3Inventory.Environment.IsUnknown() && !r.InputS3Inventory.Environment.IsNull() {
-			*environment42 = r.InputS3Inventory.Environment.ValueString()
+			*environment41 = r.InputS3Inventory.Environment.ValueString()
 		} else {
-			environment42 = nil
+			environment41 = nil
 		}
-		pqEnabled42 := new(bool)
+		pqEnabled41 := new(bool)
 		if !r.InputS3Inventory.PqEnabled.IsUnknown() && !r.InputS3Inventory.PqEnabled.IsNull() {
-			*pqEnabled42 = r.InputS3Inventory.PqEnabled.ValueBool()
+			*pqEnabled41 = r.InputS3Inventory.PqEnabled.ValueBool()
 		} else {
-			pqEnabled42 = nil
+			pqEnabled41 = nil
 		}
-		streamtags42 := make([]string, 0, len(r.InputS3Inventory.Streamtags))
-		for streamtagsIndex42 := range r.InputS3Inventory.Streamtags {
-			streamtags42 = append(streamtags42, r.InputS3Inventory.Streamtags[streamtagsIndex42].ValueString())
+		streamtags41 := make([]string, 0, len(r.InputS3Inventory.Streamtags))
+		for streamtagsIndex41 := range r.InputS3Inventory.Streamtags {
+			streamtags41 = append(streamtags41, r.InputS3Inventory.Streamtags[streamtagsIndex41].ValueString())
 		}
-		connections42 := make([]shared.InputS3InventoryConnection, 0, len(r.InputS3Inventory.Connections))
-		for connectionsIndex42 := range r.InputS3Inventory.Connections {
-			pipeline85 := new(string)
-			if !r.InputS3Inventory.Connections[connectionsIndex42].Pipeline.IsUnknown() && !r.InputS3Inventory.Connections[connectionsIndex42].Pipeline.IsNull() {
-				*pipeline85 = r.InputS3Inventory.Connections[connectionsIndex42].Pipeline.ValueString()
+		connections41 := make([]shared.InputS3InventoryConnection, 0, len(r.InputS3Inventory.Connections))
+		for connectionsIndex41 := range r.InputS3Inventory.Connections {
+			pipeline83 := new(string)
+			if !r.InputS3Inventory.Connections[connectionsIndex41].Pipeline.IsUnknown() && !r.InputS3Inventory.Connections[connectionsIndex41].Pipeline.IsNull() {
+				*pipeline83 = r.InputS3Inventory.Connections[connectionsIndex41].Pipeline.ValueString()
 			} else {
-				pipeline85 = nil
+				pipeline83 = nil
 			}
-			var output43 string
-			output43 = r.InputS3Inventory.Connections[connectionsIndex42].Output.ValueString()
+			var output42 string
+			output42 = r.InputS3Inventory.Connections[connectionsIndex41].Output.ValueString()
 
-			connections42 = append(connections42, shared.InputS3InventoryConnection{
-				Pipeline: pipeline85,
-				Output:   output43,
+			connections41 = append(connections41, shared.InputS3InventoryConnection{
+				Pipeline: pipeline83,
+				Output:   output42,
 			})
 		}
-		var pq42 *shared.InputS3InventoryPq
+		var pq41 *shared.InputS3InventoryPq
 		if r.InputS3Inventory.Pq != nil {
-			mode55 := new(shared.InputS3InventoryMode)
+			mode54 := new(shared.InputS3InventoryMode)
 			if !r.InputS3Inventory.Pq.Mode.IsUnknown() && !r.InputS3Inventory.Pq.Mode.IsNull() {
-				*mode55 = shared.InputS3InventoryMode(r.InputS3Inventory.Pq.Mode.ValueString())
+				*mode54 = shared.InputS3InventoryMode(r.InputS3Inventory.Pq.Mode.ValueString())
 			} else {
-				mode55 = nil
+				mode54 = nil
 			}
-			maxBufferSize43 := new(float64)
+			maxBufferSize42 := new(float64)
 			if !r.InputS3Inventory.Pq.MaxBufferSize.IsUnknown() && !r.InputS3Inventory.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize43 = r.InputS3Inventory.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize42 = r.InputS3Inventory.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize43 = nil
+				maxBufferSize42 = nil
 			}
-			commitFrequency42 := new(float64)
+			commitFrequency41 := new(float64)
 			if !r.InputS3Inventory.Pq.CommitFrequency.IsUnknown() && !r.InputS3Inventory.Pq.CommitFrequency.IsNull() {
-				*commitFrequency42 = r.InputS3Inventory.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency41 = r.InputS3Inventory.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency42 = nil
+				commitFrequency41 = nil
 			}
-			maxFileSize42 := new(string)
+			maxFileSize41 := new(string)
 			if !r.InputS3Inventory.Pq.MaxFileSize.IsUnknown() && !r.InputS3Inventory.Pq.MaxFileSize.IsNull() {
-				*maxFileSize42 = r.InputS3Inventory.Pq.MaxFileSize.ValueString()
+				*maxFileSize41 = r.InputS3Inventory.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize42 = nil
+				maxFileSize41 = nil
 			}
-			maxSize42 := new(string)
+			maxSize41 := new(string)
 			if !r.InputS3Inventory.Pq.MaxSize.IsUnknown() && !r.InputS3Inventory.Pq.MaxSize.IsNull() {
-				*maxSize42 = r.InputS3Inventory.Pq.MaxSize.ValueString()
+				*maxSize41 = r.InputS3Inventory.Pq.MaxSize.ValueString()
 			} else {
-				maxSize42 = nil
+				maxSize41 = nil
 			}
-			path43 := new(string)
+			path42 := new(string)
 			if !r.InputS3Inventory.Pq.Path.IsUnknown() && !r.InputS3Inventory.Pq.Path.IsNull() {
-				*path43 = r.InputS3Inventory.Pq.Path.ValueString()
+				*path42 = r.InputS3Inventory.Pq.Path.ValueString()
 			} else {
-				path43 = nil
+				path42 = nil
 			}
-			compress49 := new(shared.InputS3InventoryCompression)
+			compress48 := new(shared.InputS3InventoryCompression)
 			if !r.InputS3Inventory.Pq.Compress.IsUnknown() && !r.InputS3Inventory.Pq.Compress.IsNull() {
-				*compress49 = shared.InputS3InventoryCompression(r.InputS3Inventory.Pq.Compress.ValueString())
+				*compress48 = shared.InputS3InventoryCompression(r.InputS3Inventory.Pq.Compress.ValueString())
 			} else {
-				compress49 = nil
+				compress48 = nil
 			}
-			pq42 = &shared.InputS3InventoryPq{
-				Mode:            mode55,
-				MaxBufferSize:   maxBufferSize43,
-				CommitFrequency: commitFrequency42,
-				MaxFileSize:     maxFileSize42,
-				MaxSize:         maxSize42,
-				Path:            path43,
-				Compress:        compress49,
+			pq41 = &shared.InputS3InventoryPq{
+				Mode:            mode54,
+				MaxBufferSize:   maxBufferSize42,
+				CommitFrequency: commitFrequency41,
+				MaxFileSize:     maxFileSize41,
+				MaxSize:         maxSize41,
+				Path:            path42,
+				Compress:        compress48,
 			}
 		}
 		var queueName3 string
@@ -15352,11 +14770,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			reuseConnections6 = nil
 		}
-		rejectUnauthorized32 := new(bool)
+		rejectUnauthorized31 := new(bool)
 		if !r.InputS3Inventory.RejectUnauthorized.IsUnknown() && !r.InputS3Inventory.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized32 = r.InputS3Inventory.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized31 = r.InputS3Inventory.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized32 = nil
+			rejectUnauthorized31 = nil
 		}
 		breakerRulesets10 := make([]string, 0, len(r.InputS3Inventory.BreakerRulesets))
 		for breakerRulesetsIndex10 := range r.InputS3Inventory.BreakerRulesets {
@@ -15386,11 +14804,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			numReceivers3 = nil
 		}
-		socketTimeout14 := new(float64)
+		socketTimeout13 := new(float64)
 		if !r.InputS3Inventory.SocketTimeout.IsUnknown() && !r.InputS3Inventory.SocketTimeout.IsNull() {
-			*socketTimeout14 = r.InputS3Inventory.SocketTimeout.ValueFloat64()
+			*socketTimeout13 = r.InputS3Inventory.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout14 = nil
+			socketTimeout13 = nil
 		}
 		skipOnError3 := new(bool)
 		if !r.InputS3Inventory.SkipOnError.IsUnknown() && !r.InputS3Inventory.SkipOnError.IsNull() {
@@ -15430,11 +14848,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var preprocess3 *shared.InputS3InventoryPreprocess
 		if r.InputS3Inventory.Preprocess != nil {
-			disabled78 := new(bool)
+			disabled76 := new(bool)
 			if !r.InputS3Inventory.Preprocess.Disabled.IsUnknown() && !r.InputS3Inventory.Preprocess.Disabled.IsNull() {
-				*disabled78 = r.InputS3Inventory.Preprocess.Disabled.ValueBool()
+				*disabled76 = r.InputS3Inventory.Preprocess.Disabled.ValueBool()
 			} else {
-				disabled78 = nil
+				disabled76 = nil
 			}
 			command4 := new(string)
 			if !r.InputS3Inventory.Preprocess.Command.IsUnknown() && !r.InputS3Inventory.Preprocess.Command.IsNull() {
@@ -15447,22 +14865,22 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				args3 = append(args3, r.InputS3Inventory.Preprocess.Args[argsIndex3].ValueString())
 			}
 			preprocess3 = &shared.InputS3InventoryPreprocess{
-				Disabled: disabled78,
+				Disabled: disabled76,
 				Command:  command4,
 				Args:     args3,
 			}
 		}
-		metadata46 := make([]shared.InputS3InventoryMetadatum, 0, len(r.InputS3Inventory.Metadata))
-		for metadataIndex45 := range r.InputS3Inventory.Metadata {
-			var name66 string
-			name66 = r.InputS3Inventory.Metadata[metadataIndex45].Name.ValueString()
+		metadata45 := make([]shared.InputS3InventoryMetadatum, 0, len(r.InputS3Inventory.Metadata))
+		for metadataIndex44 := range r.InputS3Inventory.Metadata {
+			var name61 string
+			name61 = r.InputS3Inventory.Metadata[metadataIndex44].Name.ValueString()
 
-			var value62 string
-			value62 = r.InputS3Inventory.Metadata[metadataIndex45].Value.ValueString()
+			var value57 string
+			value57 = r.InputS3Inventory.Metadata[metadataIndex44].Value.ValueString()
 
-			metadata46 = append(metadata46, shared.InputS3InventoryMetadatum{
-				Name:  name66,
-				Value: value62,
+			metadata45 = append(metadata45, shared.InputS3InventoryMetadatum{
+				Name:  name61,
+				Value: value57,
 			})
 		}
 		parquetChunkSizeMb2 := new(float64)
@@ -15520,11 +14938,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			validateInventoryFiles = nil
 		}
-		description51 := new(string)
+		description50 := new(string)
 		if !r.InputS3Inventory.Description.IsUnknown() && !r.InputS3Inventory.Description.IsNull() {
-			*description51 = r.InputS3Inventory.Description.ValueString()
+			*description50 = r.InputS3Inventory.Description.ValueString()
 		} else {
-			description51 = nil
+			description50 = nil
 		}
 		awsAPIKey4 := new(string)
 		if !r.InputS3Inventory.AwsAPIKey.IsUnknown() && !r.InputS3Inventory.AwsAPIKey.IsNull() {
@@ -15557,16 +14975,16 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			processedTagValue2 = nil
 		}
 		inputS3Inventory = &shared.InputS3Inventory{
-			ID:                          id42,
-			Type:                        typeVar46,
-			Disabled:                    disabled77,
-			Pipeline:                    pipeline84,
-			SendToRoutes:                sendToRoutes42,
-			Environment:                 environment42,
-			PqEnabled:                   pqEnabled42,
-			Streamtags:                  streamtags42,
-			Connections:                 connections42,
-			Pq:                          pq42,
+			ID:                          id41,
+			Type:                        typeVar45,
+			Disabled:                    disabled75,
+			Pipeline:                    pipeline82,
+			SendToRoutes:                sendToRoutes41,
+			Environment:                 environment41,
+			PqEnabled:                   pqEnabled41,
+			Streamtags:                  streamtags41,
+			Connections:                 connections41,
+			Pq:                          pq41,
 			QueueName:                   queueName3,
 			FileFilter:                  fileFilter3,
 			AwsAccountID:                awsAccountId2,
@@ -15576,13 +14994,13 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Endpoint:                    endpoint7,
 			SignatureVersion:            signatureVersion6,
 			ReuseConnections:            reuseConnections6,
-			RejectUnauthorized:          rejectUnauthorized32,
+			RejectUnauthorized:          rejectUnauthorized31,
 			BreakerRulesets:             breakerRulesets10,
 			StaleChannelFlushMs:         staleChannelFlushMs10,
 			MaxMessages:                 maxMessages3,
 			VisibilityTimeout:           visibilityTimeout3,
 			NumReceivers:                numReceivers3,
-			SocketTimeout:               socketTimeout14,
+			SocketTimeout:               socketTimeout13,
 			SkipOnError:                 skipOnError3,
 			EnableAssumeRole:            enableAssumeRole6,
 			AssumeRoleArn:               assumeRoleArn6,
@@ -15590,7 +15008,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			DurationSeconds:             durationSeconds6,
 			EnableSQSAssumeRole:         enableSQSAssumeRole2,
 			Preprocess:                  preprocess3,
-			Metadata:                    metadata46,
+			Metadata:                    metadata45,
 			ParquetChunkSizeMB:          parquetChunkSizeMb2,
 			ParquetChunkDownloadTimeout: parquetChunkDownloadTimeout2,
 			Checkpointing:               checkpointing2,
@@ -15598,7 +15016,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			ChecksumSuffix:              checksumSuffix,
 			MaxManifestSizeKB:           maxManifestSizeKB,
 			ValidateInventoryFiles:      validateInventoryFiles,
-			Description:                 description51,
+			Description:                 description50,
 			AwsAPIKey:                   awsAPIKey4,
 			AwsSecret:                   awsSecret4,
 			TagAfterProcessing:          tagAfterProcessing2,
@@ -15613,133 +15031,133 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputSnmp *shared.InputSnmp
 	if r.InputSnmp != nil {
-		id43 := new(string)
+		id42 := new(string)
 		if !r.InputSnmp.ID.IsUnknown() && !r.InputSnmp.ID.IsNull() {
-			*id43 = r.InputSnmp.ID.ValueString()
+			*id42 = r.InputSnmp.ID.ValueString()
 		} else {
-			id43 = nil
+			id42 = nil
 		}
-		typeVar47 := new(shared.InputSnmpType)
+		typeVar46 := new(shared.InputSnmpType)
 		if !r.InputSnmp.Type.IsUnknown() && !r.InputSnmp.Type.IsNull() {
-			*typeVar47 = shared.InputSnmpType(r.InputSnmp.Type.ValueString())
+			*typeVar46 = shared.InputSnmpType(r.InputSnmp.Type.ValueString())
 		} else {
-			typeVar47 = nil
+			typeVar46 = nil
 		}
-		disabled79 := new(bool)
+		disabled77 := new(bool)
 		if !r.InputSnmp.Disabled.IsUnknown() && !r.InputSnmp.Disabled.IsNull() {
-			*disabled79 = r.InputSnmp.Disabled.ValueBool()
+			*disabled77 = r.InputSnmp.Disabled.ValueBool()
 		} else {
-			disabled79 = nil
+			disabled77 = nil
 		}
-		pipeline86 := new(string)
+		pipeline84 := new(string)
 		if !r.InputSnmp.Pipeline.IsUnknown() && !r.InputSnmp.Pipeline.IsNull() {
-			*pipeline86 = r.InputSnmp.Pipeline.ValueString()
+			*pipeline84 = r.InputSnmp.Pipeline.ValueString()
 		} else {
-			pipeline86 = nil
+			pipeline84 = nil
 		}
-		sendToRoutes43 := new(bool)
+		sendToRoutes42 := new(bool)
 		if !r.InputSnmp.SendToRoutes.IsUnknown() && !r.InputSnmp.SendToRoutes.IsNull() {
-			*sendToRoutes43 = r.InputSnmp.SendToRoutes.ValueBool()
+			*sendToRoutes42 = r.InputSnmp.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes43 = nil
+			sendToRoutes42 = nil
 		}
-		environment43 := new(string)
+		environment42 := new(string)
 		if !r.InputSnmp.Environment.IsUnknown() && !r.InputSnmp.Environment.IsNull() {
-			*environment43 = r.InputSnmp.Environment.ValueString()
+			*environment42 = r.InputSnmp.Environment.ValueString()
 		} else {
-			environment43 = nil
+			environment42 = nil
 		}
-		pqEnabled43 := new(bool)
+		pqEnabled42 := new(bool)
 		if !r.InputSnmp.PqEnabled.IsUnknown() && !r.InputSnmp.PqEnabled.IsNull() {
-			*pqEnabled43 = r.InputSnmp.PqEnabled.ValueBool()
+			*pqEnabled42 = r.InputSnmp.PqEnabled.ValueBool()
 		} else {
-			pqEnabled43 = nil
+			pqEnabled42 = nil
 		}
-		streamtags43 := make([]string, 0, len(r.InputSnmp.Streamtags))
-		for streamtagsIndex43 := range r.InputSnmp.Streamtags {
-			streamtags43 = append(streamtags43, r.InputSnmp.Streamtags[streamtagsIndex43].ValueString())
+		streamtags42 := make([]string, 0, len(r.InputSnmp.Streamtags))
+		for streamtagsIndex42 := range r.InputSnmp.Streamtags {
+			streamtags42 = append(streamtags42, r.InputSnmp.Streamtags[streamtagsIndex42].ValueString())
 		}
-		connections43 := make([]shared.InputSnmpConnection, 0, len(r.InputSnmp.Connections))
-		for connectionsIndex43 := range r.InputSnmp.Connections {
-			pipeline87 := new(string)
-			if !r.InputSnmp.Connections[connectionsIndex43].Pipeline.IsUnknown() && !r.InputSnmp.Connections[connectionsIndex43].Pipeline.IsNull() {
-				*pipeline87 = r.InputSnmp.Connections[connectionsIndex43].Pipeline.ValueString()
+		connections42 := make([]shared.InputSnmpConnection, 0, len(r.InputSnmp.Connections))
+		for connectionsIndex42 := range r.InputSnmp.Connections {
+			pipeline85 := new(string)
+			if !r.InputSnmp.Connections[connectionsIndex42].Pipeline.IsUnknown() && !r.InputSnmp.Connections[connectionsIndex42].Pipeline.IsNull() {
+				*pipeline85 = r.InputSnmp.Connections[connectionsIndex42].Pipeline.ValueString()
 			} else {
-				pipeline87 = nil
+				pipeline85 = nil
 			}
-			var output44 string
-			output44 = r.InputSnmp.Connections[connectionsIndex43].Output.ValueString()
+			var output43 string
+			output43 = r.InputSnmp.Connections[connectionsIndex42].Output.ValueString()
 
-			connections43 = append(connections43, shared.InputSnmpConnection{
-				Pipeline: pipeline87,
-				Output:   output44,
+			connections42 = append(connections42, shared.InputSnmpConnection{
+				Pipeline: pipeline85,
+				Output:   output43,
 			})
 		}
-		var pq43 *shared.InputSnmpPq
+		var pq42 *shared.InputSnmpPq
 		if r.InputSnmp.Pq != nil {
-			mode56 := new(shared.InputSnmpMode)
+			mode55 := new(shared.InputSnmpMode)
 			if !r.InputSnmp.Pq.Mode.IsUnknown() && !r.InputSnmp.Pq.Mode.IsNull() {
-				*mode56 = shared.InputSnmpMode(r.InputSnmp.Pq.Mode.ValueString())
+				*mode55 = shared.InputSnmpMode(r.InputSnmp.Pq.Mode.ValueString())
 			} else {
-				mode56 = nil
+				mode55 = nil
 			}
-			maxBufferSize44 := new(float64)
+			maxBufferSize43 := new(float64)
 			if !r.InputSnmp.Pq.MaxBufferSize.IsUnknown() && !r.InputSnmp.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize44 = r.InputSnmp.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize43 = r.InputSnmp.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize44 = nil
+				maxBufferSize43 = nil
 			}
-			commitFrequency43 := new(float64)
+			commitFrequency42 := new(float64)
 			if !r.InputSnmp.Pq.CommitFrequency.IsUnknown() && !r.InputSnmp.Pq.CommitFrequency.IsNull() {
-				*commitFrequency43 = r.InputSnmp.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency42 = r.InputSnmp.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency43 = nil
+				commitFrequency42 = nil
 			}
-			maxFileSize43 := new(string)
+			maxFileSize42 := new(string)
 			if !r.InputSnmp.Pq.MaxFileSize.IsUnknown() && !r.InputSnmp.Pq.MaxFileSize.IsNull() {
-				*maxFileSize43 = r.InputSnmp.Pq.MaxFileSize.ValueString()
+				*maxFileSize42 = r.InputSnmp.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize43 = nil
+				maxFileSize42 = nil
 			}
-			maxSize43 := new(string)
+			maxSize42 := new(string)
 			if !r.InputSnmp.Pq.MaxSize.IsUnknown() && !r.InputSnmp.Pq.MaxSize.IsNull() {
-				*maxSize43 = r.InputSnmp.Pq.MaxSize.ValueString()
+				*maxSize42 = r.InputSnmp.Pq.MaxSize.ValueString()
 			} else {
-				maxSize43 = nil
+				maxSize42 = nil
 			}
-			path44 := new(string)
+			path43 := new(string)
 			if !r.InputSnmp.Pq.Path.IsUnknown() && !r.InputSnmp.Pq.Path.IsNull() {
-				*path44 = r.InputSnmp.Pq.Path.ValueString()
+				*path43 = r.InputSnmp.Pq.Path.ValueString()
 			} else {
-				path44 = nil
+				path43 = nil
 			}
-			compress50 := new(shared.InputSnmpCompression)
+			compress49 := new(shared.InputSnmpCompression)
 			if !r.InputSnmp.Pq.Compress.IsUnknown() && !r.InputSnmp.Pq.Compress.IsNull() {
-				*compress50 = shared.InputSnmpCompression(r.InputSnmp.Pq.Compress.ValueString())
+				*compress49 = shared.InputSnmpCompression(r.InputSnmp.Pq.Compress.ValueString())
 			} else {
-				compress50 = nil
+				compress49 = nil
 			}
-			pq43 = &shared.InputSnmpPq{
-				Mode:            mode56,
-				MaxBufferSize:   maxBufferSize44,
-				CommitFrequency: commitFrequency43,
-				MaxFileSize:     maxFileSize43,
-				MaxSize:         maxSize43,
-				Path:            path44,
-				Compress:        compress50,
+			pq42 = &shared.InputSnmpPq{
+				Mode:            mode55,
+				MaxBufferSize:   maxBufferSize43,
+				CommitFrequency: commitFrequency42,
+				MaxFileSize:     maxFileSize42,
+				MaxSize:         maxSize42,
+				Path:            path43,
+				Compress:        compress49,
 			}
 		}
-		host19 := new(string)
+		host18 := new(string)
 		if !r.InputSnmp.Host.IsUnknown() && !r.InputSnmp.Host.IsNull() {
-			*host19 = r.InputSnmp.Host.ValueString()
+			*host18 = r.InputSnmp.Host.ValueString()
 		} else {
-			host19 = nil
+			host18 = nil
 		}
-		port16 := new(float64)
+		port15 := new(float64)
 		if !r.InputSnmp.Port.IsUnknown() && !r.InputSnmp.Port.IsNull() {
-			*port16 = r.InputSnmp.Port.ValueFloat64()
+			*port15 = r.InputSnmp.Port.ValueFloat64()
 		} else {
-			port16 = nil
+			port15 = nil
 		}
 		var snmpV3Auth *shared.SNMPv3Authentication
 		if r.InputSnmp.SnmpV3Auth != nil {
@@ -15757,8 +15175,8 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			}
 			v3Users := make([]shared.V3User, 0, len(r.InputSnmp.SnmpV3Auth.V3Users))
 			for v3UsersIndex := range r.InputSnmp.SnmpV3Auth.V3Users {
-				var name67 string
-				name67 = r.InputSnmp.SnmpV3Auth.V3Users[v3UsersIndex].Name.ValueString()
+				var name62 string
+				name62 = r.InputSnmp.SnmpV3Auth.V3Users[v3UsersIndex].Name.ValueString()
 
 				authProtocol := new(shared.AuthenticationProtocol)
 				if !r.InputSnmp.SnmpV3Auth.V3Users[v3UsersIndex].AuthProtocol.IsUnknown() && !r.InputSnmp.SnmpV3Auth.V3Users[v3UsersIndex].AuthProtocol.IsNull() {
@@ -15775,7 +15193,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 					_ = json.Unmarshal([]byte(r.InputSnmp.SnmpV3Auth.V3Users[v3UsersIndex].PrivProtocol.ValueString()), &privProtocol)
 				}
 				v3Users = append(v3Users, shared.V3User{
-					Name:         name67,
+					Name:         name62,
 					AuthProtocol: authProtocol,
 					AuthKey:      authKey,
 					PrivProtocol: privProtocol,
@@ -15787,11 +15205,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				V3Users:            v3Users,
 			}
 		}
-		maxBufferSize45 := new(float64)
+		maxBufferSize44 := new(float64)
 		if !r.InputSnmp.MaxBufferSize.IsUnknown() && !r.InputSnmp.MaxBufferSize.IsNull() {
-			*maxBufferSize45 = r.InputSnmp.MaxBufferSize.ValueFloat64()
+			*maxBufferSize44 = r.InputSnmp.MaxBufferSize.ValueFloat64()
 		} else {
-			maxBufferSize45 = nil
+			maxBufferSize44 = nil
 		}
 		ipWhitelistRegex3 := new(string)
 		if !r.InputSnmp.IPWhitelistRegex.IsUnknown() && !r.InputSnmp.IPWhitelistRegex.IsNull() {
@@ -15799,17 +15217,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			ipWhitelistRegex3 = nil
 		}
-		metadata47 := make([]shared.InputSnmpMetadatum, 0, len(r.InputSnmp.Metadata))
-		for metadataIndex46 := range r.InputSnmp.Metadata {
-			var name68 string
-			name68 = r.InputSnmp.Metadata[metadataIndex46].Name.ValueString()
+		metadata46 := make([]shared.InputSnmpMetadatum, 0, len(r.InputSnmp.Metadata))
+		for metadataIndex45 := range r.InputSnmp.Metadata {
+			var name63 string
+			name63 = r.InputSnmp.Metadata[metadataIndex45].Name.ValueString()
 
-			var value63 string
-			value63 = r.InputSnmp.Metadata[metadataIndex46].Value.ValueString()
+			var value58 string
+			value58 = r.InputSnmp.Metadata[metadataIndex45].Value.ValueString()
 
-			metadata47 = append(metadata47, shared.InputSnmpMetadatum{
-				Name:  name68,
-				Value: value63,
+			metadata46 = append(metadata46, shared.InputSnmpMetadatum{
+				Name:  name63,
+				Value: value58,
 			})
 		}
 		udpSocketRxBufSize1 := new(float64)
@@ -15830,33 +15248,33 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			bestEffortParsing = nil
 		}
-		description52 := new(string)
+		description51 := new(string)
 		if !r.InputSnmp.Description.IsUnknown() && !r.InputSnmp.Description.IsNull() {
-			*description52 = r.InputSnmp.Description.ValueString()
+			*description51 = r.InputSnmp.Description.ValueString()
 		} else {
-			description52 = nil
+			description51 = nil
 		}
 		inputSnmp = &shared.InputSnmp{
-			ID:                 id43,
-			Type:               typeVar47,
-			Disabled:           disabled79,
-			Pipeline:           pipeline86,
-			SendToRoutes:       sendToRoutes43,
-			Environment:        environment43,
-			PqEnabled:          pqEnabled43,
-			Streamtags:         streamtags43,
-			Connections:        connections43,
-			Pq:                 pq43,
-			Host:               host19,
-			Port:               port16,
+			ID:                 id42,
+			Type:               typeVar46,
+			Disabled:           disabled77,
+			Pipeline:           pipeline84,
+			SendToRoutes:       sendToRoutes42,
+			Environment:        environment42,
+			PqEnabled:          pqEnabled42,
+			Streamtags:         streamtags42,
+			Connections:        connections42,
+			Pq:                 pq42,
+			Host:               host18,
+			Port:               port15,
 			SnmpV3Auth:         snmpV3Auth,
-			MaxBufferSize:      maxBufferSize45,
+			MaxBufferSize:      maxBufferSize44,
 			IPWhitelistRegex:   ipWhitelistRegex3,
-			Metadata:           metadata47,
+			Metadata:           metadata46,
 			UDPSocketRxBufSize: udpSocketRxBufSize1,
 			VarbindsWithTypes:  varbindsWithTypes,
 			BestEffortParsing:  bestEffortParsing,
-			Description:        description52,
+			Description:        description51,
 		}
 	}
 	if inputSnmp != nil {
@@ -15866,271 +15284,271 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputOpenTelemetry *shared.InputOpenTelemetry
 	if r.InputOpenTelemetry != nil {
-		id44 := new(string)
+		id43 := new(string)
 		if !r.InputOpenTelemetry.ID.IsUnknown() && !r.InputOpenTelemetry.ID.IsNull() {
-			*id44 = r.InputOpenTelemetry.ID.ValueString()
+			*id43 = r.InputOpenTelemetry.ID.ValueString()
 		} else {
-			id44 = nil
+			id43 = nil
 		}
-		typeVar48 := new(shared.InputOpenTelemetryType)
+		typeVar47 := new(shared.InputOpenTelemetryType)
 		if !r.InputOpenTelemetry.Type.IsUnknown() && !r.InputOpenTelemetry.Type.IsNull() {
-			*typeVar48 = shared.InputOpenTelemetryType(r.InputOpenTelemetry.Type.ValueString())
+			*typeVar47 = shared.InputOpenTelemetryType(r.InputOpenTelemetry.Type.ValueString())
 		} else {
-			typeVar48 = nil
+			typeVar47 = nil
 		}
-		disabled80 := new(bool)
+		disabled78 := new(bool)
 		if !r.InputOpenTelemetry.Disabled.IsUnknown() && !r.InputOpenTelemetry.Disabled.IsNull() {
-			*disabled80 = r.InputOpenTelemetry.Disabled.ValueBool()
+			*disabled78 = r.InputOpenTelemetry.Disabled.ValueBool()
 		} else {
-			disabled80 = nil
+			disabled78 = nil
 		}
-		pipeline88 := new(string)
+		pipeline86 := new(string)
 		if !r.InputOpenTelemetry.Pipeline.IsUnknown() && !r.InputOpenTelemetry.Pipeline.IsNull() {
-			*pipeline88 = r.InputOpenTelemetry.Pipeline.ValueString()
+			*pipeline86 = r.InputOpenTelemetry.Pipeline.ValueString()
 		} else {
-			pipeline88 = nil
+			pipeline86 = nil
 		}
-		sendToRoutes44 := new(bool)
+		sendToRoutes43 := new(bool)
 		if !r.InputOpenTelemetry.SendToRoutes.IsUnknown() && !r.InputOpenTelemetry.SendToRoutes.IsNull() {
-			*sendToRoutes44 = r.InputOpenTelemetry.SendToRoutes.ValueBool()
+			*sendToRoutes43 = r.InputOpenTelemetry.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes44 = nil
+			sendToRoutes43 = nil
 		}
-		environment44 := new(string)
+		environment43 := new(string)
 		if !r.InputOpenTelemetry.Environment.IsUnknown() && !r.InputOpenTelemetry.Environment.IsNull() {
-			*environment44 = r.InputOpenTelemetry.Environment.ValueString()
+			*environment43 = r.InputOpenTelemetry.Environment.ValueString()
 		} else {
-			environment44 = nil
+			environment43 = nil
 		}
-		pqEnabled44 := new(bool)
+		pqEnabled43 := new(bool)
 		if !r.InputOpenTelemetry.PqEnabled.IsUnknown() && !r.InputOpenTelemetry.PqEnabled.IsNull() {
-			*pqEnabled44 = r.InputOpenTelemetry.PqEnabled.ValueBool()
+			*pqEnabled43 = r.InputOpenTelemetry.PqEnabled.ValueBool()
 		} else {
-			pqEnabled44 = nil
+			pqEnabled43 = nil
 		}
-		streamtags44 := make([]string, 0, len(r.InputOpenTelemetry.Streamtags))
-		for streamtagsIndex44 := range r.InputOpenTelemetry.Streamtags {
-			streamtags44 = append(streamtags44, r.InputOpenTelemetry.Streamtags[streamtagsIndex44].ValueString())
+		streamtags43 := make([]string, 0, len(r.InputOpenTelemetry.Streamtags))
+		for streamtagsIndex43 := range r.InputOpenTelemetry.Streamtags {
+			streamtags43 = append(streamtags43, r.InputOpenTelemetry.Streamtags[streamtagsIndex43].ValueString())
 		}
-		connections44 := make([]shared.InputOpenTelemetryConnection, 0, len(r.InputOpenTelemetry.Connections))
-		for connectionsIndex44 := range r.InputOpenTelemetry.Connections {
-			pipeline89 := new(string)
-			if !r.InputOpenTelemetry.Connections[connectionsIndex44].Pipeline.IsUnknown() && !r.InputOpenTelemetry.Connections[connectionsIndex44].Pipeline.IsNull() {
-				*pipeline89 = r.InputOpenTelemetry.Connections[connectionsIndex44].Pipeline.ValueString()
+		connections43 := make([]shared.InputOpenTelemetryConnection, 0, len(r.InputOpenTelemetry.Connections))
+		for connectionsIndex43 := range r.InputOpenTelemetry.Connections {
+			pipeline87 := new(string)
+			if !r.InputOpenTelemetry.Connections[connectionsIndex43].Pipeline.IsUnknown() && !r.InputOpenTelemetry.Connections[connectionsIndex43].Pipeline.IsNull() {
+				*pipeline87 = r.InputOpenTelemetry.Connections[connectionsIndex43].Pipeline.ValueString()
 			} else {
-				pipeline89 = nil
+				pipeline87 = nil
 			}
-			var output45 string
-			output45 = r.InputOpenTelemetry.Connections[connectionsIndex44].Output.ValueString()
+			var output44 string
+			output44 = r.InputOpenTelemetry.Connections[connectionsIndex43].Output.ValueString()
 
-			connections44 = append(connections44, shared.InputOpenTelemetryConnection{
-				Pipeline: pipeline89,
-				Output:   output45,
+			connections43 = append(connections43, shared.InputOpenTelemetryConnection{
+				Pipeline: pipeline87,
+				Output:   output44,
 			})
 		}
-		var pq44 *shared.InputOpenTelemetryPq
+		var pq43 *shared.InputOpenTelemetryPq
 		if r.InputOpenTelemetry.Pq != nil {
-			mode57 := new(shared.InputOpenTelemetryMode)
+			mode56 := new(shared.InputOpenTelemetryMode)
 			if !r.InputOpenTelemetry.Pq.Mode.IsUnknown() && !r.InputOpenTelemetry.Pq.Mode.IsNull() {
-				*mode57 = shared.InputOpenTelemetryMode(r.InputOpenTelemetry.Pq.Mode.ValueString())
+				*mode56 = shared.InputOpenTelemetryMode(r.InputOpenTelemetry.Pq.Mode.ValueString())
 			} else {
-				mode57 = nil
+				mode56 = nil
 			}
-			maxBufferSize46 := new(float64)
+			maxBufferSize45 := new(float64)
 			if !r.InputOpenTelemetry.Pq.MaxBufferSize.IsUnknown() && !r.InputOpenTelemetry.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize46 = r.InputOpenTelemetry.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize45 = r.InputOpenTelemetry.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize46 = nil
+				maxBufferSize45 = nil
 			}
-			commitFrequency44 := new(float64)
+			commitFrequency43 := new(float64)
 			if !r.InputOpenTelemetry.Pq.CommitFrequency.IsUnknown() && !r.InputOpenTelemetry.Pq.CommitFrequency.IsNull() {
-				*commitFrequency44 = r.InputOpenTelemetry.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency43 = r.InputOpenTelemetry.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency44 = nil
+				commitFrequency43 = nil
 			}
-			maxFileSize44 := new(string)
+			maxFileSize43 := new(string)
 			if !r.InputOpenTelemetry.Pq.MaxFileSize.IsUnknown() && !r.InputOpenTelemetry.Pq.MaxFileSize.IsNull() {
-				*maxFileSize44 = r.InputOpenTelemetry.Pq.MaxFileSize.ValueString()
+				*maxFileSize43 = r.InputOpenTelemetry.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize44 = nil
+				maxFileSize43 = nil
 			}
-			maxSize44 := new(string)
+			maxSize43 := new(string)
 			if !r.InputOpenTelemetry.Pq.MaxSize.IsUnknown() && !r.InputOpenTelemetry.Pq.MaxSize.IsNull() {
-				*maxSize44 = r.InputOpenTelemetry.Pq.MaxSize.ValueString()
+				*maxSize43 = r.InputOpenTelemetry.Pq.MaxSize.ValueString()
 			} else {
-				maxSize44 = nil
+				maxSize43 = nil
 			}
-			path45 := new(string)
+			path44 := new(string)
 			if !r.InputOpenTelemetry.Pq.Path.IsUnknown() && !r.InputOpenTelemetry.Pq.Path.IsNull() {
-				*path45 = r.InputOpenTelemetry.Pq.Path.ValueString()
+				*path44 = r.InputOpenTelemetry.Pq.Path.ValueString()
 			} else {
-				path45 = nil
+				path44 = nil
 			}
-			compress51 := new(shared.InputOpenTelemetryCompression)
+			compress50 := new(shared.InputOpenTelemetryCompression)
 			if !r.InputOpenTelemetry.Pq.Compress.IsUnknown() && !r.InputOpenTelemetry.Pq.Compress.IsNull() {
-				*compress51 = shared.InputOpenTelemetryCompression(r.InputOpenTelemetry.Pq.Compress.ValueString())
+				*compress50 = shared.InputOpenTelemetryCompression(r.InputOpenTelemetry.Pq.Compress.ValueString())
 			} else {
-				compress51 = nil
+				compress50 = nil
 			}
-			pq44 = &shared.InputOpenTelemetryPq{
-				Mode:            mode57,
-				MaxBufferSize:   maxBufferSize46,
-				CommitFrequency: commitFrequency44,
-				MaxFileSize:     maxFileSize44,
-				MaxSize:         maxSize44,
-				Path:            path45,
-				Compress:        compress51,
+			pq43 = &shared.InputOpenTelemetryPq{
+				Mode:            mode56,
+				MaxBufferSize:   maxBufferSize45,
+				CommitFrequency: commitFrequency43,
+				MaxFileSize:     maxFileSize43,
+				MaxSize:         maxSize43,
+				Path:            path44,
+				Compress:        compress50,
 			}
 		}
-		host20 := new(string)
+		host19 := new(string)
 		if !r.InputOpenTelemetry.Host.IsUnknown() && !r.InputOpenTelemetry.Host.IsNull() {
-			*host20 = r.InputOpenTelemetry.Host.ValueString()
+			*host19 = r.InputOpenTelemetry.Host.ValueString()
 		} else {
-			host20 = nil
+			host19 = nil
 		}
-		port17 := new(float64)
+		port16 := new(float64)
 		if !r.InputOpenTelemetry.Port.IsUnknown() && !r.InputOpenTelemetry.Port.IsNull() {
-			*port17 = r.InputOpenTelemetry.Port.ValueFloat64()
+			*port16 = r.InputOpenTelemetry.Port.ValueFloat64()
 		} else {
-			port17 = nil
+			port16 = nil
 		}
-		var tls23 *shared.InputOpenTelemetryTLSSettingsServerSide
+		var tls22 *shared.InputOpenTelemetryTLSSettingsServerSide
 		if r.InputOpenTelemetry.TLS != nil {
-			disabled81 := new(bool)
+			disabled79 := new(bool)
 			if !r.InputOpenTelemetry.TLS.Disabled.IsUnknown() && !r.InputOpenTelemetry.TLS.Disabled.IsNull() {
-				*disabled81 = r.InputOpenTelemetry.TLS.Disabled.ValueBool()
+				*disabled79 = r.InputOpenTelemetry.TLS.Disabled.ValueBool()
 			} else {
-				disabled81 = nil
+				disabled79 = nil
 			}
-			certificateName24 := new(string)
+			certificateName23 := new(string)
 			if !r.InputOpenTelemetry.TLS.CertificateName.IsUnknown() && !r.InputOpenTelemetry.TLS.CertificateName.IsNull() {
-				*certificateName24 = r.InputOpenTelemetry.TLS.CertificateName.ValueString()
+				*certificateName23 = r.InputOpenTelemetry.TLS.CertificateName.ValueString()
 			} else {
-				certificateName24 = nil
+				certificateName23 = nil
 			}
-			privKeyPath23 := new(string)
+			privKeyPath22 := new(string)
 			if !r.InputOpenTelemetry.TLS.PrivKeyPath.IsUnknown() && !r.InputOpenTelemetry.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath23 = r.InputOpenTelemetry.TLS.PrivKeyPath.ValueString()
+				*privKeyPath22 = r.InputOpenTelemetry.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath23 = nil
+				privKeyPath22 = nil
 			}
-			passphrase23 := new(string)
+			passphrase22 := new(string)
 			if !r.InputOpenTelemetry.TLS.Passphrase.IsUnknown() && !r.InputOpenTelemetry.TLS.Passphrase.IsNull() {
-				*passphrase23 = r.InputOpenTelemetry.TLS.Passphrase.ValueString()
+				*passphrase22 = r.InputOpenTelemetry.TLS.Passphrase.ValueString()
 			} else {
-				passphrase23 = nil
+				passphrase22 = nil
 			}
-			certPath23 := new(string)
+			certPath22 := new(string)
 			if !r.InputOpenTelemetry.TLS.CertPath.IsUnknown() && !r.InputOpenTelemetry.TLS.CertPath.IsNull() {
-				*certPath23 = r.InputOpenTelemetry.TLS.CertPath.ValueString()
+				*certPath22 = r.InputOpenTelemetry.TLS.CertPath.ValueString()
 			} else {
-				certPath23 = nil
+				certPath22 = nil
 			}
-			caPath22 := new(string)
+			caPath21 := new(string)
 			if !r.InputOpenTelemetry.TLS.CaPath.IsUnknown() && !r.InputOpenTelemetry.TLS.CaPath.IsNull() {
-				*caPath22 = r.InputOpenTelemetry.TLS.CaPath.ValueString()
+				*caPath21 = r.InputOpenTelemetry.TLS.CaPath.ValueString()
 			} else {
-				caPath22 = nil
+				caPath21 = nil
 			}
-			requestCert16 := new(bool)
+			requestCert15 := new(bool)
 			if !r.InputOpenTelemetry.TLS.RequestCert.IsUnknown() && !r.InputOpenTelemetry.TLS.RequestCert.IsNull() {
-				*requestCert16 = r.InputOpenTelemetry.TLS.RequestCert.ValueBool()
+				*requestCert15 = r.InputOpenTelemetry.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert16 = nil
+				requestCert15 = nil
 			}
-			var rejectUnauthorized33 interface{}
+			var rejectUnauthorized32 interface{}
 			if !r.InputOpenTelemetry.TLS.RejectUnauthorized.IsUnknown() && !r.InputOpenTelemetry.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputOpenTelemetry.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized33)
+				_ = json.Unmarshal([]byte(r.InputOpenTelemetry.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized32)
 			}
-			var commonNameRegex16 interface{}
+			var commonNameRegex15 interface{}
 			if !r.InputOpenTelemetry.TLS.CommonNameRegex.IsUnknown() && !r.InputOpenTelemetry.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputOpenTelemetry.TLS.CommonNameRegex.ValueString()), &commonNameRegex16)
+				_ = json.Unmarshal([]byte(r.InputOpenTelemetry.TLS.CommonNameRegex.ValueString()), &commonNameRegex15)
 			}
-			minVersion22 := new(shared.InputOpenTelemetryMinimumTLSVersion)
+			minVersion21 := new(shared.InputOpenTelemetryMinimumTLSVersion)
 			if !r.InputOpenTelemetry.TLS.MinVersion.IsUnknown() && !r.InputOpenTelemetry.TLS.MinVersion.IsNull() {
-				*minVersion22 = shared.InputOpenTelemetryMinimumTLSVersion(r.InputOpenTelemetry.TLS.MinVersion.ValueString())
+				*minVersion21 = shared.InputOpenTelemetryMinimumTLSVersion(r.InputOpenTelemetry.TLS.MinVersion.ValueString())
 			} else {
-				minVersion22 = nil
+				minVersion21 = nil
 			}
-			maxVersion22 := new(shared.InputOpenTelemetryMaximumTLSVersion)
+			maxVersion21 := new(shared.InputOpenTelemetryMaximumTLSVersion)
 			if !r.InputOpenTelemetry.TLS.MaxVersion.IsUnknown() && !r.InputOpenTelemetry.TLS.MaxVersion.IsNull() {
-				*maxVersion22 = shared.InputOpenTelemetryMaximumTLSVersion(r.InputOpenTelemetry.TLS.MaxVersion.ValueString())
+				*maxVersion21 = shared.InputOpenTelemetryMaximumTLSVersion(r.InputOpenTelemetry.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion22 = nil
+				maxVersion21 = nil
 			}
-			tls23 = &shared.InputOpenTelemetryTLSSettingsServerSide{
-				Disabled:           disabled81,
-				CertificateName:    certificateName24,
-				PrivKeyPath:        privKeyPath23,
-				Passphrase:         passphrase23,
-				CertPath:           certPath23,
-				CaPath:             caPath22,
-				RequestCert:        requestCert16,
-				RejectUnauthorized: rejectUnauthorized33,
-				CommonNameRegex:    commonNameRegex16,
-				MinVersion:         minVersion22,
-				MaxVersion:         maxVersion22,
+			tls22 = &shared.InputOpenTelemetryTLSSettingsServerSide{
+				Disabled:           disabled79,
+				CertificateName:    certificateName23,
+				PrivKeyPath:        privKeyPath22,
+				Passphrase:         passphrase22,
+				CertPath:           certPath22,
+				CaPath:             caPath21,
+				RequestCert:        requestCert15,
+				RejectUnauthorized: rejectUnauthorized32,
+				CommonNameRegex:    commonNameRegex15,
+				MinVersion:         minVersion21,
+				MaxVersion:         maxVersion21,
 			}
 		}
-		maxActiveReq12 := new(float64)
+		maxActiveReq11 := new(float64)
 		if !r.InputOpenTelemetry.MaxActiveReq.IsUnknown() && !r.InputOpenTelemetry.MaxActiveReq.IsNull() {
-			*maxActiveReq12 = r.InputOpenTelemetry.MaxActiveReq.ValueFloat64()
+			*maxActiveReq11 = r.InputOpenTelemetry.MaxActiveReq.ValueFloat64()
 		} else {
-			maxActiveReq12 = nil
+			maxActiveReq11 = nil
 		}
-		maxRequestsPerSocket12 := new(int64)
+		maxRequestsPerSocket11 := new(int64)
 		if !r.InputOpenTelemetry.MaxRequestsPerSocket.IsUnknown() && !r.InputOpenTelemetry.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket12 = r.InputOpenTelemetry.MaxRequestsPerSocket.ValueInt64()
+			*maxRequestsPerSocket11 = r.InputOpenTelemetry.MaxRequestsPerSocket.ValueInt64()
 		} else {
-			maxRequestsPerSocket12 = nil
+			maxRequestsPerSocket11 = nil
 		}
-		var enableProxyHeader16 interface{}
+		var enableProxyHeader15 interface{}
 		if !r.InputOpenTelemetry.EnableProxyHeader.IsUnknown() && !r.InputOpenTelemetry.EnableProxyHeader.IsNull() {
-			_ = json.Unmarshal([]byte(r.InputOpenTelemetry.EnableProxyHeader.ValueString()), &enableProxyHeader16)
+			_ = json.Unmarshal([]byte(r.InputOpenTelemetry.EnableProxyHeader.ValueString()), &enableProxyHeader15)
 		}
-		var captureHeaders12 interface{}
+		var captureHeaders11 interface{}
 		if !r.InputOpenTelemetry.CaptureHeaders.IsUnknown() && !r.InputOpenTelemetry.CaptureHeaders.IsNull() {
-			_ = json.Unmarshal([]byte(r.InputOpenTelemetry.CaptureHeaders.ValueString()), &captureHeaders12)
+			_ = json.Unmarshal([]byte(r.InputOpenTelemetry.CaptureHeaders.ValueString()), &captureHeaders11)
 		}
-		var activityLogSampleRate12 interface{}
+		var activityLogSampleRate11 interface{}
 		if !r.InputOpenTelemetry.ActivityLogSampleRate.IsUnknown() && !r.InputOpenTelemetry.ActivityLogSampleRate.IsNull() {
-			_ = json.Unmarshal([]byte(r.InputOpenTelemetry.ActivityLogSampleRate.ValueString()), &activityLogSampleRate12)
+			_ = json.Unmarshal([]byte(r.InputOpenTelemetry.ActivityLogSampleRate.ValueString()), &activityLogSampleRate11)
 		}
-		requestTimeout21 := new(float64)
+		requestTimeout20 := new(float64)
 		if !r.InputOpenTelemetry.RequestTimeout.IsUnknown() && !r.InputOpenTelemetry.RequestTimeout.IsNull() {
-			*requestTimeout21 = r.InputOpenTelemetry.RequestTimeout.ValueFloat64()
+			*requestTimeout20 = r.InputOpenTelemetry.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout21 = nil
+			requestTimeout20 = nil
 		}
-		socketTimeout15 := new(float64)
+		socketTimeout14 := new(float64)
 		if !r.InputOpenTelemetry.SocketTimeout.IsUnknown() && !r.InputOpenTelemetry.SocketTimeout.IsNull() {
-			*socketTimeout15 = r.InputOpenTelemetry.SocketTimeout.ValueFloat64()
+			*socketTimeout14 = r.InputOpenTelemetry.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout15 = nil
+			socketTimeout14 = nil
 		}
-		keepAliveTimeout12 := new(float64)
+		keepAliveTimeout11 := new(float64)
 		if !r.InputOpenTelemetry.KeepAliveTimeout.IsUnknown() && !r.InputOpenTelemetry.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout12 = r.InputOpenTelemetry.KeepAliveTimeout.ValueFloat64()
+			*keepAliveTimeout11 = r.InputOpenTelemetry.KeepAliveTimeout.ValueFloat64()
 		} else {
-			keepAliveTimeout12 = nil
+			keepAliveTimeout11 = nil
 		}
-		enableHealthCheck12 := new(bool)
+		enableHealthCheck11 := new(bool)
 		if !r.InputOpenTelemetry.EnableHealthCheck.IsUnknown() && !r.InputOpenTelemetry.EnableHealthCheck.IsNull() {
-			*enableHealthCheck12 = r.InputOpenTelemetry.EnableHealthCheck.ValueBool()
+			*enableHealthCheck11 = r.InputOpenTelemetry.EnableHealthCheck.ValueBool()
 		} else {
-			enableHealthCheck12 = nil
+			enableHealthCheck11 = nil
 		}
-		ipAllowlistRegex12 := new(string)
+		ipAllowlistRegex11 := new(string)
 		if !r.InputOpenTelemetry.IPAllowlistRegex.IsUnknown() && !r.InputOpenTelemetry.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex12 = r.InputOpenTelemetry.IPAllowlistRegex.ValueString()
+			*ipAllowlistRegex11 = r.InputOpenTelemetry.IPAllowlistRegex.ValueString()
 		} else {
-			ipAllowlistRegex12 = nil
+			ipAllowlistRegex11 = nil
 		}
-		ipDenylistRegex12 := new(string)
+		ipDenylistRegex11 := new(string)
 		if !r.InputOpenTelemetry.IPDenylistRegex.IsUnknown() && !r.InputOpenTelemetry.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex12 = r.InputOpenTelemetry.IPDenylistRegex.ValueString()
+			*ipDenylistRegex11 = r.InputOpenTelemetry.IPDenylistRegex.ValueString()
 		} else {
-			ipDenylistRegex12 = nil
+			ipDenylistRegex11 = nil
 		}
 		protocol1 := new(shared.InputOpenTelemetryProtocol)
 		if !r.InputOpenTelemetry.Protocol.IsUnknown() && !r.InputOpenTelemetry.Protocol.IsNull() {
@@ -16156,23 +15574,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			otlpVersion = nil
 		}
-		authType17 := new(shared.InputOpenTelemetryAuthenticationType)
+		authType15 := new(shared.InputOpenTelemetryAuthenticationType)
 		if !r.InputOpenTelemetry.AuthType.IsUnknown() && !r.InputOpenTelemetry.AuthType.IsNull() {
-			*authType17 = shared.InputOpenTelemetryAuthenticationType(r.InputOpenTelemetry.AuthType.ValueString())
+			*authType15 = shared.InputOpenTelemetryAuthenticationType(r.InputOpenTelemetry.AuthType.ValueString())
 		} else {
-			authType17 = nil
+			authType15 = nil
 		}
-		metadata48 := make([]shared.InputOpenTelemetryMetadatum, 0, len(r.InputOpenTelemetry.Metadata))
-		for metadataIndex47 := range r.InputOpenTelemetry.Metadata {
-			var name69 string
-			name69 = r.InputOpenTelemetry.Metadata[metadataIndex47].Name.ValueString()
+		metadata47 := make([]shared.InputOpenTelemetryMetadatum, 0, len(r.InputOpenTelemetry.Metadata))
+		for metadataIndex46 := range r.InputOpenTelemetry.Metadata {
+			var name64 string
+			name64 = r.InputOpenTelemetry.Metadata[metadataIndex46].Name.ValueString()
 
-			var value64 string
-			value64 = r.InputOpenTelemetry.Metadata[metadataIndex47].Value.ValueString()
+			var value59 string
+			value59 = r.InputOpenTelemetry.Metadata[metadataIndex46].Value.ValueString()
 
-			metadata48 = append(metadata48, shared.InputOpenTelemetryMetadatum{
-				Name:  name69,
-				Value: value64,
+			metadata47 = append(metadata47, shared.InputOpenTelemetryMetadatum{
+				Name:  name64,
+				Value: value59,
 			})
 		}
 		maxActiveCxn3 := new(float64)
@@ -16181,102 +15599,102 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			maxActiveCxn3 = nil
 		}
-		description53 := new(string)
+		description52 := new(string)
 		if !r.InputOpenTelemetry.Description.IsUnknown() && !r.InputOpenTelemetry.Description.IsNull() {
-			*description53 = r.InputOpenTelemetry.Description.ValueString()
+			*description52 = r.InputOpenTelemetry.Description.ValueString()
 		} else {
-			description53 = nil
+			description52 = nil
 		}
-		username11 := new(string)
+		username9 := new(string)
 		if !r.InputOpenTelemetry.Username.IsUnknown() && !r.InputOpenTelemetry.Username.IsNull() {
-			*username11 = r.InputOpenTelemetry.Username.ValueString()
+			*username9 = r.InputOpenTelemetry.Username.ValueString()
 		} else {
-			username11 = nil
+			username9 = nil
 		}
-		password11 := new(string)
+		password9 := new(string)
 		if !r.InputOpenTelemetry.Password.IsUnknown() && !r.InputOpenTelemetry.Password.IsNull() {
-			*password11 = r.InputOpenTelemetry.Password.ValueString()
+			*password9 = r.InputOpenTelemetry.Password.ValueString()
 		} else {
-			password11 = nil
+			password9 = nil
 		}
-		token11 := new(string)
+		token9 := new(string)
 		if !r.InputOpenTelemetry.Token.IsUnknown() && !r.InputOpenTelemetry.Token.IsNull() {
-			*token11 = r.InputOpenTelemetry.Token.ValueString()
+			*token9 = r.InputOpenTelemetry.Token.ValueString()
 		} else {
-			token11 = nil
+			token9 = nil
 		}
-		credentialsSecret14 := new(string)
+		credentialsSecret12 := new(string)
 		if !r.InputOpenTelemetry.CredentialsSecret.IsUnknown() && !r.InputOpenTelemetry.CredentialsSecret.IsNull() {
-			*credentialsSecret14 = r.InputOpenTelemetry.CredentialsSecret.ValueString()
+			*credentialsSecret12 = r.InputOpenTelemetry.CredentialsSecret.ValueString()
 		} else {
-			credentialsSecret14 = nil
+			credentialsSecret12 = nil
 		}
-		textSecret12 := new(string)
+		textSecret10 := new(string)
 		if !r.InputOpenTelemetry.TextSecret.IsUnknown() && !r.InputOpenTelemetry.TextSecret.IsNull() {
-			*textSecret12 = r.InputOpenTelemetry.TextSecret.ValueString()
+			*textSecret10 = r.InputOpenTelemetry.TextSecret.ValueString()
 		} else {
-			textSecret12 = nil
+			textSecret10 = nil
 		}
-		loginUrl7 := new(string)
+		loginUrl5 := new(string)
 		if !r.InputOpenTelemetry.LoginURL.IsUnknown() && !r.InputOpenTelemetry.LoginURL.IsNull() {
-			*loginUrl7 = r.InputOpenTelemetry.LoginURL.ValueString()
+			*loginUrl5 = r.InputOpenTelemetry.LoginURL.ValueString()
 		} else {
-			loginUrl7 = nil
+			loginUrl5 = nil
 		}
-		secretParamName7 := new(string)
+		secretParamName5 := new(string)
 		if !r.InputOpenTelemetry.SecretParamName.IsUnknown() && !r.InputOpenTelemetry.SecretParamName.IsNull() {
-			*secretParamName7 = r.InputOpenTelemetry.SecretParamName.ValueString()
+			*secretParamName5 = r.InputOpenTelemetry.SecretParamName.ValueString()
 		} else {
-			secretParamName7 = nil
+			secretParamName5 = nil
 		}
-		secret8 := new(string)
+		secret6 := new(string)
 		if !r.InputOpenTelemetry.Secret.IsUnknown() && !r.InputOpenTelemetry.Secret.IsNull() {
-			*secret8 = r.InputOpenTelemetry.Secret.ValueString()
+			*secret6 = r.InputOpenTelemetry.Secret.ValueString()
 		} else {
-			secret8 = nil
+			secret6 = nil
 		}
-		tokenAttributeName7 := new(string)
+		tokenAttributeName5 := new(string)
 		if !r.InputOpenTelemetry.TokenAttributeName.IsUnknown() && !r.InputOpenTelemetry.TokenAttributeName.IsNull() {
-			*tokenAttributeName7 = r.InputOpenTelemetry.TokenAttributeName.ValueString()
+			*tokenAttributeName5 = r.InputOpenTelemetry.TokenAttributeName.ValueString()
 		} else {
-			tokenAttributeName7 = nil
+			tokenAttributeName5 = nil
 		}
-		authHeaderExpr7 := new(string)
+		authHeaderExpr5 := new(string)
 		if !r.InputOpenTelemetry.AuthHeaderExpr.IsUnknown() && !r.InputOpenTelemetry.AuthHeaderExpr.IsNull() {
-			*authHeaderExpr7 = r.InputOpenTelemetry.AuthHeaderExpr.ValueString()
+			*authHeaderExpr5 = r.InputOpenTelemetry.AuthHeaderExpr.ValueString()
 		} else {
-			authHeaderExpr7 = nil
+			authHeaderExpr5 = nil
 		}
-		tokenTimeoutSecs7 := new(float64)
+		tokenTimeoutSecs5 := new(float64)
 		if !r.InputOpenTelemetry.TokenTimeoutSecs.IsUnknown() && !r.InputOpenTelemetry.TokenTimeoutSecs.IsNull() {
-			*tokenTimeoutSecs7 = r.InputOpenTelemetry.TokenTimeoutSecs.ValueFloat64()
+			*tokenTimeoutSecs5 = r.InputOpenTelemetry.TokenTimeoutSecs.ValueFloat64()
 		} else {
-			tokenTimeoutSecs7 = nil
+			tokenTimeoutSecs5 = nil
 		}
-		oauthParams7 := make([]shared.InputOpenTelemetryOauthParam, 0, len(r.InputOpenTelemetry.OauthParams))
-		for oauthParamsIndex7 := range r.InputOpenTelemetry.OauthParams {
-			var name70 string
-			name70 = r.InputOpenTelemetry.OauthParams[oauthParamsIndex7].Name.ValueString()
+		oauthParams5 := make([]shared.InputOpenTelemetryOauthParam, 0, len(r.InputOpenTelemetry.OauthParams))
+		for oauthParamsIndex5 := range r.InputOpenTelemetry.OauthParams {
+			var name65 string
+			name65 = r.InputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.ValueString()
 
-			var value65 string
-			value65 = r.InputOpenTelemetry.OauthParams[oauthParamsIndex7].Value.ValueString()
+			var value60 string
+			value60 = r.InputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.ValueString()
 
-			oauthParams7 = append(oauthParams7, shared.InputOpenTelemetryOauthParam{
-				Name:  name70,
-				Value: value65,
+			oauthParams5 = append(oauthParams5, shared.InputOpenTelemetryOauthParam{
+				Name:  name65,
+				Value: value60,
 			})
 		}
-		oauthHeaders7 := make([]shared.InputOpenTelemetryOauthHeader, 0, len(r.InputOpenTelemetry.OauthHeaders))
-		for oauthHeadersIndex7 := range r.InputOpenTelemetry.OauthHeaders {
-			var name71 string
-			name71 = r.InputOpenTelemetry.OauthHeaders[oauthHeadersIndex7].Name.ValueString()
+		oauthHeaders5 := make([]shared.InputOpenTelemetryOauthHeader, 0, len(r.InputOpenTelemetry.OauthHeaders))
+		for oauthHeadersIndex5 := range r.InputOpenTelemetry.OauthHeaders {
+			var name66 string
+			name66 = r.InputOpenTelemetry.OauthHeaders[oauthHeadersIndex5].Name.ValueString()
 
-			var value66 string
-			value66 = r.InputOpenTelemetry.OauthHeaders[oauthHeadersIndex7].Value.ValueString()
+			var value61 string
+			value61 = r.InputOpenTelemetry.OauthHeaders[oauthHeadersIndex5].Value.ValueString()
 
-			oauthHeaders7 = append(oauthHeaders7, shared.InputOpenTelemetryOauthHeader{
-				Name:  name71,
-				Value: value66,
+			oauthHeaders5 = append(oauthHeaders5, shared.InputOpenTelemetryOauthHeader{
+				Name:  name66,
+				Value: value61,
 			})
 		}
 		extractLogs := new(bool)
@@ -16286,51 +15704,51 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			extractLogs = nil
 		}
 		inputOpenTelemetry = &shared.InputOpenTelemetry{
-			ID:                    id44,
-			Type:                  typeVar48,
-			Disabled:              disabled80,
-			Pipeline:              pipeline88,
-			SendToRoutes:          sendToRoutes44,
-			Environment:           environment44,
-			PqEnabled:             pqEnabled44,
-			Streamtags:            streamtags44,
-			Connections:           connections44,
-			Pq:                    pq44,
-			Host:                  host20,
-			Port:                  port17,
-			TLS:                   tls23,
-			MaxActiveReq:          maxActiveReq12,
-			MaxRequestsPerSocket:  maxRequestsPerSocket12,
-			EnableProxyHeader:     enableProxyHeader16,
-			CaptureHeaders:        captureHeaders12,
-			ActivityLogSampleRate: activityLogSampleRate12,
-			RequestTimeout:        requestTimeout21,
-			SocketTimeout:         socketTimeout15,
-			KeepAliveTimeout:      keepAliveTimeout12,
-			EnableHealthCheck:     enableHealthCheck12,
-			IPAllowlistRegex:      ipAllowlistRegex12,
-			IPDenylistRegex:       ipDenylistRegex12,
+			ID:                    id43,
+			Type:                  typeVar47,
+			Disabled:              disabled78,
+			Pipeline:              pipeline86,
+			SendToRoutes:          sendToRoutes43,
+			Environment:           environment43,
+			PqEnabled:             pqEnabled43,
+			Streamtags:            streamtags43,
+			Connections:           connections43,
+			Pq:                    pq43,
+			Host:                  host19,
+			Port:                  port16,
+			TLS:                   tls22,
+			MaxActiveReq:          maxActiveReq11,
+			MaxRequestsPerSocket:  maxRequestsPerSocket11,
+			EnableProxyHeader:     enableProxyHeader15,
+			CaptureHeaders:        captureHeaders11,
+			ActivityLogSampleRate: activityLogSampleRate11,
+			RequestTimeout:        requestTimeout20,
+			SocketTimeout:         socketTimeout14,
+			KeepAliveTimeout:      keepAliveTimeout11,
+			EnableHealthCheck:     enableHealthCheck11,
+			IPAllowlistRegex:      ipAllowlistRegex11,
+			IPDenylistRegex:       ipDenylistRegex11,
 			Protocol:              protocol1,
 			ExtractSpans:          extractSpans,
 			ExtractMetrics:        extractMetrics3,
 			OtlpVersion:           otlpVersion,
-			AuthType:              authType17,
-			Metadata:              metadata48,
+			AuthType:              authType15,
+			Metadata:              metadata47,
 			MaxActiveCxn:          maxActiveCxn3,
-			Description:           description53,
-			Username:              username11,
-			Password:              password11,
-			Token:                 token11,
-			CredentialsSecret:     credentialsSecret14,
-			TextSecret:            textSecret12,
-			LoginURL:              loginUrl7,
-			SecretParamName:       secretParamName7,
-			Secret:                secret8,
-			TokenAttributeName:    tokenAttributeName7,
-			AuthHeaderExpr:        authHeaderExpr7,
-			TokenTimeoutSecs:      tokenTimeoutSecs7,
-			OauthParams:           oauthParams7,
-			OauthHeaders:          oauthHeaders7,
+			Description:           description52,
+			Username:              username9,
+			Password:              password9,
+			Token:                 token9,
+			CredentialsSecret:     credentialsSecret12,
+			TextSecret:            textSecret10,
+			LoginURL:              loginUrl5,
+			SecretParamName:       secretParamName5,
+			Secret:                secret6,
+			TokenAttributeName:    tokenAttributeName5,
+			AuthHeaderExpr:        authHeaderExpr5,
+			TokenTimeoutSecs:      tokenTimeoutSecs5,
+			OauthParams:           oauthParams5,
+			OauthHeaders:          oauthHeaders5,
 			ExtractLogs:           extractLogs,
 		}
 	}
@@ -16341,216 +15759,216 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputModelDrivenTelemetry *shared.InputModelDrivenTelemetry
 	if r.InputModelDrivenTelemetry != nil {
-		id45 := new(string)
+		id44 := new(string)
 		if !r.InputModelDrivenTelemetry.ID.IsUnknown() && !r.InputModelDrivenTelemetry.ID.IsNull() {
-			*id45 = r.InputModelDrivenTelemetry.ID.ValueString()
+			*id44 = r.InputModelDrivenTelemetry.ID.ValueString()
 		} else {
-			id45 = nil
+			id44 = nil
 		}
-		typeVar49 := new(shared.InputModelDrivenTelemetryType)
+		typeVar48 := new(shared.InputModelDrivenTelemetryType)
 		if !r.InputModelDrivenTelemetry.Type.IsUnknown() && !r.InputModelDrivenTelemetry.Type.IsNull() {
-			*typeVar49 = shared.InputModelDrivenTelemetryType(r.InputModelDrivenTelemetry.Type.ValueString())
+			*typeVar48 = shared.InputModelDrivenTelemetryType(r.InputModelDrivenTelemetry.Type.ValueString())
 		} else {
-			typeVar49 = nil
+			typeVar48 = nil
 		}
-		disabled82 := new(bool)
+		disabled80 := new(bool)
 		if !r.InputModelDrivenTelemetry.Disabled.IsUnknown() && !r.InputModelDrivenTelemetry.Disabled.IsNull() {
-			*disabled82 = r.InputModelDrivenTelemetry.Disabled.ValueBool()
+			*disabled80 = r.InputModelDrivenTelemetry.Disabled.ValueBool()
 		} else {
-			disabled82 = nil
+			disabled80 = nil
 		}
-		pipeline90 := new(string)
+		pipeline88 := new(string)
 		if !r.InputModelDrivenTelemetry.Pipeline.IsUnknown() && !r.InputModelDrivenTelemetry.Pipeline.IsNull() {
-			*pipeline90 = r.InputModelDrivenTelemetry.Pipeline.ValueString()
+			*pipeline88 = r.InputModelDrivenTelemetry.Pipeline.ValueString()
 		} else {
-			pipeline90 = nil
+			pipeline88 = nil
 		}
-		sendToRoutes45 := new(bool)
+		sendToRoutes44 := new(bool)
 		if !r.InputModelDrivenTelemetry.SendToRoutes.IsUnknown() && !r.InputModelDrivenTelemetry.SendToRoutes.IsNull() {
-			*sendToRoutes45 = r.InputModelDrivenTelemetry.SendToRoutes.ValueBool()
+			*sendToRoutes44 = r.InputModelDrivenTelemetry.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes45 = nil
+			sendToRoutes44 = nil
 		}
-		environment45 := new(string)
+		environment44 := new(string)
 		if !r.InputModelDrivenTelemetry.Environment.IsUnknown() && !r.InputModelDrivenTelemetry.Environment.IsNull() {
-			*environment45 = r.InputModelDrivenTelemetry.Environment.ValueString()
+			*environment44 = r.InputModelDrivenTelemetry.Environment.ValueString()
 		} else {
-			environment45 = nil
+			environment44 = nil
 		}
-		pqEnabled45 := new(bool)
+		pqEnabled44 := new(bool)
 		if !r.InputModelDrivenTelemetry.PqEnabled.IsUnknown() && !r.InputModelDrivenTelemetry.PqEnabled.IsNull() {
-			*pqEnabled45 = r.InputModelDrivenTelemetry.PqEnabled.ValueBool()
+			*pqEnabled44 = r.InputModelDrivenTelemetry.PqEnabled.ValueBool()
 		} else {
-			pqEnabled45 = nil
+			pqEnabled44 = nil
 		}
-		streamtags45 := make([]string, 0, len(r.InputModelDrivenTelemetry.Streamtags))
-		for streamtagsIndex45 := range r.InputModelDrivenTelemetry.Streamtags {
-			streamtags45 = append(streamtags45, r.InputModelDrivenTelemetry.Streamtags[streamtagsIndex45].ValueString())
+		streamtags44 := make([]string, 0, len(r.InputModelDrivenTelemetry.Streamtags))
+		for streamtagsIndex44 := range r.InputModelDrivenTelemetry.Streamtags {
+			streamtags44 = append(streamtags44, r.InputModelDrivenTelemetry.Streamtags[streamtagsIndex44].ValueString())
 		}
-		connections45 := make([]shared.InputModelDrivenTelemetryConnection, 0, len(r.InputModelDrivenTelemetry.Connections))
-		for connectionsIndex45 := range r.InputModelDrivenTelemetry.Connections {
-			pipeline91 := new(string)
-			if !r.InputModelDrivenTelemetry.Connections[connectionsIndex45].Pipeline.IsUnknown() && !r.InputModelDrivenTelemetry.Connections[connectionsIndex45].Pipeline.IsNull() {
-				*pipeline91 = r.InputModelDrivenTelemetry.Connections[connectionsIndex45].Pipeline.ValueString()
+		connections44 := make([]shared.InputModelDrivenTelemetryConnection, 0, len(r.InputModelDrivenTelemetry.Connections))
+		for connectionsIndex44 := range r.InputModelDrivenTelemetry.Connections {
+			pipeline89 := new(string)
+			if !r.InputModelDrivenTelemetry.Connections[connectionsIndex44].Pipeline.IsUnknown() && !r.InputModelDrivenTelemetry.Connections[connectionsIndex44].Pipeline.IsNull() {
+				*pipeline89 = r.InputModelDrivenTelemetry.Connections[connectionsIndex44].Pipeline.ValueString()
 			} else {
-				pipeline91 = nil
+				pipeline89 = nil
 			}
-			var output46 string
-			output46 = r.InputModelDrivenTelemetry.Connections[connectionsIndex45].Output.ValueString()
+			var output45 string
+			output45 = r.InputModelDrivenTelemetry.Connections[connectionsIndex44].Output.ValueString()
 
-			connections45 = append(connections45, shared.InputModelDrivenTelemetryConnection{
-				Pipeline: pipeline91,
-				Output:   output46,
+			connections44 = append(connections44, shared.InputModelDrivenTelemetryConnection{
+				Pipeline: pipeline89,
+				Output:   output45,
 			})
 		}
-		var pq45 *shared.InputModelDrivenTelemetryPq
+		var pq44 *shared.InputModelDrivenTelemetryPq
 		if r.InputModelDrivenTelemetry.Pq != nil {
-			mode58 := new(shared.InputModelDrivenTelemetryMode)
+			mode57 := new(shared.InputModelDrivenTelemetryMode)
 			if !r.InputModelDrivenTelemetry.Pq.Mode.IsUnknown() && !r.InputModelDrivenTelemetry.Pq.Mode.IsNull() {
-				*mode58 = shared.InputModelDrivenTelemetryMode(r.InputModelDrivenTelemetry.Pq.Mode.ValueString())
+				*mode57 = shared.InputModelDrivenTelemetryMode(r.InputModelDrivenTelemetry.Pq.Mode.ValueString())
 			} else {
-				mode58 = nil
+				mode57 = nil
 			}
-			maxBufferSize47 := new(float64)
+			maxBufferSize46 := new(float64)
 			if !r.InputModelDrivenTelemetry.Pq.MaxBufferSize.IsUnknown() && !r.InputModelDrivenTelemetry.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize47 = r.InputModelDrivenTelemetry.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize46 = r.InputModelDrivenTelemetry.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize47 = nil
+				maxBufferSize46 = nil
 			}
-			commitFrequency45 := new(float64)
+			commitFrequency44 := new(float64)
 			if !r.InputModelDrivenTelemetry.Pq.CommitFrequency.IsUnknown() && !r.InputModelDrivenTelemetry.Pq.CommitFrequency.IsNull() {
-				*commitFrequency45 = r.InputModelDrivenTelemetry.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency44 = r.InputModelDrivenTelemetry.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency45 = nil
+				commitFrequency44 = nil
 			}
-			maxFileSize45 := new(string)
+			maxFileSize44 := new(string)
 			if !r.InputModelDrivenTelemetry.Pq.MaxFileSize.IsUnknown() && !r.InputModelDrivenTelemetry.Pq.MaxFileSize.IsNull() {
-				*maxFileSize45 = r.InputModelDrivenTelemetry.Pq.MaxFileSize.ValueString()
+				*maxFileSize44 = r.InputModelDrivenTelemetry.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize45 = nil
+				maxFileSize44 = nil
 			}
-			maxSize45 := new(string)
+			maxSize44 := new(string)
 			if !r.InputModelDrivenTelemetry.Pq.MaxSize.IsUnknown() && !r.InputModelDrivenTelemetry.Pq.MaxSize.IsNull() {
-				*maxSize45 = r.InputModelDrivenTelemetry.Pq.MaxSize.ValueString()
+				*maxSize44 = r.InputModelDrivenTelemetry.Pq.MaxSize.ValueString()
 			} else {
-				maxSize45 = nil
+				maxSize44 = nil
 			}
-			path46 := new(string)
+			path45 := new(string)
 			if !r.InputModelDrivenTelemetry.Pq.Path.IsUnknown() && !r.InputModelDrivenTelemetry.Pq.Path.IsNull() {
-				*path46 = r.InputModelDrivenTelemetry.Pq.Path.ValueString()
+				*path45 = r.InputModelDrivenTelemetry.Pq.Path.ValueString()
 			} else {
-				path46 = nil
+				path45 = nil
 			}
-			compress52 := new(shared.InputModelDrivenTelemetryCompression)
+			compress51 := new(shared.InputModelDrivenTelemetryCompression)
 			if !r.InputModelDrivenTelemetry.Pq.Compress.IsUnknown() && !r.InputModelDrivenTelemetry.Pq.Compress.IsNull() {
-				*compress52 = shared.InputModelDrivenTelemetryCompression(r.InputModelDrivenTelemetry.Pq.Compress.ValueString())
+				*compress51 = shared.InputModelDrivenTelemetryCompression(r.InputModelDrivenTelemetry.Pq.Compress.ValueString())
 			} else {
-				compress52 = nil
+				compress51 = nil
 			}
-			pq45 = &shared.InputModelDrivenTelemetryPq{
-				Mode:            mode58,
-				MaxBufferSize:   maxBufferSize47,
-				CommitFrequency: commitFrequency45,
-				MaxFileSize:     maxFileSize45,
-				MaxSize:         maxSize45,
-				Path:            path46,
-				Compress:        compress52,
+			pq44 = &shared.InputModelDrivenTelemetryPq{
+				Mode:            mode57,
+				MaxBufferSize:   maxBufferSize46,
+				CommitFrequency: commitFrequency44,
+				MaxFileSize:     maxFileSize44,
+				MaxSize:         maxSize44,
+				Path:            path45,
+				Compress:        compress51,
 			}
 		}
-		host21 := new(string)
+		host20 := new(string)
 		if !r.InputModelDrivenTelemetry.Host.IsUnknown() && !r.InputModelDrivenTelemetry.Host.IsNull() {
-			*host21 = r.InputModelDrivenTelemetry.Host.ValueString()
+			*host20 = r.InputModelDrivenTelemetry.Host.ValueString()
 		} else {
-			host21 = nil
+			host20 = nil
 		}
-		port18 := new(float64)
+		port17 := new(float64)
 		if !r.InputModelDrivenTelemetry.Port.IsUnknown() && !r.InputModelDrivenTelemetry.Port.IsNull() {
-			*port18 = r.InputModelDrivenTelemetry.Port.ValueFloat64()
+			*port17 = r.InputModelDrivenTelemetry.Port.ValueFloat64()
 		} else {
-			port18 = nil
+			port17 = nil
 		}
-		var tls24 *shared.InputModelDrivenTelemetryTLSSettingsServerSide
+		var tls23 *shared.InputModelDrivenTelemetryTLSSettingsServerSide
 		if r.InputModelDrivenTelemetry.TLS != nil {
-			disabled83 := new(bool)
+			disabled81 := new(bool)
 			if !r.InputModelDrivenTelemetry.TLS.Disabled.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.Disabled.IsNull() {
-				*disabled83 = r.InputModelDrivenTelemetry.TLS.Disabled.ValueBool()
+				*disabled81 = r.InputModelDrivenTelemetry.TLS.Disabled.ValueBool()
 			} else {
-				disabled83 = nil
+				disabled81 = nil
 			}
-			certificateName25 := new(string)
+			certificateName24 := new(string)
 			if !r.InputModelDrivenTelemetry.TLS.CertificateName.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.CertificateName.IsNull() {
-				*certificateName25 = r.InputModelDrivenTelemetry.TLS.CertificateName.ValueString()
+				*certificateName24 = r.InputModelDrivenTelemetry.TLS.CertificateName.ValueString()
 			} else {
-				certificateName25 = nil
+				certificateName24 = nil
 			}
-			privKeyPath24 := new(string)
+			privKeyPath23 := new(string)
 			if !r.InputModelDrivenTelemetry.TLS.PrivKeyPath.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath24 = r.InputModelDrivenTelemetry.TLS.PrivKeyPath.ValueString()
+				*privKeyPath23 = r.InputModelDrivenTelemetry.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath24 = nil
+				privKeyPath23 = nil
 			}
-			certPath24 := new(string)
+			certPath23 := new(string)
 			if !r.InputModelDrivenTelemetry.TLS.CertPath.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.CertPath.IsNull() {
-				*certPath24 = r.InputModelDrivenTelemetry.TLS.CertPath.ValueString()
+				*certPath23 = r.InputModelDrivenTelemetry.TLS.CertPath.ValueString()
 			} else {
-				certPath24 = nil
+				certPath23 = nil
 			}
-			caPath23 := new(string)
+			caPath22 := new(string)
 			if !r.InputModelDrivenTelemetry.TLS.CaPath.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.CaPath.IsNull() {
-				*caPath23 = r.InputModelDrivenTelemetry.TLS.CaPath.ValueString()
+				*caPath22 = r.InputModelDrivenTelemetry.TLS.CaPath.ValueString()
 			} else {
-				caPath23 = nil
+				caPath22 = nil
 			}
-			requestCert17 := new(bool)
+			requestCert16 := new(bool)
 			if !r.InputModelDrivenTelemetry.TLS.RequestCert.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.RequestCert.IsNull() {
-				*requestCert17 = r.InputModelDrivenTelemetry.TLS.RequestCert.ValueBool()
+				*requestCert16 = r.InputModelDrivenTelemetry.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert17 = nil
+				requestCert16 = nil
 			}
-			var rejectUnauthorized34 interface{}
+			var rejectUnauthorized33 interface{}
 			if !r.InputModelDrivenTelemetry.TLS.RejectUnauthorized.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputModelDrivenTelemetry.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized34)
+				_ = json.Unmarshal([]byte(r.InputModelDrivenTelemetry.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized33)
 			}
-			var commonNameRegex17 interface{}
+			var commonNameRegex16 interface{}
 			if !r.InputModelDrivenTelemetry.TLS.CommonNameRegex.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputModelDrivenTelemetry.TLS.CommonNameRegex.ValueString()), &commonNameRegex17)
+				_ = json.Unmarshal([]byte(r.InputModelDrivenTelemetry.TLS.CommonNameRegex.ValueString()), &commonNameRegex16)
 			}
-			minVersion23 := new(shared.InputModelDrivenTelemetryMinimumTLSVersion)
+			minVersion22 := new(shared.InputModelDrivenTelemetryMinimumTLSVersion)
 			if !r.InputModelDrivenTelemetry.TLS.MinVersion.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.MinVersion.IsNull() {
-				*minVersion23 = shared.InputModelDrivenTelemetryMinimumTLSVersion(r.InputModelDrivenTelemetry.TLS.MinVersion.ValueString())
+				*minVersion22 = shared.InputModelDrivenTelemetryMinimumTLSVersion(r.InputModelDrivenTelemetry.TLS.MinVersion.ValueString())
 			} else {
-				minVersion23 = nil
+				minVersion22 = nil
 			}
-			maxVersion23 := new(shared.InputModelDrivenTelemetryMaximumTLSVersion)
+			maxVersion22 := new(shared.InputModelDrivenTelemetryMaximumTLSVersion)
 			if !r.InputModelDrivenTelemetry.TLS.MaxVersion.IsUnknown() && !r.InputModelDrivenTelemetry.TLS.MaxVersion.IsNull() {
-				*maxVersion23 = shared.InputModelDrivenTelemetryMaximumTLSVersion(r.InputModelDrivenTelemetry.TLS.MaxVersion.ValueString())
+				*maxVersion22 = shared.InputModelDrivenTelemetryMaximumTLSVersion(r.InputModelDrivenTelemetry.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion23 = nil
+				maxVersion22 = nil
 			}
-			tls24 = &shared.InputModelDrivenTelemetryTLSSettingsServerSide{
-				Disabled:           disabled83,
-				CertificateName:    certificateName25,
-				PrivKeyPath:        privKeyPath24,
-				CertPath:           certPath24,
-				CaPath:             caPath23,
-				RequestCert:        requestCert17,
-				RejectUnauthorized: rejectUnauthorized34,
-				CommonNameRegex:    commonNameRegex17,
-				MinVersion:         minVersion23,
-				MaxVersion:         maxVersion23,
+			tls23 = &shared.InputModelDrivenTelemetryTLSSettingsServerSide{
+				Disabled:           disabled81,
+				CertificateName:    certificateName24,
+				PrivKeyPath:        privKeyPath23,
+				CertPath:           certPath23,
+				CaPath:             caPath22,
+				RequestCert:        requestCert16,
+				RejectUnauthorized: rejectUnauthorized33,
+				CommonNameRegex:    commonNameRegex16,
+				MinVersion:         minVersion22,
+				MaxVersion:         maxVersion22,
 			}
 		}
-		metadata49 := make([]shared.InputModelDrivenTelemetryMetadatum, 0, len(r.InputModelDrivenTelemetry.Metadata))
-		for metadataIndex48 := range r.InputModelDrivenTelemetry.Metadata {
-			var name72 string
-			name72 = r.InputModelDrivenTelemetry.Metadata[metadataIndex48].Name.ValueString()
+		metadata48 := make([]shared.InputModelDrivenTelemetryMetadatum, 0, len(r.InputModelDrivenTelemetry.Metadata))
+		for metadataIndex47 := range r.InputModelDrivenTelemetry.Metadata {
+			var name67 string
+			name67 = r.InputModelDrivenTelemetry.Metadata[metadataIndex47].Name.ValueString()
 
-			var value67 string
-			value67 = r.InputModelDrivenTelemetry.Metadata[metadataIndex48].Value.ValueString()
+			var value62 string
+			value62 = r.InputModelDrivenTelemetry.Metadata[metadataIndex47].Value.ValueString()
 
-			metadata49 = append(metadata49, shared.InputModelDrivenTelemetryMetadatum{
-				Name:  name72,
-				Value: value67,
+			metadata48 = append(metadata48, shared.InputModelDrivenTelemetryMetadatum{
+				Name:  name67,
+				Value: value62,
 			})
 		}
 		maxActiveCxn4 := new(float64)
@@ -16565,30 +15983,30 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			shutdownTimeoutMs = nil
 		}
-		description54 := new(string)
+		description53 := new(string)
 		if !r.InputModelDrivenTelemetry.Description.IsUnknown() && !r.InputModelDrivenTelemetry.Description.IsNull() {
-			*description54 = r.InputModelDrivenTelemetry.Description.ValueString()
+			*description53 = r.InputModelDrivenTelemetry.Description.ValueString()
 		} else {
-			description54 = nil
+			description53 = nil
 		}
 		inputModelDrivenTelemetry = &shared.InputModelDrivenTelemetry{
-			ID:                id45,
-			Type:              typeVar49,
-			Disabled:          disabled82,
-			Pipeline:          pipeline90,
-			SendToRoutes:      sendToRoutes45,
-			Environment:       environment45,
-			PqEnabled:         pqEnabled45,
-			Streamtags:        streamtags45,
-			Connections:       connections45,
-			Pq:                pq45,
-			Host:              host21,
-			Port:              port18,
-			TLS:               tls24,
-			Metadata:          metadata49,
+			ID:                id44,
+			Type:              typeVar48,
+			Disabled:          disabled80,
+			Pipeline:          pipeline88,
+			SendToRoutes:      sendToRoutes44,
+			Environment:       environment44,
+			PqEnabled:         pqEnabled44,
+			Streamtags:        streamtags44,
+			Connections:       connections44,
+			Pq:                pq44,
+			Host:              host20,
+			Port:              port17,
+			TLS:               tls23,
+			Metadata:          metadata48,
 			MaxActiveCxn:      maxActiveCxn4,
 			ShutdownTimeoutMs: shutdownTimeoutMs,
-			Description:       description54,
+			Description:       description53,
 		}
 	}
 	if inputModelDrivenTelemetry != nil {
@@ -16598,120 +16016,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputSqs *shared.InputSqs
 	if r.InputSqs != nil {
-		id46 := new(string)
+		id45 := new(string)
 		if !r.InputSqs.ID.IsUnknown() && !r.InputSqs.ID.IsNull() {
-			*id46 = r.InputSqs.ID.ValueString()
+			*id45 = r.InputSqs.ID.ValueString()
 		} else {
-			id46 = nil
+			id45 = nil
 		}
-		typeVar50 := new(shared.InputSqsType)
+		typeVar49 := new(shared.InputSqsType)
 		if !r.InputSqs.Type.IsUnknown() && !r.InputSqs.Type.IsNull() {
-			*typeVar50 = shared.InputSqsType(r.InputSqs.Type.ValueString())
+			*typeVar49 = shared.InputSqsType(r.InputSqs.Type.ValueString())
 		} else {
-			typeVar50 = nil
+			typeVar49 = nil
 		}
-		disabled84 := new(bool)
+		disabled82 := new(bool)
 		if !r.InputSqs.Disabled.IsUnknown() && !r.InputSqs.Disabled.IsNull() {
-			*disabled84 = r.InputSqs.Disabled.ValueBool()
+			*disabled82 = r.InputSqs.Disabled.ValueBool()
 		} else {
-			disabled84 = nil
+			disabled82 = nil
 		}
-		pipeline92 := new(string)
+		pipeline90 := new(string)
 		if !r.InputSqs.Pipeline.IsUnknown() && !r.InputSqs.Pipeline.IsNull() {
-			*pipeline92 = r.InputSqs.Pipeline.ValueString()
+			*pipeline90 = r.InputSqs.Pipeline.ValueString()
 		} else {
-			pipeline92 = nil
+			pipeline90 = nil
 		}
-		sendToRoutes46 := new(bool)
+		sendToRoutes45 := new(bool)
 		if !r.InputSqs.SendToRoutes.IsUnknown() && !r.InputSqs.SendToRoutes.IsNull() {
-			*sendToRoutes46 = r.InputSqs.SendToRoutes.ValueBool()
+			*sendToRoutes45 = r.InputSqs.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes46 = nil
+			sendToRoutes45 = nil
 		}
-		environment46 := new(string)
+		environment45 := new(string)
 		if !r.InputSqs.Environment.IsUnknown() && !r.InputSqs.Environment.IsNull() {
-			*environment46 = r.InputSqs.Environment.ValueString()
+			*environment45 = r.InputSqs.Environment.ValueString()
 		} else {
-			environment46 = nil
+			environment45 = nil
 		}
-		pqEnabled46 := new(bool)
+		pqEnabled45 := new(bool)
 		if !r.InputSqs.PqEnabled.IsUnknown() && !r.InputSqs.PqEnabled.IsNull() {
-			*pqEnabled46 = r.InputSqs.PqEnabled.ValueBool()
+			*pqEnabled45 = r.InputSqs.PqEnabled.ValueBool()
 		} else {
-			pqEnabled46 = nil
+			pqEnabled45 = nil
 		}
-		streamtags46 := make([]string, 0, len(r.InputSqs.Streamtags))
-		for streamtagsIndex46 := range r.InputSqs.Streamtags {
-			streamtags46 = append(streamtags46, r.InputSqs.Streamtags[streamtagsIndex46].ValueString())
+		streamtags45 := make([]string, 0, len(r.InputSqs.Streamtags))
+		for streamtagsIndex45 := range r.InputSqs.Streamtags {
+			streamtags45 = append(streamtags45, r.InputSqs.Streamtags[streamtagsIndex45].ValueString())
 		}
-		connections46 := make([]shared.InputSqsConnection, 0, len(r.InputSqs.Connections))
-		for connectionsIndex46 := range r.InputSqs.Connections {
-			pipeline93 := new(string)
-			if !r.InputSqs.Connections[connectionsIndex46].Pipeline.IsUnknown() && !r.InputSqs.Connections[connectionsIndex46].Pipeline.IsNull() {
-				*pipeline93 = r.InputSqs.Connections[connectionsIndex46].Pipeline.ValueString()
+		connections45 := make([]shared.InputSqsConnection, 0, len(r.InputSqs.Connections))
+		for connectionsIndex45 := range r.InputSqs.Connections {
+			pipeline91 := new(string)
+			if !r.InputSqs.Connections[connectionsIndex45].Pipeline.IsUnknown() && !r.InputSqs.Connections[connectionsIndex45].Pipeline.IsNull() {
+				*pipeline91 = r.InputSqs.Connections[connectionsIndex45].Pipeline.ValueString()
 			} else {
-				pipeline93 = nil
+				pipeline91 = nil
 			}
-			var output47 string
-			output47 = r.InputSqs.Connections[connectionsIndex46].Output.ValueString()
+			var output46 string
+			output46 = r.InputSqs.Connections[connectionsIndex45].Output.ValueString()
 
-			connections46 = append(connections46, shared.InputSqsConnection{
-				Pipeline: pipeline93,
-				Output:   output47,
+			connections45 = append(connections45, shared.InputSqsConnection{
+				Pipeline: pipeline91,
+				Output:   output46,
 			})
 		}
-		var pq46 *shared.InputSqsPq
+		var pq45 *shared.InputSqsPq
 		if r.InputSqs.Pq != nil {
-			mode59 := new(shared.InputSqsMode)
+			mode58 := new(shared.InputSqsMode)
 			if !r.InputSqs.Pq.Mode.IsUnknown() && !r.InputSqs.Pq.Mode.IsNull() {
-				*mode59 = shared.InputSqsMode(r.InputSqs.Pq.Mode.ValueString())
+				*mode58 = shared.InputSqsMode(r.InputSqs.Pq.Mode.ValueString())
 			} else {
-				mode59 = nil
+				mode58 = nil
 			}
-			maxBufferSize48 := new(float64)
+			maxBufferSize47 := new(float64)
 			if !r.InputSqs.Pq.MaxBufferSize.IsUnknown() && !r.InputSqs.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize48 = r.InputSqs.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize47 = r.InputSqs.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize48 = nil
+				maxBufferSize47 = nil
 			}
-			commitFrequency46 := new(float64)
+			commitFrequency45 := new(float64)
 			if !r.InputSqs.Pq.CommitFrequency.IsUnknown() && !r.InputSqs.Pq.CommitFrequency.IsNull() {
-				*commitFrequency46 = r.InputSqs.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency45 = r.InputSqs.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency46 = nil
+				commitFrequency45 = nil
 			}
-			maxFileSize46 := new(string)
+			maxFileSize45 := new(string)
 			if !r.InputSqs.Pq.MaxFileSize.IsUnknown() && !r.InputSqs.Pq.MaxFileSize.IsNull() {
-				*maxFileSize46 = r.InputSqs.Pq.MaxFileSize.ValueString()
+				*maxFileSize45 = r.InputSqs.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize46 = nil
+				maxFileSize45 = nil
 			}
-			maxSize46 := new(string)
+			maxSize45 := new(string)
 			if !r.InputSqs.Pq.MaxSize.IsUnknown() && !r.InputSqs.Pq.MaxSize.IsNull() {
-				*maxSize46 = r.InputSqs.Pq.MaxSize.ValueString()
+				*maxSize45 = r.InputSqs.Pq.MaxSize.ValueString()
 			} else {
-				maxSize46 = nil
+				maxSize45 = nil
 			}
-			path47 := new(string)
+			path46 := new(string)
 			if !r.InputSqs.Pq.Path.IsUnknown() && !r.InputSqs.Pq.Path.IsNull() {
-				*path47 = r.InputSqs.Pq.Path.ValueString()
+				*path46 = r.InputSqs.Pq.Path.ValueString()
 			} else {
-				path47 = nil
+				path46 = nil
 			}
-			compress53 := new(shared.InputSqsCompression)
+			compress52 := new(shared.InputSqsCompression)
 			if !r.InputSqs.Pq.Compress.IsUnknown() && !r.InputSqs.Pq.Compress.IsNull() {
-				*compress53 = shared.InputSqsCompression(r.InputSqs.Pq.Compress.ValueString())
+				*compress52 = shared.InputSqsCompression(r.InputSqs.Pq.Compress.ValueString())
 			} else {
-				compress53 = nil
+				compress52 = nil
 			}
-			pq46 = &shared.InputSqsPq{
-				Mode:            mode59,
-				MaxBufferSize:   maxBufferSize48,
-				CommitFrequency: commitFrequency46,
-				MaxFileSize:     maxFileSize46,
-				MaxSize:         maxSize46,
-				Path:            path47,
-				Compress:        compress53,
+			pq45 = &shared.InputSqsPq{
+				Mode:            mode58,
+				MaxBufferSize:   maxBufferSize47,
+				CommitFrequency: commitFrequency45,
+				MaxFileSize:     maxFileSize45,
+				MaxSize:         maxSize45,
+				Path:            path46,
+				Compress:        compress52,
 			}
 		}
 		var queueName4 string
@@ -16771,11 +16189,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			reuseConnections7 = nil
 		}
-		rejectUnauthorized35 := new(bool)
+		rejectUnauthorized34 := new(bool)
 		if !r.InputSqs.RejectUnauthorized.IsUnknown() && !r.InputSqs.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized35 = r.InputSqs.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized34 = r.InputSqs.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized35 = nil
+			rejectUnauthorized34 = nil
 		}
 		enableAssumeRole7 := new(bool)
 		if !r.InputSqs.EnableAssumeRole.IsUnknown() && !r.InputSqs.EnableAssumeRole.IsNull() {
@@ -16813,17 +16231,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			visibilityTimeout4 = nil
 		}
-		metadata50 := make([]shared.InputSqsMetadatum, 0, len(r.InputSqs.Metadata))
-		for metadataIndex49 := range r.InputSqs.Metadata {
-			var name73 string
-			name73 = r.InputSqs.Metadata[metadataIndex49].Name.ValueString()
+		metadata49 := make([]shared.InputSqsMetadatum, 0, len(r.InputSqs.Metadata))
+		for metadataIndex48 := range r.InputSqs.Metadata {
+			var name68 string
+			name68 = r.InputSqs.Metadata[metadataIndex48].Name.ValueString()
 
-			var value68 string
-			value68 = r.InputSqs.Metadata[metadataIndex49].Value.ValueString()
+			var value63 string
+			value63 = r.InputSqs.Metadata[metadataIndex48].Value.ValueString()
 
-			metadata50 = append(metadata50, shared.InputSqsMetadatum{
-				Name:  name73,
-				Value: value68,
+			metadata49 = append(metadata49, shared.InputSqsMetadatum{
+				Name:  name68,
+				Value: value63,
 			})
 		}
 		pollTimeout3 := new(float64)
@@ -16832,11 +16250,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			pollTimeout3 = nil
 		}
-		description55 := new(string)
+		description54 := new(string)
 		if !r.InputSqs.Description.IsUnknown() && !r.InputSqs.Description.IsNull() {
-			*description55 = r.InputSqs.Description.ValueString()
+			*description54 = r.InputSqs.Description.ValueString()
 		} else {
-			description55 = nil
+			description54 = nil
 		}
 		awsAPIKey5 := new(string)
 		if !r.InputSqs.AwsAPIKey.IsUnknown() && !r.InputSqs.AwsAPIKey.IsNull() {
@@ -16857,16 +16275,16 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			numReceivers4 = nil
 		}
 		inputSqs = &shared.InputSqs{
-			ID:                      id46,
-			Type:                    typeVar50,
-			Disabled:                disabled84,
-			Pipeline:                pipeline92,
-			SendToRoutes:            sendToRoutes46,
-			Environment:             environment46,
-			PqEnabled:               pqEnabled46,
-			Streamtags:              streamtags46,
-			Connections:             connections46,
-			Pq:                      pq46,
+			ID:                      id45,
+			Type:                    typeVar49,
+			Disabled:                disabled82,
+			Pipeline:                pipeline90,
+			SendToRoutes:            sendToRoutes45,
+			Environment:             environment45,
+			PqEnabled:               pqEnabled45,
+			Streamtags:              streamtags45,
+			Connections:             connections45,
+			Pq:                      pq45,
 			QueueName:               queueName4,
 			QueueType:               queueType,
 			AwsAccountID:            awsAccountId3,
@@ -16877,16 +16295,16 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Endpoint:                endpoint8,
 			SignatureVersion:        signatureVersion7,
 			ReuseConnections:        reuseConnections7,
-			RejectUnauthorized:      rejectUnauthorized35,
+			RejectUnauthorized:      rejectUnauthorized34,
 			EnableAssumeRole:        enableAssumeRole7,
 			AssumeRoleArn:           assumeRoleArn7,
 			AssumeRoleExternalID:    assumeRoleExternalId7,
 			DurationSeconds:         durationSeconds7,
 			MaxMessages:             maxMessages4,
 			VisibilityTimeout:       visibilityTimeout4,
-			Metadata:                metadata50,
+			Metadata:                metadata49,
 			PollTimeout:             pollTimeout3,
-			Description:             description55,
+			Description:             description54,
 			AwsAPIKey:               awsAPIKey5,
 			AwsSecret:               awsSecret5,
 			NumReceivers:            numReceivers4,
@@ -16901,122 +16319,122 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	if r.InputSyslog != nil {
 		var inputSyslogSyslog1 *shared.InputSyslogSyslog1
 		if r.InputSyslog.InputSyslogSyslog1 != nil {
-			id47 := new(string)
+			id46 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog1.ID.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.ID.IsNull() {
-				*id47 = r.InputSyslog.InputSyslogSyslog1.ID.ValueString()
+				*id46 = r.InputSyslog.InputSyslogSyslog1.ID.ValueString()
 			} else {
-				id47 = nil
+				id46 = nil
 			}
-			typeVar51 := shared.InputSyslogType1(r.InputSyslog.InputSyslogSyslog1.Type.ValueString())
-			disabled85 := new(bool)
+			typeVar50 := shared.InputSyslogType1(r.InputSyslog.InputSyslogSyslog1.Type.ValueString())
+			disabled83 := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog1.Disabled.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Disabled.IsNull() {
-				*disabled85 = r.InputSyslog.InputSyslogSyslog1.Disabled.ValueBool()
+				*disabled83 = r.InputSyslog.InputSyslogSyslog1.Disabled.ValueBool()
 			} else {
-				disabled85 = nil
+				disabled83 = nil
 			}
-			pipeline94 := new(string)
+			pipeline92 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog1.Pipeline.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Pipeline.IsNull() {
-				*pipeline94 = r.InputSyslog.InputSyslogSyslog1.Pipeline.ValueString()
+				*pipeline92 = r.InputSyslog.InputSyslogSyslog1.Pipeline.ValueString()
 			} else {
-				pipeline94 = nil
+				pipeline92 = nil
 			}
-			sendToRoutes47 := new(bool)
+			sendToRoutes46 := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog1.SendToRoutes.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.SendToRoutes.IsNull() {
-				*sendToRoutes47 = r.InputSyslog.InputSyslogSyslog1.SendToRoutes.ValueBool()
+				*sendToRoutes46 = r.InputSyslog.InputSyslogSyslog1.SendToRoutes.ValueBool()
 			} else {
-				sendToRoutes47 = nil
+				sendToRoutes46 = nil
 			}
-			environment47 := new(string)
+			environment46 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog1.Environment.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Environment.IsNull() {
-				*environment47 = r.InputSyslog.InputSyslogSyslog1.Environment.ValueString()
+				*environment46 = r.InputSyslog.InputSyslogSyslog1.Environment.ValueString()
 			} else {
-				environment47 = nil
+				environment46 = nil
 			}
-			pqEnabled47 := new(bool)
+			pqEnabled46 := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog1.PqEnabled.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.PqEnabled.IsNull() {
-				*pqEnabled47 = r.InputSyslog.InputSyslogSyslog1.PqEnabled.ValueBool()
+				*pqEnabled46 = r.InputSyslog.InputSyslogSyslog1.PqEnabled.ValueBool()
 			} else {
-				pqEnabled47 = nil
+				pqEnabled46 = nil
 			}
-			streamtags47 := make([]string, 0, len(r.InputSyslog.InputSyslogSyslog1.Streamtags))
-			for streamtagsIndex47 := range r.InputSyslog.InputSyslogSyslog1.Streamtags {
-				streamtags47 = append(streamtags47, r.InputSyslog.InputSyslogSyslog1.Streamtags[streamtagsIndex47].ValueString())
+			streamtags46 := make([]string, 0, len(r.InputSyslog.InputSyslogSyslog1.Streamtags))
+			for streamtagsIndex46 := range r.InputSyslog.InputSyslogSyslog1.Streamtags {
+				streamtags46 = append(streamtags46, r.InputSyslog.InputSyslogSyslog1.Streamtags[streamtagsIndex46].ValueString())
 			}
-			connections47 := make([]shared.InputSyslogConnection1, 0, len(r.InputSyslog.InputSyslogSyslog1.Connections))
-			for connectionsIndex47 := range r.InputSyslog.InputSyslogSyslog1.Connections {
-				pipeline95 := new(string)
-				if !r.InputSyslog.InputSyslogSyslog1.Connections[connectionsIndex47].Pipeline.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Connections[connectionsIndex47].Pipeline.IsNull() {
-					*pipeline95 = r.InputSyslog.InputSyslogSyslog1.Connections[connectionsIndex47].Pipeline.ValueString()
+			connections46 := make([]shared.InputSyslogConnection1, 0, len(r.InputSyslog.InputSyslogSyslog1.Connections))
+			for connectionsIndex46 := range r.InputSyslog.InputSyslogSyslog1.Connections {
+				pipeline93 := new(string)
+				if !r.InputSyslog.InputSyslogSyslog1.Connections[connectionsIndex46].Pipeline.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Connections[connectionsIndex46].Pipeline.IsNull() {
+					*pipeline93 = r.InputSyslog.InputSyslogSyslog1.Connections[connectionsIndex46].Pipeline.ValueString()
 				} else {
-					pipeline95 = nil
+					pipeline93 = nil
 				}
-				var output48 string
-				output48 = r.InputSyslog.InputSyslogSyslog1.Connections[connectionsIndex47].Output.ValueString()
+				var output47 string
+				output47 = r.InputSyslog.InputSyslogSyslog1.Connections[connectionsIndex46].Output.ValueString()
 
-				connections47 = append(connections47, shared.InputSyslogConnection1{
-					Pipeline: pipeline95,
-					Output:   output48,
+				connections46 = append(connections46, shared.InputSyslogConnection1{
+					Pipeline: pipeline93,
+					Output:   output47,
 				})
 			}
-			var pq47 *shared.InputSyslogPq1
+			var pq46 *shared.InputSyslogPq1
 			if r.InputSyslog.InputSyslogSyslog1.Pq != nil {
-				mode60 := new(shared.InputSyslogMode1)
+				mode59 := new(shared.InputSyslogMode1)
 				if !r.InputSyslog.InputSyslogSyslog1.Pq.Mode.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Pq.Mode.IsNull() {
-					*mode60 = shared.InputSyslogMode1(r.InputSyslog.InputSyslogSyslog1.Pq.Mode.ValueString())
+					*mode59 = shared.InputSyslogMode1(r.InputSyslog.InputSyslogSyslog1.Pq.Mode.ValueString())
 				} else {
-					mode60 = nil
+					mode59 = nil
 				}
-				maxBufferSize49 := new(float64)
+				maxBufferSize48 := new(float64)
 				if !r.InputSyslog.InputSyslogSyslog1.Pq.MaxBufferSize.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Pq.MaxBufferSize.IsNull() {
-					*maxBufferSize49 = r.InputSyslog.InputSyslogSyslog1.Pq.MaxBufferSize.ValueFloat64()
+					*maxBufferSize48 = r.InputSyslog.InputSyslogSyslog1.Pq.MaxBufferSize.ValueFloat64()
 				} else {
-					maxBufferSize49 = nil
+					maxBufferSize48 = nil
 				}
-				commitFrequency47 := new(float64)
+				commitFrequency46 := new(float64)
 				if !r.InputSyslog.InputSyslogSyslog1.Pq.CommitFrequency.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Pq.CommitFrequency.IsNull() {
-					*commitFrequency47 = r.InputSyslog.InputSyslogSyslog1.Pq.CommitFrequency.ValueFloat64()
+					*commitFrequency46 = r.InputSyslog.InputSyslogSyslog1.Pq.CommitFrequency.ValueFloat64()
 				} else {
-					commitFrequency47 = nil
+					commitFrequency46 = nil
 				}
-				maxFileSize47 := new(string)
+				maxFileSize46 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog1.Pq.MaxFileSize.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Pq.MaxFileSize.IsNull() {
-					*maxFileSize47 = r.InputSyslog.InputSyslogSyslog1.Pq.MaxFileSize.ValueString()
+					*maxFileSize46 = r.InputSyslog.InputSyslogSyslog1.Pq.MaxFileSize.ValueString()
 				} else {
-					maxFileSize47 = nil
+					maxFileSize46 = nil
 				}
-				maxSize47 := new(string)
+				maxSize46 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog1.Pq.MaxSize.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Pq.MaxSize.IsNull() {
-					*maxSize47 = r.InputSyslog.InputSyslogSyslog1.Pq.MaxSize.ValueString()
+					*maxSize46 = r.InputSyslog.InputSyslogSyslog1.Pq.MaxSize.ValueString()
 				} else {
-					maxSize47 = nil
+					maxSize46 = nil
 				}
-				path48 := new(string)
+				path47 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog1.Pq.Path.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Pq.Path.IsNull() {
-					*path48 = r.InputSyslog.InputSyslogSyslog1.Pq.Path.ValueString()
+					*path47 = r.InputSyslog.InputSyslogSyslog1.Pq.Path.ValueString()
 				} else {
-					path48 = nil
+					path47 = nil
 				}
-				compress54 := new(shared.InputSyslogCompression1)
+				compress53 := new(shared.InputSyslogCompression1)
 				if !r.InputSyslog.InputSyslogSyslog1.Pq.Compress.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Pq.Compress.IsNull() {
-					*compress54 = shared.InputSyslogCompression1(r.InputSyslog.InputSyslogSyslog1.Pq.Compress.ValueString())
+					*compress53 = shared.InputSyslogCompression1(r.InputSyslog.InputSyslogSyslog1.Pq.Compress.ValueString())
 				} else {
-					compress54 = nil
+					compress53 = nil
 				}
-				pq47 = &shared.InputSyslogPq1{
-					Mode:            mode60,
-					MaxBufferSize:   maxBufferSize49,
-					CommitFrequency: commitFrequency47,
-					MaxFileSize:     maxFileSize47,
-					MaxSize:         maxSize47,
-					Path:            path48,
-					Compress:        compress54,
+				pq46 = &shared.InputSyslogPq1{
+					Mode:            mode59,
+					MaxBufferSize:   maxBufferSize48,
+					CommitFrequency: commitFrequency46,
+					MaxFileSize:     maxFileSize46,
+					MaxSize:         maxSize46,
+					Path:            path47,
+					Compress:        compress53,
 				}
 			}
-			host22 := new(string)
+			host21 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog1.Host.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Host.IsNull() {
-				*host22 = r.InputSyslog.InputSyslogSyslog1.Host.ValueString()
+				*host21 = r.InputSyslog.InputSyslogSyslog1.Host.ValueString()
 			} else {
-				host22 = nil
+				host21 = nil
 			}
 			var udpPort1 float64
 			udpPort1 = r.InputSyslog.InputSyslogSyslog1.UDPPort.ValueFloat64()
@@ -17027,11 +16445,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				tcpPort1 = nil
 			}
-			maxBufferSize50 := new(float64)
+			maxBufferSize49 := new(float64)
 			if !r.InputSyslog.InputSyslogSyslog1.MaxBufferSize.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.MaxBufferSize.IsNull() {
-				*maxBufferSize50 = r.InputSyslog.InputSyslogSyslog1.MaxBufferSize.ValueFloat64()
+				*maxBufferSize49 = r.InputSyslog.InputSyslogSyslog1.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize50 = nil
+				maxBufferSize49 = nil
 			}
 			ipWhitelistRegex4 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog1.IPWhitelistRegex.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.IPWhitelistRegex.IsNull() {
@@ -17051,11 +16469,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				singleMsgUDPPackets = nil
 			}
-			enableProxyHeader17 := new(bool)
+			enableProxyHeader16 := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog1.EnableProxyHeader.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.EnableProxyHeader.IsNull() {
-				*enableProxyHeader17 = r.InputSyslog.InputSyslogSyslog1.EnableProxyHeader.ValueBool()
+				*enableProxyHeader16 = r.InputSyslog.InputSyslogSyslog1.EnableProxyHeader.ValueBool()
 			} else {
-				enableProxyHeader17 = nil
+				enableProxyHeader16 = nil
 			}
 			keepFieldsList := make([]string, 0, len(r.InputSyslog.InputSyslogSyslog1.KeepFieldsList))
 			for keepFieldsListIndex := range r.InputSyslog.InputSyslogSyslog1.KeepFieldsList {
@@ -17109,95 +16527,95 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				socketMaxLifespan3 = nil
 			}
-			var tls25 *shared.InputSyslogTLSSettingsServerSide1
+			var tls24 *shared.InputSyslogTLSSettingsServerSide1
 			if r.InputSyslog.InputSyslogSyslog1.TLS != nil {
-				disabled86 := new(bool)
+				disabled84 := new(bool)
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.Disabled.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.Disabled.IsNull() {
-					*disabled86 = r.InputSyslog.InputSyslogSyslog1.TLS.Disabled.ValueBool()
+					*disabled84 = r.InputSyslog.InputSyslogSyslog1.TLS.Disabled.ValueBool()
 				} else {
-					disabled86 = nil
+					disabled84 = nil
 				}
-				certificateName26 := new(string)
+				certificateName25 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.CertificateName.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.CertificateName.IsNull() {
-					*certificateName26 = r.InputSyslog.InputSyslogSyslog1.TLS.CertificateName.ValueString()
+					*certificateName25 = r.InputSyslog.InputSyslogSyslog1.TLS.CertificateName.ValueString()
 				} else {
-					certificateName26 = nil
+					certificateName25 = nil
 				}
-				privKeyPath25 := new(string)
+				privKeyPath24 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.PrivKeyPath.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.PrivKeyPath.IsNull() {
-					*privKeyPath25 = r.InputSyslog.InputSyslogSyslog1.TLS.PrivKeyPath.ValueString()
+					*privKeyPath24 = r.InputSyslog.InputSyslogSyslog1.TLS.PrivKeyPath.ValueString()
 				} else {
-					privKeyPath25 = nil
+					privKeyPath24 = nil
 				}
-				passphrase24 := new(string)
+				passphrase23 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.Passphrase.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.Passphrase.IsNull() {
-					*passphrase24 = r.InputSyslog.InputSyslogSyslog1.TLS.Passphrase.ValueString()
+					*passphrase23 = r.InputSyslog.InputSyslogSyslog1.TLS.Passphrase.ValueString()
 				} else {
-					passphrase24 = nil
+					passphrase23 = nil
 				}
-				certPath25 := new(string)
+				certPath24 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.CertPath.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.CertPath.IsNull() {
-					*certPath25 = r.InputSyslog.InputSyslogSyslog1.TLS.CertPath.ValueString()
+					*certPath24 = r.InputSyslog.InputSyslogSyslog1.TLS.CertPath.ValueString()
 				} else {
-					certPath25 = nil
+					certPath24 = nil
 				}
-				caPath24 := new(string)
+				caPath23 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.CaPath.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.CaPath.IsNull() {
-					*caPath24 = r.InputSyslog.InputSyslogSyslog1.TLS.CaPath.ValueString()
+					*caPath23 = r.InputSyslog.InputSyslogSyslog1.TLS.CaPath.ValueString()
 				} else {
-					caPath24 = nil
+					caPath23 = nil
 				}
-				requestCert18 := new(bool)
+				requestCert17 := new(bool)
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.RequestCert.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.RequestCert.IsNull() {
-					*requestCert18 = r.InputSyslog.InputSyslogSyslog1.TLS.RequestCert.ValueBool()
+					*requestCert17 = r.InputSyslog.InputSyslogSyslog1.TLS.RequestCert.ValueBool()
 				} else {
-					requestCert18 = nil
+					requestCert17 = nil
 				}
-				var rejectUnauthorized36 interface{}
+				var rejectUnauthorized35 interface{}
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized.IsNull() {
-					_ = json.Unmarshal([]byte(r.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized36)
+					_ = json.Unmarshal([]byte(r.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized35)
 				}
-				var commonNameRegex18 interface{}
+				var commonNameRegex17 interface{}
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex.IsNull() {
-					_ = json.Unmarshal([]byte(r.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex.ValueString()), &commonNameRegex18)
+					_ = json.Unmarshal([]byte(r.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex.ValueString()), &commonNameRegex17)
 				}
-				minVersion24 := new(shared.InputSyslogMinimumTLSVersion1)
+				minVersion23 := new(shared.InputSyslogMinimumTLSVersion1)
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.MinVersion.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.MinVersion.IsNull() {
-					*minVersion24 = shared.InputSyslogMinimumTLSVersion1(r.InputSyslog.InputSyslogSyslog1.TLS.MinVersion.ValueString())
+					*minVersion23 = shared.InputSyslogMinimumTLSVersion1(r.InputSyslog.InputSyslogSyslog1.TLS.MinVersion.ValueString())
 				} else {
-					minVersion24 = nil
+					minVersion23 = nil
 				}
-				maxVersion24 := new(shared.InputSyslogMaximumTLSVersion1)
+				maxVersion23 := new(shared.InputSyslogMaximumTLSVersion1)
 				if !r.InputSyslog.InputSyslogSyslog1.TLS.MaxVersion.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.TLS.MaxVersion.IsNull() {
-					*maxVersion24 = shared.InputSyslogMaximumTLSVersion1(r.InputSyslog.InputSyslogSyslog1.TLS.MaxVersion.ValueString())
+					*maxVersion23 = shared.InputSyslogMaximumTLSVersion1(r.InputSyslog.InputSyslogSyslog1.TLS.MaxVersion.ValueString())
 				} else {
-					maxVersion24 = nil
+					maxVersion23 = nil
 				}
-				tls25 = &shared.InputSyslogTLSSettingsServerSide1{
-					Disabled:           disabled86,
-					CertificateName:    certificateName26,
-					PrivKeyPath:        privKeyPath25,
-					Passphrase:         passphrase24,
-					CertPath:           certPath25,
-					CaPath:             caPath24,
-					RequestCert:        requestCert18,
-					RejectUnauthorized: rejectUnauthorized36,
-					CommonNameRegex:    commonNameRegex18,
-					MinVersion:         minVersion24,
-					MaxVersion:         maxVersion24,
+				tls24 = &shared.InputSyslogTLSSettingsServerSide1{
+					Disabled:           disabled84,
+					CertificateName:    certificateName25,
+					PrivKeyPath:        privKeyPath24,
+					Passphrase:         passphrase23,
+					CertPath:           certPath24,
+					CaPath:             caPath23,
+					RequestCert:        requestCert17,
+					RejectUnauthorized: rejectUnauthorized35,
+					CommonNameRegex:    commonNameRegex17,
+					MinVersion:         minVersion23,
+					MaxVersion:         maxVersion23,
 				}
 			}
-			metadata51 := make([]shared.InputSyslogMetadatum1, 0, len(r.InputSyslog.InputSyslogSyslog1.Metadata))
-			for metadataIndex50 := range r.InputSyslog.InputSyslogSyslog1.Metadata {
-				var name74 string
-				name74 = r.InputSyslog.InputSyslogSyslog1.Metadata[metadataIndex50].Name.ValueString()
+			metadata50 := make([]shared.InputSyslogMetadatum1, 0, len(r.InputSyslog.InputSyslogSyslog1.Metadata))
+			for metadataIndex49 := range r.InputSyslog.InputSyslogSyslog1.Metadata {
+				var name69 string
+				name69 = r.InputSyslog.InputSyslogSyslog1.Metadata[metadataIndex49].Name.ValueString()
 
-				var value69 string
-				value69 = r.InputSyslog.InputSyslogSyslog1.Metadata[metadataIndex50].Value.ValueString()
+				var value64 string
+				value64 = r.InputSyslog.InputSyslogSyslog1.Metadata[metadataIndex49].Value.ValueString()
 
-				metadata51 = append(metadata51, shared.InputSyslogMetadatum1{
-					Name:  name74,
-					Value: value69,
+				metadata50 = append(metadata50, shared.InputSyslogMetadatum1{
+					Name:  name69,
+					Value: value64,
 				})
 			}
 			udpSocketRxBufSize2 := new(float64)
@@ -17212,11 +16630,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				enableLoadBalancing3 = nil
 			}
-			description56 := new(string)
+			description55 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog1.Description.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.Description.IsNull() {
-				*description56 = r.InputSyslog.InputSyslogSyslog1.Description.ValueString()
+				*description55 = r.InputSyslog.InputSyslogSyslog1.Description.ValueString()
 			} else {
-				description56 = nil
+				description55 = nil
 			}
 			enableEnhancedProxyHeaderParsing := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog1.EnableEnhancedProxyHeaderParsing.IsUnknown() && !r.InputSyslog.InputSyslogSyslog1.EnableEnhancedProxyHeaderParsing.IsNull() {
@@ -17225,24 +16643,24 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				enableEnhancedProxyHeaderParsing = nil
 			}
 			inputSyslogSyslog1 = &shared.InputSyslogSyslog1{
-				ID:                               id47,
-				Type:                             typeVar51,
-				Disabled:                         disabled85,
-				Pipeline:                         pipeline94,
-				SendToRoutes:                     sendToRoutes47,
-				Environment:                      environment47,
-				PqEnabled:                        pqEnabled47,
-				Streamtags:                       streamtags47,
-				Connections:                      connections47,
-				Pq:                               pq47,
-				Host:                             host22,
+				ID:                               id46,
+				Type:                             typeVar50,
+				Disabled:                         disabled83,
+				Pipeline:                         pipeline92,
+				SendToRoutes:                     sendToRoutes46,
+				Environment:                      environment46,
+				PqEnabled:                        pqEnabled46,
+				Streamtags:                       streamtags46,
+				Connections:                      connections46,
+				Pq:                               pq46,
+				Host:                             host21,
 				UDPPort:                          udpPort1,
 				TCPPort:                          tcpPort1,
-				MaxBufferSize:                    maxBufferSize50,
+				MaxBufferSize:                    maxBufferSize49,
 				IPWhitelistRegex:                 ipWhitelistRegex4,
 				TimestampTimezone:                timestampTimezone,
 				SingleMsgUDPPackets:              singleMsgUDPPackets,
-				EnableProxyHeader:                enableProxyHeader17,
+				EnableProxyHeader:                enableProxyHeader16,
 				KeepFieldsList:                   keepFieldsList,
 				OctetCounting:                    octetCounting,
 				InferFraming:                     inferFraming,
@@ -17252,11 +16670,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				SocketIdleTimeout:                socketIdleTimeout3,
 				SocketEndingMaxWait:              socketEndingMaxWait3,
 				SocketMaxLifespan:                socketMaxLifespan3,
-				TLS:                              tls25,
-				Metadata:                         metadata51,
+				TLS:                              tls24,
+				Metadata:                         metadata50,
 				UDPSocketRxBufSize:               udpSocketRxBufSize2,
 				EnableLoadBalancing:              enableLoadBalancing3,
-				Description:                      description56,
+				Description:                      description55,
 				EnableEnhancedProxyHeaderParsing: enableEnhancedProxyHeaderParsing,
 			}
 		}
@@ -17267,122 +16685,122 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var inputSyslogSyslog2 *shared.InputSyslogSyslog2
 		if r.InputSyslog.InputSyslogSyslog2 != nil {
-			id48 := new(string)
+			id47 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog2.ID.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.ID.IsNull() {
-				*id48 = r.InputSyslog.InputSyslogSyslog2.ID.ValueString()
+				*id47 = r.InputSyslog.InputSyslogSyslog2.ID.ValueString()
 			} else {
-				id48 = nil
+				id47 = nil
 			}
-			typeVar52 := shared.InputSyslogType2(r.InputSyslog.InputSyslogSyslog2.Type.ValueString())
-			disabled87 := new(bool)
+			typeVar51 := shared.InputSyslogType2(r.InputSyslog.InputSyslogSyslog2.Type.ValueString())
+			disabled85 := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog2.Disabled.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Disabled.IsNull() {
-				*disabled87 = r.InputSyslog.InputSyslogSyslog2.Disabled.ValueBool()
+				*disabled85 = r.InputSyslog.InputSyslogSyslog2.Disabled.ValueBool()
 			} else {
-				disabled87 = nil
+				disabled85 = nil
 			}
-			pipeline96 := new(string)
+			pipeline94 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog2.Pipeline.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Pipeline.IsNull() {
-				*pipeline96 = r.InputSyslog.InputSyslogSyslog2.Pipeline.ValueString()
+				*pipeline94 = r.InputSyslog.InputSyslogSyslog2.Pipeline.ValueString()
 			} else {
-				pipeline96 = nil
+				pipeline94 = nil
 			}
-			sendToRoutes48 := new(bool)
+			sendToRoutes47 := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog2.SendToRoutes.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.SendToRoutes.IsNull() {
-				*sendToRoutes48 = r.InputSyslog.InputSyslogSyslog2.SendToRoutes.ValueBool()
+				*sendToRoutes47 = r.InputSyslog.InputSyslogSyslog2.SendToRoutes.ValueBool()
 			} else {
-				sendToRoutes48 = nil
+				sendToRoutes47 = nil
 			}
-			environment48 := new(string)
+			environment47 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog2.Environment.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Environment.IsNull() {
-				*environment48 = r.InputSyslog.InputSyslogSyslog2.Environment.ValueString()
+				*environment47 = r.InputSyslog.InputSyslogSyslog2.Environment.ValueString()
 			} else {
-				environment48 = nil
+				environment47 = nil
 			}
-			pqEnabled48 := new(bool)
+			pqEnabled47 := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog2.PqEnabled.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.PqEnabled.IsNull() {
-				*pqEnabled48 = r.InputSyslog.InputSyslogSyslog2.PqEnabled.ValueBool()
+				*pqEnabled47 = r.InputSyslog.InputSyslogSyslog2.PqEnabled.ValueBool()
 			} else {
-				pqEnabled48 = nil
+				pqEnabled47 = nil
 			}
-			streamtags48 := make([]string, 0, len(r.InputSyslog.InputSyslogSyslog2.Streamtags))
-			for streamtagsIndex48 := range r.InputSyslog.InputSyslogSyslog2.Streamtags {
-				streamtags48 = append(streamtags48, r.InputSyslog.InputSyslogSyslog2.Streamtags[streamtagsIndex48].ValueString())
+			streamtags47 := make([]string, 0, len(r.InputSyslog.InputSyslogSyslog2.Streamtags))
+			for streamtagsIndex47 := range r.InputSyslog.InputSyslogSyslog2.Streamtags {
+				streamtags47 = append(streamtags47, r.InputSyslog.InputSyslogSyslog2.Streamtags[streamtagsIndex47].ValueString())
 			}
-			connections48 := make([]shared.InputSyslogConnection2, 0, len(r.InputSyslog.InputSyslogSyslog2.Connections))
-			for connectionsIndex48 := range r.InputSyslog.InputSyslogSyslog2.Connections {
-				pipeline97 := new(string)
-				if !r.InputSyslog.InputSyslogSyslog2.Connections[connectionsIndex48].Pipeline.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Connections[connectionsIndex48].Pipeline.IsNull() {
-					*pipeline97 = r.InputSyslog.InputSyslogSyslog2.Connections[connectionsIndex48].Pipeline.ValueString()
+			connections47 := make([]shared.InputSyslogConnection2, 0, len(r.InputSyslog.InputSyslogSyslog2.Connections))
+			for connectionsIndex47 := range r.InputSyslog.InputSyslogSyslog2.Connections {
+				pipeline95 := new(string)
+				if !r.InputSyslog.InputSyslogSyslog2.Connections[connectionsIndex47].Pipeline.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Connections[connectionsIndex47].Pipeline.IsNull() {
+					*pipeline95 = r.InputSyslog.InputSyslogSyslog2.Connections[connectionsIndex47].Pipeline.ValueString()
 				} else {
-					pipeline97 = nil
+					pipeline95 = nil
 				}
-				var output49 string
-				output49 = r.InputSyslog.InputSyslogSyslog2.Connections[connectionsIndex48].Output.ValueString()
+				var output48 string
+				output48 = r.InputSyslog.InputSyslogSyslog2.Connections[connectionsIndex47].Output.ValueString()
 
-				connections48 = append(connections48, shared.InputSyslogConnection2{
-					Pipeline: pipeline97,
-					Output:   output49,
+				connections47 = append(connections47, shared.InputSyslogConnection2{
+					Pipeline: pipeline95,
+					Output:   output48,
 				})
 			}
-			var pq48 *shared.InputSyslogPq2
+			var pq47 *shared.InputSyslogPq2
 			if r.InputSyslog.InputSyslogSyslog2.Pq != nil {
-				mode61 := new(shared.InputSyslogMode2)
+				mode60 := new(shared.InputSyslogMode2)
 				if !r.InputSyslog.InputSyslogSyslog2.Pq.Mode.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Pq.Mode.IsNull() {
-					*mode61 = shared.InputSyslogMode2(r.InputSyslog.InputSyslogSyslog2.Pq.Mode.ValueString())
+					*mode60 = shared.InputSyslogMode2(r.InputSyslog.InputSyslogSyslog2.Pq.Mode.ValueString())
 				} else {
-					mode61 = nil
+					mode60 = nil
 				}
-				maxBufferSize51 := new(float64)
+				maxBufferSize50 := new(float64)
 				if !r.InputSyslog.InputSyslogSyslog2.Pq.MaxBufferSize.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Pq.MaxBufferSize.IsNull() {
-					*maxBufferSize51 = r.InputSyslog.InputSyslogSyslog2.Pq.MaxBufferSize.ValueFloat64()
+					*maxBufferSize50 = r.InputSyslog.InputSyslogSyslog2.Pq.MaxBufferSize.ValueFloat64()
 				} else {
-					maxBufferSize51 = nil
+					maxBufferSize50 = nil
 				}
-				commitFrequency48 := new(float64)
+				commitFrequency47 := new(float64)
 				if !r.InputSyslog.InputSyslogSyslog2.Pq.CommitFrequency.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Pq.CommitFrequency.IsNull() {
-					*commitFrequency48 = r.InputSyslog.InputSyslogSyslog2.Pq.CommitFrequency.ValueFloat64()
+					*commitFrequency47 = r.InputSyslog.InputSyslogSyslog2.Pq.CommitFrequency.ValueFloat64()
 				} else {
-					commitFrequency48 = nil
+					commitFrequency47 = nil
 				}
-				maxFileSize48 := new(string)
+				maxFileSize47 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog2.Pq.MaxFileSize.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Pq.MaxFileSize.IsNull() {
-					*maxFileSize48 = r.InputSyslog.InputSyslogSyslog2.Pq.MaxFileSize.ValueString()
+					*maxFileSize47 = r.InputSyslog.InputSyslogSyslog2.Pq.MaxFileSize.ValueString()
 				} else {
-					maxFileSize48 = nil
+					maxFileSize47 = nil
 				}
-				maxSize48 := new(string)
+				maxSize47 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog2.Pq.MaxSize.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Pq.MaxSize.IsNull() {
-					*maxSize48 = r.InputSyslog.InputSyslogSyslog2.Pq.MaxSize.ValueString()
+					*maxSize47 = r.InputSyslog.InputSyslogSyslog2.Pq.MaxSize.ValueString()
 				} else {
-					maxSize48 = nil
+					maxSize47 = nil
 				}
-				path49 := new(string)
+				path48 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog2.Pq.Path.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Pq.Path.IsNull() {
-					*path49 = r.InputSyslog.InputSyslogSyslog2.Pq.Path.ValueString()
+					*path48 = r.InputSyslog.InputSyslogSyslog2.Pq.Path.ValueString()
 				} else {
-					path49 = nil
+					path48 = nil
 				}
-				compress55 := new(shared.InputSyslogCompression2)
+				compress54 := new(shared.InputSyslogCompression2)
 				if !r.InputSyslog.InputSyslogSyslog2.Pq.Compress.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Pq.Compress.IsNull() {
-					*compress55 = shared.InputSyslogCompression2(r.InputSyslog.InputSyslogSyslog2.Pq.Compress.ValueString())
+					*compress54 = shared.InputSyslogCompression2(r.InputSyslog.InputSyslogSyslog2.Pq.Compress.ValueString())
 				} else {
-					compress55 = nil
+					compress54 = nil
 				}
-				pq48 = &shared.InputSyslogPq2{
-					Mode:            mode61,
-					MaxBufferSize:   maxBufferSize51,
-					CommitFrequency: commitFrequency48,
-					MaxFileSize:     maxFileSize48,
-					MaxSize:         maxSize48,
-					Path:            path49,
-					Compress:        compress55,
+				pq47 = &shared.InputSyslogPq2{
+					Mode:            mode60,
+					MaxBufferSize:   maxBufferSize50,
+					CommitFrequency: commitFrequency47,
+					MaxFileSize:     maxFileSize47,
+					MaxSize:         maxSize47,
+					Path:            path48,
+					Compress:        compress54,
 				}
 			}
-			host23 := new(string)
+			host22 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog2.Host.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Host.IsNull() {
-				*host23 = r.InputSyslog.InputSyslogSyslog2.Host.ValueString()
+				*host22 = r.InputSyslog.InputSyslogSyslog2.Host.ValueString()
 			} else {
-				host23 = nil
+				host22 = nil
 			}
 			udpPort2 := new(float64)
 			if !r.InputSyslog.InputSyslogSyslog2.UDPPort.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.UDPPort.IsNull() {
@@ -17393,11 +16811,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			var tcpPort2 float64
 			tcpPort2 = r.InputSyslog.InputSyslogSyslog2.TCPPort.ValueFloat64()
 
-			maxBufferSize52 := new(float64)
+			maxBufferSize51 := new(float64)
 			if !r.InputSyslog.InputSyslogSyslog2.MaxBufferSize.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.MaxBufferSize.IsNull() {
-				*maxBufferSize52 = r.InputSyslog.InputSyslogSyslog2.MaxBufferSize.ValueFloat64()
+				*maxBufferSize51 = r.InputSyslog.InputSyslogSyslog2.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize52 = nil
+				maxBufferSize51 = nil
 			}
 			ipWhitelistRegex5 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog2.IPWhitelistRegex.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.IPWhitelistRegex.IsNull() {
@@ -17417,11 +16835,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				singleMsgUDPPackets1 = nil
 			}
-			enableProxyHeader18 := new(bool)
+			enableProxyHeader17 := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog2.EnableProxyHeader.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.EnableProxyHeader.IsNull() {
-				*enableProxyHeader18 = r.InputSyslog.InputSyslogSyslog2.EnableProxyHeader.ValueBool()
+				*enableProxyHeader17 = r.InputSyslog.InputSyslogSyslog2.EnableProxyHeader.ValueBool()
 			} else {
-				enableProxyHeader18 = nil
+				enableProxyHeader17 = nil
 			}
 			keepFieldsList1 := make([]string, 0, len(r.InputSyslog.InputSyslogSyslog2.KeepFieldsList))
 			for keepFieldsListIndex1 := range r.InputSyslog.InputSyslogSyslog2.KeepFieldsList {
@@ -17475,95 +16893,95 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				socketMaxLifespan4 = nil
 			}
-			var tls26 *shared.InputSyslogTLSSettingsServerSide2
+			var tls25 *shared.InputSyslogTLSSettingsServerSide2
 			if r.InputSyslog.InputSyslogSyslog2.TLS != nil {
-				disabled88 := new(bool)
+				disabled86 := new(bool)
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.Disabled.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.Disabled.IsNull() {
-					*disabled88 = r.InputSyslog.InputSyslogSyslog2.TLS.Disabled.ValueBool()
+					*disabled86 = r.InputSyslog.InputSyslogSyslog2.TLS.Disabled.ValueBool()
 				} else {
-					disabled88 = nil
+					disabled86 = nil
 				}
-				certificateName27 := new(string)
+				certificateName26 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.CertificateName.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.CertificateName.IsNull() {
-					*certificateName27 = r.InputSyslog.InputSyslogSyslog2.TLS.CertificateName.ValueString()
+					*certificateName26 = r.InputSyslog.InputSyslogSyslog2.TLS.CertificateName.ValueString()
 				} else {
-					certificateName27 = nil
+					certificateName26 = nil
 				}
-				privKeyPath26 := new(string)
+				privKeyPath25 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.PrivKeyPath.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.PrivKeyPath.IsNull() {
-					*privKeyPath26 = r.InputSyslog.InputSyslogSyslog2.TLS.PrivKeyPath.ValueString()
+					*privKeyPath25 = r.InputSyslog.InputSyslogSyslog2.TLS.PrivKeyPath.ValueString()
 				} else {
-					privKeyPath26 = nil
+					privKeyPath25 = nil
 				}
-				passphrase25 := new(string)
+				passphrase24 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.Passphrase.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.Passphrase.IsNull() {
-					*passphrase25 = r.InputSyslog.InputSyslogSyslog2.TLS.Passphrase.ValueString()
+					*passphrase24 = r.InputSyslog.InputSyslogSyslog2.TLS.Passphrase.ValueString()
 				} else {
-					passphrase25 = nil
+					passphrase24 = nil
 				}
-				certPath26 := new(string)
+				certPath25 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.CertPath.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.CertPath.IsNull() {
-					*certPath26 = r.InputSyslog.InputSyslogSyslog2.TLS.CertPath.ValueString()
+					*certPath25 = r.InputSyslog.InputSyslogSyslog2.TLS.CertPath.ValueString()
 				} else {
-					certPath26 = nil
+					certPath25 = nil
 				}
-				caPath25 := new(string)
+				caPath24 := new(string)
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.CaPath.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.CaPath.IsNull() {
-					*caPath25 = r.InputSyslog.InputSyslogSyslog2.TLS.CaPath.ValueString()
+					*caPath24 = r.InputSyslog.InputSyslogSyslog2.TLS.CaPath.ValueString()
 				} else {
-					caPath25 = nil
+					caPath24 = nil
 				}
-				requestCert19 := new(bool)
+				requestCert18 := new(bool)
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.RequestCert.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.RequestCert.IsNull() {
-					*requestCert19 = r.InputSyslog.InputSyslogSyslog2.TLS.RequestCert.ValueBool()
+					*requestCert18 = r.InputSyslog.InputSyslogSyslog2.TLS.RequestCert.ValueBool()
 				} else {
-					requestCert19 = nil
+					requestCert18 = nil
 				}
-				var rejectUnauthorized37 interface{}
+				var rejectUnauthorized36 interface{}
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized.IsNull() {
-					_ = json.Unmarshal([]byte(r.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized37)
+					_ = json.Unmarshal([]byte(r.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized36)
 				}
-				var commonNameRegex19 interface{}
+				var commonNameRegex18 interface{}
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex.IsNull() {
-					_ = json.Unmarshal([]byte(r.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex.ValueString()), &commonNameRegex19)
+					_ = json.Unmarshal([]byte(r.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex.ValueString()), &commonNameRegex18)
 				}
-				minVersion25 := new(shared.InputSyslogMinimumTLSVersion2)
+				minVersion24 := new(shared.InputSyslogMinimumTLSVersion2)
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.MinVersion.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.MinVersion.IsNull() {
-					*minVersion25 = shared.InputSyslogMinimumTLSVersion2(r.InputSyslog.InputSyslogSyslog2.TLS.MinVersion.ValueString())
+					*minVersion24 = shared.InputSyslogMinimumTLSVersion2(r.InputSyslog.InputSyslogSyslog2.TLS.MinVersion.ValueString())
 				} else {
-					minVersion25 = nil
+					minVersion24 = nil
 				}
-				maxVersion25 := new(shared.InputSyslogMaximumTLSVersion2)
+				maxVersion24 := new(shared.InputSyslogMaximumTLSVersion2)
 				if !r.InputSyslog.InputSyslogSyslog2.TLS.MaxVersion.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.TLS.MaxVersion.IsNull() {
-					*maxVersion25 = shared.InputSyslogMaximumTLSVersion2(r.InputSyslog.InputSyslogSyslog2.TLS.MaxVersion.ValueString())
+					*maxVersion24 = shared.InputSyslogMaximumTLSVersion2(r.InputSyslog.InputSyslogSyslog2.TLS.MaxVersion.ValueString())
 				} else {
-					maxVersion25 = nil
+					maxVersion24 = nil
 				}
-				tls26 = &shared.InputSyslogTLSSettingsServerSide2{
-					Disabled:           disabled88,
-					CertificateName:    certificateName27,
-					PrivKeyPath:        privKeyPath26,
-					Passphrase:         passphrase25,
-					CertPath:           certPath26,
-					CaPath:             caPath25,
-					RequestCert:        requestCert19,
-					RejectUnauthorized: rejectUnauthorized37,
-					CommonNameRegex:    commonNameRegex19,
-					MinVersion:         minVersion25,
-					MaxVersion:         maxVersion25,
+				tls25 = &shared.InputSyslogTLSSettingsServerSide2{
+					Disabled:           disabled86,
+					CertificateName:    certificateName26,
+					PrivKeyPath:        privKeyPath25,
+					Passphrase:         passphrase24,
+					CertPath:           certPath25,
+					CaPath:             caPath24,
+					RequestCert:        requestCert18,
+					RejectUnauthorized: rejectUnauthorized36,
+					CommonNameRegex:    commonNameRegex18,
+					MinVersion:         minVersion24,
+					MaxVersion:         maxVersion24,
 				}
 			}
-			metadata52 := make([]shared.InputSyslogMetadatum2, 0, len(r.InputSyslog.InputSyslogSyslog2.Metadata))
-			for metadataIndex51 := range r.InputSyslog.InputSyslogSyslog2.Metadata {
-				var name75 string
-				name75 = r.InputSyslog.InputSyslogSyslog2.Metadata[metadataIndex51].Name.ValueString()
+			metadata51 := make([]shared.InputSyslogMetadatum2, 0, len(r.InputSyslog.InputSyslogSyslog2.Metadata))
+			for metadataIndex50 := range r.InputSyslog.InputSyslogSyslog2.Metadata {
+				var name70 string
+				name70 = r.InputSyslog.InputSyslogSyslog2.Metadata[metadataIndex50].Name.ValueString()
 
-				var value70 string
-				value70 = r.InputSyslog.InputSyslogSyslog2.Metadata[metadataIndex51].Value.ValueString()
+				var value65 string
+				value65 = r.InputSyslog.InputSyslogSyslog2.Metadata[metadataIndex50].Value.ValueString()
 
-				metadata52 = append(metadata52, shared.InputSyslogMetadatum2{
-					Name:  name75,
-					Value: value70,
+				metadata51 = append(metadata51, shared.InputSyslogMetadatum2{
+					Name:  name70,
+					Value: value65,
 				})
 			}
 			udpSocketRxBufSize3 := new(float64)
@@ -17578,11 +16996,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				enableLoadBalancing4 = nil
 			}
-			description57 := new(string)
+			description56 := new(string)
 			if !r.InputSyslog.InputSyslogSyslog2.Description.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.Description.IsNull() {
-				*description57 = r.InputSyslog.InputSyslogSyslog2.Description.ValueString()
+				*description56 = r.InputSyslog.InputSyslogSyslog2.Description.ValueString()
 			} else {
-				description57 = nil
+				description56 = nil
 			}
 			enableEnhancedProxyHeaderParsing1 := new(bool)
 			if !r.InputSyslog.InputSyslogSyslog2.EnableEnhancedProxyHeaderParsing.IsUnknown() && !r.InputSyslog.InputSyslogSyslog2.EnableEnhancedProxyHeaderParsing.IsNull() {
@@ -17591,24 +17009,24 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				enableEnhancedProxyHeaderParsing1 = nil
 			}
 			inputSyslogSyslog2 = &shared.InputSyslogSyslog2{
-				ID:                               id48,
-				Type:                             typeVar52,
-				Disabled:                         disabled87,
-				Pipeline:                         pipeline96,
-				SendToRoutes:                     sendToRoutes48,
-				Environment:                      environment48,
-				PqEnabled:                        pqEnabled48,
-				Streamtags:                       streamtags48,
-				Connections:                      connections48,
-				Pq:                               pq48,
-				Host:                             host23,
+				ID:                               id47,
+				Type:                             typeVar51,
+				Disabled:                         disabled85,
+				Pipeline:                         pipeline94,
+				SendToRoutes:                     sendToRoutes47,
+				Environment:                      environment47,
+				PqEnabled:                        pqEnabled47,
+				Streamtags:                       streamtags47,
+				Connections:                      connections47,
+				Pq:                               pq47,
+				Host:                             host22,
 				UDPPort:                          udpPort2,
 				TCPPort:                          tcpPort2,
-				MaxBufferSize:                    maxBufferSize52,
+				MaxBufferSize:                    maxBufferSize51,
 				IPWhitelistRegex:                 ipWhitelistRegex5,
 				TimestampTimezone:                timestampTimezone1,
 				SingleMsgUDPPackets:              singleMsgUDPPackets1,
-				EnableProxyHeader:                enableProxyHeader18,
+				EnableProxyHeader:                enableProxyHeader17,
 				KeepFieldsList:                   keepFieldsList1,
 				OctetCounting:                    octetCounting1,
 				InferFraming:                     inferFraming1,
@@ -17618,11 +17036,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				SocketIdleTimeout:                socketIdleTimeout4,
 				SocketEndingMaxWait:              socketEndingMaxWait4,
 				SocketMaxLifespan:                socketMaxLifespan4,
-				TLS:                              tls26,
-				Metadata:                         metadata52,
+				TLS:                              tls25,
+				Metadata:                         metadata51,
 				UDPSocketRxBufSize:               udpSocketRxBufSize3,
 				EnableLoadBalancing:              enableLoadBalancing4,
-				Description:                      description57,
+				Description:                      description56,
 				EnableEnhancedProxyHeaderParsing: enableEnhancedProxyHeaderParsing1,
 			}
 		}
@@ -17639,119 +17057,119 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputFile *shared.InputFile
 	if r.InputFile != nil {
-		var id49 string
-		id49 = r.InputFile.ID.ValueString()
+		var id48 string
+		id48 = r.InputFile.ID.ValueString()
 
-		typeVar53 := shared.InputFileType(r.InputFile.Type.ValueString())
-		disabled89 := new(bool)
+		typeVar52 := shared.InputFileType(r.InputFile.Type.ValueString())
+		disabled87 := new(bool)
 		if !r.InputFile.Disabled.IsUnknown() && !r.InputFile.Disabled.IsNull() {
-			*disabled89 = r.InputFile.Disabled.ValueBool()
+			*disabled87 = r.InputFile.Disabled.ValueBool()
 		} else {
-			disabled89 = nil
+			disabled87 = nil
 		}
-		pipeline98 := new(string)
+		pipeline96 := new(string)
 		if !r.InputFile.Pipeline.IsUnknown() && !r.InputFile.Pipeline.IsNull() {
-			*pipeline98 = r.InputFile.Pipeline.ValueString()
+			*pipeline96 = r.InputFile.Pipeline.ValueString()
 		} else {
-			pipeline98 = nil
+			pipeline96 = nil
 		}
-		sendToRoutes49 := new(bool)
+		sendToRoutes48 := new(bool)
 		if !r.InputFile.SendToRoutes.IsUnknown() && !r.InputFile.SendToRoutes.IsNull() {
-			*sendToRoutes49 = r.InputFile.SendToRoutes.ValueBool()
+			*sendToRoutes48 = r.InputFile.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes49 = nil
+			sendToRoutes48 = nil
 		}
-		environment49 := new(string)
+		environment48 := new(string)
 		if !r.InputFile.Environment.IsUnknown() && !r.InputFile.Environment.IsNull() {
-			*environment49 = r.InputFile.Environment.ValueString()
+			*environment48 = r.InputFile.Environment.ValueString()
 		} else {
-			environment49 = nil
+			environment48 = nil
 		}
-		pqEnabled49 := new(bool)
+		pqEnabled48 := new(bool)
 		if !r.InputFile.PqEnabled.IsUnknown() && !r.InputFile.PqEnabled.IsNull() {
-			*pqEnabled49 = r.InputFile.PqEnabled.ValueBool()
+			*pqEnabled48 = r.InputFile.PqEnabled.ValueBool()
 		} else {
-			pqEnabled49 = nil
+			pqEnabled48 = nil
 		}
-		streamtags49 := make([]string, 0, len(r.InputFile.Streamtags))
-		for streamtagsIndex49 := range r.InputFile.Streamtags {
-			streamtags49 = append(streamtags49, r.InputFile.Streamtags[streamtagsIndex49].ValueString())
+		streamtags48 := make([]string, 0, len(r.InputFile.Streamtags))
+		for streamtagsIndex48 := range r.InputFile.Streamtags {
+			streamtags48 = append(streamtags48, r.InputFile.Streamtags[streamtagsIndex48].ValueString())
 		}
-		connections49 := make([]shared.InputFileConnection, 0, len(r.InputFile.Connections))
-		for connectionsIndex49 := range r.InputFile.Connections {
-			pipeline99 := new(string)
-			if !r.InputFile.Connections[connectionsIndex49].Pipeline.IsUnknown() && !r.InputFile.Connections[connectionsIndex49].Pipeline.IsNull() {
-				*pipeline99 = r.InputFile.Connections[connectionsIndex49].Pipeline.ValueString()
+		connections48 := make([]shared.InputFileConnection, 0, len(r.InputFile.Connections))
+		for connectionsIndex48 := range r.InputFile.Connections {
+			pipeline97 := new(string)
+			if !r.InputFile.Connections[connectionsIndex48].Pipeline.IsUnknown() && !r.InputFile.Connections[connectionsIndex48].Pipeline.IsNull() {
+				*pipeline97 = r.InputFile.Connections[connectionsIndex48].Pipeline.ValueString()
 			} else {
-				pipeline99 = nil
+				pipeline97 = nil
 			}
-			var output50 string
-			output50 = r.InputFile.Connections[connectionsIndex49].Output.ValueString()
+			var output49 string
+			output49 = r.InputFile.Connections[connectionsIndex48].Output.ValueString()
 
-			connections49 = append(connections49, shared.InputFileConnection{
-				Pipeline: pipeline99,
-				Output:   output50,
+			connections48 = append(connections48, shared.InputFileConnection{
+				Pipeline: pipeline97,
+				Output:   output49,
 			})
 		}
-		var pq49 *shared.InputFilePq
+		var pq48 *shared.InputFilePq
 		if r.InputFile.Pq != nil {
-			mode62 := new(shared.InputFilePqMode)
+			mode61 := new(shared.InputFilePqMode)
 			if !r.InputFile.Pq.Mode.IsUnknown() && !r.InputFile.Pq.Mode.IsNull() {
-				*mode62 = shared.InputFilePqMode(r.InputFile.Pq.Mode.ValueString())
+				*mode61 = shared.InputFilePqMode(r.InputFile.Pq.Mode.ValueString())
 			} else {
-				mode62 = nil
+				mode61 = nil
 			}
-			maxBufferSize53 := new(float64)
+			maxBufferSize52 := new(float64)
 			if !r.InputFile.Pq.MaxBufferSize.IsUnknown() && !r.InputFile.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize53 = r.InputFile.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize52 = r.InputFile.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize53 = nil
+				maxBufferSize52 = nil
 			}
-			commitFrequency49 := new(float64)
+			commitFrequency48 := new(float64)
 			if !r.InputFile.Pq.CommitFrequency.IsUnknown() && !r.InputFile.Pq.CommitFrequency.IsNull() {
-				*commitFrequency49 = r.InputFile.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency48 = r.InputFile.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency49 = nil
+				commitFrequency48 = nil
 			}
-			maxFileSize49 := new(string)
+			maxFileSize48 := new(string)
 			if !r.InputFile.Pq.MaxFileSize.IsUnknown() && !r.InputFile.Pq.MaxFileSize.IsNull() {
-				*maxFileSize49 = r.InputFile.Pq.MaxFileSize.ValueString()
+				*maxFileSize48 = r.InputFile.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize49 = nil
+				maxFileSize48 = nil
 			}
-			maxSize49 := new(string)
+			maxSize48 := new(string)
 			if !r.InputFile.Pq.MaxSize.IsUnknown() && !r.InputFile.Pq.MaxSize.IsNull() {
-				*maxSize49 = r.InputFile.Pq.MaxSize.ValueString()
+				*maxSize48 = r.InputFile.Pq.MaxSize.ValueString()
 			} else {
-				maxSize49 = nil
+				maxSize48 = nil
 			}
-			path50 := new(string)
+			path49 := new(string)
 			if !r.InputFile.Pq.Path.IsUnknown() && !r.InputFile.Pq.Path.IsNull() {
-				*path50 = r.InputFile.Pq.Path.ValueString()
+				*path49 = r.InputFile.Pq.Path.ValueString()
 			} else {
-				path50 = nil
+				path49 = nil
 			}
-			compress56 := new(shared.InputFileCompression)
+			compress55 := new(shared.InputFileCompression)
 			if !r.InputFile.Pq.Compress.IsUnknown() && !r.InputFile.Pq.Compress.IsNull() {
-				*compress56 = shared.InputFileCompression(r.InputFile.Pq.Compress.ValueString())
+				*compress55 = shared.InputFileCompression(r.InputFile.Pq.Compress.ValueString())
 			} else {
-				compress56 = nil
+				compress55 = nil
 			}
-			pq49 = &shared.InputFilePq{
-				Mode:            mode62,
-				MaxBufferSize:   maxBufferSize53,
-				CommitFrequency: commitFrequency49,
-				MaxFileSize:     maxFileSize49,
-				MaxSize:         maxSize49,
-				Path:            path50,
-				Compress:        compress56,
+			pq48 = &shared.InputFilePq{
+				Mode:            mode61,
+				MaxBufferSize:   maxBufferSize52,
+				CommitFrequency: commitFrequency48,
+				MaxFileSize:     maxFileSize48,
+				MaxSize:         maxSize48,
+				Path:            path49,
+				Compress:        compress55,
 			}
 		}
-		mode63 := new(shared.InputFileMode)
+		mode62 := new(shared.InputFileMode)
 		if !r.InputFile.Mode.IsUnknown() && !r.InputFile.Mode.IsNull() {
-			*mode63 = shared.InputFileMode(r.InputFile.Mode.ValueString())
+			*mode62 = shared.InputFileMode(r.InputFile.Mode.ValueString())
 		} else {
-			mode63 = nil
+			mode62 = nil
 		}
 		interval15 := new(float64)
 		if !r.InputFile.Interval.IsUnknown() && !r.InputFile.Interval.IsNull() {
@@ -17799,17 +17217,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			hashLen = nil
 		}
-		metadata53 := make([]shared.InputFileMetadatum, 0, len(r.InputFile.Metadata))
-		for metadataIndex52 := range r.InputFile.Metadata {
-			var name76 string
-			name76 = r.InputFile.Metadata[metadataIndex52].Name.ValueString()
+		metadata52 := make([]shared.InputFileMetadatum, 0, len(r.InputFile.Metadata))
+		for metadataIndex51 := range r.InputFile.Metadata {
+			var name71 string
+			name71 = r.InputFile.Metadata[metadataIndex51].Name.ValueString()
 
-			var value71 string
-			value71 = r.InputFile.Metadata[metadataIndex52].Value.ValueString()
+			var value66 string
+			value66 = r.InputFile.Metadata[metadataIndex51].Value.ValueString()
 
-			metadata53 = append(metadata53, shared.InputFileMetadatum{
-				Name:  name76,
-				Value: value71,
+			metadata52 = append(metadata52, shared.InputFileMetadatum{
+				Name:  name71,
+				Value: value66,
 			})
 		}
 		breakerRulesets11 := make([]string, 0, len(r.InputFile.BreakerRulesets))
@@ -17822,17 +17240,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			staleChannelFlushMs11 = nil
 		}
-		description58 := new(string)
+		description57 := new(string)
 		if !r.InputFile.Description.IsUnknown() && !r.InputFile.Description.IsNull() {
-			*description58 = r.InputFile.Description.ValueString()
+			*description57 = r.InputFile.Description.ValueString()
 		} else {
-			description58 = nil
+			description57 = nil
 		}
-		path51 := new(string)
+		path50 := new(string)
 		if !r.InputFile.Path.IsUnknown() && !r.InputFile.Path.IsNull() {
-			*path51 = r.InputFile.Path.ValueString()
+			*path50 = r.InputFile.Path.ValueString()
 		} else {
-			path51 = nil
+			path50 = nil
 		}
 		depth := new(float64)
 		if !r.InputFile.Depth.IsUnknown() && !r.InputFile.Depth.IsNull() {
@@ -17859,17 +17277,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			includeUnidentifiableBinary = nil
 		}
 		inputFile = &shared.InputFile{
-			ID:                          id49,
-			Type:                        typeVar53,
-			Disabled:                    disabled89,
-			Pipeline:                    pipeline98,
-			SendToRoutes:                sendToRoutes49,
-			Environment:                 environment49,
-			PqEnabled:                   pqEnabled49,
-			Streamtags:                  streamtags49,
-			Connections:                 connections49,
-			Pq:                          pq49,
-			Mode:                        mode63,
+			ID:                          id48,
+			Type:                        typeVar52,
+			Disabled:                    disabled87,
+			Pipeline:                    pipeline96,
+			SendToRoutes:                sendToRoutes48,
+			Environment:                 environment48,
+			PqEnabled:                   pqEnabled48,
+			Streamtags:                  streamtags48,
+			Connections:                 connections48,
+			Pq:                          pq48,
+			Mode:                        mode62,
 			Interval:                    interval15,
 			Filenames:                   filenames,
 			TailOnly:                    tailOnly,
@@ -17878,11 +17296,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			CheckFileModTime:            checkFileModTime,
 			ForceText:                   forceText,
 			HashLen:                     hashLen,
-			Metadata:                    metadata53,
+			Metadata:                    metadata52,
 			BreakerRulesets:             breakerRulesets11,
 			StaleChannelFlushMs:         staleChannelFlushMs11,
-			Description:                 description58,
-			Path:                        path51,
+			Description:                 description57,
+			Path:                        path50,
 			Depth:                       depth,
 			SuppressMissingPathErrors:   suppressMissingPathErrors,
 			DeleteFiles:                 deleteFiles,
@@ -17896,207 +17314,207 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputTCP *shared.InputTCP
 	if r.InputTCP != nil {
-		id50 := new(string)
+		id49 := new(string)
 		if !r.InputTCP.ID.IsUnknown() && !r.InputTCP.ID.IsNull() {
-			*id50 = r.InputTCP.ID.ValueString()
+			*id49 = r.InputTCP.ID.ValueString()
 		} else {
-			id50 = nil
+			id49 = nil
 		}
-		typeVar54 := new(shared.InputTCPType)
+		typeVar53 := new(shared.InputTCPType)
 		if !r.InputTCP.Type.IsUnknown() && !r.InputTCP.Type.IsNull() {
-			*typeVar54 = shared.InputTCPType(r.InputTCP.Type.ValueString())
+			*typeVar53 = shared.InputTCPType(r.InputTCP.Type.ValueString())
 		} else {
-			typeVar54 = nil
+			typeVar53 = nil
 		}
-		disabled90 := new(bool)
+		disabled88 := new(bool)
 		if !r.InputTCP.Disabled.IsUnknown() && !r.InputTCP.Disabled.IsNull() {
-			*disabled90 = r.InputTCP.Disabled.ValueBool()
+			*disabled88 = r.InputTCP.Disabled.ValueBool()
 		} else {
-			disabled90 = nil
+			disabled88 = nil
 		}
-		pipeline100 := new(string)
+		pipeline98 := new(string)
 		if !r.InputTCP.Pipeline.IsUnknown() && !r.InputTCP.Pipeline.IsNull() {
-			*pipeline100 = r.InputTCP.Pipeline.ValueString()
+			*pipeline98 = r.InputTCP.Pipeline.ValueString()
 		} else {
-			pipeline100 = nil
+			pipeline98 = nil
 		}
-		sendToRoutes50 := new(bool)
+		sendToRoutes49 := new(bool)
 		if !r.InputTCP.SendToRoutes.IsUnknown() && !r.InputTCP.SendToRoutes.IsNull() {
-			*sendToRoutes50 = r.InputTCP.SendToRoutes.ValueBool()
+			*sendToRoutes49 = r.InputTCP.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes50 = nil
+			sendToRoutes49 = nil
 		}
-		environment50 := new(string)
+		environment49 := new(string)
 		if !r.InputTCP.Environment.IsUnknown() && !r.InputTCP.Environment.IsNull() {
-			*environment50 = r.InputTCP.Environment.ValueString()
+			*environment49 = r.InputTCP.Environment.ValueString()
 		} else {
-			environment50 = nil
+			environment49 = nil
 		}
-		pqEnabled50 := new(bool)
+		pqEnabled49 := new(bool)
 		if !r.InputTCP.PqEnabled.IsUnknown() && !r.InputTCP.PqEnabled.IsNull() {
-			*pqEnabled50 = r.InputTCP.PqEnabled.ValueBool()
+			*pqEnabled49 = r.InputTCP.PqEnabled.ValueBool()
 		} else {
-			pqEnabled50 = nil
+			pqEnabled49 = nil
 		}
-		streamtags50 := make([]string, 0, len(r.InputTCP.Streamtags))
-		for streamtagsIndex50 := range r.InputTCP.Streamtags {
-			streamtags50 = append(streamtags50, r.InputTCP.Streamtags[streamtagsIndex50].ValueString())
+		streamtags49 := make([]string, 0, len(r.InputTCP.Streamtags))
+		for streamtagsIndex49 := range r.InputTCP.Streamtags {
+			streamtags49 = append(streamtags49, r.InputTCP.Streamtags[streamtagsIndex49].ValueString())
 		}
-		connections50 := make([]shared.InputTCPConnection, 0, len(r.InputTCP.Connections))
-		for connectionsIndex50 := range r.InputTCP.Connections {
-			pipeline101 := new(string)
-			if !r.InputTCP.Connections[connectionsIndex50].Pipeline.IsUnknown() && !r.InputTCP.Connections[connectionsIndex50].Pipeline.IsNull() {
-				*pipeline101 = r.InputTCP.Connections[connectionsIndex50].Pipeline.ValueString()
+		connections49 := make([]shared.InputTCPConnection, 0, len(r.InputTCP.Connections))
+		for connectionsIndex49 := range r.InputTCP.Connections {
+			pipeline99 := new(string)
+			if !r.InputTCP.Connections[connectionsIndex49].Pipeline.IsUnknown() && !r.InputTCP.Connections[connectionsIndex49].Pipeline.IsNull() {
+				*pipeline99 = r.InputTCP.Connections[connectionsIndex49].Pipeline.ValueString()
 			} else {
-				pipeline101 = nil
+				pipeline99 = nil
 			}
-			var output51 string
-			output51 = r.InputTCP.Connections[connectionsIndex50].Output.ValueString()
+			var output50 string
+			output50 = r.InputTCP.Connections[connectionsIndex49].Output.ValueString()
 
-			connections50 = append(connections50, shared.InputTCPConnection{
-				Pipeline: pipeline101,
-				Output:   output51,
+			connections49 = append(connections49, shared.InputTCPConnection{
+				Pipeline: pipeline99,
+				Output:   output50,
 			})
 		}
-		var pq50 *shared.InputTCPPq
+		var pq49 *shared.InputTCPPq
 		if r.InputTCP.Pq != nil {
-			mode64 := new(shared.InputTCPMode)
+			mode63 := new(shared.InputTCPMode)
 			if !r.InputTCP.Pq.Mode.IsUnknown() && !r.InputTCP.Pq.Mode.IsNull() {
-				*mode64 = shared.InputTCPMode(r.InputTCP.Pq.Mode.ValueString())
+				*mode63 = shared.InputTCPMode(r.InputTCP.Pq.Mode.ValueString())
 			} else {
-				mode64 = nil
+				mode63 = nil
 			}
-			maxBufferSize54 := new(float64)
+			maxBufferSize53 := new(float64)
 			if !r.InputTCP.Pq.MaxBufferSize.IsUnknown() && !r.InputTCP.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize54 = r.InputTCP.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize53 = r.InputTCP.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize54 = nil
+				maxBufferSize53 = nil
 			}
-			commitFrequency50 := new(float64)
+			commitFrequency49 := new(float64)
 			if !r.InputTCP.Pq.CommitFrequency.IsUnknown() && !r.InputTCP.Pq.CommitFrequency.IsNull() {
-				*commitFrequency50 = r.InputTCP.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency49 = r.InputTCP.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency50 = nil
+				commitFrequency49 = nil
 			}
-			maxFileSize50 := new(string)
+			maxFileSize49 := new(string)
 			if !r.InputTCP.Pq.MaxFileSize.IsUnknown() && !r.InputTCP.Pq.MaxFileSize.IsNull() {
-				*maxFileSize50 = r.InputTCP.Pq.MaxFileSize.ValueString()
+				*maxFileSize49 = r.InputTCP.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize50 = nil
+				maxFileSize49 = nil
 			}
-			maxSize50 := new(string)
+			maxSize49 := new(string)
 			if !r.InputTCP.Pq.MaxSize.IsUnknown() && !r.InputTCP.Pq.MaxSize.IsNull() {
-				*maxSize50 = r.InputTCP.Pq.MaxSize.ValueString()
+				*maxSize49 = r.InputTCP.Pq.MaxSize.ValueString()
 			} else {
-				maxSize50 = nil
+				maxSize49 = nil
 			}
-			path52 := new(string)
+			path51 := new(string)
 			if !r.InputTCP.Pq.Path.IsUnknown() && !r.InputTCP.Pq.Path.IsNull() {
-				*path52 = r.InputTCP.Pq.Path.ValueString()
+				*path51 = r.InputTCP.Pq.Path.ValueString()
 			} else {
-				path52 = nil
+				path51 = nil
 			}
-			compress57 := new(shared.InputTCPCompression)
+			compress56 := new(shared.InputTCPCompression)
 			if !r.InputTCP.Pq.Compress.IsUnknown() && !r.InputTCP.Pq.Compress.IsNull() {
-				*compress57 = shared.InputTCPCompression(r.InputTCP.Pq.Compress.ValueString())
+				*compress56 = shared.InputTCPCompression(r.InputTCP.Pq.Compress.ValueString())
 			} else {
-				compress57 = nil
+				compress56 = nil
 			}
-			pq50 = &shared.InputTCPPq{
-				Mode:            mode64,
-				MaxBufferSize:   maxBufferSize54,
-				CommitFrequency: commitFrequency50,
-				MaxFileSize:     maxFileSize50,
-				MaxSize:         maxSize50,
-				Path:            path52,
-				Compress:        compress57,
+			pq49 = &shared.InputTCPPq{
+				Mode:            mode63,
+				MaxBufferSize:   maxBufferSize53,
+				CommitFrequency: commitFrequency49,
+				MaxFileSize:     maxFileSize49,
+				MaxSize:         maxSize49,
+				Path:            path51,
+				Compress:        compress56,
 			}
 		}
-		host24 := new(string)
+		host23 := new(string)
 		if !r.InputTCP.Host.IsUnknown() && !r.InputTCP.Host.IsNull() {
-			*host24 = r.InputTCP.Host.ValueString()
+			*host23 = r.InputTCP.Host.ValueString()
 		} else {
-			host24 = nil
+			host23 = nil
 		}
-		var port19 float64
-		port19 = r.InputTCP.Port.ValueFloat64()
+		var port18 float64
+		port18 = r.InputTCP.Port.ValueFloat64()
 
-		var tls27 *shared.InputTCPTLSSettingsServerSide
+		var tls26 *shared.InputTCPTLSSettingsServerSide
 		if r.InputTCP.TLS != nil {
-			disabled91 := new(bool)
+			disabled89 := new(bool)
 			if !r.InputTCP.TLS.Disabled.IsUnknown() && !r.InputTCP.TLS.Disabled.IsNull() {
-				*disabled91 = r.InputTCP.TLS.Disabled.ValueBool()
+				*disabled89 = r.InputTCP.TLS.Disabled.ValueBool()
 			} else {
-				disabled91 = nil
+				disabled89 = nil
 			}
-			certificateName28 := new(string)
+			certificateName27 := new(string)
 			if !r.InputTCP.TLS.CertificateName.IsUnknown() && !r.InputTCP.TLS.CertificateName.IsNull() {
-				*certificateName28 = r.InputTCP.TLS.CertificateName.ValueString()
+				*certificateName27 = r.InputTCP.TLS.CertificateName.ValueString()
 			} else {
-				certificateName28 = nil
+				certificateName27 = nil
 			}
-			privKeyPath27 := new(string)
+			privKeyPath26 := new(string)
 			if !r.InputTCP.TLS.PrivKeyPath.IsUnknown() && !r.InputTCP.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath27 = r.InputTCP.TLS.PrivKeyPath.ValueString()
+				*privKeyPath26 = r.InputTCP.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath27 = nil
+				privKeyPath26 = nil
 			}
-			passphrase26 := new(string)
+			passphrase25 := new(string)
 			if !r.InputTCP.TLS.Passphrase.IsUnknown() && !r.InputTCP.TLS.Passphrase.IsNull() {
-				*passphrase26 = r.InputTCP.TLS.Passphrase.ValueString()
+				*passphrase25 = r.InputTCP.TLS.Passphrase.ValueString()
 			} else {
-				passphrase26 = nil
+				passphrase25 = nil
 			}
-			certPath27 := new(string)
+			certPath26 := new(string)
 			if !r.InputTCP.TLS.CertPath.IsUnknown() && !r.InputTCP.TLS.CertPath.IsNull() {
-				*certPath27 = r.InputTCP.TLS.CertPath.ValueString()
+				*certPath26 = r.InputTCP.TLS.CertPath.ValueString()
 			} else {
-				certPath27 = nil
+				certPath26 = nil
 			}
-			caPath26 := new(string)
+			caPath25 := new(string)
 			if !r.InputTCP.TLS.CaPath.IsUnknown() && !r.InputTCP.TLS.CaPath.IsNull() {
-				*caPath26 = r.InputTCP.TLS.CaPath.ValueString()
+				*caPath25 = r.InputTCP.TLS.CaPath.ValueString()
 			} else {
-				caPath26 = nil
+				caPath25 = nil
 			}
-			requestCert20 := new(bool)
+			requestCert19 := new(bool)
 			if !r.InputTCP.TLS.RequestCert.IsUnknown() && !r.InputTCP.TLS.RequestCert.IsNull() {
-				*requestCert20 = r.InputTCP.TLS.RequestCert.ValueBool()
+				*requestCert19 = r.InputTCP.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert20 = nil
+				requestCert19 = nil
 			}
-			var rejectUnauthorized38 interface{}
+			var rejectUnauthorized37 interface{}
 			if !r.InputTCP.TLS.RejectUnauthorized.IsUnknown() && !r.InputTCP.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputTCP.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized38)
+				_ = json.Unmarshal([]byte(r.InputTCP.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized37)
 			}
-			var commonNameRegex20 interface{}
+			var commonNameRegex19 interface{}
 			if !r.InputTCP.TLS.CommonNameRegex.IsUnknown() && !r.InputTCP.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputTCP.TLS.CommonNameRegex.ValueString()), &commonNameRegex20)
+				_ = json.Unmarshal([]byte(r.InputTCP.TLS.CommonNameRegex.ValueString()), &commonNameRegex19)
 			}
-			minVersion26 := new(shared.InputTCPMinimumTLSVersion)
+			minVersion25 := new(shared.InputTCPMinimumTLSVersion)
 			if !r.InputTCP.TLS.MinVersion.IsUnknown() && !r.InputTCP.TLS.MinVersion.IsNull() {
-				*minVersion26 = shared.InputTCPMinimumTLSVersion(r.InputTCP.TLS.MinVersion.ValueString())
+				*minVersion25 = shared.InputTCPMinimumTLSVersion(r.InputTCP.TLS.MinVersion.ValueString())
 			} else {
-				minVersion26 = nil
+				minVersion25 = nil
 			}
-			maxVersion26 := new(shared.InputTCPMaximumTLSVersion)
+			maxVersion25 := new(shared.InputTCPMaximumTLSVersion)
 			if !r.InputTCP.TLS.MaxVersion.IsUnknown() && !r.InputTCP.TLS.MaxVersion.IsNull() {
-				*maxVersion26 = shared.InputTCPMaximumTLSVersion(r.InputTCP.TLS.MaxVersion.ValueString())
+				*maxVersion25 = shared.InputTCPMaximumTLSVersion(r.InputTCP.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion26 = nil
+				maxVersion25 = nil
 			}
-			tls27 = &shared.InputTCPTLSSettingsServerSide{
-				Disabled:           disabled91,
-				CertificateName:    certificateName28,
-				PrivKeyPath:        privKeyPath27,
-				Passphrase:         passphrase26,
-				CertPath:           certPath27,
-				CaPath:             caPath26,
-				RequestCert:        requestCert20,
-				RejectUnauthorized: rejectUnauthorized38,
-				CommonNameRegex:    commonNameRegex20,
-				MinVersion:         minVersion26,
-				MaxVersion:         maxVersion26,
+			tls26 = &shared.InputTCPTLSSettingsServerSide{
+				Disabled:           disabled89,
+				CertificateName:    certificateName27,
+				PrivKeyPath:        privKeyPath26,
+				Passphrase:         passphrase25,
+				CertPath:           certPath26,
+				CaPath:             caPath25,
+				RequestCert:        requestCert19,
+				RejectUnauthorized: rejectUnauthorized37,
+				CommonNameRegex:    commonNameRegex19,
+				MinVersion:         minVersion25,
+				MaxVersion:         maxVersion25,
 			}
 		}
 		ipWhitelistRegex6 := new(string)
@@ -18129,23 +17547,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			socketMaxLifespan5 = nil
 		}
-		enableProxyHeader19 := new(bool)
+		enableProxyHeader18 := new(bool)
 		if !r.InputTCP.EnableProxyHeader.IsUnknown() && !r.InputTCP.EnableProxyHeader.IsNull() {
-			*enableProxyHeader19 = r.InputTCP.EnableProxyHeader.ValueBool()
+			*enableProxyHeader18 = r.InputTCP.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader19 = nil
+			enableProxyHeader18 = nil
 		}
-		metadata54 := make([]shared.InputTCPMetadatum, 0, len(r.InputTCP.Metadata))
-		for metadataIndex53 := range r.InputTCP.Metadata {
-			var name77 string
-			name77 = r.InputTCP.Metadata[metadataIndex53].Name.ValueString()
+		metadata53 := make([]shared.InputTCPMetadatum, 0, len(r.InputTCP.Metadata))
+		for metadataIndex52 := range r.InputTCP.Metadata {
+			var name72 string
+			name72 = r.InputTCP.Metadata[metadataIndex52].Name.ValueString()
 
-			var value72 string
-			value72 = r.InputTCP.Metadata[metadataIndex53].Value.ValueString()
+			var value67 string
+			value67 = r.InputTCP.Metadata[metadataIndex52].Value.ValueString()
 
-			metadata54 = append(metadata54, shared.InputTCPMetadatum{
-				Name:  name77,
-				Value: value72,
+			metadata53 = append(metadata53, shared.InputTCPMetadatum{
+				Name:  name72,
+				Value: value67,
 			})
 		}
 		breakerRulesets12 := make([]string, 0, len(r.InputTCP.BreakerRulesets))
@@ -18166,11 +17584,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var preprocess4 *shared.InputTCPPreprocess
 		if r.InputTCP.Preprocess != nil {
-			disabled92 := new(bool)
+			disabled90 := new(bool)
 			if !r.InputTCP.Preprocess.Disabled.IsUnknown() && !r.InputTCP.Preprocess.Disabled.IsNull() {
-				*disabled92 = r.InputTCP.Preprocess.Disabled.ValueBool()
+				*disabled90 = r.InputTCP.Preprocess.Disabled.ValueBool()
 			} else {
-				disabled92 = nil
+				disabled90 = nil
 			}
 			command5 := new(string)
 			if !r.InputTCP.Preprocess.Command.IsUnknown() && !r.InputTCP.Preprocess.Command.IsNull() {
@@ -18183,50 +17601,50 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				args4 = append(args4, r.InputTCP.Preprocess.Args[argsIndex4].ValueString())
 			}
 			preprocess4 = &shared.InputTCPPreprocess{
-				Disabled: disabled92,
+				Disabled: disabled90,
 				Command:  command5,
 				Args:     args4,
 			}
 		}
-		description59 := new(string)
+		description58 := new(string)
 		if !r.InputTCP.Description.IsUnknown() && !r.InputTCP.Description.IsNull() {
-			*description59 = r.InputTCP.Description.ValueString()
+			*description58 = r.InputTCP.Description.ValueString()
 		} else {
-			description59 = nil
+			description58 = nil
 		}
-		authType18 := new(shared.InputTCPAuthenticationMethod)
+		authType16 := new(shared.InputTCPAuthenticationMethod)
 		if !r.InputTCP.AuthType.IsUnknown() && !r.InputTCP.AuthType.IsNull() {
-			*authType18 = shared.InputTCPAuthenticationMethod(r.InputTCP.AuthType.ValueString())
+			*authType16 = shared.InputTCPAuthenticationMethod(r.InputTCP.AuthType.ValueString())
 		} else {
-			authType18 = nil
+			authType16 = nil
 		}
 		inputTCP = &shared.InputTCP{
-			ID:                  id50,
-			Type:                typeVar54,
-			Disabled:            disabled90,
-			Pipeline:            pipeline100,
-			SendToRoutes:        sendToRoutes50,
-			Environment:         environment50,
-			PqEnabled:           pqEnabled50,
-			Streamtags:          streamtags50,
-			Connections:         connections50,
-			Pq:                  pq50,
-			Host:                host24,
-			Port:                port19,
-			TLS:                 tls27,
+			ID:                  id49,
+			Type:                typeVar53,
+			Disabled:            disabled88,
+			Pipeline:            pipeline98,
+			SendToRoutes:        sendToRoutes49,
+			Environment:         environment49,
+			PqEnabled:           pqEnabled49,
+			Streamtags:          streamtags49,
+			Connections:         connections49,
+			Pq:                  pq49,
+			Host:                host23,
+			Port:                port18,
+			TLS:                 tls26,
 			IPWhitelistRegex:    ipWhitelistRegex6,
 			MaxActiveCxn:        maxActiveCxn7,
 			SocketIdleTimeout:   socketIdleTimeout5,
 			SocketEndingMaxWait: socketEndingMaxWait5,
 			SocketMaxLifespan:   socketMaxLifespan5,
-			EnableProxyHeader:   enableProxyHeader19,
-			Metadata:            metadata54,
+			EnableProxyHeader:   enableProxyHeader18,
+			Metadata:            metadata53,
 			BreakerRulesets:     breakerRulesets12,
 			StaleChannelFlushMs: staleChannelFlushMs12,
 			EnableHeader:        enableHeader4,
 			Preprocess:          preprocess4,
-			Description:         description59,
-			AuthType:            authType18,
+			Description:         description58,
+			AuthType:            authType16,
 		}
 	}
 	if inputTCP != nil {
@@ -18236,112 +17654,112 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputAppscope *shared.InputAppscope
 	if r.InputAppscope != nil {
-		var id51 string
-		id51 = r.InputAppscope.ID.ValueString()
+		var id50 string
+		id50 = r.InputAppscope.ID.ValueString()
 
-		typeVar55 := shared.InputAppscopeType(r.InputAppscope.Type.ValueString())
-		disabled93 := new(bool)
+		typeVar54 := shared.InputAppscopeType(r.InputAppscope.Type.ValueString())
+		disabled91 := new(bool)
 		if !r.InputAppscope.Disabled.IsUnknown() && !r.InputAppscope.Disabled.IsNull() {
-			*disabled93 = r.InputAppscope.Disabled.ValueBool()
+			*disabled91 = r.InputAppscope.Disabled.ValueBool()
 		} else {
-			disabled93 = nil
+			disabled91 = nil
 		}
-		pipeline102 := new(string)
+		pipeline100 := new(string)
 		if !r.InputAppscope.Pipeline.IsUnknown() && !r.InputAppscope.Pipeline.IsNull() {
-			*pipeline102 = r.InputAppscope.Pipeline.ValueString()
+			*pipeline100 = r.InputAppscope.Pipeline.ValueString()
 		} else {
-			pipeline102 = nil
+			pipeline100 = nil
 		}
-		sendToRoutes51 := new(bool)
+		sendToRoutes50 := new(bool)
 		if !r.InputAppscope.SendToRoutes.IsUnknown() && !r.InputAppscope.SendToRoutes.IsNull() {
-			*sendToRoutes51 = r.InputAppscope.SendToRoutes.ValueBool()
+			*sendToRoutes50 = r.InputAppscope.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes51 = nil
+			sendToRoutes50 = nil
 		}
-		environment51 := new(string)
+		environment50 := new(string)
 		if !r.InputAppscope.Environment.IsUnknown() && !r.InputAppscope.Environment.IsNull() {
-			*environment51 = r.InputAppscope.Environment.ValueString()
+			*environment50 = r.InputAppscope.Environment.ValueString()
 		} else {
-			environment51 = nil
+			environment50 = nil
 		}
-		pqEnabled51 := new(bool)
+		pqEnabled50 := new(bool)
 		if !r.InputAppscope.PqEnabled.IsUnknown() && !r.InputAppscope.PqEnabled.IsNull() {
-			*pqEnabled51 = r.InputAppscope.PqEnabled.ValueBool()
+			*pqEnabled50 = r.InputAppscope.PqEnabled.ValueBool()
 		} else {
-			pqEnabled51 = nil
+			pqEnabled50 = nil
 		}
-		streamtags51 := make([]string, 0, len(r.InputAppscope.Streamtags))
-		for streamtagsIndex51 := range r.InputAppscope.Streamtags {
-			streamtags51 = append(streamtags51, r.InputAppscope.Streamtags[streamtagsIndex51].ValueString())
+		streamtags50 := make([]string, 0, len(r.InputAppscope.Streamtags))
+		for streamtagsIndex50 := range r.InputAppscope.Streamtags {
+			streamtags50 = append(streamtags50, r.InputAppscope.Streamtags[streamtagsIndex50].ValueString())
 		}
-		connections51 := make([]shared.InputAppscopeConnection, 0, len(r.InputAppscope.Connections))
-		for connectionsIndex51 := range r.InputAppscope.Connections {
-			pipeline103 := new(string)
-			if !r.InputAppscope.Connections[connectionsIndex51].Pipeline.IsUnknown() && !r.InputAppscope.Connections[connectionsIndex51].Pipeline.IsNull() {
-				*pipeline103 = r.InputAppscope.Connections[connectionsIndex51].Pipeline.ValueString()
+		connections50 := make([]shared.InputAppscopeConnection, 0, len(r.InputAppscope.Connections))
+		for connectionsIndex50 := range r.InputAppscope.Connections {
+			pipeline101 := new(string)
+			if !r.InputAppscope.Connections[connectionsIndex50].Pipeline.IsUnknown() && !r.InputAppscope.Connections[connectionsIndex50].Pipeline.IsNull() {
+				*pipeline101 = r.InputAppscope.Connections[connectionsIndex50].Pipeline.ValueString()
 			} else {
-				pipeline103 = nil
+				pipeline101 = nil
 			}
-			var output52 string
-			output52 = r.InputAppscope.Connections[connectionsIndex51].Output.ValueString()
+			var output51 string
+			output51 = r.InputAppscope.Connections[connectionsIndex50].Output.ValueString()
 
-			connections51 = append(connections51, shared.InputAppscopeConnection{
-				Pipeline: pipeline103,
-				Output:   output52,
+			connections50 = append(connections50, shared.InputAppscopeConnection{
+				Pipeline: pipeline101,
+				Output:   output51,
 			})
 		}
-		var pq51 *shared.InputAppscopePq
+		var pq50 *shared.InputAppscopePq
 		if r.InputAppscope.Pq != nil {
-			mode65 := new(shared.InputAppscopeMode)
+			mode64 := new(shared.InputAppscopeMode)
 			if !r.InputAppscope.Pq.Mode.IsUnknown() && !r.InputAppscope.Pq.Mode.IsNull() {
-				*mode65 = shared.InputAppscopeMode(r.InputAppscope.Pq.Mode.ValueString())
+				*mode64 = shared.InputAppscopeMode(r.InputAppscope.Pq.Mode.ValueString())
 			} else {
-				mode65 = nil
+				mode64 = nil
 			}
-			maxBufferSize55 := new(float64)
+			maxBufferSize54 := new(float64)
 			if !r.InputAppscope.Pq.MaxBufferSize.IsUnknown() && !r.InputAppscope.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize55 = r.InputAppscope.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize54 = r.InputAppscope.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize55 = nil
+				maxBufferSize54 = nil
 			}
-			commitFrequency51 := new(float64)
+			commitFrequency50 := new(float64)
 			if !r.InputAppscope.Pq.CommitFrequency.IsUnknown() && !r.InputAppscope.Pq.CommitFrequency.IsNull() {
-				*commitFrequency51 = r.InputAppscope.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency50 = r.InputAppscope.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency51 = nil
+				commitFrequency50 = nil
 			}
-			maxFileSize51 := new(string)
+			maxFileSize50 := new(string)
 			if !r.InputAppscope.Pq.MaxFileSize.IsUnknown() && !r.InputAppscope.Pq.MaxFileSize.IsNull() {
-				*maxFileSize51 = r.InputAppscope.Pq.MaxFileSize.ValueString()
+				*maxFileSize50 = r.InputAppscope.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize51 = nil
+				maxFileSize50 = nil
 			}
-			maxSize51 := new(string)
+			maxSize50 := new(string)
 			if !r.InputAppscope.Pq.MaxSize.IsUnknown() && !r.InputAppscope.Pq.MaxSize.IsNull() {
-				*maxSize51 = r.InputAppscope.Pq.MaxSize.ValueString()
+				*maxSize50 = r.InputAppscope.Pq.MaxSize.ValueString()
 			} else {
-				maxSize51 = nil
+				maxSize50 = nil
 			}
-			path53 := new(string)
+			path52 := new(string)
 			if !r.InputAppscope.Pq.Path.IsUnknown() && !r.InputAppscope.Pq.Path.IsNull() {
-				*path53 = r.InputAppscope.Pq.Path.ValueString()
+				*path52 = r.InputAppscope.Pq.Path.ValueString()
 			} else {
-				path53 = nil
+				path52 = nil
 			}
-			compress58 := new(shared.InputAppscopeCompression)
+			compress57 := new(shared.InputAppscopeCompression)
 			if !r.InputAppscope.Pq.Compress.IsUnknown() && !r.InputAppscope.Pq.Compress.IsNull() {
-				*compress58 = shared.InputAppscopeCompression(r.InputAppscope.Pq.Compress.ValueString())
+				*compress57 = shared.InputAppscopeCompression(r.InputAppscope.Pq.Compress.ValueString())
 			} else {
-				compress58 = nil
+				compress57 = nil
 			}
-			pq51 = &shared.InputAppscopePq{
-				Mode:            mode65,
-				MaxBufferSize:   maxBufferSize55,
-				CommitFrequency: commitFrequency51,
-				MaxFileSize:     maxFileSize51,
-				MaxSize:         maxSize51,
-				Path:            path53,
-				Compress:        compress58,
+			pq50 = &shared.InputAppscopePq{
+				Mode:            mode64,
+				MaxBufferSize:   maxBufferSize54,
+				CommitFrequency: commitFrequency50,
+				MaxFileSize:     maxFileSize50,
+				MaxSize:         maxSize50,
+				Path:            path52,
+				Compress:        compress57,
 			}
 		}
 		ipWhitelistRegex7 := new(string)
@@ -18374,23 +17792,23 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			socketMaxLifespan6 = nil
 		}
-		enableProxyHeader20 := new(bool)
+		enableProxyHeader19 := new(bool)
 		if !r.InputAppscope.EnableProxyHeader.IsUnknown() && !r.InputAppscope.EnableProxyHeader.IsNull() {
-			*enableProxyHeader20 = r.InputAppscope.EnableProxyHeader.ValueBool()
+			*enableProxyHeader19 = r.InputAppscope.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader20 = nil
+			enableProxyHeader19 = nil
 		}
-		metadata55 := make([]shared.InputAppscopeMetadatum, 0, len(r.InputAppscope.Metadata))
-		for metadataIndex54 := range r.InputAppscope.Metadata {
-			var name78 string
-			name78 = r.InputAppscope.Metadata[metadataIndex54].Name.ValueString()
+		metadata54 := make([]shared.InputAppscopeMetadatum, 0, len(r.InputAppscope.Metadata))
+		for metadataIndex53 := range r.InputAppscope.Metadata {
+			var name73 string
+			name73 = r.InputAppscope.Metadata[metadataIndex53].Name.ValueString()
 
-			var value73 string
-			value73 = r.InputAppscope.Metadata[metadataIndex54].Value.ValueString()
+			var value68 string
+			value68 = r.InputAppscope.Metadata[metadataIndex53].Value.ValueString()
 
-			metadata55 = append(metadata55, shared.InputAppscopeMetadatum{
-				Name:  name78,
-				Value: value73,
+			metadata54 = append(metadata54, shared.InputAppscopeMetadatum{
+				Name:  name73,
+				Value: value68,
 			})
 		}
 		breakerRulesets13 := make([]string, 0, len(r.InputAppscope.BreakerRulesets))
@@ -18468,11 +17886,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				maxDataTime6 = nil
 			}
-			compress59 := new(shared.InputAppscopeDataCompressionFormat)
+			compress58 := new(shared.InputAppscopeDataCompressionFormat)
 			if !r.InputAppscope.Persistence.Compress.IsUnknown() && !r.InputAppscope.Persistence.Compress.IsNull() {
-				*compress59 = shared.InputAppscopeDataCompressionFormat(r.InputAppscope.Persistence.Compress.ValueString())
+				*compress58 = shared.InputAppscopeDataCompressionFormat(r.InputAppscope.Persistence.Compress.ValueString())
 			} else {
-				compress59 = nil
+				compress58 = nil
 			}
 			destPath4 := new(string)
 			if !r.InputAppscope.Persistence.DestPath.IsUnknown() && !r.InputAppscope.Persistence.DestPath.IsNull() {
@@ -18485,110 +17903,110 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				TimeWindow:  timeWindow6,
 				MaxDataSize: maxDataSize6,
 				MaxDataTime: maxDataTime6,
-				Compress:    compress59,
+				Compress:    compress58,
 				DestPath:    destPath4,
 			}
 		}
-		authType19 := new(shared.InputAppscopeAuthenticationMethod)
+		authType17 := new(shared.InputAppscopeAuthenticationMethod)
 		if !r.InputAppscope.AuthType.IsUnknown() && !r.InputAppscope.AuthType.IsNull() {
-			*authType19 = shared.InputAppscopeAuthenticationMethod(r.InputAppscope.AuthType.ValueString())
+			*authType17 = shared.InputAppscopeAuthenticationMethod(r.InputAppscope.AuthType.ValueString())
 		} else {
-			authType19 = nil
+			authType17 = nil
 		}
-		description60 := new(string)
+		description59 := new(string)
 		if !r.InputAppscope.Description.IsUnknown() && !r.InputAppscope.Description.IsNull() {
-			*description60 = r.InputAppscope.Description.ValueString()
+			*description59 = r.InputAppscope.Description.ValueString()
 		} else {
-			description60 = nil
+			description59 = nil
 		}
-		host25 := new(string)
+		host24 := new(string)
 		if !r.InputAppscope.Host.IsUnknown() && !r.InputAppscope.Host.IsNull() {
-			*host25 = r.InputAppscope.Host.ValueString()
+			*host24 = r.InputAppscope.Host.ValueString()
 		} else {
-			host25 = nil
+			host24 = nil
 		}
-		port20 := new(float64)
+		port19 := new(float64)
 		if !r.InputAppscope.Port.IsUnknown() && !r.InputAppscope.Port.IsNull() {
-			*port20 = r.InputAppscope.Port.ValueFloat64()
+			*port19 = r.InputAppscope.Port.ValueFloat64()
 		} else {
-			port20 = nil
+			port19 = nil
 		}
-		var tls28 *shared.InputAppscopeTLSSettingsServerSide
+		var tls27 *shared.InputAppscopeTLSSettingsServerSide
 		if r.InputAppscope.TLS != nil {
-			disabled94 := new(bool)
+			disabled92 := new(bool)
 			if !r.InputAppscope.TLS.Disabled.IsUnknown() && !r.InputAppscope.TLS.Disabled.IsNull() {
-				*disabled94 = r.InputAppscope.TLS.Disabled.ValueBool()
+				*disabled92 = r.InputAppscope.TLS.Disabled.ValueBool()
 			} else {
-				disabled94 = nil
+				disabled92 = nil
 			}
-			certificateName29 := new(string)
+			certificateName28 := new(string)
 			if !r.InputAppscope.TLS.CertificateName.IsUnknown() && !r.InputAppscope.TLS.CertificateName.IsNull() {
-				*certificateName29 = r.InputAppscope.TLS.CertificateName.ValueString()
+				*certificateName28 = r.InputAppscope.TLS.CertificateName.ValueString()
 			} else {
-				certificateName29 = nil
+				certificateName28 = nil
 			}
-			privKeyPath28 := new(string)
+			privKeyPath27 := new(string)
 			if !r.InputAppscope.TLS.PrivKeyPath.IsUnknown() && !r.InputAppscope.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath28 = r.InputAppscope.TLS.PrivKeyPath.ValueString()
+				*privKeyPath27 = r.InputAppscope.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath28 = nil
+				privKeyPath27 = nil
 			}
-			passphrase27 := new(string)
+			passphrase26 := new(string)
 			if !r.InputAppscope.TLS.Passphrase.IsUnknown() && !r.InputAppscope.TLS.Passphrase.IsNull() {
-				*passphrase27 = r.InputAppscope.TLS.Passphrase.ValueString()
+				*passphrase26 = r.InputAppscope.TLS.Passphrase.ValueString()
 			} else {
-				passphrase27 = nil
+				passphrase26 = nil
 			}
-			certPath28 := new(string)
+			certPath27 := new(string)
 			if !r.InputAppscope.TLS.CertPath.IsUnknown() && !r.InputAppscope.TLS.CertPath.IsNull() {
-				*certPath28 = r.InputAppscope.TLS.CertPath.ValueString()
+				*certPath27 = r.InputAppscope.TLS.CertPath.ValueString()
 			} else {
-				certPath28 = nil
+				certPath27 = nil
 			}
-			caPath27 := new(string)
+			caPath26 := new(string)
 			if !r.InputAppscope.TLS.CaPath.IsUnknown() && !r.InputAppscope.TLS.CaPath.IsNull() {
-				*caPath27 = r.InputAppscope.TLS.CaPath.ValueString()
+				*caPath26 = r.InputAppscope.TLS.CaPath.ValueString()
 			} else {
-				caPath27 = nil
+				caPath26 = nil
 			}
-			requestCert21 := new(bool)
+			requestCert20 := new(bool)
 			if !r.InputAppscope.TLS.RequestCert.IsUnknown() && !r.InputAppscope.TLS.RequestCert.IsNull() {
-				*requestCert21 = r.InputAppscope.TLS.RequestCert.ValueBool()
+				*requestCert20 = r.InputAppscope.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert21 = nil
+				requestCert20 = nil
 			}
-			var rejectUnauthorized39 interface{}
+			var rejectUnauthorized38 interface{}
 			if !r.InputAppscope.TLS.RejectUnauthorized.IsUnknown() && !r.InputAppscope.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputAppscope.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized39)
+				_ = json.Unmarshal([]byte(r.InputAppscope.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized38)
 			}
-			var commonNameRegex21 interface{}
+			var commonNameRegex20 interface{}
 			if !r.InputAppscope.TLS.CommonNameRegex.IsUnknown() && !r.InputAppscope.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputAppscope.TLS.CommonNameRegex.ValueString()), &commonNameRegex21)
+				_ = json.Unmarshal([]byte(r.InputAppscope.TLS.CommonNameRegex.ValueString()), &commonNameRegex20)
 			}
-			minVersion27 := new(shared.InputAppscopeMinimumTLSVersion)
+			minVersion26 := new(shared.InputAppscopeMinimumTLSVersion)
 			if !r.InputAppscope.TLS.MinVersion.IsUnknown() && !r.InputAppscope.TLS.MinVersion.IsNull() {
-				*minVersion27 = shared.InputAppscopeMinimumTLSVersion(r.InputAppscope.TLS.MinVersion.ValueString())
+				*minVersion26 = shared.InputAppscopeMinimumTLSVersion(r.InputAppscope.TLS.MinVersion.ValueString())
 			} else {
-				minVersion27 = nil
+				minVersion26 = nil
 			}
-			maxVersion27 := new(shared.InputAppscopeMaximumTLSVersion)
+			maxVersion26 := new(shared.InputAppscopeMaximumTLSVersion)
 			if !r.InputAppscope.TLS.MaxVersion.IsUnknown() && !r.InputAppscope.TLS.MaxVersion.IsNull() {
-				*maxVersion27 = shared.InputAppscopeMaximumTLSVersion(r.InputAppscope.TLS.MaxVersion.ValueString())
+				*maxVersion26 = shared.InputAppscopeMaximumTLSVersion(r.InputAppscope.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion27 = nil
+				maxVersion26 = nil
 			}
-			tls28 = &shared.InputAppscopeTLSSettingsServerSide{
-				Disabled:           disabled94,
-				CertificateName:    certificateName29,
-				PrivKeyPath:        privKeyPath28,
-				Passphrase:         passphrase27,
-				CertPath:           certPath28,
-				CaPath:             caPath27,
-				RequestCert:        requestCert21,
-				RejectUnauthorized: rejectUnauthorized39,
-				CommonNameRegex:    commonNameRegex21,
-				MinVersion:         minVersion27,
-				MaxVersion:         maxVersion27,
+			tls27 = &shared.InputAppscopeTLSSettingsServerSide{
+				Disabled:           disabled92,
+				CertificateName:    certificateName28,
+				PrivKeyPath:        privKeyPath27,
+				Passphrase:         passphrase26,
+				CertPath:           certPath27,
+				CaPath:             caPath26,
+				RequestCert:        requestCert20,
+				RejectUnauthorized: rejectUnauthorized38,
+				CommonNameRegex:    commonNameRegex20,
+				MinVersion:         minVersion26,
+				MaxVersion:         maxVersion26,
 			}
 		}
 		unixSocketPath := new(string)
@@ -18609,44 +18027,44 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			authToken1 = nil
 		}
-		textSecret13 := new(string)
+		textSecret11 := new(string)
 		if !r.InputAppscope.TextSecret.IsUnknown() && !r.InputAppscope.TextSecret.IsNull() {
-			*textSecret13 = r.InputAppscope.TextSecret.ValueString()
+			*textSecret11 = r.InputAppscope.TextSecret.ValueString()
 		} else {
-			textSecret13 = nil
+			textSecret11 = nil
 		}
 		inputAppscope = &shared.InputAppscope{
-			ID:                  id51,
-			Type:                typeVar55,
-			Disabled:            disabled93,
-			Pipeline:            pipeline102,
-			SendToRoutes:        sendToRoutes51,
-			Environment:         environment51,
-			PqEnabled:           pqEnabled51,
-			Streamtags:          streamtags51,
-			Connections:         connections51,
-			Pq:                  pq51,
+			ID:                  id50,
+			Type:                typeVar54,
+			Disabled:            disabled91,
+			Pipeline:            pipeline100,
+			SendToRoutes:        sendToRoutes50,
+			Environment:         environment50,
+			PqEnabled:           pqEnabled50,
+			Streamtags:          streamtags50,
+			Connections:         connections50,
+			Pq:                  pq50,
 			IPWhitelistRegex:    ipWhitelistRegex7,
 			MaxActiveCxn:        maxActiveCxn8,
 			SocketIdleTimeout:   socketIdleTimeout6,
 			SocketEndingMaxWait: socketEndingMaxWait6,
 			SocketMaxLifespan:   socketMaxLifespan6,
-			EnableProxyHeader:   enableProxyHeader20,
-			Metadata:            metadata55,
+			EnableProxyHeader:   enableProxyHeader19,
+			Metadata:            metadata54,
 			BreakerRulesets:     breakerRulesets13,
 			StaleChannelFlushMs: staleChannelFlushMs13,
 			EnableUnixPath:      enableUnixPath,
 			Filter:              filter7,
 			Persistence:         persistence6,
-			AuthType:            authType19,
-			Description:         description60,
-			Host:                host25,
-			Port:                port20,
-			TLS:                 tls28,
+			AuthType:            authType17,
+			Description:         description59,
+			Host:                host24,
+			Port:                port19,
+			TLS:                 tls27,
 			UnixSocketPath:      unixSocketPath,
 			UnixSocketPerms:     unixSocketPerms,
 			AuthToken:           authToken1,
-			TextSecret:          textSecret13,
+			TextSecret:          textSecret11,
 		}
 	}
 	if inputAppscope != nil {
@@ -18656,133 +18074,133 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputWef *shared.InputWef
 	if r.InputWef != nil {
-		id52 := new(string)
+		id51 := new(string)
 		if !r.InputWef.ID.IsUnknown() && !r.InputWef.ID.IsNull() {
-			*id52 = r.InputWef.ID.ValueString()
+			*id51 = r.InputWef.ID.ValueString()
 		} else {
-			id52 = nil
+			id51 = nil
 		}
-		typeVar56 := new(shared.InputWefType)
+		typeVar55 := new(shared.InputWefType)
 		if !r.InputWef.Type.IsUnknown() && !r.InputWef.Type.IsNull() {
-			*typeVar56 = shared.InputWefType(r.InputWef.Type.ValueString())
+			*typeVar55 = shared.InputWefType(r.InputWef.Type.ValueString())
 		} else {
-			typeVar56 = nil
+			typeVar55 = nil
 		}
-		disabled95 := new(bool)
+		disabled93 := new(bool)
 		if !r.InputWef.Disabled.IsUnknown() && !r.InputWef.Disabled.IsNull() {
-			*disabled95 = r.InputWef.Disabled.ValueBool()
+			*disabled93 = r.InputWef.Disabled.ValueBool()
 		} else {
-			disabled95 = nil
+			disabled93 = nil
 		}
-		pipeline104 := new(string)
+		pipeline102 := new(string)
 		if !r.InputWef.Pipeline.IsUnknown() && !r.InputWef.Pipeline.IsNull() {
-			*pipeline104 = r.InputWef.Pipeline.ValueString()
+			*pipeline102 = r.InputWef.Pipeline.ValueString()
 		} else {
-			pipeline104 = nil
+			pipeline102 = nil
 		}
-		sendToRoutes52 := new(bool)
+		sendToRoutes51 := new(bool)
 		if !r.InputWef.SendToRoutes.IsUnknown() && !r.InputWef.SendToRoutes.IsNull() {
-			*sendToRoutes52 = r.InputWef.SendToRoutes.ValueBool()
+			*sendToRoutes51 = r.InputWef.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes52 = nil
+			sendToRoutes51 = nil
 		}
-		environment52 := new(string)
+		environment51 := new(string)
 		if !r.InputWef.Environment.IsUnknown() && !r.InputWef.Environment.IsNull() {
-			*environment52 = r.InputWef.Environment.ValueString()
+			*environment51 = r.InputWef.Environment.ValueString()
 		} else {
-			environment52 = nil
+			environment51 = nil
 		}
-		pqEnabled52 := new(bool)
+		pqEnabled51 := new(bool)
 		if !r.InputWef.PqEnabled.IsUnknown() && !r.InputWef.PqEnabled.IsNull() {
-			*pqEnabled52 = r.InputWef.PqEnabled.ValueBool()
+			*pqEnabled51 = r.InputWef.PqEnabled.ValueBool()
 		} else {
-			pqEnabled52 = nil
+			pqEnabled51 = nil
 		}
-		streamtags52 := make([]string, 0, len(r.InputWef.Streamtags))
-		for streamtagsIndex52 := range r.InputWef.Streamtags {
-			streamtags52 = append(streamtags52, r.InputWef.Streamtags[streamtagsIndex52].ValueString())
+		streamtags51 := make([]string, 0, len(r.InputWef.Streamtags))
+		for streamtagsIndex51 := range r.InputWef.Streamtags {
+			streamtags51 = append(streamtags51, r.InputWef.Streamtags[streamtagsIndex51].ValueString())
 		}
-		connections52 := make([]shared.InputWefConnection, 0, len(r.InputWef.Connections))
-		for connectionsIndex52 := range r.InputWef.Connections {
-			pipeline105 := new(string)
-			if !r.InputWef.Connections[connectionsIndex52].Pipeline.IsUnknown() && !r.InputWef.Connections[connectionsIndex52].Pipeline.IsNull() {
-				*pipeline105 = r.InputWef.Connections[connectionsIndex52].Pipeline.ValueString()
+		connections51 := make([]shared.InputWefConnection, 0, len(r.InputWef.Connections))
+		for connectionsIndex51 := range r.InputWef.Connections {
+			pipeline103 := new(string)
+			if !r.InputWef.Connections[connectionsIndex51].Pipeline.IsUnknown() && !r.InputWef.Connections[connectionsIndex51].Pipeline.IsNull() {
+				*pipeline103 = r.InputWef.Connections[connectionsIndex51].Pipeline.ValueString()
 			} else {
-				pipeline105 = nil
+				pipeline103 = nil
 			}
-			var output53 string
-			output53 = r.InputWef.Connections[connectionsIndex52].Output.ValueString()
+			var output52 string
+			output52 = r.InputWef.Connections[connectionsIndex51].Output.ValueString()
 
-			connections52 = append(connections52, shared.InputWefConnection{
-				Pipeline: pipeline105,
-				Output:   output53,
+			connections51 = append(connections51, shared.InputWefConnection{
+				Pipeline: pipeline103,
+				Output:   output52,
 			})
 		}
-		var pq52 *shared.InputWefPq
+		var pq51 *shared.InputWefPq
 		if r.InputWef.Pq != nil {
-			mode66 := new(shared.InputWefMode)
+			mode65 := new(shared.InputWefMode)
 			if !r.InputWef.Pq.Mode.IsUnknown() && !r.InputWef.Pq.Mode.IsNull() {
-				*mode66 = shared.InputWefMode(r.InputWef.Pq.Mode.ValueString())
+				*mode65 = shared.InputWefMode(r.InputWef.Pq.Mode.ValueString())
 			} else {
-				mode66 = nil
+				mode65 = nil
 			}
-			maxBufferSize56 := new(float64)
+			maxBufferSize55 := new(float64)
 			if !r.InputWef.Pq.MaxBufferSize.IsUnknown() && !r.InputWef.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize56 = r.InputWef.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize55 = r.InputWef.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize56 = nil
+				maxBufferSize55 = nil
 			}
-			commitFrequency52 := new(float64)
+			commitFrequency51 := new(float64)
 			if !r.InputWef.Pq.CommitFrequency.IsUnknown() && !r.InputWef.Pq.CommitFrequency.IsNull() {
-				*commitFrequency52 = r.InputWef.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency51 = r.InputWef.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency52 = nil
+				commitFrequency51 = nil
 			}
-			maxFileSize52 := new(string)
+			maxFileSize51 := new(string)
 			if !r.InputWef.Pq.MaxFileSize.IsUnknown() && !r.InputWef.Pq.MaxFileSize.IsNull() {
-				*maxFileSize52 = r.InputWef.Pq.MaxFileSize.ValueString()
+				*maxFileSize51 = r.InputWef.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize52 = nil
+				maxFileSize51 = nil
 			}
-			maxSize52 := new(string)
+			maxSize51 := new(string)
 			if !r.InputWef.Pq.MaxSize.IsUnknown() && !r.InputWef.Pq.MaxSize.IsNull() {
-				*maxSize52 = r.InputWef.Pq.MaxSize.ValueString()
+				*maxSize51 = r.InputWef.Pq.MaxSize.ValueString()
 			} else {
-				maxSize52 = nil
+				maxSize51 = nil
 			}
-			path54 := new(string)
+			path53 := new(string)
 			if !r.InputWef.Pq.Path.IsUnknown() && !r.InputWef.Pq.Path.IsNull() {
-				*path54 = r.InputWef.Pq.Path.ValueString()
+				*path53 = r.InputWef.Pq.Path.ValueString()
 			} else {
-				path54 = nil
+				path53 = nil
 			}
-			compress60 := new(shared.InputWefCompression)
+			compress59 := new(shared.InputWefCompression)
 			if !r.InputWef.Pq.Compress.IsUnknown() && !r.InputWef.Pq.Compress.IsNull() {
-				*compress60 = shared.InputWefCompression(r.InputWef.Pq.Compress.ValueString())
+				*compress59 = shared.InputWefCompression(r.InputWef.Pq.Compress.ValueString())
 			} else {
-				compress60 = nil
+				compress59 = nil
 			}
-			pq52 = &shared.InputWefPq{
-				Mode:            mode66,
-				MaxBufferSize:   maxBufferSize56,
-				CommitFrequency: commitFrequency52,
-				MaxFileSize:     maxFileSize52,
-				MaxSize:         maxSize52,
-				Path:            path54,
-				Compress:        compress60,
+			pq51 = &shared.InputWefPq{
+				Mode:            mode65,
+				MaxBufferSize:   maxBufferSize55,
+				CommitFrequency: commitFrequency51,
+				MaxFileSize:     maxFileSize51,
+				MaxSize:         maxSize51,
+				Path:            path53,
+				Compress:        compress59,
 			}
 		}
-		host26 := new(string)
+		host25 := new(string)
 		if !r.InputWef.Host.IsUnknown() && !r.InputWef.Host.IsNull() {
-			*host26 = r.InputWef.Host.ValueString()
+			*host25 = r.InputWef.Host.ValueString()
 		} else {
-			host26 = nil
+			host25 = nil
 		}
-		port21 := new(float64)
+		port20 := new(float64)
 		if !r.InputWef.Port.IsUnknown() && !r.InputWef.Port.IsNull() {
-			*port21 = r.InputWef.Port.ValueFloat64()
+			*port20 = r.InputWef.Port.ValueFloat64()
 		} else {
-			port21 = nil
+			port20 = nil
 		}
 		authMethod := new(shared.InputWefAuthenticationMethod)
 		if !r.InputWef.AuthMethod.IsUnknown() && !r.InputWef.AuthMethod.IsNull() {
@@ -18790,64 +18208,64 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			authMethod = nil
 		}
-		var tls29 *shared.MTLSSettings
+		var tls28 *shared.MTLSSettings
 		if r.InputWef.TLS != nil {
-			disabled96 := new(bool)
+			disabled94 := new(bool)
 			if !r.InputWef.TLS.Disabled.IsUnknown() && !r.InputWef.TLS.Disabled.IsNull() {
-				*disabled96 = r.InputWef.TLS.Disabled.ValueBool()
+				*disabled94 = r.InputWef.TLS.Disabled.ValueBool()
 			} else {
-				disabled96 = nil
+				disabled94 = nil
 			}
-			rejectUnauthorized40 := new(bool)
+			rejectUnauthorized39 := new(bool)
 			if !r.InputWef.TLS.RejectUnauthorized.IsUnknown() && !r.InputWef.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized40 = r.InputWef.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized39 = r.InputWef.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized40 = nil
+				rejectUnauthorized39 = nil
 			}
-			requestCert22 := new(bool)
+			requestCert21 := new(bool)
 			if !r.InputWef.TLS.RequestCert.IsUnknown() && !r.InputWef.TLS.RequestCert.IsNull() {
-				*requestCert22 = r.InputWef.TLS.RequestCert.ValueBool()
+				*requestCert21 = r.InputWef.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert22 = nil
+				requestCert21 = nil
 			}
-			certificateName30 := new(string)
+			certificateName29 := new(string)
 			if !r.InputWef.TLS.CertificateName.IsUnknown() && !r.InputWef.TLS.CertificateName.IsNull() {
-				*certificateName30 = r.InputWef.TLS.CertificateName.ValueString()
+				*certificateName29 = r.InputWef.TLS.CertificateName.ValueString()
 			} else {
-				certificateName30 = nil
+				certificateName29 = nil
 			}
-			var privKeyPath29 string
-			privKeyPath29 = r.InputWef.TLS.PrivKeyPath.ValueString()
+			var privKeyPath28 string
+			privKeyPath28 = r.InputWef.TLS.PrivKeyPath.ValueString()
 
-			passphrase28 := new(string)
+			passphrase27 := new(string)
 			if !r.InputWef.TLS.Passphrase.IsUnknown() && !r.InputWef.TLS.Passphrase.IsNull() {
-				*passphrase28 = r.InputWef.TLS.Passphrase.ValueString()
+				*passphrase27 = r.InputWef.TLS.Passphrase.ValueString()
 			} else {
-				passphrase28 = nil
+				passphrase27 = nil
 			}
-			var certPath29 string
-			certPath29 = r.InputWef.TLS.CertPath.ValueString()
+			var certPath28 string
+			certPath28 = r.InputWef.TLS.CertPath.ValueString()
 
-			var caPath28 string
-			caPath28 = r.InputWef.TLS.CaPath.ValueString()
+			var caPath27 string
+			caPath27 = r.InputWef.TLS.CaPath.ValueString()
 
-			commonNameRegex22 := new(string)
+			commonNameRegex21 := new(string)
 			if !r.InputWef.TLS.CommonNameRegex.IsUnknown() && !r.InputWef.TLS.CommonNameRegex.IsNull() {
-				*commonNameRegex22 = r.InputWef.TLS.CommonNameRegex.ValueString()
+				*commonNameRegex21 = r.InputWef.TLS.CommonNameRegex.ValueString()
 			} else {
-				commonNameRegex22 = nil
+				commonNameRegex21 = nil
 			}
-			minVersion28 := new(shared.InputWefMinimumTLSVersion)
+			minVersion27 := new(shared.InputWefMinimumTLSVersion)
 			if !r.InputWef.TLS.MinVersion.IsUnknown() && !r.InputWef.TLS.MinVersion.IsNull() {
-				*minVersion28 = shared.InputWefMinimumTLSVersion(r.InputWef.TLS.MinVersion.ValueString())
+				*minVersion27 = shared.InputWefMinimumTLSVersion(r.InputWef.TLS.MinVersion.ValueString())
 			} else {
-				minVersion28 = nil
+				minVersion27 = nil
 			}
-			maxVersion28 := new(shared.InputWefMaximumTLSVersion)
+			maxVersion27 := new(shared.InputWefMaximumTLSVersion)
 			if !r.InputWef.TLS.MaxVersion.IsUnknown() && !r.InputWef.TLS.MaxVersion.IsNull() {
-				*maxVersion28 = shared.InputWefMaximumTLSVersion(r.InputWef.TLS.MaxVersion.ValueString())
+				*maxVersion27 = shared.InputWefMaximumTLSVersion(r.InputWef.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion28 = nil
+				maxVersion27 = nil
 			}
 			ocspCheck := new(bool)
 			if !r.InputWef.TLS.OcspCheck.IsUnknown() && !r.InputWef.TLS.OcspCheck.IsNull() {
@@ -18869,77 +18287,77 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				ocspCheckFailClose = nil
 			}
-			tls29 = &shared.MTLSSettings{
-				Disabled:           disabled96,
-				RejectUnauthorized: rejectUnauthorized40,
-				RequestCert:        requestCert22,
-				CertificateName:    certificateName30,
-				PrivKeyPath:        privKeyPath29,
-				Passphrase:         passphrase28,
-				CertPath:           certPath29,
-				CaPath:             caPath28,
-				CommonNameRegex:    commonNameRegex22,
-				MinVersion:         minVersion28,
-				MaxVersion:         maxVersion28,
+			tls28 = &shared.MTLSSettings{
+				Disabled:           disabled94,
+				RejectUnauthorized: rejectUnauthorized39,
+				RequestCert:        requestCert21,
+				CertificateName:    certificateName29,
+				PrivKeyPath:        privKeyPath28,
+				Passphrase:         passphrase27,
+				CertPath:           certPath28,
+				CaPath:             caPath27,
+				CommonNameRegex:    commonNameRegex21,
+				MinVersion:         minVersion27,
+				MaxVersion:         maxVersion27,
 				OcspCheck:          ocspCheck,
 				Keytab:             keytab,
 				Principal:          principal,
 				OcspCheckFailClose: ocspCheckFailClose,
 			}
 		}
-		maxActiveReq13 := new(float64)
+		maxActiveReq12 := new(float64)
 		if !r.InputWef.MaxActiveReq.IsUnknown() && !r.InputWef.MaxActiveReq.IsNull() {
-			*maxActiveReq13 = r.InputWef.MaxActiveReq.ValueFloat64()
+			*maxActiveReq12 = r.InputWef.MaxActiveReq.ValueFloat64()
 		} else {
-			maxActiveReq13 = nil
+			maxActiveReq12 = nil
 		}
-		maxRequestsPerSocket13 := new(int64)
+		maxRequestsPerSocket12 := new(int64)
 		if !r.InputWef.MaxRequestsPerSocket.IsUnknown() && !r.InputWef.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket13 = r.InputWef.MaxRequestsPerSocket.ValueInt64()
+			*maxRequestsPerSocket12 = r.InputWef.MaxRequestsPerSocket.ValueInt64()
 		} else {
-			maxRequestsPerSocket13 = nil
+			maxRequestsPerSocket12 = nil
 		}
-		enableProxyHeader21 := new(bool)
+		enableProxyHeader20 := new(bool)
 		if !r.InputWef.EnableProxyHeader.IsUnknown() && !r.InputWef.EnableProxyHeader.IsNull() {
-			*enableProxyHeader21 = r.InputWef.EnableProxyHeader.ValueBool()
+			*enableProxyHeader20 = r.InputWef.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader21 = nil
+			enableProxyHeader20 = nil
 		}
-		captureHeaders13 := new(bool)
+		captureHeaders12 := new(bool)
 		if !r.InputWef.CaptureHeaders.IsUnknown() && !r.InputWef.CaptureHeaders.IsNull() {
-			*captureHeaders13 = r.InputWef.CaptureHeaders.ValueBool()
+			*captureHeaders12 = r.InputWef.CaptureHeaders.ValueBool()
 		} else {
-			captureHeaders13 = nil
+			captureHeaders12 = nil
 		}
-		keepAliveTimeout13 := new(float64)
+		keepAliveTimeout12 := new(float64)
 		if !r.InputWef.KeepAliveTimeout.IsUnknown() && !r.InputWef.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout13 = r.InputWef.KeepAliveTimeout.ValueFloat64()
+			*keepAliveTimeout12 = r.InputWef.KeepAliveTimeout.ValueFloat64()
 		} else {
-			keepAliveTimeout13 = nil
+			keepAliveTimeout12 = nil
 		}
-		enableHealthCheck13 := new(bool)
+		enableHealthCheck12 := new(bool)
 		if !r.InputWef.EnableHealthCheck.IsUnknown() && !r.InputWef.EnableHealthCheck.IsNull() {
-			*enableHealthCheck13 = r.InputWef.EnableHealthCheck.ValueBool()
+			*enableHealthCheck12 = r.InputWef.EnableHealthCheck.ValueBool()
 		} else {
-			enableHealthCheck13 = nil
+			enableHealthCheck12 = nil
 		}
-		ipAllowlistRegex13 := new(string)
+		ipAllowlistRegex12 := new(string)
 		if !r.InputWef.IPAllowlistRegex.IsUnknown() && !r.InputWef.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex13 = r.InputWef.IPAllowlistRegex.ValueString()
+			*ipAllowlistRegex12 = r.InputWef.IPAllowlistRegex.ValueString()
 		} else {
-			ipAllowlistRegex13 = nil
+			ipAllowlistRegex12 = nil
 		}
-		ipDenylistRegex13 := new(string)
+		ipDenylistRegex12 := new(string)
 		if !r.InputWef.IPDenylistRegex.IsUnknown() && !r.InputWef.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex13 = r.InputWef.IPDenylistRegex.ValueString()
+			*ipDenylistRegex12 = r.InputWef.IPDenylistRegex.ValueString()
 		} else {
-			ipDenylistRegex13 = nil
+			ipDenylistRegex12 = nil
 		}
-		socketTimeout16 := new(float64)
+		socketTimeout15 := new(float64)
 		if !r.InputWef.SocketTimeout.IsUnknown() && !r.InputWef.SocketTimeout.IsNull() {
-			*socketTimeout16 = r.InputWef.SocketTimeout.ValueFloat64()
+			*socketTimeout15 = r.InputWef.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout16 = nil
+			socketTimeout15 = nil
 		}
 		caFingerprint := new(string)
 		if !r.InputWef.CaFingerprint.IsUnknown() && !r.InputWef.CaFingerprint.IsNull() {
@@ -18967,8 +18385,8 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		subscriptions := make([]shared.InputWefSubscription, 0, len(r.InputWef.Subscriptions))
 		for subscriptionsIndex := range r.InputWef.Subscriptions {
-			var id53 string
-			id53 = r.InputWef.Subscriptions[subscriptionsIndex].ID.ValueString()
+			var id52 string
+			id52 = r.InputWef.Subscriptions[subscriptionsIndex].ID.ValueString()
 
 			var subscriptionName1 string
 			subscriptionName1 = r.InputWef.Subscriptions[subscriptionsIndex].SubscriptionName.ValueString()
@@ -19009,11 +18427,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				sendBookmarks = nil
 			}
-			compress61 := new(bool)
+			compress60 := new(bool)
 			if !r.InputWef.Subscriptions[subscriptionsIndex].Compress.IsUnknown() && !r.InputWef.Subscriptions[subscriptionsIndex].Compress.IsNull() {
-				*compress61 = r.InputWef.Subscriptions[subscriptionsIndex].Compress.ValueBool()
+				*compress60 = r.InputWef.Subscriptions[subscriptionsIndex].Compress.ValueBool()
 			} else {
-				compress61 = nil
+				compress60 = nil
 			}
 			targets1 := make([]string, 0, len(r.InputWef.Subscriptions[subscriptionsIndex].Targets))
 			for targetsIndex1 := range r.InputWef.Subscriptions[subscriptionsIndex].Targets {
@@ -19031,21 +18449,21 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				querySelector = nil
 			}
-			metadata56 := make([]shared.SubscriptionMetadatum, 0, len(r.InputWef.Subscriptions[subscriptionsIndex].Metadata))
-			for metadataIndex55 := range r.InputWef.Subscriptions[subscriptionsIndex].Metadata {
-				var name79 string
-				name79 = r.InputWef.Subscriptions[subscriptionsIndex].Metadata[metadataIndex55].Name.ValueString()
+			metadata55 := make([]shared.SubscriptionMetadatum, 0, len(r.InputWef.Subscriptions[subscriptionsIndex].Metadata))
+			for metadataIndex54 := range r.InputWef.Subscriptions[subscriptionsIndex].Metadata {
+				var name74 string
+				name74 = r.InputWef.Subscriptions[subscriptionsIndex].Metadata[metadataIndex54].Name.ValueString()
 
-				var value74 string
-				value74 = r.InputWef.Subscriptions[subscriptionsIndex].Metadata[metadataIndex55].Value.ValueString()
+				var value69 string
+				value69 = r.InputWef.Subscriptions[subscriptionsIndex].Metadata[metadataIndex54].Value.ValueString()
 
-				metadata56 = append(metadata56, shared.SubscriptionMetadatum{
-					Name:  name79,
-					Value: value74,
+				metadata55 = append(metadata55, shared.SubscriptionMetadatum{
+					Name:  name74,
+					Value: value69,
 				})
 			}
 			subscriptions = append(subscriptions, shared.InputWefSubscription{
-				ID:                 id53,
+				ID:                 id52,
 				SubscriptionName:   subscriptionName1,
 				Version:            version,
 				ContentFormat:      contentFormat,
@@ -19053,31 +18471,31 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				BatchTimeout:       batchTimeout,
 				ReadExistingEvents: readExistingEvents,
 				SendBookmarks:      sendBookmarks,
-				Compress:           compress61,
+				Compress:           compress60,
 				Targets:            targets1,
 				Locale:             locale,
 				QuerySelector:      querySelector,
-				Metadata:           metadata56,
+				Metadata:           metadata55,
 			})
 		}
-		metadata57 := make([]shared.InputWefMetadatum, 0, len(r.InputWef.Metadata))
-		for metadataIndex56 := range r.InputWef.Metadata {
-			var name80 string
-			name80 = r.InputWef.Metadata[metadataIndex56].Name.ValueString()
+		metadata56 := make([]shared.InputWefMetadatum, 0, len(r.InputWef.Metadata))
+		for metadataIndex55 := range r.InputWef.Metadata {
+			var name75 string
+			name75 = r.InputWef.Metadata[metadataIndex55].Name.ValueString()
 
-			var value75 string
-			value75 = r.InputWef.Metadata[metadataIndex56].Value.ValueString()
+			var value70 string
+			value70 = r.InputWef.Metadata[metadataIndex55].Value.ValueString()
 
-			metadata57 = append(metadata57, shared.InputWefMetadatum{
-				Name:  name80,
-				Value: value75,
+			metadata56 = append(metadata56, shared.InputWefMetadatum{
+				Name:  name75,
+				Value: value70,
 			})
 		}
-		description61 := new(string)
+		description60 := new(string)
 		if !r.InputWef.Description.IsUnknown() && !r.InputWef.Description.IsNull() {
-			*description61 = r.InputWef.Description.ValueString()
+			*description60 = r.InputWef.Description.ValueString()
 		} else {
-			description61 = nil
+			description60 = nil
 		}
 		logFingerprintMismatch := new(bool)
 		if !r.InputWef.LogFingerprintMismatch.IsUnknown() && !r.InputWef.LogFingerprintMismatch.IsNull() {
@@ -19086,36 +18504,36 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			logFingerprintMismatch = nil
 		}
 		inputWef = &shared.InputWef{
-			ID:                     id52,
-			Type:                   typeVar56,
-			Disabled:               disabled95,
-			Pipeline:               pipeline104,
-			SendToRoutes:           sendToRoutes52,
-			Environment:            environment52,
-			PqEnabled:              pqEnabled52,
-			Streamtags:             streamtags52,
-			Connections:            connections52,
-			Pq:                     pq52,
-			Host:                   host26,
-			Port:                   port21,
+			ID:                     id51,
+			Type:                   typeVar55,
+			Disabled:               disabled93,
+			Pipeline:               pipeline102,
+			SendToRoutes:           sendToRoutes51,
+			Environment:            environment51,
+			PqEnabled:              pqEnabled51,
+			Streamtags:             streamtags51,
+			Connections:            connections51,
+			Pq:                     pq51,
+			Host:                   host25,
+			Port:                   port20,
 			AuthMethod:             authMethod,
-			TLS:                    tls29,
-			MaxActiveReq:           maxActiveReq13,
-			MaxRequestsPerSocket:   maxRequestsPerSocket13,
-			EnableProxyHeader:      enableProxyHeader21,
-			CaptureHeaders:         captureHeaders13,
-			KeepAliveTimeout:       keepAliveTimeout13,
-			EnableHealthCheck:      enableHealthCheck13,
-			IPAllowlistRegex:       ipAllowlistRegex13,
-			IPDenylistRegex:        ipDenylistRegex13,
-			SocketTimeout:          socketTimeout16,
+			TLS:                    tls28,
+			MaxActiveReq:           maxActiveReq12,
+			MaxRequestsPerSocket:   maxRequestsPerSocket12,
+			EnableProxyHeader:      enableProxyHeader20,
+			CaptureHeaders:         captureHeaders12,
+			KeepAliveTimeout:       keepAliveTimeout12,
+			EnableHealthCheck:      enableHealthCheck12,
+			IPAllowlistRegex:       ipAllowlistRegex12,
+			IPDenylistRegex:        ipDenylistRegex12,
+			SocketTimeout:          socketTimeout15,
 			CaFingerprint:          caFingerprint,
 			Keytab:                 keytab1,
 			Principal:              principal1,
 			AllowMachineIDMismatch: allowMachineIDMismatch,
 			Subscriptions:          subscriptions,
-			Metadata:               metadata57,
-			Description:            description61,
+			Metadata:               metadata56,
+			Description:            description60,
 			LogFingerprintMismatch: logFingerprintMismatch,
 		}
 	}
@@ -19126,115 +18544,115 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputWinEventLogs *shared.InputWinEventLogs
 	if r.InputWinEventLogs != nil {
-		id54 := new(string)
+		id53 := new(string)
 		if !r.InputWinEventLogs.ID.IsUnknown() && !r.InputWinEventLogs.ID.IsNull() {
-			*id54 = r.InputWinEventLogs.ID.ValueString()
+			*id53 = r.InputWinEventLogs.ID.ValueString()
 		} else {
-			id54 = nil
+			id53 = nil
 		}
-		typeVar57 := shared.InputWinEventLogsType(r.InputWinEventLogs.Type.ValueString())
-		disabled97 := new(bool)
+		typeVar56 := shared.InputWinEventLogsType(r.InputWinEventLogs.Type.ValueString())
+		disabled95 := new(bool)
 		if !r.InputWinEventLogs.Disabled.IsUnknown() && !r.InputWinEventLogs.Disabled.IsNull() {
-			*disabled97 = r.InputWinEventLogs.Disabled.ValueBool()
+			*disabled95 = r.InputWinEventLogs.Disabled.ValueBool()
 		} else {
-			disabled97 = nil
+			disabled95 = nil
 		}
-		pipeline106 := new(string)
+		pipeline104 := new(string)
 		if !r.InputWinEventLogs.Pipeline.IsUnknown() && !r.InputWinEventLogs.Pipeline.IsNull() {
-			*pipeline106 = r.InputWinEventLogs.Pipeline.ValueString()
+			*pipeline104 = r.InputWinEventLogs.Pipeline.ValueString()
 		} else {
-			pipeline106 = nil
+			pipeline104 = nil
 		}
-		sendToRoutes53 := new(bool)
+		sendToRoutes52 := new(bool)
 		if !r.InputWinEventLogs.SendToRoutes.IsUnknown() && !r.InputWinEventLogs.SendToRoutes.IsNull() {
-			*sendToRoutes53 = r.InputWinEventLogs.SendToRoutes.ValueBool()
+			*sendToRoutes52 = r.InputWinEventLogs.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes53 = nil
+			sendToRoutes52 = nil
 		}
-		environment53 := new(string)
+		environment52 := new(string)
 		if !r.InputWinEventLogs.Environment.IsUnknown() && !r.InputWinEventLogs.Environment.IsNull() {
-			*environment53 = r.InputWinEventLogs.Environment.ValueString()
+			*environment52 = r.InputWinEventLogs.Environment.ValueString()
 		} else {
-			environment53 = nil
+			environment52 = nil
 		}
-		pqEnabled53 := new(bool)
+		pqEnabled52 := new(bool)
 		if !r.InputWinEventLogs.PqEnabled.IsUnknown() && !r.InputWinEventLogs.PqEnabled.IsNull() {
-			*pqEnabled53 = r.InputWinEventLogs.PqEnabled.ValueBool()
+			*pqEnabled52 = r.InputWinEventLogs.PqEnabled.ValueBool()
 		} else {
-			pqEnabled53 = nil
+			pqEnabled52 = nil
 		}
-		streamtags53 := make([]string, 0, len(r.InputWinEventLogs.Streamtags))
-		for streamtagsIndex53 := range r.InputWinEventLogs.Streamtags {
-			streamtags53 = append(streamtags53, r.InputWinEventLogs.Streamtags[streamtagsIndex53].ValueString())
+		streamtags52 := make([]string, 0, len(r.InputWinEventLogs.Streamtags))
+		for streamtagsIndex52 := range r.InputWinEventLogs.Streamtags {
+			streamtags52 = append(streamtags52, r.InputWinEventLogs.Streamtags[streamtagsIndex52].ValueString())
 		}
-		connections53 := make([]shared.InputWinEventLogsConnection, 0, len(r.InputWinEventLogs.Connections))
-		for connectionsIndex53 := range r.InputWinEventLogs.Connections {
-			pipeline107 := new(string)
-			if !r.InputWinEventLogs.Connections[connectionsIndex53].Pipeline.IsUnknown() && !r.InputWinEventLogs.Connections[connectionsIndex53].Pipeline.IsNull() {
-				*pipeline107 = r.InputWinEventLogs.Connections[connectionsIndex53].Pipeline.ValueString()
+		connections52 := make([]shared.InputWinEventLogsConnection, 0, len(r.InputWinEventLogs.Connections))
+		for connectionsIndex52 := range r.InputWinEventLogs.Connections {
+			pipeline105 := new(string)
+			if !r.InputWinEventLogs.Connections[connectionsIndex52].Pipeline.IsUnknown() && !r.InputWinEventLogs.Connections[connectionsIndex52].Pipeline.IsNull() {
+				*pipeline105 = r.InputWinEventLogs.Connections[connectionsIndex52].Pipeline.ValueString()
 			} else {
-				pipeline107 = nil
+				pipeline105 = nil
 			}
-			var output54 string
-			output54 = r.InputWinEventLogs.Connections[connectionsIndex53].Output.ValueString()
+			var output53 string
+			output53 = r.InputWinEventLogs.Connections[connectionsIndex52].Output.ValueString()
 
-			connections53 = append(connections53, shared.InputWinEventLogsConnection{
-				Pipeline: pipeline107,
-				Output:   output54,
+			connections52 = append(connections52, shared.InputWinEventLogsConnection{
+				Pipeline: pipeline105,
+				Output:   output53,
 			})
 		}
-		var pq53 *shared.InputWinEventLogsPq
+		var pq52 *shared.InputWinEventLogsPq
 		if r.InputWinEventLogs.Pq != nil {
-			mode67 := new(shared.InputWinEventLogsMode)
+			mode66 := new(shared.InputWinEventLogsMode)
 			if !r.InputWinEventLogs.Pq.Mode.IsUnknown() && !r.InputWinEventLogs.Pq.Mode.IsNull() {
-				*mode67 = shared.InputWinEventLogsMode(r.InputWinEventLogs.Pq.Mode.ValueString())
+				*mode66 = shared.InputWinEventLogsMode(r.InputWinEventLogs.Pq.Mode.ValueString())
 			} else {
-				mode67 = nil
+				mode66 = nil
 			}
-			maxBufferSize57 := new(float64)
+			maxBufferSize56 := new(float64)
 			if !r.InputWinEventLogs.Pq.MaxBufferSize.IsUnknown() && !r.InputWinEventLogs.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize57 = r.InputWinEventLogs.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize56 = r.InputWinEventLogs.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize57 = nil
+				maxBufferSize56 = nil
 			}
-			commitFrequency53 := new(float64)
+			commitFrequency52 := new(float64)
 			if !r.InputWinEventLogs.Pq.CommitFrequency.IsUnknown() && !r.InputWinEventLogs.Pq.CommitFrequency.IsNull() {
-				*commitFrequency53 = r.InputWinEventLogs.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency52 = r.InputWinEventLogs.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency53 = nil
+				commitFrequency52 = nil
 			}
-			maxFileSize53 := new(string)
+			maxFileSize52 := new(string)
 			if !r.InputWinEventLogs.Pq.MaxFileSize.IsUnknown() && !r.InputWinEventLogs.Pq.MaxFileSize.IsNull() {
-				*maxFileSize53 = r.InputWinEventLogs.Pq.MaxFileSize.ValueString()
+				*maxFileSize52 = r.InputWinEventLogs.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize53 = nil
+				maxFileSize52 = nil
 			}
-			maxSize53 := new(string)
+			maxSize52 := new(string)
 			if !r.InputWinEventLogs.Pq.MaxSize.IsUnknown() && !r.InputWinEventLogs.Pq.MaxSize.IsNull() {
-				*maxSize53 = r.InputWinEventLogs.Pq.MaxSize.ValueString()
+				*maxSize52 = r.InputWinEventLogs.Pq.MaxSize.ValueString()
 			} else {
-				maxSize53 = nil
+				maxSize52 = nil
 			}
-			path55 := new(string)
+			path54 := new(string)
 			if !r.InputWinEventLogs.Pq.Path.IsUnknown() && !r.InputWinEventLogs.Pq.Path.IsNull() {
-				*path55 = r.InputWinEventLogs.Pq.Path.ValueString()
+				*path54 = r.InputWinEventLogs.Pq.Path.ValueString()
 			} else {
-				path55 = nil
+				path54 = nil
 			}
-			compress62 := new(shared.InputWinEventLogsCompression)
+			compress61 := new(shared.InputWinEventLogsCompression)
 			if !r.InputWinEventLogs.Pq.Compress.IsUnknown() && !r.InputWinEventLogs.Pq.Compress.IsNull() {
-				*compress62 = shared.InputWinEventLogsCompression(r.InputWinEventLogs.Pq.Compress.ValueString())
+				*compress61 = shared.InputWinEventLogsCompression(r.InputWinEventLogs.Pq.Compress.ValueString())
 			} else {
-				compress62 = nil
+				compress61 = nil
 			}
-			pq53 = &shared.InputWinEventLogsPq{
-				Mode:            mode67,
-				MaxBufferSize:   maxBufferSize57,
-				CommitFrequency: commitFrequency53,
-				MaxFileSize:     maxFileSize53,
-				MaxSize:         maxSize53,
-				Path:            path55,
-				Compress:        compress62,
+			pq52 = &shared.InputWinEventLogsPq{
+				Mode:            mode66,
+				MaxBufferSize:   maxBufferSize56,
+				CommitFrequency: commitFrequency52,
+				MaxFileSize:     maxFileSize52,
+				MaxSize:         maxSize52,
+				Path:            path54,
+				Compress:        compress61,
 			}
 		}
 		logNames := make([]string, 0, len(r.InputWinEventLogs.LogNames))
@@ -19271,17 +18689,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			batchSize = nil
 		}
-		metadata58 := make([]shared.InputWinEventLogsMetadatum, 0, len(r.InputWinEventLogs.Metadata))
-		for metadataIndex57 := range r.InputWinEventLogs.Metadata {
-			var name81 string
-			name81 = r.InputWinEventLogs.Metadata[metadataIndex57].Name.ValueString()
+		metadata57 := make([]shared.InputWinEventLogsMetadatum, 0, len(r.InputWinEventLogs.Metadata))
+		for metadataIndex56 := range r.InputWinEventLogs.Metadata {
+			var name76 string
+			name76 = r.InputWinEventLogs.Metadata[metadataIndex56].Name.ValueString()
 
-			var value76 string
-			value76 = r.InputWinEventLogs.Metadata[metadataIndex57].Value.ValueString()
+			var value71 string
+			value71 = r.InputWinEventLogs.Metadata[metadataIndex56].Value.ValueString()
 
-			metadata58 = append(metadata58, shared.InputWinEventLogsMetadatum{
-				Name:  name81,
-				Value: value76,
+			metadata57 = append(metadata57, shared.InputWinEventLogsMetadatum{
+				Name:  name76,
+				Value: value71,
 			})
 		}
 		maxEventBytes := new(float64)
@@ -19290,32 +18708,32 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			maxEventBytes = nil
 		}
-		description62 := new(string)
+		description61 := new(string)
 		if !r.InputWinEventLogs.Description.IsUnknown() && !r.InputWinEventLogs.Description.IsNull() {
-			*description62 = r.InputWinEventLogs.Description.ValueString()
+			*description61 = r.InputWinEventLogs.Description.ValueString()
 		} else {
-			description62 = nil
+			description61 = nil
 		}
 		inputWinEventLogs = &shared.InputWinEventLogs{
-			ID:                  id54,
-			Type:                typeVar57,
-			Disabled:            disabled97,
-			Pipeline:            pipeline106,
-			SendToRoutes:        sendToRoutes53,
-			Environment:         environment53,
-			PqEnabled:           pqEnabled53,
-			Streamtags:          streamtags53,
-			Connections:         connections53,
-			Pq:                  pq53,
+			ID:                  id53,
+			Type:                typeVar56,
+			Disabled:            disabled95,
+			Pipeline:            pipeline104,
+			SendToRoutes:        sendToRoutes52,
+			Environment:         environment52,
+			PqEnabled:           pqEnabled52,
+			Streamtags:          streamtags52,
+			Connections:         connections52,
+			Pq:                  pq52,
 			LogNames:            logNames,
 			ReadMode:            readMode,
 			EventFormat:         eventFormat,
 			DisableNativeModule: disableNativeModule2,
 			Interval:            interval16,
 			BatchSize:           batchSize,
-			Metadata:            metadata58,
+			Metadata:            metadata57,
 			MaxEventBytes:       maxEventBytes,
-			Description:         description62,
+			Description:         description61,
 		}
 	}
 	if inputWinEventLogs != nil {
@@ -19325,136 +18743,136 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputRawUDP *shared.InputRawUDP
 	if r.InputRawUDP != nil {
-		id55 := new(string)
+		id54 := new(string)
 		if !r.InputRawUDP.ID.IsUnknown() && !r.InputRawUDP.ID.IsNull() {
-			*id55 = r.InputRawUDP.ID.ValueString()
+			*id54 = r.InputRawUDP.ID.ValueString()
 		} else {
-			id55 = nil
+			id54 = nil
 		}
-		typeVar58 := new(shared.InputRawUDPType)
+		typeVar57 := new(shared.InputRawUDPType)
 		if !r.InputRawUDP.Type.IsUnknown() && !r.InputRawUDP.Type.IsNull() {
-			*typeVar58 = shared.InputRawUDPType(r.InputRawUDP.Type.ValueString())
+			*typeVar57 = shared.InputRawUDPType(r.InputRawUDP.Type.ValueString())
 		} else {
-			typeVar58 = nil
+			typeVar57 = nil
 		}
-		disabled98 := new(bool)
+		disabled96 := new(bool)
 		if !r.InputRawUDP.Disabled.IsUnknown() && !r.InputRawUDP.Disabled.IsNull() {
-			*disabled98 = r.InputRawUDP.Disabled.ValueBool()
+			*disabled96 = r.InputRawUDP.Disabled.ValueBool()
 		} else {
-			disabled98 = nil
+			disabled96 = nil
 		}
-		pipeline108 := new(string)
+		pipeline106 := new(string)
 		if !r.InputRawUDP.Pipeline.IsUnknown() && !r.InputRawUDP.Pipeline.IsNull() {
-			*pipeline108 = r.InputRawUDP.Pipeline.ValueString()
+			*pipeline106 = r.InputRawUDP.Pipeline.ValueString()
 		} else {
-			pipeline108 = nil
+			pipeline106 = nil
 		}
-		sendToRoutes54 := new(bool)
+		sendToRoutes53 := new(bool)
 		if !r.InputRawUDP.SendToRoutes.IsUnknown() && !r.InputRawUDP.SendToRoutes.IsNull() {
-			*sendToRoutes54 = r.InputRawUDP.SendToRoutes.ValueBool()
+			*sendToRoutes53 = r.InputRawUDP.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes54 = nil
+			sendToRoutes53 = nil
 		}
-		environment54 := new(string)
+		environment53 := new(string)
 		if !r.InputRawUDP.Environment.IsUnknown() && !r.InputRawUDP.Environment.IsNull() {
-			*environment54 = r.InputRawUDP.Environment.ValueString()
+			*environment53 = r.InputRawUDP.Environment.ValueString()
 		} else {
-			environment54 = nil
+			environment53 = nil
 		}
-		pqEnabled54 := new(bool)
+		pqEnabled53 := new(bool)
 		if !r.InputRawUDP.PqEnabled.IsUnknown() && !r.InputRawUDP.PqEnabled.IsNull() {
-			*pqEnabled54 = r.InputRawUDP.PqEnabled.ValueBool()
+			*pqEnabled53 = r.InputRawUDP.PqEnabled.ValueBool()
 		} else {
-			pqEnabled54 = nil
+			pqEnabled53 = nil
 		}
-		streamtags54 := make([]string, 0, len(r.InputRawUDP.Streamtags))
-		for streamtagsIndex54 := range r.InputRawUDP.Streamtags {
-			streamtags54 = append(streamtags54, r.InputRawUDP.Streamtags[streamtagsIndex54].ValueString())
+		streamtags53 := make([]string, 0, len(r.InputRawUDP.Streamtags))
+		for streamtagsIndex53 := range r.InputRawUDP.Streamtags {
+			streamtags53 = append(streamtags53, r.InputRawUDP.Streamtags[streamtagsIndex53].ValueString())
 		}
-		connections54 := make([]shared.InputRawUDPConnection, 0, len(r.InputRawUDP.Connections))
-		for connectionsIndex54 := range r.InputRawUDP.Connections {
-			pipeline109 := new(string)
-			if !r.InputRawUDP.Connections[connectionsIndex54].Pipeline.IsUnknown() && !r.InputRawUDP.Connections[connectionsIndex54].Pipeline.IsNull() {
-				*pipeline109 = r.InputRawUDP.Connections[connectionsIndex54].Pipeline.ValueString()
+		connections53 := make([]shared.InputRawUDPConnection, 0, len(r.InputRawUDP.Connections))
+		for connectionsIndex53 := range r.InputRawUDP.Connections {
+			pipeline107 := new(string)
+			if !r.InputRawUDP.Connections[connectionsIndex53].Pipeline.IsUnknown() && !r.InputRawUDP.Connections[connectionsIndex53].Pipeline.IsNull() {
+				*pipeline107 = r.InputRawUDP.Connections[connectionsIndex53].Pipeline.ValueString()
 			} else {
-				pipeline109 = nil
+				pipeline107 = nil
 			}
-			var output55 string
-			output55 = r.InputRawUDP.Connections[connectionsIndex54].Output.ValueString()
+			var output54 string
+			output54 = r.InputRawUDP.Connections[connectionsIndex53].Output.ValueString()
 
-			connections54 = append(connections54, shared.InputRawUDPConnection{
-				Pipeline: pipeline109,
-				Output:   output55,
+			connections53 = append(connections53, shared.InputRawUDPConnection{
+				Pipeline: pipeline107,
+				Output:   output54,
 			})
 		}
-		var pq54 *shared.InputRawUDPPq
+		var pq53 *shared.InputRawUDPPq
 		if r.InputRawUDP.Pq != nil {
-			mode68 := new(shared.InputRawUDPMode)
+			mode67 := new(shared.InputRawUDPMode)
 			if !r.InputRawUDP.Pq.Mode.IsUnknown() && !r.InputRawUDP.Pq.Mode.IsNull() {
-				*mode68 = shared.InputRawUDPMode(r.InputRawUDP.Pq.Mode.ValueString())
+				*mode67 = shared.InputRawUDPMode(r.InputRawUDP.Pq.Mode.ValueString())
 			} else {
-				mode68 = nil
+				mode67 = nil
 			}
-			maxBufferSize58 := new(float64)
+			maxBufferSize57 := new(float64)
 			if !r.InputRawUDP.Pq.MaxBufferSize.IsUnknown() && !r.InputRawUDP.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize58 = r.InputRawUDP.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize57 = r.InputRawUDP.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize58 = nil
+				maxBufferSize57 = nil
 			}
-			commitFrequency54 := new(float64)
+			commitFrequency53 := new(float64)
 			if !r.InputRawUDP.Pq.CommitFrequency.IsUnknown() && !r.InputRawUDP.Pq.CommitFrequency.IsNull() {
-				*commitFrequency54 = r.InputRawUDP.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency53 = r.InputRawUDP.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency54 = nil
+				commitFrequency53 = nil
 			}
-			maxFileSize54 := new(string)
+			maxFileSize53 := new(string)
 			if !r.InputRawUDP.Pq.MaxFileSize.IsUnknown() && !r.InputRawUDP.Pq.MaxFileSize.IsNull() {
-				*maxFileSize54 = r.InputRawUDP.Pq.MaxFileSize.ValueString()
+				*maxFileSize53 = r.InputRawUDP.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize54 = nil
+				maxFileSize53 = nil
 			}
-			maxSize54 := new(string)
+			maxSize53 := new(string)
 			if !r.InputRawUDP.Pq.MaxSize.IsUnknown() && !r.InputRawUDP.Pq.MaxSize.IsNull() {
-				*maxSize54 = r.InputRawUDP.Pq.MaxSize.ValueString()
+				*maxSize53 = r.InputRawUDP.Pq.MaxSize.ValueString()
 			} else {
-				maxSize54 = nil
+				maxSize53 = nil
 			}
-			path56 := new(string)
+			path55 := new(string)
 			if !r.InputRawUDP.Pq.Path.IsUnknown() && !r.InputRawUDP.Pq.Path.IsNull() {
-				*path56 = r.InputRawUDP.Pq.Path.ValueString()
+				*path55 = r.InputRawUDP.Pq.Path.ValueString()
 			} else {
-				path56 = nil
+				path55 = nil
 			}
-			compress63 := new(shared.InputRawUDPCompression)
+			compress62 := new(shared.InputRawUDPCompression)
 			if !r.InputRawUDP.Pq.Compress.IsUnknown() && !r.InputRawUDP.Pq.Compress.IsNull() {
-				*compress63 = shared.InputRawUDPCompression(r.InputRawUDP.Pq.Compress.ValueString())
+				*compress62 = shared.InputRawUDPCompression(r.InputRawUDP.Pq.Compress.ValueString())
 			} else {
-				compress63 = nil
+				compress62 = nil
 			}
-			pq54 = &shared.InputRawUDPPq{
-				Mode:            mode68,
-				MaxBufferSize:   maxBufferSize58,
-				CommitFrequency: commitFrequency54,
-				MaxFileSize:     maxFileSize54,
-				MaxSize:         maxSize54,
-				Path:            path56,
-				Compress:        compress63,
+			pq53 = &shared.InputRawUDPPq{
+				Mode:            mode67,
+				MaxBufferSize:   maxBufferSize57,
+				CommitFrequency: commitFrequency53,
+				MaxFileSize:     maxFileSize53,
+				MaxSize:         maxSize53,
+				Path:            path55,
+				Compress:        compress62,
 			}
 		}
-		host27 := new(string)
+		host26 := new(string)
 		if !r.InputRawUDP.Host.IsUnknown() && !r.InputRawUDP.Host.IsNull() {
-			*host27 = r.InputRawUDP.Host.ValueString()
+			*host26 = r.InputRawUDP.Host.ValueString()
 		} else {
-			host27 = nil
+			host26 = nil
 		}
-		var port22 float64
-		port22 = r.InputRawUDP.Port.ValueFloat64()
+		var port21 float64
+		port21 = r.InputRawUDP.Port.ValueFloat64()
 
-		maxBufferSize59 := new(float64)
+		maxBufferSize58 := new(float64)
 		if !r.InputRawUDP.MaxBufferSize.IsUnknown() && !r.InputRawUDP.MaxBufferSize.IsNull() {
-			*maxBufferSize59 = r.InputRawUDP.MaxBufferSize.ValueFloat64()
+			*maxBufferSize58 = r.InputRawUDP.MaxBufferSize.ValueFloat64()
 		} else {
-			maxBufferSize59 = nil
+			maxBufferSize58 = nil
 		}
 		ipWhitelistRegex8 := new(string)
 		if !r.InputRawUDP.IPWhitelistRegex.IsUnknown() && !r.InputRawUDP.IPWhitelistRegex.IsNull() {
@@ -19480,45 +18898,45 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			udpSocketRxBufSize4 = nil
 		}
-		metadata59 := make([]shared.InputRawUDPMetadatum, 0, len(r.InputRawUDP.Metadata))
-		for metadataIndex58 := range r.InputRawUDP.Metadata {
-			var name82 string
-			name82 = r.InputRawUDP.Metadata[metadataIndex58].Name.ValueString()
+		metadata58 := make([]shared.InputRawUDPMetadatum, 0, len(r.InputRawUDP.Metadata))
+		for metadataIndex57 := range r.InputRawUDP.Metadata {
+			var name77 string
+			name77 = r.InputRawUDP.Metadata[metadataIndex57].Name.ValueString()
 
-			var value77 string
-			value77 = r.InputRawUDP.Metadata[metadataIndex58].Value.ValueString()
+			var value72 string
+			value72 = r.InputRawUDP.Metadata[metadataIndex57].Value.ValueString()
 
-			metadata59 = append(metadata59, shared.InputRawUDPMetadatum{
-				Name:  name82,
-				Value: value77,
+			metadata58 = append(metadata58, shared.InputRawUDPMetadatum{
+				Name:  name77,
+				Value: value72,
 			})
 		}
-		description63 := new(string)
+		description62 := new(string)
 		if !r.InputRawUDP.Description.IsUnknown() && !r.InputRawUDP.Description.IsNull() {
-			*description63 = r.InputRawUDP.Description.ValueString()
+			*description62 = r.InputRawUDP.Description.ValueString()
 		} else {
-			description63 = nil
+			description62 = nil
 		}
 		inputRawUDP = &shared.InputRawUDP{
-			ID:                  id55,
-			Type:                typeVar58,
-			Disabled:            disabled98,
-			Pipeline:            pipeline108,
-			SendToRoutes:        sendToRoutes54,
-			Environment:         environment54,
-			PqEnabled:           pqEnabled54,
-			Streamtags:          streamtags54,
-			Connections:         connections54,
-			Pq:                  pq54,
-			Host:                host27,
-			Port:                port22,
-			MaxBufferSize:       maxBufferSize59,
+			ID:                  id54,
+			Type:                typeVar57,
+			Disabled:            disabled96,
+			Pipeline:            pipeline106,
+			SendToRoutes:        sendToRoutes53,
+			Environment:         environment53,
+			PqEnabled:           pqEnabled53,
+			Streamtags:          streamtags53,
+			Connections:         connections53,
+			Pq:                  pq53,
+			Host:                host26,
+			Port:                port21,
+			MaxBufferSize:       maxBufferSize58,
 			IPWhitelistRegex:    ipWhitelistRegex8,
 			SingleMsgUDPPackets: singleMsgUDPPackets2,
 			IngestRawBytes:      ingestRawBytes,
 			UDPSocketRxBufSize:  udpSocketRxBufSize4,
-			Metadata:            metadata59,
-			Description:         description63,
+			Metadata:            metadata58,
+			Description:         description62,
 		}
 	}
 	if inputRawUDP != nil {
@@ -19528,124 +18946,124 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputJournalFiles *shared.InputJournalFiles
 	if r.InputJournalFiles != nil {
-		id56 := new(string)
+		id55 := new(string)
 		if !r.InputJournalFiles.ID.IsUnknown() && !r.InputJournalFiles.ID.IsNull() {
-			*id56 = r.InputJournalFiles.ID.ValueString()
+			*id55 = r.InputJournalFiles.ID.ValueString()
 		} else {
-			id56 = nil
+			id55 = nil
 		}
-		typeVar59 := new(shared.InputJournalFilesType)
+		typeVar58 := new(shared.InputJournalFilesType)
 		if !r.InputJournalFiles.Type.IsUnknown() && !r.InputJournalFiles.Type.IsNull() {
-			*typeVar59 = shared.InputJournalFilesType(r.InputJournalFiles.Type.ValueString())
+			*typeVar58 = shared.InputJournalFilesType(r.InputJournalFiles.Type.ValueString())
 		} else {
-			typeVar59 = nil
+			typeVar58 = nil
 		}
-		disabled99 := new(bool)
+		disabled97 := new(bool)
 		if !r.InputJournalFiles.Disabled.IsUnknown() && !r.InputJournalFiles.Disabled.IsNull() {
-			*disabled99 = r.InputJournalFiles.Disabled.ValueBool()
+			*disabled97 = r.InputJournalFiles.Disabled.ValueBool()
 		} else {
-			disabled99 = nil
+			disabled97 = nil
 		}
-		pipeline110 := new(string)
+		pipeline108 := new(string)
 		if !r.InputJournalFiles.Pipeline.IsUnknown() && !r.InputJournalFiles.Pipeline.IsNull() {
-			*pipeline110 = r.InputJournalFiles.Pipeline.ValueString()
+			*pipeline108 = r.InputJournalFiles.Pipeline.ValueString()
 		} else {
-			pipeline110 = nil
+			pipeline108 = nil
 		}
-		sendToRoutes55 := new(bool)
+		sendToRoutes54 := new(bool)
 		if !r.InputJournalFiles.SendToRoutes.IsUnknown() && !r.InputJournalFiles.SendToRoutes.IsNull() {
-			*sendToRoutes55 = r.InputJournalFiles.SendToRoutes.ValueBool()
+			*sendToRoutes54 = r.InputJournalFiles.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes55 = nil
+			sendToRoutes54 = nil
 		}
-		environment55 := new(string)
+		environment54 := new(string)
 		if !r.InputJournalFiles.Environment.IsUnknown() && !r.InputJournalFiles.Environment.IsNull() {
-			*environment55 = r.InputJournalFiles.Environment.ValueString()
+			*environment54 = r.InputJournalFiles.Environment.ValueString()
 		} else {
-			environment55 = nil
+			environment54 = nil
 		}
-		pqEnabled55 := new(bool)
+		pqEnabled54 := new(bool)
 		if !r.InputJournalFiles.PqEnabled.IsUnknown() && !r.InputJournalFiles.PqEnabled.IsNull() {
-			*pqEnabled55 = r.InputJournalFiles.PqEnabled.ValueBool()
+			*pqEnabled54 = r.InputJournalFiles.PqEnabled.ValueBool()
 		} else {
-			pqEnabled55 = nil
+			pqEnabled54 = nil
 		}
-		streamtags55 := make([]string, 0, len(r.InputJournalFiles.Streamtags))
-		for streamtagsIndex55 := range r.InputJournalFiles.Streamtags {
-			streamtags55 = append(streamtags55, r.InputJournalFiles.Streamtags[streamtagsIndex55].ValueString())
+		streamtags54 := make([]string, 0, len(r.InputJournalFiles.Streamtags))
+		for streamtagsIndex54 := range r.InputJournalFiles.Streamtags {
+			streamtags54 = append(streamtags54, r.InputJournalFiles.Streamtags[streamtagsIndex54].ValueString())
 		}
-		connections55 := make([]shared.InputJournalFilesConnection, 0, len(r.InputJournalFiles.Connections))
-		for connectionsIndex55 := range r.InputJournalFiles.Connections {
-			pipeline111 := new(string)
-			if !r.InputJournalFiles.Connections[connectionsIndex55].Pipeline.IsUnknown() && !r.InputJournalFiles.Connections[connectionsIndex55].Pipeline.IsNull() {
-				*pipeline111 = r.InputJournalFiles.Connections[connectionsIndex55].Pipeline.ValueString()
+		connections54 := make([]shared.InputJournalFilesConnection, 0, len(r.InputJournalFiles.Connections))
+		for connectionsIndex54 := range r.InputJournalFiles.Connections {
+			pipeline109 := new(string)
+			if !r.InputJournalFiles.Connections[connectionsIndex54].Pipeline.IsUnknown() && !r.InputJournalFiles.Connections[connectionsIndex54].Pipeline.IsNull() {
+				*pipeline109 = r.InputJournalFiles.Connections[connectionsIndex54].Pipeline.ValueString()
 			} else {
-				pipeline111 = nil
+				pipeline109 = nil
 			}
-			var output56 string
-			output56 = r.InputJournalFiles.Connections[connectionsIndex55].Output.ValueString()
+			var output55 string
+			output55 = r.InputJournalFiles.Connections[connectionsIndex54].Output.ValueString()
 
-			connections55 = append(connections55, shared.InputJournalFilesConnection{
-				Pipeline: pipeline111,
-				Output:   output56,
+			connections54 = append(connections54, shared.InputJournalFilesConnection{
+				Pipeline: pipeline109,
+				Output:   output55,
 			})
 		}
-		var pq55 *shared.InputJournalFilesPq
+		var pq54 *shared.InputJournalFilesPq
 		if r.InputJournalFiles.Pq != nil {
-			mode69 := new(shared.InputJournalFilesMode)
+			mode68 := new(shared.InputJournalFilesMode)
 			if !r.InputJournalFiles.Pq.Mode.IsUnknown() && !r.InputJournalFiles.Pq.Mode.IsNull() {
-				*mode69 = shared.InputJournalFilesMode(r.InputJournalFiles.Pq.Mode.ValueString())
+				*mode68 = shared.InputJournalFilesMode(r.InputJournalFiles.Pq.Mode.ValueString())
 			} else {
-				mode69 = nil
+				mode68 = nil
 			}
-			maxBufferSize60 := new(float64)
+			maxBufferSize59 := new(float64)
 			if !r.InputJournalFiles.Pq.MaxBufferSize.IsUnknown() && !r.InputJournalFiles.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize60 = r.InputJournalFiles.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize59 = r.InputJournalFiles.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize60 = nil
+				maxBufferSize59 = nil
 			}
-			commitFrequency55 := new(float64)
+			commitFrequency54 := new(float64)
 			if !r.InputJournalFiles.Pq.CommitFrequency.IsUnknown() && !r.InputJournalFiles.Pq.CommitFrequency.IsNull() {
-				*commitFrequency55 = r.InputJournalFiles.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency54 = r.InputJournalFiles.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency55 = nil
+				commitFrequency54 = nil
 			}
-			maxFileSize55 := new(string)
+			maxFileSize54 := new(string)
 			if !r.InputJournalFiles.Pq.MaxFileSize.IsUnknown() && !r.InputJournalFiles.Pq.MaxFileSize.IsNull() {
-				*maxFileSize55 = r.InputJournalFiles.Pq.MaxFileSize.ValueString()
+				*maxFileSize54 = r.InputJournalFiles.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize55 = nil
+				maxFileSize54 = nil
 			}
-			maxSize55 := new(string)
+			maxSize54 := new(string)
 			if !r.InputJournalFiles.Pq.MaxSize.IsUnknown() && !r.InputJournalFiles.Pq.MaxSize.IsNull() {
-				*maxSize55 = r.InputJournalFiles.Pq.MaxSize.ValueString()
+				*maxSize54 = r.InputJournalFiles.Pq.MaxSize.ValueString()
 			} else {
-				maxSize55 = nil
+				maxSize54 = nil
 			}
-			path57 := new(string)
+			path56 := new(string)
 			if !r.InputJournalFiles.Pq.Path.IsUnknown() && !r.InputJournalFiles.Pq.Path.IsNull() {
-				*path57 = r.InputJournalFiles.Pq.Path.ValueString()
+				*path56 = r.InputJournalFiles.Pq.Path.ValueString()
 			} else {
-				path57 = nil
+				path56 = nil
 			}
-			compress64 := new(shared.InputJournalFilesCompression)
+			compress63 := new(shared.InputJournalFilesCompression)
 			if !r.InputJournalFiles.Pq.Compress.IsUnknown() && !r.InputJournalFiles.Pq.Compress.IsNull() {
-				*compress64 = shared.InputJournalFilesCompression(r.InputJournalFiles.Pq.Compress.ValueString())
+				*compress63 = shared.InputJournalFilesCompression(r.InputJournalFiles.Pq.Compress.ValueString())
 			} else {
-				compress64 = nil
+				compress63 = nil
 			}
-			pq55 = &shared.InputJournalFilesPq{
-				Mode:            mode69,
-				MaxBufferSize:   maxBufferSize60,
-				CommitFrequency: commitFrequency55,
-				MaxFileSize:     maxFileSize55,
-				MaxSize:         maxSize55,
-				Path:            path57,
-				Compress:        compress64,
+			pq54 = &shared.InputJournalFilesPq{
+				Mode:            mode68,
+				MaxBufferSize:   maxBufferSize59,
+				CommitFrequency: commitFrequency54,
+				MaxFileSize:     maxFileSize54,
+				MaxSize:         maxSize54,
+				Path:            path56,
+				Compress:        compress63,
 			}
 		}
-		var path58 string
-		path58 = r.InputJournalFiles.Path.ValueString()
+		var path57 string
+		path57 = r.InputJournalFiles.Path.ValueString()
 
 		interval17 := new(float64)
 		if !r.InputJournalFiles.Interval.IsUnknown() && !r.InputJournalFiles.Interval.IsNull() {
@@ -19662,15 +19080,15 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			var filter8 string
 			filter8 = r.InputJournalFiles.Rules[rulesIndex3].Filter.ValueString()
 
-			description64 := new(string)
+			description63 := new(string)
 			if !r.InputJournalFiles.Rules[rulesIndex3].Description.IsUnknown() && !r.InputJournalFiles.Rules[rulesIndex3].Description.IsNull() {
-				*description64 = r.InputJournalFiles.Rules[rulesIndex3].Description.ValueString()
+				*description63 = r.InputJournalFiles.Rules[rulesIndex3].Description.ValueString()
 			} else {
-				description64 = nil
+				description63 = nil
 			}
 			rules3 = append(rules3, shared.InputJournalFilesRule{
 				Filter:      filter8,
-				Description: description64,
+				Description: description63,
 			})
 		}
 		currentBoot := new(bool)
@@ -19685,44 +19103,44 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			maxAgeDur1 = nil
 		}
-		metadata60 := make([]shared.InputJournalFilesMetadatum, 0, len(r.InputJournalFiles.Metadata))
-		for metadataIndex59 := range r.InputJournalFiles.Metadata {
-			var name83 string
-			name83 = r.InputJournalFiles.Metadata[metadataIndex59].Name.ValueString()
+		metadata59 := make([]shared.InputJournalFilesMetadatum, 0, len(r.InputJournalFiles.Metadata))
+		for metadataIndex58 := range r.InputJournalFiles.Metadata {
+			var name78 string
+			name78 = r.InputJournalFiles.Metadata[metadataIndex58].Name.ValueString()
 
-			var value78 string
-			value78 = r.InputJournalFiles.Metadata[metadataIndex59].Value.ValueString()
+			var value73 string
+			value73 = r.InputJournalFiles.Metadata[metadataIndex58].Value.ValueString()
 
-			metadata60 = append(metadata60, shared.InputJournalFilesMetadatum{
-				Name:  name83,
-				Value: value78,
+			metadata59 = append(metadata59, shared.InputJournalFilesMetadatum{
+				Name:  name78,
+				Value: value73,
 			})
 		}
-		description65 := new(string)
+		description64 := new(string)
 		if !r.InputJournalFiles.Description.IsUnknown() && !r.InputJournalFiles.Description.IsNull() {
-			*description65 = r.InputJournalFiles.Description.ValueString()
+			*description64 = r.InputJournalFiles.Description.ValueString()
 		} else {
-			description65 = nil
+			description64 = nil
 		}
 		inputJournalFiles = &shared.InputJournalFiles{
-			ID:           id56,
-			Type:         typeVar59,
-			Disabled:     disabled99,
-			Pipeline:     pipeline110,
-			SendToRoutes: sendToRoutes55,
-			Environment:  environment55,
-			PqEnabled:    pqEnabled55,
-			Streamtags:   streamtags55,
-			Connections:  connections55,
-			Pq:           pq55,
-			Path:         path58,
+			ID:           id55,
+			Type:         typeVar58,
+			Disabled:     disabled97,
+			Pipeline:     pipeline108,
+			SendToRoutes: sendToRoutes54,
+			Environment:  environment54,
+			PqEnabled:    pqEnabled54,
+			Streamtags:   streamtags54,
+			Connections:  connections54,
+			Pq:           pq54,
+			Path:         path57,
 			Interval:     interval17,
 			Journals:     journals,
 			Rules:        rules3,
 			CurrentBoot:  currentBoot,
 			MaxAgeDur:    maxAgeDur1,
-			Metadata:     metadata60,
-			Description:  description65,
+			Metadata:     metadata59,
+			Description:  description64,
 		}
 	}
 	if inputJournalFiles != nil {
@@ -19732,120 +19150,120 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputWiz *shared.InputWiz
 	if r.InputWiz != nil {
-		id57 := new(string)
+		id56 := new(string)
 		if !r.InputWiz.ID.IsUnknown() && !r.InputWiz.ID.IsNull() {
-			*id57 = r.InputWiz.ID.ValueString()
+			*id56 = r.InputWiz.ID.ValueString()
 		} else {
-			id57 = nil
+			id56 = nil
 		}
-		typeVar60 := new(shared.InputWizType)
+		typeVar59 := new(shared.InputWizType)
 		if !r.InputWiz.Type.IsUnknown() && !r.InputWiz.Type.IsNull() {
-			*typeVar60 = shared.InputWizType(r.InputWiz.Type.ValueString())
+			*typeVar59 = shared.InputWizType(r.InputWiz.Type.ValueString())
 		} else {
-			typeVar60 = nil
+			typeVar59 = nil
 		}
-		disabled100 := new(bool)
+		disabled98 := new(bool)
 		if !r.InputWiz.Disabled.IsUnknown() && !r.InputWiz.Disabled.IsNull() {
-			*disabled100 = r.InputWiz.Disabled.ValueBool()
+			*disabled98 = r.InputWiz.Disabled.ValueBool()
 		} else {
-			disabled100 = nil
+			disabled98 = nil
 		}
-		pipeline112 := new(string)
+		pipeline110 := new(string)
 		if !r.InputWiz.Pipeline.IsUnknown() && !r.InputWiz.Pipeline.IsNull() {
-			*pipeline112 = r.InputWiz.Pipeline.ValueString()
+			*pipeline110 = r.InputWiz.Pipeline.ValueString()
 		} else {
-			pipeline112 = nil
+			pipeline110 = nil
 		}
-		sendToRoutes56 := new(bool)
+		sendToRoutes55 := new(bool)
 		if !r.InputWiz.SendToRoutes.IsUnknown() && !r.InputWiz.SendToRoutes.IsNull() {
-			*sendToRoutes56 = r.InputWiz.SendToRoutes.ValueBool()
+			*sendToRoutes55 = r.InputWiz.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes56 = nil
+			sendToRoutes55 = nil
 		}
-		environment56 := new(string)
+		environment55 := new(string)
 		if !r.InputWiz.Environment.IsUnknown() && !r.InputWiz.Environment.IsNull() {
-			*environment56 = r.InputWiz.Environment.ValueString()
+			*environment55 = r.InputWiz.Environment.ValueString()
 		} else {
-			environment56 = nil
+			environment55 = nil
 		}
-		pqEnabled56 := new(bool)
+		pqEnabled55 := new(bool)
 		if !r.InputWiz.PqEnabled.IsUnknown() && !r.InputWiz.PqEnabled.IsNull() {
-			*pqEnabled56 = r.InputWiz.PqEnabled.ValueBool()
+			*pqEnabled55 = r.InputWiz.PqEnabled.ValueBool()
 		} else {
-			pqEnabled56 = nil
+			pqEnabled55 = nil
 		}
-		streamtags56 := make([]string, 0, len(r.InputWiz.Streamtags))
-		for streamtagsIndex56 := range r.InputWiz.Streamtags {
-			streamtags56 = append(streamtags56, r.InputWiz.Streamtags[streamtagsIndex56].ValueString())
+		streamtags55 := make([]string, 0, len(r.InputWiz.Streamtags))
+		for streamtagsIndex55 := range r.InputWiz.Streamtags {
+			streamtags55 = append(streamtags55, r.InputWiz.Streamtags[streamtagsIndex55].ValueString())
 		}
-		connections56 := make([]shared.InputWizConnection, 0, len(r.InputWiz.Connections))
-		for connectionsIndex56 := range r.InputWiz.Connections {
-			pipeline113 := new(string)
-			if !r.InputWiz.Connections[connectionsIndex56].Pipeline.IsUnknown() && !r.InputWiz.Connections[connectionsIndex56].Pipeline.IsNull() {
-				*pipeline113 = r.InputWiz.Connections[connectionsIndex56].Pipeline.ValueString()
+		connections55 := make([]shared.InputWizConnection, 0, len(r.InputWiz.Connections))
+		for connectionsIndex55 := range r.InputWiz.Connections {
+			pipeline111 := new(string)
+			if !r.InputWiz.Connections[connectionsIndex55].Pipeline.IsUnknown() && !r.InputWiz.Connections[connectionsIndex55].Pipeline.IsNull() {
+				*pipeline111 = r.InputWiz.Connections[connectionsIndex55].Pipeline.ValueString()
 			} else {
-				pipeline113 = nil
+				pipeline111 = nil
 			}
-			var output57 string
-			output57 = r.InputWiz.Connections[connectionsIndex56].Output.ValueString()
+			var output56 string
+			output56 = r.InputWiz.Connections[connectionsIndex55].Output.ValueString()
 
-			connections56 = append(connections56, shared.InputWizConnection{
-				Pipeline: pipeline113,
-				Output:   output57,
+			connections55 = append(connections55, shared.InputWizConnection{
+				Pipeline: pipeline111,
+				Output:   output56,
 			})
 		}
-		var pq56 *shared.InputWizPq
+		var pq55 *shared.InputWizPq
 		if r.InputWiz.Pq != nil {
-			mode70 := new(shared.InputWizMode)
+			mode69 := new(shared.InputWizMode)
 			if !r.InputWiz.Pq.Mode.IsUnknown() && !r.InputWiz.Pq.Mode.IsNull() {
-				*mode70 = shared.InputWizMode(r.InputWiz.Pq.Mode.ValueString())
+				*mode69 = shared.InputWizMode(r.InputWiz.Pq.Mode.ValueString())
 			} else {
-				mode70 = nil
+				mode69 = nil
 			}
-			maxBufferSize61 := new(float64)
+			maxBufferSize60 := new(float64)
 			if !r.InputWiz.Pq.MaxBufferSize.IsUnknown() && !r.InputWiz.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize61 = r.InputWiz.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize60 = r.InputWiz.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize61 = nil
+				maxBufferSize60 = nil
 			}
-			commitFrequency56 := new(float64)
+			commitFrequency55 := new(float64)
 			if !r.InputWiz.Pq.CommitFrequency.IsUnknown() && !r.InputWiz.Pq.CommitFrequency.IsNull() {
-				*commitFrequency56 = r.InputWiz.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency55 = r.InputWiz.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency56 = nil
+				commitFrequency55 = nil
 			}
-			maxFileSize56 := new(string)
+			maxFileSize55 := new(string)
 			if !r.InputWiz.Pq.MaxFileSize.IsUnknown() && !r.InputWiz.Pq.MaxFileSize.IsNull() {
-				*maxFileSize56 = r.InputWiz.Pq.MaxFileSize.ValueString()
+				*maxFileSize55 = r.InputWiz.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize56 = nil
+				maxFileSize55 = nil
 			}
-			maxSize56 := new(string)
+			maxSize55 := new(string)
 			if !r.InputWiz.Pq.MaxSize.IsUnknown() && !r.InputWiz.Pq.MaxSize.IsNull() {
-				*maxSize56 = r.InputWiz.Pq.MaxSize.ValueString()
+				*maxSize55 = r.InputWiz.Pq.MaxSize.ValueString()
 			} else {
-				maxSize56 = nil
+				maxSize55 = nil
 			}
-			path59 := new(string)
+			path58 := new(string)
 			if !r.InputWiz.Pq.Path.IsUnknown() && !r.InputWiz.Pq.Path.IsNull() {
-				*path59 = r.InputWiz.Pq.Path.ValueString()
+				*path58 = r.InputWiz.Pq.Path.ValueString()
 			} else {
-				path59 = nil
+				path58 = nil
 			}
-			compress65 := new(shared.InputWizCompression)
+			compress64 := new(shared.InputWizCompression)
 			if !r.InputWiz.Pq.Compress.IsUnknown() && !r.InputWiz.Pq.Compress.IsNull() {
-				*compress65 = shared.InputWizCompression(r.InputWiz.Pq.Compress.ValueString())
+				*compress64 = shared.InputWizCompression(r.InputWiz.Pq.Compress.ValueString())
 			} else {
-				compress65 = nil
+				compress64 = nil
 			}
-			pq56 = &shared.InputWizPq{
-				Mode:            mode70,
-				MaxBufferSize:   maxBufferSize61,
-				CommitFrequency: commitFrequency56,
-				MaxFileSize:     maxFileSize56,
-				MaxSize:         maxSize56,
-				Path:            path59,
-				Compress:        compress65,
+			pq55 = &shared.InputWizPq{
+				Mode:            mode69,
+				MaxBufferSize:   maxBufferSize60,
+				CommitFrequency: commitFrequency55,
+				MaxFileSize:     maxFileSize55,
+				MaxSize:         maxSize55,
+				Path:            path58,
+				Compress:        compress64,
 			}
 		}
 		endpoint9 := new(string)
@@ -19889,11 +19307,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				Enabled:            enabled8,
 			})
 		}
-		requestTimeout22 := new(float64)
+		requestTimeout21 := new(float64)
 		if !r.InputWiz.RequestTimeout.IsUnknown() && !r.InputWiz.RequestTimeout.IsNull() {
-			*requestTimeout22 = r.InputWiz.RequestTimeout.ValueFloat64()
+			*requestTimeout21 = r.InputWiz.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout22 = nil
+			requestTimeout21 = nil
 		}
 		keepAliveTime5 := new(float64)
 		if !r.InputWiz.KeepAliveTime.IsUnknown() && !r.InputWiz.KeepAliveTime.IsNull() {
@@ -19919,26 +19337,26 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			ignoreGroupJobsLimit5 = nil
 		}
-		metadata61 := make([]shared.InputWizMetadatum, 0, len(r.InputWiz.Metadata))
-		for metadataIndex60 := range r.InputWiz.Metadata {
-			var name84 string
-			name84 = r.InputWiz.Metadata[metadataIndex60].Name.ValueString()
+		metadata60 := make([]shared.InputWizMetadatum, 0, len(r.InputWiz.Metadata))
+		for metadataIndex59 := range r.InputWiz.Metadata {
+			var name79 string
+			name79 = r.InputWiz.Metadata[metadataIndex59].Name.ValueString()
 
-			var value79 string
-			value79 = r.InputWiz.Metadata[metadataIndex60].Value.ValueString()
+			var value74 string
+			value74 = r.InputWiz.Metadata[metadataIndex59].Value.ValueString()
 
-			metadata61 = append(metadata61, shared.InputWizMetadatum{
-				Name:  name84,
-				Value: value79,
+			metadata60 = append(metadata60, shared.InputWizMetadatum{
+				Name:  name79,
+				Value: value74,
 			})
 		}
 		var retryRules4 *shared.InputWizRetryRules
 		if r.InputWiz.RetryRules != nil {
-			typeVar61 := new(shared.InputWizRetryType)
+			typeVar60 := new(shared.InputWizRetryType)
 			if !r.InputWiz.RetryRules.Type.IsUnknown() && !r.InputWiz.RetryRules.Type.IsNull() {
-				*typeVar61 = shared.InputWizRetryType(r.InputWiz.RetryRules.Type.ValueString())
+				*typeVar60 = shared.InputWizRetryType(r.InputWiz.RetryRules.Type.ValueString())
 			} else {
-				typeVar61 = nil
+				typeVar60 = nil
 			}
 			interval18 := new(float64)
 			if !r.InputWiz.RetryRules.Interval.IsUnknown() && !r.InputWiz.RetryRules.Interval.IsNull() {
@@ -19981,7 +19399,7 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				retryConnectReset4 = nil
 			}
 			retryRules4 = &shared.InputWizRetryRules{
-				Type:                typeVar61,
+				Type:                typeVar60,
 				Interval:            interval18,
 				Limit:               limit4,
 				Multiplier:          multiplier4,
@@ -19991,17 +19409,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				RetryConnectReset:   retryConnectReset4,
 			}
 		}
-		authType20 := new(shared.InputWizAuthenticationMethod)
+		authType18 := new(shared.InputWizAuthenticationMethod)
 		if !r.InputWiz.AuthType.IsUnknown() && !r.InputWiz.AuthType.IsNull() {
-			*authType20 = shared.InputWizAuthenticationMethod(r.InputWiz.AuthType.ValueString())
+			*authType18 = shared.InputWizAuthenticationMethod(r.InputWiz.AuthType.ValueString())
 		} else {
-			authType20 = nil
+			authType18 = nil
 		}
-		description66 := new(string)
+		description65 := new(string)
 		if !r.InputWiz.Description.IsUnknown() && !r.InputWiz.Description.IsNull() {
-			*description66 = r.InputWiz.Description.ValueString()
+			*description65 = r.InputWiz.Description.ValueString()
 		} else {
-			description66 = nil
+			description65 = nil
 		}
 		clientSecret3 := new(string)
 		if !r.InputWiz.ClientSecret.IsUnknown() && !r.InputWiz.ClientSecret.IsNull() {
@@ -20009,39 +19427,39 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			clientSecret3 = nil
 		}
-		textSecret14 := new(string)
+		textSecret12 := new(string)
 		if !r.InputWiz.TextSecret.IsUnknown() && !r.InputWiz.TextSecret.IsNull() {
-			*textSecret14 = r.InputWiz.TextSecret.ValueString()
+			*textSecret12 = r.InputWiz.TextSecret.ValueString()
 		} else {
-			textSecret14 = nil
+			textSecret12 = nil
 		}
 		inputWiz = &shared.InputWiz{
-			ID:                   id57,
-			Type:                 typeVar60,
-			Disabled:             disabled100,
-			Pipeline:             pipeline112,
-			SendToRoutes:         sendToRoutes56,
-			Environment:          environment56,
-			PqEnabled:            pqEnabled56,
-			Streamtags:           streamtags56,
-			Connections:          connections56,
-			Pq:                   pq56,
+			ID:                   id56,
+			Type:                 typeVar59,
+			Disabled:             disabled98,
+			Pipeline:             pipeline110,
+			SendToRoutes:         sendToRoutes55,
+			Environment:          environment55,
+			PqEnabled:            pqEnabled55,
+			Streamtags:           streamtags55,
+			Connections:          connections55,
+			Pq:                   pq55,
 			Endpoint:             endpoint9,
 			AuthURL:              authURL,
 			AuthAudienceOverride: authAudienceOverride,
 			ClientID:             clientId2,
 			ContentConfig:        contentConfig2,
-			RequestTimeout:       requestTimeout22,
+			RequestTimeout:       requestTimeout21,
 			KeepAliveTime:        keepAliveTime5,
 			MaxMissedKeepAlives:  maxMissedKeepAlives5,
 			TTL:                  ttl5,
 			IgnoreGroupJobsLimit: ignoreGroupJobsLimit5,
-			Metadata:             metadata61,
+			Metadata:             metadata60,
 			RetryRules:           retryRules4,
-			AuthType:             authType20,
-			Description:          description66,
+			AuthType:             authType18,
+			Description:          description65,
 			ClientSecret:         clientSecret3,
-			TextSecret:           textSecret14,
+			TextSecret:           textSecret12,
 		}
 	}
 	if inputWiz != nil {
@@ -20051,282 +19469,282 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputWizWebhook *shared.InputWizWebhook
 	if r.InputWizWebhook != nil {
-		id58 := new(string)
+		id57 := new(string)
 		if !r.InputWizWebhook.ID.IsUnknown() && !r.InputWizWebhook.ID.IsNull() {
-			*id58 = r.InputWizWebhook.ID.ValueString()
+			*id57 = r.InputWizWebhook.ID.ValueString()
 		} else {
-			id58 = nil
+			id57 = nil
 		}
-		typeVar62 := shared.InputWizWebhookType(r.InputWizWebhook.Type.ValueString())
-		disabled101 := new(bool)
+		typeVar61 := shared.InputWizWebhookType(r.InputWizWebhook.Type.ValueString())
+		disabled99 := new(bool)
 		if !r.InputWizWebhook.Disabled.IsUnknown() && !r.InputWizWebhook.Disabled.IsNull() {
-			*disabled101 = r.InputWizWebhook.Disabled.ValueBool()
+			*disabled99 = r.InputWizWebhook.Disabled.ValueBool()
 		} else {
-			disabled101 = nil
+			disabled99 = nil
 		}
-		pipeline114 := new(string)
+		pipeline112 := new(string)
 		if !r.InputWizWebhook.Pipeline.IsUnknown() && !r.InputWizWebhook.Pipeline.IsNull() {
-			*pipeline114 = r.InputWizWebhook.Pipeline.ValueString()
+			*pipeline112 = r.InputWizWebhook.Pipeline.ValueString()
 		} else {
-			pipeline114 = nil
+			pipeline112 = nil
 		}
-		sendToRoutes57 := new(bool)
+		sendToRoutes56 := new(bool)
 		if !r.InputWizWebhook.SendToRoutes.IsUnknown() && !r.InputWizWebhook.SendToRoutes.IsNull() {
-			*sendToRoutes57 = r.InputWizWebhook.SendToRoutes.ValueBool()
+			*sendToRoutes56 = r.InputWizWebhook.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes57 = nil
+			sendToRoutes56 = nil
 		}
-		environment57 := new(string)
+		environment56 := new(string)
 		if !r.InputWizWebhook.Environment.IsUnknown() && !r.InputWizWebhook.Environment.IsNull() {
-			*environment57 = r.InputWizWebhook.Environment.ValueString()
+			*environment56 = r.InputWizWebhook.Environment.ValueString()
 		} else {
-			environment57 = nil
+			environment56 = nil
 		}
-		pqEnabled57 := new(bool)
+		pqEnabled56 := new(bool)
 		if !r.InputWizWebhook.PqEnabled.IsUnknown() && !r.InputWizWebhook.PqEnabled.IsNull() {
-			*pqEnabled57 = r.InputWizWebhook.PqEnabled.ValueBool()
+			*pqEnabled56 = r.InputWizWebhook.PqEnabled.ValueBool()
 		} else {
-			pqEnabled57 = nil
+			pqEnabled56 = nil
 		}
-		streamtags57 := make([]string, 0, len(r.InputWizWebhook.Streamtags))
-		for streamtagsIndex57 := range r.InputWizWebhook.Streamtags {
-			streamtags57 = append(streamtags57, r.InputWizWebhook.Streamtags[streamtagsIndex57].ValueString())
+		streamtags56 := make([]string, 0, len(r.InputWizWebhook.Streamtags))
+		for streamtagsIndex56 := range r.InputWizWebhook.Streamtags {
+			streamtags56 = append(streamtags56, r.InputWizWebhook.Streamtags[streamtagsIndex56].ValueString())
 		}
-		connections57 := make([]shared.InputWizWebhookConnection, 0, len(r.InputWizWebhook.Connections))
-		for connectionsIndex57 := range r.InputWizWebhook.Connections {
-			pipeline115 := new(string)
-			if !r.InputWizWebhook.Connections[connectionsIndex57].Pipeline.IsUnknown() && !r.InputWizWebhook.Connections[connectionsIndex57].Pipeline.IsNull() {
-				*pipeline115 = r.InputWizWebhook.Connections[connectionsIndex57].Pipeline.ValueString()
+		connections56 := make([]shared.InputWizWebhookConnection, 0, len(r.InputWizWebhook.Connections))
+		for connectionsIndex56 := range r.InputWizWebhook.Connections {
+			pipeline113 := new(string)
+			if !r.InputWizWebhook.Connections[connectionsIndex56].Pipeline.IsUnknown() && !r.InputWizWebhook.Connections[connectionsIndex56].Pipeline.IsNull() {
+				*pipeline113 = r.InputWizWebhook.Connections[connectionsIndex56].Pipeline.ValueString()
 			} else {
-				pipeline115 = nil
+				pipeline113 = nil
 			}
-			var output58 string
-			output58 = r.InputWizWebhook.Connections[connectionsIndex57].Output.ValueString()
+			var output57 string
+			output57 = r.InputWizWebhook.Connections[connectionsIndex56].Output.ValueString()
 
-			connections57 = append(connections57, shared.InputWizWebhookConnection{
-				Pipeline: pipeline115,
-				Output:   output58,
+			connections56 = append(connections56, shared.InputWizWebhookConnection{
+				Pipeline: pipeline113,
+				Output:   output57,
 			})
 		}
-		var pq57 *shared.InputWizWebhookPq
+		var pq56 *shared.InputWizWebhookPq
 		if r.InputWizWebhook.Pq != nil {
-			mode71 := new(shared.InputWizWebhookMode)
+			mode70 := new(shared.InputWizWebhookMode)
 			if !r.InputWizWebhook.Pq.Mode.IsUnknown() && !r.InputWizWebhook.Pq.Mode.IsNull() {
-				*mode71 = shared.InputWizWebhookMode(r.InputWizWebhook.Pq.Mode.ValueString())
+				*mode70 = shared.InputWizWebhookMode(r.InputWizWebhook.Pq.Mode.ValueString())
 			} else {
-				mode71 = nil
+				mode70 = nil
 			}
-			maxBufferSize62 := new(float64)
+			maxBufferSize61 := new(float64)
 			if !r.InputWizWebhook.Pq.MaxBufferSize.IsUnknown() && !r.InputWizWebhook.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize62 = r.InputWizWebhook.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize61 = r.InputWizWebhook.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize62 = nil
+				maxBufferSize61 = nil
 			}
-			commitFrequency57 := new(float64)
+			commitFrequency56 := new(float64)
 			if !r.InputWizWebhook.Pq.CommitFrequency.IsUnknown() && !r.InputWizWebhook.Pq.CommitFrequency.IsNull() {
-				*commitFrequency57 = r.InputWizWebhook.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency56 = r.InputWizWebhook.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency57 = nil
+				commitFrequency56 = nil
 			}
-			maxFileSize57 := new(string)
+			maxFileSize56 := new(string)
 			if !r.InputWizWebhook.Pq.MaxFileSize.IsUnknown() && !r.InputWizWebhook.Pq.MaxFileSize.IsNull() {
-				*maxFileSize57 = r.InputWizWebhook.Pq.MaxFileSize.ValueString()
+				*maxFileSize56 = r.InputWizWebhook.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize57 = nil
+				maxFileSize56 = nil
 			}
-			maxSize57 := new(string)
+			maxSize56 := new(string)
 			if !r.InputWizWebhook.Pq.MaxSize.IsUnknown() && !r.InputWizWebhook.Pq.MaxSize.IsNull() {
-				*maxSize57 = r.InputWizWebhook.Pq.MaxSize.ValueString()
+				*maxSize56 = r.InputWizWebhook.Pq.MaxSize.ValueString()
 			} else {
-				maxSize57 = nil
+				maxSize56 = nil
 			}
-			path60 := new(string)
+			path59 := new(string)
 			if !r.InputWizWebhook.Pq.Path.IsUnknown() && !r.InputWizWebhook.Pq.Path.IsNull() {
-				*path60 = r.InputWizWebhook.Pq.Path.ValueString()
+				*path59 = r.InputWizWebhook.Pq.Path.ValueString()
 			} else {
-				path60 = nil
+				path59 = nil
 			}
-			compress66 := new(shared.InputWizWebhookCompression)
+			compress65 := new(shared.InputWizWebhookCompression)
 			if !r.InputWizWebhook.Pq.Compress.IsUnknown() && !r.InputWizWebhook.Pq.Compress.IsNull() {
-				*compress66 = shared.InputWizWebhookCompression(r.InputWizWebhook.Pq.Compress.ValueString())
+				*compress65 = shared.InputWizWebhookCompression(r.InputWizWebhook.Pq.Compress.ValueString())
 			} else {
-				compress66 = nil
+				compress65 = nil
 			}
 			var pqControls *shared.InputWizWebhookPqControls
 			if r.InputWizWebhook.Pq.PqControls != nil {
 				pqControls = &shared.InputWizWebhookPqControls{}
 			}
-			pq57 = &shared.InputWizWebhookPq{
-				Mode:            mode71,
-				MaxBufferSize:   maxBufferSize62,
-				CommitFrequency: commitFrequency57,
-				MaxFileSize:     maxFileSize57,
-				MaxSize:         maxSize57,
-				Path:            path60,
-				Compress:        compress66,
+			pq56 = &shared.InputWizWebhookPq{
+				Mode:            mode70,
+				MaxBufferSize:   maxBufferSize61,
+				CommitFrequency: commitFrequency56,
+				MaxFileSize:     maxFileSize56,
+				MaxSize:         maxSize56,
+				Path:            path59,
+				Compress:        compress65,
 				PqControls:      pqControls,
 			}
 		}
-		host28 := new(string)
+		host27 := new(string)
 		if !r.InputWizWebhook.Host.IsUnknown() && !r.InputWizWebhook.Host.IsNull() {
-			*host28 = r.InputWizWebhook.Host.ValueString()
+			*host27 = r.InputWizWebhook.Host.ValueString()
 		} else {
-			host28 = nil
+			host27 = nil
 		}
-		var port23 float64
-		port23 = r.InputWizWebhook.Port.ValueFloat64()
+		var port22 float64
+		port22 = r.InputWizWebhook.Port.ValueFloat64()
 
 		authTokens8 := make([]string, 0, len(r.InputWizWebhook.AuthTokens))
 		for authTokensIndex8 := range r.InputWizWebhook.AuthTokens {
 			authTokens8 = append(authTokens8, r.InputWizWebhook.AuthTokens[authTokensIndex8].ValueString())
 		}
-		var tls30 *shared.InputWizWebhookTLSSettingsServerSide
+		var tls29 *shared.InputWizWebhookTLSSettingsServerSide
 		if r.InputWizWebhook.TLS != nil {
-			disabled102 := new(bool)
+			disabled100 := new(bool)
 			if !r.InputWizWebhook.TLS.Disabled.IsUnknown() && !r.InputWizWebhook.TLS.Disabled.IsNull() {
-				*disabled102 = r.InputWizWebhook.TLS.Disabled.ValueBool()
+				*disabled100 = r.InputWizWebhook.TLS.Disabled.ValueBool()
 			} else {
-				disabled102 = nil
+				disabled100 = nil
 			}
-			requestCert23 := new(bool)
+			requestCert22 := new(bool)
 			if !r.InputWizWebhook.TLS.RequestCert.IsUnknown() && !r.InputWizWebhook.TLS.RequestCert.IsNull() {
-				*requestCert23 = r.InputWizWebhook.TLS.RequestCert.ValueBool()
+				*requestCert22 = r.InputWizWebhook.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert23 = nil
+				requestCert22 = nil
 			}
-			rejectUnauthorized41 := new(bool)
+			rejectUnauthorized40 := new(bool)
 			if !r.InputWizWebhook.TLS.RejectUnauthorized.IsUnknown() && !r.InputWizWebhook.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized41 = r.InputWizWebhook.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized40 = r.InputWizWebhook.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized41 = nil
+				rejectUnauthorized40 = nil
 			}
-			commonNameRegex23 := new(string)
+			commonNameRegex22 := new(string)
 			if !r.InputWizWebhook.TLS.CommonNameRegex.IsUnknown() && !r.InputWizWebhook.TLS.CommonNameRegex.IsNull() {
-				*commonNameRegex23 = r.InputWizWebhook.TLS.CommonNameRegex.ValueString()
+				*commonNameRegex22 = r.InputWizWebhook.TLS.CommonNameRegex.ValueString()
 			} else {
-				commonNameRegex23 = nil
+				commonNameRegex22 = nil
 			}
-			certificateName31 := new(string)
+			certificateName30 := new(string)
 			if !r.InputWizWebhook.TLS.CertificateName.IsUnknown() && !r.InputWizWebhook.TLS.CertificateName.IsNull() {
-				*certificateName31 = r.InputWizWebhook.TLS.CertificateName.ValueString()
+				*certificateName30 = r.InputWizWebhook.TLS.CertificateName.ValueString()
 			} else {
-				certificateName31 = nil
+				certificateName30 = nil
 			}
-			privKeyPath30 := new(string)
+			privKeyPath29 := new(string)
 			if !r.InputWizWebhook.TLS.PrivKeyPath.IsUnknown() && !r.InputWizWebhook.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath30 = r.InputWizWebhook.TLS.PrivKeyPath.ValueString()
+				*privKeyPath29 = r.InputWizWebhook.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath30 = nil
+				privKeyPath29 = nil
 			}
-			passphrase29 := new(string)
+			passphrase28 := new(string)
 			if !r.InputWizWebhook.TLS.Passphrase.IsUnknown() && !r.InputWizWebhook.TLS.Passphrase.IsNull() {
-				*passphrase29 = r.InputWizWebhook.TLS.Passphrase.ValueString()
+				*passphrase28 = r.InputWizWebhook.TLS.Passphrase.ValueString()
 			} else {
-				passphrase29 = nil
+				passphrase28 = nil
 			}
-			certPath30 := new(string)
+			certPath29 := new(string)
 			if !r.InputWizWebhook.TLS.CertPath.IsUnknown() && !r.InputWizWebhook.TLS.CertPath.IsNull() {
-				*certPath30 = r.InputWizWebhook.TLS.CertPath.ValueString()
+				*certPath29 = r.InputWizWebhook.TLS.CertPath.ValueString()
 			} else {
-				certPath30 = nil
+				certPath29 = nil
 			}
-			caPath29 := new(string)
+			caPath28 := new(string)
 			if !r.InputWizWebhook.TLS.CaPath.IsUnknown() && !r.InputWizWebhook.TLS.CaPath.IsNull() {
-				*caPath29 = r.InputWizWebhook.TLS.CaPath.ValueString()
+				*caPath28 = r.InputWizWebhook.TLS.CaPath.ValueString()
 			} else {
-				caPath29 = nil
+				caPath28 = nil
 			}
-			minVersion29 := new(shared.InputWizWebhookMinimumTLSVersion)
+			minVersion28 := new(shared.InputWizWebhookMinimumTLSVersion)
 			if !r.InputWizWebhook.TLS.MinVersion.IsUnknown() && !r.InputWizWebhook.TLS.MinVersion.IsNull() {
-				*minVersion29 = shared.InputWizWebhookMinimumTLSVersion(r.InputWizWebhook.TLS.MinVersion.ValueString())
+				*minVersion28 = shared.InputWizWebhookMinimumTLSVersion(r.InputWizWebhook.TLS.MinVersion.ValueString())
 			} else {
-				minVersion29 = nil
+				minVersion28 = nil
 			}
-			maxVersion29 := new(shared.InputWizWebhookMaximumTLSVersion)
+			maxVersion28 := new(shared.InputWizWebhookMaximumTLSVersion)
 			if !r.InputWizWebhook.TLS.MaxVersion.IsUnknown() && !r.InputWizWebhook.TLS.MaxVersion.IsNull() {
-				*maxVersion29 = shared.InputWizWebhookMaximumTLSVersion(r.InputWizWebhook.TLS.MaxVersion.ValueString())
+				*maxVersion28 = shared.InputWizWebhookMaximumTLSVersion(r.InputWizWebhook.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion29 = nil
+				maxVersion28 = nil
 			}
-			tls30 = &shared.InputWizWebhookTLSSettingsServerSide{
-				Disabled:           disabled102,
-				RequestCert:        requestCert23,
-				RejectUnauthorized: rejectUnauthorized41,
-				CommonNameRegex:    commonNameRegex23,
-				CertificateName:    certificateName31,
-				PrivKeyPath:        privKeyPath30,
-				Passphrase:         passphrase29,
-				CertPath:           certPath30,
-				CaPath:             caPath29,
-				MinVersion:         minVersion29,
-				MaxVersion:         maxVersion29,
+			tls29 = &shared.InputWizWebhookTLSSettingsServerSide{
+				Disabled:           disabled100,
+				RequestCert:        requestCert22,
+				RejectUnauthorized: rejectUnauthorized40,
+				CommonNameRegex:    commonNameRegex22,
+				CertificateName:    certificateName30,
+				PrivKeyPath:        privKeyPath29,
+				Passphrase:         passphrase28,
+				CertPath:           certPath29,
+				CaPath:             caPath28,
+				MinVersion:         minVersion28,
+				MaxVersion:         maxVersion28,
 			}
 		}
-		maxActiveReq14 := new(float64)
+		maxActiveReq13 := new(float64)
 		if !r.InputWizWebhook.MaxActiveReq.IsUnknown() && !r.InputWizWebhook.MaxActiveReq.IsNull() {
-			*maxActiveReq14 = r.InputWizWebhook.MaxActiveReq.ValueFloat64()
+			*maxActiveReq13 = r.InputWizWebhook.MaxActiveReq.ValueFloat64()
 		} else {
-			maxActiveReq14 = nil
+			maxActiveReq13 = nil
 		}
-		maxRequestsPerSocket14 := new(int64)
+		maxRequestsPerSocket13 := new(int64)
 		if !r.InputWizWebhook.MaxRequestsPerSocket.IsUnknown() && !r.InputWizWebhook.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket14 = r.InputWizWebhook.MaxRequestsPerSocket.ValueInt64()
+			*maxRequestsPerSocket13 = r.InputWizWebhook.MaxRequestsPerSocket.ValueInt64()
 		} else {
-			maxRequestsPerSocket14 = nil
+			maxRequestsPerSocket13 = nil
 		}
-		enableProxyHeader22 := new(bool)
+		enableProxyHeader21 := new(bool)
 		if !r.InputWizWebhook.EnableProxyHeader.IsUnknown() && !r.InputWizWebhook.EnableProxyHeader.IsNull() {
-			*enableProxyHeader22 = r.InputWizWebhook.EnableProxyHeader.ValueBool()
+			*enableProxyHeader21 = r.InputWizWebhook.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader22 = nil
+			enableProxyHeader21 = nil
 		}
-		captureHeaders14 := new(bool)
+		captureHeaders13 := new(bool)
 		if !r.InputWizWebhook.CaptureHeaders.IsUnknown() && !r.InputWizWebhook.CaptureHeaders.IsNull() {
-			*captureHeaders14 = r.InputWizWebhook.CaptureHeaders.ValueBool()
+			*captureHeaders13 = r.InputWizWebhook.CaptureHeaders.ValueBool()
 		} else {
-			captureHeaders14 = nil
+			captureHeaders13 = nil
 		}
-		activityLogSampleRate13 := new(float64)
+		activityLogSampleRate12 := new(float64)
 		if !r.InputWizWebhook.ActivityLogSampleRate.IsUnknown() && !r.InputWizWebhook.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate13 = r.InputWizWebhook.ActivityLogSampleRate.ValueFloat64()
+			*activityLogSampleRate12 = r.InputWizWebhook.ActivityLogSampleRate.ValueFloat64()
 		} else {
-			activityLogSampleRate13 = nil
+			activityLogSampleRate12 = nil
 		}
-		requestTimeout23 := new(float64)
+		requestTimeout22 := new(float64)
 		if !r.InputWizWebhook.RequestTimeout.IsUnknown() && !r.InputWizWebhook.RequestTimeout.IsNull() {
-			*requestTimeout23 = r.InputWizWebhook.RequestTimeout.ValueFloat64()
+			*requestTimeout22 = r.InputWizWebhook.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout23 = nil
+			requestTimeout22 = nil
 		}
-		socketTimeout17 := new(float64)
+		socketTimeout16 := new(float64)
 		if !r.InputWizWebhook.SocketTimeout.IsUnknown() && !r.InputWizWebhook.SocketTimeout.IsNull() {
-			*socketTimeout17 = r.InputWizWebhook.SocketTimeout.ValueFloat64()
+			*socketTimeout16 = r.InputWizWebhook.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout17 = nil
+			socketTimeout16 = nil
 		}
-		keepAliveTimeout14 := new(float64)
+		keepAliveTimeout13 := new(float64)
 		if !r.InputWizWebhook.KeepAliveTimeout.IsUnknown() && !r.InputWizWebhook.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout14 = r.InputWizWebhook.KeepAliveTimeout.ValueFloat64()
+			*keepAliveTimeout13 = r.InputWizWebhook.KeepAliveTimeout.ValueFloat64()
 		} else {
-			keepAliveTimeout14 = nil
+			keepAliveTimeout13 = nil
 		}
-		enableHealthCheck14 := new(bool)
+		enableHealthCheck13 := new(bool)
 		if !r.InputWizWebhook.EnableHealthCheck.IsUnknown() && !r.InputWizWebhook.EnableHealthCheck.IsNull() {
-			*enableHealthCheck14 = r.InputWizWebhook.EnableHealthCheck.ValueBool()
+			*enableHealthCheck13 = r.InputWizWebhook.EnableHealthCheck.ValueBool()
 		} else {
-			enableHealthCheck14 = nil
+			enableHealthCheck13 = nil
 		}
-		ipAllowlistRegex14 := new(string)
+		ipAllowlistRegex13 := new(string)
 		if !r.InputWizWebhook.IPAllowlistRegex.IsUnknown() && !r.InputWizWebhook.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex14 = r.InputWizWebhook.IPAllowlistRegex.ValueString()
+			*ipAllowlistRegex13 = r.InputWizWebhook.IPAllowlistRegex.ValueString()
 		} else {
-			ipAllowlistRegex14 = nil
+			ipAllowlistRegex13 = nil
 		}
-		ipDenylistRegex14 := new(string)
+		ipDenylistRegex13 := new(string)
 		if !r.InputWizWebhook.IPDenylistRegex.IsUnknown() && !r.InputWizWebhook.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex14 = r.InputWizWebhook.IPDenylistRegex.ValueString()
+			*ipDenylistRegex13 = r.InputWizWebhook.IPDenylistRegex.ValueString()
 		} else {
-			ipDenylistRegex14 = nil
+			ipDenylistRegex13 = nil
 		}
 		breakerRulesets14 := make([]string, 0, len(r.InputWizWebhook.BreakerRulesets))
 		for breakerRulesetsIndex14 := range r.InputWizWebhook.BreakerRulesets {
@@ -20338,17 +19756,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			staleChannelFlushMs14 = nil
 		}
-		metadata62 := make([]shared.InputWizWebhookMetadatum, 0, len(r.InputWizWebhook.Metadata))
-		for metadataIndex61 := range r.InputWizWebhook.Metadata {
-			var name85 string
-			name85 = r.InputWizWebhook.Metadata[metadataIndex61].Name.ValueString()
+		metadata61 := make([]shared.InputWizWebhookMetadatum, 0, len(r.InputWizWebhook.Metadata))
+		for metadataIndex60 := range r.InputWizWebhook.Metadata {
+			var name80 string
+			name80 = r.InputWizWebhook.Metadata[metadataIndex60].Name.ValueString()
 
-			var value80 string
-			value80 = r.InputWizWebhook.Metadata[metadataIndex61].Value.ValueString()
+			var value75 string
+			value75 = r.InputWizWebhook.Metadata[metadataIndex60].Value.ValueString()
 
-			metadata62 = append(metadata62, shared.InputWizWebhookMetadatum{
-				Name:  name85,
-				Value: value80,
+			metadata61 = append(metadata61, shared.InputWizWebhookMetadatum{
+				Name:  name80,
+				Value: value75,
 			})
 		}
 		allowedPaths1 := make([]string, 0, len(r.InputWizWebhook.AllowedPaths))
@@ -20361,73 +19779,73 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		authTokensExt2 := make([]shared.InputWizWebhookAuthTokensExt, 0, len(r.InputWizWebhook.AuthTokensExt))
 		for authTokensExtIndex2 := range r.InputWizWebhook.AuthTokensExt {
-			var token12 string
-			token12 = r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Token.ValueString()
+			var token10 string
+			token10 = r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Token.ValueString()
 
-			description67 := new(string)
+			description66 := new(string)
 			if !r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Description.IsUnknown() && !r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Description.IsNull() {
-				*description67 = r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Description.ValueString()
+				*description66 = r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Description.ValueString()
 			} else {
-				description67 = nil
+				description66 = nil
 			}
-			metadata63 := make([]shared.InputWizWebhookAuthTokensExtMetadatum, 0, len(r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Metadata))
-			for metadataIndex62 := range r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Metadata {
-				var name86 string
-				name86 = r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Metadata[metadataIndex62].Name.ValueString()
+			metadata62 := make([]shared.InputWizWebhookAuthTokensExtMetadatum, 0, len(r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Metadata))
+			for metadataIndex61 := range r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Metadata {
+				var name81 string
+				name81 = r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Metadata[metadataIndex61].Name.ValueString()
 
-				var value81 string
-				value81 = r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Metadata[metadataIndex62].Value.ValueString()
+				var value76 string
+				value76 = r.InputWizWebhook.AuthTokensExt[authTokensExtIndex2].Metadata[metadataIndex61].Value.ValueString()
 
-				metadata63 = append(metadata63, shared.InputWizWebhookAuthTokensExtMetadatum{
-					Name:  name86,
-					Value: value81,
+				metadata62 = append(metadata62, shared.InputWizWebhookAuthTokensExtMetadatum{
+					Name:  name81,
+					Value: value76,
 				})
 			}
 			authTokensExt2 = append(authTokensExt2, shared.InputWizWebhookAuthTokensExt{
-				Token:       token12,
-				Description: description67,
-				Metadata:    metadata63,
+				Token:       token10,
+				Description: description66,
+				Metadata:    metadata62,
 			})
 		}
-		description68 := new(string)
+		description67 := new(string)
 		if !r.InputWizWebhook.Description.IsUnknown() && !r.InputWizWebhook.Description.IsNull() {
-			*description68 = r.InputWizWebhook.Description.ValueString()
+			*description67 = r.InputWizWebhook.Description.ValueString()
 		} else {
-			description68 = nil
+			description67 = nil
 		}
 		inputWizWebhook = &shared.InputWizWebhook{
-			ID:                    id58,
-			Type:                  typeVar62,
-			Disabled:              disabled101,
-			Pipeline:              pipeline114,
-			SendToRoutes:          sendToRoutes57,
-			Environment:           environment57,
-			PqEnabled:             pqEnabled57,
-			Streamtags:            streamtags57,
-			Connections:           connections57,
-			Pq:                    pq57,
-			Host:                  host28,
-			Port:                  port23,
+			ID:                    id57,
+			Type:                  typeVar61,
+			Disabled:              disabled99,
+			Pipeline:              pipeline112,
+			SendToRoutes:          sendToRoutes56,
+			Environment:           environment56,
+			PqEnabled:             pqEnabled56,
+			Streamtags:            streamtags56,
+			Connections:           connections56,
+			Pq:                    pq56,
+			Host:                  host27,
+			Port:                  port22,
 			AuthTokens:            authTokens8,
-			TLS:                   tls30,
-			MaxActiveReq:          maxActiveReq14,
-			MaxRequestsPerSocket:  maxRequestsPerSocket14,
-			EnableProxyHeader:     enableProxyHeader22,
-			CaptureHeaders:        captureHeaders14,
-			ActivityLogSampleRate: activityLogSampleRate13,
-			RequestTimeout:        requestTimeout23,
-			SocketTimeout:         socketTimeout17,
-			KeepAliveTimeout:      keepAliveTimeout14,
-			EnableHealthCheck:     enableHealthCheck14,
-			IPAllowlistRegex:      ipAllowlistRegex14,
-			IPDenylistRegex:       ipDenylistRegex14,
+			TLS:                   tls29,
+			MaxActiveReq:          maxActiveReq13,
+			MaxRequestsPerSocket:  maxRequestsPerSocket13,
+			EnableProxyHeader:     enableProxyHeader21,
+			CaptureHeaders:        captureHeaders13,
+			ActivityLogSampleRate: activityLogSampleRate12,
+			RequestTimeout:        requestTimeout22,
+			SocketTimeout:         socketTimeout16,
+			KeepAliveTimeout:      keepAliveTimeout13,
+			EnableHealthCheck:     enableHealthCheck13,
+			IPAllowlistRegex:      ipAllowlistRegex13,
+			IPDenylistRegex:       ipDenylistRegex13,
 			BreakerRulesets:       breakerRulesets14,
 			StaleChannelFlushMs:   staleChannelFlushMs14,
-			Metadata:              metadata62,
+			Metadata:              metadata61,
 			AllowedPaths:          allowedPaths1,
 			AllowedMethods:        allowedMethods1,
 			AuthTokensExt:         authTokensExt2,
-			Description:           description68,
+			Description:           description67,
 		}
 	}
 	if inputWizWebhook != nil {
@@ -20437,133 +19855,133 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputNetflow *shared.InputNetflow
 	if r.InputNetflow != nil {
-		id59 := new(string)
+		id58 := new(string)
 		if !r.InputNetflow.ID.IsUnknown() && !r.InputNetflow.ID.IsNull() {
-			*id59 = r.InputNetflow.ID.ValueString()
+			*id58 = r.InputNetflow.ID.ValueString()
 		} else {
-			id59 = nil
+			id58 = nil
 		}
-		typeVar63 := new(shared.InputNetflowType)
+		typeVar62 := new(shared.InputNetflowType)
 		if !r.InputNetflow.Type.IsUnknown() && !r.InputNetflow.Type.IsNull() {
-			*typeVar63 = shared.InputNetflowType(r.InputNetflow.Type.ValueString())
+			*typeVar62 = shared.InputNetflowType(r.InputNetflow.Type.ValueString())
 		} else {
-			typeVar63 = nil
+			typeVar62 = nil
 		}
-		disabled103 := new(bool)
+		disabled101 := new(bool)
 		if !r.InputNetflow.Disabled.IsUnknown() && !r.InputNetflow.Disabled.IsNull() {
-			*disabled103 = r.InputNetflow.Disabled.ValueBool()
+			*disabled101 = r.InputNetflow.Disabled.ValueBool()
 		} else {
-			disabled103 = nil
+			disabled101 = nil
 		}
-		pipeline116 := new(string)
+		pipeline114 := new(string)
 		if !r.InputNetflow.Pipeline.IsUnknown() && !r.InputNetflow.Pipeline.IsNull() {
-			*pipeline116 = r.InputNetflow.Pipeline.ValueString()
+			*pipeline114 = r.InputNetflow.Pipeline.ValueString()
 		} else {
-			pipeline116 = nil
+			pipeline114 = nil
 		}
-		sendToRoutes58 := new(bool)
+		sendToRoutes57 := new(bool)
 		if !r.InputNetflow.SendToRoutes.IsUnknown() && !r.InputNetflow.SendToRoutes.IsNull() {
-			*sendToRoutes58 = r.InputNetflow.SendToRoutes.ValueBool()
+			*sendToRoutes57 = r.InputNetflow.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes58 = nil
+			sendToRoutes57 = nil
 		}
-		environment58 := new(string)
+		environment57 := new(string)
 		if !r.InputNetflow.Environment.IsUnknown() && !r.InputNetflow.Environment.IsNull() {
-			*environment58 = r.InputNetflow.Environment.ValueString()
+			*environment57 = r.InputNetflow.Environment.ValueString()
 		} else {
-			environment58 = nil
+			environment57 = nil
 		}
-		pqEnabled58 := new(bool)
+		pqEnabled57 := new(bool)
 		if !r.InputNetflow.PqEnabled.IsUnknown() && !r.InputNetflow.PqEnabled.IsNull() {
-			*pqEnabled58 = r.InputNetflow.PqEnabled.ValueBool()
+			*pqEnabled57 = r.InputNetflow.PqEnabled.ValueBool()
 		} else {
-			pqEnabled58 = nil
+			pqEnabled57 = nil
 		}
-		streamtags58 := make([]string, 0, len(r.InputNetflow.Streamtags))
-		for streamtagsIndex58 := range r.InputNetflow.Streamtags {
-			streamtags58 = append(streamtags58, r.InputNetflow.Streamtags[streamtagsIndex58].ValueString())
+		streamtags57 := make([]string, 0, len(r.InputNetflow.Streamtags))
+		for streamtagsIndex57 := range r.InputNetflow.Streamtags {
+			streamtags57 = append(streamtags57, r.InputNetflow.Streamtags[streamtagsIndex57].ValueString())
 		}
-		connections58 := make([]shared.InputNetflowConnection, 0, len(r.InputNetflow.Connections))
-		for connectionsIndex58 := range r.InputNetflow.Connections {
-			pipeline117 := new(string)
-			if !r.InputNetflow.Connections[connectionsIndex58].Pipeline.IsUnknown() && !r.InputNetflow.Connections[connectionsIndex58].Pipeline.IsNull() {
-				*pipeline117 = r.InputNetflow.Connections[connectionsIndex58].Pipeline.ValueString()
+		connections57 := make([]shared.InputNetflowConnection, 0, len(r.InputNetflow.Connections))
+		for connectionsIndex57 := range r.InputNetflow.Connections {
+			pipeline115 := new(string)
+			if !r.InputNetflow.Connections[connectionsIndex57].Pipeline.IsUnknown() && !r.InputNetflow.Connections[connectionsIndex57].Pipeline.IsNull() {
+				*pipeline115 = r.InputNetflow.Connections[connectionsIndex57].Pipeline.ValueString()
 			} else {
-				pipeline117 = nil
+				pipeline115 = nil
 			}
-			var output59 string
-			output59 = r.InputNetflow.Connections[connectionsIndex58].Output.ValueString()
+			var output58 string
+			output58 = r.InputNetflow.Connections[connectionsIndex57].Output.ValueString()
 
-			connections58 = append(connections58, shared.InputNetflowConnection{
-				Pipeline: pipeline117,
-				Output:   output59,
+			connections57 = append(connections57, shared.InputNetflowConnection{
+				Pipeline: pipeline115,
+				Output:   output58,
 			})
 		}
-		var pq58 *shared.InputNetflowPq
+		var pq57 *shared.InputNetflowPq
 		if r.InputNetflow.Pq != nil {
-			mode72 := new(shared.InputNetflowMode)
+			mode71 := new(shared.InputNetflowMode)
 			if !r.InputNetflow.Pq.Mode.IsUnknown() && !r.InputNetflow.Pq.Mode.IsNull() {
-				*mode72 = shared.InputNetflowMode(r.InputNetflow.Pq.Mode.ValueString())
+				*mode71 = shared.InputNetflowMode(r.InputNetflow.Pq.Mode.ValueString())
 			} else {
-				mode72 = nil
+				mode71 = nil
 			}
-			maxBufferSize63 := new(float64)
+			maxBufferSize62 := new(float64)
 			if !r.InputNetflow.Pq.MaxBufferSize.IsUnknown() && !r.InputNetflow.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize63 = r.InputNetflow.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize62 = r.InputNetflow.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize63 = nil
+				maxBufferSize62 = nil
 			}
-			commitFrequency58 := new(float64)
+			commitFrequency57 := new(float64)
 			if !r.InputNetflow.Pq.CommitFrequency.IsUnknown() && !r.InputNetflow.Pq.CommitFrequency.IsNull() {
-				*commitFrequency58 = r.InputNetflow.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency57 = r.InputNetflow.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency58 = nil
+				commitFrequency57 = nil
 			}
-			maxFileSize58 := new(string)
+			maxFileSize57 := new(string)
 			if !r.InputNetflow.Pq.MaxFileSize.IsUnknown() && !r.InputNetflow.Pq.MaxFileSize.IsNull() {
-				*maxFileSize58 = r.InputNetflow.Pq.MaxFileSize.ValueString()
+				*maxFileSize57 = r.InputNetflow.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize58 = nil
+				maxFileSize57 = nil
 			}
-			maxSize58 := new(string)
+			maxSize57 := new(string)
 			if !r.InputNetflow.Pq.MaxSize.IsUnknown() && !r.InputNetflow.Pq.MaxSize.IsNull() {
-				*maxSize58 = r.InputNetflow.Pq.MaxSize.ValueString()
+				*maxSize57 = r.InputNetflow.Pq.MaxSize.ValueString()
 			} else {
-				maxSize58 = nil
+				maxSize57 = nil
 			}
-			path61 := new(string)
+			path60 := new(string)
 			if !r.InputNetflow.Pq.Path.IsUnknown() && !r.InputNetflow.Pq.Path.IsNull() {
-				*path61 = r.InputNetflow.Pq.Path.ValueString()
+				*path60 = r.InputNetflow.Pq.Path.ValueString()
 			} else {
-				path61 = nil
+				path60 = nil
 			}
-			compress67 := new(shared.InputNetflowCompression)
+			compress66 := new(shared.InputNetflowCompression)
 			if !r.InputNetflow.Pq.Compress.IsUnknown() && !r.InputNetflow.Pq.Compress.IsNull() {
-				*compress67 = shared.InputNetflowCompression(r.InputNetflow.Pq.Compress.ValueString())
+				*compress66 = shared.InputNetflowCompression(r.InputNetflow.Pq.Compress.ValueString())
 			} else {
-				compress67 = nil
+				compress66 = nil
 			}
-			pq58 = &shared.InputNetflowPq{
-				Mode:            mode72,
-				MaxBufferSize:   maxBufferSize63,
-				CommitFrequency: commitFrequency58,
-				MaxFileSize:     maxFileSize58,
-				MaxSize:         maxSize58,
-				Path:            path61,
-				Compress:        compress67,
+			pq57 = &shared.InputNetflowPq{
+				Mode:            mode71,
+				MaxBufferSize:   maxBufferSize62,
+				CommitFrequency: commitFrequency57,
+				MaxFileSize:     maxFileSize57,
+				MaxSize:         maxSize57,
+				Path:            path60,
+				Compress:        compress66,
 			}
 		}
-		host29 := new(string)
+		host28 := new(string)
 		if !r.InputNetflow.Host.IsUnknown() && !r.InputNetflow.Host.IsNull() {
-			*host29 = r.InputNetflow.Host.ValueString()
+			*host28 = r.InputNetflow.Host.ValueString()
 		} else {
-			host29 = nil
+			host28 = nil
 		}
-		port24 := new(float64)
+		port23 := new(float64)
 		if !r.InputNetflow.Port.IsUnknown() && !r.InputNetflow.Port.IsNull() {
-			*port24 = r.InputNetflow.Port.ValueFloat64()
+			*port23 = r.InputNetflow.Port.ValueFloat64()
 		} else {
-			port24 = nil
+			port23 = nil
 		}
 		enablePassThrough := new(bool)
 		if !r.InputNetflow.EnablePassThrough.IsUnknown() && !r.InputNetflow.EnablePassThrough.IsNull() {
@@ -20571,17 +19989,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			enablePassThrough = nil
 		}
-		ipAllowlistRegex15 := new(string)
+		ipAllowlistRegex14 := new(string)
 		if !r.InputNetflow.IPAllowlistRegex.IsUnknown() && !r.InputNetflow.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex15 = r.InputNetflow.IPAllowlistRegex.ValueString()
+			*ipAllowlistRegex14 = r.InputNetflow.IPAllowlistRegex.ValueString()
 		} else {
-			ipAllowlistRegex15 = nil
+			ipAllowlistRegex14 = nil
 		}
-		ipDenylistRegex15 := new(string)
+		ipDenylistRegex14 := new(string)
 		if !r.InputNetflow.IPDenylistRegex.IsUnknown() && !r.InputNetflow.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex15 = r.InputNetflow.IPDenylistRegex.ValueString()
+			*ipDenylistRegex14 = r.InputNetflow.IPDenylistRegex.ValueString()
 		} else {
-			ipDenylistRegex15 = nil
+			ipDenylistRegex14 = nil
 		}
 		udpSocketRxBufSize5 := new(float64)
 		if !r.InputNetflow.UDPSocketRxBufSize.IsUnknown() && !r.InputNetflow.UDPSocketRxBufSize.IsNull() {
@@ -20613,48 +20031,48 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			ipfixEnabled = nil
 		}
-		metadata64 := make([]shared.InputNetflowMetadatum, 0, len(r.InputNetflow.Metadata))
-		for metadataIndex63 := range r.InputNetflow.Metadata {
-			var name87 string
-			name87 = r.InputNetflow.Metadata[metadataIndex63].Name.ValueString()
+		metadata63 := make([]shared.InputNetflowMetadatum, 0, len(r.InputNetflow.Metadata))
+		for metadataIndex62 := range r.InputNetflow.Metadata {
+			var name82 string
+			name82 = r.InputNetflow.Metadata[metadataIndex62].Name.ValueString()
 
-			var value82 string
-			value82 = r.InputNetflow.Metadata[metadataIndex63].Value.ValueString()
+			var value77 string
+			value77 = r.InputNetflow.Metadata[metadataIndex62].Value.ValueString()
 
-			metadata64 = append(metadata64, shared.InputNetflowMetadatum{
-				Name:  name87,
-				Value: value82,
+			metadata63 = append(metadata63, shared.InputNetflowMetadatum{
+				Name:  name82,
+				Value: value77,
 			})
 		}
-		description69 := new(string)
+		description68 := new(string)
 		if !r.InputNetflow.Description.IsUnknown() && !r.InputNetflow.Description.IsNull() {
-			*description69 = r.InputNetflow.Description.ValueString()
+			*description68 = r.InputNetflow.Description.ValueString()
 		} else {
-			description69 = nil
+			description68 = nil
 		}
 		inputNetflow = &shared.InputNetflow{
-			ID:                   id59,
-			Type:                 typeVar63,
-			Disabled:             disabled103,
-			Pipeline:             pipeline116,
-			SendToRoutes:         sendToRoutes58,
-			Environment:          environment58,
-			PqEnabled:            pqEnabled58,
-			Streamtags:           streamtags58,
-			Connections:          connections58,
-			Pq:                   pq58,
-			Host:                 host29,
-			Port:                 port24,
+			ID:                   id58,
+			Type:                 typeVar62,
+			Disabled:             disabled101,
+			Pipeline:             pipeline114,
+			SendToRoutes:         sendToRoutes57,
+			Environment:          environment57,
+			PqEnabled:            pqEnabled57,
+			Streamtags:           streamtags57,
+			Connections:          connections57,
+			Pq:                   pq57,
+			Host:                 host28,
+			Port:                 port23,
 			EnablePassThrough:    enablePassThrough,
-			IPAllowlistRegex:     ipAllowlistRegex15,
-			IPDenylistRegex:      ipDenylistRegex15,
+			IPAllowlistRegex:     ipAllowlistRegex14,
+			IPDenylistRegex:      ipDenylistRegex14,
 			UDPSocketRxBufSize:   udpSocketRxBufSize5,
 			TemplateCacheMinutes: templateCacheMinutes,
 			V5Enabled:            v5Enabled,
 			V9Enabled:            v9Enabled,
 			IpfixEnabled:         ipfixEnabled,
-			Metadata:             metadata64,
-			Description:          description69,
+			Metadata:             metadata63,
+			Description:          description68,
 		}
 	}
 	if inputNetflow != nil {
@@ -20664,115 +20082,115 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputSecurityLake *shared.InputSecurityLake
 	if r.InputSecurityLake != nil {
-		id60 := new(string)
+		id59 := new(string)
 		if !r.InputSecurityLake.ID.IsUnknown() && !r.InputSecurityLake.ID.IsNull() {
-			*id60 = r.InputSecurityLake.ID.ValueString()
+			*id59 = r.InputSecurityLake.ID.ValueString()
 		} else {
-			id60 = nil
+			id59 = nil
 		}
-		typeVar64 := shared.InputSecurityLakeType(r.InputSecurityLake.Type.ValueString())
-		disabled104 := new(bool)
+		typeVar63 := shared.InputSecurityLakeType(r.InputSecurityLake.Type.ValueString())
+		disabled102 := new(bool)
 		if !r.InputSecurityLake.Disabled.IsUnknown() && !r.InputSecurityLake.Disabled.IsNull() {
-			*disabled104 = r.InputSecurityLake.Disabled.ValueBool()
+			*disabled102 = r.InputSecurityLake.Disabled.ValueBool()
 		} else {
-			disabled104 = nil
+			disabled102 = nil
 		}
-		pipeline118 := new(string)
+		pipeline116 := new(string)
 		if !r.InputSecurityLake.Pipeline.IsUnknown() && !r.InputSecurityLake.Pipeline.IsNull() {
-			*pipeline118 = r.InputSecurityLake.Pipeline.ValueString()
+			*pipeline116 = r.InputSecurityLake.Pipeline.ValueString()
 		} else {
-			pipeline118 = nil
+			pipeline116 = nil
 		}
-		sendToRoutes59 := new(bool)
+		sendToRoutes58 := new(bool)
 		if !r.InputSecurityLake.SendToRoutes.IsUnknown() && !r.InputSecurityLake.SendToRoutes.IsNull() {
-			*sendToRoutes59 = r.InputSecurityLake.SendToRoutes.ValueBool()
+			*sendToRoutes58 = r.InputSecurityLake.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes59 = nil
+			sendToRoutes58 = nil
 		}
-		environment59 := new(string)
+		environment58 := new(string)
 		if !r.InputSecurityLake.Environment.IsUnknown() && !r.InputSecurityLake.Environment.IsNull() {
-			*environment59 = r.InputSecurityLake.Environment.ValueString()
+			*environment58 = r.InputSecurityLake.Environment.ValueString()
 		} else {
-			environment59 = nil
+			environment58 = nil
 		}
-		pqEnabled59 := new(bool)
+		pqEnabled58 := new(bool)
 		if !r.InputSecurityLake.PqEnabled.IsUnknown() && !r.InputSecurityLake.PqEnabled.IsNull() {
-			*pqEnabled59 = r.InputSecurityLake.PqEnabled.ValueBool()
+			*pqEnabled58 = r.InputSecurityLake.PqEnabled.ValueBool()
 		} else {
-			pqEnabled59 = nil
+			pqEnabled58 = nil
 		}
-		streamtags59 := make([]string, 0, len(r.InputSecurityLake.Streamtags))
-		for streamtagsIndex59 := range r.InputSecurityLake.Streamtags {
-			streamtags59 = append(streamtags59, r.InputSecurityLake.Streamtags[streamtagsIndex59].ValueString())
+		streamtags58 := make([]string, 0, len(r.InputSecurityLake.Streamtags))
+		for streamtagsIndex58 := range r.InputSecurityLake.Streamtags {
+			streamtags58 = append(streamtags58, r.InputSecurityLake.Streamtags[streamtagsIndex58].ValueString())
 		}
-		connections59 := make([]shared.InputSecurityLakeConnection, 0, len(r.InputSecurityLake.Connections))
-		for connectionsIndex59 := range r.InputSecurityLake.Connections {
-			pipeline119 := new(string)
-			if !r.InputSecurityLake.Connections[connectionsIndex59].Pipeline.IsUnknown() && !r.InputSecurityLake.Connections[connectionsIndex59].Pipeline.IsNull() {
-				*pipeline119 = r.InputSecurityLake.Connections[connectionsIndex59].Pipeline.ValueString()
+		connections58 := make([]shared.InputSecurityLakeConnection, 0, len(r.InputSecurityLake.Connections))
+		for connectionsIndex58 := range r.InputSecurityLake.Connections {
+			pipeline117 := new(string)
+			if !r.InputSecurityLake.Connections[connectionsIndex58].Pipeline.IsUnknown() && !r.InputSecurityLake.Connections[connectionsIndex58].Pipeline.IsNull() {
+				*pipeline117 = r.InputSecurityLake.Connections[connectionsIndex58].Pipeline.ValueString()
 			} else {
-				pipeline119 = nil
+				pipeline117 = nil
 			}
-			var output60 string
-			output60 = r.InputSecurityLake.Connections[connectionsIndex59].Output.ValueString()
+			var output59 string
+			output59 = r.InputSecurityLake.Connections[connectionsIndex58].Output.ValueString()
 
-			connections59 = append(connections59, shared.InputSecurityLakeConnection{
-				Pipeline: pipeline119,
-				Output:   output60,
+			connections58 = append(connections58, shared.InputSecurityLakeConnection{
+				Pipeline: pipeline117,
+				Output:   output59,
 			})
 		}
-		var pq59 *shared.InputSecurityLakePq
+		var pq58 *shared.InputSecurityLakePq
 		if r.InputSecurityLake.Pq != nil {
-			mode73 := new(shared.InputSecurityLakeMode)
+			mode72 := new(shared.InputSecurityLakeMode)
 			if !r.InputSecurityLake.Pq.Mode.IsUnknown() && !r.InputSecurityLake.Pq.Mode.IsNull() {
-				*mode73 = shared.InputSecurityLakeMode(r.InputSecurityLake.Pq.Mode.ValueString())
+				*mode72 = shared.InputSecurityLakeMode(r.InputSecurityLake.Pq.Mode.ValueString())
 			} else {
-				mode73 = nil
+				mode72 = nil
 			}
-			maxBufferSize64 := new(float64)
+			maxBufferSize63 := new(float64)
 			if !r.InputSecurityLake.Pq.MaxBufferSize.IsUnknown() && !r.InputSecurityLake.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize64 = r.InputSecurityLake.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize63 = r.InputSecurityLake.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize64 = nil
+				maxBufferSize63 = nil
 			}
-			commitFrequency59 := new(float64)
+			commitFrequency58 := new(float64)
 			if !r.InputSecurityLake.Pq.CommitFrequency.IsUnknown() && !r.InputSecurityLake.Pq.CommitFrequency.IsNull() {
-				*commitFrequency59 = r.InputSecurityLake.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency58 = r.InputSecurityLake.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency59 = nil
+				commitFrequency58 = nil
 			}
-			maxFileSize59 := new(string)
+			maxFileSize58 := new(string)
 			if !r.InputSecurityLake.Pq.MaxFileSize.IsUnknown() && !r.InputSecurityLake.Pq.MaxFileSize.IsNull() {
-				*maxFileSize59 = r.InputSecurityLake.Pq.MaxFileSize.ValueString()
+				*maxFileSize58 = r.InputSecurityLake.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize59 = nil
+				maxFileSize58 = nil
 			}
-			maxSize59 := new(string)
+			maxSize58 := new(string)
 			if !r.InputSecurityLake.Pq.MaxSize.IsUnknown() && !r.InputSecurityLake.Pq.MaxSize.IsNull() {
-				*maxSize59 = r.InputSecurityLake.Pq.MaxSize.ValueString()
+				*maxSize58 = r.InputSecurityLake.Pq.MaxSize.ValueString()
 			} else {
-				maxSize59 = nil
+				maxSize58 = nil
 			}
-			path62 := new(string)
+			path61 := new(string)
 			if !r.InputSecurityLake.Pq.Path.IsUnknown() && !r.InputSecurityLake.Pq.Path.IsNull() {
-				*path62 = r.InputSecurityLake.Pq.Path.ValueString()
+				*path61 = r.InputSecurityLake.Pq.Path.ValueString()
 			} else {
-				path62 = nil
+				path61 = nil
 			}
-			compress68 := new(shared.InputSecurityLakeCompression)
+			compress67 := new(shared.InputSecurityLakeCompression)
 			if !r.InputSecurityLake.Pq.Compress.IsUnknown() && !r.InputSecurityLake.Pq.Compress.IsNull() {
-				*compress68 = shared.InputSecurityLakeCompression(r.InputSecurityLake.Pq.Compress.ValueString())
+				*compress67 = shared.InputSecurityLakeCompression(r.InputSecurityLake.Pq.Compress.ValueString())
 			} else {
-				compress68 = nil
+				compress67 = nil
 			}
-			pq59 = &shared.InputSecurityLakePq{
-				Mode:            mode73,
-				MaxBufferSize:   maxBufferSize64,
-				CommitFrequency: commitFrequency59,
-				MaxFileSize:     maxFileSize59,
-				MaxSize:         maxSize59,
-				Path:            path62,
-				Compress:        compress68,
+			pq58 = &shared.InputSecurityLakePq{
+				Mode:            mode72,
+				MaxBufferSize:   maxBufferSize63,
+				CommitFrequency: commitFrequency58,
+				MaxFileSize:     maxFileSize58,
+				MaxSize:         maxSize58,
+				Path:            path61,
+				Compress:        compress67,
 			}
 		}
 		var queueName5 string
@@ -20826,11 +20244,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			reuseConnections8 = nil
 		}
-		rejectUnauthorized42 := new(bool)
+		rejectUnauthorized41 := new(bool)
 		if !r.InputSecurityLake.RejectUnauthorized.IsUnknown() && !r.InputSecurityLake.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized42 = r.InputSecurityLake.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized41 = r.InputSecurityLake.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized42 = nil
+			rejectUnauthorized41 = nil
 		}
 		breakerRulesets15 := make([]string, 0, len(r.InputSecurityLake.BreakerRulesets))
 		for breakerRulesetsIndex15 := range r.InputSecurityLake.BreakerRulesets {
@@ -20860,11 +20278,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			numReceivers5 = nil
 		}
-		socketTimeout18 := new(float64)
+		socketTimeout17 := new(float64)
 		if !r.InputSecurityLake.SocketTimeout.IsUnknown() && !r.InputSecurityLake.SocketTimeout.IsNull() {
-			*socketTimeout18 = r.InputSecurityLake.SocketTimeout.ValueFloat64()
+			*socketTimeout17 = r.InputSecurityLake.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout18 = nil
+			socketTimeout17 = nil
 		}
 		skipOnError4 := new(bool)
 		if !r.InputSecurityLake.SkipOnError.IsUnknown() && !r.InputSecurityLake.SkipOnError.IsNull() {
@@ -20904,11 +20322,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		}
 		var preprocess5 *shared.InputSecurityLakePreprocess
 		if r.InputSecurityLake.Preprocess != nil {
-			disabled105 := new(bool)
+			disabled103 := new(bool)
 			if !r.InputSecurityLake.Preprocess.Disabled.IsUnknown() && !r.InputSecurityLake.Preprocess.Disabled.IsNull() {
-				*disabled105 = r.InputSecurityLake.Preprocess.Disabled.ValueBool()
+				*disabled103 = r.InputSecurityLake.Preprocess.Disabled.ValueBool()
 			} else {
-				disabled105 = nil
+				disabled103 = nil
 			}
 			command6 := new(string)
 			if !r.InputSecurityLake.Preprocess.Command.IsUnknown() && !r.InputSecurityLake.Preprocess.Command.IsNull() {
@@ -20921,22 +20339,22 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 				args5 = append(args5, r.InputSecurityLake.Preprocess.Args[argsIndex5].ValueString())
 			}
 			preprocess5 = &shared.InputSecurityLakePreprocess{
-				Disabled: disabled105,
+				Disabled: disabled103,
 				Command:  command6,
 				Args:     args5,
 			}
 		}
-		metadata65 := make([]shared.InputSecurityLakeMetadatum, 0, len(r.InputSecurityLake.Metadata))
-		for metadataIndex64 := range r.InputSecurityLake.Metadata {
-			var name88 string
-			name88 = r.InputSecurityLake.Metadata[metadataIndex64].Name.ValueString()
+		metadata64 := make([]shared.InputSecurityLakeMetadatum, 0, len(r.InputSecurityLake.Metadata))
+		for metadataIndex63 := range r.InputSecurityLake.Metadata {
+			var name83 string
+			name83 = r.InputSecurityLake.Metadata[metadataIndex63].Name.ValueString()
 
-			var value83 string
-			value83 = r.InputSecurityLake.Metadata[metadataIndex64].Value.ValueString()
+			var value78 string
+			value78 = r.InputSecurityLake.Metadata[metadataIndex63].Value.ValueString()
 
-			metadata65 = append(metadata65, shared.InputSecurityLakeMetadatum{
-				Name:  name88,
-				Value: value83,
+			metadata64 = append(metadata64, shared.InputSecurityLakeMetadatum{
+				Name:  name83,
+				Value: value78,
 			})
 		}
 		parquetChunkSizeMb3 := new(float64)
@@ -20982,11 +20400,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			encoding3 = nil
 		}
-		description70 := new(string)
+		description69 := new(string)
 		if !r.InputSecurityLake.Description.IsUnknown() && !r.InputSecurityLake.Description.IsNull() {
-			*description70 = r.InputSecurityLake.Description.ValueString()
+			*description69 = r.InputSecurityLake.Description.ValueString()
 		} else {
-			description70 = nil
+			description69 = nil
 		}
 		awsAPIKey6 := new(string)
 		if !r.InputSecurityLake.AwsAPIKey.IsUnknown() && !r.InputSecurityLake.AwsAPIKey.IsNull() {
@@ -21019,16 +20437,16 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			processedTagValue3 = nil
 		}
 		inputSecurityLake = &shared.InputSecurityLake{
-			ID:                          id60,
-			Type:                        typeVar64,
-			Disabled:                    disabled104,
-			Pipeline:                    pipeline118,
-			SendToRoutes:                sendToRoutes59,
-			Environment:                 environment59,
-			PqEnabled:                   pqEnabled59,
-			Streamtags:                  streamtags59,
-			Connections:                 connections59,
-			Pq:                          pq59,
+			ID:                          id59,
+			Type:                        typeVar63,
+			Disabled:                    disabled102,
+			Pipeline:                    pipeline116,
+			SendToRoutes:                sendToRoutes58,
+			Environment:                 environment58,
+			PqEnabled:                   pqEnabled58,
+			Streamtags:                  streamtags58,
+			Connections:                 connections58,
+			Pq:                          pq58,
 			QueueName:                   queueName5,
 			FileFilter:                  fileFilter4,
 			AwsAccountID:                awsAccountId4,
@@ -21038,13 +20456,13 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			Endpoint:                    endpoint10,
 			SignatureVersion:            signatureVersion8,
 			ReuseConnections:            reuseConnections8,
-			RejectUnauthorized:          rejectUnauthorized42,
+			RejectUnauthorized:          rejectUnauthorized41,
 			BreakerRulesets:             breakerRulesets15,
 			StaleChannelFlushMs:         staleChannelFlushMs15,
 			MaxMessages:                 maxMessages5,
 			VisibilityTimeout:           visibilityTimeout5,
 			NumReceivers:                numReceivers5,
-			SocketTimeout:               socketTimeout18,
+			SocketTimeout:               socketTimeout17,
 			SkipOnError:                 skipOnError4,
 			EnableAssumeRole:            enableAssumeRole8,
 			AssumeRoleArn:               assumeRoleArn8,
@@ -21052,13 +20470,13 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			DurationSeconds:             durationSeconds8,
 			EnableSQSAssumeRole:         enableSQSAssumeRole3,
 			Preprocess:                  preprocess5,
-			Metadata:                    metadata65,
+			Metadata:                    metadata64,
 			ParquetChunkSizeMB:          parquetChunkSizeMb3,
 			ParquetChunkDownloadTimeout: parquetChunkDownloadTimeout3,
 			Checkpointing:               checkpointing3,
 			PollTimeout:                 pollTimeout4,
 			Encoding:                    encoding3,
-			Description:                 description70,
+			Description:                 description69,
 			AwsAPIKey:                   awsAPIKey6,
 			AwsSecret:                   awsSecret6,
 			TagAfterProcessing:          tagAfterProcessing3,
@@ -21073,325 +20491,325 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputZscalerHec *shared.InputZscalerHec
 	if r.InputZscalerHec != nil {
-		id61 := new(string)
+		id60 := new(string)
 		if !r.InputZscalerHec.ID.IsUnknown() && !r.InputZscalerHec.ID.IsNull() {
-			*id61 = r.InputZscalerHec.ID.ValueString()
+			*id60 = r.InputZscalerHec.ID.ValueString()
 		} else {
-			id61 = nil
+			id60 = nil
 		}
-		typeVar65 := new(shared.InputZscalerHecType)
+		typeVar64 := new(shared.InputZscalerHecType)
 		if !r.InputZscalerHec.Type.IsUnknown() && !r.InputZscalerHec.Type.IsNull() {
-			*typeVar65 = shared.InputZscalerHecType(r.InputZscalerHec.Type.ValueString())
+			*typeVar64 = shared.InputZscalerHecType(r.InputZscalerHec.Type.ValueString())
 		} else {
-			typeVar65 = nil
+			typeVar64 = nil
 		}
-		disabled106 := new(bool)
+		disabled104 := new(bool)
 		if !r.InputZscalerHec.Disabled.IsUnknown() && !r.InputZscalerHec.Disabled.IsNull() {
-			*disabled106 = r.InputZscalerHec.Disabled.ValueBool()
+			*disabled104 = r.InputZscalerHec.Disabled.ValueBool()
 		} else {
-			disabled106 = nil
+			disabled104 = nil
 		}
-		pipeline120 := new(string)
+		pipeline118 := new(string)
 		if !r.InputZscalerHec.Pipeline.IsUnknown() && !r.InputZscalerHec.Pipeline.IsNull() {
-			*pipeline120 = r.InputZscalerHec.Pipeline.ValueString()
+			*pipeline118 = r.InputZscalerHec.Pipeline.ValueString()
 		} else {
-			pipeline120 = nil
+			pipeline118 = nil
 		}
-		sendToRoutes60 := new(bool)
+		sendToRoutes59 := new(bool)
 		if !r.InputZscalerHec.SendToRoutes.IsUnknown() && !r.InputZscalerHec.SendToRoutes.IsNull() {
-			*sendToRoutes60 = r.InputZscalerHec.SendToRoutes.ValueBool()
+			*sendToRoutes59 = r.InputZscalerHec.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes60 = nil
+			sendToRoutes59 = nil
 		}
-		environment60 := new(string)
+		environment59 := new(string)
 		if !r.InputZscalerHec.Environment.IsUnknown() && !r.InputZscalerHec.Environment.IsNull() {
-			*environment60 = r.InputZscalerHec.Environment.ValueString()
+			*environment59 = r.InputZscalerHec.Environment.ValueString()
 		} else {
-			environment60 = nil
+			environment59 = nil
 		}
-		pqEnabled60 := new(bool)
+		pqEnabled59 := new(bool)
 		if !r.InputZscalerHec.PqEnabled.IsUnknown() && !r.InputZscalerHec.PqEnabled.IsNull() {
-			*pqEnabled60 = r.InputZscalerHec.PqEnabled.ValueBool()
+			*pqEnabled59 = r.InputZscalerHec.PqEnabled.ValueBool()
 		} else {
-			pqEnabled60 = nil
+			pqEnabled59 = nil
 		}
-		streamtags60 := make([]string, 0, len(r.InputZscalerHec.Streamtags))
-		for streamtagsIndex60 := range r.InputZscalerHec.Streamtags {
-			streamtags60 = append(streamtags60, r.InputZscalerHec.Streamtags[streamtagsIndex60].ValueString())
+		streamtags59 := make([]string, 0, len(r.InputZscalerHec.Streamtags))
+		for streamtagsIndex59 := range r.InputZscalerHec.Streamtags {
+			streamtags59 = append(streamtags59, r.InputZscalerHec.Streamtags[streamtagsIndex59].ValueString())
 		}
-		connections60 := make([]shared.InputZscalerHecConnection, 0, len(r.InputZscalerHec.Connections))
-		for connectionsIndex60 := range r.InputZscalerHec.Connections {
-			pipeline121 := new(string)
-			if !r.InputZscalerHec.Connections[connectionsIndex60].Pipeline.IsUnknown() && !r.InputZscalerHec.Connections[connectionsIndex60].Pipeline.IsNull() {
-				*pipeline121 = r.InputZscalerHec.Connections[connectionsIndex60].Pipeline.ValueString()
+		connections59 := make([]shared.InputZscalerHecConnection, 0, len(r.InputZscalerHec.Connections))
+		for connectionsIndex59 := range r.InputZscalerHec.Connections {
+			pipeline119 := new(string)
+			if !r.InputZscalerHec.Connections[connectionsIndex59].Pipeline.IsUnknown() && !r.InputZscalerHec.Connections[connectionsIndex59].Pipeline.IsNull() {
+				*pipeline119 = r.InputZscalerHec.Connections[connectionsIndex59].Pipeline.ValueString()
 			} else {
-				pipeline121 = nil
+				pipeline119 = nil
 			}
-			var output61 string
-			output61 = r.InputZscalerHec.Connections[connectionsIndex60].Output.ValueString()
+			var output60 string
+			output60 = r.InputZscalerHec.Connections[connectionsIndex59].Output.ValueString()
 
-			connections60 = append(connections60, shared.InputZscalerHecConnection{
-				Pipeline: pipeline121,
-				Output:   output61,
+			connections59 = append(connections59, shared.InputZscalerHecConnection{
+				Pipeline: pipeline119,
+				Output:   output60,
 			})
 		}
-		var pq60 *shared.InputZscalerHecPq
+		var pq59 *shared.InputZscalerHecPq
 		if r.InputZscalerHec.Pq != nil {
-			mode74 := new(shared.InputZscalerHecMode)
+			mode73 := new(shared.InputZscalerHecMode)
 			if !r.InputZscalerHec.Pq.Mode.IsUnknown() && !r.InputZscalerHec.Pq.Mode.IsNull() {
-				*mode74 = shared.InputZscalerHecMode(r.InputZscalerHec.Pq.Mode.ValueString())
+				*mode73 = shared.InputZscalerHecMode(r.InputZscalerHec.Pq.Mode.ValueString())
 			} else {
-				mode74 = nil
+				mode73 = nil
 			}
-			maxBufferSize65 := new(float64)
+			maxBufferSize64 := new(float64)
 			if !r.InputZscalerHec.Pq.MaxBufferSize.IsUnknown() && !r.InputZscalerHec.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize65 = r.InputZscalerHec.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize64 = r.InputZscalerHec.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize65 = nil
+				maxBufferSize64 = nil
 			}
-			commitFrequency60 := new(float64)
+			commitFrequency59 := new(float64)
 			if !r.InputZscalerHec.Pq.CommitFrequency.IsUnknown() && !r.InputZscalerHec.Pq.CommitFrequency.IsNull() {
-				*commitFrequency60 = r.InputZscalerHec.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency59 = r.InputZscalerHec.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency60 = nil
+				commitFrequency59 = nil
 			}
-			maxFileSize60 := new(string)
+			maxFileSize59 := new(string)
 			if !r.InputZscalerHec.Pq.MaxFileSize.IsUnknown() && !r.InputZscalerHec.Pq.MaxFileSize.IsNull() {
-				*maxFileSize60 = r.InputZscalerHec.Pq.MaxFileSize.ValueString()
+				*maxFileSize59 = r.InputZscalerHec.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize60 = nil
+				maxFileSize59 = nil
 			}
-			maxSize60 := new(string)
+			maxSize59 := new(string)
 			if !r.InputZscalerHec.Pq.MaxSize.IsUnknown() && !r.InputZscalerHec.Pq.MaxSize.IsNull() {
-				*maxSize60 = r.InputZscalerHec.Pq.MaxSize.ValueString()
+				*maxSize59 = r.InputZscalerHec.Pq.MaxSize.ValueString()
 			} else {
-				maxSize60 = nil
+				maxSize59 = nil
 			}
-			path63 := new(string)
+			path62 := new(string)
 			if !r.InputZscalerHec.Pq.Path.IsUnknown() && !r.InputZscalerHec.Pq.Path.IsNull() {
-				*path63 = r.InputZscalerHec.Pq.Path.ValueString()
+				*path62 = r.InputZscalerHec.Pq.Path.ValueString()
 			} else {
-				path63 = nil
+				path62 = nil
 			}
-			compress69 := new(shared.InputZscalerHecCompression)
+			compress68 := new(shared.InputZscalerHecCompression)
 			if !r.InputZscalerHec.Pq.Compress.IsUnknown() && !r.InputZscalerHec.Pq.Compress.IsNull() {
-				*compress69 = shared.InputZscalerHecCompression(r.InputZscalerHec.Pq.Compress.ValueString())
+				*compress68 = shared.InputZscalerHecCompression(r.InputZscalerHec.Pq.Compress.ValueString())
 			} else {
-				compress69 = nil
+				compress68 = nil
 			}
-			pq60 = &shared.InputZscalerHecPq{
-				Mode:            mode74,
-				MaxBufferSize:   maxBufferSize65,
-				CommitFrequency: commitFrequency60,
-				MaxFileSize:     maxFileSize60,
-				MaxSize:         maxSize60,
-				Path:            path63,
-				Compress:        compress69,
+			pq59 = &shared.InputZscalerHecPq{
+				Mode:            mode73,
+				MaxBufferSize:   maxBufferSize64,
+				CommitFrequency: commitFrequency59,
+				MaxFileSize:     maxFileSize59,
+				MaxSize:         maxSize59,
+				Path:            path62,
+				Compress:        compress68,
 			}
 		}
-		host30 := new(string)
+		host29 := new(string)
 		if !r.InputZscalerHec.Host.IsUnknown() && !r.InputZscalerHec.Host.IsNull() {
-			*host30 = r.InputZscalerHec.Host.ValueString()
+			*host29 = r.InputZscalerHec.Host.ValueString()
 		} else {
-			host30 = nil
+			host29 = nil
 		}
-		var port25 float64
-		port25 = r.InputZscalerHec.Port.ValueFloat64()
+		var port24 float64
+		port24 = r.InputZscalerHec.Port.ValueFloat64()
 
 		authTokens9 := make([]shared.InputZscalerHecAuthToken, 0, len(r.InputZscalerHec.AuthTokens))
 		for authTokensIndex9 := range r.InputZscalerHec.AuthTokens {
-			authType21 := new(shared.InputZscalerHecAuthenticationMethod)
+			authType19 := new(shared.InputZscalerHecAuthenticationMethod)
 			if !r.InputZscalerHec.AuthTokens[authTokensIndex9].AuthType.IsUnknown() && !r.InputZscalerHec.AuthTokens[authTokensIndex9].AuthType.IsNull() {
-				*authType21 = shared.InputZscalerHecAuthenticationMethod(r.InputZscalerHec.AuthTokens[authTokensIndex9].AuthType.ValueString())
+				*authType19 = shared.InputZscalerHecAuthenticationMethod(r.InputZscalerHec.AuthTokens[authTokensIndex9].AuthType.ValueString())
 			} else {
-				authType21 = nil
+				authType19 = nil
 			}
 			var tokenSecret1 interface{}
 			if !r.InputZscalerHec.AuthTokens[authTokensIndex9].TokenSecret.IsUnknown() && !r.InputZscalerHec.AuthTokens[authTokensIndex9].TokenSecret.IsNull() {
 				_ = json.Unmarshal([]byte(r.InputZscalerHec.AuthTokens[authTokensIndex9].TokenSecret.ValueString()), &tokenSecret1)
 			}
-			var token13 interface{}
-			_ = json.Unmarshal([]byte(r.InputZscalerHec.AuthTokens[authTokensIndex9].Token.ValueString()), &token13)
+			var token11 interface{}
+			_ = json.Unmarshal([]byte(r.InputZscalerHec.AuthTokens[authTokensIndex9].Token.ValueString()), &token11)
 			enabled10 := new(bool)
 			if !r.InputZscalerHec.AuthTokens[authTokensIndex9].Enabled.IsUnknown() && !r.InputZscalerHec.AuthTokens[authTokensIndex9].Enabled.IsNull() {
 				*enabled10 = r.InputZscalerHec.AuthTokens[authTokensIndex9].Enabled.ValueBool()
 			} else {
 				enabled10 = nil
 			}
-			description71 := new(string)
+			description70 := new(string)
 			if !r.InputZscalerHec.AuthTokens[authTokensIndex9].Description.IsUnknown() && !r.InputZscalerHec.AuthTokens[authTokensIndex9].Description.IsNull() {
-				*description71 = r.InputZscalerHec.AuthTokens[authTokensIndex9].Description.ValueString()
+				*description70 = r.InputZscalerHec.AuthTokens[authTokensIndex9].Description.ValueString()
 			} else {
-				description71 = nil
+				description70 = nil
 			}
 			allowedIndexesAtToken1 := make([]string, 0, len(r.InputZscalerHec.AuthTokens[authTokensIndex9].AllowedIndexesAtToken))
 			for allowedIndexesAtTokenIndex1 := range r.InputZscalerHec.AuthTokens[authTokensIndex9].AllowedIndexesAtToken {
 				allowedIndexesAtToken1 = append(allowedIndexesAtToken1, r.InputZscalerHec.AuthTokens[authTokensIndex9].AllowedIndexesAtToken[allowedIndexesAtTokenIndex1].ValueString())
 			}
-			metadata66 := make([]shared.InputZscalerHecAuthTokenMetadatum, 0, len(r.InputZscalerHec.AuthTokens[authTokensIndex9].Metadata))
-			for metadataIndex65 := range r.InputZscalerHec.AuthTokens[authTokensIndex9].Metadata {
-				var name89 string
-				name89 = r.InputZscalerHec.AuthTokens[authTokensIndex9].Metadata[metadataIndex65].Name.ValueString()
+			metadata65 := make([]shared.InputZscalerHecAuthTokenMetadatum, 0, len(r.InputZscalerHec.AuthTokens[authTokensIndex9].Metadata))
+			for metadataIndex64 := range r.InputZscalerHec.AuthTokens[authTokensIndex9].Metadata {
+				var name84 string
+				name84 = r.InputZscalerHec.AuthTokens[authTokensIndex9].Metadata[metadataIndex64].Name.ValueString()
 
-				var value84 string
-				value84 = r.InputZscalerHec.AuthTokens[authTokensIndex9].Metadata[metadataIndex65].Value.ValueString()
+				var value79 string
+				value79 = r.InputZscalerHec.AuthTokens[authTokensIndex9].Metadata[metadataIndex64].Value.ValueString()
 
-				metadata66 = append(metadata66, shared.InputZscalerHecAuthTokenMetadatum{
-					Name:  name89,
-					Value: value84,
+				metadata65 = append(metadata65, shared.InputZscalerHecAuthTokenMetadatum{
+					Name:  name84,
+					Value: value79,
 				})
 			}
 			authTokens9 = append(authTokens9, shared.InputZscalerHecAuthToken{
-				AuthType:              authType21,
+				AuthType:              authType19,
 				TokenSecret:           tokenSecret1,
-				Token:                 token13,
+				Token:                 token11,
 				Enabled:               enabled10,
-				Description:           description71,
+				Description:           description70,
 				AllowedIndexesAtToken: allowedIndexesAtToken1,
-				Metadata:              metadata66,
+				Metadata:              metadata65,
 			})
 		}
-		var tls31 *shared.InputZscalerHecTLSSettingsServerSide
+		var tls30 *shared.InputZscalerHecTLSSettingsServerSide
 		if r.InputZscalerHec.TLS != nil {
-			disabled107 := new(bool)
+			disabled105 := new(bool)
 			if !r.InputZscalerHec.TLS.Disabled.IsUnknown() && !r.InputZscalerHec.TLS.Disabled.IsNull() {
-				*disabled107 = r.InputZscalerHec.TLS.Disabled.ValueBool()
+				*disabled105 = r.InputZscalerHec.TLS.Disabled.ValueBool()
 			} else {
-				disabled107 = nil
+				disabled105 = nil
 			}
-			certificateName32 := new(string)
+			certificateName31 := new(string)
 			if !r.InputZscalerHec.TLS.CertificateName.IsUnknown() && !r.InputZscalerHec.TLS.CertificateName.IsNull() {
-				*certificateName32 = r.InputZscalerHec.TLS.CertificateName.ValueString()
+				*certificateName31 = r.InputZscalerHec.TLS.CertificateName.ValueString()
 			} else {
-				certificateName32 = nil
+				certificateName31 = nil
 			}
-			privKeyPath31 := new(string)
+			privKeyPath30 := new(string)
 			if !r.InputZscalerHec.TLS.PrivKeyPath.IsUnknown() && !r.InputZscalerHec.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath31 = r.InputZscalerHec.TLS.PrivKeyPath.ValueString()
+				*privKeyPath30 = r.InputZscalerHec.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath31 = nil
+				privKeyPath30 = nil
 			}
-			passphrase30 := new(string)
+			passphrase29 := new(string)
 			if !r.InputZscalerHec.TLS.Passphrase.IsUnknown() && !r.InputZscalerHec.TLS.Passphrase.IsNull() {
-				*passphrase30 = r.InputZscalerHec.TLS.Passphrase.ValueString()
+				*passphrase29 = r.InputZscalerHec.TLS.Passphrase.ValueString()
 			} else {
-				passphrase30 = nil
+				passphrase29 = nil
 			}
-			certPath31 := new(string)
+			certPath30 := new(string)
 			if !r.InputZscalerHec.TLS.CertPath.IsUnknown() && !r.InputZscalerHec.TLS.CertPath.IsNull() {
-				*certPath31 = r.InputZscalerHec.TLS.CertPath.ValueString()
+				*certPath30 = r.InputZscalerHec.TLS.CertPath.ValueString()
 			} else {
-				certPath31 = nil
+				certPath30 = nil
 			}
-			caPath30 := new(string)
+			caPath29 := new(string)
 			if !r.InputZscalerHec.TLS.CaPath.IsUnknown() && !r.InputZscalerHec.TLS.CaPath.IsNull() {
-				*caPath30 = r.InputZscalerHec.TLS.CaPath.ValueString()
+				*caPath29 = r.InputZscalerHec.TLS.CaPath.ValueString()
 			} else {
-				caPath30 = nil
+				caPath29 = nil
 			}
-			requestCert24 := new(bool)
+			requestCert23 := new(bool)
 			if !r.InputZscalerHec.TLS.RequestCert.IsUnknown() && !r.InputZscalerHec.TLS.RequestCert.IsNull() {
-				*requestCert24 = r.InputZscalerHec.TLS.RequestCert.ValueBool()
+				*requestCert23 = r.InputZscalerHec.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert24 = nil
+				requestCert23 = nil
 			}
-			var rejectUnauthorized43 interface{}
+			var rejectUnauthorized42 interface{}
 			if !r.InputZscalerHec.TLS.RejectUnauthorized.IsUnknown() && !r.InputZscalerHec.TLS.RejectUnauthorized.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputZscalerHec.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized43)
+				_ = json.Unmarshal([]byte(r.InputZscalerHec.TLS.RejectUnauthorized.ValueString()), &rejectUnauthorized42)
 			}
-			var commonNameRegex24 interface{}
+			var commonNameRegex23 interface{}
 			if !r.InputZscalerHec.TLS.CommonNameRegex.IsUnknown() && !r.InputZscalerHec.TLS.CommonNameRegex.IsNull() {
-				_ = json.Unmarshal([]byte(r.InputZscalerHec.TLS.CommonNameRegex.ValueString()), &commonNameRegex24)
+				_ = json.Unmarshal([]byte(r.InputZscalerHec.TLS.CommonNameRegex.ValueString()), &commonNameRegex23)
 			}
-			minVersion30 := new(shared.InputZscalerHecMinimumTLSVersion)
+			minVersion29 := new(shared.InputZscalerHecMinimumTLSVersion)
 			if !r.InputZscalerHec.TLS.MinVersion.IsUnknown() && !r.InputZscalerHec.TLS.MinVersion.IsNull() {
-				*minVersion30 = shared.InputZscalerHecMinimumTLSVersion(r.InputZscalerHec.TLS.MinVersion.ValueString())
+				*minVersion29 = shared.InputZscalerHecMinimumTLSVersion(r.InputZscalerHec.TLS.MinVersion.ValueString())
 			} else {
-				minVersion30 = nil
+				minVersion29 = nil
 			}
-			maxVersion30 := new(shared.InputZscalerHecMaximumTLSVersion)
+			maxVersion29 := new(shared.InputZscalerHecMaximumTLSVersion)
 			if !r.InputZscalerHec.TLS.MaxVersion.IsUnknown() && !r.InputZscalerHec.TLS.MaxVersion.IsNull() {
-				*maxVersion30 = shared.InputZscalerHecMaximumTLSVersion(r.InputZscalerHec.TLS.MaxVersion.ValueString())
+				*maxVersion29 = shared.InputZscalerHecMaximumTLSVersion(r.InputZscalerHec.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion30 = nil
+				maxVersion29 = nil
 			}
-			tls31 = &shared.InputZscalerHecTLSSettingsServerSide{
-				Disabled:           disabled107,
-				CertificateName:    certificateName32,
-				PrivKeyPath:        privKeyPath31,
-				Passphrase:         passphrase30,
-				CertPath:           certPath31,
-				CaPath:             caPath30,
-				RequestCert:        requestCert24,
-				RejectUnauthorized: rejectUnauthorized43,
-				CommonNameRegex:    commonNameRegex24,
-				MinVersion:         minVersion30,
-				MaxVersion:         maxVersion30,
+			tls30 = &shared.InputZscalerHecTLSSettingsServerSide{
+				Disabled:           disabled105,
+				CertificateName:    certificateName31,
+				PrivKeyPath:        privKeyPath30,
+				Passphrase:         passphrase29,
+				CertPath:           certPath30,
+				CaPath:             caPath29,
+				RequestCert:        requestCert23,
+				RejectUnauthorized: rejectUnauthorized42,
+				CommonNameRegex:    commonNameRegex23,
+				MinVersion:         minVersion29,
+				MaxVersion:         maxVersion29,
 			}
 		}
-		maxActiveReq15 := new(float64)
+		maxActiveReq14 := new(float64)
 		if !r.InputZscalerHec.MaxActiveReq.IsUnknown() && !r.InputZscalerHec.MaxActiveReq.IsNull() {
-			*maxActiveReq15 = r.InputZscalerHec.MaxActiveReq.ValueFloat64()
+			*maxActiveReq14 = r.InputZscalerHec.MaxActiveReq.ValueFloat64()
 		} else {
-			maxActiveReq15 = nil
+			maxActiveReq14 = nil
 		}
-		maxRequestsPerSocket15 := new(int64)
+		maxRequestsPerSocket14 := new(int64)
 		if !r.InputZscalerHec.MaxRequestsPerSocket.IsUnknown() && !r.InputZscalerHec.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket15 = r.InputZscalerHec.MaxRequestsPerSocket.ValueInt64()
+			*maxRequestsPerSocket14 = r.InputZscalerHec.MaxRequestsPerSocket.ValueInt64()
 		} else {
-			maxRequestsPerSocket15 = nil
+			maxRequestsPerSocket14 = nil
 		}
-		enableProxyHeader23 := new(bool)
+		enableProxyHeader22 := new(bool)
 		if !r.InputZscalerHec.EnableProxyHeader.IsUnknown() && !r.InputZscalerHec.EnableProxyHeader.IsNull() {
-			*enableProxyHeader23 = r.InputZscalerHec.EnableProxyHeader.ValueBool()
+			*enableProxyHeader22 = r.InputZscalerHec.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader23 = nil
+			enableProxyHeader22 = nil
 		}
-		captureHeaders15 := new(bool)
+		captureHeaders14 := new(bool)
 		if !r.InputZscalerHec.CaptureHeaders.IsUnknown() && !r.InputZscalerHec.CaptureHeaders.IsNull() {
-			*captureHeaders15 = r.InputZscalerHec.CaptureHeaders.ValueBool()
+			*captureHeaders14 = r.InputZscalerHec.CaptureHeaders.ValueBool()
 		} else {
-			captureHeaders15 = nil
+			captureHeaders14 = nil
 		}
-		activityLogSampleRate14 := new(float64)
+		activityLogSampleRate13 := new(float64)
 		if !r.InputZscalerHec.ActivityLogSampleRate.IsUnknown() && !r.InputZscalerHec.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate14 = r.InputZscalerHec.ActivityLogSampleRate.ValueFloat64()
+			*activityLogSampleRate13 = r.InputZscalerHec.ActivityLogSampleRate.ValueFloat64()
 		} else {
-			activityLogSampleRate14 = nil
+			activityLogSampleRate13 = nil
 		}
-		requestTimeout24 := new(float64)
+		requestTimeout23 := new(float64)
 		if !r.InputZscalerHec.RequestTimeout.IsUnknown() && !r.InputZscalerHec.RequestTimeout.IsNull() {
-			*requestTimeout24 = r.InputZscalerHec.RequestTimeout.ValueFloat64()
+			*requestTimeout23 = r.InputZscalerHec.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout24 = nil
+			requestTimeout23 = nil
 		}
-		socketTimeout19 := new(float64)
+		socketTimeout18 := new(float64)
 		if !r.InputZscalerHec.SocketTimeout.IsUnknown() && !r.InputZscalerHec.SocketTimeout.IsNull() {
-			*socketTimeout19 = r.InputZscalerHec.SocketTimeout.ValueFloat64()
+			*socketTimeout18 = r.InputZscalerHec.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout19 = nil
+			socketTimeout18 = nil
 		}
-		keepAliveTimeout15 := new(float64)
+		keepAliveTimeout14 := new(float64)
 		if !r.InputZscalerHec.KeepAliveTimeout.IsUnknown() && !r.InputZscalerHec.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout15 = r.InputZscalerHec.KeepAliveTimeout.ValueFloat64()
+			*keepAliveTimeout14 = r.InputZscalerHec.KeepAliveTimeout.ValueFloat64()
 		} else {
-			keepAliveTimeout15 = nil
+			keepAliveTimeout14 = nil
 		}
-		var enableHealthCheck15 interface{}
+		var enableHealthCheck14 interface{}
 		if !r.InputZscalerHec.EnableHealthCheck.IsUnknown() && !r.InputZscalerHec.EnableHealthCheck.IsNull() {
-			_ = json.Unmarshal([]byte(r.InputZscalerHec.EnableHealthCheck.ValueString()), &enableHealthCheck15)
+			_ = json.Unmarshal([]byte(r.InputZscalerHec.EnableHealthCheck.ValueString()), &enableHealthCheck14)
 		}
-		ipAllowlistRegex16 := new(string)
+		ipAllowlistRegex15 := new(string)
 		if !r.InputZscalerHec.IPAllowlistRegex.IsUnknown() && !r.InputZscalerHec.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex16 = r.InputZscalerHec.IPAllowlistRegex.ValueString()
+			*ipAllowlistRegex15 = r.InputZscalerHec.IPAllowlistRegex.ValueString()
 		} else {
-			ipAllowlistRegex16 = nil
+			ipAllowlistRegex15 = nil
 		}
-		ipDenylistRegex16 := new(string)
+		ipDenylistRegex15 := new(string)
 		if !r.InputZscalerHec.IPDenylistRegex.IsUnknown() && !r.InputZscalerHec.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex16 = r.InputZscalerHec.IPDenylistRegex.ValueString()
+			*ipDenylistRegex15 = r.InputZscalerHec.IPDenylistRegex.ValueString()
 		} else {
-			ipDenylistRegex16 = nil
+			ipDenylistRegex15 = nil
 		}
 		hecAPI := new(string)
 		if !r.InputZscalerHec.HecAPI.IsUnknown() && !r.InputZscalerHec.HecAPI.IsNull() {
@@ -21399,17 +20817,17 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			hecAPI = nil
 		}
-		metadata67 := make([]shared.InputZscalerHecMetadatum, 0, len(r.InputZscalerHec.Metadata))
-		for metadataIndex66 := range r.InputZscalerHec.Metadata {
-			var name90 string
-			name90 = r.InputZscalerHec.Metadata[metadataIndex66].Name.ValueString()
+		metadata66 := make([]shared.InputZscalerHecMetadatum, 0, len(r.InputZscalerHec.Metadata))
+		for metadataIndex65 := range r.InputZscalerHec.Metadata {
+			var name85 string
+			name85 = r.InputZscalerHec.Metadata[metadataIndex65].Name.ValueString()
 
-			var value85 string
-			value85 = r.InputZscalerHec.Metadata[metadataIndex66].Value.ValueString()
+			var value80 string
+			value80 = r.InputZscalerHec.Metadata[metadataIndex65].Value.ValueString()
 
-			metadata67 = append(metadata67, shared.InputZscalerHecMetadatum{
-				Name:  name90,
-				Value: value85,
+			metadata66 = append(metadata66, shared.InputZscalerHecMetadatum{
+				Name:  name85,
+				Value: value80,
 			})
 		}
 		allowedIndexes1 := make([]string, 0, len(r.InputZscalerHec.AllowedIndexes))
@@ -21436,46 +20854,46 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			emitTokenMetrics1 = nil
 		}
-		description72 := new(string)
+		description71 := new(string)
 		if !r.InputZscalerHec.Description.IsUnknown() && !r.InputZscalerHec.Description.IsNull() {
-			*description72 = r.InputZscalerHec.Description.ValueString()
+			*description71 = r.InputZscalerHec.Description.ValueString()
 		} else {
-			description72 = nil
+			description71 = nil
 		}
 		inputZscalerHec = &shared.InputZscalerHec{
-			ID:                        id61,
-			Type:                      typeVar65,
-			Disabled:                  disabled106,
-			Pipeline:                  pipeline120,
-			SendToRoutes:              sendToRoutes60,
-			Environment:               environment60,
-			PqEnabled:                 pqEnabled60,
-			Streamtags:                streamtags60,
-			Connections:               connections60,
-			Pq:                        pq60,
-			Host:                      host30,
-			Port:                      port25,
+			ID:                        id60,
+			Type:                      typeVar64,
+			Disabled:                  disabled104,
+			Pipeline:                  pipeline118,
+			SendToRoutes:              sendToRoutes59,
+			Environment:               environment59,
+			PqEnabled:                 pqEnabled59,
+			Streamtags:                streamtags59,
+			Connections:               connections59,
+			Pq:                        pq59,
+			Host:                      host29,
+			Port:                      port24,
 			AuthTokens:                authTokens9,
-			TLS:                       tls31,
-			MaxActiveReq:              maxActiveReq15,
-			MaxRequestsPerSocket:      maxRequestsPerSocket15,
-			EnableProxyHeader:         enableProxyHeader23,
-			CaptureHeaders:            captureHeaders15,
-			ActivityLogSampleRate:     activityLogSampleRate14,
-			RequestTimeout:            requestTimeout24,
-			SocketTimeout:             socketTimeout19,
-			KeepAliveTimeout:          keepAliveTimeout15,
-			EnableHealthCheck:         enableHealthCheck15,
-			IPAllowlistRegex:          ipAllowlistRegex16,
-			IPDenylistRegex:           ipDenylistRegex16,
+			TLS:                       tls30,
+			MaxActiveReq:              maxActiveReq14,
+			MaxRequestsPerSocket:      maxRequestsPerSocket14,
+			EnableProxyHeader:         enableProxyHeader22,
+			CaptureHeaders:            captureHeaders14,
+			ActivityLogSampleRate:     activityLogSampleRate13,
+			RequestTimeout:            requestTimeout23,
+			SocketTimeout:             socketTimeout18,
+			KeepAliveTimeout:          keepAliveTimeout14,
+			EnableHealthCheck:         enableHealthCheck14,
+			IPAllowlistRegex:          ipAllowlistRegex15,
+			IPDenylistRegex:           ipDenylistRegex15,
 			HecAPI:                    hecAPI,
-			Metadata:                  metadata67,
+			Metadata:                  metadata66,
 			AllowedIndexes:            allowedIndexes1,
 			HecAcks:                   hecAcks,
 			AccessControlAllowOrigin:  accessControlAllowOrigin1,
 			AccessControlAllowHeaders: accessControlAllowHeaders1,
 			EmitTokenMetrics:          emitTokenMetrics1,
-			Description:               description72,
+			Description:               description71,
 		}
 	}
 	if inputZscalerHec != nil {
@@ -21485,138 +20903,138 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 	}
 	var inputCloudflareHec *shared.InputCloudflareHec
 	if r.InputCloudflareHec != nil {
-		id62 := new(string)
+		id61 := new(string)
 		if !r.InputCloudflareHec.ID.IsUnknown() && !r.InputCloudflareHec.ID.IsNull() {
-			*id62 = r.InputCloudflareHec.ID.ValueString()
+			*id61 = r.InputCloudflareHec.ID.ValueString()
 		} else {
-			id62 = nil
+			id61 = nil
 		}
-		typeVar66 := shared.InputCloudflareHecType(r.InputCloudflareHec.Type.ValueString())
-		disabled108 := new(bool)
+		typeVar65 := shared.InputCloudflareHecType(r.InputCloudflareHec.Type.ValueString())
+		disabled106 := new(bool)
 		if !r.InputCloudflareHec.Disabled.IsUnknown() && !r.InputCloudflareHec.Disabled.IsNull() {
-			*disabled108 = r.InputCloudflareHec.Disabled.ValueBool()
+			*disabled106 = r.InputCloudflareHec.Disabled.ValueBool()
 		} else {
-			disabled108 = nil
+			disabled106 = nil
 		}
-		pipeline122 := new(string)
+		pipeline120 := new(string)
 		if !r.InputCloudflareHec.Pipeline.IsUnknown() && !r.InputCloudflareHec.Pipeline.IsNull() {
-			*pipeline122 = r.InputCloudflareHec.Pipeline.ValueString()
+			*pipeline120 = r.InputCloudflareHec.Pipeline.ValueString()
 		} else {
-			pipeline122 = nil
+			pipeline120 = nil
 		}
-		sendToRoutes61 := new(bool)
+		sendToRoutes60 := new(bool)
 		if !r.InputCloudflareHec.SendToRoutes.IsUnknown() && !r.InputCloudflareHec.SendToRoutes.IsNull() {
-			*sendToRoutes61 = r.InputCloudflareHec.SendToRoutes.ValueBool()
+			*sendToRoutes60 = r.InputCloudflareHec.SendToRoutes.ValueBool()
 		} else {
-			sendToRoutes61 = nil
+			sendToRoutes60 = nil
 		}
-		environment61 := new(string)
+		environment60 := new(string)
 		if !r.InputCloudflareHec.Environment.IsUnknown() && !r.InputCloudflareHec.Environment.IsNull() {
-			*environment61 = r.InputCloudflareHec.Environment.ValueString()
+			*environment60 = r.InputCloudflareHec.Environment.ValueString()
 		} else {
-			environment61 = nil
+			environment60 = nil
 		}
-		pqEnabled61 := new(bool)
+		pqEnabled60 := new(bool)
 		if !r.InputCloudflareHec.PqEnabled.IsUnknown() && !r.InputCloudflareHec.PqEnabled.IsNull() {
-			*pqEnabled61 = r.InputCloudflareHec.PqEnabled.ValueBool()
+			*pqEnabled60 = r.InputCloudflareHec.PqEnabled.ValueBool()
 		} else {
-			pqEnabled61 = nil
+			pqEnabled60 = nil
 		}
-		streamtags61 := make([]string, 0, len(r.InputCloudflareHec.Streamtags))
-		for streamtagsIndex61 := range r.InputCloudflareHec.Streamtags {
-			streamtags61 = append(streamtags61, r.InputCloudflareHec.Streamtags[streamtagsIndex61].ValueString())
+		streamtags60 := make([]string, 0, len(r.InputCloudflareHec.Streamtags))
+		for streamtagsIndex60 := range r.InputCloudflareHec.Streamtags {
+			streamtags60 = append(streamtags60, r.InputCloudflareHec.Streamtags[streamtagsIndex60].ValueString())
 		}
-		connections61 := make([]shared.InputCloudflareHecConnection, 0, len(r.InputCloudflareHec.Connections))
-		for connectionsIndex61 := range r.InputCloudflareHec.Connections {
-			pipeline123 := new(string)
-			if !r.InputCloudflareHec.Connections[connectionsIndex61].Pipeline.IsUnknown() && !r.InputCloudflareHec.Connections[connectionsIndex61].Pipeline.IsNull() {
-				*pipeline123 = r.InputCloudflareHec.Connections[connectionsIndex61].Pipeline.ValueString()
+		connections60 := make([]shared.InputCloudflareHecConnection, 0, len(r.InputCloudflareHec.Connections))
+		for connectionsIndex60 := range r.InputCloudflareHec.Connections {
+			pipeline121 := new(string)
+			if !r.InputCloudflareHec.Connections[connectionsIndex60].Pipeline.IsUnknown() && !r.InputCloudflareHec.Connections[connectionsIndex60].Pipeline.IsNull() {
+				*pipeline121 = r.InputCloudflareHec.Connections[connectionsIndex60].Pipeline.ValueString()
 			} else {
-				pipeline123 = nil
+				pipeline121 = nil
 			}
-			var output62 string
-			output62 = r.InputCloudflareHec.Connections[connectionsIndex61].Output.ValueString()
+			var output61 string
+			output61 = r.InputCloudflareHec.Connections[connectionsIndex60].Output.ValueString()
 
-			connections61 = append(connections61, shared.InputCloudflareHecConnection{
-				Pipeline: pipeline123,
-				Output:   output62,
+			connections60 = append(connections60, shared.InputCloudflareHecConnection{
+				Pipeline: pipeline121,
+				Output:   output61,
 			})
 		}
-		var pq61 *shared.InputCloudflareHecPq
+		var pq60 *shared.InputCloudflareHecPq
 		if r.InputCloudflareHec.Pq != nil {
-			mode75 := new(shared.InputCloudflareHecMode)
+			mode74 := new(shared.InputCloudflareHecMode)
 			if !r.InputCloudflareHec.Pq.Mode.IsUnknown() && !r.InputCloudflareHec.Pq.Mode.IsNull() {
-				*mode75 = shared.InputCloudflareHecMode(r.InputCloudflareHec.Pq.Mode.ValueString())
+				*mode74 = shared.InputCloudflareHecMode(r.InputCloudflareHec.Pq.Mode.ValueString())
 			} else {
-				mode75 = nil
+				mode74 = nil
 			}
-			maxBufferSize66 := new(float64)
+			maxBufferSize65 := new(float64)
 			if !r.InputCloudflareHec.Pq.MaxBufferSize.IsUnknown() && !r.InputCloudflareHec.Pq.MaxBufferSize.IsNull() {
-				*maxBufferSize66 = r.InputCloudflareHec.Pq.MaxBufferSize.ValueFloat64()
+				*maxBufferSize65 = r.InputCloudflareHec.Pq.MaxBufferSize.ValueFloat64()
 			} else {
-				maxBufferSize66 = nil
+				maxBufferSize65 = nil
 			}
-			commitFrequency61 := new(float64)
+			commitFrequency60 := new(float64)
 			if !r.InputCloudflareHec.Pq.CommitFrequency.IsUnknown() && !r.InputCloudflareHec.Pq.CommitFrequency.IsNull() {
-				*commitFrequency61 = r.InputCloudflareHec.Pq.CommitFrequency.ValueFloat64()
+				*commitFrequency60 = r.InputCloudflareHec.Pq.CommitFrequency.ValueFloat64()
 			} else {
-				commitFrequency61 = nil
+				commitFrequency60 = nil
 			}
-			maxFileSize61 := new(string)
+			maxFileSize60 := new(string)
 			if !r.InputCloudflareHec.Pq.MaxFileSize.IsUnknown() && !r.InputCloudflareHec.Pq.MaxFileSize.IsNull() {
-				*maxFileSize61 = r.InputCloudflareHec.Pq.MaxFileSize.ValueString()
+				*maxFileSize60 = r.InputCloudflareHec.Pq.MaxFileSize.ValueString()
 			} else {
-				maxFileSize61 = nil
+				maxFileSize60 = nil
 			}
-			maxSize61 := new(string)
+			maxSize60 := new(string)
 			if !r.InputCloudflareHec.Pq.MaxSize.IsUnknown() && !r.InputCloudflareHec.Pq.MaxSize.IsNull() {
-				*maxSize61 = r.InputCloudflareHec.Pq.MaxSize.ValueString()
+				*maxSize60 = r.InputCloudflareHec.Pq.MaxSize.ValueString()
 			} else {
-				maxSize61 = nil
+				maxSize60 = nil
 			}
-			path64 := new(string)
+			path63 := new(string)
 			if !r.InputCloudflareHec.Pq.Path.IsUnknown() && !r.InputCloudflareHec.Pq.Path.IsNull() {
-				*path64 = r.InputCloudflareHec.Pq.Path.ValueString()
+				*path63 = r.InputCloudflareHec.Pq.Path.ValueString()
 			} else {
-				path64 = nil
+				path63 = nil
 			}
-			compress70 := new(shared.InputCloudflareHecCompression)
+			compress69 := new(shared.InputCloudflareHecCompression)
 			if !r.InputCloudflareHec.Pq.Compress.IsUnknown() && !r.InputCloudflareHec.Pq.Compress.IsNull() {
-				*compress70 = shared.InputCloudflareHecCompression(r.InputCloudflareHec.Pq.Compress.ValueString())
+				*compress69 = shared.InputCloudflareHecCompression(r.InputCloudflareHec.Pq.Compress.ValueString())
 			} else {
-				compress70 = nil
+				compress69 = nil
 			}
 			var pqControls1 *shared.InputCloudflareHecPqControls
 			if r.InputCloudflareHec.Pq.PqControls != nil {
 				pqControls1 = &shared.InputCloudflareHecPqControls{}
 			}
-			pq61 = &shared.InputCloudflareHecPq{
-				Mode:            mode75,
-				MaxBufferSize:   maxBufferSize66,
-				CommitFrequency: commitFrequency61,
-				MaxFileSize:     maxFileSize61,
-				MaxSize:         maxSize61,
-				Path:            path64,
-				Compress:        compress70,
+			pq60 = &shared.InputCloudflareHecPq{
+				Mode:            mode74,
+				MaxBufferSize:   maxBufferSize65,
+				CommitFrequency: commitFrequency60,
+				MaxFileSize:     maxFileSize60,
+				MaxSize:         maxSize60,
+				Path:            path63,
+				Compress:        compress69,
 				PqControls:      pqControls1,
 			}
 		}
-		host31 := new(string)
+		host30 := new(string)
 		if !r.InputCloudflareHec.Host.IsUnknown() && !r.InputCloudflareHec.Host.IsNull() {
-			*host31 = r.InputCloudflareHec.Host.ValueString()
+			*host30 = r.InputCloudflareHec.Host.ValueString()
 		} else {
-			host31 = nil
+			host30 = nil
 		}
-		var port26 float64
-		port26 = r.InputCloudflareHec.Port.ValueFloat64()
+		var port25 float64
+		port25 = r.InputCloudflareHec.Port.ValueFloat64()
 
 		authTokens10 := make([]shared.InputCloudflareHecAuthToken, 0, len(r.InputCloudflareHec.AuthTokens))
 		for authTokensIndex10 := range r.InputCloudflareHec.AuthTokens {
-			authType22 := new(shared.InputCloudflareHecAuthenticationMethod)
+			authType20 := new(shared.InputCloudflareHecAuthenticationMethod)
 			if !r.InputCloudflareHec.AuthTokens[authTokensIndex10].AuthType.IsUnknown() && !r.InputCloudflareHec.AuthTokens[authTokensIndex10].AuthType.IsNull() {
-				*authType22 = shared.InputCloudflareHecAuthenticationMethod(r.InputCloudflareHec.AuthTokens[authTokensIndex10].AuthType.ValueString())
+				*authType20 = shared.InputCloudflareHecAuthenticationMethod(r.InputCloudflareHec.AuthTokens[authTokensIndex10].AuthType.ValueString())
 			} else {
-				authType22 = nil
+				authType20 = nil
 			}
 			tokenSecret2 := new(string)
 			if !r.InputCloudflareHec.AuthTokens[authTokensIndex10].TokenSecret.IsUnknown() && !r.InputCloudflareHec.AuthTokens[authTokensIndex10].TokenSecret.IsNull() {
@@ -21624,11 +21042,11 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				tokenSecret2 = nil
 			}
-			token14 := new(string)
+			token12 := new(string)
 			if !r.InputCloudflareHec.AuthTokens[authTokensIndex10].Token.IsUnknown() && !r.InputCloudflareHec.AuthTokens[authTokensIndex10].Token.IsNull() {
-				*token14 = r.InputCloudflareHec.AuthTokens[authTokensIndex10].Token.ValueString()
+				*token12 = r.InputCloudflareHec.AuthTokens[authTokensIndex10].Token.ValueString()
 			} else {
-				token14 = nil
+				token12 = nil
 			}
 			enabled11 := new(bool)
 			if !r.InputCloudflareHec.AuthTokens[authTokensIndex10].Enabled.IsUnknown() && !r.InputCloudflareHec.AuthTokens[authTokensIndex10].Enabled.IsNull() {
@@ -21636,199 +21054,199 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 			} else {
 				enabled11 = nil
 			}
-			description73 := new(string)
+			description72 := new(string)
 			if !r.InputCloudflareHec.AuthTokens[authTokensIndex10].Description.IsUnknown() && !r.InputCloudflareHec.AuthTokens[authTokensIndex10].Description.IsNull() {
-				*description73 = r.InputCloudflareHec.AuthTokens[authTokensIndex10].Description.ValueString()
+				*description72 = r.InputCloudflareHec.AuthTokens[authTokensIndex10].Description.ValueString()
 			} else {
-				description73 = nil
+				description72 = nil
 			}
 			allowedIndexesAtToken2 := make([]string, 0, len(r.InputCloudflareHec.AuthTokens[authTokensIndex10].AllowedIndexesAtToken))
 			for allowedIndexesAtTokenIndex2 := range r.InputCloudflareHec.AuthTokens[authTokensIndex10].AllowedIndexesAtToken {
 				allowedIndexesAtToken2 = append(allowedIndexesAtToken2, r.InputCloudflareHec.AuthTokens[authTokensIndex10].AllowedIndexesAtToken[allowedIndexesAtTokenIndex2].ValueString())
 			}
-			metadata68 := make([]shared.InputCloudflareHecAuthTokenMetadatum, 0, len(r.InputCloudflareHec.AuthTokens[authTokensIndex10].Metadata))
-			for metadataIndex67 := range r.InputCloudflareHec.AuthTokens[authTokensIndex10].Metadata {
-				var name91 string
-				name91 = r.InputCloudflareHec.AuthTokens[authTokensIndex10].Metadata[metadataIndex67].Name.ValueString()
+			metadata67 := make([]shared.InputCloudflareHecAuthTokenMetadatum, 0, len(r.InputCloudflareHec.AuthTokens[authTokensIndex10].Metadata))
+			for metadataIndex66 := range r.InputCloudflareHec.AuthTokens[authTokensIndex10].Metadata {
+				var name86 string
+				name86 = r.InputCloudflareHec.AuthTokens[authTokensIndex10].Metadata[metadataIndex66].Name.ValueString()
 
-				var value86 string
-				value86 = r.InputCloudflareHec.AuthTokens[authTokensIndex10].Metadata[metadataIndex67].Value.ValueString()
+				var value81 string
+				value81 = r.InputCloudflareHec.AuthTokens[authTokensIndex10].Metadata[metadataIndex66].Value.ValueString()
 
-				metadata68 = append(metadata68, shared.InputCloudflareHecAuthTokenMetadatum{
-					Name:  name91,
-					Value: value86,
+				metadata67 = append(metadata67, shared.InputCloudflareHecAuthTokenMetadatum{
+					Name:  name86,
+					Value: value81,
 				})
 			}
 			authTokens10 = append(authTokens10, shared.InputCloudflareHecAuthToken{
-				AuthType:              authType22,
+				AuthType:              authType20,
 				TokenSecret:           tokenSecret2,
-				Token:                 token14,
+				Token:                 token12,
 				Enabled:               enabled11,
-				Description:           description73,
+				Description:           description72,
 				AllowedIndexesAtToken: allowedIndexesAtToken2,
-				Metadata:              metadata68,
+				Metadata:              metadata67,
 			})
 		}
-		var tls32 *shared.InputCloudflareHecTLSSettingsServerSide
+		var tls31 *shared.InputCloudflareHecTLSSettingsServerSide
 		if r.InputCloudflareHec.TLS != nil {
-			disabled109 := new(bool)
+			disabled107 := new(bool)
 			if !r.InputCloudflareHec.TLS.Disabled.IsUnknown() && !r.InputCloudflareHec.TLS.Disabled.IsNull() {
-				*disabled109 = r.InputCloudflareHec.TLS.Disabled.ValueBool()
+				*disabled107 = r.InputCloudflareHec.TLS.Disabled.ValueBool()
 			} else {
-				disabled109 = nil
+				disabled107 = nil
 			}
-			requestCert25 := new(bool)
+			requestCert24 := new(bool)
 			if !r.InputCloudflareHec.TLS.RequestCert.IsUnknown() && !r.InputCloudflareHec.TLS.RequestCert.IsNull() {
-				*requestCert25 = r.InputCloudflareHec.TLS.RequestCert.ValueBool()
+				*requestCert24 = r.InputCloudflareHec.TLS.RequestCert.ValueBool()
 			} else {
-				requestCert25 = nil
+				requestCert24 = nil
 			}
-			rejectUnauthorized44 := new(bool)
+			rejectUnauthorized43 := new(bool)
 			if !r.InputCloudflareHec.TLS.RejectUnauthorized.IsUnknown() && !r.InputCloudflareHec.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized44 = r.InputCloudflareHec.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized43 = r.InputCloudflareHec.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized44 = nil
+				rejectUnauthorized43 = nil
 			}
-			commonNameRegex25 := new(string)
+			commonNameRegex24 := new(string)
 			if !r.InputCloudflareHec.TLS.CommonNameRegex.IsUnknown() && !r.InputCloudflareHec.TLS.CommonNameRegex.IsNull() {
-				*commonNameRegex25 = r.InputCloudflareHec.TLS.CommonNameRegex.ValueString()
+				*commonNameRegex24 = r.InputCloudflareHec.TLS.CommonNameRegex.ValueString()
 			} else {
-				commonNameRegex25 = nil
+				commonNameRegex24 = nil
 			}
-			certificateName33 := new(string)
+			certificateName32 := new(string)
 			if !r.InputCloudflareHec.TLS.CertificateName.IsUnknown() && !r.InputCloudflareHec.TLS.CertificateName.IsNull() {
-				*certificateName33 = r.InputCloudflareHec.TLS.CertificateName.ValueString()
+				*certificateName32 = r.InputCloudflareHec.TLS.CertificateName.ValueString()
 			} else {
-				certificateName33 = nil
+				certificateName32 = nil
 			}
-			privKeyPath32 := new(string)
+			privKeyPath31 := new(string)
 			if !r.InputCloudflareHec.TLS.PrivKeyPath.IsUnknown() && !r.InputCloudflareHec.TLS.PrivKeyPath.IsNull() {
-				*privKeyPath32 = r.InputCloudflareHec.TLS.PrivKeyPath.ValueString()
+				*privKeyPath31 = r.InputCloudflareHec.TLS.PrivKeyPath.ValueString()
 			} else {
-				privKeyPath32 = nil
+				privKeyPath31 = nil
 			}
-			passphrase31 := new(string)
+			passphrase30 := new(string)
 			if !r.InputCloudflareHec.TLS.Passphrase.IsUnknown() && !r.InputCloudflareHec.TLS.Passphrase.IsNull() {
-				*passphrase31 = r.InputCloudflareHec.TLS.Passphrase.ValueString()
+				*passphrase30 = r.InputCloudflareHec.TLS.Passphrase.ValueString()
 			} else {
-				passphrase31 = nil
+				passphrase30 = nil
 			}
-			certPath32 := new(string)
+			certPath31 := new(string)
 			if !r.InputCloudflareHec.TLS.CertPath.IsUnknown() && !r.InputCloudflareHec.TLS.CertPath.IsNull() {
-				*certPath32 = r.InputCloudflareHec.TLS.CertPath.ValueString()
+				*certPath31 = r.InputCloudflareHec.TLS.CertPath.ValueString()
 			} else {
-				certPath32 = nil
+				certPath31 = nil
 			}
-			caPath31 := new(string)
+			caPath30 := new(string)
 			if !r.InputCloudflareHec.TLS.CaPath.IsUnknown() && !r.InputCloudflareHec.TLS.CaPath.IsNull() {
-				*caPath31 = r.InputCloudflareHec.TLS.CaPath.ValueString()
+				*caPath30 = r.InputCloudflareHec.TLS.CaPath.ValueString()
 			} else {
-				caPath31 = nil
+				caPath30 = nil
 			}
-			minVersion31 := new(shared.InputCloudflareHecMinimumTLSVersion)
+			minVersion30 := new(shared.InputCloudflareHecMinimumTLSVersion)
 			if !r.InputCloudflareHec.TLS.MinVersion.IsUnknown() && !r.InputCloudflareHec.TLS.MinVersion.IsNull() {
-				*minVersion31 = shared.InputCloudflareHecMinimumTLSVersion(r.InputCloudflareHec.TLS.MinVersion.ValueString())
+				*minVersion30 = shared.InputCloudflareHecMinimumTLSVersion(r.InputCloudflareHec.TLS.MinVersion.ValueString())
 			} else {
-				minVersion31 = nil
+				minVersion30 = nil
 			}
-			maxVersion31 := new(shared.InputCloudflareHecMaximumTLSVersion)
+			maxVersion30 := new(shared.InputCloudflareHecMaximumTLSVersion)
 			if !r.InputCloudflareHec.TLS.MaxVersion.IsUnknown() && !r.InputCloudflareHec.TLS.MaxVersion.IsNull() {
-				*maxVersion31 = shared.InputCloudflareHecMaximumTLSVersion(r.InputCloudflareHec.TLS.MaxVersion.ValueString())
+				*maxVersion30 = shared.InputCloudflareHecMaximumTLSVersion(r.InputCloudflareHec.TLS.MaxVersion.ValueString())
 			} else {
-				maxVersion31 = nil
+				maxVersion30 = nil
 			}
-			tls32 = &shared.InputCloudflareHecTLSSettingsServerSide{
-				Disabled:           disabled109,
-				RequestCert:        requestCert25,
-				RejectUnauthorized: rejectUnauthorized44,
-				CommonNameRegex:    commonNameRegex25,
-				CertificateName:    certificateName33,
-				PrivKeyPath:        privKeyPath32,
-				Passphrase:         passphrase31,
-				CertPath:           certPath32,
-				CaPath:             caPath31,
-				MinVersion:         minVersion31,
-				MaxVersion:         maxVersion31,
+			tls31 = &shared.InputCloudflareHecTLSSettingsServerSide{
+				Disabled:           disabled107,
+				RequestCert:        requestCert24,
+				RejectUnauthorized: rejectUnauthorized43,
+				CommonNameRegex:    commonNameRegex24,
+				CertificateName:    certificateName32,
+				PrivKeyPath:        privKeyPath31,
+				Passphrase:         passphrase30,
+				CertPath:           certPath31,
+				CaPath:             caPath30,
+				MinVersion:         minVersion30,
+				MaxVersion:         maxVersion30,
 			}
 		}
-		maxActiveReq16 := new(float64)
+		maxActiveReq15 := new(float64)
 		if !r.InputCloudflareHec.MaxActiveReq.IsUnknown() && !r.InputCloudflareHec.MaxActiveReq.IsNull() {
-			*maxActiveReq16 = r.InputCloudflareHec.MaxActiveReq.ValueFloat64()
+			*maxActiveReq15 = r.InputCloudflareHec.MaxActiveReq.ValueFloat64()
 		} else {
-			maxActiveReq16 = nil
+			maxActiveReq15 = nil
 		}
-		maxRequestsPerSocket16 := new(int64)
+		maxRequestsPerSocket15 := new(int64)
 		if !r.InputCloudflareHec.MaxRequestsPerSocket.IsUnknown() && !r.InputCloudflareHec.MaxRequestsPerSocket.IsNull() {
-			*maxRequestsPerSocket16 = r.InputCloudflareHec.MaxRequestsPerSocket.ValueInt64()
+			*maxRequestsPerSocket15 = r.InputCloudflareHec.MaxRequestsPerSocket.ValueInt64()
 		} else {
-			maxRequestsPerSocket16 = nil
+			maxRequestsPerSocket15 = nil
 		}
-		enableProxyHeader24 := new(bool)
+		enableProxyHeader23 := new(bool)
 		if !r.InputCloudflareHec.EnableProxyHeader.IsUnknown() && !r.InputCloudflareHec.EnableProxyHeader.IsNull() {
-			*enableProxyHeader24 = r.InputCloudflareHec.EnableProxyHeader.ValueBool()
+			*enableProxyHeader23 = r.InputCloudflareHec.EnableProxyHeader.ValueBool()
 		} else {
-			enableProxyHeader24 = nil
+			enableProxyHeader23 = nil
 		}
-		captureHeaders16 := new(bool)
+		captureHeaders15 := new(bool)
 		if !r.InputCloudflareHec.CaptureHeaders.IsUnknown() && !r.InputCloudflareHec.CaptureHeaders.IsNull() {
-			*captureHeaders16 = r.InputCloudflareHec.CaptureHeaders.ValueBool()
+			*captureHeaders15 = r.InputCloudflareHec.CaptureHeaders.ValueBool()
 		} else {
-			captureHeaders16 = nil
+			captureHeaders15 = nil
 		}
-		activityLogSampleRate15 := new(float64)
+		activityLogSampleRate14 := new(float64)
 		if !r.InputCloudflareHec.ActivityLogSampleRate.IsUnknown() && !r.InputCloudflareHec.ActivityLogSampleRate.IsNull() {
-			*activityLogSampleRate15 = r.InputCloudflareHec.ActivityLogSampleRate.ValueFloat64()
+			*activityLogSampleRate14 = r.InputCloudflareHec.ActivityLogSampleRate.ValueFloat64()
 		} else {
-			activityLogSampleRate15 = nil
+			activityLogSampleRate14 = nil
 		}
-		requestTimeout25 := new(float64)
+		requestTimeout24 := new(float64)
 		if !r.InputCloudflareHec.RequestTimeout.IsUnknown() && !r.InputCloudflareHec.RequestTimeout.IsNull() {
-			*requestTimeout25 = r.InputCloudflareHec.RequestTimeout.ValueFloat64()
+			*requestTimeout24 = r.InputCloudflareHec.RequestTimeout.ValueFloat64()
 		} else {
-			requestTimeout25 = nil
+			requestTimeout24 = nil
 		}
-		socketTimeout20 := new(float64)
+		socketTimeout19 := new(float64)
 		if !r.InputCloudflareHec.SocketTimeout.IsUnknown() && !r.InputCloudflareHec.SocketTimeout.IsNull() {
-			*socketTimeout20 = r.InputCloudflareHec.SocketTimeout.ValueFloat64()
+			*socketTimeout19 = r.InputCloudflareHec.SocketTimeout.ValueFloat64()
 		} else {
-			socketTimeout20 = nil
+			socketTimeout19 = nil
 		}
-		keepAliveTimeout16 := new(float64)
+		keepAliveTimeout15 := new(float64)
 		if !r.InputCloudflareHec.KeepAliveTimeout.IsUnknown() && !r.InputCloudflareHec.KeepAliveTimeout.IsNull() {
-			*keepAliveTimeout16 = r.InputCloudflareHec.KeepAliveTimeout.ValueFloat64()
+			*keepAliveTimeout15 = r.InputCloudflareHec.KeepAliveTimeout.ValueFloat64()
 		} else {
-			keepAliveTimeout16 = nil
+			keepAliveTimeout15 = nil
 		}
-		var enableHealthCheck16 interface{}
+		var enableHealthCheck15 interface{}
 		if !r.InputCloudflareHec.EnableHealthCheck.IsUnknown() && !r.InputCloudflareHec.EnableHealthCheck.IsNull() {
-			_ = json.Unmarshal([]byte(r.InputCloudflareHec.EnableHealthCheck.ValueString()), &enableHealthCheck16)
+			_ = json.Unmarshal([]byte(r.InputCloudflareHec.EnableHealthCheck.ValueString()), &enableHealthCheck15)
 		}
-		ipAllowlistRegex17 := new(string)
+		ipAllowlistRegex16 := new(string)
 		if !r.InputCloudflareHec.IPAllowlistRegex.IsUnknown() && !r.InputCloudflareHec.IPAllowlistRegex.IsNull() {
-			*ipAllowlistRegex17 = r.InputCloudflareHec.IPAllowlistRegex.ValueString()
+			*ipAllowlistRegex16 = r.InputCloudflareHec.IPAllowlistRegex.ValueString()
 		} else {
-			ipAllowlistRegex17 = nil
+			ipAllowlistRegex16 = nil
 		}
-		ipDenylistRegex17 := new(string)
+		ipDenylistRegex16 := new(string)
 		if !r.InputCloudflareHec.IPDenylistRegex.IsUnknown() && !r.InputCloudflareHec.IPDenylistRegex.IsNull() {
-			*ipDenylistRegex17 = r.InputCloudflareHec.IPDenylistRegex.ValueString()
+			*ipDenylistRegex16 = r.InputCloudflareHec.IPDenylistRegex.ValueString()
 		} else {
-			ipDenylistRegex17 = nil
+			ipDenylistRegex16 = nil
 		}
 		var hecApi1 string
 		hecApi1 = r.InputCloudflareHec.HecAPI.ValueString()
 
-		metadata69 := make([]shared.InputCloudflareHecMetadatum, 0, len(r.InputCloudflareHec.Metadata))
-		for metadataIndex68 := range r.InputCloudflareHec.Metadata {
-			var name92 string
-			name92 = r.InputCloudflareHec.Metadata[metadataIndex68].Name.ValueString()
+		metadata68 := make([]shared.InputCloudflareHecMetadatum, 0, len(r.InputCloudflareHec.Metadata))
+		for metadataIndex67 := range r.InputCloudflareHec.Metadata {
+			var name87 string
+			name87 = r.InputCloudflareHec.Metadata[metadataIndex67].Name.ValueString()
 
-			var value87 string
-			value87 = r.InputCloudflareHec.Metadata[metadataIndex68].Value.ValueString()
+			var value82 string
+			value82 = r.InputCloudflareHec.Metadata[metadataIndex67].Value.ValueString()
 
-			metadata69 = append(metadata69, shared.InputCloudflareHecMetadatum{
-				Name:  name92,
-				Value: value87,
+			metadata68 = append(metadata68, shared.InputCloudflareHecMetadatum{
+				Name:  name87,
+				Value: value82,
 			})
 		}
 		allowedIndexes2 := make([]string, 0, len(r.InputCloudflareHec.AllowedIndexes))
@@ -21859,47 +21277,47 @@ func (r *SourceResourceModel) ToSharedInput(ctx context.Context) (*shared.Input,
 		} else {
 			emitTokenMetrics2 = nil
 		}
-		description74 := new(string)
+		description73 := new(string)
 		if !r.InputCloudflareHec.Description.IsUnknown() && !r.InputCloudflareHec.Description.IsNull() {
-			*description74 = r.InputCloudflareHec.Description.ValueString()
+			*description73 = r.InputCloudflareHec.Description.ValueString()
 		} else {
-			description74 = nil
+			description73 = nil
 		}
 		inputCloudflareHec = &shared.InputCloudflareHec{
-			ID:                        id62,
-			Type:                      typeVar66,
-			Disabled:                  disabled108,
-			Pipeline:                  pipeline122,
-			SendToRoutes:              sendToRoutes61,
-			Environment:               environment61,
-			PqEnabled:                 pqEnabled61,
-			Streamtags:                streamtags61,
-			Connections:               connections61,
-			Pq:                        pq61,
-			Host:                      host31,
-			Port:                      port26,
+			ID:                        id61,
+			Type:                      typeVar65,
+			Disabled:                  disabled106,
+			Pipeline:                  pipeline120,
+			SendToRoutes:              sendToRoutes60,
+			Environment:               environment60,
+			PqEnabled:                 pqEnabled60,
+			Streamtags:                streamtags60,
+			Connections:               connections60,
+			Pq:                        pq60,
+			Host:                      host30,
+			Port:                      port25,
 			AuthTokens:                authTokens10,
-			TLS:                       tls32,
-			MaxActiveReq:              maxActiveReq16,
-			MaxRequestsPerSocket:      maxRequestsPerSocket16,
-			EnableProxyHeader:         enableProxyHeader24,
-			CaptureHeaders:            captureHeaders16,
-			ActivityLogSampleRate:     activityLogSampleRate15,
-			RequestTimeout:            requestTimeout25,
-			SocketTimeout:             socketTimeout20,
-			KeepAliveTimeout:          keepAliveTimeout16,
-			EnableHealthCheck:         enableHealthCheck16,
-			IPAllowlistRegex:          ipAllowlistRegex17,
-			IPDenylistRegex:           ipDenylistRegex17,
+			TLS:                       tls31,
+			MaxActiveReq:              maxActiveReq15,
+			MaxRequestsPerSocket:      maxRequestsPerSocket15,
+			EnableProxyHeader:         enableProxyHeader23,
+			CaptureHeaders:            captureHeaders15,
+			ActivityLogSampleRate:     activityLogSampleRate14,
+			RequestTimeout:            requestTimeout24,
+			SocketTimeout:             socketTimeout19,
+			KeepAliveTimeout:          keepAliveTimeout15,
+			EnableHealthCheck:         enableHealthCheck15,
+			IPAllowlistRegex:          ipAllowlistRegex16,
+			IPDenylistRegex:           ipDenylistRegex16,
 			HecAPI:                    hecApi1,
-			Metadata:                  metadata69,
+			Metadata:                  metadata68,
 			AllowedIndexes:            allowedIndexes2,
 			BreakerRulesets:           breakerRulesets16,
 			StaleChannelFlushMs:       staleChannelFlushMs16,
 			AccessControlAllowOrigin:  accessControlAllowOrigin2,
 			AccessControlAllowHeaders: accessControlAllowHeaders2,
 			EmitTokenMetrics:          emitTokenMetrics2,
-			Description:               description74,
+			Description:               description73,
 		}
 	}
 	if inputCloudflareHec != nil {
