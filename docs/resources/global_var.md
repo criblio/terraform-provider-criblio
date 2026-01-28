@@ -14,6 +14,12 @@ GlobalVar Resource
 
 ```terraform
 resource "criblio_global_var" "my_globalvar" {
+  args = [
+    {
+      name = "val"
+      type = "number"
+    }
+  ]
   description = "This is a test var."
   group_id    = "default"
   id          = "test_var"
@@ -34,6 +40,7 @@ resource "criblio_global_var" "my_globalvar" {
 
 ### Optional
 
+- `args` (Attributes List) Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)). (see [below for nested schema](#nestedatt--args))
 - `description` (String) Brief description of this variable. Optional.
 - `lib` (String)
 - `tags` (String) One or more tags related to this variable. Optional.
@@ -43,6 +50,14 @@ resource "criblio_global_var" "my_globalvar" {
 ### Read-Only
 
 - `items` (List of Map of String)
+
+<a id="nestedatt--args"></a>
+### Nested Schema for `args`
+
+Required:
+
+- `name` (String) Argument name
+- `type` (String) Argument type (e.g. number, string)
 
 ## Import
 

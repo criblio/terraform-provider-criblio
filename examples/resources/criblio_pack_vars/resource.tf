@@ -1,4 +1,10 @@
 resource "criblio_pack_vars" "my_packvars" {
+  args = [
+    {
+      name = "val"
+      type = "number"
+    }
+  ]
   description = "This is a test var."
   group_id    = "Cribl"
   id          = "test_var"

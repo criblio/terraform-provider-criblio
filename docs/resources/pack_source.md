@@ -4456,7 +4456,7 @@ resource "criblio_pack_source" "my_packsource" {
 
 - `group_id` (String) group Id
 - `id` (String) Unique ID to create pack source
-- `pack` (String) pack inputs to POST
+- `pack` (String) pack inputs to POST. Requires replacement if changed.
 
 ### Optional
 

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 5d2302fb754cefa5a456bbdb212d0e0b
+  docChecksum: 62d5d65bdced8d111b41b060ad4ecc7d
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.92
-  configChecksum: 4d2852bb810bae04b8db6e87f05065ba
+  releaseVersion: 1.20.97
+  configChecksum: a531eb3ddc970d00373420dae64b2e54
   published: true
 features:
   terraform:
@@ -329,8 +329,6 @@ generatedFiles:
   - internal/provider/notificationtargets_data_source_sdk.go
   - internal/provider/pack_data_source.go
   - internal/provider/pack_data_source_sdk.go
-  - internal/provider/pack_resource.go
-  - internal/provider/pack_resource_sdk.go
   - internal/provider/packbreakers_data_source.go
   - internal/provider/packbreakers_data_source_sdk.go
   - internal/provider/packbreakers_resource.go
@@ -493,6 +491,7 @@ generatedFiles:
   - internal/provider/types/appscope_custom.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
+  - internal/provider/types/arg.go
   - internal/provider/types/auth_config.go
   - internal/provider/types/auth_request_header.go
   - internal/provider/types/auth_request_param.go
@@ -5443,7 +5442,7 @@ examples:
         path:
           groupId: "default"
       requestBody:
-        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
           application/json: {}
@@ -5467,7 +5466,7 @@ examples:
           id: "ENV"
           groupId: "Cribl"
       requestBody:
-        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
           application/json: {}
@@ -5504,7 +5503,7 @@ examples:
           pack: "example-pack"
           groupId: "Cribl"
       requestBody:
-        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
           application/json: {}
@@ -5530,7 +5529,7 @@ examples:
           pack: "example-pack"
           groupId: "Cribl"
       requestBody:
-        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
           application/json: {}

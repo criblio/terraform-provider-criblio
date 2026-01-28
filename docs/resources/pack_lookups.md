@@ -31,7 +31,7 @@ resource "criblio_pack_lookups" "my_packlookups" {
 
 - `group_id` (String) group Id
 - `id` (String) Unique ID to PATCH for pack
-- `pack` (String) pack ID to GET
+- `pack` (String) pack ID to GET. Requires replacement if changed.
 
 ### Optional
 

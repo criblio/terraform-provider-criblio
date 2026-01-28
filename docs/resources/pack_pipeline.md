@@ -57,7 +57,7 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
 - `group_id` (String) group Id
 - `id` (String) Unique ID to PATCH for pack
-- `pack` (String) pack ID to POST
+- `pack` (String) pack ID to POST. Changing this forces replacement because the pipeline is scoped to a pack and cannot be moved in place.
 
 ### Read-Only
 

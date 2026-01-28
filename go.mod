@@ -2,6 +2,8 @@ module github.com/criblio/terraform-provider-criblio
 
 go 1.24.0
 
+toolchain go1.24.1
+
 require (
 	github.com/hashicorp/go-retryablehttp v0.7.7
 	github.com/hashicorp/go-uuid v1.0.3

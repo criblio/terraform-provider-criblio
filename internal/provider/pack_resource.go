@@ -7,8 +7,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"os"
+	"path/filepath"
+	"strings"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -329,12 +336,76 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
+	// If filename is provided, first upload the file via PUT
+	if !data.Filename.IsUnknown() && !data.Filename.IsNull() {
+		filename := data.Filename.ValueString()
+		var filePath string
+
+		if filepath.IsAbs(filename) {
+			filePath = filename
+		} else {
+			var err error
+			filePath, err = filepath.Abs(filename)
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to resolve file path", fmt.Sprintf("Failed to resolve path %s: %v", filename, err))
+				return
+			}
+			filePath = filepath.Clean(filePath)
+		}
+
+		if _, err := os.Stat(filePath); os.IsNotExist(err) {
+			wd, _ := os.Getwd()
+			resp.Diagnostics.AddError(
+				"Pack file not found",
+				fmt.Sprintf("File does not exist: %s\n\nWorking directory: %s\n\nPlease use an absolute path or Terraform's path functions:\n  filename = \"${path.module}/%s\"\n  or\n  filename = \"${path.root}/%s\"",
+					filePath,
+					wd,
+					filepath.Base(filename),
+					filepath.Base(filename),
+				),
+			)
+			return
+		}
+
+		fileContent, err := os.ReadFile(filePath)
+		if err != nil {
+			resp.Diagnostics.AddError("Failed to read pack file", fmt.Sprintf("Unable to read file %s: %v", filePath, err))
+			return
+		}
+
+		baseFilename := filepath.Base(filePath)
+		uploadReq := operations.UpdatePacksRequest{
+			GroupID:  data.GroupID.ValueString(),
+			Filename: &baseFilename,
+		}
+
+		storedFilename, putErr := r.uploadPackFile(ctx, uploadReq, fileContent, baseFilename)
+		if putErr != nil {
+			resp.Diagnostics.AddError("Failed to upload pack file", putErr.Error())
+			return
+		}
+
+		filenameForPost := storedFilename
+		if filenameForPost == "" {
+			filenameForPost = baseFilename
+		}
+
+		data.Filename = types.StringValue(filenameForPost)
+		data.Source = types.StringValue(filenameForPost)
+	}
+
 	request, requestDiags := data.ToOperationsCreatePacksRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	if request.Filename == nil && !data.Filename.IsUnknown() && !data.Filename.IsNull() {
+		filename := data.Filename.ValueString()
+		request.Filename = &filename
+	}
+
 	res, err := r.client.Packs.CreatePacks(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -600,6 +671,122 @@ func (r *PackResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		return
 	}
 
+}
+
+// uploadPackFile uploads a pack file via PUT request with file content in the body.
+// Returns the stored filename from the server response (which may have a random suffix).
+// Uses a successful GET request to extract the base URL and auth headers.
+func (r *PackResource) uploadPackFile(ctx context.Context, uploadReq operations.UpdatePacksRequest, fileContent []byte, filename string) (string, error) {
+	listReq := operations.GetPacksByGroupRequest{
+		GroupID: uploadReq.GroupID,
+	}
+	listRes, _ := r.client.Packs.GetPacksByGroup(ctx, listReq)
+
+	var baseURL string
+	var authHeader string
+	var path string
+
+	if listRes != nil && listRes.RawResponse != nil && listRes.RawResponse.Request != nil {
+		originalReq := listRes.RawResponse.Request
+		if originalReq.URL != nil && originalReq.URL.Host != "" {
+			scheme := originalReq.URL.Scheme
+			if scheme == "" {
+				scheme = "https"
+			}
+			baseURL = fmt.Sprintf("%s://%s", scheme, originalReq.URL.Host)
+		}
+		if baseURL == "" && originalReq.Host != "" {
+			baseURL = fmt.Sprintf("https://%s", originalReq.Host)
+		}
+		if authVal := originalReq.Header.Get("Authorization"); authVal != "" {
+			authHeader = authVal
+		}
+	}
+
+	if baseURL == "" {
+		getReq := operations.GetPacksByIDRequest{
+			GroupID: uploadReq.GroupID,
+			ID:      "_dummy_for_url_extraction_",
+			Disabled: nil,
+		}
+		getRes, _ := r.client.Packs.GetPacksByID(ctx, getReq)
+		if getRes != nil && getRes.RawResponse != nil && getRes.RawResponse.Request != nil {
+			originalReq := getRes.RawResponse.Request
+			if originalReq.URL != nil && originalReq.URL.Host != "" {
+				scheme := originalReq.URL.Scheme
+				if scheme == "" {
+					scheme = "https"
+				}
+				baseURL = fmt.Sprintf("%s://%s", scheme, originalReq.URL.Host)
+			}
+			if baseURL == "" && originalReq.Host != "" {
+				baseURL = fmt.Sprintf("https://%s", originalReq.Host)
+			}
+			if authHeader == "" {
+				authHeader = originalReq.Header.Get("Authorization")
+			}
+		}
+	}
+
+	if baseURL == "" {
+		return "", fmt.Errorf("failed to extract base URL from API requests. Please check your provider configuration")
+	}
+
+	if path == "" {
+		path = fmt.Sprintf("/api/v1/m/%s/packs", uploadReq.GroupID)
+	}
+
+	queryParams := url.Values{}
+	queryParams.Set("filename", filename)
+	queryParams.Set("size", fmt.Sprintf("%d", len(fileContent)))
+	processedURL := fmt.Sprintf("%s%s?%s", baseURL, path, queryParams.Encode())
+
+	req, err := http.NewRequestWithContext(ctx, "PUT", processedURL, bytes.NewReader(fileContent))
+	if err != nil {
+		return "", fmt.Errorf("failed to create PUT request: %v", err)
+	}
+
+	if authHeader != "" {
+		req.Header.Set("Authorization", authHeader)
+	}
+	req.Header.Set("Content-Type", "application/octet-stream")
+	req.Header.Set("Content-Length", fmt.Sprintf("%d", len(fileContent)))
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", "terraform-provider-criblio")
+
+	client := &http.Client{}
+	httpRes, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to execute PUT request: %v", err)
+	}
+	defer httpRes.Body.Close()
+
+	if httpRes.StatusCode != 200 {
+		body, _ := io.ReadAll(httpRes.Body)
+		return "", fmt.Errorf("pack file upload failed with status %d: %s", httpRes.StatusCode, string(body))
+	}
+
+	var storedFilename string
+	body, err := io.ReadAll(httpRes.Body)
+	if err == nil && len(body) > 0 {
+		var responseData struct {
+			Source string `json:"source"`
+		}
+		if err := json.Unmarshal(body, &responseData); err == nil && responseData.Source != "" {
+			if strings.HasPrefix(responseData.Source, "file:") {
+				p := strings.TrimPrefix(responseData.Source, "file:")
+				storedFilename = filepath.Base(p)
+			} else {
+				storedFilename = responseData.Source
+			}
+		}
+	}
+
+	if storedFilename == "" {
+		storedFilename = filename
+	}
+
+	return storedFilename, nil
 }
 
 func (r *PackResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

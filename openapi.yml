@@ -8035,6 +8035,31 @@ components:
           title: Tags
           description: One or more tags related to this variable. Optional.
           example: "test"
+        args:
+          type: array
+          title: Args
+          description: Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).
+          items:
+            type: object
+            required:
+              - type
+              - name
+            properties:
+              type:
+                type: string
+                description: Argument type (e.g. number, string)
+                example: "number"
+              name:
+                type: string
+                description: Argument name
+                example: "val"
+          example:
+            - type: "number"
+              name: "val"
+            - type: "number"
+              name: "precision"
+            - type: "number"
+              name: "test"
     HmacFunction:
       type: object
       properties:
@@ -71874,6 +71899,7 @@ paths:
             type: string
           description: pack ID to GET
           example: "example-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -71897,6 +71923,7 @@ paths:
           schema: *a109
           description: pack ID to POST
           example: "example-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -71927,6 +71954,7 @@ paths:
             type: string
           description: pack ID to GET
           example: "example-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -71956,6 +71984,7 @@ paths:
           schema: *a109
           description: pack ID to PATCH
           example: "example-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -71983,6 +72012,7 @@ paths:
           schema: *a109
           description: pack ID to DELETE
           example: "example-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -73505,6 +73535,7 @@ paths:
           schema: *a138
           description: pack ID to POST
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -73530,6 +73561,7 @@ paths:
             type: string
           description: pack ID to GET
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: id
           in: path
           required: true
@@ -73572,6 +73604,7 @@ paths:
           schema: *a138
           description: pack ID to PATCH
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: disabled
           in: query
           required: false
@@ -73602,6 +73635,7 @@ paths:
             type: string
           description: pack inputs to GET
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -73631,6 +73665,7 @@ paths:
           schema: *a138
           description: pack inputs to POST
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -73666,6 +73701,7 @@ paths:
           schema: *a138
           description: pack ID to GET
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -73695,6 +73731,7 @@ paths:
           schema: *a138
           description: pack ID to PATCH
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
         - name: disabled
           in: query
           required: false
@@ -73729,6 +73766,7 @@ paths:
           schema: *a138
           description: pack ID to DELETE
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -73771,6 +73809,7 @@ paths:
           schema:
             type: string
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
       operationId: listPackOutput
       tags:
         &a120
@@ -73819,6 +73858,7 @@ paths:
           schema:
             type: string
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
         - name: id
           in: query
           required: true
@@ -73866,6 +73906,7 @@ paths:
           schema:
             type: string
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
       responses: *a121
     patch:
       x-speakeasy-entity-operation: PackDestination#update
@@ -73893,6 +73934,7 @@ paths:
           schema:
             type: string
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Output object to be updated
         required: true
@@ -73927,6 +73969,7 @@ paths:
           schema:
             type: string
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
       responses: *a121
       x-speakeasy-retries:
         strategy: backoff
@@ -73956,6 +73999,7 @@ paths:
             type: string
           description: pack ID to GET
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -73987,6 +74031,7 @@ paths:
             type: string
           description: pack ID to GET
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -74016,6 +74061,7 @@ paths:
           schema: *a138
           description: pack ID to GET
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -74053,6 +74099,7 @@ paths:
           schema: *a138
           description: pack ID to PATCH
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: disabled
           in: query
           required: false
@@ -74087,6 +74134,7 @@ paths:
           schema: *a138
           description: pack ID to DELETE
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -74147,6 +74195,7 @@ paths:
             type: string
           description: pack ID to POST
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -74215,6 +74264,7 @@ paths:
           schema: *a138
           description: pack ID to POST
           example: "myExistingPackId"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
@@ -74299,6 +74349,7 @@ paths:
             type: string
           description: pack ID to GET
           example: "observability-pack"
+          x-speakeasy-param-force-new: true
         - name: groupId
           in: path
           required: true
