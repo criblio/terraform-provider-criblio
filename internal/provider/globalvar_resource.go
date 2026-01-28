@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -36,6 +37,7 @@ type GlobalVarResource struct {
 
 // GlobalVarResourceModel describes the resource data model.
 type GlobalVarResourceModel struct {
+	Args        []tfTypes.Arg                     `tfsdk:"args"`
 	Description types.String                      `tfsdk:"description"`
 	GroupID     types.String                      `tfsdk:"group_id"`
 	ID          types.String                      `tfsdk:"id"`
@@ -54,6 +56,22 @@ func (r *GlobalVarResource) Schema(ctx context.Context, req resource.SchemaReque
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "GlobalVar Resource",
 		Attributes: map[string]schema.Attribute{
+			"args": schema.ListNestedAttribute{
+				Optional: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							Required:    true,
+							Description: `Argument name`,
+						},
+						"type": schema.StringAttribute{
+							Required:    true,
+							Description: `Argument type (e.g. number, string)`,
+						},
+					},
+				},
+				Description: `Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).`,
+			},
 			"description": schema.StringAttribute{
 				Optional:    true,
 				Description: `Brief description of this variable. Optional.`,

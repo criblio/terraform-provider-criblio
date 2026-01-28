@@ -53,6 +53,27 @@ func (e *GlobalVarType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+type Arg struct {
+	// Argument type (e.g. number, string)
+	Type string `json:"type"`
+	// Argument name
+	Name string `json:"name"`
+}
+
+func (a *Arg) GetType() string {
+	if a == nil {
+		return ""
+	}
+	return a.Type
+}
+
+func (a *Arg) GetName() string {
+	if a == nil {
+		return ""
+	}
+	return a.Name
+}
+
 type GlobalVar struct {
 	// Global variable name.
 	ID  string  `json:"id"`
@@ -65,6 +86,8 @@ type GlobalVar struct {
 	Value *string `json:"value,omitempty"`
 	// One or more tags related to this variable. Optional.
 	Tags *string `json:"tags,omitempty"`
+	// Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).
+	Args []Arg `json:"args,omitempty"`
 }
 
 func (g GlobalVar) MarshalJSON() ([]byte, error) {
@@ -118,4 +141,11 @@ func (g *GlobalVar) GetTags() *string {
 		return nil
 	}
 	return g.Tags
+}
+
+func (g *GlobalVar) GetArgs() []Arg {
+	if g == nil {
+		return nil
+	}
+	return g.Args
 }

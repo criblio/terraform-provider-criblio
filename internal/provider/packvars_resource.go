@@ -7,13 +7,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -36,6 +39,7 @@ type PackVarsResource struct {
 
 // PackVarsResourceModel describes the resource data model.
 type PackVarsResourceModel struct {
+	Args        []tfTypes.Arg                     `tfsdk:"args"`
 	Description types.String                      `tfsdk:"description"`
 	GroupID     types.String                      `tfsdk:"group_id"`
 	ID          types.String                      `tfsdk:"id"`
@@ -55,6 +59,22 @@ func (r *PackVarsResource) Schema(ctx context.Context, req resource.SchemaReques
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "PackVars Resource",
 		Attributes: map[string]schema.Attribute{
+			"args": schema.ListNestedAttribute{
+				Optional: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							Required:    true,
+							Description: `Argument name`,
+						},
+						"type": schema.StringAttribute{
+							Required:    true,
+							Description: `Argument type (e.g. number, string)`,
+						},
+					},
+				},
+				Description: `Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).`,
+			},
 			"description": schema.StringAttribute{
 				Optional:    true,
 				Description: `Brief description of this variable. Optional.`,
@@ -80,8 +100,11 @@ func (r *PackVarsResource) Schema(ctx context.Context, req resource.SchemaReques
 				Optional: true,
 			},
 			"pack": schema.StringAttribute{
-				Required:    true,
-				Description: `pack ID to POST`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `pack ID to POST. Requires replacement if changed.`,
 			},
 			"tags": schema.StringAttribute{
 				Optional:    true,

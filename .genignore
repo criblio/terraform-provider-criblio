@@ -1,10 +1,13 @@
 internal/provider/routes_resource.go
+internal/provider/pack_resource.go
+internal/provider/pack_resource_sdk.go
 internal/provider/packroutes_resource.go
 internal/provider/packpipeline_resource.go
 internal/provider/packpipeline_resource_sdk.go
 internal/provider/pipeline_resource.go
 internal/provider/packsource_resource_sdk.go
 internal/provider/pipeline_resource_sdk.go
+internal/provider/pipeline_data_source.go
 internal/provider/pipeline_data_source_sdk.go
 internal/provider/types/pipeline_function_conf.go
 internal/sdk/models/shared/pipelinefunctionconf.go

@@ -14,6 +14,12 @@ PackVars Resource
 
 ```terraform
 resource "criblio_pack_vars" "my_packvars" {
+  args = [
+    {
+      name = "val"
+      type = "number"
+    }
+  ]
   description = "This is a test var."
   group_id    = "Cribl"
   id          = "test_var"
@@ -32,10 +38,11 @@ resource "criblio_pack_vars" "my_packvars" {
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `id` (String) Global variable name.
-- `pack` (String) pack ID to POST
+- `pack` (String) pack ID to POST. Requires replacement if changed.
 
 ### Optional
 
+- `args` (Attributes List) Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)). (see [below for nested schema](#nestedatt--args))
 - `description` (String) Brief description of this variable. Optional.
 - `lib` (String)
 - `tags` (String) One or more tags related to this variable. Optional.
@@ -45,6 +52,14 @@ resource "criblio_pack_vars" "my_packvars" {
 ### Read-Only
 
 - `items` (List of Map of String)
+
+<a id="nestedatt--args"></a>
+### Nested Schema for `args`
+
+Required:
+
+- `name` (String) Argument name
+- `type` (String) Argument type (e.g. number, string)
 
 ## Import
 

@@ -329,8 +329,6 @@ generatedFiles:
   - internal/provider/notificationtargets_data_source_sdk.go
   - internal/provider/pack_data_source.go
   - internal/provider/pack_data_source_sdk.go
-  - internal/provider/pack_resource.go
-  - internal/provider/pack_resource_sdk.go
   - internal/provider/packbreakers_data_source.go
   - internal/provider/packbreakers_data_source_sdk.go
   - internal/provider/packbreakers_resource.go
@@ -493,6 +491,7 @@ generatedFiles:
   - internal/provider/types/appscope_custom.go
   - internal/provider/types/appscope_transport.go
   - internal/provider/types/appscope_transport_tls.go
+  - internal/provider/types/arg.go
   - internal/provider/types/auth_config.go
   - internal/provider/types/auth_request_header.go
   - internal/provider/types/auth_request_param.go
@@ -5422,7 +5421,7 @@ examples:
         path:
           groupId: "default"
       requestBody:
-        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
           application/json: {}
@@ -5446,7 +5445,7 @@ examples:
           id: "ENV"
           groupId: "Cribl"
       requestBody:
-        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
           application/json: {}
@@ -5483,7 +5482,7 @@ examples:
           pack: "example-pack"
           groupId: "Cribl"
       requestBody:
-        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
           application/json: {}
@@ -5509,7 +5508,7 @@ examples:
           pack: "example-pack"
           groupId: "Cribl"
       requestBody:
-        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test"}
+        application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
           application/json: {}

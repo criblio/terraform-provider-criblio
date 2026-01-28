@@ -206,6 +206,19 @@ func (r *PackVarsResourceModel) ToSharedGlobalVar(ctx context.Context) (*shared.
 	} else {
 		tags = nil
 	}
+	args := make([]shared.Arg, 0, len(r.Args))
+	for argsIndex := range r.Args {
+		var type1 string
+		type1 = r.Args[argsIndex].Type.ValueString()
+
+		var name string
+		name = r.Args[argsIndex].Name.ValueString()
+
+		args = append(args, shared.Arg{
+			Type: type1,
+			Name: name,
+		})
+	}
 	out := shared.GlobalVar{
 		ID:          id,
 		Lib:         lib,
@@ -213,6 +226,7 @@ func (r *PackVarsResourceModel) ToSharedGlobalVar(ctx context.Context) (*shared.
 		Type:        typeVar,
 		Value:       value,
 		Tags:        tags,
+		Args:        args,
 	}
 
 	return &out, diags
