@@ -947,6 +947,14 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var inputGrafana InputGrafana = InputGrafana{}
+	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputTypeInputGrafana,
+			Value: &inputGrafana,
+		})
+	}
+
 	var inputLoki InputLoki = InputLoki{}
 	if err := utils.UnmarshalJSON(data, &inputLoki, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1088,14 +1096,6 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  InputTypeInputZscalerHec,
 			Value: &inputZscalerHec,
-		})
-	}
-
-	var inputGrafana InputGrafana = InputGrafana{}
-	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputTypeInputGrafana,
-			Value: &inputGrafana,
 		})
 	}
 
@@ -1275,6 +1275,9 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 	case InputTypeInputConfluentCloud:
 		u.InputConfluentCloud = best.Value.(*InputConfluentCloud)
 		return nil
+	case InputTypeInputGrafana:
+		u.InputGrafana = best.Value.(*InputGrafana)
+		return nil
 	case InputTypeInputLoki:
 		u.InputLoki = best.Value.(*InputLoki)
 		return nil
@@ -1328,9 +1331,6 @@ func (u *Input) UnmarshalJSON(data []byte) error {
 		return nil
 	case InputTypeInputZscalerHec:
 		u.InputZscalerHec = best.Value.(*InputZscalerHec)
-		return nil
-	case InputTypeInputGrafana:
-		u.InputGrafana = best.Value.(*InputGrafana)
 		return nil
 	case InputTypeInputPrometheus:
 		u.InputPrometheus = best.Value.(*InputPrometheus)

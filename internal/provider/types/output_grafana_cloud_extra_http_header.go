@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type OutputGrafanaCloudExtraHTTPHeader1 struct {
+type OutputGrafanaCloudExtraHTTPHeader struct {
 	Name  types.String `tfsdk:"name"`
 	Value types.String `tfsdk:"value"`
 }
