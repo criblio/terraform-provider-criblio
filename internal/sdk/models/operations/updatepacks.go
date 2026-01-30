@@ -8,7 +8,8 @@ import (
 )
 
 type UpdatePacksRequest struct {
-	// the file to upload
+	// Local .crbl file to upload. Updates the pack in place.
+	//
 	Filename *string `queryParam:"style=form,explode=true,name=filename"`
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`

@@ -16,6 +16,7 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -116,10 +117,7 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"filename": schema.StringAttribute{
 				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `the file to upload, if this option is used, the description and display_name will be ignored and the pack file's metadata will be used. Requires replacement if changed.`,
+				Description: `Local .crbl file path to upload. File is uploaded (PUT) then the pack is installed or updated in place (PATCH); changing filename updates the existing pack rather than replacing it. If set, description and display_name are ignored and the pack file's metadata is used.`,
 			},
 			"force": schema.BoolAttribute{
 				Optional: true,
@@ -336,6 +334,8 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
+	// When creating from file, full source from PUT response (e.g. "file:/opt/.../name.crbl") for PATCH when pack exists.
+	var uploadedFullSource string
 	// If filename is provided, first upload the file via PUT
 	if !data.Filename.IsUnknown() && !data.Filename.IsNull() {
 		filename := data.Filename.ValueString()
@@ -379,19 +379,20 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 			Filename: &baseFilename,
 		}
 
-		storedFilename, putErr := r.uploadPackFile(ctx, uploadReq, fileContent, baseFilename)
+		fullSource, shortName, putErr := r.uploadPackFile(ctx, uploadReq, fileContent, baseFilename)
 		if putErr != nil {
 			resp.Diagnostics.AddError("Failed to upload pack file", putErr.Error())
 			return
 		}
 
-		filenameForPost := storedFilename
+		filenameForPost := shortName
 		if filenameForPost == "" {
 			filenameForPost = baseFilename
 		}
 
 		data.Filename = types.StringValue(filenameForPost)
 		data.Source = types.StringValue(filenameForPost)
+		uploadedFullSource = fullSource
 	}
 
 	request, requestDiags := data.ToOperationsCreatePacksRequest(ctx)
@@ -406,27 +407,84 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		request.Filename = &filename
 	}
 
-	res, err := r.client.Packs.CreatePacks(ctx, *request)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+	// When creating from file, check if pack already exists. If so, upgrade via PATCH instead of POST create.
+	createdFromFile := !data.Filename.IsUnknown() && !data.Filename.IsNull() && data.Filename.ValueString() != ""
+	var packExists bool
+	if createdFromFile {
+		checkReq, checkDiags := data.ToOperationsGetPacksByIDRequest(ctx)
+		resp.Diagnostics.Append(checkDiags...)
+		if !resp.Diagnostics.HasError() {
+			checkRes, checkErr := r.client.Packs.GetPacksByID(ctx, *checkReq)
+			if checkErr == nil && checkRes != nil && checkRes.StatusCode == 200 {
+				packExists = true
+			}
 		}
-		return
 	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
+
+	if packExists {
+		// Pack already exists; try UI-style POST (items array) first, then fall back to PATCH.
+		fullPath := fullSourcePath(uploadedFullSource)
+		if fullPath == "" {
+			fullPath = fullSourcePath(data.Source.ValueString())
+		}
+		version := ""
+		displayName := data.ID.ValueString()
+		body, postErr := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), data.ID.ValueString(), fullPath, version, displayName)
+		if postErr == nil && body != nil {
+			resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePacksByIDResponseBody(ctx, body)...)
+		} else {
+			shortName := shortNameForPatch(uploadedFullSource)
+			if shortName == "" {
+				shortName = shortNameForPatch(data.Source.ValueString())
+			}
+			if shortName == "" {
+				shortName = data.Source.ValueString()
+			}
+			body, patchErr := r.patchPackByIDWithSource(ctx, data.GroupID.ValueString(), data.ID.ValueString(), shortName, nil)
+			if patchErr != nil {
+				if postErr != nil {
+					resp.Diagnostics.AddError("failure to invoke API", postErr.Error())
+				} else {
+					resp.Diagnostics.AddError("failure to invoke API", patchErr.Error())
+				}
+				return
+			}
+			if body != nil {
+				resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePacksByIDResponseBody(ctx, body)...)
+			} else {
+				getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
+				resp.Diagnostics.Append(getDiags...)
+				if !resp.Diagnostics.HasError() {
+					getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
+					if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
+						resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
+					}
+				}
+			}
+		}
+	} else {
+		res, err := r.client.Packs.CreatePacks(ctx, *request)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res != nil && res.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+			}
+			return
+		}
+		if res == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+			return
+		}
+		if res.StatusCode != 200 {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+			return
+		}
+		if !(res.Object != nil) {
+			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+			return
+		}
+		resp.Diagnostics.Append(data.RefreshFromOperationsCreatePacksResponseBody(ctx, res.Object)...)
 	}
-	if res.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	if !(res.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreatePacksResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -551,33 +609,165 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
+	// If filename is a local file path, upload it and set source to the stored filename; pack is updated in place (PATCH).
+	var uploadedSource string // non-empty when we just uploaded a file; use for PATCH source param
+	if !data.Filename.IsUnknown() && !data.Filename.IsNull() {
+		filename := data.Filename.ValueString()
+		var filePath string
+		if filepath.IsAbs(filename) {
+			filePath = filename
+		} else {
+			var err error
+			filePath, err = filepath.Abs(filename)
+			if err != nil {
+				filePath = filename
+			} else {
+				filePath = filepath.Clean(filePath)
+			}
+		}
+		if _, err := os.Stat(filePath); err == nil {
+			fileContent, err := os.ReadFile(filePath)
+			if err != nil {
+				resp.Diagnostics.AddError("Failed to read pack file", fmt.Sprintf("Unable to read file %s: %v", filePath, err))
+				return
+			}
+			baseFilename := filepath.Base(filePath)
+			uploadReq := operations.UpdatePacksRequest{
+				GroupID:  data.GroupID.ValueString(),
+				Filename: &baseFilename,
+			}
+			fullSource, shortName, putErr := r.uploadPackFile(ctx, uploadReq, fileContent, baseFilename)
+			if putErr != nil {
+				resp.Diagnostics.AddError("Failed to upload pack file", putErr.Error())
+				return
+			}
+			// Use full source (e.g. "file:/opt/.../name.crbl") for PATCH; store short name in state
+			uploadedSource = fullSource
+			if uploadedSource == "" {
+				uploadedSource = shortName
+			}
+			if uploadedSource == "" {
+				uploadedSource = baseFilename
+			}
+			stateSource := shortName
+			if stateSource == "" {
+				stateSource = baseFilename
+			}
+			data.Filename = types.StringValue(stateSource)
+			data.Source = types.StringValue(stateSource)
+		}
+		// If filename was set but path didn't exist, data.Source may still be from state; ensure it's set for PATCH
+		if data.Source.IsNull() || data.Source.IsUnknown() {
+			resp.Diagnostics.AddError(
+				"Pack file not found for update",
+				fmt.Sprintf("filename is set but file does not exist: %s. Use an absolute path or path.module.", data.Filename.ValueString()),
+			)
+			return
+		}
+	}
+
 	request, requestDiags := data.ToOperationsUpdatePacksByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Packs.UpdatePacksByID(ctx, *request)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+	// PATCH requires source; set from uploaded value first, then data.Source/data.Filename
+	if uploadedSource != "" {
+		request.Source = &uploadedSource
+	} else if request.Source == nil || *request.Source == "" {
+		if !data.Source.IsNull() && !data.Source.IsUnknown() && data.Source.ValueString() != "" {
+			s := data.Source.ValueString()
+			request.Source = &s
+		}
+		if (request.Source == nil || *request.Source == "") && !data.Filename.IsNull() && !data.Filename.IsUnknown() && data.Filename.ValueString() != "" {
+			s := data.Filename.ValueString()
+			request.Source = &s
+		}
+	}
+	if uploadedSource == "" && (request.Source == nil || *request.Source == "") {
+		resp.Diagnostics.AddError(
+			"Missing source for pack update",
+			"The API requires the source parameter. Set filename to a local .crbl file path so the provider can upload it and set source, or ensure the pack resource has source set (e.g. from a previous apply).",
+		)
+		return
+	}
+	// Why UI succeeds: UI sends POST with body { items: [{ id, source (full path), version, warnings }], count: 1 }
+	// after PUT upload. That "install/upgrade" path updates the pack in place (no "Pack Id conflicts", no "up to date").
+	// PATCH with short filename works but returns 500 "Version X is up to date" when version unchanged; we treat that as success.
+	var patchRes *operations.UpdatePacksByIDResponse
+	if uploadedSource != "" {
+		shortName := shortNameForPatch(uploadedSource)
+		if shortName == "" {
+			shortName = uploadedSource
+		}
+		fullPath := fullSourcePath(uploadedSource)
+		version := ""
+		if len(data.Items) > 0 && !data.Items[0].Version.IsNull() && !data.Items[0].Version.IsUnknown() {
+			version = data.Items[0].Version.ValueString()
+		}
+		displayName := data.ID.ValueString()
+		if len(data.Items) > 0 && !data.Items[0].DisplayName.IsNull() && !data.Items[0].DisplayName.IsUnknown() {
+			displayName = data.Items[0].DisplayName.ValueString()
+		}
+		// Prefer UI-style POST (items array) so we avoid PATCH "up to date" 500.
+		body, postErr := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), data.ID.ValueString(), fullPath, version, displayName)
+		if postErr == nil && body != nil {
+			patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: body}
+		} else {
+			// Fallback: PATCH with short filename (may return "up to date" 500, which we treat as success).
+			body, patchErr := r.patchPackByIDWithSource(ctx, data.GroupID.ValueString(), data.ID.ValueString(), shortName, request.Disabled)
+			if patchErr != nil {
+				if postErr != nil {
+					resp.Diagnostics.AddError("failure to invoke API", postErr.Error())
+				} else {
+					resp.Diagnostics.AddError("failure to invoke API", patchErr.Error())
+				}
+				return
+			}
+			if body != nil {
+				patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: body}
+			} else {
+				getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
+				resp.Diagnostics.Append(getDiags...)
+				if !resp.Diagnostics.HasError() {
+				getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
+				if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
+					patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: &operations.UpdatePacksByIDResponseBody{Items: getRes.Object.Items}}
+				}
+				}
+			}
+		}
+	} else {
+		sourceVal := *request.Source
+		request.Source = &sourceVal
+		var err error
+		patchRes, err = r.client.Packs.UpdatePacksByID(ctx, *request)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if patchRes != nil && patchRes.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(patchRes.RawResponse))
+			}
+			return
+		}
+	}
+	if patchRes == nil {
+		resp.Diagnostics.AddError("unexpected response from API", "no response")
+		return
+	}
+	if patchRes.StatusCode != 200 {
+		if patchRes.RawResponse != nil {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", patchRes.StatusCode), debugResponse(patchRes.RawResponse))
+		} else {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("status code %v", patchRes.StatusCode))
 		}
 		return
 	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+	if patchRes.Object == nil {
+		resp.Diagnostics.AddError("unexpected response from API", "Got an unexpected response body")
 		return
 	}
-	if res.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	if !(res.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePacksByIDResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePacksByIDResponseBody(ctx, patchRes.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -667,6 +857,16 @@ func (r *PackResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		return
 	}
 	if res.StatusCode != 200 {
+		if res.StatusCode == 500 && res.RawResponse != nil && res.RawResponse.Body != nil {
+			body, _ := io.ReadAll(res.RawResponse.Body)
+			if bytes.Contains(body, []byte("referenced by")) || bytes.Contains(body, []byte("Cannot uninstall")) {
+				resp.Diagnostics.AddError(
+					"Cannot delete pack: it is in use",
+					"The pack is referenced by a route or other resource. Remove or update the route (e.g. criblio_routes) so it no longer references this pack, then try again.",
+				)
+				return
+			}
+		}
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -674,9 +874,8 @@ func (r *PackResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 }
 
 // uploadPackFile uploads a pack file via PUT request with file content in the body.
-// Returns the stored filename from the server response (which may have a random suffix).
-// Uses a successful GET request to extract the base URL and auth headers.
-func (r *PackResource) uploadPackFile(ctx context.Context, uploadReq operations.UpdatePacksRequest, fileContent []byte, filename string) (string, error) {
+// Returns the stored source from the server response (full path e.g. "file:/opt/.../name.crbl" for PATCH; short name for state).
+func (r *PackResource) uploadPackFile(ctx context.Context, uploadReq operations.UpdatePacksRequest, fileContent []byte, filename string) (storedSource string, storedShortName string, err error) {
 	listReq := operations.GetPacksByGroupRequest{
 		GroupID: uploadReq.GroupID,
 	}
@@ -729,7 +928,7 @@ func (r *PackResource) uploadPackFile(ctx context.Context, uploadReq operations.
 	}
 
 	if baseURL == "" {
-		return "", fmt.Errorf("failed to extract base URL from API requests. Please check your provider configuration")
+		return "", "", fmt.Errorf("failed to extract base URL from API requests. Please check your provider configuration")
 	}
 
 	if path == "" {
@@ -743,7 +942,7 @@ func (r *PackResource) uploadPackFile(ctx context.Context, uploadReq operations.
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", processedURL, bytes.NewReader(fileContent))
 	if err != nil {
-		return "", fmt.Errorf("failed to create PUT request: %v", err)
+		return "", "", fmt.Errorf("failed to create PUT request: %v", err)
 	}
 
 	if authHeader != "" {
@@ -757,36 +956,274 @@ func (r *PackResource) uploadPackFile(ctx context.Context, uploadReq operations.
 	client := &http.Client{}
 	httpRes, err := client.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("failed to execute PUT request: %v", err)
+		return "", "", fmt.Errorf("failed to execute PUT request: %v", err)
 	}
 	defer httpRes.Body.Close()
 
+	body, err := io.ReadAll(httpRes.Body)
+	if err != nil {
+		return "", "", fmt.Errorf("failed to read upload response: %v", err)
+	}
 	if httpRes.StatusCode != 200 {
-		body, _ := io.ReadAll(httpRes.Body)
-		return "", fmt.Errorf("pack file upload failed with status %d: %s", httpRes.StatusCode, string(body))
+		return "", "", fmt.Errorf("pack file upload failed with status %d: %s", httpRes.StatusCode, string(body))
 	}
 
-	var storedFilename string
-	body, err := io.ReadAll(httpRes.Body)
-	if err == nil && len(body) > 0 {
+	var fullSource string
+	var shortName string
+	if len(body) > 0 {
 		var responseData struct {
-			Source string `json:"source"`
+			Source string           `json:"source"`
+			Items  []map[string]any `json:"items"`
 		}
-		if err := json.Unmarshal(body, &responseData); err == nil && responseData.Source != "" {
-			if strings.HasPrefix(responseData.Source, "file:") {
-				p := strings.TrimPrefix(responseData.Source, "file:")
-				storedFilename = filepath.Base(p)
-			} else {
-				storedFilename = responseData.Source
+		if err := json.Unmarshal(body, &responseData); err == nil {
+			source := responseData.Source
+			if source == "" && len(responseData.Items) > 0 {
+				if s, ok := responseData.Items[0]["source"].(string); ok {
+					source = s
+				}
+			}
+			if source != "" {
+				fullSource = source
+				if strings.HasPrefix(source, "file:") {
+					shortName = filepath.Base(strings.TrimPrefix(source, "file:"))
+				} else {
+					shortName = source
+				}
 			}
 		}
 	}
-
-	if storedFilename == "" {
-		storedFilename = filename
+	if fullSource == "" {
+		fullSource = "file:" + filename
+		shortName = filename
+	}
+	if shortName == "" {
+		shortName = filename
 	}
 
-	return storedFilename, nil
+	return fullSource, shortName, nil
+}
+
+// fullSourcePath returns the full "file:..." path for state; used when constructing paths.
+func fullSourcePath(source string) string {
+	if source == "" {
+		return source
+	}
+	if strings.HasPrefix(source, "file:") {
+		return source
+	}
+	return "file:/opt/cribl_config/state/packs/" + source
+}
+
+// shortNameForPatch returns the source value for PATCH: API expects only the filename (e.g. "billing_pipeline.W3avtlR.crbl");
+// it prepends its base path, so sending the full "file:..." path causes a doubled path and ENOENT.
+func shortNameForPatch(source string) string {
+	if source == "" {
+		return source
+	}
+	if strings.HasPrefix(source, "file:") {
+		return filepath.Base(strings.TrimPrefix(source, "file:"))
+	}
+	return filepath.Base(source)
+}
+
+// postPacksInstallWithItems sends POST to /api/v1/m/{groupID}/packs with UI-style body:
+// { "items": [{ "id", "source" (full path), "version", "warnings", "displayName" }], "count": 1 }.
+// This matches the Cribl UI "Import Pack" with Overwrite and avoids PATCH "Version X is up to date" 500.
+func (r *PackResource) postPacksInstallWithItems(ctx context.Context, groupID, packID, sourceFullPath, version, displayName string) (*operations.UpdatePacksByIDResponseBody, error) {
+	listReq := operations.GetPacksByGroupRequest{GroupID: groupID}
+	listRes, _ := r.client.Packs.GetPacksByGroup(ctx, listReq)
+	var baseURL string
+	var authHeader string
+	if listRes != nil && listRes.RawResponse != nil && listRes.RawResponse.Request != nil {
+		originalReq := listRes.RawResponse.Request
+		if originalReq.URL != nil && originalReq.URL.Host != "" {
+			scheme := originalReq.URL.Scheme
+			if scheme == "" {
+				scheme = "https"
+			}
+			baseURL = fmt.Sprintf("%s://%s", scheme, originalReq.URL.Host)
+		}
+		if baseURL == "" && originalReq.Host != "" {
+			baseURL = fmt.Sprintf("https://%s", originalReq.Host)
+		}
+		if authVal := originalReq.Header.Get("Authorization"); authVal != "" {
+			authHeader = authVal
+		}
+	}
+	if baseURL == "" {
+		getReq := operations.GetPacksByIDRequest{GroupID: groupID, ID: "_dummy_", Disabled: nil}
+		getRes, _ := r.client.Packs.GetPacksByID(ctx, getReq)
+		if getRes != nil && getRes.RawResponse != nil && getRes.RawResponse.Request != nil {
+			orig := getRes.RawResponse.Request
+			if orig.URL != nil && orig.URL.Host != "" {
+				scheme := orig.URL.Scheme
+				if scheme == "" {
+					scheme = "https"
+				}
+				baseURL = fmt.Sprintf("%s://%s", scheme, orig.URL.Host)
+			}
+			if authHeader == "" {
+				authHeader = orig.Header.Get("Authorization")
+			}
+		}
+	}
+	if baseURL == "" {
+		return nil, fmt.Errorf("failed to extract base URL for POST packs")
+	}
+	path := fmt.Sprintf("/api/v1/m/%s/packs", groupID)
+	rawURL := baseURL + path
+	if displayName == "" {
+		displayName = packID
+	}
+	body := struct {
+		Items []struct {
+			ID          string   `json:"id"`
+			Source      string   `json:"source"`
+			Version     string   `json:"version,omitempty"`
+			Warnings    []string `json:"warnings,omitempty"`
+			DisplayName string   `json:"displayName,omitempty"`
+		} `json:"items"`
+		Count int `json:"count"`
+	}{
+		Items: []struct {
+			ID          string   `json:"id"`
+			Source      string   `json:"source"`
+			Version     string   `json:"version,omitempty"`
+			Warnings    []string `json:"warnings,omitempty"`
+			DisplayName string   `json:"displayName,omitempty"`
+		}{
+			{ID: packID, Source: sourceFullPath, Version: version, Warnings: []string{}, DisplayName: displayName},
+		},
+		Count: 1,
+	}
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal POST body: %v", err)
+	}
+	req, err := http.NewRequestWithContext(ctx, "POST", rawURL, bytes.NewReader(bodyBytes))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create POST request: %v", err)
+	}
+	if authHeader != "" {
+		req.Header.Set("Authorization", authHeader)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("User-Agent", "terraform-provider-criblio")
+	client := &http.Client{}
+	httpRes, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("POST packs request failed: %v", err)
+	}
+	defer httpRes.Body.Close()
+	resBody, err := io.ReadAll(httpRes.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read POST response: %v", err)
+	}
+	if httpRes.StatusCode != 200 {
+		return nil, fmt.Errorf("pack POST failed with status %d: %s", httpRes.StatusCode, string(resBody))
+	}
+	var out struct {
+		Items []shared.PackInstallInfo `json:"items"`
+	}
+	if len(resBody) > 0 {
+		if err := json.Unmarshal(resBody, &out); err != nil {
+			return nil, fmt.Errorf("failed to parse POST response: %v", err)
+		}
+	}
+	return &operations.UpdatePacksByIDResponseBody{Items: out.Items}, nil
+}
+
+// patchPackByIDWithSource sends PATCH to /api/v1/m/{groupID}/packs/{id} with source (and optional disabled) in the query string only.
+// Used after PUT upload to upgrade the existing pack in place (avoids POST "Pack Id conflicts").
+func (r *PackResource) patchPackByIDWithSource(ctx context.Context, groupID, packID, source string, disabled *bool) (*operations.UpdatePacksByIDResponseBody, error) {
+	listReq := operations.GetPacksByGroupRequest{GroupID: groupID}
+	listRes, _ := r.client.Packs.GetPacksByGroup(ctx, listReq)
+	var baseURL string
+	var authHeader string
+	if listRes != nil && listRes.RawResponse != nil && listRes.RawResponse.Request != nil {
+		originalReq := listRes.RawResponse.Request
+		if originalReq.URL != nil && originalReq.URL.Host != "" {
+			scheme := originalReq.URL.Scheme
+			if scheme == "" {
+				scheme = "https"
+			}
+			baseURL = fmt.Sprintf("%s://%s", scheme, originalReq.URL.Host)
+		}
+		if baseURL == "" && originalReq.Host != "" {
+			baseURL = fmt.Sprintf("https://%s", originalReq.Host)
+		}
+		if authVal := originalReq.Header.Get("Authorization"); authVal != "" {
+			authHeader = authVal
+		}
+	}
+	if baseURL == "" {
+		getReq := operations.GetPacksByIDRequest{GroupID: groupID, ID: "_dummy_", Disabled: nil}
+		getRes, _ := r.client.Packs.GetPacksByID(ctx, getReq)
+		if getRes != nil && getRes.RawResponse != nil && getRes.RawResponse.Request != nil {
+			orig := getRes.RawResponse.Request
+			if orig.URL != nil && orig.URL.Host != "" {
+				scheme := orig.URL.Scheme
+				if scheme == "" {
+					scheme = "https"
+				}
+				baseURL = fmt.Sprintf("%s://%s", scheme, orig.URL.Host)
+			}
+			if authHeader == "" {
+				authHeader = orig.Header.Get("Authorization")
+			}
+		}
+	}
+	if baseURL == "" {
+		return nil, fmt.Errorf("failed to extract base URL for PATCH")
+	}
+	path := fmt.Sprintf("/api/v1/m/%s/packs/%s", groupID, packID)
+	rawURL := baseURL + path
+	form := url.Values{}
+	form.Set("source", source)
+	if disabled != nil {
+		form.Set("disabled", fmt.Sprintf("%t", *disabled))
+	}
+	// Send source in both query string and form body; API may require body for PATCH.
+	queryURL := rawURL + "?" + form.Encode()
+	bodyBytes := []byte(form.Encode())
+	req, err := http.NewRequestWithContext(ctx, "PATCH", queryURL, bytes.NewReader(bodyBytes))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create PATCH request: %v", err)
+	}
+	if authHeader != "" {
+		req.Header.Set("Authorization", authHeader)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Length", fmt.Sprintf("%d", len(bodyBytes)))
+	req.Header.Set("User-Agent", "terraform-provider-criblio")
+	client := &http.Client{}
+	httpRes, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("PATCH request failed: %v", err)
+	}
+	defer httpRes.Body.Close()
+	resBody, err := io.ReadAll(httpRes.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read PATCH response: %v", err)
+	}
+	if httpRes.StatusCode != 200 {
+		// API returns 500 "Version X is up to date" when pack is already at desired state; treat as success.
+		if httpRes.StatusCode == 500 && bytes.Contains(resBody, []byte("up to date")) {
+			return nil, nil // caller will refresh state via GET
+		}
+		return nil, fmt.Errorf("pack PATCH failed with status %d: %s", httpRes.StatusCode, string(resBody))
+	}
+	var out struct {
+		Items []shared.PackInstallInfo `json:"items"`
+	}
+	if len(resBody) > 0 {
+		if err := json.Unmarshal(resBody, &out); err != nil {
+			return nil, fmt.Errorf("failed to parse PATCH response: %v", err)
+		}
+	}
+	return &operations.UpdatePacksByIDResponseBody{Items: out.Items}, nil
 }
 
 func (r *PackResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

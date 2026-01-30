@@ -32,7 +32,8 @@ func newPacks(rootSDK *CriblIo, sdkConfig config.SDKConfiguration, hooks *hooks.
 }
 
 // CreatePacks - Install Pack
-// Install Pack
+// Install Pack. When filename (local .crbl path) is used, file is uploaded then the pack
+// is installed or updated in place; existing pack with same id is upgraded, not replaced.
 func (s *Packs) CreatePacks(ctx context.Context, request operations.CreatePacksRequest, opts ...operations.Option) (*operations.CreatePacksResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -493,7 +494,7 @@ func (s *Packs) GetPacksByGroup(ctx context.Context, request operations.GetPacks
 }
 
 // UpdatePacks - Upload Pack
-// Upload Pack
+// Upload Pack. Uploads a .crbl file; pack is updated in place, not replaced.
 func (s *Packs) UpdatePacks(ctx context.Context, request operations.UpdatePacksRequest, opts ...operations.Option) (*operations.UpdatePacksResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

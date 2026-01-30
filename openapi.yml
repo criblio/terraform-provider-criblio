@@ -26,6 +26,15 @@ components:
   schemas:
     Pack:
       x-speakeasy-entity: Pack
+      description: |
+        Pack resource. When filename is supplied (local .crbl file path), the file is uploaded
+        and the pack is installed or upgraded in place. Changing filename updates the existing
+        pack (PATCH) rather than replacing it.
+
+        **Using packs in routes:** When a pack is referenced in a route (e.g. `pipeline = "pack:my_pack_id"`),
+        use a filename that includes the pack version (e.g. `billing_pipeline_1.0.0.crbl`). When you release
+        a new version, update the filename to match (e.g. `billing_pipeline_1.1.0.crbl`) so Terraform detects
+        the change and applies the pack update. This ensures route references always pick up the intended pack version.
       type: object
       properties:
         displayName:
@@ -78551,7 +78560,10 @@ paths:
           required: false
           schema:
             type: string
-          description: the file to upload, if this option is used, the description and display_name will be ignored and the pack file's metadata will be used
+          description: |
+            Local .crbl file path to upload. When used, file is uploaded (PUT) then the pack is
+            installed or, if it already exists, updated in place (no replace).
+            Description and display_name are ignored; pack file metadata is used.
           example: "observability-pack-1.2.3.crbl"
         - name: disabled
           in: query
@@ -78563,7 +78575,9 @@ paths:
       tags:
         - packs
       summary: Install Pack
-      description: Install Pack
+      description: |
+        Install Pack. When filename (local .crbl path) is used, file is uploaded then the pack
+        is installed or updated in place; existing pack with same id is upgraded, not replaced.
       deprecated: false
       responses:
         "200":
@@ -78653,7 +78667,8 @@ paths:
       tags:
         - packs
       summary: Upload Pack
-      description: Upload Pack
+      description: |
+        Upload Pack. Uploads a .crbl file; pack is updated in place, not replaced.
       deprecated: false
       responses:
         "200":
@@ -78686,7 +78701,8 @@ paths:
           required: false
           schema:
             type: string
-          description: the file to upload
+          description: |
+            Local .crbl file to upload. Updates the pack in place.
           example: "./myLocalFile.json"
         - name: groupId
           in: path

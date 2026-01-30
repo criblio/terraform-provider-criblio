@@ -16,3 +16,4 @@ tests/e2e/import.tf
 *.tfvars
 # SBOM files (generated automatically)
 sbom-*.json 
+.gocache/

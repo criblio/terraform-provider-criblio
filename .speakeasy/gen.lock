@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 96b55e4fdfd6c5348efd40cb5c072b14
+  docChecksum: 77f1b137f35d95d3d657e7eb15fb09aa
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.101
-  configChecksum: 2b38a4fd998c00251f6ee9d761b15d65
+  releaseVersion: 1.20.103
+  configChecksum: b91932a6be78d51d4f19ac3ad24fdbfb
   published: true
 features:
   terraform:
@@ -361,7 +361,6 @@ generatedFiles:
   - internal/provider/parserlibentry_data_source_sdk.go
   - internal/provider/parserlibentry_resource.go
   - internal/provider/parserlibentry_resource_sdk.go
-  - internal/provider/pipeline_data_source.go
   - internal/provider/project_data_source.go
   - internal/provider/project_data_source_sdk.go
   - internal/provider/project_resource.go
