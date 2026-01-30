@@ -67,7 +67,7 @@ resource "criblio_pack" "my_pack" {
 - `disabled` (Boolean)
 - `display_name` (String) Requires replacement if changed.
 - `exports` (List of String) Requires replacement if changed.
-- `filename` (String) the file to upload, if this option is used, the description and display_name will be ignored and the pack file's metadata will be used. Requires replacement if changed.
+- `filename` (String) Local .crbl file path to upload. File is uploaded (PUT) then the pack is installed or updated in place (PATCH); changing filename updates the existing pack rather than replacing it. If set, description and display_name are ignored and the pack file's metadata is used.
 - `force` (Boolean) Requires replacement if changed.
 - `inputs` (Number) Requires replacement if changed.
 - `is_disabled` (Boolean) Requires replacement if changed.

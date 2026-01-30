@@ -10,7 +10,10 @@ import (
 type CreatePacksRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-	// the file to upload, if this option is used, the description and display_name will be ignored and the pack file's metadata will be used
+	// Local .crbl file path to upload. When used, file is uploaded (PUT) then the pack is
+	// installed or, if it already exists, updated in place (no replace).
+	// Description and display_name are ignored; pack file metadata is used.
+	//
 	Filename *string `queryParam:"style=form,explode=true,name=filename"`
 	Disabled *bool   `queryParam:"style=form,explode=true,name=disabled"`
 	// PackRequestBody object
