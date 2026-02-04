@@ -3,7 +3,7 @@
 allEnvs=(
 	'criblio_regex.my_regex/{"group_id": "default", "id": "test_regex_2"}'
 	'criblio_database_connection.my_databaseconnection/{"group_id": "default", "id": "my_databaseconnection"}'
-	'criblio_hmac_function.my_hmacfunction/{"group_id": "default", "id": "my_hmacfunction"}'
+	'criblio_hmac_function.my_hmacfunction/{"group_id": "default", "id": "my_hmacfunction_test"}'
 	'criblio_parquet_schema.my_parquet_schema/{"group_id": "default", "id": "my_parquet_schema"}'
 	'criblio_schema.my_schema/{"group_id": "default", "id": "my_schema"}'
 	'criblio_global_var.my_globalvar/{"group_id": "default", "id": "sample_globalvar"}'
