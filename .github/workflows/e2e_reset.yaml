@@ -1,4 +1,4 @@
-name: Test PR commit
+name: Reset E2E Test Org
 on:
   workflow_dispatch:
 
