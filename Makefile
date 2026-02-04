@@ -18,6 +18,12 @@ test-cleanup:
 unit-test: 
 	go test -v ./internal/sdk/internal/hooks
 
+unit-test-import-cli:
+	go test -v ./tools/import-cli/...
+
+build-import-cli:
+	go build -o goatify ./tools/import-cli
+
 test-speakeasy: 
 	speakeasy test && speakeasy lint openapi --non-interactive -s openapi.yml
 
