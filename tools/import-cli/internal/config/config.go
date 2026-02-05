@@ -8,9 +8,25 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"gopkg.in/ini.v1"
 )
+
+// Config holds Cribl config loaded from flags, env, and credentials file.
+type Config struct {
+	v *viper.Viper
+}
+
+// NewConfig returns a Config that uses the given Viper for storage.
+func NewConfig(v *viper.Viper) *Config {
+	return &Config{v: v}
+}
+
+// Viper returns the underlying Viper (e.g. for client.NewFromViper).
+func (c *Config) Viper() *viper.Viper {
+	return c.v
+}
 
 // Key names used in Viper (and credentials file profile section).
 const (
@@ -48,9 +64,9 @@ func DefaultCredentialsPath() (string, error) {
 	return filepath.Join(home, ".cribl", "credentials"), nil
 }
 
-// LoadCredentialsFile reads ~/.cribl/credentials (or legacy ~/.cribl) and sets Viper keys
+// LoadCredentialsFile reads ~/.cribl/credentials (or legacy ~/.cribl) and sets keys
 // for the profile given by CRIBL_PROFILE (default "default"). File format is INI.
-func LoadCredentialsFile(v *viper.Viper) error {
+func (c *Config) LoadCredentialsFile() error {
 	path, err := DefaultCredentialsPath()
 	if err != nil {
 		return err
@@ -66,7 +82,7 @@ func LoadCredentialsFile(v *viper.Viper) error {
 	if err != nil {
 		return fmt.Errorf("failed to read credentials file %s: %w", path, err)
 	}
-	cfg, err := ini.Load(data)
+	iniCfg, err := ini.Load(data)
 	if err != nil {
 		return fmt.Errorf("failed to parse credentials file %s: %w", path, err)
 	}
@@ -74,18 +90,18 @@ func LoadCredentialsFile(v *viper.Viper) error {
 	if profile == "" {
 		profile = "default"
 	}
-	sec, err := cfg.GetSection(profile)
+	sec, err := iniCfg.GetSection(profile)
 	if err != nil {
 		return nil
 	}
-	setFromIniIfUnset(v, sec, "client_id", KeyClientID)
-	setFromIniIfUnset(v, sec, "client_secret", KeyClientSecret)
-	setFromIniIfUnset(v, sec, "organization_id", KeyOrganizationID)
-	setFromIniIfUnset(v, sec, "workspace", KeyWorkspaceID)
-	setFromIniIfUnset(v, sec, "cloud_domain", KeyCloudDomain)
-	setFromIniIfUnset(v, sec, "onprem_server_url", KeyOnpremServerURL)
-	setFromIniIfUnset(v, sec, "onprem_username", KeyOnpremUsername)
-	setFromIniIfUnset(v, sec, "onprem_password", KeyOnpremPassword)
+	setFromIniIfUnset(c.v, sec, "client_id", KeyClientID)
+	setFromIniIfUnset(c.v, sec, "client_secret", KeyClientSecret)
+	setFromIniIfUnset(c.v, sec, "organization_id", KeyOrganizationID)
+	setFromIniIfUnset(c.v, sec, "workspace", KeyWorkspaceID)
+	setFromIniIfUnset(c.v, sec, "cloud_domain", KeyCloudDomain)
+	setFromIniIfUnset(c.v, sec, "onprem_server_url", KeyOnpremServerURL)
+	setFromIniIfUnset(c.v, sec, "onprem_username", KeyOnpremUsername)
+	setFromIniIfUnset(c.v, sec, "onprem_password", KeyOnpremPassword)
 	return nil
 }
 
@@ -100,36 +116,41 @@ func setFromIniIfUnset(v *viper.Viper, sec *ini.Section, iniKey, viperKey string
 	v.Set(viperKey, strings.TrimSpace(k.String()))
 }
 
-// BindEnv binds all supported env vars to Viper keys.
-func BindEnv(v *viper.Viper) {
-	_ = v.BindEnv(KeyOnpremServerURL, EnvOnpremServerURL)
-	_ = v.BindEnv(KeyBearerToken, EnvBearerToken)
-	_ = v.BindEnv(KeyClientID, EnvClientID)
-	_ = v.BindEnv(KeyClientSecret, EnvClientSecret)
-	_ = v.BindEnv(KeyOrganizationID, EnvOrganizationID)
-	_ = v.BindEnv(KeyWorkspaceID, EnvWorkspaceID)
-	_ = v.BindEnv(KeyCloudDomain, EnvCloudDomain)
-	_ = v.BindEnv(KeyOnpremUsername, EnvOnpremUsername)
-	_ = v.BindEnv(KeyOnpremPassword, EnvOnpremPassword)
+// BindEnv binds all supported env vars to the config's Viper keys.
+func (c *Config) BindEnv() {
+	_ = c.v.BindEnv(KeyOnpremServerURL, EnvOnpremServerURL)
+	_ = c.v.BindEnv(KeyBearerToken, EnvBearerToken)
+	_ = c.v.BindEnv(KeyClientID, EnvClientID)
+	_ = c.v.BindEnv(KeyClientSecret, EnvClientSecret)
+	_ = c.v.BindEnv(KeyOrganizationID, EnvOrganizationID)
+	_ = c.v.BindEnv(KeyWorkspaceID, EnvWorkspaceID)
+	_ = c.v.BindEnv(KeyCloudDomain, EnvCloudDomain)
+	_ = c.v.BindEnv(KeyOnpremUsername, EnvOnpremUsername)
+	_ = c.v.BindEnv(KeyOnpremPassword, EnvOnpremPassword)
+}
+
+// BindPFlag binds a flag to a config key (for Cobra flag override).
+func (c *Config) BindPFlag(key string, flag *pflag.Flag) error {
+	return c.v.BindPFlag(key, flag)
 }
 
 // Get returns the resolved value for key (flag > env > file).
-func Get(v *viper.Viper, key string) string {
-	return strings.TrimSpace(v.GetString(key))
+func (c *Config) Get(key string) string {
+	return strings.TrimSpace(c.v.GetString(key))
 }
 
 // ValidateRequired returns an actionable error if required configuration is missing.
 // On-prem: need onprem_server_url and (bearer_token or username/password).
 // Cloud: need (bearer_token or client_id/client_secret) and organization_id and workspace_id.
-func ValidateRequired(v *viper.Viper) error {
-	serverURL := Get(v, KeyOnpremServerURL)
-	token := Get(v, KeyBearerToken)
-	clientID := Get(v, KeyClientID)
-	clientSecret := Get(v, KeyClientSecret)
-	orgID := Get(v, KeyOrganizationID)
-	workspaceID := Get(v, KeyWorkspaceID)
-	username := Get(v, KeyOnpremUsername)
-	password := Get(v, KeyOnpremPassword)
+func (c *Config) ValidateRequired() error {
+	serverURL := c.Get(KeyOnpremServerURL)
+	token := c.Get(KeyBearerToken)
+	clientID := c.Get(KeyClientID)
+	clientSecret := c.Get(KeyClientSecret)
+	orgID := c.Get(KeyOrganizationID)
+	workspaceID := c.Get(KeyWorkspaceID)
+	username := c.Get(KeyOnpremUsername)
+	password := c.Get(KeyOnpremPassword)
 
 	if serverURL != "" {
 		if token == "" && (username == "" || password == "") {

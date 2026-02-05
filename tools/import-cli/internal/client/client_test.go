@@ -8,11 +8,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-func TestNewFromViper_setsEnvFromViper(t *testing.T) {
+func TestNewFromConfig_setsEnvFromConfig(t *testing.T) {
 	// Mutates process env; restore in cleanup. Do not run in parallel.
 	v := viper.New()
 	v.Set(config.KeyOrganizationID, "test-org-1")
 	v.Set(config.KeyWorkspaceID, "main")
+	cfg := config.NewConfig(v)
 
 	origOrg := os.Getenv(config.EnvOrganizationID)
 	origWorkspace := os.Getenv(config.EnvWorkspaceID)
@@ -21,9 +22,9 @@ func TestNewFromViper_setsEnvFromViper(t *testing.T) {
 		_ = os.Setenv(config.EnvWorkspaceID, origWorkspace)
 	})
 
-	_, err := NewFromViper(v)
+	_, err := NewFromConfig(cfg)
 	if err != nil {
-		t.Fatalf("NewFromViper: %v", err)
+		t.Fatalf("NewFromConfig: %v", err)
 	}
 	if got := os.Getenv(config.EnvOrganizationID); got != "test-org-1" {
 		t.Errorf("CRIBL_ORGANIZATION_ID: got %q want test-org-1", got)
@@ -33,36 +34,38 @@ func TestNewFromViper_setsEnvFromViper(t *testing.T) {
 	}
 }
 
-func TestNewFromViper_unsetsEnvWhenEmpty(t *testing.T) {
+func TestNewFromConfig_unsetsEnvWhenEmpty(t *testing.T) {
 	t.Setenv(config.EnvOrganizationID, "was-set") // restored automatically after test
 
 	v := viper.New()
 	v.Set(config.KeyOrganizationID, "") // explicit empty
+	cfg := config.NewConfig(v)
 
-	_, err := NewFromViper(v)
+	_, err := NewFromConfig(cfg)
 	if err != nil {
-		t.Fatalf("NewFromViper: %v", err)
+		t.Fatalf("NewFromConfig: %v", err)
 	}
 	if got := os.Getenv(config.EnvOrganizationID); got != "" {
-		t.Errorf("empty Viper value should unset env: got %q", got)
+		t.Errorf("empty config value should unset env: got %q", got)
 	}
 }
 
-func TestNewFromViper_returnsNonNilClient(t *testing.T) {
+func TestNewFromConfig_returnsNonNilClient(t *testing.T) {
 	v := viper.New()
 	v.Set(config.KeyOnpremServerURL, "https://local.cribl")
 	v.Set(config.KeyBearerToken, "token")
+	cfg := config.NewConfig(v)
 
-	client, err := NewFromViper(v)
+	sdkClient, err := NewFromConfig(cfg)
 	if err != nil {
-		t.Fatalf("NewFromViper: %v", err)
+		t.Fatalf("NewFromConfig: %v", err)
 	}
-	if client == nil {
-		t.Error("NewFromViper returned nil client")
+	if sdkClient == nil {
+		t.Error("NewFromConfig returned nil client")
 	}
 }
 
-func TestNewFromViper_onPremEnvSet(t *testing.T) {
+func TestNewFromConfig_onPremEnvSet(t *testing.T) {
 	origURL := os.Getenv(config.EnvOnpremServerURL)
 	origToken := os.Getenv(config.EnvBearerToken)
 	t.Cleanup(func() {
@@ -73,10 +76,11 @@ func TestNewFromViper_onPremEnvSet(t *testing.T) {
 	v := viper.New()
 	v.Set(config.KeyOnpremServerURL, "https://onprem.example.com")
 	v.Set(config.KeyBearerToken, "secret-token")
+	cfg := config.NewConfig(v)
 
-	_, err := NewFromViper(v)
+	_, err := NewFromConfig(cfg)
 	if err != nil {
-		t.Fatalf("NewFromViper: %v", err)
+		t.Fatalf("NewFromConfig: %v", err)
 	}
 	if got := os.Getenv(config.EnvOnpremServerURL); got != "https://onprem.example.com" {
 		t.Errorf("CRIBL_ONPREM_SERVER_URL: got %q", got)

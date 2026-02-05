@@ -8,26 +8,25 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/config"
-	"github.com/spf13/viper"
 )
 
-// NewFromViper builds a Cribl SDK client from the resolved config.
-func NewFromViper(v *viper.Viper) (*sdk.CriblIo, error) {
-	applyViperToEnv(v)
+// NewFromConfig builds a Cribl SDK client from the resolved config.
+func NewFromConfig(cfg *config.Config) (*sdk.CriblIo, error) {
+	applyConfigToEnv(cfg)
 	return sdk.New(sdk.WithClient(&http.Client{})), nil
 }
 
-// applyViperToEnv sets CRIBL_* environment variables from Viper's resolved config.
-func applyViperToEnv(v *viper.Viper) {
-	setEnv(config.EnvOnpremServerURL, config.Get(v, config.KeyOnpremServerURL))
-	setEnv(config.EnvBearerToken, config.Get(v, config.KeyBearerToken))
-	setEnv(config.EnvClientID, config.Get(v, config.KeyClientID))
-	setEnv(config.EnvClientSecret, config.Get(v, config.KeyClientSecret))
-	setEnv(config.EnvOrganizationID, config.Get(v, config.KeyOrganizationID))
-	setEnv(config.EnvWorkspaceID, config.Get(v, config.KeyWorkspaceID))
-	setEnv(config.EnvCloudDomain, config.Get(v, config.KeyCloudDomain))
-	setEnv(config.EnvOnpremUsername, config.Get(v, config.KeyOnpremUsername))
-	setEnv(config.EnvOnpremPassword, config.Get(v, config.KeyOnpremPassword))
+// applyConfigToEnv sets CRIBL_* environment variables from the config.
+func applyConfigToEnv(cfg *config.Config) {
+	setEnv(config.EnvOnpremServerURL, cfg.Get(config.KeyOnpremServerURL))
+	setEnv(config.EnvBearerToken, cfg.Get(config.KeyBearerToken))
+	setEnv(config.EnvClientID, cfg.Get(config.KeyClientID))
+	setEnv(config.EnvClientSecret, cfg.Get(config.KeyClientSecret))
+	setEnv(config.EnvOrganizationID, cfg.Get(config.KeyOrganizationID))
+	setEnv(config.EnvWorkspaceID, cfg.Get(config.KeyWorkspaceID))
+	setEnv(config.EnvCloudDomain, cfg.Get(config.KeyCloudDomain))
+	setEnv(config.EnvOnpremUsername, cfg.Get(config.KeyOnpremUsername))
+	setEnv(config.EnvOnpremPassword, cfg.Get(config.KeyOnpremPassword))
 }
 
 func setEnv(key, value string) {

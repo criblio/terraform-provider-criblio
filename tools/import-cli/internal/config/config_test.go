@@ -24,11 +24,12 @@ func TestDefaultCredentialsPath(t *testing.T) {
 func TestGet(t *testing.T) {
 	v := viper.New()
 	v.Set(KeyOrganizationID, "  org1  ")
-	if got := Get(v, KeyOrganizationID); got != "org1" {
+	cfg := NewConfig(v)
+	if got := cfg.Get(KeyOrganizationID); got != "org1" {
 		t.Errorf("Get trim space: got %q", got)
 	}
 	v.Set(KeyWorkspaceID, "")
-	if got := Get(v, KeyWorkspaceID); got != "" {
+	if got := cfg.Get(KeyWorkspaceID); got != "" {
 		t.Errorf("Get empty: got %q", got)
 	}
 }
@@ -38,9 +39,9 @@ func TestBindEnv(t *testing.T) {
 	t.Setenv(EnvOrganizationID, val)
 	t.Cleanup(func() { _ = os.Unsetenv(EnvOrganizationID) })
 
-	v := viper.New()
-	BindEnv(v)
-	if got := Get(v, KeyOrganizationID); got != val {
+	cfg := NewConfig(viper.New())
+	cfg.BindEnv()
+	if got := cfg.Get(KeyOrganizationID); got != val {
 		t.Errorf("after BindEnv, Get(KeyOrganizationID): got %q want %q", got, val)
 	}
 }
@@ -48,8 +49,9 @@ func TestBindEnv(t *testing.T) {
 func TestValidateRequired_onPremMissingAuth(t *testing.T) {
 	v := viper.New()
 	v.Set(KeyOnpremServerURL, "https://cribl.local")
-	BindEnv(v)
-	err := ValidateRequired(v)
+	cfg := NewConfig(v)
+	cfg.BindEnv()
+	err := cfg.ValidateRequired()
 	if err == nil {
 		t.Fatal("expected error for on-prem without auth")
 	}
@@ -62,7 +64,8 @@ func TestValidateRequired_onPremWithToken(t *testing.T) {
 	v := viper.New()
 	v.Set(KeyOnpremServerURL, "https://cribl.local")
 	v.Set(KeyBearerToken, "token")
-	err := ValidateRequired(v)
+	cfg := NewConfig(v)
+	err := cfg.ValidateRequired()
 	if err != nil {
 		t.Errorf("on-prem with token should be valid: %v", err)
 	}
@@ -71,7 +74,8 @@ func TestValidateRequired_onPremWithToken(t *testing.T) {
 func TestValidateRequired_cloudTokenMissingOrgWorkspace(t *testing.T) {
 	v := viper.New()
 	v.Set(KeyBearerToken, "token")
-	err := ValidateRequired(v)
+	cfg := NewConfig(v)
+	err := cfg.ValidateRequired()
 	if err == nil {
 		t.Fatal("expected error for cloud token without org/workspace")
 	}
@@ -82,7 +86,8 @@ func TestValidateRequired_cloudTokenWithOrgWorkspace(t *testing.T) {
 	v.Set(KeyBearerToken, "token")
 	v.Set(KeyOrganizationID, "org1")
 	v.Set(KeyWorkspaceID, "main")
-	err := ValidateRequired(v)
+	cfg := NewConfig(v)
+	err := cfg.ValidateRequired()
 	if err != nil {
 		t.Errorf("cloud token with org/workspace should be valid: %v", err)
 	}
@@ -92,7 +97,8 @@ func TestValidateRequired_cloudClientCredsMissingOrgWorkspace(t *testing.T) {
 	v := viper.New()
 	v.Set(KeyClientID, "cid")
 	v.Set(KeyClientSecret, "secret")
-	err := ValidateRequired(v)
+	cfg := NewConfig(v)
+	err := cfg.ValidateRequired()
 	if err == nil {
 		t.Fatal("expected error for client creds without org/workspace")
 	}
@@ -104,15 +110,16 @@ func TestValidateRequired_cloudClientCredsComplete(t *testing.T) {
 	v.Set(KeyClientSecret, "secret")
 	v.Set(KeyOrganizationID, "org1")
 	v.Set(KeyWorkspaceID, "main")
-	err := ValidateRequired(v)
+	cfg := NewConfig(v)
+	err := cfg.ValidateRequired()
 	if err != nil {
 		t.Errorf("cloud client creds with org/workspace should be valid: %v", err)
 	}
 }
 
 func TestValidateRequired_noConfig(t *testing.T) {
-	v := viper.New()
-	err := ValidateRequired(v)
+	cfg := NewConfig(viper.New())
+	err := cfg.ValidateRequired()
 	if err == nil {
 		t.Fatal("expected error when no config set")
 	}
@@ -126,8 +133,8 @@ func TestLoadCredentialsFile_noFile(t *testing.T) {
 	t.Setenv("HOME", dir)
 	t.Cleanup(func() { _ = os.Unsetenv("HOME") })
 
-	v := viper.New()
-	err := LoadCredentialsFile(v)
+	cfg := NewConfig(viper.New())
+	err := cfg.LoadCredentialsFile()
 	if err != nil {
 		t.Errorf("no credentials file should return nil (not error): %v", err)
 	}
@@ -154,18 +161,18 @@ client_secret = test-secret
 	t.Setenv("HOME", dir)
 	t.Cleanup(func() { _ = os.Setenv("HOME", origHome) })
 
-	v := viper.New()
-	err := LoadCredentialsFile(v)
+	cfg := NewConfig(viper.New())
+	err := cfg.LoadCredentialsFile()
 	if err != nil {
 		t.Fatalf("LoadCredentialsFile: %v", err)
 	}
-	if got := Get(v, KeyOrganizationID); got != "test-org" {
+	if got := cfg.Get(KeyOrganizationID); got != "test-org" {
 		t.Errorf("organization_id: got %q want test-org", got)
 	}
-	if got := Get(v, KeyWorkspaceID); got != "test-ws" {
+	if got := cfg.Get(KeyWorkspaceID); got != "test-ws" {
 		t.Errorf("workspace_id: got %q want test-ws", got)
 	}
-	if got := Get(v, KeyClientID); got != "test-cid" {
+	if got := cfg.Get(KeyClientID); got != "test-cid" {
 		t.Errorf("client_id: got %q want test-cid", got)
 	}
 }
@@ -183,19 +190,19 @@ func TestLoadCredentialsFile_fileOnlyFillsUnset(t *testing.T) {
 	t.Setenv("HOME", dir)
 	t.Cleanup(func() { _ = os.Setenv("HOME", origHome) })
 
-	v := viper.New()
-	v.Set(KeyOrganizationID, "from-flag") // flag/value already set
-	BindEnv(v)
-	err := LoadCredentialsFile(v)
+	cfg := NewConfig(viper.New())
+	cfg.v.Set(KeyOrganizationID, "from-flag") // value already set (e.g. from flag)
+	cfg.BindEnv()
+	err := cfg.LoadCredentialsFile()
 	if err != nil {
 		t.Fatal(err)
 	}
 	// Viper precedence: already-set value wins over file. So org should still be from-flag.
-	if got := Get(v, KeyOrganizationID); got != "from-flag" {
+	if got := cfg.Get(KeyOrganizationID); got != "from-flag" {
 		t.Errorf("existing value should not be overwritten by file: got %q", got)
 	}
 	// Workspace was not set, so file should have filled it.
-	if got := Get(v, KeyWorkspaceID); got != "from-file-ws" {
+	if got := cfg.Get(KeyWorkspaceID); got != "from-file-ws" {
 		t.Errorf("workspace from file: got %q want from-file-ws", got)
 	}
 }

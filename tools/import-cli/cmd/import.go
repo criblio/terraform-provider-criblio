@@ -27,7 +27,8 @@ func NewImportCommand() *cobra.Command {
 		cloudDomain string
 	)
 	v := viper.New()
-	config.BindEnv(v)
+	cfg := config.NewConfig(v)
+	cfg.BindEnv()
 
 	imp := &cobra.Command{
 		Use:   "import",
@@ -37,14 +38,14 @@ func NewImportCommand() *cobra.Command {
 			if err := ValidateImportFlags(include, exclude); err != nil {
 				return err
 			}
-			if err := config.LoadCredentialsFile(v); err != nil {
+			if err := cfg.LoadCredentialsFile(); err != nil {
 				return err
 			}
-			if err := config.ValidateRequired(v); err != nil {
+			if err := cfg.ValidateRequired(); err != nil {
 				return err
 			}
 			if verbose {
-				printResolvedConfig(c, v)
+				printResolvedConfig(c, cfg)
 			}
 			return nil
 		},
@@ -60,34 +61,34 @@ func NewImportCommand() *cobra.Command {
 	imp.Flags().StringVar(&orgID, "org-id", "", "Cribl org identifier")
 	imp.Flags().StringVar(&workspaceID, "workspace-id", "", "Workspace identifier")
 	imp.Flags().StringVar(&cloudDomain, "cloud-domain", "", "Cloud domain override")
-	_ = v.BindPFlag(config.KeyOnpremServerURL, imp.Flags().Lookup("server-url"))
-	_ = v.BindPFlag(config.KeyOrganizationID, imp.Flags().Lookup("org-id"))
-	_ = v.BindPFlag(config.KeyWorkspaceID, imp.Flags().Lookup("workspace-id"))
-	_ = v.BindPFlag(config.KeyCloudDomain, imp.Flags().Lookup("cloud-domain"))
+	_ = cfg.BindPFlag(config.KeyOnpremServerURL, imp.Flags().Lookup("server-url"))
+	_ = cfg.BindPFlag(config.KeyOrganizationID, imp.Flags().Lookup("org-id"))
+	_ = cfg.BindPFlag(config.KeyWorkspaceID, imp.Flags().Lookup("workspace-id"))
+	_ = cfg.BindPFlag(config.KeyCloudDomain, imp.Flags().Lookup("cloud-domain"))
 
 	return imp
 }
 
 // printResolvedConfig prints the resolved config (no secrets) for verbose mode.
-func printResolvedConfig(cmd *cobra.Command, v *viper.Viper) {
+func printResolvedConfig(cmd *cobra.Command, cfg *config.Config) {
 	out := cmd.OutOrStderr()
-	serverURL := config.Get(v, config.KeyOnpremServerURL)
+	serverURL := cfg.Get(config.KeyOnpremServerURL)
 	if serverURL != "" {
 		fmt.Fprintf(out, "server_url: %s (on-prem)\n", serverURL)
 	} else {
-		orgID := config.Get(v, config.KeyOrganizationID)
-		workspaceID := config.Get(v, config.KeyWorkspaceID)
-		cloudDomain := config.Get(v, config.KeyCloudDomain)
+		orgID := cfg.Get(config.KeyOrganizationID)
+		workspaceID := cfg.Get(config.KeyWorkspaceID)
+		cloudDomain := cfg.Get(config.KeyCloudDomain)
 		if cloudDomain == "" {
 			cloudDomain = "cribl.cloud"
 		}
 		fmt.Fprintf(out, "organization_id: %s, workspace_id: %s, cloud_domain: %s (cloud)\n", orgID, workspaceID, cloudDomain)
 	}
-	if config.Get(v, config.KeyBearerToken) != "" {
+	if cfg.Get(config.KeyBearerToken) != "" {
 		fmt.Fprintln(out, "auth: bearer token")
-	} else if config.Get(v, config.KeyClientID) != "" {
+	} else if cfg.Get(config.KeyClientID) != "" {
 		fmt.Fprintln(out, "auth: client credentials")
-	} else if config.Get(v, config.KeyOnpremUsername) != "" {
+	} else if cfg.Get(config.KeyOnpremUsername) != "" {
 		fmt.Fprintln(out, "auth: username/password")
 	}
 }
