@@ -85,7 +85,6 @@ func TestValidateImportFlags(t *testing.T) {
 		{"overlap multiple", []string{"a", "b"}, []string{"b", "c"}, true},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			err := cmd.ValidateImportFlags(tt.include, tt.exclude)
