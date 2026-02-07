@@ -1,0 +1,17 @@
+name: Reset E2E Test Org
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: e2e_reset
+  cancel-in-progress: false
+
+jobs:
+  e2e_reset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - name: e2e_reset
+        run: | 
+          ./github/workflows/scripts/e2e_reset.sh
