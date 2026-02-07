@@ -16,7 +16,7 @@ test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
 
 unit-test: 
-	go test -v ./internal/sdk/internal/hooks
+	go test -v ./internal/sdk/credentials ./internal/sdk/internal/hooks
 
 unit-test-import-cli:
 	go test -v ./tools/import-cli/...

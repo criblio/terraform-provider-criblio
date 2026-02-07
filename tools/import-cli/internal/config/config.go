@@ -1,16 +1,14 @@
 // Package config loads Cribl auth and connection settings from flags, environment,
-// and ~/.cribl/credentials. Env var names and credentials file format match the SDK's CriblTerraformHook.
+// and credentials file. Uses internal/sdk/credentials for file/env so SDK and CLI share one implementation.
 package config
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/credentials"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"gopkg.in/ini.v1"
 )
 
 // Config holds Cribl config loaded from flags, env, and credentials file.
@@ -55,65 +53,34 @@ const (
 	EnvOnpremPassword  = "CRIBL_ONPREM_PASSWORD"
 )
 
-// DefaultCredentialsPath returns ~/.cribl/credentials.
-func DefaultCredentialsPath() (string, error) {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return "", fmt.Errorf("failed to get home directory: %w", err)
-	}
-	return filepath.Join(home, ".cribl", "credentials"), nil
-}
-
-// LoadCredentialsFile reads ~/.cribl/credentials (or legacy ~/.cribl) and sets keys
-// for the profile given by CRIBL_PROFILE (default "default"). File format is INI.
+// LoadCredentialsFile merges credentials from internal/sdk/credentials (env + ~/.cribl/credentials)
+// into the config. Only keys not already set (e.g. by flags) are filled.
 func (c *Config) LoadCredentialsFile() error {
-	path, err := DefaultCredentialsPath()
+	creds, err := credentials.GetCredentials()
 	if err != nil {
 		return err
 	}
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		legacy := filepath.Join(filepath.Dir(filepath.Dir(path)), ".cribl")
-		if _, err := os.Stat(legacy); os.IsNotExist(err) {
-			return nil
-		}
-		path = legacy
-	}
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return fmt.Errorf("failed to read credentials file %s: %w", path, err)
-	}
-	iniCfg, err := ini.Load(data)
-	if err != nil {
-		return fmt.Errorf("failed to parse credentials file %s: %w", path, err)
-	}
-	profile := os.Getenv(EnvProfile)
-	if profile == "" {
-		profile = "default"
-	}
-	sec, err := iniCfg.GetSection(profile)
-	if err != nil {
+	if creds == nil {
 		return nil
 	}
-	setFromIniIfUnset(c.v, sec, "client_id", KeyClientID)
-	setFromIniIfUnset(c.v, sec, "client_secret", KeyClientSecret)
-	setFromIniIfUnset(c.v, sec, "organization_id", KeyOrganizationID)
-	setFromIniIfUnset(c.v, sec, "workspace", KeyWorkspaceID)
-	setFromIniIfUnset(c.v, sec, "cloud_domain", KeyCloudDomain)
-	setFromIniIfUnset(c.v, sec, "onprem_server_url", KeyOnpremServerURL)
-	setFromIniIfUnset(c.v, sec, "onprem_username", KeyOnpremUsername)
-	setFromIniIfUnset(c.v, sec, "onprem_password", KeyOnpremPassword)
+	setIfUnset(c.v, KeyClientID, creds.ClientID)
+	setIfUnset(c.v, KeyClientSecret, creds.ClientSecret)
+	setIfUnset(c.v, KeyOrganizationID, creds.OrganizationID)
+	setIfUnset(c.v, KeyWorkspaceID, creds.Workspace)
+	setIfUnset(c.v, KeyCloudDomain, creds.CloudDomain)
+	setIfUnset(c.v, KeyOnpremServerURL, creds.OnpremServerURL)
+	setIfUnset(c.v, KeyOnpremUsername, creds.OnpremUsername)
+	setIfUnset(c.v, KeyOnpremPassword, creds.OnpremPassword)
 	return nil
 }
 
-func setFromIniIfUnset(v *viper.Viper, sec *ini.Section, iniKey, viperKey string) {
-	if v.GetString(viperKey) != "" {
+func setIfUnset(v *viper.Viper, key, value string) {
+	if strings.TrimSpace(v.GetString(key)) != "" {
 		return
 	}
-	k, err := sec.GetKey(iniKey)
-	if err != nil {
-		return
+	if value != "" {
+		v.Set(key, strings.TrimSpace(value))
 	}
-	v.Set(viperKey, strings.TrimSpace(k.String()))
 }
 
 // BindEnv binds all supported env vars to the config's Viper keys.

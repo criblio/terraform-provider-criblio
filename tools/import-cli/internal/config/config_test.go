@@ -8,19 +8,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-func TestDefaultCredentialsPath(t *testing.T) {
-	path, err := DefaultCredentialsPath()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if path == "" {
-		t.Error("expected non-empty path")
-	}
-	if filepath.Base(path) != "credentials" {
-		t.Errorf("expected base credentials, got %q", filepath.Base(path))
-	}
-}
-
 func TestGet(t *testing.T) {
 	v := viper.New()
 	v.Set(KeyOrganizationID, "  org1  ")
