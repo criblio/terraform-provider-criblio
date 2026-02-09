@@ -13,5 +13,11 @@ jobs:
       - uses: actions/checkout@v4.2.2
 
       - name: e2e_reset
+        env:
+          CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
+          CRIBL_WORKSPACE_ID: "tfprovider"
+          CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
+          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
+          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
         run: | 
-          ./github/workflows/scripts/e2e_reset.sh
+          ./.github/workflows/scripts/e2e_reset.sh
