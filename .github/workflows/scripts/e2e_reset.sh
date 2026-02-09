@@ -29,7 +29,7 @@ fi
 
 echo
 
-END_TIME=$(( $(date +%s) + 1800 ))
+END_TIME=$(( $(date +%s) + 2700 ))
 success=false
 while [[ $(date +%s) -lt $END_TIME ]]; do
     #check status in loop until deleted
@@ -60,7 +60,7 @@ fi
 
 echo
 
-END_TIME=$(( $(date +%s) + 1800 ))
+END_TIME=$(( $(date +%s) + 2700 ))
 success=false
 while [[ $(date +%s) -lt $END_TIME ]]; do
     #check status in loop until created
@@ -87,6 +87,6 @@ curl -s -X POST "https://tfprovider2-beautiful-nguyen-y8y4azd.cribl-playground.c
      -d '{"version": "0.0.1", "tags": {"streamtags": []}, "exports": [], "displayName": "HelloPacks", "id": "HelloPacks"}'
 
 if [[ $? -ne 0  ]]; then
-    echo "Workspace create failed!"
+    echo "Required pack create failed!"
     exit 1
 fi
