@@ -8,6 +8,19 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      tools: ${{ steps.filter.outputs.tools }}
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            tools:
+              - 'tools/**'
+
   terraform_fmt_checks:
     runs-on: ubuntu-latest
     steps:
@@ -153,6 +166,21 @@ jobs:
       - name: Run Unit Tests
         run: | 
           make unit-test
+
+  unit_test_import_cli:
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.tools == 'true'
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Run import-cli Unit Tests
+        run: make unit-test-import-cli
 
   speakeasy_test:
     runs-on: ubuntu-latest

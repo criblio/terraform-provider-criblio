@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	credpkg "github.com/criblio/terraform-provider-criblio/internal/sdk/credentials"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/go-retryablehttp"
 )
@@ -43,7 +44,7 @@ func (o *CriblTerraformHook) SDKInit(baseURL string, client HTTPClient) (string,
 
 	// Get credentials from config or environment
 	log.Printf("[DEBUG] Attempting to get credentials")
-	config, err := GetCredentials()
+	config, err := credpkg.GetCredentials()
 	if err != nil {
 		o.baseURL = baseURL
 		log.Printf("[ERROR] Failed to get credentials: %v", err)
@@ -142,7 +143,7 @@ func (o *CriblTerraformHook) BeforeRequest(ctx BeforeRequestContext, req *http.R
 	var config *CriblConfig
 	// Get credentials file config for fallback values
 	// this function respects our ONPREM scheme and returns criblconfig with vars set correctly
-	config, err := GetCredentials()
+	config, err := credpkg.GetCredentials()
 	if err != nil {
 		log.Printf("[ERROR] Failed to get credentials from config: %v", err)
 	}
@@ -543,7 +544,7 @@ func (o *CriblTerraformHook) AfterError(ctx AfterErrorContext, res *http.Respons
 	// If we get an authentication error, try to handle it with our custom auth
 	case http.StatusUnauthorized:
 		// Get credentials from config or environment
-		config, err := GetCredentials()
+		config, err := credpkg.GetCredentials()
 		if err != nil {
 			return res, err
 		}

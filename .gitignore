@@ -7,6 +7,7 @@
 **/.speakeasy/temp/
 **/.speakeasy/logs/
 terraform-provider-criblio
+goatify
 tests/e2e/local-plugins/registry.terraform.io/criblio/criblio/999.99.9/darwin_arm64/terraform-provider-criblio_v999.99.9
 **/.speakeasy/temp/
 **/.speakeasy/logs/
@@ -17,3 +18,4 @@ tests/e2e/import.tf
 # SBOM files (generated automatically)
 sbom-*.json 
 .gocache/
+.cursor/
