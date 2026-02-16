@@ -88,3 +88,25 @@ func TestRootCommand_Execute(t *testing.T) {
 		})
 	}
 }
+
+// TestRootCommand_HelpIncludesCommandDescriptionsAndExamples verifies goatify --help
+// includes command descriptions and example usage (CLI UX stability).
+func TestRootCommand_HelpIncludesCommandDescriptionsAndExamples(t *testing.T) {
+	t.Parallel()
+	root := cmd.NewRootCommand()
+	out := &bytes.Buffer{}
+	root.SetOut(out)
+	root.SetErr(out)
+	root.SetArgs([]string{"--help"})
+	err := root.Execute()
+	require.NoError(t, err)
+	help := out.String()
+
+	// Command descriptions: root Short and subcommand names
+	assert.Contains(t, help, "Export Cribl", "root --help should include command description")
+	assert.Contains(t, help, "import", "root --help should list import command")
+	assert.Contains(t, help, "version", "root --help should list version command")
+
+	// Example usage must render
+	assert.Contains(t, help, "import --dry-run", "root --help should show example usage")
+}

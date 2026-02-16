@@ -4,6 +4,7 @@ package config
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/credentials"
@@ -106,6 +107,22 @@ func (c *Config) Get(key string) string {
 	return strings.TrimSpace(c.v.GetString(key))
 }
 
+// validateOnPremServerURL returns an error if the given string is not a valid
+// on-prem server URL (must be http or https with a non-empty host).
+func validateOnPremServerURL(s string) error {
+	u, err := url.Parse(s)
+	if err != nil {
+		return fmt.Errorf("invalid on-prem server URL %q: %w", s, err)
+	}
+	if u.Scheme != "http" && u.Scheme != "https" {
+		return fmt.Errorf("invalid on-prem server URL %q: scheme must be http or https", s)
+	}
+	if u.Host == "" {
+		return fmt.Errorf("invalid on-prem server URL %q: missing host", s)
+	}
+	return nil
+}
+
 // ValidateRequired returns an actionable error if required configuration is missing.
 // On-prem: need onprem_server_url and (bearer_token or username/password).
 // Cloud: need (bearer_token or client_id/client_secret) and organization_id and workspace_id.
@@ -122,6 +139,9 @@ func (c *Config) ValidateRequired() error {
 	if serverURL != "" {
 		if token == "" && (username == "" || password == "") {
 			return fmt.Errorf("on-prem server URL is set but authentication is missing: set %s or set both %s and %s", EnvBearerToken, EnvOnpremUsername, EnvOnpremPassword)
+		}
+		if err := validateOnPremServerURL(serverURL); err != nil {
+			return err
 		}
 		return nil
 	}

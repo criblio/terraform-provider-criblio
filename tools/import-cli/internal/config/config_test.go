@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/spf13/viper"
@@ -55,6 +56,34 @@ func TestValidateRequired_onPremWithToken(t *testing.T) {
 	err := cfg.ValidateRequired()
 	if err != nil {
 		t.Errorf("on-prem with token should be valid: %v", err)
+	}
+}
+
+func TestValidateRequired_onPremInvalidURL(t *testing.T) {
+	tests := []struct {
+		name    string
+		serverURL string
+		wantErr string
+	}{
+		{"missing scheme", "cribl.local", "scheme must be http or https"},
+		{"empty host", "https://", "missing host"},
+		{"not a URL", "://bad", "invalid on-prem server URL"},
+		{"invalid scheme", "ftp://cribl.local", "scheme must be http or https"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			v := viper.New()
+			v.Set(KeyOnpremServerURL, tt.serverURL)
+			v.Set(KeyBearerToken, "token")
+			cfg := NewConfig(v)
+			err := cfg.ValidateRequired()
+			if err == nil {
+				t.Fatal("expected error for invalid on-prem URL")
+			}
+			if err.Error() == "" || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Errorf("expected error containing %q, got: %v", tt.wantErr, err)
+			}
+		})
 	}
 }
 
@@ -112,6 +141,10 @@ func TestValidateRequired_noConfig(t *testing.T) {
 	}
 	if err.Error() == "" {
 		t.Error("expected non-empty error message")
+	}
+	// Auth failures must surface readable, user-focused errors: tell user what to set.
+	if !strings.Contains(err.Error(), EnvOnpremServerURL) && !strings.Contains(err.Error(), "on-prem") {
+		t.Errorf("expected missing-credentials error to mention on-prem or %s, got: %s", EnvOnpremServerURL, err.Error())
 	}
 }
 
