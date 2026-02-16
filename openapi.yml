@@ -1779,6 +1779,22 @@ components:
                       title: Path extractors
                       items:
                         type: object
+                        properties:
+                          key:
+                            type: string
+                            title: Field name
+                            description: Name of the extracted field
+                            example: "account_id"
+                          expression:
+                            type: string
+                            title: Expression
+                            description: JavaScript expression to compute the value from the path
+                            example: "__input.s3.key.split('/')[1]"
+                          pattern:
+                            type: string
+                            title: Pattern
+                            description: Regex pattern to match paths (alternative to key/expression)
+                            example: ".*.gz"
                         example: {"pattern": ".*.gz"}
                       example: [{"pattern": ".*.gz"}]
                     maxBatchSize:
@@ -1835,6 +1851,22 @@ components:
                       title: Path extractors
                       items:
                         type: object
+                        properties:
+                          key:
+                            type: string
+                            title: Field name
+                            description: Name of the extracted field
+                            example: "account_id"
+                          expression:
+                            type: string
+                            title: Expression
+                            description: JavaScript expression to compute the value from the path
+                            example: "__input.azureBlob.key.split('/')[1]"
+                          pattern:
+                            type: string
+                            title: Pattern
+                            description: Regex pattern to match paths (alternative to key/expression)
+                            example: ".*.json"
                         example: {"pattern": ".*.json"}
                       example: [{"pattern": ".*.json"}]
                     maxBatchSize:
@@ -1937,6 +1969,22 @@ components:
                       title: Path extractors
                       items:
                         type: object
+                        properties:
+                          key:
+                            type: string
+                            title: Field name
+                            description: Name of the extracted field
+                            example: "account_id"
+                          expression:
+                            type: string
+                            title: Expression
+                            description: JavaScript expression to compute the value from the path
+                            example: "__input.gcs.key.split('/')[1]"
+                          pattern:
+                            type: string
+                            title: Pattern
+                            description: Regex pattern to match paths (alternative to key/expression)
+                            example: ".*.csv"
                         example: {"pattern": ".*.csv"}
                       example: [{"pattern": ".*.csv"}]
                     maxBatchSize:

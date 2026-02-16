@@ -8,6 +8,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/criblio/terraform-provider-criblio/internal/planmodifiers/mapplanmodifier"
+	"github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
@@ -18,7 +20,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -78,19 +82,24 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 							},
 							Attributes: map[string]schema.Attribute{
 								"conf": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
-									Computed:    true,
-									Optional:    true,
+									CustomType: jsontypes.NormalizedType{},
+									Computed:   true,
+									Optional:   true,
+									PlanModifiers: []planmodifier.String{
+										stringplanmodifier.PipelineConfSuppressWhitespaceDiff(),
+									},
 									Description: `Function-specific configuration as a JSON object. Different functions require different configuration fields.`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
+									Default:     stringdefault.StaticString(""),
 									Description: `Simple description of this step`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
 									Optional:    true,
+									Default:     booldefault.StaticBool(false),
 									Description: `If true, data will not be pushed through this function`,
 								},
 								"filter": schema.StringAttribute{
@@ -102,11 +111,13 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 								"final": schema.BoolAttribute{
 									Computed:    true,
 									Optional:    true,
+									Default:     booldefault.StaticBool(false),
 									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
 								},
 								"group_id": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
+									Default:     stringdefault.StaticString(""),
 									Description: `Group ID`,
 								},
 								"id": schema.StringAttribute{
@@ -124,6 +135,9 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 					"groups": schema.MapNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Map{
+							mapplanmodifier.SuppressDiff(mapplanmodifier.ExplicitSuppress),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),

@@ -2,5 +2,12 @@
 
 package types
 
+import (
+	"github.com/hashicorp/terraform-plugin-framework/types"
+)
+
 type InputCollectorS3Extractor struct {
+	Expression types.String `tfsdk:"expression"`
+	Key        types.String `tfsdk:"key"`
+	Pattern    types.String `tfsdk:"pattern"`
 }

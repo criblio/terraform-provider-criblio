@@ -90,25 +90,45 @@ func (r *PipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, r
 			return diags
 		}
 		functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
-		functions.Description = types.StringPointerValue(functionsItem.Description)
-		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
-		functions.Filter = types.StringPointerValue(functionsItem.Filter)
-		functions.Final = types.BoolPointerValue(functionsItem.Final)
-		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
+		// Use schema default values when API returns nil so plan doesn't show perpetual diff for optional+computed attributes
+		if functionsItem.Description != nil {
+			functions.Description = types.StringValue(*functionsItem.Description)
+		} else {
+			functions.Description = types.StringValue("")
+		}
+		if functionsItem.Disabled != nil {
+			functions.Disabled = types.BoolValue(*functionsItem.Disabled)
+		} else {
+			functions.Disabled = types.BoolValue(false)
+		}
+		if functionsItem.Filter != nil {
+			functions.Filter = types.StringValue(*functionsItem.Filter)
+		} else {
+			functions.Filter = types.StringValue("true")
+		}
+		if functionsItem.Final != nil {
+			functions.Final = types.BoolValue(*functionsItem.Final)
+		} else {
+			functions.Final = types.BoolValue(false)
+		}
+		if functionsItem.GroupID != nil {
+			functions.GroupID = types.StringValue(*functionsItem.GroupID)
+		} else {
+			functions.GroupID = types.StringValue("")
+		}
 		functions.ID = types.StringValue(functionsItem.ID)
 
 		r.Conf.Functions = append(r.Conf.Functions, functions)
 	}
-	if len(resp.Conf.Groups) > 0 {
-		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
-		for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
-			var pipelineGroupsResult tfTypes.PipelineGroups
-			pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
-			pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
-			pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
+	// Always set Groups so state has a concrete value (empty map when API returns none), avoiding "(known after apply)" diff
+	r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
+	for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
+		var pipelineGroupsResult tfTypes.PipelineGroups
+		pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
+		pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
+		pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
 
-			r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
-		}
+		r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
 	}
 	r.Conf.Output = types.StringPointerValue(resp.Conf.Output)
 	r.Conf.Streamtags = make([]types.String, 0, len(resp.Conf.Streamtags))
