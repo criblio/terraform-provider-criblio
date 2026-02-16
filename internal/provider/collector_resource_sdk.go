@@ -1852,7 +1852,32 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			} else {
 				recurse = nil
 			}
-			extractors := make([]shared.InputCollectorS3Extractor, len(r.InputCollectorS3.Collector.Conf.Extractors))
+			extractors := make([]shared.InputCollectorS3Extractor, 0, len(r.InputCollectorS3.Collector.Conf.Extractors))
+			for extractorsIndex := range r.InputCollectorS3.Collector.Conf.Extractors {
+				key := new(string)
+				if !r.InputCollectorS3.Collector.Conf.Extractors[extractorsIndex].Key.IsUnknown() && !r.InputCollectorS3.Collector.Conf.Extractors[extractorsIndex].Key.IsNull() {
+					*key = r.InputCollectorS3.Collector.Conf.Extractors[extractorsIndex].Key.ValueString()
+				} else {
+					key = nil
+				}
+				expression3 := new(string)
+				if !r.InputCollectorS3.Collector.Conf.Extractors[extractorsIndex].Expression.IsUnknown() && !r.InputCollectorS3.Collector.Conf.Extractors[extractorsIndex].Expression.IsNull() {
+					*expression3 = r.InputCollectorS3.Collector.Conf.Extractors[extractorsIndex].Expression.ValueString()
+				} else {
+					expression3 = nil
+				}
+				pattern := new(string)
+				if !r.InputCollectorS3.Collector.Conf.Extractors[extractorsIndex].Pattern.IsUnknown() && !r.InputCollectorS3.Collector.Conf.Extractors[extractorsIndex].Pattern.IsNull() {
+					*pattern = r.InputCollectorS3.Collector.Conf.Extractors[extractorsIndex].Pattern.ValueString()
+				} else {
+					pattern = nil
+				}
+				extractors = append(extractors, shared.InputCollectorS3Extractor{
+					Key:        key,
+					Expression: expression3,
+					Pattern:    pattern,
+				})
+			}
 			maxBatchSize := new(int64)
 			if !r.InputCollectorS3.Collector.Conf.MaxBatchSize.IsUnknown() && !r.InputCollectorS3.Collector.Conf.MaxBatchSize.IsNull() {
 				*maxBatchSize = r.InputCollectorS3.Collector.Conf.MaxBatchSize.ValueInt64()
@@ -2015,11 +2040,11 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				} else {
 					latest4 = nil
 				}
-				expression3 := new(string)
+				expression4 := new(string)
 				if !r.InputCollectorAzureBlob.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.Expression.IsNull() {
-					*expression3 = r.InputCollectorAzureBlob.Schedule.Run.Expression.ValueString()
+					*expression4 = r.InputCollectorAzureBlob.Schedule.Run.Expression.ValueString()
 				} else {
-					expression3 = nil
+					expression4 = nil
 				}
 				minTaskSize3 := new(string)
 				if !r.InputCollectorAzureBlob.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorAzureBlob.Schedule.Run.MinTaskSize.IsNull() {
@@ -2072,7 +2097,7 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					TimeRangeType:          timeRangeType3,
 					Earliest:               earliest4,
 					Latest:                 latest4,
-					Expression:             expression3,
+					Expression:             expression4,
 					MinTaskSize:            minTaskSize3,
 					MaxTaskSize:            maxTaskSize3,
 					TimeWarning:            timeWarning3,
@@ -2228,7 +2253,32 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			} else {
 				recurse1 = nil
 			}
-			extractors1 := make([]shared.InputCollectorAzureBlobExtractor, len(r.InputCollectorAzureBlob.Collector.Conf.Extractors))
+			extractors1 := make([]shared.InputCollectorAzureBlobExtractor, 0, len(r.InputCollectorAzureBlob.Collector.Conf.Extractors))
+			for extractorsIndex1 := range r.InputCollectorAzureBlob.Collector.Conf.Extractors {
+				key1 := new(string)
+				if !r.InputCollectorAzureBlob.Collector.Conf.Extractors[extractorsIndex1].Key.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.Extractors[extractorsIndex1].Key.IsNull() {
+					*key1 = r.InputCollectorAzureBlob.Collector.Conf.Extractors[extractorsIndex1].Key.ValueString()
+				} else {
+					key1 = nil
+				}
+				expression5 := new(string)
+				if !r.InputCollectorAzureBlob.Collector.Conf.Extractors[extractorsIndex1].Expression.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.Extractors[extractorsIndex1].Expression.IsNull() {
+					*expression5 = r.InputCollectorAzureBlob.Collector.Conf.Extractors[extractorsIndex1].Expression.ValueString()
+				} else {
+					expression5 = nil
+				}
+				pattern1 := new(string)
+				if !r.InputCollectorAzureBlob.Collector.Conf.Extractors[extractorsIndex1].Pattern.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.Extractors[extractorsIndex1].Pattern.IsNull() {
+					*pattern1 = r.InputCollectorAzureBlob.Collector.Conf.Extractors[extractorsIndex1].Pattern.ValueString()
+				} else {
+					pattern1 = nil
+				}
+				extractors1 = append(extractors1, shared.InputCollectorAzureBlobExtractor{
+					Key:        key1,
+					Expression: expression5,
+					Pattern:    pattern1,
+				})
+			}
 			maxBatchSize1 := new(int64)
 			if !r.InputCollectorAzureBlob.Collector.Conf.MaxBatchSize.IsUnknown() && !r.InputCollectorAzureBlob.Collector.Conf.MaxBatchSize.IsNull() {
 				*maxBatchSize1 = r.InputCollectorAzureBlob.Collector.Conf.MaxBatchSize.ValueInt64()
@@ -2389,11 +2439,11 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				} else {
 					latest5 = nil
 				}
-				expression4 := new(string)
+				expression6 := new(string)
 				if !r.InputCollectorCriblLake.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.Expression.IsNull() {
-					*expression4 = r.InputCollectorCriblLake.Schedule.Run.Expression.ValueString()
+					*expression6 = r.InputCollectorCriblLake.Schedule.Run.Expression.ValueString()
 				} else {
-					expression4 = nil
+					expression6 = nil
 				}
 				minTaskSize4 := new(string)
 				if !r.InputCollectorCriblLake.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorCriblLake.Schedule.Run.MinTaskSize.IsNull() {
@@ -2446,7 +2496,7 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					TimeRangeType:          timeRangeType4,
 					Earliest:               earliest5,
 					Latest:                 latest5,
-					Expression:             expression4,
+					Expression:             expression6,
 					MinTaskSize:            minTaskSize4,
 					MaxTaskSize:            maxTaskSize4,
 					TimeWarning:            timeWarning4,
@@ -2719,11 +2769,11 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				} else {
 					latest6 = nil
 				}
-				expression5 := new(string)
+				expression7 := new(string)
 				if !r.InputCollectorDatabase.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.Expression.IsNull() {
-					*expression5 = r.InputCollectorDatabase.Schedule.Run.Expression.ValueString()
+					*expression7 = r.InputCollectorDatabase.Schedule.Run.Expression.ValueString()
 				} else {
-					expression5 = nil
+					expression7 = nil
 				}
 				minTaskSize5 := new(string)
 				if !r.InputCollectorDatabase.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorDatabase.Schedule.Run.MinTaskSize.IsNull() {
@@ -2776,7 +2826,7 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					TimeRangeType:          timeRangeType5,
 					Earliest:               earliest6,
 					Latest:                 latest6,
-					Expression:             expression5,
+					Expression:             expression7,
 					MinTaskSize:            minTaskSize5,
 					MaxTaskSize:            maxTaskSize5,
 					TimeWarning:            timeWarning5,
@@ -3063,11 +3113,11 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				} else {
 					latest7 = nil
 				}
-				expression6 := new(string)
+				expression8 := new(string)
 				if !r.InputCollectorGCS.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.Expression.IsNull() {
-					*expression6 = r.InputCollectorGCS.Schedule.Run.Expression.ValueString()
+					*expression8 = r.InputCollectorGCS.Schedule.Run.Expression.ValueString()
 				} else {
-					expression6 = nil
+					expression8 = nil
 				}
 				minTaskSize6 := new(string)
 				if !r.InputCollectorGCS.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorGCS.Schedule.Run.MinTaskSize.IsNull() {
@@ -3120,7 +3170,7 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					TimeRangeType:          timeRangeType6,
 					Earliest:               earliest7,
 					Latest:                 latest7,
-					Expression:             expression6,
+					Expression:             expression8,
 					MinTaskSize:            minTaskSize6,
 					MaxTaskSize:            maxTaskSize6,
 					TimeWarning:            timeWarning6,
@@ -3270,7 +3320,32 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			} else {
 				recurse2 = nil
 			}
-			extractors2 := make([]shared.InputCollectorGCSExtractor, len(r.InputCollectorGCS.Collector.Conf.Extractors))
+			extractors2 := make([]shared.InputCollectorGCSExtractor, 0, len(r.InputCollectorGCS.Collector.Conf.Extractors))
+			for extractorsIndex2 := range r.InputCollectorGCS.Collector.Conf.Extractors {
+				key2 := new(string)
+				if !r.InputCollectorGCS.Collector.Conf.Extractors[extractorsIndex2].Key.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.Extractors[extractorsIndex2].Key.IsNull() {
+					*key2 = r.InputCollectorGCS.Collector.Conf.Extractors[extractorsIndex2].Key.ValueString()
+				} else {
+					key2 = nil
+				}
+				expression9 := new(string)
+				if !r.InputCollectorGCS.Collector.Conf.Extractors[extractorsIndex2].Expression.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.Extractors[extractorsIndex2].Expression.IsNull() {
+					*expression9 = r.InputCollectorGCS.Collector.Conf.Extractors[extractorsIndex2].Expression.ValueString()
+				} else {
+					expression9 = nil
+				}
+				pattern2 := new(string)
+				if !r.InputCollectorGCS.Collector.Conf.Extractors[extractorsIndex2].Pattern.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.Extractors[extractorsIndex2].Pattern.IsNull() {
+					*pattern2 = r.InputCollectorGCS.Collector.Conf.Extractors[extractorsIndex2].Pattern.ValueString()
+				} else {
+					pattern2 = nil
+				}
+				extractors2 = append(extractors2, shared.InputCollectorGCSExtractor{
+					Key:        key2,
+					Expression: expression9,
+					Pattern:    pattern2,
+				})
+			}
 			maxBatchSize2 := new(int64)
 			if !r.InputCollectorGCS.Collector.Conf.MaxBatchSize.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.MaxBatchSize.IsNull() {
 				*maxBatchSize2 = r.InputCollectorGCS.Collector.Conf.MaxBatchSize.ValueInt64()
@@ -3430,11 +3505,11 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				} else {
 					latest8 = nil
 				}
-				expression7 := new(string)
+				expression10 := new(string)
 				if !r.InputCollectorHealthCheck.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.Expression.IsNull() {
-					*expression7 = r.InputCollectorHealthCheck.Schedule.Run.Expression.ValueString()
+					*expression10 = r.InputCollectorHealthCheck.Schedule.Run.Expression.ValueString()
 				} else {
-					expression7 = nil
+					expression10 = nil
 				}
 				minTaskSize7 := new(string)
 				if !r.InputCollectorHealthCheck.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorHealthCheck.Schedule.Run.MinTaskSize.IsNull() {
@@ -3487,7 +3562,7 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					TimeRangeType:          timeRangeType7,
 					Earliest:               earliest8,
 					Latest:                 latest8,
-					Expression:             expression7,
+					Expression:             expression10,
 					MinTaskSize:            minTaskSize7,
 					MaxTaskSize:            maxTaskSize7,
 					TimeWarning:            timeWarning7,
@@ -3809,11 +3884,11 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				} else {
 					latest9 = nil
 				}
-				expression8 := new(string)
+				expression11 := new(string)
 				if !r.InputCollectorScript.Schedule.Run.Expression.IsUnknown() && !r.InputCollectorScript.Schedule.Run.Expression.IsNull() {
-					*expression8 = r.InputCollectorScript.Schedule.Run.Expression.ValueString()
+					*expression11 = r.InputCollectorScript.Schedule.Run.Expression.ValueString()
 				} else {
-					expression8 = nil
+					expression11 = nil
 				}
 				minTaskSize8 := new(string)
 				if !r.InputCollectorScript.Schedule.Run.MinTaskSize.IsUnknown() && !r.InputCollectorScript.Schedule.Run.MinTaskSize.IsNull() {
@@ -3866,7 +3941,7 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					TimeRangeType:          timeRangeType8,
 					Earliest:               earliest9,
 					Latest:                 latest9,
-					Expression:             expression8,
+					Expression:             expression11,
 					MinTaskSize:            minTaskSize8,
 					MaxTaskSize:            maxTaskSize8,
 					TimeWarning:            timeWarning8,

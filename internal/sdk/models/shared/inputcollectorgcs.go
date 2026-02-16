@@ -633,6 +633,12 @@ func (e *InputCollectorGCSAuthenticationMethod) UnmarshalJSON(data []byte) error
 }
 
 type InputCollectorGCSExtractor struct {
+	// Name of the extracted field
+	Key *string `json:"key,omitempty"`
+	// JavaScript expression to compute the value from the path
+	Expression *string `json:"expression,omitempty"`
+	// Regex pattern to match paths (alternative to key/expression)
+	Pattern *string `json:"pattern,omitempty"`
 }
 
 func (i InputCollectorGCSExtractor) MarshalJSON() ([]byte, error) {
@@ -644,6 +650,27 @@ func (i *InputCollectorGCSExtractor) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (i *InputCollectorGCSExtractor) GetKey() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Key
+}
+
+func (i *InputCollectorGCSExtractor) GetExpression() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Expression
+}
+
+func (i *InputCollectorGCSExtractor) GetPattern() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Pattern
 }
 
 type InputCollectorGCSConf struct {

@@ -633,6 +633,12 @@ func (e *InputCollectorAzureBlobAuthenticationMethod) UnmarshalJSON(data []byte)
 }
 
 type InputCollectorAzureBlobExtractor struct {
+	// Name of the extracted field
+	Key *string `json:"key,omitempty"`
+	// JavaScript expression to compute the value from the path
+	Expression *string `json:"expression,omitempty"`
+	// Regex pattern to match paths (alternative to key/expression)
+	Pattern *string `json:"pattern,omitempty"`
 }
 
 func (i InputCollectorAzureBlobExtractor) MarshalJSON() ([]byte, error) {
@@ -644,6 +650,27 @@ func (i *InputCollectorAzureBlobExtractor) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (i *InputCollectorAzureBlobExtractor) GetKey() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Key
+}
+
+func (i *InputCollectorAzureBlobExtractor) GetExpression() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Expression
+}
+
+func (i *InputCollectorAzureBlobExtractor) GetPattern() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Pattern
 }
 
 type InputCollectorAzureBlobConf struct {

@@ -24,7 +24,9 @@ resource "criblio_collector" "my_collector" {
         container_name    = "my-container"
         extractors = [
           {
-            # ...
+            expression = "__input.azureBlob.key.split('/')[1]"
+            key        = "account_id"
+            pattern    = ".*.json"
           }
         ]
         max_batch_size       = 500
@@ -273,7 +275,9 @@ resource "criblio_collector" "my_collector" {
         bucket    = "my-gcs-bucket"
         extractors = [
           {
-            # ...
+            expression = "__input.gcs.key.split('/')[1]"
+            key        = "account_id"
+            pattern    = ".*.csv"
           }
         ]
         max_batch_size              = 200
@@ -656,7 +660,9 @@ resource "criblio_collector" "my_collector" {
         bucket                    = "my-s3-bucket"
         extractors = [
           {
-            # ...
+            expression = "__input.s3.key.split('/')[1]"
+            key        = "account_id"
+            pattern    = ".*.gz"
           }
         ]
         max_batch_size = 100
@@ -989,6 +995,12 @@ Optional:
 
 <a id="nestedatt--input_collector_azure_blob--collector--conf--extractors"></a>
 ### Nested Schema for `input_collector_azure_blob.collector.conf.extractors`
+
+Optional:
+
+- `expression` (String) JavaScript expression to compute the value from the path
+- `key` (String) Name of the extracted field
+- `pattern` (String) Regex pattern to match paths (alternative to key/expression)
 
 
 
@@ -1385,6 +1397,12 @@ Optional:
 
 <a id="nestedatt--input_collector_gcs--collector--conf--extractors"></a>
 ### Nested Schema for `input_collector_gcs.collector.conf.extractors`
+
+Optional:
+
+- `expression` (String) JavaScript expression to compute the value from the path
+- `key` (String) Name of the extracted field
+- `pattern` (String) Regex pattern to match paths (alternative to key/expression)
 
 
 
@@ -1960,6 +1978,12 @@ Optional:
 
 <a id="nestedatt--input_collector_s3--collector--conf--extractors"></a>
 ### Nested Schema for `input_collector_s3.collector.conf.extractors`
+
+Optional:
+
+- `expression` (String) JavaScript expression to compute the value from the path
+- `key` (String) Name of the extracted field
+- `pattern` (String) Regex pattern to match paths (alternative to key/expression)
 
 
 
