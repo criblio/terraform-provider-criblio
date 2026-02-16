@@ -9,7 +9,9 @@ resource "criblio_collector" "my_collector" {
         container_name    = "my-container"
         extractors = [
           {
-            # ...
+            expression = "__input.azureBlob.key.split('/')[1]"
+            key        = "account_id"
+            pattern    = ".*.json"
           }
         ]
         max_batch_size       = 500
@@ -258,7 +260,9 @@ resource "criblio_collector" "my_collector" {
         bucket    = "my-gcs-bucket"
         extractors = [
           {
-            # ...
+            expression = "__input.gcs.key.split('/')[1]"
+            key        = "account_id"
+            pattern    = ".*.csv"
           }
         ]
         max_batch_size              = 200
@@ -641,7 +645,9 @@ resource "criblio_collector" "my_collector" {
         bucket                    = "my-s3-bucket"
         extractors = [
           {
-            # ...
+            expression = "__input.s3.key.split('/')[1]"
+            key        = "account_id"
+            pattern    = ".*.gz"
           }
         ]
         max_batch_size = 100

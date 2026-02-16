@@ -107,7 +107,20 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"extractors": schema.ListNestedAttribute{
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{},
+											Attributes: map[string]schema.Attribute{
+												"expression": schema.StringAttribute{
+													Optional:    true,
+													Description: `JavaScript expression to compute the value from the path`,
+												},
+												"key": schema.StringAttribute{
+													Optional:    true,
+													Description: `Name of the extracted field`,
+												},
+												"pattern": schema.StringAttribute{
+													Optional:    true,
+													Description: `Regex pattern to match paths (alternative to key/expression)`,
+												},
+											},
 										},
 									},
 									"max_batch_size": schema.Int64Attribute{
@@ -1166,7 +1179,20 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"extractors": schema.ListNestedAttribute{
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{},
+											Attributes: map[string]schema.Attribute{
+												"expression": schema.StringAttribute{
+													Optional:    true,
+													Description: `JavaScript expression to compute the value from the path`,
+												},
+												"key": schema.StringAttribute{
+													Optional:    true,
+													Description: `Name of the extracted field`,
+												},
+												"pattern": schema.StringAttribute{
+													Optional:    true,
+													Description: `Regex pattern to match paths (alternative to key/expression)`,
+												},
+											},
 										},
 									},
 									"max_batch_size": schema.Int64Attribute{
@@ -2722,7 +2748,20 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"extractors": schema.ListNestedAttribute{
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{},
+											Attributes: map[string]schema.Attribute{
+												"expression": schema.StringAttribute{
+													Optional:    true,
+													Description: `JavaScript expression to compute the value from the path`,
+												},
+												"key": schema.StringAttribute{
+													Optional:    true,
+													Description: `Name of the extracted field`,
+												},
+												"pattern": schema.StringAttribute{
+													Optional:    true,
+													Description: `Regex pattern to match paths (alternative to key/expression)`,
+												},
+											},
 										},
 									},
 									"max_batch_size": schema.Int64Attribute{

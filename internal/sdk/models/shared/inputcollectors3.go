@@ -630,6 +630,12 @@ func (e *InputCollectorS3AuthenticationMethod) UnmarshalJSON(data []byte) error 
 }
 
 type InputCollectorS3Extractor struct {
+	// Name of the extracted field
+	Key *string `json:"key,omitempty"`
+	// JavaScript expression to compute the value from the path
+	Expression *string `json:"expression,omitempty"`
+	// Regex pattern to match paths (alternative to key/expression)
+	Pattern *string `json:"pattern,omitempty"`
 }
 
 func (i InputCollectorS3Extractor) MarshalJSON() ([]byte, error) {
@@ -641,6 +647,27 @@ func (i *InputCollectorS3Extractor) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (i *InputCollectorS3Extractor) GetKey() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Key
+}
+
+func (i *InputCollectorS3Extractor) GetExpression() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Expression
+}
+
+func (i *InputCollectorS3Extractor) GetPattern() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Pattern
 }
 
 type InputCollectorS3Conf struct {
