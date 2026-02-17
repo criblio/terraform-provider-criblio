@@ -96,6 +96,15 @@ func NewImportCommand() *cobra.Command {
 			if dryRun {
 				// Preview only: print resource counts and types. No file writes, no Get*ByID (discovery uses List* only).
 				printDryRunPreview(c, results, group)
+				var firstErr error
+				for _, r := range results {
+					if r.Err != nil && firstErr == nil {
+						firstErr = r.Err
+					}
+				}
+				if firstErr != nil {
+					return fmt.Errorf("discovery had errors (see preview above): %w", firstErr)
+				}
 				return nil
 			}
 			// Surface SDK errors with resource context; fail if any discovery failed

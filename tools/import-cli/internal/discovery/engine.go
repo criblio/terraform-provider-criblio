@@ -34,8 +34,14 @@ func Discover(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, 
 	includeSet := sliceToSet(include)
 	excludeSet := sliceToSet(exclude)
 
-	streamIDs, streamNames, _ := fetchGroupsByProduct(ctx, client, operations.GetProductsGroupsByProductProductStream)
-	edgeIDs, edgeNames, _ := fetchGroupsByProduct(ctx, client, operations.GetProductsGroupsByProductProductEdge)
+	streamIDs, streamNames, streamErr := fetchGroupsByProduct(ctx, client, operations.GetProductsGroupsByProductProductStream)
+	if streamErr != nil {
+		return nil, fmt.Errorf("fetch stream groups: %w", streamErr)
+	}
+	edgeIDs, edgeNames, edgeErr := fetchGroupsByProduct(ctx, client, operations.GetProductsGroupsByProductProductEdge)
+	if edgeErr != nil {
+		return nil, fmt.Errorf("fetch edge groups: %w", edgeErr)
+	}
 
 	// Apply group filter: keep only groups whose ID or label matches.
 	streamIDs, streamNames = filterGroups(streamIDs, streamNames, " (stream)", groupFilter)
@@ -210,7 +216,7 @@ func listOne(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupID
 	args := buildListArgs(ctx, method, e, groupIDs[0])
 	// Skip API call when request requires a pack ID we don't have (avoids 404 from /p// in path).
 	if len(args) >= 2 && requestRequiresPack(args[1]) {
-		return 0, nil, nil
+		return 0, nil, fmt.Errorf("skipped: list request requires pack ID (pack-scoped resource; use --import-ids-file to add import IDs)")
 	}
 	// If the method has no request or request has no GroupID, call once.
 	if len(args) < 2 || !requestHasGroupID(args[1]) {
@@ -235,7 +241,15 @@ func listOne(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupID
 }
 
 // callListAndCount invokes the list method with the given args and returns the item count.
-func callListAndCount(ctx context.Context, method reflect.Value, args []reflect.Value) (int, error) {
+// args are built from method.Type() in buildListArgs so they match the method signature.
+// We use reflection because the registry drives which SDK List* method to call by name;
+// a panic from type mismatch is recovered and returned as an error.
+func callListAndCount(ctx context.Context, method reflect.Value, args []reflect.Value) (n int, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("list method call failed: %v", r)
+		}
+	}()
 	outs := method.Call(args)
 	if len(outs) != 2 {
 		return 0, fmt.Errorf("unexpected method signature")
