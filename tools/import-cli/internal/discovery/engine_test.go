@@ -46,6 +46,7 @@ func criblMockServer(t *testing.T) *httptest.Server {
 func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
+	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
 	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
@@ -75,6 +76,7 @@ func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 func TestDiscover_IncludeExcludeFilter(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
+	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
 	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
@@ -101,6 +103,7 @@ func TestDiscover_IncludeExcludeFilter(t *testing.T) {
 func TestDiscover_SDKErrorsSurfacedWithResourceContext(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
+	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
 	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
@@ -119,6 +122,7 @@ func TestDiscover_SDKErrorsSurfacedWithResourceContext(t *testing.T) {
 func TestDiscover_EmptyIncludeNoDiscoverableTypes(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
+	t.Setenv("CRIBL_BEARER_TOKEN", "mock") // skip SDK credential lookup so requests go to mock server
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
 	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
@@ -141,7 +145,8 @@ func mustBuildRegistry(t *testing.T, ctx context.Context) *registry.Registry {
 // TestRegistryListMethodsExistOnSDK ensures every registry entry that has SDKService and
 // ListMethod set refers to a real service field and method on sdk.CriblIo. This catches
 // typos or SDK renames at test time instead of at discovery runtime (reflection would
-// then fail or panic).
+// then fail or panic). Uses the field's type to look up the method so we validate even
+// when the client's service field is nil (e.g. zero-value &sdk.CriblIo{}).
 func TestRegistryListMethodsExistOnSDK(t *testing.T) {
 	client := &sdk.CriblIo{}
 	clientVal := reflect.ValueOf(client).Elem()
@@ -152,15 +157,15 @@ func TestRegistryListMethodsExistOnSDK(t *testing.T) {
 		}
 		svcField := clientVal.FieldByName(e.SDKService)
 		require.True(t, svcField.IsValid(), "registry entry %q: SDKService %q not found on sdk.CriblIo", e.TypeName, e.SDKService)
-		if svcField.Kind() == reflect.Ptr && svcField.IsNil() {
-			// Service exists but is nil (e.g. optional); discovery would fail at runtime too
-			continue
+
+		// Resolve the type on which the method is defined (pointer receiver *Service).
+		svcType := svcField.Type()
+		if svcType.Kind() == reflect.Ptr {
+			svcType = svcType.Elem()
 		}
-		svc := svcField
-		if svc.Kind() == reflect.Ptr {
-			svc = svc.Elem()
-		}
-		method := svc.Addr().MethodByName(e.ListMethod)
+		// Method is on *Service; use a non-nil pointer so MethodByName can find it.
+		svcPtr := reflect.New(svcType)
+		method := svcPtr.MethodByName(e.ListMethod)
 		assert.True(t, method.IsValid(), "registry entry %q: ListMethod %q not found on service %s", e.TypeName, e.ListMethod, e.SDKService)
 	}
 }
