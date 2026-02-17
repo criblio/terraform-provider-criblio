@@ -3,6 +3,8 @@ package discovery
 import (
 	"context"
 	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
@@ -12,10 +14,40 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// criblMockServer starts an httptest.Server that returns minimal valid responses for discovery:
+// POST /oauth/token returns 200 with a token so SDK auth succeeds; groups API returns one group;
+// other GETs return {"items":[]}. Use with sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client())).
+func criblMockServer(t *testing.T) *httptest.Server {
+	t.Helper()
+	groupsJSON := []byte(`{"items":[{"id":"default","name":"default"}]}`)
+	emptyListJSON := []byte(`{"items":[]}`)
+	oauthJSON := []byte(`{"access_token":"test","expires_in":300}`)
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method == http.MethodPost && (strings.HasSuffix(r.URL.Path, "/oauth/token") || r.URL.Path == "/oauth/token") {
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write(oauthJSON)
+			return
+		}
+		if r.Method != http.MethodGet {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		path := r.URL.Path
+		if strings.HasSuffix(path, "/products/stream/groups") || strings.HasSuffix(path, "/products/edge/groups") {
+			_, _ = w.Write(groupsJSON)
+			return
+		}
+		_, _ = w.Write(emptyListJSON)
+	}))
+}
+
 func TestDiscover_AllSupportedTypesListed(t *testing.T) {
+	server := criblMockServer(t)
+	defer server.Close()
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
-	client := sdk.New(sdk.WithClient(&http.Client{}))
+	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
 
 	results, err := Discover(ctx, client, reg, nil, nil, nil)
 	require.NoError(t, err)
@@ -40,9 +72,11 @@ func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 }
 
 func TestDiscover_IncludeExcludeFilter(t *testing.T) {
+	server := criblMockServer(t)
+	defer server.Close()
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
-	client := sdk.New(sdk.WithClient(&http.Client{}))
+	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
 
 	// Only criblio_source and criblio_pipeline
 	results, err := Discover(ctx, client, reg, []string{"criblio_source", "criblio_pipeline"}, nil, nil)
@@ -64,10 +98,11 @@ func TestDiscover_IncludeExcludeFilter(t *testing.T) {
 }
 
 func TestDiscover_SDKErrorsSurfacedWithResourceContext(t *testing.T) {
+	server := criblMockServer(t)
+	defer server.Close()
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
-	// Client with no auth / invalid server will fail when we call List*
-	client := sdk.New(sdk.WithClient(&http.Client{}))
+	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
 
 	results, err := Discover(ctx, client, reg, []string{"criblio_source"}, nil, nil)
 	require.NoError(t, err)
@@ -81,9 +116,11 @@ func TestDiscover_SDKErrorsSurfacedWithResourceContext(t *testing.T) {
 }
 
 func TestDiscover_EmptyIncludeNoDiscoverableTypes(t *testing.T) {
+	server := criblMockServer(t)
+	defer server.Close()
 	ctx := context.Background()
 	reg := mustBuildRegistry(t, ctx)
-	client := sdk.New(sdk.WithClient(&http.Client{}))
+	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
 
 	// Include only a type that doesn't exist
 	results, err := Discover(ctx, client, reg, []string{"criblio_nonexistent"}, nil, nil)
