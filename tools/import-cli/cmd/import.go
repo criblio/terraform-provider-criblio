@@ -189,7 +189,7 @@ func printDryRunPreview(cmd *cobra.Command, results []discovery.Result, groupFil
 
 	fmt.Fprintln(out, "")
 	fmt.Fprintln(out, "Preview: resource types and counts that would be exported (--dry-run)")
-	fmt.Fprintln(out, "Resource types are filtered by --include and --exclude when set. Groups filtered by --group when set.")
+	fmt.Fprintln(out, "Resource types are filtered by --include and --exclude when set. Groups (stream worker group or edge fleet) are filtered by --group when set.")
 	var totalResources int
 	var typesShown int
 	var typesWithErr int
