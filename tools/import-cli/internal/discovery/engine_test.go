@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -135,4 +136,31 @@ func mustBuildRegistry(t *testing.T, ctx context.Context) *registry.Registry {
 	reg, err := registry.NewFromResources(ctx, constructors, registry.MetadataFromProvider(), nil)
 	require.NoError(t, err)
 	return reg
+}
+
+// TestRegistryListMethodsExistOnSDK ensures every registry entry that has SDKService and
+// ListMethod set refers to a real service field and method on sdk.CriblIo. This catches
+// typos or SDK renames at test time instead of at discovery runtime (reflection would
+// then fail or panic).
+func TestRegistryListMethodsExistOnSDK(t *testing.T) {
+	client := &sdk.CriblIo{}
+	clientVal := reflect.ValueOf(client).Elem()
+
+	for _, e := range mustBuildRegistry(t, context.Background()).Entries() {
+		if e.SDKService == "" || e.ListMethod == "" {
+			continue
+		}
+		svcField := clientVal.FieldByName(e.SDKService)
+		require.True(t, svcField.IsValid(), "registry entry %q: SDKService %q not found on sdk.CriblIo", e.TypeName, e.SDKService)
+		if svcField.Kind() == reflect.Ptr && svcField.IsNil() {
+			// Service exists but is nil (e.g. optional); discovery would fail at runtime too
+			continue
+		}
+		svc := svcField
+		if svc.Kind() == reflect.Ptr {
+			svc = svc.Elem()
+		}
+		method := svc.Addr().MethodByName(e.ListMethod)
+		assert.True(t, method.IsValid(), "registry entry %q: ListMethod %q not found on service %s", e.TypeName, e.ListMethod, e.SDKService)
+	}
 }
