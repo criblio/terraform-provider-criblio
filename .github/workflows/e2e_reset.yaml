@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: e2e_reset
+  group: tfprovider2
   cancel-in-progress: false
 
 jobs:

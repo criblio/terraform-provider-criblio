@@ -79,14 +79,29 @@ if [[ $success == "false" ]]; then
     exit 1
 fi
 
+echo "Workspace create successful!"
+echo "Waiting for workspace to stabilize, sleeping for 60 seconds..."
+sleep 60
 
-#create the needed single pack
-curl -s -X POST "https://tfprovider2-beautiful-nguyen-y8y4azd.cribl-playground.cloud/api/v1/m/default/packs" \
-     -H 'Content-Type: application/json' \
-     --header "Authorization: Bearer $BEARER_TOKEN" \
-     -d '{"version": "0.0.1", "tags": {"streamtags": []}, "exports": [], "displayName": "HelloPacks", "id": "HelloPacks"}'
+END_TIME=$(( $(date +%s) + 300 ))
+success=false
+while [[ $(date +%s) -lt $END_TIME ]]; do
+    #create the needed single pack
+    curl -s -X POST "https://tfprovider2-beautiful-nguyen-y8y4azd.cribl-playground.cloud/api/v1/m/default/packs" \
+	 -H 'Content-Type: application/json' \
+	 --header "Authorization: Bearer $BEARER_TOKEN" \
+	 -d '{"version": "0.0.1", "tags": {"streamtags": []}, "exports": [], "displayName": "HelloPacks", "id": "HelloPacks"}'
+    if [[ $? -eq 0 ]]; then
+	success=true
+        break
+    else
+        echo "pack creation failed, retrying in 60 seconds..."
+	sleep 60
+    fi
+done
 
-if [[ $? -ne 0  ]]; then
-    echo "Required pack create failed!"
+if [[ $success == "false" ]]; then
+    echo "Pack creation failed!"
     exit 1
 fi
+
