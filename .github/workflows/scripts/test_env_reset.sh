@@ -1,7 +1,7 @@
 #!/bin/bash
 
 checkWorkspaceStatus() {
-   curl -s -X GET 'https://api.cribl-playground.cloud/v2/organizations/beautiful-nguyen-y8y4azd/workspaces/tfprovider2' \
+   curl -s -X GET "https://api.cribl-playground.cloud/v2/organizations/beautiful-nguyen-y8y4azd/workspaces/$CRIBL_WORKSPACE_ID" \
        --header "Authorization: Bearer $BEARER_TOKEN"  | jq '.state'
 }
 
@@ -19,7 +19,7 @@ if [[ $BEARER_TOKEN == ""  ]]; then
 fi
 
 #perform delete
-curl -s -X DELETE 'https://api.cribl-playground.cloud/v2/organizations/beautiful-nguyen-y8y4azd/workspaces/tfprovider2' \
+curl -s -X DELETE "https://api.cribl-playground.cloud/v2/organizations/beautiful-nguyen-y8y4azd/workspaces/$CRIBL_WORKSPACE_ID" \
      --header "Authorization: Bearer $BEARER_TOKEN"
 
 if [[ $? -ne 0  ]]; then
@@ -51,7 +51,7 @@ fi
 curl -s -X POST "https://api.cribl-playground.cloud/v2/organizations/beautiful-nguyen-y8y4azd/workspaces" \
      -H 'Content-Type: application/json' \
      --header "Authorization: Bearer $BEARER_TOKEN" \
-     -d '{"workspaceId": "tfprovider2", "alias": "e2e-tests", "region": "us-west-2", "description": "", "tags": []}'
+     -d "{\"workspaceId\": \"$CRIBL_WORKSPACE_ID\", \"alias\": \"e2e-tests\", \"region\": \"us-west-2\", \"description\": \"\", \"tags\": []}"
 
 if [[ $? -ne 0  ]]; then
     echo "Workspace create failed!"
@@ -87,7 +87,7 @@ END_TIME=$(( $(date +%s) + 300 ))
 success=false
 while [[ $(date +%s) -lt $END_TIME ]]; do
     #create the needed single pack
-    curl -s -X POST "https://tfprovider2-beautiful-nguyen-y8y4azd.cribl-playground.cloud/api/v1/m/default/packs" \
+    curl -s -X POST "https://$CRIBL_WORKSPACE_ID-beautiful-nguyen-y8y4azd.cribl-playground.cloud/api/v1/m/default/packs" \
 	 -H 'Content-Type: application/json' \
 	 --header "Authorization: Bearer $BEARER_TOKEN" \
 	 -d '{"version": "0.0.1", "tags": {"streamtags": []}, "exports": [], "displayName": "HelloPacks", "id": "HelloPacks"}'
