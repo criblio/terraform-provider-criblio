@@ -54,14 +54,14 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
         })
       },
     ]
+    streamtags = [
+      "tags"
+    ]
     groups = {
       default = {
         name = "default"
       }
     }
-    streamtags = [
-      "tags"
-    ]
   }
 }
 

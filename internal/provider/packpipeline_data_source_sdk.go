@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -16,76 +17,60 @@ func (r *PackPipelineDataSourceModel) RefreshFromOperationsGetPipelinesByPackWit
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.Routes{}
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
 
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.Routes
+		diags.Append(r.RefreshFromSharedPipeline(ctx, &resp.Items[0])...)
 
-			items.Comments = []tfTypes.Comment{}
+		if diags.HasError() {
+			return diags
+		}
 
-			for _, commentsItem := range itemsItem.Comments {
-				var comments tfTypes.Comment
+	}
 
-				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
-				}
-				comments.Comment = types.StringPointerValue(commentsItem.Comment)
+	return diags
+}
 
-				items.Comments = append(items.Comments, comments)
-			}
-			if len(itemsItem.Groups) > 0 {
-				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
-				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
-					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
-					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
+func (r *PackPipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
+	var diags diag.Diagnostics
 
-					items.Groups[routesGroupsKey] = routesGroupsResult
-				}
-			}
-			items.ID = types.StringPointerValue(itemsItem.ID)
-			items.Routes = []tfTypes.RoutesRoute{}
+	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(resp.Conf.AsyncFuncTimeout)
+	r.Conf.Description = types.StringPointerValue(resp.Conf.Description)
+	r.Conf.Functions = []tfTypes.PipelineFunctionConf{}
 
-			for _, routesItem := range itemsItem.Routes {
-				var routes tfTypes.RoutesRoute
+	for _, functionsItem := range resp.Conf.Functions {
+		var functions tfTypes.PipelineFunctionConf
 
-				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
-				}
-				routes.Description = types.StringPointerValue(routesItem.Description)
-				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
-				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
-				routes.Filter = types.StringPointerValue(routesItem.Filter)
-				routes.Final = types.BoolPointerValue(routesItem.Final)
-				routes.ID = types.StringPointerValue(routesItem.ID)
-				routes.Name = types.StringValue(routesItem.Name)
-				if routesItem.Output == nil {
-					routes.Output = jsontypes.NewNormalizedNull()
-				} else {
-					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
-				}
-				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = jsontypes.NewNormalizedNull()
-				} else {
-					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
-				}
-				routes.Pipeline = types.StringValue(routesItem.Pipeline)
+		confBytes, _ := json.Marshal(functionsItem.Conf)
+		functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
+		functions.Description = types.StringPointerValue(functionsItem.Description)
+		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
+		functions.Filter = types.StringPointerValue(functionsItem.Filter)
+		functions.Final = types.BoolPointerValue(functionsItem.Final)
+		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
+		functions.ID = types.StringValue(functionsItem.ID)
 
-				items.Routes = append(items.Routes, routes)
-			}
+		r.Conf.Functions = append(r.Conf.Functions, functions)
+	}
+	if len(resp.Conf.Groups) > 0 {
+		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
+		for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
+			var pipelineGroupsResult tfTypes.PipelineGroups
+			pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
+			pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
+			pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
 
-			r.Items = append(r.Items, items)
+			r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
 		}
 	}
+	r.Conf.Output = types.StringPointerValue(resp.Conf.Output)
+	r.Conf.Streamtags = make([]types.String, 0, len(resp.Conf.Streamtags))
+	for _, v := range resp.Conf.Streamtags {
+		r.Conf.Streamtags = append(r.Conf.Streamtags, types.StringValue(v))
+	}
+	r.ID = types.StringValue(resp.ID)
 
 	return diags
 }

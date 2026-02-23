@@ -37,12 +37,12 @@ func (g *GetPipelinesByPackWithIDRequest) GetGroupID() string {
 	return g.GroupID
 }
 
-// GetPipelinesByPackWithIDResponseBody - a list of Routes objects
+// GetPipelinesByPackWithIDResponseBody - a list of Pipeline objects
 type GetPipelinesByPackWithIDResponseBody struct {
-	Items []shared.Routes `json:"items,omitempty"`
+	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (g *GetPipelinesByPackWithIDResponseBody) GetItems() []shared.Routes {
+func (g *GetPipelinesByPackWithIDResponseBody) GetItems() []shared.Pipeline {
 	if g == nil {
 		return nil
 	}
@@ -56,7 +56,7 @@ type GetPipelinesByPackWithIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Routes objects
+	// a list of Pipeline objects
 	Object *GetPipelinesByPackWithIDResponseBody
 	// Unexpected error
 	Error *shared.Error

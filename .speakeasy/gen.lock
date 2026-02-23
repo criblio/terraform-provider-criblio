@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: a6274ea862a070f9ab337b17e929bade
+  docChecksum: bd5cef8cf43b31b7635fb904c8a59f29
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
@@ -7647,7 +7647,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemInputsByPack:

@@ -73600,7 +73600,7 @@ paths:
       summary: Get a list of Pipelines by ID within a Pack
       description: Get a list of Pipeline by ID within a Pack
       x-speakeasy-entity-operation: PackPipeline#get
-      responses: *a136
+      responses: *a127
       parameters:
         - name: pack
           in: path
