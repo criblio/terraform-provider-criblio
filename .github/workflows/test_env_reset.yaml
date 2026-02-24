@@ -1,4 +1,4 @@
-name: Reset E2E Test Org
+name: Reset Target Test Org
 on:
   workflow_dispatch:
     inputs:
