@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - name: e2e_reset
+      - name: env_reset
         env:
           CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
           CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
@@ -22,4 +22,4 @@ jobs:
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
         run: | 
           export CRIBL_WORKSPACE_ID=${{ github.event.inputs.workspace }}
-          ./.github/workflows/scripts/e2e_reset.sh
+          ./.github/workflows/scripts/test_env_reset.sh
