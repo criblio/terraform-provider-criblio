@@ -5,9 +5,9 @@ if [[ ! $(echo "$PWD" | rev | cut -d '/' -f 1 | rev) == terraform-provider-cribl
 	exit 1
 fi
 
-flags=""
+flags="-parallelism=1"
 if [[ -z $CRIBL_CLOUD_DOMAIN ]]; then
-	flags='-var=onprem=true -parallelism=1'
+	flags="$flags -var=onprem=true"
 fi
 
 cd tests/e2e

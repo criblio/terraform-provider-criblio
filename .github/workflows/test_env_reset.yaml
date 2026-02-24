@@ -1,10 +1,12 @@
-name: Reset E2E Test Org
+name: Reset Target Test Org
 on:
   workflow_dispatch:
-
-concurrency:
-  group: e2e_reset
-  cancel-in-progress: false
+    inputs:
+      workspace:
+        description: 'workspace to reset'
+        required: true
+        default: 'tfprovider2'
+        type: string
 
 jobs:
   e2e_reset:
@@ -15,9 +17,9 @@ jobs:
       - name: e2e_reset
         env:
           CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
-          CRIBL_WORKSPACE_ID: "tfprovider"
           CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
           CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
           CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
         run: | 
+          export CRIBL_WORKSPACE_ID=${{ github.event.inputs.workspace }}
           ./.github/workflows/scripts/e2e_reset.sh
