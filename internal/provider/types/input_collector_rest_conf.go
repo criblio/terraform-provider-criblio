@@ -15,6 +15,7 @@ type InputCollectorRestConf struct {
 	AuthRequestParams     []AuthRequestParam       `tfsdk:"auth_request_params"`
 	CaptureHeaders        types.Bool               `tfsdk:"capture_headers"`
 	ClientSecretParamName types.String             `tfsdk:"client_secret_param_name"`
+	CollectBody           types.String             `tfsdk:"collect_body"`
 	CollectMethod         types.String             `tfsdk:"collect_method"`
 	CollectRequestHeaders []CollectRequestHeader   `tfsdk:"collect_request_headers"`
 	CollectRequestParams  []CollectRequestParam    `tfsdk:"collect_request_params"`

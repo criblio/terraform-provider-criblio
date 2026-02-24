@@ -1212,7 +1212,9 @@ type InputCollectorRestConf struct {
 	CollectMethod         *InputCollectorRestCollectMethod `json:"collectMethod,omitempty"`
 	CollectRequestHeaders []CollectRequestHeader           `json:"collectRequestHeaders,omitempty"`
 	CollectRequestParams  []CollectRequestParam            `json:"collectRequestParams,omitempty"`
-	Timeout               *int64                           `json:"timeout,omitempty"`
+	// Body content for the collect request, used with the post_with_body collect method
+	CollectBody *string `json:"collectBody,omitempty"`
+	Timeout     *int64  `json:"timeout,omitempty"`
 	UseRoundRobinDNS      *bool                            `json:"useRoundRobinDns,omitempty"`
 	DisableTimeFilter     *bool                            `json:"disableTimeFilter,omitempty"`
 	DecodeURL             *bool                            `default:"false" json:"decodeUrl"`
@@ -1360,6 +1362,13 @@ func (i *InputCollectorRestConf) GetCollectRequestParams() []CollectRequestParam
 		return nil
 	}
 	return i.CollectRequestParams
+}
+
+func (i *InputCollectorRestConf) GetCollectBody() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CollectBody
 }
 
 func (i *InputCollectorRestConf) GetTimeout() *int64 {

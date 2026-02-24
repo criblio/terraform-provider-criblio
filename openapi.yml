@@ -1539,6 +1539,11 @@ components:
                             title: Parameter value
                             example: "100"
                       example: [{"name": "limit", "value": "100"}]
+                    collectBody:
+                      type: string
+                      title: Collect body
+                      description: Body content for the collect request, used with the post_with_body collect method
+                      example: '{"filter":"status=active"}'
                     # Request Configuration
                     timeout:
                       type: integer
