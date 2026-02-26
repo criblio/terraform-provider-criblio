@@ -1998,6 +1998,10 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"client_secret_param_name": schema.StringAttribute{
 										Optional: true,
 									},
+									"collect_body": schema.StringAttribute{
+										Optional:    true,
+										Description: `Body content for the collect request, used with the post_with_body collect method`,
+									},
 									"collect_method": schema.StringAttribute{
 										Optional:    true,
 										Description: `must be one of ["get", "post", "post_with_body", "other"]`,

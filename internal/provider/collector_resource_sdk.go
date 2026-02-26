@@ -1060,6 +1060,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					Value: value5,
 				})
 			}
+			collectBody := new(string)
+			if !r.InputCollectorRest.Collector.Conf.CollectBody.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CollectBody.IsNull() {
+				*collectBody = r.InputCollectorRest.Collector.Conf.CollectBody.ValueString()
+			} else {
+				collectBody = nil
+			}
 			timeout1 := new(int64)
 			if !r.InputCollectorRest.Collector.Conf.Timeout.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Timeout.IsNull() {
 				*timeout1 = r.InputCollectorRest.Collector.Conf.Timeout.ValueInt64()
@@ -1471,6 +1477,7 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				CollectMethod:         collectMethod,
 				CollectRequestHeaders: collectRequestHeaders,
 				CollectRequestParams:  collectRequestParams,
+				CollectBody:           collectBody,
 				Timeout:               timeout1,
 				UseRoundRobinDNS:      useRoundRobinDns1,
 				DisableTimeFilter:     disableTimeFilter1,
