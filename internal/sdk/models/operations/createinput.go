@@ -39,10 +39,10 @@ func (c *CreateInputRequest) GetInput() shared.Input {
 
 // CreateInputResponseBody - a list of Input objects
 type CreateInputResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.Input `json:"items,omitempty"`
 }
 
-func (c *CreateInputResponseBody) GetItems() []map[string]any {
+func (c *CreateInputResponseBody) GetItems() []shared.Input {
 	if c == nil {
 		return nil
 	}

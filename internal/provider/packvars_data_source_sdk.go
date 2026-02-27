@@ -4,29 +4,56 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 func (r *PackVarsDataSourceModel) RefreshFromOperationsGetGlobalVariableLibVarsByPackAndIDResponseBody(ctx context.Context, resp *operations.GetGlobalVariableLibVarsByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = nil
-		for _, itemsItem := range resp.Items {
-			var items map[string]jsontypes.Normalized
-			if len(itemsItem) > 0 {
-				items = make(map[string]jsontypes.Normalized, len(itemsItem))
-				for key, value := range itemsItem {
-					result, _ := json.Marshal(value)
-					items[key] = jsontypes.NewNormalizedValue(string(result))
-				}
-			}
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedGlobalVar(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
+
+	return diags
+}
+
+func (r *PackVarsDataSourceModel) RefreshFromSharedGlobalVar(ctx context.Context, resp *shared.GlobalVar) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Args = []tfTypes.Arg{}
+
+	for _, argsItem := range resp.Args {
+		var args tfTypes.Arg
+
+		args.Name = types.StringValue(argsItem.Name)
+		args.Type = types.StringValue(argsItem.Type)
+
+		r.Args = append(r.Args, args)
+	}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	r.Lib = types.StringPointerValue(resp.Lib)
+	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp.Type != nil {
+		r.Type = types.StringValue(string(*resp.Type))
+	} else {
+		r.Type = types.StringNull()
+	}
+	r.Value = types.StringPointerValue(resp.Value)
 
 	return diags
 }

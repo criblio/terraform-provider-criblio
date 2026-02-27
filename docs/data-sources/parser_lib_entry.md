@@ -15,6 +15,7 @@ ParserLibEntry DataSource
 ```terraform
 data "criblio_parser_lib_entry" "my_parserlibentry" {
   group_id = "Cribl"
+  id       = "parser-json"
 }
 ```
 
@@ -24,11 +25,11 @@ data "criblio_parser_lib_entry" "my_parserlibentry" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
 - `description` (String)
-- `id` (String) The ID of this resource.
 - `lib` (String)
 - `tags` (String) Optionally, add tags that you can use for filtering
 - `type` (String) Parser or formatter type to use

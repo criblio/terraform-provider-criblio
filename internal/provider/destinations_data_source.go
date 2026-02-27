@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -29,8 +30,8 @@ type DestinationsDataSource struct {
 
 // DestinationsDataSourceModel describes the data model.
 type DestinationsDataSourceModel struct {
-	GroupID types.String                      `tfsdk:"group_id"`
-	Items   []map[string]jsontypes.Normalized `tfsdk:"items"`
+	GroupID types.String     `tfsdk:"group_id"`
+	Items   []tfTypes.Output `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -48,10 +49,13500 @@ func (r *DestinationsDataSource) Schema(ctx context.Context, req datasource.Sche
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
-			"items": schema.ListAttribute{
+			"items": schema.ListNestedAttribute{
 				Computed: true,
-				ElementType: types.MapType{
-					ElemType: jsontypes.NormalizedType{},
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"output_azure_blob": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed: true,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"azure_cloud": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Azure cloud to use. Defaults to Azure Public Cloud.`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"certificate": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The certificate you registered as credentials for your app in the Azure portal`,
+										},
+									},
+								},
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The service principal's client ID`,
+								},
+								"client_text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"connection_string": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter your Azure Storage account connection string. If left blank, Stream will fall back to env.AZURE_STORAGE_CONNECTION_STRING.`,
+								},
+								"container_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Azure Blob Storage container name. Name can include only lowercase letters, numbers, and hyphens. For dynamic container names, enter a JavaScript expression within quotes or backtickss, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as ` + "`" + `myContainer-${C.env["CRIBL_WORKER_ID"]}` + "`" + `.`,
+								},
+								"create_container": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Create the configured container in Azure Blob Storage if it does not already exist`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Root directory prepended to path before uploading. Value can be a JavaScript expression enclosed in quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as ` + "`" + `myBlobPrefix-${C.env["CRIBL_WORKER_ID"]}` + "`" + `.`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"endpoint_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `).`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"storage_account_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `The name of your Azure storage account`,
+								},
+								"storage_class": schema.StringAttribute{
+									Computed: true,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The service principal's tenant ID`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+							},
+						},
+						"output_azure_data_explorer": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"additional_properties": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Optionally, enter additional configuration properties to send to the ingestion service`,
+								},
+								"certificate": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The certificate you registered as credentials for your app in the Azure portal`,
+										},
+									},
+								},
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `client_id to pass in the OAuth request parameter`,
+								},
+								"client_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `The client secret that you generated for your app in the Azure portal`,
+								},
+								"cluster_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The base URI for your cluster. Typically, ` + "`" + `https://<cluster>.<region>.kusto.windows.net` + "`" + `.`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"database": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the database containing the table where data will be ingested`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extent_tags": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"prefix": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Strings or tags associated with the extent (ingested data shard)`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `).`,
+								},
+								"flush_immediately": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Bypass the data management service's aggregation mechanism`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"ingest_if_not_exists": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Prevents duplicate ingestion by verifying whether an extent with the specified ingest-by tag already exists`,
+								},
+								"ingest_mode": schema.StringAttribute{
+									Computed: true,
+								},
+								"ingest_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The ingestion service URI for your cluster. Typically, ` + "`" + `https://ingest-<cluster>.<region>.kusto.windows.net` + "`" + `.`,
+								},
+								"is_mapping_obj": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Send a JSON mapping object instead of specifying an existing named data mapping`,
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"mapping_ref": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter the name of a data mapping associated with your target table. Or, if incoming event and target table fields match exactly, you can leave the field empty.`,
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"oauth_endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Endpoint used to acquire authentication tokens from Azure`,
+								},
+								"oauth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `The type of OAuth 2.0 client credentials grant flow to use`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).` + "\n" +
+										`` + "\n" +
+										`` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side),` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"report_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Level of ingestion status reporting. Defaults to FailuresOnly.`,
+								},
+								"report_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target of the ingestion status reporting. Defaults to Queue.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"retain_blob_on_success": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Prevent blob deletion after ingestion is complete`,
+								},
+								"scope": schema.StringAttribute{
+									Computed:    true,
+									Description: `Scope to pass in the OAuth request parameter`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"table": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the table to ingest data into`,
+								},
+								"tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Directory ID (tenant identifier) in Azure Active Directory`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"validate_database_settings": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When saving or starting the Destination, validate the database name and credentials; also validate table name, except when creating a new table. Disable if your Azure app does not have both the Database Viewer and the Table Viewer role.`,
+								},
+							},
+						},
+						"output_azure_eventhub": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"ack": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Control the number of required acknowledgments`,
+								},
+								"authentication_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+								},
+								"brokers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of Event Hubs Kafka brokers to connect to, eg. yourdomain.servicebus.windows.net:9093. The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for a connection to complete successfully`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_event_count": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events in a batch before forcing a flush`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format to use to serialize events before writing to the Event Hubs Kafka brokers`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+								},
+								"max_back_off": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+								"max_record_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size of each record batch before compression. Setting should be < message.max.bytes settings in Event Hubs brokers.`,
+								},
+								"max_retries": schema.Float64Attribute{
+									Computed:    true,
+									Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reauthentication_threshold": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to a request`,
+								},
+								"sasl": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"mechanism": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+									Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's)`,
+										},
+									},
+								},
+								"topic": schema.StringAttribute{
+									Computed:    true,
+									Description: `The name of the Event Hub (Kafka Topic) to publish events. Can be overwritten using field __topicOut.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_azure_logs": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"api_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The DNS name of the Log API endpoint that sends log data to a Log Analytics workspace in Azure Monitor. Defaults to .ods.opinsights.azure.com. @{product} will add a prefix and suffix to construct a URI in this format: <https://<Workspace_ID><your_DNS_name>/api/logs?api-version=<API version>.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter workspace ID and workspace key directly, or select a stored secret`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed: true,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"keypair_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"log_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Log Type of events sent to this LogAnalytics workspace. Defaults to ` + "`" + `Cribl` + "`" + `. Use only letters, numbers, and ` + "`" + `_` + "`" + ` characters, and can't exceed 100 characters. Can be overwritten by event field __logType.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"resource_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional Resource ID of the Azure resource to associate the data with. Can be overridden by the __resourceId event field. This ID populates the _ResourceId property, allowing the data to be included in resource-centric queries. If the ID is neither specified nor overridden, resource-centric queries will omit the data.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"workspace_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.`,
+								},
+								"workspace_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.`,
+								},
+							},
+						},
+						"output_chronicle": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"api_version": schema.StringAttribute{
+									Computed: true,
+								},
+								"authentication_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"custom_labels": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"rbac_enabled": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Designate this label for role-based access control and filtering`,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Custom labels to be added to every event`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"gcp_instance": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Google Cloud Platform (GCP) instance to send events to. This is the Chronicle customer uuid.`,
+								},
+								"gcp_project_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Google Cloud Platform (GCP) project ID to send events to`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"ingestion_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"log_text_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the event field that contains the log text to send. If not specified, Stream sends a JSON representation of the whole event.`,
+								},
+								"log_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Default log type value to send to SecOps. Can be overwritten by event field __logType.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"namespace": schema.StringAttribute{
+									Computed:    true,
+									Description: `User-configured environment namespace to identify the data domain the logs originated from. This namespace is used as a tag to identify the appropriate data domain for indexing and enrichment functionality. Can be overwritten by event field __namespace.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_backpressure_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+								},
+								"pq_max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of events to hold in memory before writing the events to disk`,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"pq_rate_per_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+								},
+								"pq_strict_ordering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regional endpoint to send events to`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"service_account_credentials": schema.StringAttribute{
+									Computed:    true,
+									Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
+								},
+								"service_account_credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.`,
+								},
+							},
+						},
+						"output_click_house": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"async_inserts": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Collect data into batches for later processing. Disable to write to a ClickHouse table immediately.`,
+								},
+								"auth_header_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed: true,
+								},
+								"column_mappings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"column_name": schema.StringAttribute{
+												Computed:    true,
+												Description: `Name of the column in ClickHouse that will store field value`,
+											},
+											"column_type": schema.StringAttribute{
+												Computed:    true,
+												Description: `Type of the column in the ClickHouse database`,
+											},
+											"column_value_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute value to be inserted into ClickHouse table`,
+											},
+										},
+									},
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials`,
+								},
+								"database": schema.StringAttribute{
+									Computed: true,
+								},
+								"describe_table": schema.StringAttribute{
+									Computed:    true,
+									Description: `Retrieves the table schema from ClickHouse and populates the Column Mapping table`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dump_format_errors_to_disk": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log the most recent event that fails to match the table schema`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_mapping_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to exclude from sending to ClickHouse`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data format to use when sending data to ClickHouse. Defaults to JSON Compact.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"login_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL for OAuth`,
+								},
+								"mapping_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `How event fields are mapped to ClickHouse columns.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"oauth_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header value`,
+											},
+										},
+									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"oauth_params": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter value`,
+											},
+										},
+									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"password": schema.StringAttribute{
+									Computed: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).` + "\n" +
+										`` + "\n" +
+										`` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side),` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter value to pass in request body`,
+								},
+								"secret_param_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter name to pass in request body`,
+								},
+								"sql_username": schema.StringAttribute{
+									Computed:    true,
+									Description: `Username for certificate authentication`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"table_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bearer token to include in the authorization header`,
+								},
+								"token_attribute_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+								},
+								"token_timeout_secs": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the OAuth token should be refreshed.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL of the ClickHouse instance. Example: http://localhost:8123/`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"username": schema.StringAttribute{
+									Computed: true,
+								},
+								"wait_for_async_inserts": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Cribl will wait for confirmation that data has been fully inserted into the ClickHouse database before proceeding. Disabling this option can increase throughput, but Cribl won’t be able to verify data has been completely inserted.`,
+								},
+							},
+						},
+						"output_cloudflare_r2": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `This value can be a constant or a JavaScript expression (` + "`" + `${C.env.SOME_ACCESS_KEY}` + "`" + `)`,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret key. This value can be a constant or a JavaScript expression, such as ` + "`" + `${C.env.SOME_SECRET}` + "`" + `).`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the destination R2 bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example referencing a Global Variable: ` + "`" + `myBucket-${C.vars.myVar}` + "`" + ``,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Root directory to prepend to path before uploading. Enter a constant, or a JavaScript expression enclosed in quotes or backticks.`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Cloudflare R2 service URL (example: https://<ACCOUNT_ID>.r2.cloudflarestorage.com)`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `).`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"object_acl": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
+									Computed:    true,
+									Description: `Parsed as JSON.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"region": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
+									Computed:    true,
+									Description: `Parsed as JSON.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates)`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"server_side_encryption": schema.StringAttribute{
+									Computed:    true,
+									Description: `Server-side encryption for uploaded objects`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing MinIO requests`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.`,
+								},
+								"storage_class": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage class to select for uploaded objects`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+							},
+						},
+						"output_cloudwatch": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"duration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials to access CloudWatchLogs`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `CloudWatchLogs service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to CloudWatchLogs-compatible endpoint.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"log_group_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `CloudWatch log group to associate events with`,
+								},
+								"log_stream_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Prefix for CloudWatch log stream name. This prefix will be used to generate a unique log stream name per cribl instance, for example: myStream_myHost_myOutputId`,
+								},
+								"max_queue_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of queued batches before blocking`,
+								},
+								"max_record_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size (KB) of each individual record before compression. For non compressible data 1MB is the max recommended size`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the CloudWatchLogs is located`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_confluent_cloud": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"ack": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Control the number of required acknowledgments.`,
+								},
+								"authentication_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+								},
+								"brokers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092.`,
+								},
+								"compression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the data before sending to Kafka`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for a connection to complete successfully`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_event_count": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of events you want the Destination to allow in a batch before forcing a flush`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum amount of time you want the Destination to wait before forcing a flush. Shorter intervals tend to result in smaller batches being sent.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format to use to serialize events before writing to Kafka.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+								},
+								"kafka_schema_registry": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"auth": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"credentials_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select or create a secret that references your credentials`,
+												},
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+											},
+											Description: `Credentials to use when authenticating with the schema registry using basic HTTP authentication`,
+										},
+										"connection_timeout": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum time to wait for a Schema Registry connection to complete successfully`,
+										},
+										"default_key_schema_id": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Used when __keySchemaIdOut is not present, to transform key values, leave blank if key transformation is not required by default.`,
+										},
+										"default_value_schema_id": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Used when __valueSchemaIdOut is not present, to transform _raw, leave blank if value transformation is not required by default.`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_retries": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
+										},
+										"request_timeout": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum time to wait for the Schema Registry to respond to a request`,
+										},
+										"schema_registry_url": schema.StringAttribute{
+											Computed:    true,
+											Description: `URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.`,
+										},
+										"tls": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"ca_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+												},
+												"cert_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+												},
+												"certificate_name": schema.StringAttribute{
+													Computed:    true,
+													Description: `The name of the predefined certificate`,
+												},
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"max_version": schema.StringAttribute{
+													Computed: true,
+												},
+												"min_version": schema.StringAttribute{
+													Computed: true,
+												},
+												"passphrase": schema.StringAttribute{
+													Computed:    true,
+													Description: `Passphrase to use to decrypt private key`,
+												},
+												"priv_key_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+												},
+												"reject_unauthorized": schema.BoolAttribute{
+													Computed: true,
+													MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+														`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+												},
+												"servername": schema.StringAttribute{
+													Computed:    true,
+													Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+												},
+											},
+										},
+									},
+								},
+								"max_back_off": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+								"max_record_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size of each record batch before compression. The value must not exceed the Kafka brokers' message.max.bytes setting.`,
+								},
+								"max_retries": schema.Float64Attribute{
+									Computed:    true,
+									Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protobuf_library_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select a set of Protobuf definitions for the events you want to send`,
+								},
+								"reauthentication_threshold": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to a request`,
+								},
+								"sasl": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"mechanism": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+									Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"topic": schema.StringAttribute{
+									Computed:    true,
+									Description: `The topic to publish events to. Can be overridden using the __topicOut field.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_cribl_http": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"compression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the data before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to exclude from the event. By default, all internal fields except ` + "`" + `__output` + "`" + ` are sent. Example: ` + "`" + `cribl_pipe` + "`" + `, ` + "`" + `c*` + "`" + `. Wildcards supported.`,
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"load_balance_stats_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How far back in time to keep traffic stats for load balancing purposes`,
+								},
+								"load_balanced": schema.BoolAttribute{
+									Computed:    true,
+									Description: `For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs. If this setting is disabled, consider enabling round-robin DNS.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"token_ttl_minutes": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL of a Cribl Worker to send events to, such as http://localhost:10200`,
+								},
+								"urls": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"url": schema.StringAttribute{
+												Computed:    true,
+												Description: `URL of a Cribl Worker to send events to, such as http://localhost:10200`,
+											},
+											"weight": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+											},
+										},
+									},
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_cribl_lake": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Lake dataset to send the data to.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_cribl_tcp": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"compression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the data before sending`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to exclude from the event. By default, all internal fields except ` + "`" + `__output` + "`" + ` are sent. Example: ` + "`" + `cribl_pipe` + "`" + `, ` + "`" + `c*` + "`" + `. Wildcards supported.`,
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `The hostname of the receiver`,
+								},
+								"hosts": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"host": schema.StringAttribute{
+												Computed:    true,
+												Description: `The hostname of the receiver`,
+											},
+											"port": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The port to connect to on the provided host`,
+											},
+											"servername": schema.StringAttribute{
+												Computed:    true,
+												Description: `Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.`,
+											},
+											"tls": schema.StringAttribute{
+												Computed:    true,
+												Description: `Whether to inherit TLS configs from group setting or disable TLS`,
+											},
+											"weight": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+											},
+										},
+									},
+									Description: `Set of hosts to load-balance data to`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"load_balance_stats_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How far back in time to keep traffic stats for load balancing purposes`,
+								},
+								"load_balanced": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use load-balanced destinations`,
+								},
+								"log_failed_requests": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use to troubleshoot issues with sending data`,
+								},
+								"max_concurrent_senders": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The port to connect to on the provided host`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"token_ttl_minutes": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of minutes before the internally generated authentication token expires, valid values between 1 and 60`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"write_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
+								},
+							},
+						},
+						"output_crowdstrike_next_gen_siem": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's ` + "`" + `_raw` + "`" + ` value is sent.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed: true,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed: true,
+									MarkdownDescription: `URL provided from a CrowdStrike data connector. ` + "\n" +
+										`Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/v1/services/collector`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_databricks": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"catalog": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the catalog to use for the output`,
+								},
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `OAuth client ID for Unity Catalog authentication`,
+								},
+								"client_text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `OAuth client secret for Unity Catalog authentication`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional path to prepend to files before uploading.`,
+								},
+								"directory_batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"events_volume_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the events volume in Databricks`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `).`,
+								},
+								"force_close_on_shutdown": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the catalog schema to use for the output`,
+								},
+								"scope": schema.StringAttribute{
+									Computed:    true,
+									Description: `OAuth scope for Unity Catalog authentication`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files before compressing and moving to final destination. Use performant, stable storage.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"workspace_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Databricks workspace ID`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+							},
+						},
+						"output_datadog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"allow_api_key_from_events": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Allow API key to be set from the event's '__agent_api_key' field`,
+								},
+								"api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Organization's API key in Datadog`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter API key directly, or select a stored secret`,
+								},
+								"batch_by_tags": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Batch events by API key and the ddtags field on the event. When disabled, batches events only by API key. If incoming events have high cardinality in the ddtags field, disabling this setting may improve Destination performance.`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"content_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `The content type to use when sending logs`,
+								},
+								"custom_url": schema.StringAttribute{
+									Computed: true,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the host to send with logs. When you send logs as JSON objects, the event's 'host' field (if set) will override this value.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"message": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"send_counters_as_count": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If not enabled, Datadog will transform 'counter' metrics to 'gauge'. [Learn more about Datadog metrics types.](https://docs.datadoghq.com/metrics/types/?tab=count)`,
+								},
+								"service": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the service to send with logs. When you send logs as JSON objects, the event's '__service' field (if set) will override this value.`,
+								},
+								"severity": schema.StringAttribute{
+									Computed:    true,
+									Description: `Default value for message severity. When you send logs as JSON objects, the event's '__severity' field (if set) will override this value.`,
+								},
+								"site": schema.StringAttribute{
+									Computed:    true,
+									Description: `Datadog site to which events should be sent`,
+								},
+								"source": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the source to send with logs. When you send logs as JSON objects, the event's 'source' field (if set) will override this value.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"tags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of tags to send with logs, such as 'env:prod' and 'env_staging:east'`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_dataset": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `A 'Log Write Access' API key for the DataSet account`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter API key directly, or select a stored secret`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"custom_url": schema.StringAttribute{
+									Computed: true,
+								},
+								"default_severity": schema.StringAttribute{
+									Computed:    true,
+									Description: `Default value for event severity. If the ` + "`" + `sev` + "`" + ` or ` + "`" + `__severity` + "`" + ` fields are set on an event, the first one matching will override this value.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to exclude from the event if the Message field is either unspecified or refers to an object. Ignored if the Message field is a string. If empty, we send all non-internal fields.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"message_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the event field that contains the message or attributes to send. If not specified, all of the event's non-internal fields will be sent as attributes.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"server_host_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the event field that contains the ` + "`" + `serverHost` + "`" + ` identifier. If not specified, defaults to ` + "`" + `cribl_<outputId>` + "`" + `.`,
+								},
+								"site": schema.StringAttribute{
+									Computed:    true,
+									Description: `DataSet site to which events should be sent`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"timestamp_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the event field that contains the timestamp. If not specified, defaults to ` + "`" + `ts` + "`" + `, ` + "`" + `_time` + "`" + `, or ` + "`" + `Date.now()` + "`" + `, in that order.`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_default": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"default_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `ID of the default output. This will be used whenever a nonexistent/deleted output is referenced.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_devnull": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_disk_spool": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format. Default is gzip.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_data_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Maximum disk space that can be consumed before older buckets are deleted. Examples: 420MB, 4GB. Default is 1GB.`,
+								},
+								"max_data_time": schema.StringAttribute{
+									Computed:    true,
+									Description: `Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized within the time-buckets. If blank, the event's __partition property is used and otherwise, events go directly into the time-bucket directory.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"time_window": schema.StringAttribute{
+									Computed:    true,
+									Description: `Time period for grouping spooled events. Default is 10m.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_dl_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `This value can be a constant or a JavaScript expression (` + "`" + `${C.env.SOME_ACCESS_KEY}` + "`" + `)`,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret key. This value can be a constant or a JavaScript expression. Example: ` + "`" + `${C.env.SOME_SECRET}` + "`" + `)`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: ` + "`" + `myBucket-${C.vars.myVar}` + "`" + ``,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Prefix to append to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `myKeyPrefix-${C.vars.myVar}` + "`" + ``,
+								},
+								"duration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials to access S3`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `).`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+								},
+								"kms_key_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"partitioning_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of fields to partition the path by, in addition to time, which is included automatically. The effective partition will be YYYY/MM/DD/HH/<list/of/fields>.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the S3 bucket is located`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"server_side_encryption": schema.StringAttribute{
+									Computed: true,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing S3 requests`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"storage_class": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage class to select for uploaded objects`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+							},
+						},
+						"output_dynatrace_http": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"active_gate_domain": schema.StringAttribute{
+									Computed:    true,
+									Description: `ActiveGate domain with Log analytics collector module enabled. For example https://{activeGate-domain}:9999/e/{environment-id}/api/v2/logs/ingest.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed: true,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"environment_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `ID of the environment to send to`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields).`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to format events before sending. Defaults to JSON. Plaintext is not currently supported.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"method": schema.StringAttribute{
+									Computed:    true,
+									Description: `The method to use when sending events`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"telemetry_type": schema.StringAttribute{
+									Computed: true,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bearer token to include in the authorization header`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL to send events to. Can be overwritten by an event's __url field.`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_dynatrace_otlp": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_token_name": schema.StringAttribute{
+									Computed: true,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `The endpoint where Dynatrace events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)`,
+								},
+								"endpoint_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select the type of Dynatrace endpoint configured`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"http_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+								},
+								"http_logs_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: `If you want to send logs to the default ` + "`" + `{endpoint}/v1/logs` + "`" + ` endpoint, leave this field empty; otherwise, specify the desired endpoint`,
+								},
+								"http_metrics_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: `If you want to send metrics to the default ` + "`" + `{endpoint}/v1/metrics` + "`" + ` endpoint, leave this field empty; otherwise, specify the desired endpoint`,
+								},
+								"http_traces_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: `If you want to send traces to the default ` + "`" + `{endpoint}/v1/traces` + "`" + ` endpoint, leave this field empty; otherwise, specify the desired endpoint`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the sender should ping the peer to keep the connection open`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size (in KB) of the request body. The maximum payload size is 4 MB. If this limit is exceeded, the entire OTLP message is dropped`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"otlp_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `The version of OTLP Protobuf definitions to use when structuring data to send`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protocol": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select a transport option for Dynatrace`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_elastic": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"auth_type": schema.StringAttribute{
+											Computed:    true,
+											Description: `Enter credentials directly, or select a stored secret`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+								},
+								"doc_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Document type to use for events. Can be overwritten by an event's __type field.`,
+								},
+								"elastic_pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional Elasticsearch destination pipeline`,
+								},
+								"elastic_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional Elasticsearch version, used to format events. If not specified, will auto-discover version.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"extra_params": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"include_doc_id": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Include the ` + "`" + `document_id` + "`" + ` field when sending events to an Elastic TSDS (time series data stream)`,
+								},
+								"index": schema.StringAttribute{
+									Computed:    true,
+									Description: `Index or data stream to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.`,
+								},
+								"load_balance_stats_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How far back in time to keep traffic stats for load balancing purposes`,
+								},
+								"load_balanced": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"retry_partial_errors": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Retry failed events when a bulk request to Elastic is successful, but the response body returns an error for one or more events in the batch`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Cloud ID or URL to an Elastic cluster to send events to. Example: http://elastic:9200/_bulk`,
+								},
+								"urls": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"url": schema.StringAttribute{
+												Computed:    true,
+												Description: `The URL to an Elastic node to send events to. Example: http://elastic:9200/_bulk`,
+											},
+											"weight": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+											},
+										},
+									},
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"write_action": schema.StringAttribute{
+									Computed:    true,
+									Description: `Action to use when writing events. Must be set to ` + "`" + `Create` + "`" + ` when writing to a data stream.`,
+								},
+							},
+						},
+						"output_elastic_cloud": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"auth_type": schema.StringAttribute{
+											Computed:    true,
+											Description: `Enter credentials directly, or select a stored secret`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"elastic_pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional Elastic Cloud Destination pipeline`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"extra_params": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Extra parameters to use in HTTP requests`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"include_doc_id": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Include the ` + "`" + `document_id` + "`" + ` field when sending events to an Elastic TSDS (time series data stream)`,
+								},
+								"index": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data stream or index to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter Cloud ID of the Elastic Cloud environment to send events to`,
+								},
+							},
+						},
+						"output_exabeam": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `HMAC access key. Can be a constant or a JavaScript expression, such as ` + "`" + `${C.env.GCS_ACCESS_KEY}` + "`" + `.`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `HMAC secret. Can be a constant or a JavaScript expression, such as ` + "`" + `${C.env.GCS_SECRET}` + "`" + `.`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the destination bucket. A constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a JavaScript Global Variable: ` + "`" + `myBucket-${C.vars.myVar}` + "`" + `.`,
+								},
+								"collector_instance_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `ID of the Exabeam Collector where data should be sent. Example: 11112222-3333-4444-5555-666677778888`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"encoded_configuration": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter an encoded string containing Exabeam configurations`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Google Cloud Storage service endpoint`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the bucket is located`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing Google Cloud Storage requests`,
+								},
+								"site_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Exabeam site ID. If left blank, @{product} will use the value of the Exabeam site name.`,
+								},
+								"site_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Constant or JavaScript expression to create an Exabeam site name. Values that aren't successfully evaluated will be treated as string constants.`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"storage_class": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage class to select for uploaded objects`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timezone_offset": schema.StringAttribute{
+									Computed: true,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_filesystem": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Final destination for the output files`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `).`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files before compressing and moving to final destination. Use performant, stable storage.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+							},
+						},
+						"output_google_chronicle": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Organization's API key in Google SecOps`,
+								},
+								"api_key_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"api_version": schema.StringAttribute{
+									Computed: true,
+								},
+								"authentication_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"custom_labels": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Custom labels to be added to every batch`,
+								},
+								"customer_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique identifier (UUID) corresponding to a particular SecOps instance. Provided by your SecOps representative.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"extra_log_types": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"description": schema.StringAttribute{
+												Computed: true,
+											},
+											"log_type": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Custom log types. If the value "Custom" is selected in the setting "Default log type" above, the first custom log type in this table will be automatically selected as default log type.`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"log_format_type": schema.StringAttribute{
+									Computed: true,
+								},
+								"log_text_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the event field that contains the log text to send. If not specified, Stream sends a JSON representation of the whole event.`,
+								},
+								"log_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Default log type value to send to SecOps. Can be overwritten by event field __logType.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"namespace": schema.StringAttribute{
+									Computed:    true,
+									Description: `User-configured environment namespace to identify the data domain the logs originated from. Use namespace as a tag to identify the appropriate data domain for indexing and enrichment functionality. Can be overwritten by event field __namespace.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regional endpoint to send events to`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"service_account_credentials": schema.StringAttribute{
+									Computed:    true,
+									Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
+								},
+								"service_account_credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.`,
+								},
+							},
+						},
+						"output_google_cloud_logging": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"cache_fill_bytes_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request cache fill bytes as a string, in int64 format. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"cache_hit_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request cache hit as a boolean. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"cache_lookup_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request cache lookup as a boolean. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"cache_validated_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request cache validated with origin server as a boolean. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking.`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"file_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry source location file as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentrysourcelocation) for details.`,
+								},
+								"first_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry operation first flag as a boolean. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentryoperation) for details.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.`,
+								},
+								"function_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry source location function as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentrysourcelocation) for details.`,
+								},
+								"google_auth_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"id_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry operation ID as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentryoperation) for details.`,
+								},
+								"index_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry log split index as a number. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logsplit) for details.`,
+								},
+								"insert_id_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the value of the insert ID field.`,
+								},
+								"last_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry operation last flag as a boolean. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentryoperation) for details.`,
+								},
+								"latency_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request latency, formatted as <seconds>.<nanoseconds>s (for example, 1.23s). See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"line_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry source location line as a string, in int64 format. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentrysourcelocation) for details.`,
+								},
+								"log_labels": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"label": schema.StringAttribute{
+												Computed:    true,
+												Description: `Label name`,
+											},
+											"value_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute the label's value.`,
+											},
+										},
+									},
+									Description: `Labels to apply to the log entry`,
+								},
+								"log_location_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the value of the folder ID with which log entries should be associated.`,
+								},
+								"log_location_type": schema.StringAttribute{
+									Computed: true,
+								},
+								"log_name_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the value of the log name.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Max number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"payload_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the value of the payload. Must evaluate to a JavaScript object value. If an invalid value is encountered it will result in the default value instead. Defaults to the entire event.`,
+								},
+								"payload_format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format to use when sending payload. Defaults to Text.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"producer_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry operation producer as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentryoperation) for details.`,
+								},
+								"protocol_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request protocol as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"referer_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request referer as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"remote_ip_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request remote IP as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"request_method_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request method as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"request_size_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request size as a string, in int64 format. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"request_url_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request URL as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"resource_type_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the value of the managed resource type field. Must evaluate to one of the valid values [here](https://cloud.google.com/logging/docs/api/v2/resource-list#resource-types). Defaults to "global".`,
+								},
+								"resource_type_labels": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"label": schema.StringAttribute{
+												Computed:    true,
+												Description: `Label name`,
+											},
+											"value_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute the label's value.`,
+											},
+										},
+									},
+									Description: `Labels to apply to the managed resource. These must correspond to the valid labels for the specified resource type (see [here](https://cloud.google.com/logging/docs/api/v2/resource-list#resource-types)). Otherwise, they will be dropped by Google Cloud Logging.`,
+								},
+								"response_size_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP response size as a string, in int64 format. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"server_ip_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request server IP as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"service_account_credentials": schema.StringAttribute{
+									Computed:    true,
+									Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
+								},
+								"severity_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the value of the severity field. Must evaluate to one of the severity values supported by Google Cloud Logging [here](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity) (case insensitive). Defaults to "DEFAULT".`,
+								},
+								"span_id_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the ID of the cloud trace span associated with the current operation in which the log is being written as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.`,
+								},
+								"status_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request method as a number. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"throttle_rate_req_per_sec": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of requests to limit to per second.`,
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it.`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"total_splits_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry log split total splits as a number. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logsplit) for details.`,
+								},
+								"trace_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the REST resource name of the trace being written as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.`,
+								},
+								"trace_sampled_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the the sampling decision of the span associated with the log entry. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"uid_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the log entry log split UID as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logsplit) for details.`,
+								},
+								"user_agent_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `A JavaScript expression that evaluates to the HTTP request user agent as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.`,
+								},
+							},
+						},
+						"output_google_cloud_storage": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `HMAC access key. This value can be a constant or a JavaScript expression, such as ` + "`" + `${C.env.GCS_ACCESS_KEY}` + "`" + `.`,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed: true,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `HMAC secret. This value can be a constant or a JavaScript expression, such as ` + "`" + `${C.env.GCS_SECRET}` + "`" + `.`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the destination bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a Global Variable: ` + "`" + `myBucket-${C.vars.myVar}` + "`" + `.`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Prefix to append to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `myKeyPrefix-${C.vars.myVar}` + "`" + ``,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Google Cloud Storage service endpoint`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `).`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the bucket is located`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing Google Cloud Storage requests`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"storage_class": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage class to select for uploaded objects`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+							},
+						},
+						"output_google_pubsub": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"batch_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of items the Google API should batch before it sends them to the topic.`,
+								},
+								"batch_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum amount of time, in milliseconds, that the Google API should wait to send a batch (if the Batch size is not reached).`,
+								},
+								"create_topic": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, create topic if it does not exist.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait before sending a batch (when batch size limit is not reached).`,
+								},
+								"google_auth_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_in_progress": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of in-progress API requests before backpressure is applied.`,
+								},
+								"max_queue_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of queued batches before blocking.`,
+								},
+								"max_record_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size (KB) of batches to send.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"ordered_delivery": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, send events in the order they were added to the queue. For this to work correctly, the process receiving events must have ordering enabled.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region to publish messages to. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.`,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"service_account_credentials": schema.StringAttribute{
+									Computed:    true,
+									Description: `Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"topic_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `ID of the topic to send events to.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_grafana_cloud": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"labels": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}"`,
+								},
+								"loki_auth": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"auth_type": schema.StringAttribute{
+											Computed: true,
+										},
+										"credentials_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a secret that references your credentials`,
+										},
+										"password": schema.StringAttribute{
+											Computed:    true,
+											Description: `Password (API key in Grafana Cloud domain) for authentication`,
+										},
+										"text_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored text secret`,
+										},
+										"token": schema.StringAttribute{
+											Computed:    true,
+											Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
+										},
+										"username": schema.StringAttribute{
+											Computed:    true,
+											Description: `Username for authentication`,
+										},
+									},
+								},
+								"loki_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net. LokiUrl, PrometheusUrl, or both are required.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+								},
+								"message": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.`,
+								},
+								"message_format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format to use when sending logs to Loki (Protobuf or JSON)`,
+								},
+								"metric_rename_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"prometheus_auth": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"auth_type": schema.StringAttribute{
+											Computed: true,
+										},
+										"credentials_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a secret that references your credentials`,
+										},
+										"password": schema.StringAttribute{
+											Computed:    true,
+											Description: `Password (API key in Grafana Cloud domain) for authentication`,
+										},
+										"text_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored text secret`,
+										},
+										"token": schema.StringAttribute{
+											Computed:    true,
+											Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
+										},
+										"username": schema.StringAttribute{
+											Computed:    true,
+											Description: `Username for authentication`,
+										},
+									},
+								},
+								"prometheus_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push. LokiUrl, PrometheusUrl, or both are required.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_graphite": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `The hostname of the destination.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"mtu": schema.Float64Attribute{
+									Computed:    true,
+									Description: `When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Destination port.`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protocol": schema.StringAttribute{
+									Computed:    true,
+									Description: `Protocol to use when communicating with the destination.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"write_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
+								},
+							},
+						},
+						"output_honeycomb": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter API key directly, or select a stored secret`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"dataset": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the dataset to send events to – e.g., observability`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"team": schema.StringAttribute{
+									Computed:    true,
+									Description: `Team API key where the dataset belongs`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_humio_hec": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's ` + "`" + `_raw` + "`" + ` value is sent.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `CrowdStrike Falcon LogScale authentication token`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL to a CrowdStrike Falcon LogScale endpoint to send events to. Examples: https://cloud.us.humio.com/api/v1/ingest/hec for JSON and https://cloud.us.humio.com/api/v1/ingest/hec/raw for raw`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_influxdb": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_header_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `InfluxDB authentication type`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bucket to write to.`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials`,
+								},
+								"database": schema.StringAttribute{
+									Computed:    true,
+									Description: `Database to write to.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dynamic_value_field_name": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enabling this will pull the value field from the metric name. E,g, 'db.query.user' will use 'db.query' as the measurement and 'user' as the value field.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"login_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL for OAuth`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"oauth_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header value`,
+											},
+										},
+									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"oauth_params": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter value`,
+											},
+										},
+									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"org": schema.StringAttribute{
+									Computed:    true,
+									Description: `Organization ID for this bucket.`,
+								},
+								"password": schema.StringAttribute{
+									Computed: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter value to pass in request body`,
+								},
+								"secret_param_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter name to pass in request body`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"timestamp_precision": schema.StringAttribute{
+									Computed:    true,
+									Description: `Sets the precision for the supplied Unix time values. Defaults to milliseconds.`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bearer token to include in the authorization header`,
+								},
+								"token_attribute_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+								},
+								"token_timeout_secs": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the OAuth token should be refreshed.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL of an InfluxDB cluster to send events to, e.g., http://localhost:8086/write`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"use_v2_api": schema.BoolAttribute{
+									Computed:    true,
+									Description: `The v2 API can be enabled with InfluxDB versions 1.8 and later.`,
+								},
+								"username": schema.StringAttribute{
+									Computed: true,
+								},
+								"value_field_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the field in which to store the metric when sending to InfluxDB. If dynamic generation is enabled and fails, this will be used as a fallback.`,
+								},
+							},
+						},
+						"output_kafka": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"ack": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Control the number of required acknowledgments.`,
+								},
+								"authentication_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+								},
+								"brokers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092.`,
+								},
+								"compression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the data before sending to Kafka`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for a connection to complete successfully`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_event_count": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of events you want the Destination to allow in a batch before forcing a flush`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum amount of time you want the Destination to wait before forcing a flush. Shorter intervals tend to result in smaller batches being sent.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format to use to serialize events before writing to Kafka.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+								},
+								"kafka_schema_registry": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"auth": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"credentials_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select or create a secret that references your credentials`,
+												},
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+											},
+											Description: `Credentials to use when authenticating with the schema registry using basic HTTP authentication`,
+										},
+										"connection_timeout": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum time to wait for a Schema Registry connection to complete successfully`,
+										},
+										"default_key_schema_id": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Used when __keySchemaIdOut is not present, to transform key values, leave blank if key transformation is not required by default.`,
+										},
+										"default_value_schema_id": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Used when __valueSchemaIdOut is not present, to transform _raw, leave blank if value transformation is not required by default.`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_retries": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
+										},
+										"request_timeout": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum time to wait for the Schema Registry to respond to a request`,
+										},
+										"schema_registry_url": schema.StringAttribute{
+											Computed:    true,
+											Description: `URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.`,
+										},
+										"tls": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"ca_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+												},
+												"cert_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+												},
+												"certificate_name": schema.StringAttribute{
+													Computed:    true,
+													Description: `The name of the predefined certificate`,
+												},
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"max_version": schema.StringAttribute{
+													Computed: true,
+												},
+												"min_version": schema.StringAttribute{
+													Computed: true,
+												},
+												"passphrase": schema.StringAttribute{
+													Computed:    true,
+													Description: `Passphrase to use to decrypt private key`,
+												},
+												"priv_key_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+												},
+												"reject_unauthorized": schema.BoolAttribute{
+													Computed: true,
+													MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+														`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+												},
+												"servername": schema.StringAttribute{
+													Computed:    true,
+													Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+												},
+											},
+										},
+									},
+								},
+								"max_back_off": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+								"max_record_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size of each record batch before compression. The value must not exceed the Kafka brokers' message.max.bytes setting.`,
+								},
+								"max_retries": schema.Float64Attribute{
+									Computed:    true,
+									Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protobuf_library_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select a set of Protobuf definitions for the events you want to send`,
+								},
+								"reauthentication_threshold": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to a request`,
+								},
+								"sasl": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"mechanism": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+									Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+												`` + "\n" +
+												`` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"topic": schema.StringAttribute{
+									Computed:    true,
+									Description: `The topic to publish events to. Can be overridden using the __topicOut field.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_kinesis": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"as_ndjson": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Batch events into a single record as NDJSON`,
+								},
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"compression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression type to use for records`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing put requests before blocking.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"duration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials to access Kinesis stream`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Kinesis stream service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to Kinesis stream-compatible endpoint.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_record_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size (KB) of each individual record before compression. For uncompressed or non-compressible data 1MB is the max recommended size`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the Kinesis stream is located`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing Kinesis stream requests`,
+								},
+								"stream_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Kinesis stream name to send events to.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_list_shards": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Provides higher stream rate limits, improving delivery speed and reliability by minimizing throttling. See the [ListShards API](https://docs.aws.amazon.com/kinesis/latest/APIReference/API_ListShards.html) documentation for details.`,
+								},
+							},
+						},
+						"output_loki": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed: true,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki to complain about entries being delivered out of order.`,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"labels": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}"`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Defaults to 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order.`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki to complain about entries being delivered out of order.`,
+								},
+								"message": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.`,
+								},
+								"message_format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format to use when sending logs to Loki (Protobuf or JSON)`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"password": schema.StringAttribute{
+									Computed:    true,
+									Description: `Password (API key in Grafana Cloud domain) for authentication`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as labels to generated logs.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The endpoint to send logs to`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"username": schema.StringAttribute{
+									Computed:    true,
+									Description: `Username for authentication`,
+								},
+							},
+						},
+						"output_microsoft_fabric": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"ack": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Control the number of required acknowledgments`,
+								},
+								"authentication_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+								},
+								"bootstrap_server": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bootstrap server from Fabric Eventstream's endpoint`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for a connection to complete successfully`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_event_count": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events in a batch before forcing a flush`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format to use to serialize events before writing to the Event Hubs Kafka brokers`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+								},
+								"max_back_off": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+								"max_record_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size of each record batch before compression. Setting should be < message.max.bytes settings in Event Hubs brokers.`,
+								},
+								"max_retries": schema.Float64Attribute{
+									Computed:    true,
+									Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_backpressure_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+								},
+								"pq_max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of events to hold in memory before writing the events to disk`,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"pq_rate_per_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+								},
+								"pq_strict_ordering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+								},
+								"reauthentication_threshold": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to a request`,
+								},
+								"sasl": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"cert_path": schema.StringAttribute{
+											Computed: true,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored certificate`,
+										},
+										"client_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `client_id to pass in the OAuth request parameter`,
+										},
+										"client_secret_auth_type": schema.StringAttribute{
+											Computed: true,
+										},
+										"client_text_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored text secret`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"mechanism": schema.StringAttribute{
+											Computed: true,
+										},
+										"oauth_endpoint": schema.StringAttribute{
+											Computed:    true,
+											Description: `Endpoint used to acquire authentication tokens from Azure`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed: true,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed: true,
+										},
+										"scope": schema.StringAttribute{
+											Computed:    true,
+											Description: `Scope to pass in the OAuth request parameter`,
+										},
+										"tenant_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Directory ID (tenant identifier) in Azure Active Directory`,
+										},
+										"text_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored text secret corresponding to the SASL JASS Password Primary or Password Secondary`,
+										},
+										"username": schema.StringAttribute{
+											Computed:    true,
+											Description: `The username for authentication. This should always be $ConnectionString.`,
+										},
+									},
+									Description: `Authentication parameters to use when connecting to bootstrap server. Using TLS is highly recommended.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's)`,
+										},
+									},
+								},
+								"topic": schema.StringAttribute{
+									Computed:    true,
+									Description: `Topic name from Fabric Eventstream's endpoint`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_minio": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `This value can be a constant or a JavaScript expression (` + "`" + `${C.env.SOME_ACCESS_KEY}` + "`" + `)`,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret key. This value can be a constant or a JavaScript expression, such as ` + "`" + `${C.env.SOME_SECRET}` + "`" + `).`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the destination MinIO bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example referencing a Global Variable: ` + "`" + `myBucket-${C.vars.myVar}` + "`" + ``,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Root directory to prepend to path before uploading. Enter a constant, or a JavaScript expression enclosed in quotes or backticks.`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `MinIO service url (e.g. http://minioHost:9000)`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `).`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the MinIO service/cluster is located`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates)`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"server_side_encryption": schema.StringAttribute{
+									Computed:    true,
+									Description: `Server-side encryption for uploaded objects`,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing MinIO requests`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.`,
+								},
+								"storage_class": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage class to select for uploaded objects`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+							},
+						},
+						"output_msk": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"ack": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Control the number of required acknowledgments.`,
+								},
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"authentication_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to an authentication request`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"backoff_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.`,
+								},
+								"brokers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092.`,
+								},
+								"compression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the data before sending to Kafka`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for a connection to complete successfully`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"duration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials to access MSK`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `MSK cluster service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to MSK cluster-compatible endpoint.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_event_count": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of events you want the Destination to allow in a batch before forcing a flush`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum amount of time you want the Destination to wait before forcing a flush. Shorter intervals tend to result in smaller batches being sent.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format to use to serialize events before writing to Kafka.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).`,
+								},
+								"kafka_schema_registry": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"auth": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"credentials_secret": schema.StringAttribute{
+													Computed:    true,
+													Description: `Select or create a secret that references your credentials`,
+												},
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+											},
+											Description: `Credentials to use when authenticating with the schema registry using basic HTTP authentication`,
+										},
+										"connection_timeout": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum time to wait for a Schema Registry connection to complete successfully`,
+										},
+										"default_key_schema_id": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Used when __keySchemaIdOut is not present, to transform key values, leave blank if key transformation is not required by default.`,
+										},
+										"default_value_schema_id": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Used when __valueSchemaIdOut is not present, to transform _raw, leave blank if value transformation is not required by default.`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_retries": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of times to try fetching schemas from the Schema Registry`,
+										},
+										"request_timeout": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum time to wait for the Schema Registry to respond to a request`,
+										},
+										"schema_registry_url": schema.StringAttribute{
+											Computed:    true,
+											Description: `URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.`,
+										},
+										"tls": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"ca_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+												},
+												"cert_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+												},
+												"certificate_name": schema.StringAttribute{
+													Computed:    true,
+													Description: `The name of the predefined certificate`,
+												},
+												"disabled": schema.BoolAttribute{
+													Computed: true,
+												},
+												"max_version": schema.StringAttribute{
+													Computed: true,
+												},
+												"min_version": schema.StringAttribute{
+													Computed: true,
+												},
+												"passphrase": schema.StringAttribute{
+													Computed:    true,
+													Description: `Passphrase to use to decrypt private key`,
+												},
+												"priv_key_path": schema.StringAttribute{
+													Computed:    true,
+													Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+												},
+												"reject_unauthorized": schema.BoolAttribute{
+													Computed: true,
+													MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+														`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+												},
+												"servername": schema.StringAttribute{
+													Computed:    true,
+													Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+												},
+											},
+										},
+									},
+								},
+								"max_back_off": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+								"max_record_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size of each record batch before compression. The value must not exceed the Kafka brokers' message.max.bytes setting.`,
+								},
+								"max_retries": schema.Float64Attribute{
+									Computed:    true,
+									Description: `If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protobuf_library_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select a set of Protobuf definitions for the events you want to send`,
+								},
+								"reauthentication_threshold": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the MSK cluster is located`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time to wait for Kafka to respond to a request`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing MSK cluster requests`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+												`` + "\n" +
+												`` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"topic": schema.StringAttribute{
+									Computed:    true,
+									Description: `The topic to publish events to. Can be overridden using the __topicOut field.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_netflow": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every datagram sent will incur a DNS lookup.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"hosts": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"host": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination host`,
+											},
+											"port": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Destination port, default is 2055`,
+											},
+										},
+									},
+									Description: `One or more NetFlow destinations to forward events to`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_newrelic": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `New Relic API key. Can be overridden using __newRelic_apiKey field.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter API key directly, or select a stored secret`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"custom_url": schema.StringAttribute{
+									Computed: true,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"log_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the logtype to send with events, e.g.: observability, access_log. The event's 'sourcetype' field (if set) will override this value.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"message_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of field to send as log message value. If not present, event will be serialized and sent as JSON.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+									Description: `Fields to add to events from this input`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Which New Relic region endpoint to use.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_newrelic_events": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `New Relic account ID`,
+								},
+								"api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `New Relic API key. Can be overridden using __newRelic_apiKey field.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter API key directly, or select a stored secret`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"custom_url": schema.StringAttribute{
+									Computed: true,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"event_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Default eventType to use when not present in an event. For more information, see [here](https://docs.newrelic.com/docs/telemetry-data-platform/custom-data/custom-events/data-requirements-limits-custom-event-data/#reserved-words).`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Which New Relic region endpoint to use.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_open_telemetry": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_header_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `OpenTelemetry authentication type`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `The endpoint where OTel events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets). Unspecified ports will default to 4317, unless the endpoint is an HTTPS-based URL or TLS is enabled, in which case 443 will be used.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"http_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+								},
+								"http_logs_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: `If you want to send logs to the default ` + "`" + `{endpoint}/v1/logs` + "`" + ` endpoint, leave this field empty; otherwise, specify the desired endpoint`,
+								},
+								"http_metrics_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: `If you want to send metrics to the default ` + "`" + `{endpoint}/v1/metrics` + "`" + ` endpoint, leave this field empty; otherwise, specify the desired endpoint`,
+								},
+								"http_traces_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: `If you want to send traces to the default ` + "`" + `{endpoint}/v1/traces` + "`" + ` endpoint, leave this field empty; otherwise, specify the desired endpoint`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the sender should ping the peer to keep the connection open`,
+								},
+								"login_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL for OAuth`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+								},
+								"oauth_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header value`,
+											},
+										},
+									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"oauth_params": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter value`,
+											},
+										},
+									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"otlp_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `The version of OTLP Protobuf definitions to use when structuring data to send`,
+								},
+								"password": schema.StringAttribute{
+									Computed: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protocol": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select a transport option for OpenTelemetry`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).` + "\n" +
+										`` + "\n" +
+										`` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side),` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter value to pass in request body`,
+								},
+								"secret_param_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter name to pass in request body`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+												`` + "\n" +
+												`` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+									},
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bearer token to include in the authorization header`,
+								},
+								"token_attribute_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+								},
+								"token_timeout_secs": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the OAuth token should be refreshed.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"username": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_prometheus": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_header_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Remote Write authentication type`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"login_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL for OAuth`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"metric_rename_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.`,
+								},
+								"metrics_flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period set above.`,
+								},
+								"oauth_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header value`,
+											},
+										},
+									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"oauth_params": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter value`,
+											},
+										},
+									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"password": schema.StringAttribute{
+									Computed: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter value to pass in request body`,
+								},
+								"secret_param_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter name to pass in request body`,
+								},
+								"send_metadata": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Generate and send metadata (` + "`" + `type` + "`" + ` and ` + "`" + `metricFamilyName` + "`" + `) requests`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bearer token to include in the authorization header`,
+								},
+								"token_attribute_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+								},
+								"token_timeout_secs": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the OAuth token should be refreshed.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `The endpoint to send metrics to`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"username": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_ring": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"compress": schema.StringAttribute{
+									Computed: true,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Path to use to write metrics. Defaults to $CRIBL_HOME/state/<id>`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_data_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.`,
+								},
+								"max_data_time": schema.StringAttribute{
+									Computed:    true,
+									Description: `Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JS expression to define how files are partitioned and organized. If left blank, Cribl Stream will fallback on event.__partition.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_router": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"rules": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Description of this rule's purpose`,
+											},
+											"filter": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to select events to send to output`,
+											},
+											"final": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Flag to control whether to stop the event from being checked against other rules`,
+											},
+											"output": schema.StringAttribute{
+												Computed:    true,
+												Description: `Output to send matching events to`,
+											},
+										},
+									},
+									Description: `Event routing rules`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_s3": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `This value can be a constant or a JavaScript expression (` + "`" + `${C.env.SOME_ACCESS_KEY}` + "`" + `)`,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret key. This value can be a constant or a JavaScript expression. Example: ` + "`" + `${C.env.SOME_SECRET}` + "`" + `)`,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: ` + "`" + `myBucket-${C.vars.myVar}` + "`" + ``,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data compression format to apply to HTTP content before it is delivered`,
+								},
+								"compression_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Compression level to apply before moving files to final destination`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dest_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Prefix to append to files before uploading. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `myKeyPrefix-${C.vars.myVar}` + "`" + ``,
+								},
+								"duration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials to access S3`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `S3 service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to S3-compatible endpoint.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"file_name_suffix": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename suffix (can be constant).  The ` + "`" + `__format` + "`" + ` variable refers to the value of the ` + "`" + `Data format` + "`" + ` field (` + "`" + `json` + "`" + ` or ` + "`" + `raw` + "`" + `).  The ` + "`" + `__compression` + "`" + ` field refers to the kind of compression being used (` + "`" + `none` + "`" + ` or ` + "`" + `gzip` + "`" + `).`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Format of the output data`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+								},
+								"kms_key_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"partition_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the S3 bucket is located`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"server_side_encryption": schema.StringAttribute{
+									Computed: true,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing S3 requests`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"storage_class": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage class to select for uploaded objects`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+							},
+						},
+						"output_security_lake": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `ID of the AWS account whose data the Destination will write to Security Lake. This should have been configured when creating the Amazon Security Lake custom source.`,
+								},
+								"add_id_to_stage_path": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Add the Output ID value to staging location`,
+								},
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"automatic_schema": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `This value can be a constant or a JavaScript expression (` + "`" + `${C.env.SOME_ACCESS_KEY}` + "`" + `)`,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"base_file_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to define the output filename prefix (can be constant)`,
+								},
+								"bucket": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: ` + "`" + `myBucket-${C.vars.myVar}` + "`" + ``,
+								},
+								"custom_source": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the custom source configured in Amazon Security Lake`,
+								},
+								"deadletter_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors`,
+								},
+								"deadletter_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage location for files that fail to reach their final destination after maximum retries are exceeded`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"duration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"empty_dir_cleanup_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How frequently, in seconds, to clean up empty directories`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials to access S3`,
+								},
+								"enable_page_checksum": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Parquet tools can use the checksum of a Parquet page to verify data integrity`,
+								},
+								"enable_statistics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.`,
+								},
+								"enable_write_page_index": schema.BoolAttribute{
+									Computed:    true,
+									Description: `One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Security Lake service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to Amazon Security Lake-compatible endpoint.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"header_line": schema.StringAttribute{
+									Computed:    true,
+									Description: `If set, this line will be written to the beginning of each output file`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"key_value_metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+								},
+								"kms_key_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `ID or ARN of the KMS customer-managed key to use for encryption`,
+								},
+								"max_closing_files_to_backpressure": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files that can be waiting for upload before backpressure is applied`,
+								},
+								"max_concurrent_file_parts": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of parts to upload in parallel per file. Minimum part size is 5MB.`,
+								},
+								"max_file_idle_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_open_time_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.`,
+								},
+								"max_file_size_mb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.`,
+								},
+								"max_open_files": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.`,
+								},
+								"max_retry_num": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
+								},
+								"object_acl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Object ACL to assign to uploaded objects`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"on_disk_full_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when disk space is below the global 'Min free disk space' limit`,
+								},
+								"parquet_data_page_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.`,
+								},
+								"parquet_page_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.`,
+								},
+								"parquet_row_group_length": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of rows that every group will contain. The final group can contain a smaller number of rows.`,
+								},
+								"parquet_schema": schema.StringAttribute{
+									Computed:    true,
+									Description: `To add a new schema, navigate to Processing > Knowledge > Parquet Schemas`,
+								},
+								"parquet_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Determines which data types are supported and how they are represented`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the Amazon Security Lake is located.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"remove_empty_dirs": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Remove empty staging directories after moving files`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"server_side_encryption": schema.StringAttribute{
+									Computed: true,
+								},
+								"should_log_invalid_rows": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Log up to 3 rows that @{product} skips due to data mismatch`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing Amazon Security Lake requests`,
+								},
+								"stage_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.`,
+								},
+								"storage_class": schema.StringAttribute{
+									Computed:    true,
+									Description: `Storage class to select for uploaded objects`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"verify_permissions": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable if you can access files within the bucket but not the bucket itself`,
+								},
+								"write_high_water_mark": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Buffer size used to write to a file`,
+								},
+							},
+						},
+						"output_sentinel": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"advanced_content_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `HTTP content-type header value`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed: true,
+								},
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the Client ID for the Azure application. Can be a constant.`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"custom_content_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Content type to use for request. Defaults to application/x-ndjson. Any content types set in Advanced Settings > Extra HTTP headers will override this entry.`,
+								},
+								"custom_drop_when_null": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether to drop events when the source expression evaluates to null`,
+								},
+								"custom_event_delimiter": schema.StringAttribute{
+									Computed:    true,
+									Description: `Delimiter string to insert between individual events. Defaults to newline character.`,
+								},
+								"custom_payload_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Expression specifying how to format the payload for each batch. To reference the events to send, use the ` + "`" + `${events}` + "`" + ` variable. Example expression: ` + "`" + `{ "items" : [${events}] }` + "`" + ` would send the batch inside a JSON object.`,
+								},
+								"custom_source_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Expression to evaluate on events to generate output. Example: ` + "`" + `raw=${_raw}` + "`" + `. See [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook#custom-format) for other examples. If empty, the full event is sent as stringified JSON.`,
+								},
+								"dce_endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data collection endpoint (DCE) URL. In the format: ` + "`" + `https://<Endpoint-Name>-<Identifier>.<Region>.ingest.monitor.azure.com` + "`" + ``,
+								},
+								"dcr_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Immutable ID for the Data Collection Rule (DCR)`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"endpoint_url_configuration": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter the data collection endpoint URL or the individual ID`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field.`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"format": schema.StringAttribute{
+									Computed: true,
+								},
+								"format_event_code": schema.StringAttribute{
+									Computed:    true,
+									Description: `Custom JavaScript code to format incoming event data accessible through the __e variable. The formatted content is added to (__e['__eventOut']) if available. Otherwise, the original event is serialized as JSON. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.`,
+								},
+								"format_payload_code": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional JavaScript code to format the payload sent to the Destination. The payload, containing a batch of formatted events, is accessible through the __e['payload'] variable. The formatted payload is returned in the __e['__payloadOut'] variable. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"login_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL for OAuth`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size (KB) of the request body (defaults to the API's maximum limit of 1000 KB)`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"scope": schema.StringAttribute{
+									Computed:    true,
+									Description: `Scope to pass in the OAuth request`,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter value to pass in request body`,
+								},
+								"stream_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `The name of the stream (Sentinel table) in which to store the events`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL to send events to. Can be overwritten by an event's __url field.`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_sentinel_one_ai_siem": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"base_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Base URL of the endpoint used to send events to, such as https://<Your-S1-Tenant>.sentinelone.net. Must begin with http:// or https://, can include a port number, and no trailing slashes. Matches pattern: ^https?://[a-zA-Z0-9.-]+(:[0-9]+)?$.`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"data_source_category": schema.StringAttribute{
+									Computed:    true,
+									Description: `Specify the dataSource.category value to pass as a parameter to SentinelOne AI SIEM. This value helps categorize data and enables additional features. Don't quote this value. The default is security.`,
+								},
+								"data_source_category_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Define the dataSource.category for events using a JavaScript expression. This value helps categorize data and helps enable extra features in SentinelOne AI SIEM. You must enclose text constants in quotes. The default value is 'security'.`,
+								},
+								"data_source_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Specify the dataSource.name value to pass as a parameter to AI SIEM. This value should reflect the type of data being inserted. Don't quote this value. The default is cribl.`,
+								},
+								"data_source_name_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Define the dataSource.name for events using a JavaScript expression. This value should reflect the type of data being inserted into AI SIEM. You must enclose text constants in quotes (such as, 'networkActivity' or 'authLogs').`,
+								},
+								"data_source_vendor": schema.StringAttribute{
+									Computed:    true,
+									Description: `Specify the dataSource.vendorvalue to pass as a parameter to AI SIEM. This value should reflect the vendor of the data being inserted. Don't quote this value. The default is cribl.`,
+								},
+								"data_source_vendor_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Define the dataSource.vendor for events using a JavaScript expression. This value should reflect the vendor of the data being inserted into AI SIEM. You must enclose text constants in quotes (such as, 'Cisco' or 'Microsoft').`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"event_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Specify the event.type value to pass as an optional parameter to AI SIEM. This value acts as a label, grouping events into meaningful categories like Process Creation, File Modification, or Network Connection. Don't quote this value. By default, this field is empty.`,
+								},
+								"event_type_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, define the event.type for events using a JavaScript expression. This value acts as a label, grouping events into meaningful categories. You must enclose text constants in quotes (such as, 'Process Creation' or 'Network Connection').`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Define the serverHost for events using a JavaScript expression. This value will be passed to AI SIEM. You must enclose text constants in quotes (such as, 'myServerName').`,
+								},
+								"host_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Define serverHost for events using a JavaScript expression. You must enclose text constants in quotes (such as, 'myServer').`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_backpressure_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
+								},
+								"pq_max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of events to hold in memory before writing the events to disk`,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"pq_rate_per_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
+								},
+								"pq_strict_ordering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"source": schema.StringAttribute{
+									Computed:    true,
+									Description: `Specify the logFile value to pass as a parameter to SentinelOne AI SIEM. Don't quote this value. The default is cribl.`,
+								},
+								"source_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Define logFile for events using a JavaScript expression. You must enclose text constants in quotes (such as, 'myLogFile.txt').`,
+								},
+								"source_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Specify the sourcetype parameter for SentinelOne AI SIEM, which determines the parser. Don't quote this value. For custom parsers, substitute hecRawParser with your parser's name. The default is hecRawParser.`,
+								},
+								"source_type_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Define the parser for events using a JavaScript expression. This value helps parse data into AI SIEM. You must enclose text constants in quotes (such as, 'dottedJson'). For custom parsers, substitute 'dottedJson' with your parser's name.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `In the SentinelOne Console select Policy & Settings then select the Singularity AI SIEM section, API Keys will be at the bottom. Under Log Access Keys select a Write token and copy it here`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_service_now": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_token_name": schema.StringAttribute{
+									Computed: true,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `The endpoint where ServiceNow events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"http_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Type of compression to apply to messages sent to the OpenTelemetry endpoint`,
+								},
+								"http_logs_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: `If you want to send logs to the default ` + "`" + `{endpoint}/v1/logs` + "`" + ` endpoint, leave this field empty; otherwise, specify the desired endpoint`,
+								},
+								"http_metrics_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: `If you want to send metrics to the default ` + "`" + `{endpoint}/v1/metrics` + "`" + ` endpoint, leave this field empty; otherwise, specify the desired endpoint`,
+								},
+								"http_traces_endpoint_override": schema.StringAttribute{
+									Computed:    true,
+									Description: `If you want to send traces to the default ` + "`" + `{endpoint}/v1/traces` + "`" + ` endpoint, leave this field empty; otherwise, specify the desired endpoint`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the sender should ping the peer to keep the connection open`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"key": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"otlp_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `The version of OTLP Protobuf definitions to use when structuring data to send`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protocol": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select a transport option for OpenTelemetry`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+												`` + "\n" +
+												`` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+									},
+								},
+								"token_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_signalfx": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"realm": schema.StringAttribute{
+									Computed:    true,
+									Description: `SignalFx realm name, e.g. "us0". For a complete list of available SignalFx realm names, please check [here](https://docs.splunk.com/observability/en/get-started/service-description.html#sd-regions).`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `SignalFx API access token (see [here](https://docs.signalfx.com/en/latest/admin-guide/tokens.html#working-with-access-tokens))`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_snmp": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"hosts": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"host": schema.StringAttribute{
+												Computed:    true,
+												Description: `Destination host`,
+											},
+											"port": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Destination port, default is 162`,
+											},
+										},
+									},
+									Description: `One or more SNMP destinations to forward traps to`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_sns": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"duration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials to access SNS`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `SNS service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to SNS-compatible endpoint.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_retries": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of retries before the output returns an error. Note that not all errors are retryable. The retries use an exponential backoff policy.`,
+								},
+								"message_group_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Messages in the same group are processed in a FIFO manner. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Region where the SNS is located`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing SNS requests`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"topic_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `The ARN of the SNS topic to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. E.g., 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + ``,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_splunk": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Shared secret token to use when establishing a connection to a Splunk indexer.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Controls whether the sender should send compressed data to the server. Select 'Disabled' to reject compressed connections or 'Always' to ignore server's configuration and send compressed data.`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"enable_ack": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Check if indexer is shutting down and stop sending data. This helps minimize data loss during shutdown.`,
+								},
+								"enable_multi_metrics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Output metrics in multiple-metric format in a single event. Supported in Splunk 8.0 and above.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `The hostname of the receiver`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"log_failed_requests": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use to troubleshoot issues with sending data`,
+								},
+								"max_failed_health_checks": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.`,
+								},
+								"max_s2_sversion": schema.StringAttribute{
+									Computed:    true,
+									Description: `The highest S2S protocol version to advertise during handshake`,
+								},
+								"nested_fields": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to serialize nested fields into index-time fields`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The port to connect to on the provided host`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"write_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
+								},
+							},
+						},
+						"output_splunk_hec": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+								},
+								"enable_multi_metrics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Output metrics in multiple-metric format, supported in Splunk 8.0 and above to allow multiple metrics in a single event.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"load_balance_stats_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How far back in time to keep traffic stats for load balancing purposes`,
+								},
+								"load_balanced": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"next_queue": schema.StringAttribute{
+									Computed:    true,
+									Description: `In the Splunk app, define which Splunk processing queue to send the events after HEC processing.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"tcp_routing": schema.StringAttribute{
+									Computed:    true,
+									Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Splunk HEC authentication token`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL to a Splunk HEC endpoint to send events to, e.g., http://localhost:8088/services/collector/event`,
+								},
+								"urls": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"url": schema.StringAttribute{
+												Computed:    true,
+												Description: `URL to a Splunk HEC endpoint to send events to, e.g., http://localhost:8088/services/collector/event`,
+											},
+											"weight": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+											},
+										},
+									},
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_splunk_lb": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Shared secret token to use when establishing a connection to a Splunk indexer.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Controls whether the sender should send compressed data to the server. Select 'Disabled' to reject compressed connections or 'Always' to ignore server's configuration and send compressed data.`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+								},
+								"enable_ack": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Check if indexer is shutting down and stop sending data. This helps minimize data loss during shutdown.`,
+								},
+								"enable_multi_metrics": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Output metrics in multiple-metric format in a single event. Supported in Splunk 8.0 and above.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+								},
+								"hosts": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"host": schema.StringAttribute{
+												Computed:    true,
+												Description: `The hostname of the receiver`,
+											},
+											"port": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The port to connect to on the provided host`,
+											},
+											"servername": schema.StringAttribute{
+												Computed:    true,
+												Description: `Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.`,
+											},
+											"tls": schema.StringAttribute{
+												Computed:    true,
+												Description: `Whether to inherit TLS configs from group setting or disable TLS`,
+											},
+											"weight": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+											},
+										},
+									},
+									Description: `Set of Splunk indexers to load-balance data to.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"indexer_discovery": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Automatically discover indexers in indexer clustering environment.`,
+								},
+								"indexer_discovery_configs": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"auth_token": schema.StringAttribute{
+											Computed:    true,
+											Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
+										},
+										"auth_tokens": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"auth_type": schema.StringAttribute{
+														Computed:    true,
+														Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+													},
+												},
+											},
+											Description: `Tokens required to authenticate to cluster manager for indexer discovery`,
+										},
+										"auth_type": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+										},
+										"master_uri": schema.StringAttribute{
+											Computed:    true,
+											Description: `Full URI of Splunk cluster manager (scheme://host:port). Example: https://managerAddress:8089`,
+										},
+										"refresh_interval_sec": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Time interval, in seconds, between two consecutive indexer list fetches from cluster manager`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `During indexer discovery, reject cluster manager certificates that are not authorized by the system's CA. Disable to allow untrusted (for example, self-signed) certificates.`,
+										},
+										"site": schema.StringAttribute{
+											Computed:    true,
+											Description: `Clustering site of the indexers from where indexers need to be discovered. In case of single site cluster, it defaults to 'default' site.`,
+										},
+										"text_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored text secret`,
+										},
+									},
+									Description: `List of configurations to set up indexer discovery in Splunk Indexer clustering environment.`,
+								},
+								"load_balance_stats_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How far back in time to keep traffic stats for load balancing purposes`,
+								},
+								"log_failed_requests": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use to troubleshoot issues with sending data`,
+								},
+								"max_concurrent_senders": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.`,
+								},
+								"max_failed_health_checks": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.`,
+								},
+								"max_s2_sversion": schema.StringAttribute{
+									Computed:    true,
+									Description: `The highest S2S protocol version to advertise during handshake`,
+								},
+								"nested_fields": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to serialize nested fields into index-time fields`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"sender_unhealthy_time_allowance": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long (in milliseconds) each LB endpoint can report blocked before the Destination reports unhealthy, blocking the sender. (Grace period for fluctuations.) Use 0 to disable; max 1 minute.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
+												`` + "\n" +
+												`` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"write_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
+								},
+							},
+						},
+						"output_sqs": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Amazon Resource Name (ARN) of the role to assume`,
+								},
+								"assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `External ID to use when assuming role`,
+								},
+								"aws_account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.`,
+								},
+								"aws_api_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"aws_authentication_method": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
+								},
+								"aws_secret_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"create_queue": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Create queue if it does not exist.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"duration_seconds": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).`,
+								},
+								"enable_assume_role": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use Assume Role credentials to access SQS`,
+								},
+								"endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `SQS service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to SQS-compatible endpoint.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_in_progress": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum number of in-progress API requests before backpressure is applied.`,
+								},
+								"max_queue_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of queued batches before blocking.`,
+								},
+								"max_record_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size (KB) of batches to send. Per the SQS spec, the max allowed value is 256 KB.`,
+								},
+								"message_group_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `This parameter applies only to FIFO queues. The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner. Use event field __messageGroupId to override this value.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"queue_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `The name, URL, or ARN of the SQS queue to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: ` + "`" + `https://host:port/myQueue-${C.vars.myVar}` + "`" + `.`,
+								},
+								"queue_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `The queue type used (or created). Defaults to Standard.`,
+								},
+								"region": schema.StringAttribute{
+									Computed:    true,
+									Description: `AWS Region where the SQS queue is located. Required, unless the Queue entry is a URL or ARN that includes a Region.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reject certificates that cannot be verified against a valid CA, such as self-signed certificates`,
+								},
+								"reuse_connections": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reuse connections between requests, which can improve performance`,
+								},
+								"signature_version": schema.StringAttribute{
+									Computed:    true,
+									Description: `Signature version to use for signing SQS requests`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_statsd": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `The hostname of the destination.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"mtu": schema.Float64Attribute{
+									Computed:    true,
+									Description: `When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Destination port.`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protocol": schema.StringAttribute{
+									Computed:    true,
+									Description: `Protocol to use when communicating with the destination.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"write_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
+								},
+							},
+						},
+						"output_statsd_ext": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `The hostname of the destination.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"mtu": schema.Float64Attribute{
+									Computed:    true,
+									Description: `When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Destination port.`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protocol": schema.StringAttribute{
+									Computed:    true,
+									Description: `Protocol to use when communicating with the destination.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"write_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
+								},
+							},
+						},
+						"output_sumo_logic": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"custom_category": schema.StringAttribute{
+									Computed:    true,
+									Description: `Override the source category configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceCategory field.`,
+								},
+								"custom_source": schema.StringAttribute{
+									Computed:    true,
+									Description: `Override the source name configured on the Sumo Logic HTTP collector. This can also be overridden at the event level with the __sourceName field.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Preserve the raw event format instead of JSONifying it`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Sumo Logic HTTP collector URL to which events should be sent`,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_syslog": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"app_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Default name for device or application that originated the message. Defaults to Cribl, but will be overwritten by value of __appname if set.`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"facility": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Default value for message facility. Will be overwritten by value of __facility if set. Defaults to user.`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `The hostname of the receiver`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"load_balanced": schema.BoolAttribute{
+									Computed:    true,
+									Description: `For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs.  If this setting is disabled, consider enabling round-robin DNS.`,
+								},
+								"log_failed_requests": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use to troubleshoot issues with sending data`,
+								},
+								"max_record_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size of syslog messages. Make sure this value is less than or equal to the MTU to avoid UDP packet fragmentation.`,
+								},
+								"message_format": schema.StringAttribute{
+									Computed:    true,
+									Description: `The syslog message format depending on the receiver's support`,
+								},
+								"octet_count_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Prefix messages with the byte count of the message. If disabled, no prefix will be set, and the message will be appended with a \n.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The port to connect to on the provided host`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"protocol": schema.StringAttribute{
+									Computed:    true,
+									Description: `The network protocol to use for sending out syslog messages`,
+								},
+								"severity": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"timestamp_format": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timestamp format to use when serializing event's time field`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"udp_dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every message sent will incur a DNS lookup.`,
+								},
+								"write_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
+								},
+							},
+						},
+						"output_tcpjson": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional authentication token to include as part of the connection header`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"compression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the data before sending`,
+								},
+								"connection_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for the connection to establish before retrying`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `The hostname of the receiver`,
+								},
+								"hosts": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"host": schema.StringAttribute{
+												Computed:    true,
+												Description: `The hostname of the receiver`,
+											},
+											"port": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The port to connect to on the provided host`,
+											},
+											"servername": schema.StringAttribute{
+												Computed:    true,
+												Description: `Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.`,
+											},
+											"tls": schema.StringAttribute{
+												Computed:    true,
+												Description: `Whether to inherit TLS configs from group setting or disable TLS`,
+											},
+											"weight": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+											},
+										},
+									},
+									Description: `Set of hosts to load-balance data to`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"load_balance_stats_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How far back in time to keep traffic stats for load balancing purposes`,
+								},
+								"load_balanced": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use load-balanced destinations`,
+								},
+								"log_failed_requests": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use to troubleshoot issues with sending data`,
+								},
+								"max_concurrent_senders": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The port to connect to on the provided host`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"send_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Upon connection, send a header-like record containing the auth token and other metadata.This record will not contain an actual event – only subsequent records will.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"throttle_rate_per_sec": schema.StringAttribute{
+									Computed:    true,
+									Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed: true,
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
+												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"token_ttl_minutes": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of minutes before the internally generated authentication token expires, valid values between 1 and 60`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"write_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead`,
+								},
+							},
+						},
+						"output_wavefront": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"domain": schema.StringAttribute{
+									Computed:    true,
+									Description: `WaveFront domain name, e.g. "longboard"`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `WaveFront API authentication token (see [here](https://docs.wavefront.com/wavefront_api.html#generating-an-api-token))`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+						"output_webhook": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"advanced_content_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `HTTP content-type header value`,
+								},
+								"auth_header_expr": schema.StringAttribute{
+									Computed:    true,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+								},
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Authentication method to use for the HTTP request`,
+								},
+								"compress": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Compress the payload body before sending`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials`,
+								},
+								"custom_content_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Content type to use for request. Defaults to application/x-ndjson. Any content types set in Advanced Settings > Extra HTTP headers will override this entry.`,
+								},
+								"custom_drop_when_null": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether to drop events when the source expression evaluates to null`,
+								},
+								"custom_event_delimiter": schema.StringAttribute{
+									Computed:    true,
+									Description: `Delimiter string to insert between individual events. Defaults to newline character.`,
+								},
+								"custom_payload_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Expression specifying how to format the payload for each batch. To reference the events to send, use the ` + "`" + `${events}` + "`" + ` variable. Example expression: ` + "`" + `{ "items" : [${events}] }` + "`" + ` would send the batch inside a JSON object.`,
+								},
+								"custom_source_expression": schema.StringAttribute{
+									Computed:    true,
+									Description: `Expression to evaluate on events to generate output. Example: ` + "`" + `raw=${_raw}` + "`" + `. See [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook#custom-format) for other examples. If empty, the full event is sent as stringified JSON.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields).`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"format": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to format events before sending out`,
+								},
+								"format_event_code": schema.StringAttribute{
+									Computed:    true,
+									Description: `Custom JavaScript code to format incoming event data accessible through the __e variable. The formatted content is added to (__e['__eventOut']) if available. Otherwise, the original event is serialized as JSON. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.`,
+								},
+								"format_payload_code": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional JavaScript code to format the payload sent to the Destination. The payload, containing a batch of formatted events, is accessible through the __e['payload'] variable. The formatted payload is returned in the __e['__payloadOut'] variable. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"keep_alive": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disable to close the connection immediately after sending the outgoing request`,
+								},
+								"load_balance_stats_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How far back in time to keep traffic stats for load balancing purposes`,
+								},
+								"load_balanced": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
+								},
+								"login_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL for OAuth`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"method": schema.StringAttribute{
+									Computed:    true,
+									Description: `The method to use when sending events`,
+								},
+								"oauth_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth header value`,
+											},
+										},
+									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"oauth_params": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter name`,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `OAuth parameter value`,
+											},
+										},
+									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"password": schema.StringAttribute{
+									Computed: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter value to pass in request body`,
+								},
+								"secret_param_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Secret parameter name to pass in request body`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"tls": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"ca_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"disabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"max_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"min_version": schema.StringAttribute{
+											Computed: true,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"servername": schema.StringAttribute{
+											Computed:    true,
+											Description: `Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.`,
+										},
+									},
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Bearer token to include in the authorization header`,
+								},
+								"token_attribute_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+								},
+								"token_timeout_secs": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often the OAuth token should be refreshed.`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `URL of a webhook endpoint to send events to, such as http://localhost:10200`,
+								},
+								"urls": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"url": schema.StringAttribute{
+												Computed:    true,
+												Description: `URL of a webhook endpoint to send events to, such as http://localhost:10200`,
+											},
+											"weight": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+											},
+										},
+									},
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+								"username": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"output_xsiam": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Enter a token directly, or provide a secret referencing a token`,
+								},
+								"concurrency": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of ongoing requests before blocking`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"dns_resolve_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The interval in which to re-resolve any hostnames and pick up destinations from A records`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"exclude_self": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Exclude all IPs of the current host from the list of any resolved hostnames`,
+								},
+								"extra_http_headers": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Headers to add to all events`,
+								},
+								"failed_request_logging_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								},
+								"flush_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this output`,
+								},
+								"load_balance_stats_period_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How far back in time to keep traffic stats for load balancing purposes`,
+								},
+								"load_balanced": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.`,
+								},
+								"max_payload_events": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to include in the request body. Default is 0 (unlimited).`,
+								},
+								"max_payload_size_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum size, in KB, of the request body`,
+								},
+								"on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when all receivers are exerting backpressure`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data before sending out to this output`,
+								},
+								"pq_compress": schema.StringAttribute{
+									Computed:    true,
+									Description: `Codec to use to compress the persisted data`,
+								},
+								"pq_controls": schema.SingleNestedAttribute{
+									Computed: true,
+								},
+								"pq_max_file_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+								},
+								"pq_max_size": schema.StringAttribute{
+									Computed:    true,
+									Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								},
+								"pq_mode": schema.StringAttribute{
+									Computed:    true,
+									Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+								},
+								"pq_on_backpressure": schema.StringAttribute{
+									Computed:    true,
+									Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+								},
+								"pq_path": schema.StringAttribute{
+									Computed:    true,
+									Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+								},
+								"reject_unauthorized": schema.BoolAttribute{
+									Computed: true,
+									MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+										`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+										`        that value will take precedence.`,
+								},
+								"response_honor_retry_after_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+								},
+								"response_retry_settings": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"backoff_rate": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+											},
+											"http_status": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The HTTP response status code that will trigger retries`,
+											},
+											"initial_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+											},
+											"max_backoff": schema.Float64Attribute{
+												Computed:    true,
+												Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+											},
+										},
+									},
+									Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								},
+								"safe_headers": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `List of headers that are safe to log in plain text`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"system_fields": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
+								"throttle_rate_req_per_sec": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Maximum number of requests to limit to per second`,
+								},
+								"timeout_retry_settings": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"backoff_rate": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+										},
+										"initial_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+										},
+										"max_backoff": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+										},
+										"timeout_retry": schema.BoolAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"timeout_sec": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+								},
+								"token": schema.StringAttribute{
+									Computed:    true,
+									Description: `XSIAM authentication token`,
+								},
+								"total_memory_limit_kb": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `XSIAM endpoint URL to send events to, such as https://api-{tenant external URL}/logs/v1/event`,
+								},
+								"urls": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"url": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
+												Computed:    true,
+												Description: `Parsed as JSON.`,
+											},
+											"weight": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Assign a weight (>0) to each endpoint to indicate its traffic-handling capability`,
+											},
+										},
+									},
+								},
+								"use_round_robin_dns": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								},
+							},
+						},
+					},
 				},
 			},
 		},

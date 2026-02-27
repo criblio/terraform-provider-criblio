@@ -21,6 +21,14 @@ func (l *ListLookupFileRequest) GetGroupID() string {
 
 // ListLookupFileResponseBody - a list of LookupFile objects
 type ListLookupFileResponseBody struct {
+	Items []shared.LookupFile `json:"items,omitempty"`
+}
+
+func (l *ListLookupFileResponseBody) GetItems() []shared.LookupFile {
+	if l == nil {
+		return nil
+	}
+	return l.Items
 }
 
 type ListLookupFileResponse struct {

@@ -7,14 +7,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -40,14 +41,14 @@ type PackLookupsResource struct {
 
 // PackLookupsResourceModel describes the resource data model.
 type PackLookupsResourceModel struct {
-	Content     types.String     `tfsdk:"content"`
-	Description types.String     `tfsdk:"description"`
-	GroupID     types.String     `tfsdk:"group_id"`
-	ID          types.String     `tfsdk:"id"`
-	Items       []tfTypes.Routes `tfsdk:"items"`
-	Mode        types.String     `tfsdk:"mode"`
-	Pack        types.String     `tfsdk:"pack"`
-	Tags        types.String     `tfsdk:"tags"`
+	Content     types.String         `tfsdk:"content"`
+	Description types.String         `tfsdk:"description"`
+	GroupID     types.String         `tfsdk:"group_id"`
+	ID          types.String         `tfsdk:"id"`
+	Items       []tfTypes.LookupFile `tfsdk:"items"`
+	Mode        types.String         `tfsdk:"mode"`
+	Pack        types.String         `tfsdk:"pack"`
+	Tags        types.String         `tfsdk:"tags"`
 }
 
 func (r *PackLookupsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,101 +79,83 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
 				NestedObject: schema.NestedAttributeObject{
+					PlanModifiers: []planmodifier.Object{
+						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+					},
 					Attributes: map[string]schema.Attribute{
-						"comments": schema.ListNestedAttribute{
+						"content": schema.StringAttribute{
 							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"comment": schema.StringAttribute{
-										Computed:    true,
-										Description: `Optional, short description of this Route's purpose`,
-									},
-								},
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Comments`,
+							Description: `File content.`,
 						},
-						"groups": schema.MapNestedAttribute{
+						"description": schema.StringAttribute{
 							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										Computed:    true,
-										Description: `Short description of this group`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Whether this group is disabled`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 						},
 						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Routes ID`,
-						},
-						"routes": schema.ListNestedAttribute{
 							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+						},
+						"mode": schema.StringAttribute{
+							Computed: true,
+							Default:  stringdefault.StaticString(`memory`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Default: "memory"`,
+						},
+						"pending_task": schema.SingleNestedAttribute{
+							Computed: true,
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
+							Attributes: map[string]schema.Attribute{
+								"error": schema.StringAttribute{
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
-									"description": schema.StringAttribute{
-										Computed: true,
+									Description: `Error message if task has failed`,
+								},
+								"id": schema.StringAttribute{
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Disable this routing rule`,
+									Description: `Task ID (generated).`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
-									"enable_output_expression": schema.BoolAttribute{
-										Computed:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false`,
-									},
-									"filter": schema.StringAttribute{
-										Computed:    true,
-										Default:     stringdefault.StaticString(`true`),
-										Description: `JavaScript expression to select data to route. Default: "true"`,
-									},
-									"final": schema.BoolAttribute{
-										Computed:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true`,
-									},
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"output": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"output_expression": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"pipeline": schema.StringAttribute{
-										Computed:    true,
-										Description: `Pipeline to send the matching data to`,
-									},
+									Description: `Task type`,
 								},
 							},
-							Description: `Pipeline routing rules`,
+						},
+						"tags": schema.StringAttribute{
+							Computed: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `One or more tags related to this lookup. Optional.`,
+						},
+						"version": schema.StringAttribute{
+							Computed: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Unique string generated for each modification of this lookup`,
 						},
 					},
 				},

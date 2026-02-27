@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"encoding/json"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -17,45 +16,37 @@ func (r *SearchUsageGroupResourceModel) RefreshFromOperationsCreateUsageGroupRes
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.UsageGroup{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.UsageGroup
-
-			items.CoordinatorHeapMemoryLimit = types.Float64PointerValue(itemsItem.CoordinatorHeapMemoryLimit)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Enabled = types.BoolPointerValue(itemsItem.Enabled)
-			items.ID = types.StringValue(itemsItem.ID)
-			rulesResult, _ := json.Marshal(itemsItem.Rules)
-			items.Rules = jsontypes.NewNormalizedValue(string(rulesResult))
-			items.UsersCount = types.Float64PointerValue(itemsItem.UsersCount)
-
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedUsageGroup(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
 }
 
-func (r *SearchUsageGroupResourceModel) RefreshFromOperationsListUsageGroupResponseBody(ctx context.Context, resp *operations.ListUsageGroupResponseBody) diag.Diagnostics {
+func (r *SearchUsageGroupResourceModel) RefreshFromOperationsGetUsageGroupByIDResponseBody(ctx context.Context, resp *operations.GetUsageGroupByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.UsageGroup{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.UsageGroup
-
-			items.CoordinatorHeapMemoryLimit = types.Float64PointerValue(itemsItem.CoordinatorHeapMemoryLimit)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Enabled = types.BoolPointerValue(itemsItem.Enabled)
-			items.ID = types.StringValue(itemsItem.ID)
-			rulesResult, _ := json.Marshal(itemsItem.Rules)
-			items.Rules = jsontypes.NewNormalizedValue(string(rulesResult))
-			items.UsersCount = types.Float64PointerValue(itemsItem.UsersCount)
-
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedUsageGroup(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -65,21 +56,17 @@ func (r *SearchUsageGroupResourceModel) RefreshFromOperationsUpdateUsageGroupByI
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.UsageGroup{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.UsageGroup
-
-			items.CoordinatorHeapMemoryLimit = types.Float64PointerValue(itemsItem.CoordinatorHeapMemoryLimit)
-			items.Description = types.StringPointerValue(itemsItem.Description)
-			items.Enabled = types.BoolPointerValue(itemsItem.Enabled)
-			items.ID = types.StringValue(itemsItem.ID)
-			rulesResult, _ := json.Marshal(itemsItem.Rules)
-			items.Rules = jsontypes.NewNormalizedValue(string(rulesResult))
-			items.UsersCount = types.Float64PointerValue(itemsItem.UsersCount)
-
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedUsageGroup(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -106,6 +93,19 @@ func (r *SearchUsageGroupResourceModel) ToOperationsDeleteUsageGroupByIDRequest(
 	id = r.ID.ValueString()
 
 	out := operations.DeleteUsageGroupByIDRequest{
+		ID: id,
+	}
+
+	return &out, diags
+}
+
+func (r *SearchUsageGroupResourceModel) ToOperationsGetUsageGroupByIDRequest(ctx context.Context) (*operations.GetUsageGroupByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetUsageGroupByIDRequest{
 		ID: id,
 	}
 

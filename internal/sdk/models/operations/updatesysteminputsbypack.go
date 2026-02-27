@@ -53,12 +53,12 @@ func (u *UpdateSystemInputsByPackRequest) GetInput() shared.Input {
 	return u.Input
 }
 
-// UpdateSystemInputsByPackResponseBody - a list of Pipeline objects
+// UpdateSystemInputsByPackResponseBody - a list of Input objects
 type UpdateSystemInputsByPackResponseBody struct {
-	Items []shared.Pipeline `json:"items,omitempty"`
+	Items []shared.Input `json:"items,omitempty"`
 }
 
-func (u *UpdateSystemInputsByPackResponseBody) GetItems() []shared.Pipeline {
+func (u *UpdateSystemInputsByPackResponseBody) GetItems() []shared.Input {
 	if u == nil {
 		return nil
 	}
@@ -72,7 +72,7 @@ type UpdateSystemInputsByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Pipeline objects
+	// a list of Input objects
 	Object *UpdateSystemInputsByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

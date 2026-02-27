@@ -5,9 +5,9 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,7 +34,6 @@ type SearchUsageGroupResourceModel struct {
 	Description                types.String         `tfsdk:"description"`
 	Enabled                    types.Bool           `tfsdk:"enabled"`
 	ID                         types.String         `tfsdk:"id"`
-	Items                      []tfTypes.UsageGroup `tfsdk:"items"`
 	Rules                      jsontypes.Normalized `tfsdk:"rules"`
 	UsersCount                 types.Float64        `tfsdk:"users_count"`
 }
@@ -62,33 +61,6 @@ func (r *SearchUsageGroupResource) Schema(ctx context.Context, req resource.Sche
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to PATCH`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"coordinator_heap_memory_limit": schema.Float64Attribute{
-							Computed: true,
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"enabled": schema.BoolAttribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"rules": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Computed:    true,
-							Description: `Parsed as JSON.`,
-						},
-						"users_count": schema.Float64Attribute{
-							Computed: true,
-						},
-					},
-				},
 			},
 			"rules": schema.StringAttribute{
 				CustomType:  jsontypes.NormalizedType{},
@@ -178,31 +150,6 @@ func (r *SearchUsageGroupResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.UsageGroups.ListUsageGroup(ctx)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListUsageGroupResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -226,7 +173,13 @@ func (r *SearchUsageGroupResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	res, err := r.client.UsageGroups.ListUsageGroup(ctx)
+	request, requestDiags := data.ToOperationsGetUsageGroupByIDRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.UsageGroups.GetUsageGroupByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -250,7 +203,7 @@ func (r *SearchUsageGroupResource) Read(ctx context.Context, req resource.ReadRe
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListUsageGroupResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetUsageGroupByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -311,31 +264,6 @@ func (r *SearchUsageGroupResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.UsageGroups.ListUsageGroup(ctx)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListUsageGroupResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -385,5 +313,5 @@ func (r *SearchUsageGroupResource) Delete(ctx context.Context, req resource.Dele
 }
 
 func (r *SearchUsageGroupResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource search_usage_group.")
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

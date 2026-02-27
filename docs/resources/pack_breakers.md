@@ -69,22 +69,13 @@ resource "criblio_pack_breakers" "my_packbreakers" {
 ### Optional
 
 - `description` (String)
-- `lib` (String) Default: "custom"; must be one of ["custom", "cribl-custom"]
+- `lib` (String) Default: "custom"; must be one of ["custom", "cribl-custom", "cribl"]
 - `min_raw_length` (Number) The  minimum number of characters in _raw to determine which rule to use. Default: 256
 - `rules` (Attributes List) A list of rules that will be applied, in order, to the input data stream (see [below for nested schema](#nestedatt--rules))
 - `tags` (String)
 
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
 <a id="nestedatt--rules"></a>
 ### Nested Schema for `rules`
-
-Required:
-
-- `name` (String)
-- `timestamp` (Attributes) Auto, manual format (strptime), or current time (see [below for nested schema](#nestedatt--rules--timestamp))
 
 Optional:
 
@@ -98,14 +89,25 @@ Optional:
 - `fields_line_regex` (String) Regex that identifies and captures the fields line when type is "header". Default: "/^#[Ff]ields[:]?\\s+(.*)/"
 - `header_line_regex` (String) Regex used to identify header lines when type is "header". Default: "/^#/"
 - `max_event_bytes` (Number) The maximum number of bytes in an event before it is flushed to the pipelines. Default: 51200
+- `name` (String) Not Null
 - `parser_enabled` (Boolean) Default: false
 - `quote_char` (String) Quote character used for CSV parsing when type is "csv". Default: "\""
 - `should_use_data_raw` (Boolean) Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event. Default: false
+- `timestamp` (Attributes) Auto, manual format (strptime), or current time. Not Null (see [below for nested schema](#nestedatt--rules--timestamp))
 - `timestamp_anchor_regex` (String) The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/^/"
 - `timestamp_earliest` (String) The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time. Default: "-420weeks"
 - `timestamp_latest` (String) The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time. Default: "+1week"
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info. Default: "local"
 - `type` (String) Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow"]
+
+<a id="nestedatt--rules--fields"></a>
+### Nested Schema for `rules.fields`
+
+Optional:
+
+- `name` (String)
+- `value` (String) The JavaScript expression used to compute the field's value (can be constant). Not Null
+
 
 <a id="nestedatt--rules--timestamp"></a>
 ### Nested Schema for `rules.timestamp`
@@ -115,66 +117,6 @@ Optional:
 - `format` (String)
 - `length` (Number) Default: 150
 - `type` (String) Default: "auto"; must be one of ["auto", "format", "current"]
-
-
-<a id="nestedatt--rules--fields"></a>
-### Nested Schema for `rules.fields`
-
-Required:
-
-- `value` (String) The JavaScript expression used to compute the field's value (can be constant)
-
-Optional:
-
-- `name` (String)
-
-
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--items--comments))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--groups))
-- `id` (String) Routes ID
-- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--items--routes))
-
-<a id="nestedatt--items--comments"></a>
-### Nested Schema for `items.comments`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `comment` (String) Optional, short description of this Route's purpose
-
-
-<a id="nestedatt--items--groups"></a>
-### Nested Schema for `items.groups`
-
-Read-Only:
-
-- `description` (String) Short description of this group
-- `disabled` (Boolean) Whether this group is disabled
-- `name` (String)
-
-
-<a id="nestedatt--items--routes"></a>
-### Nested Schema for `items.routes`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `description` (String)
-- `disabled` (Boolean) Disable this routing rule
-- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false
-- `filter` (String) JavaScript expression to select data to route. Default: "true"
-- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true
-- `id` (String)
-- `name` (String)
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
-- `pipeline` (String) Pipeline to send the matching data to
 
 ## Import
 

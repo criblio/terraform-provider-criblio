@@ -62,21 +62,21 @@ resource "criblio_pack" "my_pack" {
 ### Optional
 
 - `allow_custom_functions` (Boolean) Requires replacement if changed.
-- `author` (String) Requires replacement if changed.
-- `description` (String) Requires replacement if changed.
+- `author` (String) Pack author (from pack metadata). Changes are reflected in state from the API; no replacement.
+- `description` (String) Pack description (from pack metadata). Changes are reflected in state from the API; no replacement.
 - `disabled` (Boolean)
-- `display_name` (String) Requires replacement if changed.
+- `display_name` (String) Pack display name (from pack metadata). Changes are reflected in state from the API; no replacement.
 - `exports` (List of String) Requires replacement if changed.
 - `filename` (String) Local .crbl file path to upload. File is uploaded (PUT) then the pack is installed or updated in place (PATCH); changing filename updates the existing pack rather than replacing it. If set, description and display_name are ignored and the pack file's metadata is used.
 - `force` (Boolean) Requires replacement if changed.
 - `inputs` (Number) Requires replacement if changed.
 - `is_disabled` (Boolean) Requires replacement if changed.
-- `min_log_stream_version` (String) Requires replacement if changed.
+- `min_log_stream_version` (String) Min LogStream version (from pack metadata). Changes are reflected in state from the API; no replacement.
 - `outputs` (Number) Requires replacement if changed.
 - `source` (String) body string required Pack source
 - `spec` (String) body string optional Specify a branch, tag or a semver spec
-- `tags` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--tags))
-- `version` (String) Requires replacement if changed.
+- `tags` (Attributes) Pack tags (from pack metadata). Changes are reflected in state from the API; no replacement. (see [below for nested schema](#nestedatt--tags))
+- `version` (String) Pack version (from pack metadata). Changes are reflected in state from the API; no replacement.
 
 ### Read-Only
 
@@ -87,10 +87,10 @@ resource "criblio_pack" "my_pack" {
 
 Required:
 
-- `data_type` (List of String) Requires replacement if changed.
-- `domain` (List of String) Requires replacement if changed.
-- `streamtags` (List of String) Requires replacement if changed.
-- `technology` (List of String) Requires replacement if changed.
+- `data_type` (List of String) Pack data_type tags (from pack metadata).
+- `domain` (List of String) Pack domain tags (from pack metadata).
+- `streamtags` (List of String) Pack streamtags (from pack metadata).
+- `technology` (List of String) Pack technology tags (from pack metadata).
 
 
 <a id="nestedatt--items"></a>

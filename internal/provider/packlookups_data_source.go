@@ -7,7 +7,6 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -30,10 +29,10 @@ type PackLookupsDataSource struct {
 
 // PackLookupsDataSourceModel describes the data model.
 type PackLookupsDataSourceModel struct {
-	GroupID types.String     `tfsdk:"group_id"`
-	ID      types.String     `tfsdk:"id"`
-	Items   []tfTypes.Routes `tfsdk:"items"`
-	Pack    types.String     `tfsdk:"pack"`
+	GroupID types.String         `tfsdk:"group_id"`
+	ID      types.String         `tfsdk:"id"`
+	Items   []tfTypes.LookupFile `tfsdk:"items"`
+	Pack    types.String         `tfsdk:"pack"`
 }
 
 // Metadata returns the data source type name.
@@ -59,96 +58,43 @@ func (r *PackLookupsDataSource) Schema(ctx context.Context, req datasource.Schem
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"comments": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"comment": schema.StringAttribute{
-										Computed:    true,
-										Description: `Optional, short description of this Route's purpose`,
-									},
-								},
-							},
-							Description: `Comments`,
+						"content": schema.StringAttribute{
+							Computed:    true,
+							Description: `File content.`,
 						},
-						"groups": schema.MapNestedAttribute{
+						"description": schema.StringAttribute{
 							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										Computed:    true,
-										Description: `Short description of this group`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Whether this group is disabled`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
 						},
 						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Routes ID`,
-						},
-						"routes": schema.ListNestedAttribute{
 							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Disable this routing rule`,
-									},
-									"enable_output_expression": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below`,
-									},
-									"filter": schema.StringAttribute{
-										Computed:    true,
-										Description: `JavaScript expression to select data to route`,
-									},
-									"final": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it`,
-									},
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"output": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"output_expression": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"pipeline": schema.StringAttribute{
-										Computed:    true,
-										Description: `Pipeline to send the matching data to`,
-									},
+						},
+						"mode": schema.StringAttribute{
+							Computed: true,
+						},
+						"pending_task": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"error": schema.StringAttribute{
+									Computed:    true,
+									Description: `Error message if task has failed`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Task ID (generated).`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Task type`,
 								},
 							},
-							Description: `Pipeline routing rules`,
+						},
+						"tags": schema.StringAttribute{
+							Computed:    true,
+							Description: `One or more tags related to this lookup. Optional.`,
+						},
+						"version": schema.StringAttribute{
+							Computed:    true,
+							Description: `Unique string generated for each modification of this lookup`,
 						},
 					},
 				},

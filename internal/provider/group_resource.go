@@ -5,9 +5,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
-
 	"regexp"
+	"strings"
 
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
@@ -123,8 +122,9 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"on_prem": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Whether this is an on-premises group. Cannot be true when cloud is set.`,
 			},
 			"product": schema.StringAttribute{
 				Required: true,
@@ -294,6 +294,11 @@ func (r *GroupResource) Create(ctx context.Context, req resource.CreateRequest, 
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
@@ -351,6 +356,11 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 	}
 	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
 

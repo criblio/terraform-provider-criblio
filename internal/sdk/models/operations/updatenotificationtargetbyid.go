@@ -30,10 +30,10 @@ func (u *UpdateNotificationTargetByIDRequest) GetNotificationTarget() shared.Not
 
 // UpdateNotificationTargetByIDResponseBody - a list of NotificationTarget objects
 type UpdateNotificationTargetByIDResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.NotificationTarget `json:"items,omitempty"`
 }
 
-func (u *UpdateNotificationTargetByIDResponseBody) GetItems() []map[string]any {
+func (u *UpdateNotificationTargetByIDResponseBody) GetItems() []shared.NotificationTarget {
 	if u == nil {
 		return nil
 	}

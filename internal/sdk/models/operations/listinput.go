@@ -21,10 +21,10 @@ func (l *ListInputRequest) GetGroupID() string {
 
 // ListInputResponseBody - a list of Input objects
 type ListInputResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.Input `json:"items,omitempty"`
 }
 
-func (l *ListInputResponseBody) GetItems() []map[string]any {
+func (l *ListInputResponseBody) GetItems() []shared.Input {
 	if l == nil {
 		return nil
 	}

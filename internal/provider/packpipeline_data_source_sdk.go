@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -15,79 +16,67 @@ import (
 func (r *PackPipelineDataSourceModel) RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackWithIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.Routes{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.Routes
-
-			items.Comments = []tfTypes.Comment{}
-
-			for _, commentsItem := range itemsItem.Comments {
-				var comments tfTypes.Comment
-
-				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
-				}
-				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-
-				items.Comments = append(items.Comments, comments)
-			}
-			if len(itemsItem.Groups) > 0 {
-				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
-				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
-					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
-					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
-
-					items.Groups[routesGroupsKey] = routesGroupsResult
-				}
-			}
-			items.ID = types.StringPointerValue(itemsItem.ID)
-			items.Routes = []tfTypes.RoutesRoute{}
-
-			for _, routesItem := range itemsItem.Routes {
-				var routes tfTypes.RoutesRoute
-
-				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
-				}
-				routes.Description = types.StringPointerValue(routesItem.Description)
-				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
-				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
-				routes.Filter = types.StringPointerValue(routesItem.Filter)
-				routes.Final = types.BoolPointerValue(routesItem.Final)
-				routes.ID = types.StringPointerValue(routesItem.ID)
-				routes.Name = types.StringValue(routesItem.Name)
-				if routesItem.Output == nil {
-					routes.Output = jsontypes.NewNormalizedNull()
-				} else {
-					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
-				}
-				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = jsontypes.NewNormalizedNull()
-				} else {
-					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
-				}
-				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-
-				items.Routes = append(items.Routes, routes)
-			}
-
-			r.Items = append(r.Items, items)
-		}
+	if resp != nil && len(resp.Items) > 0 {
+		refreshDataSourceFromPipeline(r, &resp.Items[0])
 	}
 
 	return diags
+}
+
+func refreshDataSourceFromPipeline(r *PackPipelineDataSourceModel, p *shared.Pipeline) {
+	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(p.Conf.AsyncFuncTimeout)
+	r.Conf.Description = types.StringPointerValue(p.Conf.Description)
+	r.Conf.Functions = []tfTypes.PipelineFunctionConf{}
+	for _, functionsItem := range p.Conf.Functions {
+		var functions tfTypes.PipelineFunctionConf
+		if len(functionsItem.Conf) > 0 {
+			confBytes, _ := json.Marshal(functionsItem.Conf)
+			functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
+		} else {
+			functions.Conf = jsontypes.NewNormalizedNull()
+		}
+		if functionsItem.Description != nil {
+			functions.Description = types.StringValue(*functionsItem.Description)
+		} else {
+			functions.Description = types.StringValue("")
+		}
+		if functionsItem.Disabled != nil {
+			functions.Disabled = types.BoolValue(*functionsItem.Disabled)
+		} else {
+			functions.Disabled = types.BoolValue(false)
+		}
+		if functionsItem.Filter != nil {
+			functions.Filter = types.StringValue(*functionsItem.Filter)
+		} else {
+			functions.Filter = types.StringValue("true")
+		}
+		if functionsItem.Final != nil {
+			functions.Final = types.BoolValue(*functionsItem.Final)
+		} else {
+			functions.Final = types.BoolValue(false)
+		}
+		if functionsItem.GroupID != nil {
+			functions.GroupID = types.StringValue(*functionsItem.GroupID)
+		} else {
+			functions.GroupID = types.StringValue("")
+		}
+		functions.ID = types.StringValue(functionsItem.ID)
+		r.Conf.Functions = append(r.Conf.Functions, functions)
+	}
+	r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(p.Conf.Groups))
+	for k, v := range p.Conf.Groups {
+		r.Conf.Groups[k] = tfTypes.PipelineGroups{
+			Description: types.StringPointerValue(v.Description),
+			Disabled:    types.BoolPointerValue(v.Disabled),
+			Name:        types.StringValue(v.Name),
+		}
+	}
+	r.Conf.Output = types.StringPointerValue(p.Conf.Output)
+	r.Conf.Streamtags = make([]types.String, 0, len(p.Conf.Streamtags))
+	for _, v := range p.Conf.Streamtags {
+		r.Conf.Streamtags = append(r.Conf.Streamtags, types.StringValue(v))
+	}
+	r.ID = types.StringValue(p.ID)
 }
 
 func (r *PackPipelineDataSourceModel) ToOperationsGetPipelinesByPackWithIDRequest(ctx context.Context) (*operations.GetPipelinesByPackWithIDRequest, diag.Diagnostics) {

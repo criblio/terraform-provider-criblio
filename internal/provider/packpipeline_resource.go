@@ -7,19 +7,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"strings"
-	"github.com/criblio/terraform-provider-criblio/internal/planmodifiers/mapplanmodifier"
 	customstringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
+	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
@@ -48,7 +46,6 @@ type PackPipelineResourceModel struct {
 	Conf    tfTypes.PipelineConf `tfsdk:"conf"`
 	GroupID types.String         `tfsdk:"group_id"`
 	ID      types.String         `tfsdk:"id"`
-	Items   []tfTypes.Routes     `tfsdk:"items"`
 	Pack    types.String         `tfsdk:"pack"`
 }
 
@@ -64,6 +61,7 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"async_func_timeout": schema.Int64Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
 						Validators: []validator.Int64{
@@ -71,11 +69,16 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 					},
 					"description": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"functions": schema.ListNestedAttribute{
+						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
 							Attributes: map[string]schema.Attribute{
 								"conf": schema.StringAttribute{
 									CustomType: jsontypes.NormalizedType{},
@@ -88,13 +91,11 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Default:     stringdefault.StaticString(""),
 									Description: `Simple description of this step`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
 									Optional:    true,
-									Default:     booldefault.StaticBool(false),
 									Description: `If true, data will not be pushed through this function`,
 								},
 								"filter": schema.StringAttribute{
@@ -106,40 +107,50 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 								"final": schema.BoolAttribute{
 									Computed:    true,
 									Optional:    true,
-									Default:     booldefault.StaticBool(false),
 									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
 								},
 								"group_id": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Default:     stringdefault.StaticString(""),
 									Description: `Group ID`,
 								},
 								"id": schema.StringAttribute{
-									Required:    true,
-									Description: `Function ID`,
+									Computed:    true,
+									Optional:    true,
+									Description: `Function ID. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
 						Description: `List of Functions to pass data through`,
 					},
 					"groups": schema.MapNestedAttribute{
+						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Map{
-							mapplanmodifier.SuppressDiff(mapplanmodifier.ExplicitSuppress),
-						},
 						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
 									Description: `Short description of this group`,
 								},
 								"disabled": schema.BoolAttribute{
+									Computed:    true,
 									Optional:    true,
 									Description: `Whether this group is disabled`,
 								},
 								"name": schema.StringAttribute{
-									Required: true,
+									Computed:    true,
+									Optional:    true,
+									Description: `Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
@@ -167,113 +178,12 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 				Required:    true,
 				Description: `Unique ID to PATCH for pack`,
 			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"comments": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"comment": schema.StringAttribute{
-										Computed:    true,
-										Description: `Optional, short description of this Route's purpose`,
-									},
-								},
-							},
-							Description: `Comments`,
-						},
-						"groups": schema.MapNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										Computed:    true,
-										Description: `Short description of this group`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Whether this group is disabled`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Routes ID`,
-						},
-						"routes": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Disable this routing rule`,
-									},
-									"enable_output_expression": schema.BoolAttribute{
-										Computed:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false`,
-									},
-									"filter": schema.StringAttribute{
-										Computed:    true,
-										Default:     stringdefault.StaticString(`true`),
-										Description: `JavaScript expression to select data to route. Default: "true"`,
-									},
-									"final": schema.BoolAttribute{
-										Computed:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true`,
-									},
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"output": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"output_expression": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"pipeline": schema.StringAttribute{
-										Computed:    true,
-										Description: `Pipeline to send the matching data to`,
-									},
-								},
-							},
-							Description: `Pipeline routing rules`,
-						},
-					},
-				},
-			},
 			"pack": schema.StringAttribute{
-				Required:    true,
-				Description: `pack ID to POST. Changing this forces replacement because the pipeline is scoped to a pack and cannot be moved in place.`,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
+				Description: `pack ID to POST. Requires replacement if changed.`,
 			},
 		},
 	}
@@ -335,51 +245,7 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	
 	if res.StatusCode != 200 {
-		// Check if error is because pipeline already exists - use UPDATE instead
-		if res != nil && res.RawResponse != nil {
-			body, _ := io.ReadAll(res.RawResponse.Body)
-			bodyStr := string(body)
-			if strings.Contains(bodyStr, "pipeline already exists") || strings.Contains(bodyStr, "already exists") {
-				// Pipeline was created between check and create, use UPDATE instead
-				updateRequest, updateDiags := data.ToOperationsUpdatePipelineByPackAndIDRequest(ctx)
-				resp.Diagnostics.Append(updateDiags...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				updateRes, updateErr := r.client.Pipelines.UpdatePipelineByPackAndID(ctx, *updateRequest)
-				if updateErr != nil {
-					resp.Diagnostics.AddError("failure to invoke API", updateErr.Error())
-					if updateRes != nil && updateRes.RawResponse != nil {
-						resp.Diagnostics.AddError("unexpected http request/response", debugResponse(updateRes.RawResponse))
-					}
-					return
-				}
-				if updateRes == nil {
-					resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", updateRes))
-					return
-				}
-				if updateRes.StatusCode != 200 {
-					resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", updateRes.StatusCode), debugResponse(updateRes.RawResponse))
-					return
-				}
-				if !(updateRes.Object != nil) {
-					resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(updateRes.RawResponse))
-					return
-				}
-				resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePipelineByPackAndIDResponseBody(ctx, updateRes.Object)...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				// Continue with GET request below
-				goto skipCreate
-			}
-		}
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -388,44 +254,6 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsCreatePipelineByPackResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-skipCreate:
-	request1, request1Diags := data.ToOperationsGetPipelinesByPackWithIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

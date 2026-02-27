@@ -7,13 +7,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
+	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -37,15 +40,14 @@ type GlobalVarResource struct {
 
 // GlobalVarResourceModel describes the resource data model.
 type GlobalVarResourceModel struct {
-	Args        []tfTypes.Arg                     `tfsdk:"args"`
-	Description types.String                      `tfsdk:"description"`
-	GroupID     types.String                      `tfsdk:"group_id"`
-	ID          types.String                      `tfsdk:"id"`
-	Items       []map[string]jsontypes.Normalized `tfsdk:"items"`
-	Lib         types.String                      `tfsdk:"lib"`
-	Tags        types.String                      `tfsdk:"tags"`
-	Type        types.String                      `tfsdk:"type"`
-	Value       types.String                      `tfsdk:"value"`
+	Args        []tfTypes.Arg `tfsdk:"args"`
+	Description types.String  `tfsdk:"description"`
+	GroupID     types.String  `tfsdk:"group_id"`
+	ID          types.String  `tfsdk:"id"`
+	Lib         types.String  `tfsdk:"lib"`
+	Tags        types.String  `tfsdk:"tags"`
+	Type        types.String  `tfsdk:"type"`
+	Value       types.String  `tfsdk:"value"`
 }
 
 func (r *GlobalVarResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -57,23 +59,39 @@ func (r *GlobalVarResource) Schema(ctx context.Context, req resource.SchemaReque
 		MarkdownDescription: "GlobalVar Resource",
 		Attributes: map[string]schema.Attribute{
 			"args": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							Required:    true,
-							Description: `Argument name`,
+							Computed:    true,
+							Optional:    true,
+							Description: `Argument name. Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
 						},
 						"type": schema.StringAttribute{
-							Required:    true,
-							Description: `Argument type (e.g. number, string)`,
+							Computed:    true,
+							Optional:    true,
+							Description: `Argument type (e.g. number, string). Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
 						},
 					},
 				},
 				Description: `Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).`,
 			},
 			"description": schema.StringAttribute{
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Brief description of this variable. Optional.`,
 			},
 			"group_id": schema.StringAttribute{
@@ -87,23 +105,28 @@ func (r *GlobalVarResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
 			},
-			"items": schema.ListAttribute{
+			"lib": schema.StringAttribute{
 				Computed: true,
-				ElementType: types.MapType{
-					ElemType: jsontypes.NormalizedType{},
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 			},
-			"lib": schema.StringAttribute{
-				Optional: true,
-			},
 			"tags": schema.StringAttribute{
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `One or more tags related to this variable. Optional.`,
 			},
 			"type": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     stringdefault.StaticString(`any`),
+				Computed: true,
+				Optional: true,
+				Default:  stringdefault.StaticString(`any`),
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Type of variable. Default: "any"; must be one of ["string", "number", "encryptedString", "boolean", "array", "object", "expression", "any"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -119,7 +142,11 @@ func (r *GlobalVarResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"value": schema.StringAttribute{
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Value of variable`,
 			},
 		},
@@ -191,43 +218,6 @@ func (r *GlobalVarResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsCreateGlobalVariableResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetGlobalVariableByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.GlobalVariables.GetGlobalVariableByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -342,43 +332,6 @@ func (r *GlobalVarResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateGlobalVariableByIDResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetGlobalVariableByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.GlobalVariables.GetGlobalVariableByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetGlobalVariableByIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -5,12 +5,15 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -29,8 +32,12 @@ type NotificationTargetDataSource struct {
 
 // NotificationTargetDataSourceModel describes the data model.
 type NotificationTargetDataSourceModel struct {
-	ID    types.String                      `tfsdk:"id"`
-	Items []map[string]jsontypes.Normalized `tfsdk:"items"`
+	ID              types.String             `tfsdk:"id"`
+	PagerDutyTarget *tfTypes.PagerDutyTarget `queryParam:"inline" tfsdk:"pager_duty_target" tfPlanOnly:"true"`
+	SlackTarget     *tfTypes.SlackTarget     `queryParam:"inline" tfsdk:"slack_target" tfPlanOnly:"true"`
+	SMTPTarget      *tfTypes.SMTPTarget      `queryParam:"inline" tfsdk:"smtp_target" tfPlanOnly:"true"`
+	SnsTarget       *tfTypes.SnsTarget       `queryParam:"inline" tfsdk:"sns_target" tfPlanOnly:"true"`
+	WebhookTarget   *tfTypes.WebhookTarget   `queryParam:"inline" tfsdk:"webhook_target" tfPlanOnly:"true"`
 }
 
 // Metadata returns the data source type name.
@@ -47,11 +54,240 @@ func (r *NotificationTargetDataSource) Schema(ctx context.Context, req datasourc
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
+				},
 			},
-			"items": schema.ListAttribute{
+			"pager_duty_target": schema.SingleNestedAttribute{
 				Computed: true,
-				ElementType: types.MapType{
-					ElemType: jsontypes.NormalizedType{},
+				Attributes: map[string]schema.Attribute{
+					"class": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional, default class value`,
+					},
+					"component": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional, default component value`,
+					},
+					"group": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional, default group value`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this notification target`,
+					},
+					"routing_key": schema.StringAttribute{
+						Computed:    true,
+						Description: `32-character integration key for an integration on a service or global ruleset`,
+					},
+					"severity": schema.StringAttribute{
+						Computed:    true,
+						Description: `Default value for message severity. Defaults to info. The __severity value, if set, will overwrite this.`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+					},
+					"type": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"slack_target": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this notification target`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+					},
+					"type": schema.StringAttribute{
+						Computed: true,
+					},
+					"url": schema.StringAttribute{
+						Computed:    true,
+						Description: `Slack's Incoming Webhook URL`,
+					},
+				},
+			},
+			"smtp_target": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"encryption_option": schema.StringAttribute{
+						Computed:    true,
+						Description: `Encryption method for SMTP`,
+					},
+					"from": schema.StringAttribute{
+						Computed:    true,
+						Description: `Email address to send from`,
+					},
+					"host": schema.StringAttribute{
+						Computed:    true,
+						Description: `SMTP server hostname`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this notification target`,
+					},
+					"password": schema.StringAttribute{
+						Computed:    true,
+						Description: `SMTP authentication password`,
+					},
+					"port": schema.Int64Attribute{
+						Computed:    true,
+						Description: `SMTP server port`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"max_version": schema.StringAttribute{
+								Computed:    true,
+								Description: `Maximum TLS version to accept`,
+							},
+							"min_version": schema.StringAttribute{
+								Computed:    true,
+								Description: `Minimum TLS version to accept`,
+							},
+							"reject_unauthorized": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether to reject unauthorized certificates`,
+							},
+						},
+						Description: `TLS configuration options`,
+					},
+					"type": schema.StringAttribute{
+						Computed: true,
+					},
+					"username": schema.StringAttribute{
+						Computed:    true,
+						Description: `SMTP authentication username`,
+					},
+				},
+			},
+			"sns_target": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"allowlist": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic.`,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Computed:    true,
+						Description: `ARN of the role to assume`,
+					},
+					"assume_role_external_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `External ID for role assumption`,
+					},
+					"aws_api_key": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS access key`,
+					},
+					"aws_authentication_method": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS authentication method`,
+					},
+					"aws_secret_key": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS secret key`,
+					},
+					"destination_type": schema.StringAttribute{
+						Computed:    true,
+						Description: `The type of destination to send notifications to`,
+					},
+					"endpoint": schema.StringAttribute{
+						Computed:    true,
+						Description: `SNS endpoint URL`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this notification target`,
+					},
+					"message_group_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Message group ID for FIFO topics`,
+					},
+					"phone_number": schema.StringAttribute{
+						Computed:    true,
+						Description: `The default phone number to send the notification to. This value can be overridden by the notification event __phoneNumber field.`,
+					},
+					"region": schema.StringAttribute{
+						Computed:    true,
+						Description: `AWS region`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+					},
+					"topic_arn": schema.StringAttribute{
+						Computed:    true,
+						Description: `The default ARN of the SNS topic to send notifications to`,
+					},
+					"topic_type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the topic selected in AWS SNS`,
+					},
+					"type": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"webhook_target": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"auth_type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Authentication method for the webhook`,
+					},
+					"format": schema.StringAttribute{
+						Computed:    true,
+						Description: `Format of the webhook payload`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this notification target`,
+					},
+					"method": schema.StringAttribute{
+						Computed:    true,
+						Description: `HTTP method to use for the webhook`,
+					},
+					"password": schema.StringAttribute{
+						Computed:    true,
+						Description: `Basic authentication password`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
+					},
+					"token": schema.StringAttribute{
+						Computed:    true,
+						Description: `Authentication token`,
+					},
+					"type": schema.StringAttribute{
+						Computed: true,
+					},
+					"url": schema.StringAttribute{
+						Computed:    true,
+						Description: `URL to send the webhook to`,
+					},
+					"username": schema.StringAttribute{
+						Computed:    true,
+						Description: `Basic authentication username`,
+					},
 				},
 			},
 		},

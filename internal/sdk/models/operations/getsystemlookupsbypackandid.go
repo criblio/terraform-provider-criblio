@@ -37,12 +37,12 @@ func (g *GetSystemLookupsByPackAndIDRequest) GetGroupID() string {
 	return g.GroupID
 }
 
-// GetSystemLookupsByPackAndIDResponseBody - a list of Routes objects
+// GetSystemLookupsByPackAndIDResponseBody - LookupFile object within a Pack
 type GetSystemLookupsByPackAndIDResponseBody struct {
-	Items []shared.Routes `json:"items,omitempty"`
+	Items []shared.LookupFile `json:"items,omitempty"`
 }
 
-func (g *GetSystemLookupsByPackAndIDResponseBody) GetItems() []shared.Routes {
+func (g *GetSystemLookupsByPackAndIDResponseBody) GetItems() []shared.LookupFile {
 	if g == nil {
 		return nil
 	}
@@ -56,7 +56,7 @@ type GetSystemLookupsByPackAndIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Routes objects
+	// LookupFile object within a Pack
 	Object *GetSystemLookupsByPackAndIDResponseBody
 	// Unexpected error
 	Error *shared.Error
