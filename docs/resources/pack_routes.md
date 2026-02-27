@@ -39,9 +39,13 @@ resource "criblio_pack_routes" "my_packroutes" {
       filter                   = "level == 'error'"
       final                    = true
       name                     = "Errors to Splunk"
-      output                   = "{ \"see\": \"documentation\" }"
-      output_expression        = "{ \"see\": \"documentation\" }"
-      pipeline                 = "main"
+      output = {
+        key = jsonencode("value")
+      }
+      output_expression = {
+        key = jsonencode("value")
+      }
+      pipeline = "main"
     }
   ]
 }
@@ -82,8 +86,8 @@ Optional:
 - `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false
 - `filter` (String) JavaScript expression to select data to route. Default: "true"
 - `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
+- `output` (Map of String)
+- `output_expression` (Map of String)
 
 
 <a id="nestedatt--comments"></a>
@@ -150,8 +154,8 @@ Read-Only:
 - `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true
 - `id` (String)
 - `name` (String)
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
+- `output` (Map of String)
+- `output_expression` (Map of String)
 - `pipeline` (String) Pipeline to send the matching data to
 
 ## Import

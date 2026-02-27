@@ -73,6 +73,6 @@ Read-Only:
 - `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it
 - `id` (String)
 - `name` (String)
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
+- `output` (Map of String)
+- `output_expression` (Map of String)
 - `pipeline` (String) Pipeline to send the matching data to

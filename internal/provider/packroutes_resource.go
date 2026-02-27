@@ -14,15 +14,17 @@ import (
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -185,7 +187,6 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"routes": schema.ListNestedAttribute{
 							Computed: true,
 							PlanModifiers: []planmodifier.List{
-								listplanmodifier.UseStateForUnknown(),
 								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
@@ -250,21 +251,19 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 									},
-									"output": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									"output": schema.MapAttribute{
+										Computed: true,
+										PlanModifiers: []planmodifier.Map{
+											speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
 										},
-										Description: `Parsed as JSON.`,
+										ElementType: jsontypes.NormalizedType{},
 									},
-									"output_expression": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									"output_expression": schema.MapAttribute{
+										Computed: true,
+										PlanModifiers: []planmodifier.Map{
+											speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
 										},
-										Description: `Parsed as JSON.`,
+										ElementType: jsontypes.NormalizedType{},
 									},
 									"pipeline": schema.StringAttribute{
 										Computed: true,
@@ -324,15 +323,19 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"name": schema.StringAttribute{
 							Required: true,
 						},
-						"output": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
+						"output": schema.MapAttribute{
 							Optional:    true,
-							Description: `Parsed as JSON.`,
+							ElementType: jsontypes.NormalizedType{},
+							Validators: []validator.Map{
+								mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+							},
 						},
-						"output_expression": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
+						"output_expression": schema.MapAttribute{
 							Optional:    true,
-							Description: `Parsed as JSON.`,
+							ElementType: jsontypes.NormalizedType{},
+							Validators: []validator.Map{
+								mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+							},
 						},
 						"pipeline": schema.StringAttribute{
 							Required:    true,
@@ -515,25 +518,6 @@ func (r *PackRoutesResource) Read(ctx context.Context, req resource.ReadRequest,
 
 	if resp.Diagnostics.HasError() {
 		return
-	}
-	// Align with criblio_routes: set top-level Routes from API response.
-	// Items[0] holds the pack-scoped routes; RoutesRoute → RoutesRoute1 (omit ID).
-	if len(data.Items) > 0 {
-		data.Routes = make([]tfTypes.RoutesRoute1, 0, len(data.Items[0].Routes))
-		for _, route := range data.Items[0].Routes {
-			data.Routes = append(data.Routes, tfTypes.RoutesRoute1{
-				AdditionalProperties:   route.AdditionalProperties,
-				Description:            route.Description,
-				Disabled:               route.Disabled,
-				EnableOutputExpression: route.EnableOutputExpression,
-				Filter:                 route.Filter,
-				Final:                  route.Final,
-				Name:                   route.Name,
-				Output:                 route.Output,
-				OutputExpression:       route.OutputExpression,
-				Pipeline:               route.Pipeline,
-			})
-		}
 	}
 
 	// Save updated data into Terraform state

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 0b975162413e412bbb9af77f23672745
+  docChecksum: 3db881f8d041e4c1f2f240fd95b10b73
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.127
-  configChecksum: 01bafe3ddd3c48bac5dd7c15331c0dde
+  releaseVersion: 1.20.129
+  configChecksum: b11d8501ac87c1781fcdf163cb02033d
   published: true
 features:
   terraform:
@@ -351,7 +351,6 @@ generatedFiles:
   - internal/provider/packsource_data_source.go
   - internal/provider/packsource_data_source_sdk.go
   - internal/provider/packsource_resource.go
-  - internal/provider/packsource_resource_sdk.go
   - internal/provider/packvars_data_source.go
   - internal/provider/packvars_data_source_sdk.go
   - internal/provider/packvars_resource.go

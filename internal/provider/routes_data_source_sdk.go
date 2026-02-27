@@ -81,17 +81,19 @@ func (r *RoutesDataSourceModel) RefreshFromSharedRoutes(ctx context.Context, res
 		routes.Final = types.BoolPointerValue(routesItem.Final)
 		routes.ID = types.StringPointerValue(routesItem.ID)
 		routes.Name = types.StringValue(routesItem.Name)
-		if routesItem.Output == nil {
-			routes.Output = jsontypes.NewNormalizedNull()
-		} else {
-			outputResult, _ := json.Marshal(routesItem.Output)
-			routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
+		if len(routesItem.Output) > 0 {
+			routes.Output = make(map[string]jsontypes.Normalized, len(routesItem.Output))
+			for key, value := range routesItem.Output {
+				result, _ := json.Marshal(value)
+				routes.Output[key] = jsontypes.NewNormalizedValue(string(result))
+			}
 		}
-		if routesItem.OutputExpression == nil {
-			routes.OutputExpression = jsontypes.NewNormalizedNull()
-		} else {
-			outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-			routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
+		if len(routesItem.OutputExpression) > 0 {
+			routes.OutputExpression = make(map[string]jsontypes.Normalized, len(routesItem.OutputExpression))
+			for key1, value1 := range routesItem.OutputExpression {
+				result1, _ := json.Marshal(value1)
+				routes.OutputExpression[key1] = jsontypes.NewNormalizedValue(string(result1))
+			}
 		}
 		routes.Pipeline = types.StringValue(routesItem.Pipeline)
 

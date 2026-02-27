@@ -15,10 +15,10 @@ type RoutesRouteInput struct {
 	// Pipeline to send the matching data to
 	Pipeline string `json:"pipeline"`
 	// Enable to use a JavaScript expression that evaluates to the name of the Description below
-	EnableOutputExpression *bool   `default:"false" json:"enableOutputExpression"`
-	Output                 any     `json:"output,omitempty"`
-	OutputExpression       any     `json:"outputExpression,omitempty"`
-	Description            *string `json:"description,omitempty"`
+	EnableOutputExpression *bool          `default:"false" json:"enableOutputExpression"`
+	Output                 map[string]any `json:"output,omitempty"`
+	OutputExpression       map[string]any `json:"outputExpression,omitempty"`
+	Description            *string        `json:"description,omitempty"`
 	// Flag to control whether the event gets consumed by this Route (Final), or cloned into it
 	Final                *bool `default:"true" json:"final"`
 	AdditionalProperties any   `additionalProperties:"true" json:"-"`
@@ -70,14 +70,14 @@ func (r *RoutesRouteInput) GetEnableOutputExpression() *bool {
 	return r.EnableOutputExpression
 }
 
-func (r *RoutesRouteInput) GetOutput() any {
+func (r *RoutesRouteInput) GetOutput() map[string]any {
 	if r == nil {
 		return nil
 	}
 	return r.Output
 }
 
-func (r *RoutesRouteInput) GetOutputExpression() any {
+func (r *RoutesRouteInput) GetOutputExpression() map[string]any {
 	if r == nil {
 		return nil
 	}

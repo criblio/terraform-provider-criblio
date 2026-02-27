@@ -8,14 +8,14 @@ import (
 )
 
 type RoutesRoute1 struct {
-	AdditionalProperties   jsontypes.Normalized `tfsdk:"additional_properties"`
-	Description            types.String         `tfsdk:"description"`
-	Disabled               types.Bool           `tfsdk:"disabled"`
-	EnableOutputExpression types.Bool           `tfsdk:"enable_output_expression"`
-	Filter                 types.String         `tfsdk:"filter"`
-	Final                  types.Bool           `tfsdk:"final"`
-	Name                   types.String         `tfsdk:"name"`
-	Output                 jsontypes.Normalized `tfsdk:"output"`
-	OutputExpression       jsontypes.Normalized `tfsdk:"output_expression"`
-	Pipeline               types.String         `tfsdk:"pipeline"`
+	AdditionalProperties   jsontypes.Normalized            `tfsdk:"additional_properties"`
+	Description            types.String                    `tfsdk:"description"`
+	Disabled               types.Bool                      `tfsdk:"disabled"`
+	EnableOutputExpression types.Bool                      `tfsdk:"enable_output_expression"`
+	Filter                 types.String                    `tfsdk:"filter"`
+	Final                  types.Bool                      `tfsdk:"final"`
+	Name                   types.String                    `tfsdk:"name"`
+	Output                 map[string]jsontypes.Normalized `tfsdk:"output"`
+	OutputExpression       map[string]jsontypes.Normalized `tfsdk:"output_expression"`
+	Pipeline               types.String                    `tfsdk:"pipeline"`
 }

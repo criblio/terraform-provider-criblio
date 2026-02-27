@@ -7,6 +7,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
+	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	speakeasy_boolvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/boolvalidators"
@@ -1114,21 +1118,33 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"auth_tokens": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
 							},
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
 							Attributes: map[string]schema.Attribute{
 								"allowed_indexes_at_token": schema.ListAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
 								},
 								"auth_type": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     stringdefault.StaticString(`secret`),
+									Computed: true,
+									Optional: true,
+									Default:  stringdefault.StaticString(`secret`),
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Select Secret to use a text secret to authenticate. Default: "secret"; must be one of ["secret", "manual"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
@@ -1140,32 +1156,50 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"description": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 								},
 								"enabled": schema.BoolAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     booldefault.StaticBool(true),
+									Computed: true,
+									Optional: true,
+									Default:  booldefault.StaticBool(true),
+									PlanModifiers: []planmodifier.Bool{
+										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+									},
 									Description: `Default: true`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
 											speakeasy_objectvalidators.NotNull(),
 										},
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Not Null`,
 												Validators: []validator.String{
 													speakeasy_stringvalidators.NotNull(),
 												},
 											},
 											"value": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 												Validators: []validator.String{
 													speakeasy_stringvalidators.NotNull(),
@@ -1176,13 +1210,19 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Description: `Fields to add to events referencing this token`,
 								},
 								"token": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 								},
 								"token_secret": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Select or create a stored text secret`,
 								},
 							},
@@ -2871,8 +2911,11 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 					"auth_tokens": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 					},
@@ -9423,8 +9466,11 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 					"auth_tokens": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 					},
@@ -27484,8 +27530,11 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Description: `List of URI paths accepted by this input. Wildcards are supported (such as /api/v*/hook). Defaults to allow all. Default: ["*"]`,
 					},
 					"auth_tokens": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 					},

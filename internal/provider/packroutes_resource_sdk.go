@@ -67,17 +67,19 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsCreateRoutesByPackRespons
 				routes.Final = types.BoolPointerValue(routesItem.Final)
 				routes.ID = types.StringPointerValue(routesItem.ID)
 				routes.Name = types.StringValue(routesItem.Name)
-				if routesItem.Output == nil {
-					routes.Output = jsontypes.NewNormalizedNull()
-				} else {
-					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
+				if len(routesItem.Output) > 0 {
+					routes.Output = make(map[string]jsontypes.Normalized, len(routesItem.Output))
+					for key, value := range routesItem.Output {
+						result, _ := json.Marshal(value)
+						routes.Output[key] = jsontypes.NewNormalizedValue(string(result))
+					}
 				}
-				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = jsontypes.NewNormalizedNull()
-				} else {
-					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
+				if len(routesItem.OutputExpression) > 0 {
+					routes.OutputExpression = make(map[string]jsontypes.Normalized, len(routesItem.OutputExpression))
+					for key1, value1 := range routesItem.OutputExpression {
+						result1, _ := json.Marshal(value1)
+						routes.OutputExpression[key1] = jsontypes.NewNormalizedValue(string(result1))
+					}
 				}
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
 
@@ -145,17 +147,19 @@ func (r *PackRoutesResourceModel) RefreshFromOperationsGetRoutesByPackResponseBo
 				routes.Final = types.BoolPointerValue(routesItem.Final)
 				routes.ID = types.StringPointerValue(routesItem.ID)
 				routes.Name = types.StringValue(routesItem.Name)
-				if routesItem.Output == nil {
-					routes.Output = jsontypes.NewNormalizedNull()
-				} else {
-					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
+				if len(routesItem.Output) > 0 {
+					routes.Output = make(map[string]jsontypes.Normalized, len(routesItem.Output))
+					for key, value := range routesItem.Output {
+						result, _ := json.Marshal(value)
+						routes.Output[key] = jsontypes.NewNormalizedValue(string(result))
+					}
 				}
-				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = jsontypes.NewNormalizedNull()
-				} else {
-					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
+				if len(routesItem.OutputExpression) > 0 {
+					routes.OutputExpression = make(map[string]jsontypes.Normalized, len(routesItem.OutputExpression))
+					for key1, value1 := range routesItem.OutputExpression {
+						result1, _ := json.Marshal(value1)
+						routes.OutputExpression[key1] = jsontypes.NewNormalizedValue(string(result1))
+					}
 				}
 				routes.Pipeline = types.StringValue(routesItem.Pipeline)
 
@@ -247,13 +251,17 @@ func (r *PackRoutesResourceModel) ToSharedRoutesInput(ctx context.Context) (*sha
 		} else {
 			enableOutputExpression = nil
 		}
-		var output interface{}
-		if !r.Routes[routesIndex].Output.IsUnknown() && !r.Routes[routesIndex].Output.IsNull() {
-			_ = json.Unmarshal([]byte(r.Routes[routesIndex].Output.ValueString()), &output)
+		output := make(map[string]interface{})
+		for outputKey := range r.Routes[routesIndex].Output {
+			var outputInst interface{}
+			_ = json.Unmarshal([]byte(r.Routes[routesIndex].Output[outputKey].ValueString()), &outputInst)
+			output[outputKey] = outputInst
 		}
-		var outputExpression interface{}
-		if !r.Routes[routesIndex].OutputExpression.IsUnknown() && !r.Routes[routesIndex].OutputExpression.IsNull() {
-			_ = json.Unmarshal([]byte(r.Routes[routesIndex].OutputExpression.ValueString()), &outputExpression)
+		outputExpression := make(map[string]interface{})
+		for outputExpressionKey := range r.Routes[routesIndex].OutputExpression {
+			var outputExpressionInst interface{}
+			_ = json.Unmarshal([]byte(r.Routes[routesIndex].OutputExpression[outputExpressionKey].ValueString()), &outputExpressionInst)
+			outputExpression[outputExpressionKey] = outputExpressionInst
 		}
 		description := new(string)
 		if !r.Routes[routesIndex].Description.IsUnknown() && !r.Routes[routesIndex].Description.IsNull() {

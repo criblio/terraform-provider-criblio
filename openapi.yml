@@ -213,6 +213,7 @@ components:
             - scheduledSearch
           example: "collection"
         ttl:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Time to live
           description: Time to keep the job's artifacts on disk after job completion. This
@@ -555,6 +556,7 @@ components:
             - scheduledSearch
           example: "executor"
         ttl:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Time to live
           description: Time to keep the job's artifacts on disk after job completion. This
@@ -771,6 +773,7 @@ components:
             - scheduledSearch
           example: "scheduledSearch"
         ttl:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Time to live
           description: Time to keep the job's artifacts on disk after job completion. This
@@ -9838,6 +9841,7 @@ components:
           description: Port to listen on
           example: 8088
         authTokens:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Auth tokens
           description: "Shared secrets to be provided by any client (Authorization:
@@ -18682,6 +18686,7 @@ components:
           description: Port to listen on
           example: 8088
         authTokens:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Auth tokens
           description: "Shared secrets to be provided by any client (Authorization:
@@ -30823,6 +30828,7 @@ components:
           maximum: 65535
           description: Port to listen on
         authTokens:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Auth tokens
           description: "Shared secrets to be provided by any client (Authorization:
@@ -31213,6 +31219,7 @@ components:
           maximum: 65535
           description: Port to listen on
         authTokens:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Auth tokens
           description: "Shared secrets to be provided by any client (Authorization:
@@ -58481,27 +58488,32 @@ components:
           type: string
           example: eval
         description:
+          x-speakeasy-param-suppress-computed-diff: true
           title: Description
           description: Simple description of this step
           type: string
           example: Parse and enrich fields
         disabled:
+          x-speakeasy-param-suppress-computed-diff: true
           title: Disabled
           description: If true, data will not be pushed through this function
           type: boolean
           example: false
         final:
+          x-speakeasy-param-suppress-computed-diff: true
           title: Final
           description: If enabled, stops the results of this Function from being passed to
             the downstream Functions
           type: boolean
           example: false
         conf:
+          x-speakeasy-param-suppress-computed-diff: true
           type: object
           title: Function-specific configs
           description: Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.
           additionalProperties: true
         groupId:
+          x-speakeasy-param-suppress-computed-diff: true
           title: Group ID
           description: Group ID
           type: string
@@ -58522,6 +58534,7 @@ components:
           additionalProperties: false
           properties:
             asyncFuncTimeout:
+              x-speakeasy-param-suppress-computed-diff: true
               type: integer
               title: Async function timeout (ms)
               description: Time (in ms) to wait for an async function to complete processing
@@ -58536,6 +58549,7 @@ components:
               default: default
               example: OutputSplunk
             description:
+              x-speakeasy-param-suppress-computed-diff: true
               title: Description
               type: string
               example: Main pipeline for app logs
@@ -58550,6 +58564,7 @@ components:
                 - prod
                 - app
             functions:
+              x-speakeasy-param-suppress-computed-diff: true
               title: Functions
               description: List of Functions to pass data through
               type: array
@@ -58566,6 +58581,7 @@ components:
                   conf:
                     format: json
             groups:
+              x-speakeasy-param-suppress-computed-diff: true
               type: object
               additionalProperties:
                 type: object
@@ -58622,6 +58638,7 @@ components:
           title: Route name
           example: Errors to Splunk
         disabled:
+          x-speakeasy-param-suppress-computed-diff: true
           type: boolean
           title: Disabled
           description: Disable this routing rule
@@ -58644,8 +58661,14 @@ components:
             the Description below
           default: false
           example: false
-        output: {}
-        outputExpression: {}
+        output:
+          x-speakeasy-param-suppress-computed-diff: true
+          type: object
+          additionalProperties: true
+        outputExpression:
+          x-speakeasy-param-suppress-computed-diff: true
+          type: object
+          additionalProperties: true
         description:
           type: string
           title: Description
@@ -58669,6 +58692,7 @@ components:
           description: Routes ID
           example: default
         routes:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Route
           description: Pipeline routing rules
@@ -64801,6 +64825,7 @@ components:
           default: "/^/"
           example: "/\\n{2,}/"
         fields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           items:
             $ref: "#/components/schemas/EventBreakerRuleFields"
