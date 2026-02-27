@@ -257,6 +257,7 @@ components:
             empty, will be enabled everywhere.
           example: "dev"
         schedule:
+          x-speakeasy-param-suppress-computed-diff: true
           type: object
           title: Schedule
           description: Configuration for a scheduled job
@@ -981,6 +982,7 @@ components:
           x-speakeasy-terraform-ignore: true
           example: "collection"
         ttl:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           default: 4h
           example: "2h"
@@ -1003,16 +1005,19 @@ components:
           default: true
           example: true
         environment:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Environment
           example: "production"
         savedState:
+          x-speakeasy-param-suppress-computed-diff: true
           type: object
           title: Saved state
           description: Saved state for the collector
           default: {}
           example: {}
         schedule:
+          x-speakeasy-param-suppress-computed-diff: true
           type: object
           title: Schedule
           description: Configuration for a scheduled job
@@ -1165,6 +1170,7 @@ components:
           example: false
         # Input Configuration
         input:
+          x-speakeasy-param-suppress-computed-diff: true
           type: object
           properties:
             type:
@@ -1289,6 +1295,7 @@ components:
                   enum: [script]
                   example: "script"
                 conf:
+                  x-speakeasy-param-suppress-computed-diff: true
                   type: object
                   properties:
                     shell:
@@ -1317,6 +1324,7 @@ components:
                   enum: [splunk]
                   example: "splunk"
                 conf:
+                  x-speakeasy-param-suppress-computed-diff: true
                   type: object
                   properties:
                     searchHead:
@@ -1410,6 +1418,7 @@ components:
                   enum: [rest]
                   example: "rest"
                 conf:
+                  x-speakeasy-param-suppress-computed-diff: true
                   required: [discovery]
                   type: object
                   properties:
@@ -1741,6 +1750,7 @@ components:
                   enum: [s3]
                   example: "s3"
                 conf:
+                  x-speakeasy-param-suppress-computed-diff: true
                   type: object
                   properties:
                     bucket:
@@ -1821,6 +1831,7 @@ components:
                   enum: [azureblob]
                   example: "azureblob"
                 conf:
+                  x-speakeasy-param-suppress-computed-diff: true
                   type: object
                   properties:
                     containerName:
@@ -1893,6 +1904,7 @@ components:
                   enum: [cribllake]
                   example: "cribllake"
                 conf:
+                  x-speakeasy-param-suppress-computed-diff: true
                   type: object
                   properties:
                     dataset:
@@ -1914,6 +1926,7 @@ components:
                   enum: [database]
                   example: "database"
                 conf:
+                  x-speakeasy-param-suppress-computed-diff: true
                   type: object
                   properties:
                     connectionId:
@@ -1944,6 +1957,7 @@ components:
                   enum: [gcs]
                   example: "gcs"
                 conf:
+                  x-speakeasy-param-suppress-computed-diff: true
                   type: object
                   properties:
                     serviceAccountCredentials:
@@ -2011,6 +2025,7 @@ components:
                   enum: [healthcheck]
                   example: "healthcheck"
                 conf:
+                  x-speakeasy-param-suppress-computed-diff: true
                   type: object
                   properties:
                     collectUrl:
@@ -2371,6 +2386,7 @@ components:
           enum: [webhook]
           example: "webhook"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -2437,6 +2453,7 @@ components:
           enum: [pager_duty]
           example: "pager_duty"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -2492,6 +2509,7 @@ components:
           enum: [slack]
           example: "slack"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -2524,6 +2542,7 @@ components:
           enum: [sns]
           example: "sns"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -2629,6 +2648,7 @@ components:
           enum: [smtp]
           example: "smtp"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -3197,8 +3217,10 @@ components:
           type: string
           example: "myUsageGroupId"
         rules:
+          x-speakeasy-param-suppress-computed-diff: true
           $ref: "#/components/schemas/LimitRuleDefinitions"
         usersCount:
+          x-speakeasy-param-suppress-computed-diff: true
           type: number
           example: 1
       required:
@@ -3286,6 +3308,7 @@ components:
           description: Dataset provider type, set automatically from the dataset provider
           example: "cribl_lake"
         metadata:
+          x-speakeasy-param-suppress-computed-diff: true
           $ref: '#/components/schemas/DatasetMetadata'
           example:
             earliest: "2025-09-30T13:41:44Z"
@@ -3332,6 +3355,7 @@ components:
           description: Type of the provider
           example: "generic"
         description:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           description: Description of the provider
           example: "my generic provider description"
@@ -5815,20 +5839,24 @@ components:
           pattern: ^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$
           example: "countries.csv"
         description:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Description
           example: "Country code to name lookup"
         tags:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Tags
           description: One or more tags related to this lookup. Optional.
           example: "geo,reference"
         version:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           description: Unique string generated for each modification of this lookup
           readOnly: true
           example: "v1.2.3"
         content:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           description: File content.
           example: "US,United States\nCA,Canada"
@@ -5842,6 +5870,7 @@ components:
             - disk
           example: "memory"
         pendingTask:
+          x-speakeasy-param-suppress-computed-diff: true
           type: object
           readOnly: true
           properties:
@@ -69340,6 +69369,7 @@ paths:
                     description: number of items present in the items array
                   items:
                     type: array
+                    x-speakeasy-param-suppress-computed-diff: true
                     items:
                       $ref: "#/components/schemas/UsageGroup"
         "401":
@@ -74445,7 +74475,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EventBreakerRuleset"
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EventBreakerRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       requestBody:
         description: Pipeline object to be updated in specified Project
         required: true

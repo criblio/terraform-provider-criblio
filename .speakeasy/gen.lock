@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 008c0b20a4c8fa7560c6d685ce9163d8
+  docChecksum: 0b975162413e412bbb9af77f23672745
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.121
-  configChecksum: 56ea8a70ebe83e0e65aaf43ee2b4483f
+  releaseVersion: 1.20.127
+  configChecksum: 01bafe3ddd3c48bac5dd7c15331c0dde
   published: true
 features:
   terraform:
@@ -346,10 +346,12 @@ generatedFiles:
   - internal/provider/packpipeline_data_source.go
   - internal/provider/packroutes_data_source.go
   - internal/provider/packroutes_data_source_sdk.go
+  - internal/provider/packroutes_resource.go
   - internal/provider/packroutes_resource_sdk.go
   - internal/provider/packsource_data_source.go
   - internal/provider/packsource_data_source_sdk.go
   - internal/provider/packsource_resource.go
+  - internal/provider/packsource_resource_sdk.go
   - internal/provider/packvars_data_source.go
   - internal/provider/packvars_data_source_sdk.go
   - internal/provider/packvars_resource.go
@@ -7734,11 +7736,13 @@ examples:
         path:
           pack: "myExistingPackId"
           groupId: "myExistingGroupId"
+        query:
+          id: "myUniquePackBreakersIdToCRUD"
       requestBody:
         application/json: {"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}
       responses:
         "200":
-          application/json: {"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}
+          application/json: {"items": [{"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getBreakersByPackAndId:

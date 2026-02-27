@@ -471,11 +471,11 @@ func (r *PackBreakersResource) Create(ctx context.Context, req resource.CreateRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.EventBreakerRuleset != nil) {
+	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedEventBreakerRuleset(ctx, res.EventBreakerRuleset)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateBreakersByPackResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

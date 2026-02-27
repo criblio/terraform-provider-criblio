@@ -16,67 +16,68 @@ import (
 func (r *PackPipelineDataSourceModel) RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackWithIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil && len(resp.Items) > 0 {
-		refreshDataSourceFromPipeline(r, &resp.Items[0])
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedPipeline(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
 }
 
-func refreshDataSourceFromPipeline(r *PackPipelineDataSourceModel, p *shared.Pipeline) {
-	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(p.Conf.AsyncFuncTimeout)
-	r.Conf.Description = types.StringPointerValue(p.Conf.Description)
+func (r *PackPipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context, resp *shared.Pipeline) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Conf.AsyncFuncTimeout = types.Int64PointerValue(resp.Conf.AsyncFuncTimeout)
+	r.Conf.Description = types.StringPointerValue(resp.Conf.Description)
 	r.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-	for _, functionsItem := range p.Conf.Functions {
+
+	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
-		if len(functionsItem.Conf) > 0 {
-			confBytes, _ := json.Marshal(functionsItem.Conf)
-			functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
-		} else {
-			functions.Conf = jsontypes.NewNormalizedNull()
+
+		// Convert conf to JSON (tfTypes.PipelineFunctionConf.Conf is jsontypes.Normalized)
+		confBytes, err := json.Marshal(functionsItem.Conf)
+		if err != nil {
+			diags.AddError("Failed to marshal function conf", err.Error())
+			return diags
 		}
-		if functionsItem.Description != nil {
-			functions.Description = types.StringValue(*functionsItem.Description)
-		} else {
-			functions.Description = types.StringValue("")
-		}
-		if functionsItem.Disabled != nil {
-			functions.Disabled = types.BoolValue(*functionsItem.Disabled)
-		} else {
-			functions.Disabled = types.BoolValue(false)
-		}
-		if functionsItem.Filter != nil {
-			functions.Filter = types.StringValue(*functionsItem.Filter)
-		} else {
-			functions.Filter = types.StringValue("true")
-		}
-		if functionsItem.Final != nil {
-			functions.Final = types.BoolValue(*functionsItem.Final)
-		} else {
-			functions.Final = types.BoolValue(false)
-		}
-		if functionsItem.GroupID != nil {
-			functions.GroupID = types.StringValue(*functionsItem.GroupID)
-		} else {
-			functions.GroupID = types.StringValue("")
-		}
+		functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
+		functions.Description = types.StringPointerValue(functionsItem.Description)
+		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
+		functions.Filter = types.StringPointerValue(functionsItem.Filter)
+		functions.Final = types.BoolPointerValue(functionsItem.Final)
+		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
 		functions.ID = types.StringValue(functionsItem.ID)
+
 		r.Conf.Functions = append(r.Conf.Functions, functions)
 	}
-	r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(p.Conf.Groups))
-	for k, v := range p.Conf.Groups {
-		r.Conf.Groups[k] = tfTypes.PipelineGroups{
-			Description: types.StringPointerValue(v.Description),
-			Disabled:    types.BoolPointerValue(v.Disabled),
-			Name:        types.StringValue(v.Name),
+	if len(resp.Conf.Groups) > 0 {
+		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
+		for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
+			var pipelineGroupsResult tfTypes.PipelineGroups
+			pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
+			pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
+			pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
+
+			r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
 		}
 	}
-	r.Conf.Output = types.StringPointerValue(p.Conf.Output)
-	r.Conf.Streamtags = make([]types.String, 0, len(p.Conf.Streamtags))
-	for _, v := range p.Conf.Streamtags {
+	r.Conf.Output = types.StringPointerValue(resp.Conf.Output)
+	r.Conf.Streamtags = make([]types.String, 0, len(resp.Conf.Streamtags))
+	for _, v := range resp.Conf.Streamtags {
 		r.Conf.Streamtags = append(r.Conf.Streamtags, types.StringValue(v))
 	}
-	r.ID = types.StringValue(p.ID)
+	r.ID = types.StringValue(resp.ID)
+
+	return diags
 }
 
 func (r *PackPipelineDataSourceModel) ToOperationsGetPipelinesByPackWithIDRequest(ctx context.Context) (*operations.GetPipelinesByPackWithIDRequest, diag.Diagnostics) {

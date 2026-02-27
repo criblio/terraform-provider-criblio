@@ -37,6 +37,18 @@ func (c *CreateBreakersByPackRequest) GetEventBreakerRuleset() shared.EventBreak
 	return c.EventBreakerRuleset
 }
 
+// CreateBreakersByPackResponseBody - Created Event Breaker Ruleset within a Pack
+type CreateBreakersByPackResponseBody struct {
+	Items []shared.EventBreakerRuleset `json:"items,omitempty"`
+}
+
+func (c *CreateBreakersByPackResponseBody) GetItems() []shared.EventBreakerRuleset {
+	if c == nil {
+		return nil
+	}
+	return c.Items
+}
+
 type CreateBreakersByPackResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -45,7 +57,9 @@ type CreateBreakersByPackResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Created Event Breaker Ruleset within a Pack
-	EventBreakerRuleset *shared.EventBreakerRuleset
+	Object *CreateBreakersByPackResponseBody
+	// Unexpected error
+	Error *shared.Error
 }
 
 func (c *CreateBreakersByPackResponse) GetContentType() string {
@@ -69,9 +83,16 @@ func (c *CreateBreakersByPackResponse) GetRawResponse() *http.Response {
 	return c.RawResponse
 }
 
-func (c *CreateBreakersByPackResponse) GetEventBreakerRuleset() *shared.EventBreakerRuleset {
+func (c *CreateBreakersByPackResponse) GetObject() *CreateBreakersByPackResponseBody {
 	if c == nil {
 		return nil
 	}
-	return c.EventBreakerRuleset
+	return c.Object
+}
+
+func (c *CreateBreakersByPackResponse) GetError() *shared.Error {
+	if c == nil {
+		return nil
+	}
+	return c.Error
 }

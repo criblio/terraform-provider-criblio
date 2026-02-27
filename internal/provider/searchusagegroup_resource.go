@@ -5,11 +5,13 @@ package provider
 import (
 	"context"
 	"fmt"
+	speakeasy_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -70,6 +72,9 @@ func (r *SearchUsageGroupResource) Schema(ctx context.Context, req resource.Sche
 			"users_count": schema.Float64Attribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.Float64{
+					speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+				},
 			},
 		},
 	}

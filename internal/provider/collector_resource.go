@@ -7,6 +7,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
+	speakeasy_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
+	speakeasy_int64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/int64planmodifier"
+	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
@@ -23,6 +29,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -74,6 +81,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 		Attributes: map[string]schema.Attribute{
 			"environment": schema.StringAttribute{
 				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -98,10 +108,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"conf": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"auth_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `must be one of ["manual", "secret", "clientSecret", "clientCert"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -113,36 +129,57 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"connection_string": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Azure storage account Connection String`,
 									},
 									"container_name": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Azure container to collect from`,
 									},
 									"extractors": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
 											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+											},
 											Attributes: map[string]schema.Attribute{
 												"expression": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 													Description: `JavaScript expression to compute the value from the path`,
 												},
 												"key": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 													Description: `Name of the extracted field`,
 												},
 												"pattern": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 													Description: `Regex pattern to match paths (alternative to key/expression)`,
 												},
 											},
@@ -151,22 +188,34 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"max_batch_size": schema.Int64Attribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Int64{
+											speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+										},
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
 									},
 									"path": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Directory where data will be collected`,
 									},
 									"recurse": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"storage_account_name": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 								},
 							},
@@ -190,6 +239,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"environment": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -208,32 +260,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"input": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
 									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -244,66 +314,96 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: true`,
 									},
 								},
 							},
 							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
 							},
 							"stale_channel_flush_ms": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(10000),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(10000),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 								Validators: []validator.Float64{
 									float64validator.Between(10, 43200000),
 								},
 							},
 							"throttle_rate_per_sec": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`0`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
 								Validators: []validator.String{
 									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`collection`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`collection`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "collection"; must be "collection"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -327,75 +427,111 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`*/5 * * * *`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Enable to configure scheduling for this Collector`,
 							},
 							"max_concurrent_runs": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(1),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
 							"resume_missed": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(0),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(0),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
 									},
 									"expression": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`true`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`true`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
 									},
 									"job_timeout": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`0`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`0`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
 										},
 									},
 									"latest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time to collect data for the selected timezone. Default: 1`,
 									},
 									"log_level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`info`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`info`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -408,36 +544,48 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_task_reschedule": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
 										Validators: []validator.Float64{
 											float64validator.AtLeast(1),
 										},
 									},
 									"max_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`10MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`10MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"min_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`1MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`list`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`list`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -448,36 +596,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"reschedule_dropped_tasks": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"state_update_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 										Description: `State tracking configuration`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`relative`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`relative`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -487,16 +653,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Description: `Time warning configuration`,
 									},
 								},
 							},
 							"skippable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
 						},
@@ -510,9 +682,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -545,10 +720,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"conf": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"dataset": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Lake dataset to collect data from`,
 									},
 								},
@@ -573,6 +754,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"environment": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -591,32 +775,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"input": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
 									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -627,66 +829,96 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: true`,
 									},
 								},
 							},
 							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
 							},
 							"stale_channel_flush_ms": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(10000),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(10000),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 								Validators: []validator.Float64{
 									float64validator.Between(10, 43200000),
 								},
 							},
 							"throttle_rate_per_sec": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`0`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
 								Validators: []validator.String{
 									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`collection`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`collection`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "collection"; must be "collection"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -710,75 +942,111 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`*/5 * * * *`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Enable to configure scheduling for this Collector`,
 							},
 							"max_concurrent_runs": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(1),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
 							"resume_missed": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(0),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(0),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
 									},
 									"expression": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`true`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`true`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
 									},
 									"job_timeout": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`0`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`0`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
 										},
 									},
 									"latest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time to collect data for the selected timezone. Default: 1`,
 									},
 									"log_level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`info`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`info`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -791,36 +1059,48 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_task_reschedule": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
 										Validators: []validator.Float64{
 											float64validator.AtLeast(1),
 										},
 									},
 									"max_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`10MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`10MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"min_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`1MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`list`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`list`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -831,36 +1111,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"reschedule_dropped_tasks": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"state_update_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 										Description: `State tracking configuration`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`relative`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`relative`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -870,16 +1168,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Description: `Time warning configuration`,
 									},
 								},
 							},
 							"skippable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
 						},
@@ -893,9 +1197,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -928,20 +1235,32 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"conf": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"connection_id": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Select an existing Database Connection`,
 									},
 									"query": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Query string for selecting data from the database`,
 									},
 									"query_validation_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 								},
 							},
@@ -963,6 +1282,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"environment": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -981,32 +1303,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"input": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
 									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -1017,66 +1357,96 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: true`,
 									},
 								},
 							},
 							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
 							},
 							"stale_channel_flush_ms": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(10000),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(10000),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 								Validators: []validator.Float64{
 									float64validator.Between(10, 43200000),
 								},
 							},
 							"throttle_rate_per_sec": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`0`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
 								Validators: []validator.String{
 									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`collection`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`collection`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "collection"; must be "collection"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -1100,75 +1470,111 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`*/5 * * * *`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Enable to configure scheduling for this Collector`,
 							},
 							"max_concurrent_runs": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(1),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
 							"resume_missed": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(0),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(0),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
 									},
 									"expression": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`true`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`true`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
 									},
 									"job_timeout": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`0`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`0`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
 										},
 									},
 									"latest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time to collect data for the selected timezone. Default: 1`,
 									},
 									"log_level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`info`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`info`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -1181,36 +1587,48 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_task_reschedule": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
 										Validators: []validator.Float64{
 											float64validator.AtLeast(1),
 										},
 									},
 									"max_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`10MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`10MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"min_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`1MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`list`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`list`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -1221,36 +1639,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"reschedule_dropped_tasks": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"state_update_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 										Description: `State tracking configuration`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`relative`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`relative`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -1260,16 +1696,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Description: `Time warning configuration`,
 									},
 								},
 							},
 							"skippable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
 						},
@@ -1283,9 +1725,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -1318,10 +1763,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"conf": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"auth_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `must be one of ["manual", "secret", "clientSecret", "clientCert"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -1333,31 +1784,49 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"bucket": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `GCS Bucket from which to collect data`,
 									},
 									"extractors": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
 											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+											},
 											Attributes: map[string]schema.Attribute{
 												"expression": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 													Description: `JavaScript expression to compute the value from the path`,
 												},
 												"key": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 													Description: `Name of the extracted field`,
 												},
 												"pattern": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 													Description: `Regex pattern to match paths (alternative to key/expression)`,
 												},
 											},
@@ -1366,22 +1835,34 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"max_batch_size": schema.Int64Attribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Int64{
+											speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+										},
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
 									},
 									"path": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Directory where data will be collected`,
 									},
 									"recurse": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"service_account_credentials": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 								},
 							},
@@ -1403,6 +1884,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"environment": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -1421,32 +1905,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"input": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
 									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -1457,66 +1959,96 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: true`,
 									},
 								},
 							},
 							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
 							},
 							"stale_channel_flush_ms": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(10000),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(10000),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 								Validators: []validator.Float64{
 									float64validator.Between(10, 43200000),
 								},
 							},
 							"throttle_rate_per_sec": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`0`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
 								Validators: []validator.String{
 									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`collection`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`collection`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "collection"; must be "collection"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -1540,75 +2072,111 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`*/5 * * * *`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Enable to configure scheduling for this Collector`,
 							},
 							"max_concurrent_runs": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(1),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
 							"resume_missed": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(0),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(0),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
 									},
 									"expression": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`true`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`true`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
 									},
 									"job_timeout": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`0`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`0`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
 										},
 									},
 									"latest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time to collect data for the selected timezone. Default: 1`,
 									},
 									"log_level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`info`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`info`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -1621,36 +2189,48 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_task_reschedule": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
 										Validators: []validator.Float64{
 											float64validator.AtLeast(1),
 										},
 									},
 									"max_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`10MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`10MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"min_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`1MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`list`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`list`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -1661,36 +2241,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"reschedule_dropped_tasks": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"state_update_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 										Description: `State tracking configuration`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`relative`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`relative`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -1700,16 +2298,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Description: `Time warning configuration`,
 									},
 								},
 							},
 							"skippable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
 						},
@@ -1723,9 +2327,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -1758,10 +2365,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"conf": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"authentication": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -1781,8 +2394,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"collect_method": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `must be one of ["get", "post", "post_with_body", "other"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -1794,25 +2410,40 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"collect_url": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `URL to use for the Collect operation`,
 									},
 									"credentials_secret": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"password": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"timeout": schema.Int64Attribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Int64{
+											speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+										},
 										Validators: []validator.Int64{
 											int64validator.AtMost(1800),
 										},
@@ -1820,6 +2451,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"username": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 								},
 							},
@@ -1843,6 +2477,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"environment": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -1861,32 +2498,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"input": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
 									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -1897,66 +2552,96 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: true`,
 									},
 								},
 							},
 							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
 							},
 							"stale_channel_flush_ms": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(10000),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(10000),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 								Validators: []validator.Float64{
 									float64validator.Between(10, 43200000),
 								},
 							},
 							"throttle_rate_per_sec": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`0`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
 								Validators: []validator.String{
 									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`collection`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`collection`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "collection"; must be "collection"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -1980,75 +2665,111 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`*/5 * * * *`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Enable to configure scheduling for this Collector`,
 							},
 							"max_concurrent_runs": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(1),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
 							"resume_missed": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(0),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(0),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
 									},
 									"expression": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`true`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`true`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
 									},
 									"job_timeout": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`0`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`0`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
 										},
 									},
 									"latest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time to collect data for the selected timezone. Default: 1`,
 									},
 									"log_level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`info`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`info`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -2061,36 +2782,48 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_task_reschedule": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
 										Validators: []validator.Float64{
 											float64validator.AtLeast(1),
 										},
 									},
 									"max_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`10MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`10MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"min_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`1MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`list`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`list`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -2101,36 +2834,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"reschedule_dropped_tasks": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"state_update_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 										Description: `State tracking configuration`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`relative`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`relative`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -2140,16 +2891,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Description: `Time warning configuration`,
 									},
 								},
 							},
 							"skippable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
 						},
@@ -2163,9 +2920,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -2198,32 +2958,53 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"conf": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"auth_header_expr": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Expression for auth header value`,
 									},
 									"auth_header_key": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Header key for authentication`,
 									},
 									"auth_request_headers": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 												},
 												"value": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 												},
 											},
 										},
@@ -2231,25 +3012,40 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"auth_request_params": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 												},
 												"value": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 												},
 											},
 										},
 									},
 									"authentication": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -2269,18 +3065,27 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"capture_headers": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(false),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(false),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: false`,
 									},
 									"client_secret_param_name": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"collect_method": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `must be one of ["get", "post", "post_with_body", "other"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -2294,18 +3099,30 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"collect_request_headers": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 												},
 												"value": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 												},
 											},
 										},
@@ -2313,56 +3130,92 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"collect_request_params": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 												},
 												"value": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 												},
 											},
 										},
 									},
 									"collect_url": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `URL to use for the Collect operation`,
 									},
 									"credentials_secret": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"decode_url": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(false),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(false),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: false`,
 									},
 									"disable_time_filter": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"discovery": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"discover_body": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"discover_data_field": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"discover_method": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `protocol used for http discovery, required for 'http' type. must be one of ["get", "post", "post_with_body", "other"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -2376,18 +3229,30 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 											"discover_request_headers": schema.ListNestedAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.List{
+													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+												},
 												NestedObject: schema.NestedAttributeObject{
 													Validators: []validator.Object{
 														speakeasy_objectvalidators.NotNull(),
+													},
+													PlanModifiers: []planmodifier.Object{
+														speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 													},
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
 															Computed: true,
 															Optional: true,
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 														},
 														"value": schema.StringAttribute{
 															Computed: true,
 															Optional: true,
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 														},
 													},
 												},
@@ -2395,16 +3260,25 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 											"discover_request_params": schema.ListNestedAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.List{
+													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+												},
 												NestedObject: schema.NestedAttributeObject{
 													Validators: []validator.Object{
 														speakeasy_objectvalidators.NotNull(),
+													},
+													PlanModifiers: []planmodifier.Object{
+														speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 													},
 													Attributes: map[string]schema.Attribute{},
 												},
 											},
 											"discover_type": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Not Null; must be one of ["http", "json", "list", "none"]`,
 												Validators: []validator.String{
 													speakeasy_stringvalidators.NotNull(),
@@ -2417,90 +3291,144 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												},
 											},
 											"discover_url": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `URL to hit for rest type collectors, required for 'http' discoverType`,
 											},
 											"enable_discover_code": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"format_result_code": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"item_list": schema.ListAttribute{
-												Computed:    true,
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.List{
+													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+												},
 												ElementType: types.StringType,
 												Description: `comma separated list of strings to return from discovery section required for 'list' discoverType`,
 											},
 											"manual_discover_result": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `json payload to return manually, required for 'json' discoverType`,
 											},
 											"pagination": schema.SingleNestedAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+												},
 												Attributes: map[string]schema.Attribute{
 													"attribute": schema.ListAttribute{
-														Computed:    true,
-														Optional:    true,
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.List{
+															speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+														},
 														ElementType: types.StringType,
 													},
 													"last_page_expr": schema.StringAttribute{
 														Computed: true,
 														Optional: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 													},
 													"limit": schema.Int64Attribute{
-														Computed:    true,
-														Optional:    true,
-														Default:     int64default.StaticInt64(100),
+														Computed: true,
+														Optional: true,
+														Default:  int64default.StaticInt64(100),
+														PlanModifiers: []planmodifier.Int64{
+															speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+														},
 														Description: `Default: 100`,
 													},
 													"limit_field": schema.StringAttribute{
 														Computed: true,
 														Optional: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 													},
 													"max_pages": schema.Int64Attribute{
-														Computed:    true,
-														Optional:    true,
-														Default:     int64default.StaticInt64(0),
+														Computed: true,
+														Optional: true,
+														Default:  int64default.StaticInt64(0),
+														PlanModifiers: []planmodifier.Int64{
+															speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+														},
 														Description: `Default: 0`,
 													},
 													"offset": schema.Int64Attribute{
 														Computed: true,
 														Optional: true,
+														PlanModifiers: []planmodifier.Int64{
+															speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+														},
 													},
 													"offset_field": schema.StringAttribute{
 														Computed: true,
 														Optional: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 													},
 													"page_field": schema.StringAttribute{
 														Computed: true,
 														Optional: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 													},
 													"size": schema.Int64Attribute{
-														Computed:    true,
-														Optional:    true,
-														Default:     int64default.StaticInt64(50),
+														Computed: true,
+														Optional: true,
+														Default:  int64default.StaticInt64(50),
+														PlanModifiers: []planmodifier.Int64{
+															speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+														},
 														Description: `Default: 50`,
 													},
 													"size_field": schema.StringAttribute{
 														Computed: true,
 														Optional: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 													},
 													"total_record_field": schema.StringAttribute{
 														Computed: true,
 														Optional: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 													},
 													"type": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Default:     stringdefault.StaticString(`none`),
+														Computed: true,
+														Optional: true,
+														Default:  stringdefault.StaticString(`none`),
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page"]`,
 														Validators: []validator.String{
 															stringvalidator.OneOf(
@@ -2512,9 +3440,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														},
 													},
 													"zero_indexed": schema.BoolAttribute{
-														Computed:    true,
-														Optional:    true,
-														Default:     booldefault.StaticBool(false),
+														Computed: true,
+														Optional: true,
+														Default:  booldefault.StaticBool(false),
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														Description: `Default: false`,
 													},
 												},
@@ -2526,74 +3457,119 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"login_body": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Body content for login request`,
 									},
 									"login_url": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `URL for authentication login`,
 									},
 									"pagination": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"attribute": schema.ListAttribute{
-												Computed:    true,
-												Optional:    true,
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.List{
+													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+												},
 												ElementType: types.StringType,
 											},
 											"last_page_expr": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"limit": schema.Int64Attribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     int64default.StaticInt64(100),
+												Computed: true,
+												Optional: true,
+												Default:  int64default.StaticInt64(100),
+												PlanModifiers: []planmodifier.Int64{
+													speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+												},
 												Description: `Default: 100`,
 											},
 											"limit_field": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"max_pages": schema.Int64Attribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     int64default.StaticInt64(0),
+												Computed: true,
+												Optional: true,
+												Default:  int64default.StaticInt64(0),
+												PlanModifiers: []planmodifier.Int64{
+													speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+												},
 												Description: `Default: 0`,
 											},
 											"offset": schema.Int64Attribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.Int64{
+													speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+												},
 											},
 											"offset_field": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"page_field": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"size": schema.Int64Attribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     int64default.StaticInt64(50),
+												Computed: true,
+												Optional: true,
+												Default:  int64default.StaticInt64(50),
+												PlanModifiers: []planmodifier.Int64{
+													speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+												},
 												Description: `Default: 50`,
 											},
 											"size_field": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"total_record_field": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`none`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`none`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -2605,9 +3581,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												},
 											},
 											"zero_indexed": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 										},
@@ -2615,14 +3594,23 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"password": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"retry_rules": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"codes": schema.ListAttribute{
 												Computed: true,
@@ -2631,61 +3619,91 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 													types.Int64Value(429),
 													types.Int64Value(503),
 												})),
+												PlanModifiers: []planmodifier.List{
+													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+												},
 												ElementType: types.Int64Type,
 												Description: `Default: [429,503]`,
 											},
 											"enable_header": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(true),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(true),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: true`,
 											},
 											"interval": schema.Int64Attribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     int64default.StaticInt64(1000),
+												Computed: true,
+												Optional: true,
+												Default:  int64default.StaticInt64(1000),
+												PlanModifiers: []planmodifier.Int64{
+													speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+												},
 												Description: `Default: 1000`,
 											},
 											"limit": schema.Int64Attribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     int64default.StaticInt64(5),
+												Computed: true,
+												Optional: true,
+												Default:  int64default.StaticInt64(5),
+												PlanModifiers: []planmodifier.Int64{
+													speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+												},
 												Description: `Default: 5`,
 											},
 											"max_interval_ms": schema.Int64Attribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     int64default.StaticInt64(20000),
+												Computed: true,
+												Optional: true,
+												Default:  int64default.StaticInt64(20000),
+												PlanModifiers: []planmodifier.Int64{
+													speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+												},
 												Description: `Default: 20000`,
 											},
 											"multiplier": schema.Float64Attribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     float64default.StaticFloat64(2),
+												Computed: true,
+												Optional: true,
+												Default:  float64default.StaticFloat64(2),
+												PlanModifiers: []planmodifier.Float64{
+													speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+												},
 												Description: `Default: 2`,
 											},
 											"retry_connect_reset": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"retry_connect_timeout": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"retry_header_name": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`retry-after`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`retry-after`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: "retry-after"`,
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`backoff`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`backoff`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: "backoff"; must be one of ["backoff", "fixed"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -2697,23 +3715,35 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"safe_headers": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 									},
 									"scheduling": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"state_tracking": schema.SingleNestedAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 									},
 									"timeout": schema.Int64Attribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Int64{
+											speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+										},
 										Validators: []validator.Int64{
 											int64validator.AtMost(1800),
 										},
@@ -2721,23 +3751,38 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"token": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"token_resp_attribute": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Attribute name for token in response`,
 									},
 									"token_secret": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"use_round_robin_dns": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"username": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 								},
 							},
@@ -2759,6 +3804,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"environment": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -2777,32 +3825,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"input": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
 									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -2813,66 +3879,96 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: true`,
 									},
 								},
 							},
 							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
 							},
 							"stale_channel_flush_ms": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(10000),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(10000),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 								Validators: []validator.Float64{
 									float64validator.Between(10, 43200000),
 								},
 							},
 							"throttle_rate_per_sec": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`0`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
 								Validators: []validator.String{
 									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`collection`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`collection`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "collection"; must be "collection"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -2896,75 +3992,111 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`*/5 * * * *`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Enable to configure scheduling for this Collector`,
 							},
 							"max_concurrent_runs": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(1),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
 							"resume_missed": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(0),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(0),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
 									},
 									"expression": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`true`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`true`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
 									},
 									"job_timeout": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`0`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`0`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
 										},
 									},
 									"latest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time to collect data for the selected timezone. Default: 1`,
 									},
 									"log_level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`info`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`info`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -2977,36 +4109,48 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_task_reschedule": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
 										Validators: []validator.Float64{
 											float64validator.AtLeast(1),
 										},
 									},
 									"max_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`10MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`10MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"min_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`1MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`list`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`list`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3017,36 +4161,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"reschedule_dropped_tasks": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"state_update_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 										Description: `State tracking configuration`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`relative`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`relative`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3056,16 +4218,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Description: `Time warning configuration`,
 									},
 								},
 							},
 							"skippable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
 						},
@@ -3079,9 +4247,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -3114,14 +4285,23 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"conf": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"aws_api_key": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"aws_authentication_method": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `must be one of ["auto", "manual", "secret"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3134,37 +4314,61 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"aws_secret": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"aws_secret_key": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"bucket": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `S3 Bucket from which to collect data`,
 									},
 									"extractors": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
 											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+											},
 											Attributes: map[string]schema.Attribute{
 												"expression": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 													Description: `JavaScript expression to compute the value from the path`,
 												},
 												"key": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 													Description: `Name of the extracted field`,
 												},
 												"pattern": schema.StringAttribute{
-													Computed:    true,
-													Optional:    true,
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
 													Description: `Regex pattern to match paths (alternative to key/expression)`,
 												},
 											},
@@ -3173,22 +4377,34 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"max_batch_size": schema.Int64Attribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Int64{
+											speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+										},
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
 									},
 									"path": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Directory where data will be collected`,
 									},
 									"recurse": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"region": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `AWS region from which to retrieve data`,
 									},
 								},
@@ -3211,6 +4427,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"environment": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -3229,32 +4448,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"input": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
 									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -3265,66 +4502,96 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: true`,
 									},
 								},
 							},
 							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
 							},
 							"stale_channel_flush_ms": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(10000),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(10000),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 								Validators: []validator.Float64{
 									float64validator.Between(10, 43200000),
 								},
 							},
 							"throttle_rate_per_sec": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`0`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
 								Validators: []validator.String{
 									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`collection`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`collection`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "collection"; must be "collection"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -3348,75 +4615,111 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`*/5 * * * *`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Enable to configure scheduling for this Collector`,
 							},
 							"max_concurrent_runs": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(1),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
 							"resume_missed": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(0),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(0),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
 									},
 									"expression": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`true`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`true`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
 									},
 									"job_timeout": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`0`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`0`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
 										},
 									},
 									"latest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time to collect data for the selected timezone. Default: 1`,
 									},
 									"log_level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`info`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`info`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3429,36 +4732,48 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_task_reschedule": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
 										Validators: []validator.Float64{
 											float64validator.AtLeast(1),
 										},
 									},
 									"max_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`10MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`10MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"min_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`1MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`list`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`list`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3469,36 +4784,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"reschedule_dropped_tasks": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"state_update_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 										Description: `State tracking configuration`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`relative`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`relative`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3508,16 +4841,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Description: `Time warning configuration`,
 									},
 								},
 							},
 							"skippable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
 						},
@@ -3531,9 +4870,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -3566,18 +4908,30 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"conf": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"collect_script": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"discover_script": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"shell": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 								},
 							},
@@ -3599,6 +4953,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"environment": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -3617,32 +4974,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"input": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
 									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -3653,66 +5028,96 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: true`,
 									},
 								},
 							},
 							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
 							},
 							"stale_channel_flush_ms": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(10000),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(10000),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 								Validators: []validator.Float64{
 									float64validator.Between(10, 43200000),
 								},
 							},
 							"throttle_rate_per_sec": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`0`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
 								Validators: []validator.String{
 									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`collection`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`collection`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "collection"; must be "collection"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -3736,75 +5141,111 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`*/5 * * * *`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Enable to configure scheduling for this Collector`,
 							},
 							"max_concurrent_runs": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(1),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
 							"resume_missed": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(0),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(0),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
 									},
 									"expression": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`true`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`true`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
 									},
 									"job_timeout": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`0`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`0`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
 										},
 									},
 									"latest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time to collect data for the selected timezone. Default: 1`,
 									},
 									"log_level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`info`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`info`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3817,36 +5258,48 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_task_reschedule": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
 										Validators: []validator.Float64{
 											float64validator.AtLeast(1),
 										},
 									},
 									"max_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`10MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`10MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"min_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`1MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`list`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`list`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3857,36 +5310,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"reschedule_dropped_tasks": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"state_update_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 										Description: `State tracking configuration`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`relative`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`relative`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3896,16 +5367,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Description: `Time warning configuration`,
 									},
 								},
 							},
 							"skippable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
 						},
@@ -3919,9 +5396,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -3954,10 +5434,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"conf": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"authentication": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -3979,33 +5465,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"credentials_secret": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"disable_time_filter": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"earliest": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time boundary for the search`,
 									},
 									"endpoint": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `REST API endpoint used to create a search`,
 									},
 									"handle_escaped_chars": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"latest": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time boundary for the search`,
 									},
 									"output_mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `must be one of ["csv", "json"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -4017,24 +5524,39 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"password": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"reject_unauthorized": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"search": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Splunk search query`,
 									},
 									"search_head": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Search head base URL`,
 									},
 									"timeout": schema.Int64Attribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Int64{
+											speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+										},
 										Validators: []validator.Int64{
 											int64validator.AtMost(1800),
 										},
@@ -4042,18 +5564,30 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"token": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"token_secret": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"use_round_robin_dns": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 									},
 									"username": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 								},
 							},
@@ -4075,6 +5609,9 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"environment": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -4093,32 +5630,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					"input": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
 									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"value": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -4129,66 +5684,96 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
 									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: true`,
 									},
 								},
 							},
 							"send_to_routes": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination. Default: true`,
 							},
 							"stale_channel_flush_ms": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(10000),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(10000),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000`,
 								Validators: []validator.Float64{
 									float64validator.Between(10, 43200000),
 								},
 							},
 							"throttle_rate_per_sec": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`0`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`0`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling. Default: "0"`,
 								Validators: []validator.String{
 									stringvalidator.RegexMatches(regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`), "must match pattern "+regexp.MustCompile(`^[\d.]+(\s[KMGTPEZYkmgtpezy][Bb])?$`).String()),
 								},
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`collection`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`collection`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "collection"; must be "collection"`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -4212,75 +5797,111 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`*/5 * * * *`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`*/5 * * * *`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Enable to configure scheduling for this Collector`,
 							},
 							"max_concurrent_runs": schema.Float64Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     float64default.StaticFloat64(1),
+								Computed: true,
+								Optional: true,
+								Default:  float64default.StaticFloat64(1),
+								PlanModifiers: []planmodifier.Float64{
+									speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+								},
 								Description: `The maximum number of instances of this scheduled job that may be running at any time. Default: 1`,
 								Validators: []validator.Float64{
 									float64validator.AtLeast(1),
 								},
 							},
 							"resume_missed": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(0),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(0),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Earliest time to collect data for the selected timezone. Default: 0`,
 									},
 									"expression": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`true`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`true`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `A filter for tokens in the provided collect path and/or the events being collected. Default: "true"`,
 									},
 									"job_timeout": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`0`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`0`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time. Default: "0"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`\d+[sm]?$`), "must match pattern "+regexp.MustCompile(`\d+[sm]?$`).String()),
 										},
 									},
 									"latest": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Latest time to collect data for the selected timezone. Default: 1`,
 									},
 									"log_level": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`info`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`info`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Level at which to set task logging. Default: "info"; must be one of ["error", "warn", "info", "debug", "silly"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -4293,36 +5914,48 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_task_reschedule": schema.Float64Attribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     float64default.StaticFloat64(1),
+										Computed: true,
+										Optional: true,
+										Default:  float64default.StaticFloat64(1),
+										PlanModifiers: []planmodifier.Float64{
+											speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+										},
 										Description: `Maximum number of times a task can be rescheduled. Default: 1`,
 										Validators: []validator.Float64{
 											float64validator.AtLeast(1),
 										},
 									},
 									"max_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`10MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`10MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks. Default: "10MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"min_task_size": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`1MB`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`1MB`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task. Default: "1MB"`,
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`), "must match pattern "+regexp.MustCompile(`^((\d*\.?\d+)((KB|MB|GB|TB|PB|EB|ZB|YB|kb|mb|gb|tb|pb|eb|zb|yb){1}))$`).String()),
 										},
 									},
 									"mode": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`list`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`list`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job. Default: "list"; must be one of ["list", "preview", "run"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -4333,36 +5966,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"reschedule_dropped_tasks": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
+										Computed: true,
+										Optional: true,
+										Default:  booldefault.StaticBool(true),
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"state_update_expression": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 										Description: `State tracking configuration`,
 									},
 									"time_range_type": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     stringdefault.StaticString(`relative`),
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`relative`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 										Description: `Default: "relative"; must be one of ["relative", "absolute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
@@ -4372,16 +6023,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
-										Computed:    true,
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Description: `Time warning configuration`,
 									},
 								},
 							},
 							"skippable": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits. Default: true`,
 							},
 						},
@@ -4395,9 +6052,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -4426,8 +6086,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Default: true`,
 			},
 			"ttl": schema.StringAttribute{
-				Computed:    true,
-				Default:     stringdefault.StaticString(`4h`),
+				Computed: true,
+				Default:  stringdefault.StaticString(`4h`),
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Default: "4h"`,
 			},
 			"worker_affinity": schema.BoolAttribute{

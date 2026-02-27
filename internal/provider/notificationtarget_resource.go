@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	speakeasy_int64validators "github.com/criblio/terraform-provider-criblio/internal/validators/int64validators"
@@ -18,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -115,9 +117,12 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						Computed: true,
+						Optional: true,
+						Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
@@ -155,9 +160,12 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						Computed: true,
+						Optional: true,
+						Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
@@ -245,9 +253,12 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						Computed: true,
+						Optional: true,
+						Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
@@ -403,9 +414,12 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						},
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						Computed: true,
+						Optional: true,
+						Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},
@@ -502,9 +516,12 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Basic authentication password`,
 					},
 					"system_fields": schema.ListAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						Computed: true,
+						Optional: true,
+						Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{types.StringValue("cribl_host")})),
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]`,
 					},

@@ -316,13 +316,12 @@ func printExportSummary(cmd *cobra.Command, res *export.ExportResult, verbose bo
 		}
 	}
 	if len(res.ConvertSkipped) > 0 {
-		fmt.Fprintf(out, "Skipped at convert: %d resources\n", len(res.ConvertSkipped))
 		if verbose {
 			for _, msg := range res.ConvertSkipped {
 				fmt.Fprintf(out, "  %s\n", msg)
 			}
 		} else {
-			fmt.Fprintf(out, "  (use --verbose to see details)\n")
+			fmt.Fprintf(out, "Use --verbose for more details.\n")
 		}
 	}
 }

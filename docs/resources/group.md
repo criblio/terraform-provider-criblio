@@ -55,7 +55,7 @@ resource "criblio_group" "my_group" {
 - `is_fleet` (Boolean)
 - `max_worker_age` (String) This is only configurable for hybrid worker groups.
 - `name` (String)
-- `on_prem` (Boolean) Whether this is an on-premises group. Cannot be true when cloud is set.
+- `on_prem` (Boolean)
 - `provisioned` (Boolean)
 - `streamtags` (List of String)
 - `tags` (String)
