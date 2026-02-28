@@ -23,13 +23,9 @@ resource "criblio_routes" "my_routes" {
       filter                   = "level == 'error'"
       final                    = true
       name                     = "Errors to Splunk"
-      output = {
-        key = jsonencode("value")
-      }
-      output_expression = {
-        key = jsonencode("value")
-      }
-      pipeline = "main"
+      output                   = "{ \"see\": \"documentation\" }"
+      output_expression        = "{ \"see\": \"documentation\" }"
+      pipeline                 = "main"
     }
   ]
 }

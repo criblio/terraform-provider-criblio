@@ -14,9 +14,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -24,7 +22,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -251,19 +248,21 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 									},
-									"output": schema.MapAttribute{
-										Computed: true,
-										PlanModifiers: []planmodifier.Map{
-											speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+									"output": schema.StringAttribute{
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										ElementType: jsontypes.NormalizedType{},
+										Description: `Parsed as JSON.`,
 									},
-									"output_expression": schema.MapAttribute{
-										Computed: true,
-										PlanModifiers: []planmodifier.Map{
-											speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+									"output_expression": schema.StringAttribute{
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										ElementType: jsontypes.NormalizedType{},
+										Description: `Parsed as JSON.`,
 									},
 									"pipeline": schema.StringAttribute{
 										Computed: true,
@@ -323,19 +322,15 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"name": schema.StringAttribute{
 							Required: true,
 						},
-						"output": schema.MapAttribute{
+						"output": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
 							Optional:    true,
-							ElementType: jsontypes.NormalizedType{},
-							Validators: []validator.Map{
-								mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-							},
+							Description: `Parsed as JSON.`,
 						},
-						"output_expression": schema.MapAttribute{
+						"output_expression": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
 							Optional:    true,
-							ElementType: jsontypes.NormalizedType{},
-							Validators: []validator.Map{
-								mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-							},
+							Description: `Parsed as JSON.`,
 						},
 						"pipeline": schema.StringAttribute{
 							Required:    true,

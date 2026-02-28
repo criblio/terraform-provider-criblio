@@ -162,6 +162,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"connections": schema.ListNestedAttribute{
 						Computed: true,
@@ -213,6 +216,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"filter": schema.SingleNestedAttribute{
 						Computed: true,
@@ -289,6 +295,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -372,6 +381,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -384,6 +396,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -516,6 +531,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -706,6 +724,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"certificate": schema.SingleNestedAttribute{
 						Computed: true,
@@ -779,6 +800,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"file_filter": schema.StringAttribute{
 						Computed:    true,
@@ -803,6 +827,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -859,10 +886,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -1091,12 +1124,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"access_control_allow_origin": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Computed:    true,
@@ -1112,26 +1151,29 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.List{
-							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+							speakeasy_listplanmodifier.PreferState(),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
 							},
 							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								speakeasy_objectplanmodifier.PreferState(),
 							},
 							Attributes: map[string]schema.Attribute{
 								"allowed_indexes_at_token": schema.ListAttribute{
 									Computed: true,
 									Optional: true,
 									PlanModifiers: []planmodifier.List{
-										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										speakeasy_listplanmodifier.PreferState(),
 									},
 									ElementType: types.StringType,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
@@ -1171,14 +1213,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Computed: true,
 									Optional: true,
 									PlanModifiers: []planmodifier.List{
-										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										speakeasy_listplanmodifier.PreferState(),
 									},
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
 											speakeasy_objectvalidators.NotNull(),
 										},
 										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+											speakeasy_objectplanmodifier.PreferState(),
 										},
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
@@ -1232,6 +1274,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"capture_headers": schema.BoolAttribute{
 						Computed:    true,
@@ -1295,6 +1340,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"hec_api": schema.StringAttribute{
 						Computed:    true,
@@ -1355,6 +1403,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -1384,6 +1435,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -1397,6 +1451,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -1519,6 +1576,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -1681,6 +1741,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"connections": schema.ListNestedAttribute{
 						Computed: true,
@@ -1716,6 +1779,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -1728,6 +1794,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -1766,6 +1835,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -2065,6 +2137,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"from_beginning": schema.BoolAttribute{
 						Computed:    true,
@@ -2168,6 +2243,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"tls": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
 										Computed:    true,
@@ -2291,6 +2369,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -2320,10 +2401,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -2486,6 +2573,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -2685,6 +2775,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"filter": schema.StringAttribute{
 						Computed: true,
@@ -2701,6 +2794,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -2730,10 +2826,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -2912,7 +3014,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.List{
-							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+							speakeasy_listplanmodifier.PreferState(),
 						},
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
@@ -2973,6 +3075,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -3024,6 +3129,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -3053,6 +3161,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -3066,6 +3177,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -3175,6 +3289,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -3345,6 +3462,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"capture_headers": schema.BoolAttribute{
 						Computed:    true,
@@ -3402,6 +3522,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -3453,6 +3576,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -3482,6 +3608,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -3495,6 +3624,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -3604,6 +3736,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -3810,6 +3945,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -3834,6 +3972,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -3863,6 +4004,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -3876,6 +4020,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -3994,6 +4141,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -4188,6 +4338,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"full_fidelity": schema.BoolAttribute{
 						Computed:    true,
@@ -4206,6 +4359,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -4235,10 +4391,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -4462,6 +4624,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
 						Computed: true,
@@ -4553,6 +4718,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"file_filter": schema.StringAttribute{
 						Computed:    true,
@@ -4577,6 +4745,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -4615,6 +4786,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"poll_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -4628,6 +4802,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -4971,6 +5148,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"extract_metrics": schema.BoolAttribute{
 						Computed:    true,
@@ -5028,6 +5208,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -5057,6 +5240,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -5070,6 +5256,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -5197,6 +5386,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -5391,6 +5583,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -5400,6 +5595,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -5429,10 +5627,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -5763,6 +5967,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -5781,6 +5988,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -5873,6 +6083,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pod_filter": schema.ListNestedAttribute{
 						Computed: true,
@@ -5904,6 +6117,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -6283,6 +6499,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Bearer tokens to include in the authorization header`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -6389,6 +6608,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"extra_http_headers": schema.ListNestedAttribute{
 						Computed: true,
@@ -6464,6 +6686,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -6497,6 +6722,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -6510,6 +6738,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -6670,6 +6901,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -6919,6 +7153,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"from_beginning": schema.BoolAttribute{
 						Computed:    true,
@@ -7006,6 +7243,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -7041,10 +7281,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -7204,6 +7450,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"disabled": schema.BoolAttribute{
 								Computed:    true,
@@ -7310,6 +7559,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"command": schema.StringAttribute{
 						Computed:    true,
@@ -7363,6 +7615,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -7381,6 +7636,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -7410,10 +7668,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -7614,6 +7878,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"check_file_mod_time": schema.BoolAttribute{
 						Computed:    true,
@@ -7673,6 +7940,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"filenames": schema.ListAttribute{
 						Computed: true,
@@ -7739,6 +8009,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -7785,10 +8058,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -7989,6 +8268,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"capture_headers": schema.BoolAttribute{
 						Computed:    true,
@@ -8046,6 +8328,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -8097,6 +8382,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -8126,6 +8414,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -8139,6 +8430,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -8248,6 +8542,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -8461,6 +8758,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"google_auth_method": schema.StringAttribute{
 						Computed:    true,
@@ -8492,6 +8792,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -8527,10 +8830,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -8802,6 +9111,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -9001,6 +9313,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -9030,6 +9345,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -9043,6 +9361,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -9300,6 +9621,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -9467,7 +9791,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.List{
-							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+							speakeasy_listplanmodifier.PreferState(),
 						},
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
@@ -9598,6 +9922,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -9649,6 +9976,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -9678,6 +10008,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -9691,6 +10024,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -9815,6 +10151,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -9997,6 +10336,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"auth_tokens_ext": schema.ListNestedAttribute{
 						Computed: true,
@@ -10055,6 +10397,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"capture_headers": schema.BoolAttribute{
 						Computed:    true,
@@ -10112,6 +10457,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -10163,6 +10511,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -10192,6 +10543,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -10205,6 +10559,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -10323,6 +10680,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -10521,6 +10881,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -10551,6 +10914,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -10588,10 +10954,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -10874,6 +11246,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"from_beginning": schema.BoolAttribute{
 						Computed:    true,
@@ -10977,6 +11352,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"tls": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
 										Computed:    true,
@@ -11100,6 +11478,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -11129,10 +11510,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -11295,6 +11682,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -11558,6 +11948,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"get_records_limit": schema.Float64Attribute{
 						Computed:    true,
@@ -11597,6 +11990,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -11640,10 +12036,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -11916,6 +12318,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -11928,6 +12333,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -11957,10 +12365,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -12158,6 +12572,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"connections": schema.ListNestedAttribute{
 						Computed: true,
@@ -12203,6 +12620,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -12224,6 +12644,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -12301,10 +12724,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -12550,6 +12979,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -12571,6 +13003,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -12654,10 +13089,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -12942,6 +13383,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -13010,6 +13454,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -13099,6 +13546,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -13112,6 +13562,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -13236,6 +13689,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -13457,6 +13913,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -13487,6 +13946,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -13516,10 +13978,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -13619,6 +14087,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -13828,6 +14299,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -13852,6 +14326,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -13881,6 +14358,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -13894,6 +14374,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -13994,6 +14477,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -14296,6 +14782,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"from_beginning": schema.BoolAttribute{
 						Computed:    true,
@@ -14399,6 +14888,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"tls": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
 										Computed:    true,
@@ -14522,6 +15014,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -14551,10 +15046,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -14719,6 +15220,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -14924,6 +15428,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -14957,6 +15464,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -14986,6 +15496,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -14999,6 +15512,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -15311,6 +15827,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -15362,6 +15881,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -15391,6 +15913,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"plan_type": schema.StringAttribute{
 						Computed:    true,
@@ -15409,6 +15934,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -15800,6 +16328,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -15875,6 +16406,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -15909,6 +16443,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"plan_type": schema.StringAttribute{
 						Computed:    true,
@@ -15927,6 +16464,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -16336,6 +16876,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -16378,6 +16921,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -16407,6 +16953,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"plan_type": schema.StringAttribute{
 						Computed:    true,
@@ -16425,6 +16974,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -16789,6 +17341,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"extract_logs": schema.BoolAttribute{
 						Computed:    true,
@@ -16875,6 +17430,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -16976,6 +17534,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -16989,6 +17550,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -17125,6 +17689,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -17433,6 +18000,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -17498,6 +18068,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -17542,10 +18115,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -17930,6 +18509,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -17989,6 +18571,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -18078,6 +18663,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -18091,6 +18679,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -18224,6 +18815,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -18441,6 +19035,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -18477,6 +19074,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -18506,6 +19106,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -18519,6 +19122,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -18747,6 +19353,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
 						Computed: true,
@@ -18838,6 +19447,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"file_filter": schema.StringAttribute{
 						Computed:    true,
@@ -18862,6 +19474,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -18918,6 +19533,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"poll_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -18931,6 +19549,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -19252,6 +19873,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
 						Computed: true,
@@ -19344,6 +19968,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"file_filter": schema.StringAttribute{
 						Computed:    true,
@@ -19377,6 +20004,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -19433,6 +20063,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"poll_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -19446,6 +20079,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -19780,6 +20416,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"checkpointing": schema.SingleNestedAttribute{
 						Computed: true,
@@ -19871,6 +20510,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"file_filter": schema.StringAttribute{
 						Computed:    true,
@@ -19895,6 +20537,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -19951,6 +20596,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"poll_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -19964,6 +20612,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -20286,6 +20937,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -20316,6 +20970,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -20345,6 +21002,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -20358,6 +21018,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -20612,6 +21275,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"auth_tokens": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -20638,6 +21304,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"compress": schema.StringAttribute{
 						Computed:    true,
@@ -20702,6 +21371,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"extract_metrics": schema.BoolAttribute{
 						Computed:    true,
@@ -20747,6 +21419,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -20776,6 +21451,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -20789,6 +21467,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -20916,6 +21597,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -21087,6 +21771,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Computed:    true,
@@ -21102,10 +21789,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -21192,6 +21885,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"capture_headers": schema.BoolAttribute{
 						Computed:    true,
@@ -21261,6 +21957,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"extract_metrics": schema.BoolAttribute{
 						Computed:    true,
@@ -21318,6 +22017,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -21347,6 +22049,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -21360,6 +22065,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -21493,6 +22201,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -21806,6 +22517,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -21875,6 +22589,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -21976,10 +22693,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -22423,6 +23146,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -22441,6 +23167,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -22479,6 +23208,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"poll_timeout": schema.Float64Attribute{
 						Computed:    true,
@@ -22492,6 +23224,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -23010,6 +23745,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"tls": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
 										Computed:    true,
@@ -23421,6 +24159,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"tls": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"ca_path": schema.StringAttribute{
 										Computed:    true,
@@ -23714,6 +24455,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.SingleNestedAttribute{
 						Computed: true,
@@ -23949,6 +24693,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -24032,10 +24779,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -24436,6 +25189,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -24457,6 +25213,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -24540,10 +25299,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -24728,6 +25493,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"connections": schema.ListNestedAttribute{
 						Computed: true,
@@ -24779,6 +25547,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -24809,6 +25580,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -24838,6 +25612,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -24851,6 +25628,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -25001,6 +25781,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -25223,6 +26006,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -25253,6 +26039,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -25282,6 +26071,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -25295,6 +26087,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -25418,6 +26213,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -25651,6 +26449,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -25713,6 +26514,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -25742,6 +26546,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -25755,6 +26562,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -25997,6 +26807,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -26237,6 +27050,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"event_format": schema.StringAttribute{
 						Computed:    true,
@@ -26291,6 +27107,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -26320,10 +27139,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -26547,6 +27372,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.SingleNestedAttribute{
 						Computed: true,
@@ -26766,6 +27594,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -26849,10 +27680,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -27174,6 +28011,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
 						Computed:    true,
@@ -27207,6 +28047,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -27236,10 +28079,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -27531,7 +28380,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.List{
-							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+							speakeasy_listplanmodifier.PreferState(),
 						},
 						ElementType: types.StringType,
 						Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
@@ -27651,6 +28500,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"host": schema.StringAttribute{
 						Computed:    true,
@@ -27702,6 +28554,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -27731,6 +28586,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -27744,6 +28602,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -27866,6 +28727,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,
@@ -28034,6 +28898,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Computed:    true,
@@ -28049,10 +28916,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -28195,6 +29068,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"hec_acks": schema.BoolAttribute{
 						Computed:    true,
@@ -28261,6 +29137,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"metadata": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.PreferState(),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -28290,6 +29169,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+						},
 					},
 					"port": schema.Float64Attribute{
 						Computed:    true,
@@ -28303,6 +29185,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pq": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
 								Computed:    true,
@@ -28412,6 +29297,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"ca_path": schema.StringAttribute{
 								Computed:    true,

@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"io"
 	"strings"
+
+	"github.com/criblio/terraform-provider-criblio/internal/planmodifiers/mapplanmodifier"
 	customstringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -20,6 +22,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
@@ -93,11 +96,13 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
+									Default:     stringdefault.StaticString(""),
 									Description: `Simple description of this step`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
 									Optional:    true,
+									Default:     booldefault.StaticBool(false),
 									Description: `If true, data will not be pushed through this function`,
 								},
 								"filter": schema.StringAttribute{
@@ -109,11 +114,13 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 								"final": schema.BoolAttribute{
 									Computed:    true,
 									Optional:    true,
+									Default:     booldefault.StaticBool(false),
 									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
 								},
 								"group_id": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
+									Default:     stringdefault.StaticString(""),
 									Description: `Group ID`,
 								},
 								"id": schema.StringAttribute{
@@ -131,6 +138,9 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 					"groups": schema.MapNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Map{
+							mapplanmodifier.SuppressDiff(mapplanmodifier.ExplicitSuppress),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),

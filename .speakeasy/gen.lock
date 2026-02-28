@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 3db881f8d041e4c1f2f240fd95b10b73
+  docChecksum: 3bcc52b5b0f9d94a5284682405da64f0
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.129
-  configChecksum: b11d8501ac87c1781fcdf163cb02033d
+  releaseVersion: 1.20.130
+  configChecksum: d2b11106ba36b418578379ef17266d60
   published: true
 features:
   terraform:
@@ -331,10 +331,6 @@ generatedFiles:
   - internal/provider/notificationtargets_data_source_sdk.go
   - internal/provider/pack_data_source.go
   - internal/provider/pack_data_source_sdk.go
-  - internal/provider/packbreakers_data_source.go
-  - internal/provider/packbreakers_data_source_sdk.go
-  - internal/provider/packbreakers_resource.go
-  - internal/provider/packbreakers_resource_sdk.go
   - internal/provider/packdestination_data_source.go
   - internal/provider/packdestination_data_source_sdk.go
   - internal/provider/packdestination_resource.go
@@ -415,16 +411,12 @@ generatedFiles:
   - internal/provider/searchsavedquery_resource_sdk.go
   - internal/provider/searchusagegroup_data_source.go
   - internal/provider/searchusagegroup_data_source_sdk.go
-  - internal/provider/searchusagegroup_resource.go
-  - internal/provider/searchusagegroup_resource_sdk.go
   - internal/provider/secret_data_source.go
   - internal/provider/secret_data_source_sdk.go
   - internal/provider/secret_resource.go
   - internal/provider/secret_resource_sdk.go
   - internal/provider/source_data_source.go
   - internal/provider/source_data_source_sdk.go
-  - internal/provider/source_resource.go
-  - internal/provider/source_resource_sdk.go
   - internal/provider/sources_data_source.go
   - internal/provider/sources_data_source_sdk.go
   - internal/provider/subscription_data_source.go

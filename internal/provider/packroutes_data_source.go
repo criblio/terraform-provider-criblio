@@ -127,13 +127,15 @@ func (r *PackRoutesDataSource) Schema(ctx context.Context, req datasource.Schema
 									"name": schema.StringAttribute{
 										Computed: true,
 									},
-									"output": schema.MapAttribute{
+									"output": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										ElementType: jsontypes.NormalizedType{},
+										Description: `Parsed as JSON.`,
 									},
-									"output_expression": schema.MapAttribute{
+									"output_expression": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										ElementType: jsontypes.NormalizedType{},
+										Description: `Parsed as JSON.`,
 									},
 									"pipeline": schema.StringAttribute{
 										Computed:    true,

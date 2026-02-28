@@ -18,11 +18,13 @@ import (
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -190,6 +192,15 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 						"fields": schema.ListNestedAttribute{
 							Computed: true,
 							Optional: true,
+							Default: listdefault.StaticValue(types.ListValueMust(
+								types.ObjectType{
+									AttrTypes: map[string]attr.Type{
+										"name":  types.StringType,
+										"value": types.StringType,
+									},
+								},
+								[]attr.Value{},
+							)),
 							PlanModifiers: []planmodifier.List{
 								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},

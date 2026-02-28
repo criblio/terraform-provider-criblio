@@ -18,8 +18,7 @@ func TestPackSource(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory:    config.TestNameDirectory(),
-					ExpectNonEmptyPlan: true,
+					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_pack.source_pack", "id", "pack-with-source"),
 						resource.TestCheckResourceAttr("criblio_pack.source_pack", "group_id", "default"),

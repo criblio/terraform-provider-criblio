@@ -987,7 +987,7 @@ components:
         ttl:
           x-speakeasy-param-suppress-computed-diff: true
           type: string
-          default: 4h
+          default: "4h"
           example: "2h"
         ignoreGroupJobsLimit:
           type: boolean
@@ -7239,6 +7239,7 @@ components:
                 maximum: 134217728
                 example: 65536
               fields:
+                x-speakeasy-param-suppress-computed-diff: true
                 title: Fields
                 description: Key-value pairs to be added to each event
                 type: array
@@ -58661,14 +58662,8 @@ components:
             the Description below
           default: false
           example: false
-        output:
-          x-speakeasy-param-suppress-computed-diff: true
-          type: object
-          additionalProperties: true
-        outputExpression:
-          x-speakeasy-param-suppress-computed-diff: true
-          type: object
-          additionalProperties: true
+        output: {}
+        outputExpression: {}
         description:
           type: string
           title: Description
@@ -70182,7 +70177,6 @@ paths:
                     x-speakeasy-param-suppress-computed-diff: true
                     items:
                       $ref: "#/components/schemas/LookupFile"
-                      x-speakeasy-compress: true
         "401":
           description: Unauthorized
         "500":

@@ -6,6 +6,10 @@ internal/provider/pipeline_resource_sdk.go
 internal/provider/packpipeline_resource.go
 internal/provider/packpipeline_resource_sdk.go
 internal/provider/packpipeline_data_source_sdk.go
+internal/provider/packbreakers_resource.go
+internal/provider/packbreakers_resource_sdk.go
+internal/provider/packbreakers_data_source.go
+internal/provider/packbreakers_data_source_sdk.go
 internal/provider/pipeline_resource.go
 internal/provider/packsource_resource_sdk.go
 internal/provider/pipeline_resource_sdk.go
@@ -20,3 +24,7 @@ internal/provider/searchdataset_resource_sdk.go
 internal/provider/searchdatasetprovider_resource.go
 internal/provider/searchdataset_resource.go
 internal/provider/group_resource.go
+internal/provider/searchusagegroup_resource.go
+internal/provider/searchusagegroup_resource_sdk.go
+internal/provider/source_resource.go
+internal/provider/source_resource_sdk.go
