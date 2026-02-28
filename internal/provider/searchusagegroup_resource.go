@@ -71,7 +71,7 @@ func (r *SearchUsageGroupResource) Schema(ctx context.Context, req resource.Sche
 				Required:   true,
 				Description: `Parsed as JSON.`,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.PreferStateIfJSONEqual(),
+					speakeasy_stringplanmodifier.PreferState(),
 				},
 			},
 			"users_count": schema.Float64Attribute{

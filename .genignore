@@ -28,3 +28,6 @@ internal/provider/searchusagegroup_resource.go
 internal/provider/searchusagegroup_resource_sdk.go
 internal/provider/source_resource.go
 internal/provider/source_resource_sdk.go
+internal/provider/collector_resource.go
+internal/provider/collector_resource_sdk.go
+internal/provider/lookupfile_resource.go

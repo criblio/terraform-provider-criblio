@@ -32,8 +32,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -218,6 +220,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"filter": schema.SingleNestedAttribute{
@@ -383,6 +386,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -398,6 +402,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -802,6 +807,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"file_filter": schema.StringAttribute{
@@ -888,6 +894,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -895,6 +902,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -1325,10 +1333,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
 					},
 					"enable_health_check": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
-						Computed:    true,
-						Optional:    true,
+						CustomType: jsontypes.NormalizedType{},
+						Computed:   true,
+						Optional:   true,
 						Description: `Parsed as JSON.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -1342,6 +1354,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"hec_api": schema.StringAttribute{
@@ -1437,6 +1450,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -1453,6 +1467,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -1781,6 +1796,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -1837,6 +1853,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -2139,6 +2156,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"from_beginning": schema.BoolAttribute{
@@ -2403,6 +2421,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -2410,6 +2429,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -2777,6 +2797,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"filter": schema.StringAttribute{
@@ -2828,6 +2849,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -2835,6 +2857,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -3064,6 +3087,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -3077,6 +3103,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -3163,6 +3190,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -3179,6 +3207,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -3511,6 +3540,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -3524,6 +3556,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -3610,6 +3643,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -3626,6 +3660,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -3947,6 +3982,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -4006,6 +4042,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -4022,6 +4059,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -4340,6 +4378,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"full_fidelity": schema.BoolAttribute{
@@ -4393,6 +4432,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -4400,6 +4440,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -4720,6 +4761,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"file_filter": schema.StringAttribute{
@@ -4788,6 +4830,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"poll_timeout": schema.Float64Attribute{
@@ -4804,6 +4847,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -5137,6 +5181,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -5150,6 +5197,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"extract_metrics": schema.BoolAttribute{
@@ -5242,6 +5290,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -5258,6 +5307,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -5585,6 +5635,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -5629,6 +5680,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -5636,6 +5688,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -5969,6 +6022,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -6085,6 +6139,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pod_filter": schema.ListNestedAttribute{
@@ -6119,6 +6174,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -6597,6 +6653,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -6610,6 +6669,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"extra_http_headers": schema.ListNestedAttribute{
@@ -6724,6 +6784,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -6740,6 +6801,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -7155,6 +7217,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"from_beginning": schema.BoolAttribute{
@@ -7283,6 +7346,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -7290,6 +7354,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -7617,6 +7682,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -7670,6 +7736,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -7677,6 +7744,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -7942,6 +8010,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"filenames": schema.ListAttribute{
@@ -8060,6 +8129,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -8067,6 +8137,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -8317,6 +8388,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -8330,6 +8404,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -8416,6 +8491,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -8432,6 +8508,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -8760,6 +8837,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"google_auth_method": schema.StringAttribute{
@@ -8832,6 +8910,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -8839,6 +8918,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -9100,6 +9180,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -9113,6 +9196,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -9347,6 +9431,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -9363,6 +9448,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -9911,6 +9997,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -9924,6 +10013,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -10010,6 +10100,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -10026,6 +10117,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -10446,6 +10538,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -10459,6 +10554,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -10545,6 +10641,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -10561,6 +10658,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -10883,6 +10981,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -10956,6 +11055,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -10963,6 +11063,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -11248,6 +11349,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"from_beginning": schema.BoolAttribute{
@@ -11512,6 +11614,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -11519,6 +11622,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -11950,6 +12054,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"get_records_limit": schema.Float64Attribute{
@@ -12038,6 +12143,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -12045,6 +12151,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -12320,6 +12427,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -12367,6 +12475,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -12374,6 +12483,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -12622,6 +12732,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -12726,6 +12837,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -12733,6 +12845,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -12981,6 +13094,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -13091,6 +13205,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -13098,6 +13213,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -13372,6 +13488,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -13385,6 +13504,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -13548,6 +13668,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -13564,6 +13685,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -13915,6 +14037,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -13980,6 +14103,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -13987,6 +14111,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -14301,6 +14426,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -14360,6 +14486,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -14376,6 +14503,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -14784,6 +14912,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"from_beginning": schema.BoolAttribute{
@@ -15048,6 +15177,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -15055,6 +15185,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -15430,6 +15561,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -15498,6 +15630,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -15514,6 +15647,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -15829,6 +15963,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -15915,6 +16050,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"plan_type": schema.StringAttribute{
@@ -15936,6 +16072,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -16330,6 +16467,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -16445,6 +16583,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"plan_type": schema.StringAttribute{
@@ -16466,6 +16605,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -16878,6 +17018,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -16955,6 +17096,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"plan_type": schema.StringAttribute{
@@ -16976,6 +17118,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -17330,6 +17473,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.StringAttribute{
 						CustomType:  jsontypes.NormalizedType{},
@@ -17343,6 +17489,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"extract_logs": schema.BoolAttribute{
@@ -17536,6 +17683,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -17552,6 +17700,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -18002,6 +18151,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -18117,6 +18267,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -18124,6 +18275,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -18498,6 +18650,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -18511,6 +18666,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -18665,6 +18821,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -18681,6 +18838,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -19037,6 +19195,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -19108,6 +19267,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -19124,6 +19284,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -19449,6 +19610,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"file_filter": schema.StringAttribute{
@@ -19535,6 +19697,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"poll_timeout": schema.Float64Attribute{
@@ -19551,6 +19714,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -19970,6 +20134,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"file_filter": schema.StringAttribute{
@@ -20065,6 +20230,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"poll_timeout": schema.Float64Attribute{
@@ -20081,6 +20247,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -20512,6 +20679,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"file_filter": schema.StringAttribute{
@@ -20598,6 +20766,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"poll_timeout": schema.Float64Attribute{
@@ -20614,6 +20783,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -20939,6 +21109,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -21004,6 +21175,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -21020,6 +21192,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -21373,6 +21546,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"extract_metrics": schema.BoolAttribute{
@@ -21453,6 +21627,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -21469,6 +21644,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -21942,10 +22118,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
 					},
 					"enable_health_check": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
-						Computed:    true,
-						Optional:    true,
+						CustomType: jsontypes.NormalizedType{},
+						Computed:   true,
+						Optional:   true,
 						Description: `Parsed as JSON.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -21959,6 +22139,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"extract_metrics": schema.BoolAttribute{
@@ -22051,6 +22232,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -22067,6 +22249,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -22519,6 +22702,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -22695,6 +22879,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -22702,6 +22887,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -23148,6 +23334,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -23210,6 +23397,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"poll_timeout": schema.Float64Attribute{
@@ -23226,6 +23414,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -24457,6 +24646,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.SingleNestedAttribute{
@@ -24781,6 +24971,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -24788,6 +24979,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -25191,6 +25383,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -25301,6 +25494,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -25308,6 +25502,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -25549,6 +25744,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -25614,6 +25810,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -25630,6 +25827,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -26008,6 +26206,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -26073,6 +26272,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -26089,6 +26289,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -26438,6 +26639,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -26451,6 +26655,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -26548,6 +26753,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -26564,6 +26770,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -27052,6 +27259,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"event_format": schema.StringAttribute{
@@ -27141,6 +27349,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -27148,6 +27357,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -27374,6 +27584,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.SingleNestedAttribute{
@@ -27682,6 +27893,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -27689,6 +27901,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -28013,6 +28226,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"id": schema.StringAttribute{
@@ -28081,6 +28295,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"pq": schema.SingleNestedAttribute{
@@ -28088,6 +28303,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -28489,6 +28705,9 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy. Default: false`,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.PreferState(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -28502,6 +28721,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"host": schema.StringAttribute{
@@ -28588,6 +28808,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -28604,6 +28825,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{
@@ -29053,10 +29275,14 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics. Default: false`,
 					},
 					"enable_health_check": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
-						Computed:    true,
-						Optional:    true,
+						CustomType: jsontypes.NormalizedType{},
+						Computed:   true,
+						Optional:   true,
 						Description: `Parsed as JSON.`,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
+						},
 					},
 					"enable_proxy_header": schema.BoolAttribute{
 						Computed:    true,
@@ -29070,6 +29296,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"hec_acks": schema.BoolAttribute{
@@ -29171,6 +29398,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline to process data from this Source before sending it through the Routes`,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.PreferState(),
+							stringplanmodifier.UseStateForUnknown(),
 						},
 					},
 					"port": schema.Float64Attribute{
@@ -29187,6 +29415,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
 							speakeasy_objectplanmodifier.PreferState(),
+							objectplanmodifier.UseStateForUnknown(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"commit_frequency": schema.Float64Attribute{

@@ -5,8 +5,8 @@ management:
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.130
-  configChecksum: d2b11106ba36b418578379ef17266d60
+  releaseVersion: 1.20.131
+  configChecksum: b8fe3c200e36b0f7993902f3ed76c324
   published: true
 features:
   terraform:
@@ -248,8 +248,6 @@ generatedFiles:
   - internal/provider/certificates_data_source_sdk.go
   - internal/provider/collector_data_source.go
   - internal/provider/collector_data_source_sdk.go
-  - internal/provider/collector_resource.go
-  - internal/provider/collector_resource_sdk.go
   - internal/provider/collectors_data_source.go
   - internal/provider/collectors_data_source_sdk.go
   - internal/provider/commit_resource.go
@@ -311,7 +309,6 @@ generatedFiles:
   - internal/provider/lakehousedatasetconnection_resource_sdk.go
   - internal/provider/lookupfile_data_source.go
   - internal/provider/lookupfile_data_source_sdk.go
-  - internal/provider/lookupfile_resource.go
   - internal/provider/lookupfile_resource_sdk.go
   - internal/provider/mappingruleset_data_source.go
   - internal/provider/mappingruleset_data_source_sdk.go
