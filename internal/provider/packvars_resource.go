@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -92,7 +93,7 @@ func (r *PackVarsResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					custom_stringplanmodifier.PreferState(),
 				},
 				Description: `Brief description of this variable. Optional.`,
 			},

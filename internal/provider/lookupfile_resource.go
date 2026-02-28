@@ -7,8 +7,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
-	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -61,7 +61,7 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.PreferState(),
+					custom_stringplanmodifier.PreferState(),
 				},
 				Description: `File content.`,
 			},
@@ -69,7 +69,7 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					custom_stringplanmodifier.PreferState(),
 				},
 			},
 			"group_id": schema.StringAttribute{
@@ -79,7 +79,7 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"id": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					custom_stringplanmodifier.PreferState(),
 				},
 				Description: `Unique ID to PATCH`,
 				Validators: []validator.String{
@@ -91,7 +91,7 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional: true,
 				Default:  stringdefault.StaticString(`memory`),
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					custom_stringplanmodifier.PreferState(),
 				},
 				Description: `Default: "memory"; must be one of ["memory", "disk"]`,
 				Validators: []validator.String{
@@ -104,28 +104,19 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"pending_task": schema.SingleNestedAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.Object{
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+					custom_objectplanmodifier.PreferState(),
 				},
 				Attributes: map[string]schema.Attribute{
 					"error": schema.StringAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
 						Description: `Error message if task has failed`,
 					},
 					"id": schema.StringAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
 						Description: `Task ID (generated).`,
 					},
 					"type": schema.StringAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
 						Description: `Task type`,
 					},
 				},
@@ -134,14 +125,14 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					custom_stringplanmodifier.PreferState(),
 				},
 				Description: `One or more tags related to this lookup. Optional.`,
 			},
 			"version": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					custom_stringplanmodifier.PreferState(),
 				},
 				Description: `Unique string generated for each modification of this lookup`,
 			},

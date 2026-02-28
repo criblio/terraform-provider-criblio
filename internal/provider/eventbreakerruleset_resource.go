@@ -11,6 +11,7 @@ import (
 	speakeasy_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
 	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -68,7 +69,7 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					custom_stringplanmodifier.PreferState(),
 				},
 			},
 			"group_id": schema.StringAttribute{

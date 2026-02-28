@@ -213,7 +213,7 @@ components:
             - scheduledSearch
           example: "collection"
         ttl:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Time to live
           description: Time to keep the job's artifacts on disk after job completion. This
@@ -258,7 +258,7 @@ components:
             empty, will be enabled everywhere.
           example: "dev"
         schedule:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           title: Schedule
           description: Configuration for a scheduled job
@@ -556,7 +556,7 @@ components:
             - scheduledSearch
           example: "executor"
         ttl:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Time to live
           description: Time to keep the job's artifacts on disk after job completion. This
@@ -773,7 +773,7 @@ components:
             - scheduledSearch
           example: "scheduledSearch"
         ttl:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Time to live
           description: Time to keep the job's artifacts on disk after job completion. This
@@ -985,7 +985,7 @@ components:
           x-speakeasy-terraform-ignore: true
           example: "collection"
         ttl:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           default: "4h"
           example: "2h"
@@ -1008,19 +1008,19 @@ components:
           default: true
           example: true
         environment:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Environment
           example: "production"
         savedState:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           title: Saved state
           description: Saved state for the collector
           default: {}
           example: {}
         schedule:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           title: Schedule
           description: Configuration for a scheduled job
@@ -1173,7 +1173,7 @@ components:
           example: false
         # Input Configuration
         input:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           properties:
             type:
@@ -1298,7 +1298,7 @@ components:
                   enum: [script]
                   example: "script"
                 conf:
-                  x-speakeasy-param-suppress-computed-diff: true
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     shell:
@@ -1327,7 +1327,7 @@ components:
                   enum: [splunk]
                   example: "splunk"
                 conf:
-                  x-speakeasy-param-suppress-computed-diff: true
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     searchHead:
@@ -1421,7 +1421,7 @@ components:
                   enum: [rest]
                   example: "rest"
                 conf:
-                  x-speakeasy-param-suppress-computed-diff: true
+                  x-speakeasy-plan-modifiers: PreferState
                   required: [discovery]
                   type: object
                   properties:
@@ -1753,7 +1753,7 @@ components:
                   enum: [s3]
                   example: "s3"
                 conf:
-                  x-speakeasy-param-suppress-computed-diff: true
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     bucket:
@@ -1834,7 +1834,7 @@ components:
                   enum: [azureblob]
                   example: "azureblob"
                 conf:
-                  x-speakeasy-param-suppress-computed-diff: true
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     containerName:
@@ -1907,7 +1907,7 @@ components:
                   enum: [cribllake]
                   example: "cribllake"
                 conf:
-                  x-speakeasy-param-suppress-computed-diff: true
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     dataset:
@@ -1929,7 +1929,7 @@ components:
                   enum: [database]
                   example: "database"
                 conf:
-                  x-speakeasy-param-suppress-computed-diff: true
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     connectionId:
@@ -1960,7 +1960,7 @@ components:
                   enum: [gcs]
                   example: "gcs"
                 conf:
-                  x-speakeasy-param-suppress-computed-diff: true
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     serviceAccountCredentials:
@@ -2028,7 +2028,7 @@ components:
                   enum: [healthcheck]
                   example: "healthcheck"
                 conf:
-                  x-speakeasy-param-suppress-computed-diff: true
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     collectUrl:
@@ -3220,10 +3220,10 @@ components:
           type: string
           example: "myUsageGroupId"
         rules:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           $ref: "#/components/schemas/LimitRuleDefinitions"
         usersCount:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: number
           example: 1
       required:
@@ -5836,35 +5836,35 @@ components:
         - id
       properties:
         id:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           title: Filename
           type: string
           pattern: ^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$
           example: "countries.csv"
         description:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Description
           example: "Country code to name lookup"
         tags:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Tags
           description: One or more tags related to this lookup. Optional.
           example: "geo,reference"
         version:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           description: Unique string generated for each modification of this lookup
           readOnly: true
           example: "v1.2.3"
         content:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           description: File content.
           example: "US,United States\nCA,Canada"
         mode:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Mode
           default: memory
@@ -5873,7 +5873,7 @@ components:
             - disk
           example: "memory"
         pendingTask:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           readOnly: true
           properties:
@@ -7050,7 +7050,7 @@ components:
           default: custom
           example: custom
         description:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Description
           example: Break HTTP access logs into events
@@ -8110,7 +8110,7 @@ components:
           title: Library
           example: "custom"
         description:
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Description
           description: Brief description of this variable. Optional.

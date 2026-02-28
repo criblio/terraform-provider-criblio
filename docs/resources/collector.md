@@ -942,13 +942,13 @@ resource "criblio_collector" "my_collector" {
 - `input_collector_s3` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3))
 - `input_collector_script` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script))
 - `input_collector_splunk` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk))
-- `ttl` (String) Default: "4h"
 
 ### Read-Only
 
 - `environment` (String)
 - `ignore_group_jobs_limit` (Boolean) Default: false
 - `resume_on_boot` (Boolean) Default: true
+- `ttl` (String) Default: "4h"
 - `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 
 <a id="nestedatt--input_collector_azure_blob"></a>

@@ -8,7 +8,9 @@ import (
 	"encoding/json"
 	"fmt"
 	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
 	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -60,18 +62,27 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 		MarkdownDescription: "PackLookups Resource",
 		Attributes: map[string]schema.Attribute{
 			"content": schema.StringAttribute{
-				Optional:    true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 				Description: `File content.`,
 			},
 			"description": schema.StringAttribute{
 				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 				Description: `Unique ID to PATCH for pack`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
@@ -90,6 +101,7 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 						"content": schema.StringAttribute{
 							Computed: true,
 							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.PreferState(),
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `File content.`,
@@ -97,12 +109,14 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 						"description": schema.StringAttribute{
 							Computed: true,
 							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.PreferState(),
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 						},
 						"id": schema.StringAttribute{
 							Computed: true,
 							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.PreferState(),
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 						},
@@ -110,6 +124,7 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 							Computed: true,
 							Default:  stringdefault.StaticString(`memory`),
 							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.PreferState(),
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `Default: "memory"`,
@@ -117,6 +132,7 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 						"pending_task": schema.SingleNestedAttribute{
 							Computed: true,
 							PlanModifiers: []planmodifier.Object{
+								custom_objectplanmodifier.PreferState(),
 								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 							},
 							Attributes: map[string]schema.Attribute{
@@ -146,6 +162,7 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 						"tags": schema.StringAttribute{
 							Computed: true,
 							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.PreferState(),
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `One or more tags related to this lookup. Optional.`,
@@ -153,6 +170,7 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 						"version": schema.StringAttribute{
 							Computed: true,
 							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.PreferState(),
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `Unique string generated for each modification of this lookup`,
@@ -161,9 +179,12 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"mode": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     stringdefault.StaticString(`memory`),
+				Computed: true,
+				Optional: true,
+				Default:  stringdefault.StaticString(`memory`),
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 				Description: `Default: "memory"; must be one of ["memory", "disk"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -180,7 +201,10 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `pack ID to GET. Requires replacement if changed.`,
 			},
 			"tags": schema.StringAttribute{
-				Optional:    true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 				Description: `One or more tags related to this lookup. Optional.`,
 			},
 		},

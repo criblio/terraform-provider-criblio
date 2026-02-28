@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 3bcc52b5b0f9d94a5284682405da64f0
+  docChecksum: 77328c3a97f3f20aebaec3625b2d0c97
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.131
-  configChecksum: b8fe3c200e36b0f7993902f3ed76c324
+  releaseVersion: 1.20.132
+  configChecksum: 99fead177d1f3857f76673dfed4ea43c
   published: true
 features:
   terraform:
@@ -248,6 +248,8 @@ generatedFiles:
   - internal/provider/certificates_data_source_sdk.go
   - internal/provider/collector_data_source.go
   - internal/provider/collector_data_source_sdk.go
+  - internal/provider/collector_resource.go
+  - internal/provider/collector_resource_sdk.go
   - internal/provider/collectors_data_source.go
   - internal/provider/collectors_data_source_sdk.go
   - internal/provider/commit_resource.go
@@ -309,7 +311,7 @@ generatedFiles:
   - internal/provider/lakehousedatasetconnection_resource_sdk.go
   - internal/provider/lookupfile_data_source.go
   - internal/provider/lookupfile_data_source_sdk.go
-  - internal/provider/lookupfile_resource_sdk.go
+  - internal/provider/lookupfile_resource.go
   - internal/provider/mappingruleset_data_source.go
   - internal/provider/mappingruleset_data_source_sdk.go
   - internal/provider/mappingruleset_resource.go
@@ -408,6 +410,8 @@ generatedFiles:
   - internal/provider/searchsavedquery_resource_sdk.go
   - internal/provider/searchusagegroup_data_source.go
   - internal/provider/searchusagegroup_data_source_sdk.go
+  - internal/provider/searchusagegroup_resource.go
+  - internal/provider/searchusagegroup_resource_sdk.go
   - internal/provider/secret_data_source.go
   - internal/provider/secret_data_source_sdk.go
   - internal/provider/secret_resource.go
