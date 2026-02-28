@@ -4630,6 +4630,131 @@ func (r *CollectorResource) Configure(ctx context.Context, req resource.Configur
 	r.client = client
 }
 
+// collectorPreferStateBackup holds input and schedule values that RefreshFrom
+// restores when the API returns nil, so they can be re-applied after refreshPlan
+// overwrites them with empty.
+type collectorPreferStateBackup struct {
+	InputRest, ScheduleRest                       interface{}
+	InputScript, ScheduleScript                   interface{}
+	InputSplunk, ScheduleSplunk                   interface{}
+	InputS3, ScheduleS3                           interface{}
+	InputAzureBlob, ScheduleAzureBlob             interface{}
+	InputCriblLake, ScheduleCriblLake             interface{}
+	InputDatabase, ScheduleDatabase               interface{}
+	InputGCS, ScheduleGCS                         interface{}
+	InputHealthCheck, ScheduleHealthCheck         interface{}
+}
+
+func collectorPreservePreferStateFields(data *CollectorResourceModel) *collectorPreferStateBackup {
+	saved := &collectorPreferStateBackup{}
+	if data.InputCollectorRest != nil {
+		saved.InputRest, saved.ScheduleRest = data.InputCollectorRest.Input, data.InputCollectorRest.Schedule
+	}
+	if data.InputCollectorScript != nil {
+		saved.InputScript, saved.ScheduleScript = data.InputCollectorScript.Input, data.InputCollectorScript.Schedule
+	}
+	if data.InputCollectorSplunk != nil {
+		saved.InputSplunk, saved.ScheduleSplunk = data.InputCollectorSplunk.Input, data.InputCollectorSplunk.Schedule
+	}
+	if data.InputCollectorS3 != nil {
+		saved.InputS3, saved.ScheduleS3 = data.InputCollectorS3.Input, data.InputCollectorS3.Schedule
+	}
+	if data.InputCollectorAzureBlob != nil {
+		saved.InputAzureBlob, saved.ScheduleAzureBlob = data.InputCollectorAzureBlob.Input, data.InputCollectorAzureBlob.Schedule
+	}
+	if data.InputCollectorCriblLake != nil {
+		saved.InputCriblLake, saved.ScheduleCriblLake = data.InputCollectorCriblLake.Input, data.InputCollectorCriblLake.Schedule
+	}
+	if data.InputCollectorDatabase != nil {
+		saved.InputDatabase, saved.ScheduleDatabase = data.InputCollectorDatabase.Input, data.InputCollectorDatabase.Schedule
+	}
+	if data.InputCollectorGCS != nil {
+		saved.InputGCS, saved.ScheduleGCS = data.InputCollectorGCS.Input, data.InputCollectorGCS.Schedule
+	}
+	if data.InputCollectorHealthCheck != nil {
+		saved.InputHealthCheck, saved.ScheduleHealthCheck = data.InputCollectorHealthCheck.Input, data.InputCollectorHealthCheck.Schedule
+	}
+	return saved
+}
+
+func collectorRestorePreferStateFields(data *CollectorResourceModel, saved *collectorPreferStateBackup) {
+	if saved == nil {
+		return
+	}
+	if data.InputCollectorRest != nil {
+		if data.InputCollectorRest.Input == nil && saved.InputRest != nil {
+			data.InputCollectorRest.Input = saved.InputRest.(*tfTypes.InputCollectorRestInput)
+		}
+		if data.InputCollectorRest.Schedule == nil && saved.ScheduleRest != nil {
+			data.InputCollectorRest.Schedule = saved.ScheduleRest.(*tfTypes.InputCollectorRestSchedule)
+		}
+	}
+	if data.InputCollectorScript != nil {
+		if data.InputCollectorScript.Input == nil && saved.InputScript != nil {
+			data.InputCollectorScript.Input = saved.InputScript.(*tfTypes.InputCollectorScriptInput)
+		}
+		if data.InputCollectorScript.Schedule == nil && saved.ScheduleScript != nil {
+			data.InputCollectorScript.Schedule = saved.ScheduleScript.(*tfTypes.InputCollectorScriptSchedule)
+		}
+	}
+	if data.InputCollectorSplunk != nil {
+		if data.InputCollectorSplunk.Input == nil && saved.InputSplunk != nil {
+			data.InputCollectorSplunk.Input = saved.InputSplunk.(*tfTypes.InputCollectorSplunkInput)
+		}
+		if data.InputCollectorSplunk.Schedule == nil && saved.ScheduleSplunk != nil {
+			data.InputCollectorSplunk.Schedule = saved.ScheduleSplunk.(*tfTypes.InputCollectorSplunkSchedule)
+		}
+	}
+	if data.InputCollectorS3 != nil {
+		if data.InputCollectorS3.Input == nil && saved.InputS3 != nil {
+			data.InputCollectorS3.Input = saved.InputS3.(*tfTypes.InputCollectorS3Input)
+		}
+		if data.InputCollectorS3.Schedule == nil && saved.ScheduleS3 != nil {
+			data.InputCollectorS3.Schedule = saved.ScheduleS3.(*tfTypes.InputCollectorS3Schedule)
+		}
+	}
+	if data.InputCollectorAzureBlob != nil {
+		if data.InputCollectorAzureBlob.Input == nil && saved.InputAzureBlob != nil {
+			data.InputCollectorAzureBlob.Input = saved.InputAzureBlob.(*tfTypes.InputCollectorAzureBlobInput)
+		}
+		if data.InputCollectorAzureBlob.Schedule == nil && saved.ScheduleAzureBlob != nil {
+			data.InputCollectorAzureBlob.Schedule = saved.ScheduleAzureBlob.(*tfTypes.InputCollectorAzureBlobSchedule)
+		}
+	}
+	if data.InputCollectorCriblLake != nil {
+		if data.InputCollectorCriblLake.Input == nil && saved.InputCriblLake != nil {
+			data.InputCollectorCriblLake.Input = saved.InputCriblLake.(*tfTypes.InputCollectorCriblLakeInput)
+		}
+		if data.InputCollectorCriblLake.Schedule == nil && saved.ScheduleCriblLake != nil {
+			data.InputCollectorCriblLake.Schedule = saved.ScheduleCriblLake.(*tfTypes.InputCollectorCriblLakeSchedule)
+		}
+	}
+	if data.InputCollectorDatabase != nil {
+		if data.InputCollectorDatabase.Input == nil && saved.InputDatabase != nil {
+			data.InputCollectorDatabase.Input = saved.InputDatabase.(*tfTypes.InputCollectorDatabaseInput)
+		}
+		if data.InputCollectorDatabase.Schedule == nil && saved.ScheduleDatabase != nil {
+			data.InputCollectorDatabase.Schedule = saved.ScheduleDatabase.(*tfTypes.InputCollectorDatabaseSchedule)
+		}
+	}
+	if data.InputCollectorGCS != nil {
+		if data.InputCollectorGCS.Input == nil && saved.InputGCS != nil {
+			data.InputCollectorGCS.Input = saved.InputGCS.(*tfTypes.InputCollectorGCSInput)
+		}
+		if data.InputCollectorGCS.Schedule == nil && saved.ScheduleGCS != nil {
+			data.InputCollectorGCS.Schedule = saved.ScheduleGCS.(*tfTypes.InputCollectorGCSSchedule)
+		}
+	}
+	if data.InputCollectorHealthCheck != nil {
+		if data.InputCollectorHealthCheck.Input == nil && saved.InputHealthCheck != nil {
+			data.InputCollectorHealthCheck.Input = saved.InputHealthCheck.(*tfTypes.InputCollectorHealthCheckInput)
+		}
+		if data.InputCollectorHealthCheck.Schedule == nil && saved.ScheduleHealthCheck != nil {
+			data.InputCollectorHealthCheck.Schedule = saved.ScheduleHealthCheck.(*tfTypes.InputCollectorHealthCheckSchedule)
+		}
+	}
+}
+
 func (r *CollectorResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *CollectorResourceModel
 	var plan types.Object
@@ -4680,11 +4805,14 @@ func (r *CollectorResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 
+	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	collectorRestorePreferStateFields(data, saved)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -4794,11 +4922,14 @@ func (r *CollectorResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 
+	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	collectorRestorePreferStateFields(data, saved)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
