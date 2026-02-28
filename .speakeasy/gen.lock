@@ -5,8 +5,8 @@ management:
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.132
-  configChecksum: 99fead177d1f3857f76673dfed4ea43c
+  releaseVersion: 1.20.133
+  configChecksum: 0c8a11a6651b6f7be98820616835b25c
   published: true
 features:
   terraform:
@@ -248,8 +248,6 @@ generatedFiles:
   - internal/provider/certificates_data_source_sdk.go
   - internal/provider/collector_data_source.go
   - internal/provider/collector_data_source_sdk.go
-  - internal/provider/collector_resource.go
-  - internal/provider/collector_resource_sdk.go
   - internal/provider/collectors_data_source.go
   - internal/provider/collectors_data_source_sdk.go
   - internal/provider/commit_resource.go
@@ -411,7 +409,6 @@ generatedFiles:
   - internal/provider/searchusagegroup_data_source.go
   - internal/provider/searchusagegroup_data_source_sdk.go
   - internal/provider/searchusagegroup_resource.go
-  - internal/provider/searchusagegroup_resource_sdk.go
   - internal/provider/secret_data_source.go
   - internal/provider/secret_data_source_sdk.go
   - internal/provider/secret_resource.go
