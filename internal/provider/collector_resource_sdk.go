@@ -75,6 +75,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	var diags diag.Diagnostics
 
 	if resp.InputCollectorAzureBlob != nil {
+		var savedInput *tfTypes.InputCollectorAzureBlobInput
+		var savedSchedule *tfTypes.InputCollectorAzureBlobSchedule
+		if r.InputCollectorAzureBlob != nil {
+			savedInput = r.InputCollectorAzureBlob.Input
+			savedSchedule = r.InputCollectorAzureBlob.Schedule
+		}
 		r.InputCollectorAzureBlob = &tfTypes.InputCollectorAzureBlob{}
 		if resp.InputCollectorAzureBlob.Collector.Conf == nil {
 			r.InputCollectorAzureBlob.Collector.Conf = nil
@@ -147,6 +153,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorAzureBlob.Input.Type = types.StringNull()
 			}
+		} else if savedInput != nil {
+			r.InputCollectorAzureBlob.Input = savedInput
 		}
 		r.InputCollectorAzureBlob.RemoveFields = make([]types.String, 0, len(resp.InputCollectorAzureBlob.RemoveFields))
 		for _, v := range resp.InputCollectorAzureBlob.RemoveFields {
@@ -207,6 +215,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorAzureBlob.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorAzureBlob.Schedule.Skippable)
+		} else if savedSchedule != nil {
+			r.InputCollectorAzureBlob.Schedule = savedSchedule
 		}
 		r.InputCollectorAzureBlob.Streamtags = make([]types.String, 0, len(resp.InputCollectorAzureBlob.Streamtags))
 		for _, v := range resp.InputCollectorAzureBlob.Streamtags {
@@ -218,6 +228,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorAzureBlob.WorkerAffinity
 	}
 	if resp.InputCollectorCriblLake != nil {
+		var savedInput *tfTypes.InputCollectorCriblLakeInput
+		var savedSchedule *tfTypes.InputCollectorCriblLakeSchedule
+		if r.InputCollectorCriblLake != nil {
+			savedInput = r.InputCollectorCriblLake.Input
+			savedSchedule = r.InputCollectorCriblLake.Schedule
+		}
 		r.InputCollectorCriblLake = &tfTypes.InputCollectorCriblLake{}
 		if resp.InputCollectorCriblLake.Collector.Conf == nil {
 			r.InputCollectorCriblLake.Collector.Conf = nil
@@ -269,6 +285,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorCriblLake.Input.Type = types.StringNull()
 			}
+		} else if savedInput != nil {
+			r.InputCollectorCriblLake.Input = savedInput
 		}
 		r.InputCollectorCriblLake.RemoveFields = make([]types.String, 0, len(resp.InputCollectorCriblLake.RemoveFields))
 		for _, v := range resp.InputCollectorCriblLake.RemoveFields {
@@ -329,6 +347,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorCriblLake.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorCriblLake.Schedule.Skippable)
+		} else if savedSchedule != nil {
+			r.InputCollectorCriblLake.Schedule = savedSchedule
 		}
 		r.InputCollectorCriblLake.Streamtags = make([]types.String, 0, len(resp.InputCollectorCriblLake.Streamtags))
 		for _, v := range resp.InputCollectorCriblLake.Streamtags {
@@ -340,6 +360,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorCriblLake.WorkerAffinity
 	}
 	if resp.InputCollectorDatabase != nil {
+		var savedInput *tfTypes.InputCollectorDatabaseInput
+		var savedSchedule *tfTypes.InputCollectorDatabaseSchedule
+		if r.InputCollectorDatabase != nil {
+			savedInput = r.InputCollectorDatabase.Input
+			savedSchedule = r.InputCollectorDatabase.Schedule
+		}
 		r.InputCollectorDatabase = &tfTypes.InputCollectorDatabase{}
 		if resp.InputCollectorDatabase.Collector.Conf == nil {
 			r.InputCollectorDatabase.Collector.Conf = nil
@@ -393,6 +419,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorDatabase.Input.Type = types.StringNull()
 			}
+		} else if savedInput != nil {
+			r.InputCollectorDatabase.Input = savedInput
 		}
 		r.InputCollectorDatabase.RemoveFields = make([]types.String, 0, len(resp.InputCollectorDatabase.RemoveFields))
 		for _, v := range resp.InputCollectorDatabase.RemoveFields {
@@ -453,6 +481,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorDatabase.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorDatabase.Schedule.Skippable)
+		} else if savedSchedule != nil {
+			r.InputCollectorDatabase.Schedule = savedSchedule
 		}
 		r.InputCollectorDatabase.Streamtags = make([]types.String, 0, len(resp.InputCollectorDatabase.Streamtags))
 		for _, v := range resp.InputCollectorDatabase.Streamtags {
@@ -464,6 +494,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorDatabase.WorkerAffinity
 	}
 	if resp.InputCollectorGCS != nil {
+		var savedInput *tfTypes.InputCollectorGCSInput
+		var savedSchedule *tfTypes.InputCollectorGCSSchedule
+		if r.InputCollectorGCS != nil {
+			savedInput = r.InputCollectorGCS.Input
+			savedSchedule = r.InputCollectorGCS.Schedule
+		}
 		r.InputCollectorGCS = &tfTypes.InputCollectorGCS{}
 		if resp.InputCollectorGCS.Collector.Conf == nil {
 			r.InputCollectorGCS.Collector.Conf = nil
@@ -535,6 +571,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorGCS.Input.Type = types.StringNull()
 			}
+		} else if savedInput != nil {
+			r.InputCollectorGCS.Input = savedInput
 		}
 		r.InputCollectorGCS.RemoveFields = make([]types.String, 0, len(resp.InputCollectorGCS.RemoveFields))
 		for _, v := range resp.InputCollectorGCS.RemoveFields {
@@ -595,6 +633,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorGCS.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorGCS.Schedule.Skippable)
+		} else if savedSchedule != nil {
+			r.InputCollectorGCS.Schedule = savedSchedule
 		}
 		r.InputCollectorGCS.Streamtags = make([]types.String, 0, len(resp.InputCollectorGCS.Streamtags))
 		for _, v := range resp.InputCollectorGCS.Streamtags {
@@ -606,6 +646,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorGCS.WorkerAffinity
 	}
 	if resp.InputCollectorHealthCheck != nil {
+		var savedInput *tfTypes.InputCollectorHealthCheckInput
+		var savedSchedule *tfTypes.InputCollectorHealthCheckSchedule
+		if r.InputCollectorHealthCheck != nil {
+			savedInput = r.InputCollectorHealthCheck.Input
+			savedSchedule = r.InputCollectorHealthCheck.Schedule
+		}
 		r.InputCollectorHealthCheck = &tfTypes.InputCollectorHealthCheck{}
 		if resp.InputCollectorHealthCheck.Collector.Conf == nil {
 			r.InputCollectorHealthCheck.Collector.Conf = nil
@@ -672,6 +718,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorHealthCheck.Input.Type = types.StringNull()
 			}
+		} else if savedInput != nil {
+			r.InputCollectorHealthCheck.Input = savedInput
 		}
 		r.InputCollectorHealthCheck.RemoveFields = make([]types.String, 0, len(resp.InputCollectorHealthCheck.RemoveFields))
 		for _, v := range resp.InputCollectorHealthCheck.RemoveFields {
@@ -732,6 +780,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorHealthCheck.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorHealthCheck.Schedule.Skippable)
+		} else if savedSchedule != nil {
+			r.InputCollectorHealthCheck.Schedule = savedSchedule
 		}
 		r.InputCollectorHealthCheck.Streamtags = make([]types.String, 0, len(resp.InputCollectorHealthCheck.Streamtags))
 		for _, v := range resp.InputCollectorHealthCheck.Streamtags {
@@ -743,6 +793,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorHealthCheck.WorkerAffinity
 	}
 	if resp.InputCollectorRest != nil {
+		var savedInput *tfTypes.InputCollectorRestInput
+		var savedSchedule *tfTypes.InputCollectorRestSchedule
+		if r.InputCollectorRest != nil {
+			savedInput = r.InputCollectorRest.Input
+			savedSchedule = r.InputCollectorRest.Schedule
+		}
 		r.InputCollectorRest = &tfTypes.InputCollectorRest{}
 		if resp.InputCollectorRest.Collector.Conf == nil {
 			r.InputCollectorRest.Collector.Conf = nil
@@ -973,6 +1029,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorRest.Input.Type = types.StringNull()
 			}
+		} else if savedInput != nil {
+			r.InputCollectorRest.Input = savedInput
 		}
 		r.InputCollectorRest.RemoveFields = make([]types.String, 0, len(resp.InputCollectorRest.RemoveFields))
 		for _, v := range resp.InputCollectorRest.RemoveFields {
@@ -1033,6 +1091,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorRest.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorRest.Schedule.Skippable)
+		} else if savedSchedule != nil {
+			r.InputCollectorRest.Schedule = savedSchedule
 		}
 		r.InputCollectorRest.Streamtags = make([]types.String, 0, len(resp.InputCollectorRest.Streamtags))
 		for _, v := range resp.InputCollectorRest.Streamtags {
@@ -1044,6 +1104,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorRest.WorkerAffinity
 	}
 	if resp.InputCollectorS3 != nil {
+		var savedInput *tfTypes.InputCollectorS3Input
+		var savedSchedule *tfTypes.InputCollectorS3Schedule
+		if r.InputCollectorS3 != nil {
+			savedInput = r.InputCollectorS3.Input
+			savedSchedule = r.InputCollectorS3.Schedule
+		}
 		r.InputCollectorS3 = &tfTypes.InputCollectorS3{}
 		if resp.InputCollectorS3.Collector.Conf == nil {
 			r.InputCollectorS3.Collector.Conf = nil
@@ -1118,6 +1184,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorS3.Input.Type = types.StringNull()
 			}
+		} else if savedInput != nil {
+			r.InputCollectorS3.Input = savedInput
 		}
 		r.InputCollectorS3.RemoveFields = make([]types.String, 0, len(resp.InputCollectorS3.RemoveFields))
 		for _, v := range resp.InputCollectorS3.RemoveFields {
@@ -1178,6 +1246,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorS3.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorS3.Schedule.Skippable)
+		} else if savedSchedule != nil {
+			r.InputCollectorS3.Schedule = savedSchedule
 		}
 		r.InputCollectorS3.Streamtags = make([]types.String, 0, len(resp.InputCollectorS3.Streamtags))
 		for _, v := range resp.InputCollectorS3.Streamtags {
@@ -1189,6 +1259,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorS3.WorkerAffinity
 	}
 	if resp.InputCollectorScript != nil {
+		var savedInput *tfTypes.InputCollectorScriptInput
+		var savedSchedule *tfTypes.InputCollectorScriptSchedule
+		if r.InputCollectorScript != nil {
+			savedInput = r.InputCollectorScript.Input
+			savedSchedule = r.InputCollectorScript.Schedule
+		}
 		r.InputCollectorScript = &tfTypes.InputCollectorScript{}
 		if resp.InputCollectorScript.Collector.Conf == nil {
 			r.InputCollectorScript.Collector.Conf = nil
@@ -1242,6 +1318,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorScript.Input.Type = types.StringNull()
 			}
+		} else if savedInput != nil {
+			r.InputCollectorScript.Input = savedInput
 		}
 		r.InputCollectorScript.RemoveFields = make([]types.String, 0, len(resp.InputCollectorScript.RemoveFields))
 		for _, v := range resp.InputCollectorScript.RemoveFields {
@@ -1302,6 +1380,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorScript.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorScript.Schedule.Skippable)
+		} else if savedSchedule != nil {
+			r.InputCollectorScript.Schedule = savedSchedule
 		}
 		r.InputCollectorScript.Streamtags = make([]types.String, 0, len(resp.InputCollectorScript.Streamtags))
 		for _, v := range resp.InputCollectorScript.Streamtags {
@@ -1313,6 +1393,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorScript.WorkerAffinity
 	}
 	if resp.InputCollectorSplunk != nil {
+		var savedInput *tfTypes.InputCollectorSplunkInput
+		var savedSchedule *tfTypes.InputCollectorSplunkSchedule
+		if r.InputCollectorSplunk != nil {
+			savedInput = r.InputCollectorSplunk.Input
+			savedSchedule = r.InputCollectorSplunk.Schedule
+		}
 		r.InputCollectorSplunk = &tfTypes.InputCollectorSplunk{}
 		if resp.InputCollectorSplunk.Collector.Conf == nil {
 			r.InputCollectorSplunk.Collector.Conf = nil
@@ -1388,6 +1474,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorSplunk.Input.Type = types.StringNull()
 			}
+		} else if savedInput != nil {
+			r.InputCollectorSplunk.Input = savedInput
 		}
 		r.InputCollectorSplunk.RemoveFields = make([]types.String, 0, len(resp.InputCollectorSplunk.RemoveFields))
 		for _, v := range resp.InputCollectorSplunk.RemoveFields {
@@ -1448,6 +1536,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorSplunk.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorSplunk.Schedule.Skippable)
+		} else if savedSchedule != nil {
+			r.InputCollectorSplunk.Schedule = savedSchedule
 		}
 		r.InputCollectorSplunk.Streamtags = make([]types.String, 0, len(resp.InputCollectorSplunk.Streamtags))
 		for _, v := range resp.InputCollectorSplunk.Streamtags {

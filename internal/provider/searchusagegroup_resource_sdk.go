@@ -79,10 +79,13 @@ func (r *SearchUsageGroupResourceModel) RefreshFromSharedUsageGroup(ctx context.
 	r.Description = types.StringPointerValue(resp.Description)
 	r.Enabled = types.BoolPointerValue(resp.Enabled)
 	r.ID = types.StringValue(resp.ID)
-	// Preserve rules when API returns nil; avoids refresh plan drift
+	// Preserve rules when API returns nil or empty; avoids refresh plan drift
 	if resp.Rules != nil {
 		rulesResult, _ := json.Marshal(resp.Rules)
-		r.Rules = jsontypes.NewNormalizedValue(string(rulesResult))
+		rulesStr := string(rulesResult)
+		if rulesStr != "null" && rulesStr != "{}" {
+			r.Rules = jsontypes.NewNormalizedValue(rulesStr)
+		}
 	}
 	// Preserve users_count when API returns nil or 0; avoids refresh plan drift
 	if resp.UsersCount != nil && *resp.UsersCount != 0 {
