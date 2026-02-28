@@ -1,3 +1,16 @@
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+}
+
 resource "criblio_collector" "splunk_access_log_collector" {
   group_id = "default"
   id       = "splunk-demo-collector"
@@ -320,8 +333,8 @@ resource "criblio_collector" "rest_api_collector_discovery_list" {
     ignore_group_jobs_limit = false
   }
 }
-
-/* collector type does not work in playground for now. Enable when fixed
+/*
+# collector type does not work in playground for now. Enable when fixed
 resource "criblio_collector" "script_collector" {
   group_id = "default"
   id       = "script-demo-collector"
@@ -384,3 +397,4 @@ resource "criblio_collector" "script_collector" {
   }
 }
 */
+

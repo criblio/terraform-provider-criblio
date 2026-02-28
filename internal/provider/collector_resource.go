@@ -4677,6 +4677,84 @@ func collectorPreservePreferStateFields(data *CollectorResourceModel) *collector
 	return saved
 }
 
+// collectorEnsureDefaultInputAndSchedule populates input and schedule with empty
+// default structs when both API and plan return nil. This prevents drift when
+// the user doesn't configure these optional PreferState fields.
+func collectorEnsureDefaultInputAndSchedule(data *CollectorResourceModel) {
+	if data.InputCollectorRest != nil {
+		if data.InputCollectorRest.Input == nil {
+			data.InputCollectorRest.Input = &tfTypes.InputCollectorRestInput{}
+		}
+		if data.InputCollectorRest.Schedule == nil {
+			data.InputCollectorRest.Schedule = &tfTypes.InputCollectorRestSchedule{}
+		}
+	}
+	if data.InputCollectorScript != nil {
+		if data.InputCollectorScript.Input == nil {
+			data.InputCollectorScript.Input = &tfTypes.InputCollectorScriptInput{}
+		}
+		if data.InputCollectorScript.Schedule == nil {
+			data.InputCollectorScript.Schedule = &tfTypes.InputCollectorScriptSchedule{}
+		}
+	}
+	if data.InputCollectorSplunk != nil {
+		if data.InputCollectorSplunk.Input == nil {
+			data.InputCollectorSplunk.Input = &tfTypes.InputCollectorSplunkInput{}
+		}
+		if data.InputCollectorSplunk.Schedule == nil {
+			data.InputCollectorSplunk.Schedule = &tfTypes.InputCollectorSplunkSchedule{}
+		}
+	}
+	if data.InputCollectorS3 != nil {
+		if data.InputCollectorS3.Input == nil {
+			data.InputCollectorS3.Input = &tfTypes.InputCollectorS3Input{}
+		}
+		if data.InputCollectorS3.Schedule == nil {
+			data.InputCollectorS3.Schedule = &tfTypes.InputCollectorS3Schedule{}
+		}
+	}
+	if data.InputCollectorAzureBlob != nil {
+		if data.InputCollectorAzureBlob.Input == nil {
+			data.InputCollectorAzureBlob.Input = &tfTypes.InputCollectorAzureBlobInput{}
+		}
+		if data.InputCollectorAzureBlob.Schedule == nil {
+			data.InputCollectorAzureBlob.Schedule = &tfTypes.InputCollectorAzureBlobSchedule{}
+		}
+	}
+	if data.InputCollectorCriblLake != nil {
+		if data.InputCollectorCriblLake.Input == nil {
+			data.InputCollectorCriblLake.Input = &tfTypes.InputCollectorCriblLakeInput{}
+		}
+		if data.InputCollectorCriblLake.Schedule == nil {
+			data.InputCollectorCriblLake.Schedule = &tfTypes.InputCollectorCriblLakeSchedule{}
+		}
+	}
+	if data.InputCollectorDatabase != nil {
+		if data.InputCollectorDatabase.Input == nil {
+			data.InputCollectorDatabase.Input = &tfTypes.InputCollectorDatabaseInput{}
+		}
+		if data.InputCollectorDatabase.Schedule == nil {
+			data.InputCollectorDatabase.Schedule = &tfTypes.InputCollectorDatabaseSchedule{}
+		}
+	}
+	if data.InputCollectorGCS != nil {
+		if data.InputCollectorGCS.Input == nil {
+			data.InputCollectorGCS.Input = &tfTypes.InputCollectorGCSInput{}
+		}
+		if data.InputCollectorGCS.Schedule == nil {
+			data.InputCollectorGCS.Schedule = &tfTypes.InputCollectorGCSSchedule{}
+		}
+	}
+	if data.InputCollectorHealthCheck != nil {
+		if data.InputCollectorHealthCheck.Input == nil {
+			data.InputCollectorHealthCheck.Input = &tfTypes.InputCollectorHealthCheckInput{}
+		}
+		if data.InputCollectorHealthCheck.Schedule == nil {
+			data.InputCollectorHealthCheck.Schedule = &tfTypes.InputCollectorHealthCheckSchedule{}
+		}
+	}
+}
+
 func collectorRestorePreferStateFields(data *CollectorResourceModel, saved *collectorPreferStateBackup) {
 	if saved == nil {
 		return
@@ -4805,6 +4883,7 @@ func (r *CollectorResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 
+	collectorEnsureDefaultInputAndSchedule(data)
 	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
@@ -4872,6 +4951,8 @@ func (r *CollectorResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
+	collectorEnsureDefaultInputAndSchedule(data)
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -4922,6 +5003,7 @@ func (r *CollectorResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 
+	collectorEnsureDefaultInputAndSchedule(data)
 	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
