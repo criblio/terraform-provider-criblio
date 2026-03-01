@@ -24,6 +24,9 @@ func WriteRootFiles(baseDir string, moduleInfos []RootModuleInfo, items []Resour
 		return fmt.Errorf("create output dir: %w", err)
 	}
 	providersContent := rootProvidersTF()
+	if err := hcl.ParseHCL(providersContent, "providers.tf"); err != nil {
+		return fmt.Errorf("providers.tf: invalid HCL: %w", err)
+	}
 	if err := DefaultFS.WriteFileAtomic(baseDir, "providers.tf", providersContent, 0644); err != nil {
 		return fmt.Errorf("write providers.tf: %w", err)
 	}
@@ -32,11 +35,17 @@ func WriteRootFiles(baseDir string, moduleInfos []RootModuleInfo, items []Resour
 		return fmt.Errorf("write README.md: %w", err)
 	}
 	mainContent := rootMainTF(moduleInfos)
+	if err := hcl.ParseHCL(mainContent, "main.tf"); err != nil {
+		return fmt.Errorf("main.tf: invalid HCL: %w", err)
+	}
 	if err := DefaultFS.WriteFileAtomic(baseDir, "main.tf", mainContent, 0644); err != nil {
 		return fmt.Errorf("write main.tf: %w", err)
 	}
 	variablesContent := rootVariablesTF(moduleInfos)
 	if len(variablesContent) > 0 {
+		if err := hcl.ParseHCL(variablesContent, "variables.tf"); err != nil {
+			return fmt.Errorf("variables.tf: invalid HCL: %w", err)
+		}
 		if err := DefaultFS.WriteFileAtomic(baseDir, "variables.tf", variablesContent, 0644); err != nil {
 			return fmt.Errorf("write variables.tf: %w", err)
 		}
@@ -49,6 +58,9 @@ func WriteRootFiles(baseDir string, moduleInfos []RootModuleInfo, items []Resour
 	}
 	importContent := rootImportTF(items, byGroup)
 	if len(importContent) > 0 {
+		if err := hcl.ParseHCL(importContent, "import.tf"); err != nil {
+			return fmt.Errorf("import.tf: invalid HCL: %w", err)
+		}
 		if err := DefaultFS.WriteFileAtomic(baseDir, "import.tf", importContent, 0644); err != nil {
 			return fmt.Errorf("write import.tf: %w", err)
 		}

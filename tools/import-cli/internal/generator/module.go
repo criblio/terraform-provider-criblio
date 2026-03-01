@@ -204,7 +204,11 @@ func WriteModuleDirectoryWithFSAndGroup(fs FileSystem, baseDir string, items []R
 	if err != nil {
 		return fmt.Errorf("main.tf: %w", err)
 	}
-	if err := fs.WriteFileAtomic(dir, "main.tf", f.Bytes(), 0644); err != nil {
+	mainBytes := f.Bytes()
+	if err := hcl.ParseHCL(mainBytes, "main.tf"); err != nil {
+		return fmt.Errorf("main.tf: invalid HCL: %w", err)
+	}
+	if err := fs.WriteFileAtomic(dir, "main.tf", mainBytes, 0644); err != nil {
 		return err
 	}
 
@@ -223,18 +227,27 @@ func WriteModuleDirectoryWithFSAndGroup(fs FileSystem, baseDir string, items []R
   }
 }
 `)
+	if err := hcl.ParseHCL(versionsContent, "versions.tf"); err != nil {
+		return fmt.Errorf("versions.tf: invalid HCL: %w", err)
+	}
 	if err := fs.WriteFileAtomic(dir, "versions.tf", versionsContent, 0644); err != nil {
 		return fmt.Errorf("write versions.tf: %w", err)
 	}
 
 	// variables.tf: secret variables referenced in resources, plus comment if none
 	variablesContent := SecretVariablesBytes(items)
+	if err := hcl.ParseHCL(variablesContent, "variables.tf"); err != nil {
+		return fmt.Errorf("variables.tf: invalid HCL: %w", err)
+	}
 	if err := fs.WriteFileAtomic(dir, "variables.tf", variablesContent, 0644); err != nil {
 		return err
 	}
 
 	// outputs.tf: minimal placeholder
 	outputsContent := []byte("# Outputs for " + typeName + " module\n# Add output blocks as needed.\n")
+	if err := hcl.ParseHCL(outputsContent, "outputs.tf"); err != nil {
+		return fmt.Errorf("outputs.tf: invalid HCL: %w", err)
+	}
 	if err := fs.WriteFileAtomic(dir, "outputs.tf", outputsContent, 0644); err != nil {
 		return err
 	}
