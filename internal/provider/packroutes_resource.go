@@ -14,6 +14,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -290,15 +291,23 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"additional_properties": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Optional:    true,
+							CustomType: jsontypes.NormalizedType{},
+							Computed:   true,
+							Optional:   true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.PreferState(),
+							},
 							Description: `Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Optional: true,
 						},
 						"disabled": schema.BoolAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.PreferState(),
+							},
 							Description: `Disable this routing rule`,
 						},
 						"enable_output_expression": schema.BoolAttribute{
@@ -323,8 +332,12 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Required: true,
 						},
 						"output": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Optional:    true,
+							CustomType: jsontypes.NormalizedType{},
+							Computed:   true,
+							Optional:   true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.PreferState(),
+							},
 							Description: `Parsed as JSON.`,
 						},
 						"output_expression": schema.StringAttribute{
@@ -414,7 +427,7 @@ func (r *PackRoutesResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+	resp.Diagnostics.Append(packRoutesPreserveRestoreAroundRefreshPlan(ctx, plan, data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -451,7 +464,7 @@ func (r *PackRoutesResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+	resp.Diagnostics.Append(packRoutesPreserveRestoreAroundRefreshPlan(ctx, plan, data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -572,7 +585,7 @@ func (r *PackRoutesResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+	resp.Diagnostics.Append(packRoutesPreserveRestoreAroundRefreshPlan(ctx, plan, data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -609,7 +622,7 @@ func (r *PackRoutesResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+	resp.Diagnostics.Append(packRoutesPreserveRestoreAroundRefreshPlan(ctx, plan, data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -662,6 +675,20 @@ func (r *PackRoutesResource) Delete(ctx context.Context, req resource.DeleteRequ
 
 }
 
+// packRoutesPreserveRestoreAroundRefreshPlan populates Routes from Items, saves them, runs refreshPlan,
+// then restores Routes so refreshPlan's overwrite with plan nulls doesn't cause drift (collector pattern).
+func packRoutesPreserveRestoreAroundRefreshPlan(ctx context.Context, plan types.Object, data *PackRoutesResourceModel) diag.Diagnostics {
+	if len(data.Items) > 0 {
+		data.Routes = packRoutesFromItemsWithPreserveState(data.Items[0].Routes, data.Routes)
+	}
+	saved := data.Routes
+	diags := refreshPlan(ctx, plan, data)
+	if len(saved) > 0 {
+		data.Routes = saved
+	}
+	return diags
+}
+
 // packRoutesFromItemsWithPreserveState converts Items[0].Routes to configurable Routes (RoutesRoute1 without ID).
 // When API returns null for optional fields (additional_properties, disabled, output, etc.), preserves
 // the value from stateRoutes to avoid plan drift (same pattern as collector PreferState).
@@ -684,6 +711,8 @@ func packRoutesFromItemsWithPreserveState(apiRoutes []tfTypes.RoutesRoute, state
 			Pipeline:               rr.Pipeline,
 		}
 		// Preserve state when API returns null for optional fields; use defaults when no state (e.g. import).
+		// When API returns "" for optional strings and state has null, use null to avoid "inconsistent result"
+		// (plan had null, provider returned "").
 		if i < len(stateRoutes) {
 			s := stateRoutes[i]
 			if rr.AdditionalProperties.IsNull() || rr.AdditionalProperties.IsUnknown() {
@@ -716,6 +745,9 @@ func packRoutesFromItemsWithPreserveState(apiRoutes []tfTypes.RoutesRoute, state
 				if !s.Description.IsNull() && !s.Description.IsUnknown() {
 					r1.Description = s.Description
 				}
+			} else if rr.Description.ValueString() == "" && (s.Description.IsNull() || s.Description.IsUnknown()) {
+				// API returned "" but plan/state had null; use null to match plan (avoid inconsistent result)
+				r1.Description = types.StringNull()
 			}
 			if rr.EnableOutputExpression.IsNull() || rr.EnableOutputExpression.IsUnknown() {
 				if !s.EnableOutputExpression.IsNull() && !s.EnableOutputExpression.IsUnknown() {
@@ -747,6 +779,10 @@ func packRoutesFromItemsWithPreserveState(apiRoutes []tfTypes.RoutesRoute, state
 			}
 			if (rr.Output.IsNull() || rr.Output.IsUnknown()) && (r1.Output.IsNull() || r1.Output.IsUnknown()) {
 				r1.Output = jsontypes.NewNormalizedValue(`"default"`)
+			}
+			// API may return "" for optional strings; use null to match plan (avoid inconsistent result)
+			if rr.Description.ValueString() == "" {
+				r1.Description = types.StringNull()
 			}
 		}
 		out = append(out, r1)
