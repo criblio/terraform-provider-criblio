@@ -45,12 +45,12 @@ func (c *CreateSystemInputsByPackRequest) GetInput() shared.Input {
 	return c.Input
 }
 
-// CreateSystemInputsByPackResponseBody - a list of Pipeline objects
+// CreateSystemInputsByPackResponseBody - a list of Input objects
 type CreateSystemInputsByPackResponseBody struct {
-	Items []shared.Pipeline `json:"items,omitempty"`
+	Items []shared.Input `json:"items,omitempty"`
 }
 
-func (c *CreateSystemInputsByPackResponseBody) GetItems() []shared.Pipeline {
+func (c *CreateSystemInputsByPackResponseBody) GetItems() []shared.Input {
 	if c == nil {
 		return nil
 	}
@@ -64,7 +64,7 @@ type CreateSystemInputsByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Pipeline objects
+	// a list of Input objects
 	Object *CreateSystemInputsByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

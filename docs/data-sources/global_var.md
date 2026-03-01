@@ -29,4 +29,17 @@ data "criblio_global_var" "my_globalvar" {
 
 ### Read-Only
 
-- `items` (List of Map of String)
+- `args` (Attributes List) Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)). (see [below for nested schema](#nestedatt--args))
+- `description` (String) Brief description of this variable. Optional.
+- `lib` (String)
+- `tags` (String) One or more tags related to this variable. Optional.
+- `type` (String) Type of variable
+- `value` (String) Value of variable
+
+<a id="nestedatt--args"></a>
+### Nested Schema for `args`
+
+Read-Only:
+
+- `name` (String) Argument name
+- `type` (String) Argument type (e.g. number, string)

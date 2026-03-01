@@ -31,50 +31,39 @@ data "criblio_pack_pipeline" "my_packpipeline" {
 
 ### Read-Only
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
 
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--items--comments))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--groups))
-- `id` (String) Routes ID
-- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--items--routes))
-
-<a id="nestedatt--items--comments"></a>
-### Nested Schema for `items.comments`
+<a id="nestedatt--conf"></a>
+### Nested Schema for `conf`
 
 Read-Only:
 
-- `additional_properties` (String) Parsed as JSON.
-- `comment` (String) Optional, short description of this Route's purpose
+- `async_func_timeout` (Number) Time (in ms) to wait for an async function to complete processing of a data item
+- `description` (String)
+- `functions` (Attributes List) List of Functions to pass data through (see [below for nested schema](#nestedatt--conf--functions))
+- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--conf--groups))
+- `output` (String) The output destination for events processed by this Pipeline
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+
+<a id="nestedatt--conf--functions"></a>
+### Nested Schema for `conf.functions`
+
+Read-Only:
+
+- `conf` (Map of String) Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.
+- `description` (String) Simple description of this step
+- `disabled` (Boolean) If true, data will not be pushed through this function
+- `filter` (String) Filter that selects data to be fed through this Function
+- `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
+- `group_id` (String) Group ID
+- `id` (String) Function ID
 
 
-<a id="nestedatt--items--groups"></a>
-### Nested Schema for `items.groups`
+<a id="nestedatt--conf--groups"></a>
+### Nested Schema for `conf.groups`
 
 Read-Only:
 
 - `description` (String) Short description of this group
 - `disabled` (Boolean) Whether this group is disabled
 - `name` (String)
-
-
-<a id="nestedatt--items--routes"></a>
-### Nested Schema for `items.routes`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `description` (String)
-- `disabled` (Boolean) Disable this routing rule
-- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below
-- `filter` (String) JavaScript expression to select data to route
-- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it
-- `id` (String)
-- `name` (String)
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
-- `pipeline` (String) Pipeline to send the matching data to

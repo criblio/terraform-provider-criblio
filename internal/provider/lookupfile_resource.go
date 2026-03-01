@@ -3,13 +3,19 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,12 +39,14 @@ type LookupFileResource struct {
 
 // LookupFileResourceModel describes the resource data model.
 type LookupFileResourceModel struct {
-	Content     types.String `tfsdk:"content"`
-	Description types.String `tfsdk:"description"`
-	GroupID     types.String `tfsdk:"group_id"`
-	ID          types.String `tfsdk:"id"`
-	Mode        types.String `tfsdk:"mode"`
-	Tags        types.String `tfsdk:"tags"`
+	Content     types.String         `tfsdk:"content"`
+	Description types.String         `tfsdk:"description"`
+	GroupID     types.String         `tfsdk:"group_id"`
+	ID          types.String         `tfsdk:"id"`
+	Mode        types.String         `tfsdk:"mode"`
+	PendingTask *tfTypes.PendingTask `tfsdk:"pending_task"`
+	Tags        types.String         `tfsdk:"tags"`
+	Version     types.String         `tfsdk:"version"`
 }
 
 func (r *LookupFileResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -50,27 +58,41 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 		MarkdownDescription: "LookupFile Resource",
 		Attributes: map[string]schema.Attribute{
 			"content": schema.StringAttribute{
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 				Description: `File content.`,
 			},
 			"description": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 				Description: `Unique ID to PATCH`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
 				},
 			},
 			"mode": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     stringdefault.StaticString(`memory`),
+				Computed: true,
+				Optional: true,
+				Default:  stringdefault.StaticString(`memory`),
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 				Description: `Default: "memory"; must be one of ["memory", "disk"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -79,9 +101,40 @@ func (r *LookupFileResource) Schema(ctx context.Context, req resource.SchemaRequ
 					),
 				},
 			},
+			"pending_task": schema.SingleNestedAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.Object{
+					custom_objectplanmodifier.PreferState(),
+				},
+				Attributes: map[string]schema.Attribute{
+					"error": schema.StringAttribute{
+						Computed:    true,
+						Description: `Error message if task has failed`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Task ID (generated).`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Task type`,
+					},
+				},
+			},
 			"tags": schema.StringAttribute{
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 				Description: `One or more tags related to this lookup. Optional.`,
+			},
+			"version": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
+				Description: `Unique string generated for each modification of this lookup`,
 			},
 		},
 	}
@@ -151,36 +204,9 @@ func (r *LookupFileResource) Create(ctx context.Context, req resource.CreateRequ
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsListLookupFileRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateLookupFileResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Lookups.ListLookupFile(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
 
@@ -212,13 +238,13 @@ func (r *LookupFileResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListLookupFileRequest(ctx)
+	request, requestDiags := data.ToOperationsGetLookupFileByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Lookups.ListLookupFile(ctx, *request)
+	res, err := r.client.Lookups.GetLookupFileByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -240,6 +266,11 @@ func (r *LookupFileResource) Read(ctx context.Context, req resource.ReadRequest,
 	}
 	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetLookupFileByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
 
@@ -287,36 +318,9 @@ func (r *LookupFileResource) Update(ctx context.Context, req resource.UpdateRequ
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsListLookupFileRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateLookupFileByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Lookups.ListLookupFile(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
 
@@ -374,5 +378,26 @@ func (r *LookupFileResource) Delete(ctx context.Context, req resource.DeleteRequ
 }
 
 func (r *LookupFileResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), req.ID)...)
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		GroupID string `json:"group_id"`
+		ID      string `json:"id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "myExistingGroupId", "id": "myNewLookupIdToCRUD"}': `+err.Error())
+		return
+	}
+
+	if len(data.GroupID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingGroupId"`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	if len(data.ID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"myNewLookupIdToCRUD"`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 }

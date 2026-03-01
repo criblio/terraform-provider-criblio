@@ -37,12 +37,12 @@ func (c *CreatePipelineByPackRequest) GetPipeline() shared.Pipeline {
 	return c.Pipeline
 }
 
-// CreatePipelineByPackResponseBody - a list of Routes objects
+// CreatePipelineByPackResponseBody - Created Pipeline within a Pack
 type CreatePipelineByPackResponseBody struct {
-	Items []shared.Routes `json:"items,omitempty"`
+	Items []shared.Pipeline `json:"items,omitempty"`
 }
 
-func (c *CreatePipelineByPackResponseBody) GetItems() []shared.Routes {
+func (c *CreatePipelineByPackResponseBody) GetItems() []shared.Pipeline {
 	if c == nil {
 		return nil
 	}
@@ -56,7 +56,7 @@ type CreatePipelineByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Routes objects
+	// Created Pipeline within a Pack
 	Object *CreatePipelineByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

@@ -7,8 +7,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
+	speakeasy_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
+	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
+	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -16,6 +24,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -57,7 +66,11 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 		MarkdownDescription: "EventBreakerRuleset Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -71,142 +84,238 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			"lib": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     stringdefault.StaticString(`custom`),
-				Description: `Default: "custom"; must be one of ["custom", "cribl-custom"]`,
+				Computed: true,
+				Optional: true,
+				Default:  stringdefault.StaticString(`custom`),
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Default: "custom"; must be one of ["custom", "cribl-custom", "cribl"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"custom",
 						"cribl-custom",
+						"cribl",
 					),
 				},
 			},
 			"min_raw_length": schema.Float64Attribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     float64default.StaticFloat64(256),
+				Computed: true,
+				Optional: true,
+				Default:  float64default.StaticFloat64(256),
+				PlanModifiers: []planmodifier.Float64{
+					speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+				},
 				Description: `The  minimum number of characters in _raw to determine which rule to use. Default: 256`,
 				Validators: []validator.Float64{
 					float64validator.Between(50, 100000),
 				},
 			},
 			"rules": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
 				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
+					PlanModifiers: []planmodifier.Object{
+						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+					},
 					Attributes: map[string]schema.Attribute{
 						"condition": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`true`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`true`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events. Default: "true"`,
 						},
 						"delimiter": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`,`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`,`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Field delimiter used for CSV parsing when type is "csv". Default: ","`,
 						},
 						"delimiter_regex": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`/\t/`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`/\t/`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Regex used to split header fields when type is "header". Default: "/\\t/"`,
 						},
 						"disabled": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     booldefault.StaticBool(false),
+							Computed: true,
+							Optional: true,
+							Default:  booldefault.StaticBool(false),
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
 							Description: `Disable this breaker rule (enabled by default). Default: false`,
 						},
 						"escape_char": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`\`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`\`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Escape character used for CSV parsing when type is "csv". Default: "\\"`,
 						},
 						"event_breaker_regex": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`/[\\n\\r]+(?!\\s)/`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`/[\\n\\r]+(?!\\s)/`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/[\\\\n\\\\r]+(?!\\\\s)/"`,
 						},
 						"fields": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+							},
 							NestedObject: schema.NestedAttributeObject{
+								Validators: []validator.Object{
+									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
 									},
 									"value": schema.StringAttribute{
-										Required:    true,
-										Description: `The JavaScript expression used to compute the field's value (can be constant)`,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `The JavaScript expression used to compute the field's value (can be constant). Not Null`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 							},
 							Description: `Key-value pairs to be added to each event`,
 						},
 						"fields_line_regex": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`/^#[Ff]ields[:]?\s+(.*)/`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`/^#[Ff]ields[:]?\s+(.*)/`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Regex that identifies and captures the fields line when type is "header". Default: "/^#[Ff]ields[:]?\\s+(.*)/"`,
 						},
 						"header_line_regex": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`/^#/`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`/^#/`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Regex used to identify header lines when type is "header". Default: "/^#/"`,
 						},
 						"max_event_bytes": schema.Float64Attribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     float64default.StaticFloat64(51200),
+							Computed: true,
+							Optional: true,
+							Default:  float64default.StaticFloat64(51200),
+							PlanModifiers: []planmodifier.Float64{
+								speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+							},
 							Description: `The maximum number of bytes in an event before it is flushed to the pipelines. Default: 51200`,
 							Validators: []validator.Float64{
 								float64validator.Between(1, 134217728),
 							},
 						},
 						"name": schema.StringAttribute{
-							Required: true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
 						},
 						"parser_enabled": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     booldefault.StaticBool(false),
+							Computed: true,
+							Optional: true,
+							Default:  booldefault.StaticBool(false),
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
 							Description: `Default: false`,
 						},
 						"quote_char": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`"`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`"`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Quote character used for CSV parsing when type is "csv". Default: "\""`,
 						},
 						"should_use_data_raw": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     booldefault.StaticBool(false),
+							Computed: true,
+							Optional: true,
+							Default:  booldefault.StaticBool(false),
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
 							Description: `Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event. Default: false`,
 						},
 						"timestamp": schema.SingleNestedAttribute{
-							Required: true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
 							Attributes: map[string]schema.Attribute{
 								"format": schema.StringAttribute{
+									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 								},
 								"length": schema.Float64Attribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     float64default.StaticFloat64(150),
+									Computed: true,
+									Optional: true,
+									Default:  float64default.StaticFloat64(150),
+									PlanModifiers: []planmodifier.Float64{
+										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+									},
 									Description: `Default: 150`,
 									Validators: []validator.Float64{
 										float64validator.AtLeast(2),
 									},
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     stringdefault.StaticString(`auto`),
+									Computed: true,
+									Optional: true,
+									Default:  stringdefault.StaticString(`auto`),
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Default: "auto"; must be one of ["auto", "format", "current"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
@@ -217,36 +326,54 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 									},
 								},
 							},
-							Description: `Auto, manual format (strptime), or current time`,
+							Description: `Auto, manual format (strptime), or current time. Not Null`,
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
 						},
 						"timestamp_anchor_regex": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`/^/`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`/^/`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction. Default: "/^/"`,
 						},
 						"timestamp_earliest": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`-420weeks`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`-420weeks`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time. Default: "-420weeks"`,
 						},
 						"timestamp_latest": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`+1week`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`+1week`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time. Default: "+1week"`,
 						},
 						"timestamp_timezone": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`local`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`local`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Timezone to assign to timestamps without timezone info. Default: "local"`,
 						},
 						"type": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     stringdefault.StaticString(`regex`),
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`regex`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow"]`,
 							Validators: []validator.String{
 								stringvalidator.OneOf(
@@ -266,7 +393,11 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 				Description: `A list of rules that will be applied, in order, to the input data stream`,
 			},
 			"tags": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 			},
 		},
 	}
@@ -336,36 +467,9 @@ func (r *EventBreakerRulesetResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetEventBreakerRulesetByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateEventBreakerRulesetResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.EventBreakerRules.GetEventBreakerRulesetByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
 
@@ -427,6 +531,11 @@ func (r *EventBreakerRulesetResource) Read(ctx context.Context, req resource.Rea
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetEventBreakerRulesetByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -472,36 +581,9 @@ func (r *EventBreakerRulesetResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetEventBreakerRulesetByIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateEventBreakerRulesetByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.EventBreakerRules.GetEventBreakerRulesetByID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
 

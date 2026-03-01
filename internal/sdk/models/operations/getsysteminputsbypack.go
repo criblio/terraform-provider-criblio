@@ -28,12 +28,12 @@ func (g *GetSystemInputsByPackRequest) GetGroupID() string {
 	return g.GroupID
 }
 
-// GetSystemInputsByPackResponseBody - a list of Routes objects
+// GetSystemInputsByPackResponseBody - a list of Input objects
 type GetSystemInputsByPackResponseBody struct {
-	Items []shared.Routes `json:"items,omitempty"`
+	Items []shared.Input `json:"items,omitempty"`
 }
 
-func (g *GetSystemInputsByPackResponseBody) GetItems() []shared.Routes {
+func (g *GetSystemInputsByPackResponseBody) GetItems() []shared.Input {
 	if g == nil {
 		return nil
 	}
@@ -47,7 +47,7 @@ type GetSystemInputsByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Routes objects
+	// a list of Input objects
 	Object *GetSystemInputsByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

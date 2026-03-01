@@ -4,29 +4,28 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 func (r *NotificationTargetResourceModel) RefreshFromOperationsCreateNotificationTargetResponseBody(ctx context.Context, resp *operations.CreateNotificationTargetResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = nil
-		for _, itemsItem := range resp.Items {
-			var items map[string]jsontypes.Normalized
-			if len(itemsItem) > 0 {
-				items = make(map[string]jsontypes.Normalized, len(itemsItem))
-				for key, value := range itemsItem {
-					result, _ := json.Marshal(value)
-					items[key] = jsontypes.NewNormalizedValue(string(result))
-				}
-			}
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedNotificationTarget(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -36,18 +35,17 @@ func (r *NotificationTargetResourceModel) RefreshFromOperationsGetNotificationTa
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = nil
-		for _, itemsItem := range resp.Items {
-			var items map[string]jsontypes.Normalized
-			if len(itemsItem) > 0 {
-				items = make(map[string]jsontypes.Normalized, len(itemsItem))
-				for key, value := range itemsItem {
-					result, _ := json.Marshal(value)
-					items[key] = jsontypes.NewNormalizedValue(string(result))
-				}
-			}
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedNotificationTarget(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -57,18 +55,149 @@ func (r *NotificationTargetResourceModel) RefreshFromOperationsUpdateNotificatio
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = nil
-		for _, itemsItem := range resp.Items {
-			var items map[string]jsontypes.Normalized
-			if len(itemsItem) > 0 {
-				items = make(map[string]jsontypes.Normalized, len(itemsItem))
-				for key, value := range itemsItem {
-					result, _ := json.Marshal(value)
-					items[key] = jsontypes.NewNormalizedValue(string(result))
-				}
-			}
-			r.Items = append(r.Items, items)
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
 		}
+
+		diags.Append(r.RefreshFromSharedNotificationTarget(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ctx context.Context, resp *shared.NotificationTarget) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp.PagerDutyTarget != nil {
+		r.PagerDutyTarget = &tfTypes.PagerDutyTarget{}
+		r.PagerDutyTarget.Class = types.StringPointerValue(resp.PagerDutyTarget.Class)
+		r.PagerDutyTarget.Component = types.StringPointerValue(resp.PagerDutyTarget.Component)
+		r.PagerDutyTarget.Group = types.StringPointerValue(resp.PagerDutyTarget.Group)
+		r.PagerDutyTarget.ID = types.StringValue(resp.PagerDutyTarget.ID)
+		r.ID = r.PagerDutyTarget.ID
+		r.PagerDutyTarget.RoutingKey = types.StringValue(resp.PagerDutyTarget.RoutingKey)
+		if resp.PagerDutyTarget.Severity != nil {
+			r.PagerDutyTarget.Severity = types.StringValue(string(*resp.PagerDutyTarget.Severity))
+		} else {
+			r.PagerDutyTarget.Severity = types.StringNull()
+		}
+		r.PagerDutyTarget.SystemFields = make([]types.String, 0, len(resp.PagerDutyTarget.SystemFields))
+		for _, v := range resp.PagerDutyTarget.SystemFields {
+			r.PagerDutyTarget.SystemFields = append(r.PagerDutyTarget.SystemFields, types.StringValue(v))
+		}
+		r.PagerDutyTarget.Type = types.StringValue(string(resp.PagerDutyTarget.Type))
+	}
+	if resp.SlackTarget != nil {
+		r.SlackTarget = &tfTypes.SlackTarget{}
+		r.SlackTarget.ID = types.StringValue(resp.SlackTarget.ID)
+		r.ID = r.SlackTarget.ID
+		r.SlackTarget.SystemFields = make([]types.String, 0, len(resp.SlackTarget.SystemFields))
+		for _, v := range resp.SlackTarget.SystemFields {
+			r.SlackTarget.SystemFields = append(r.SlackTarget.SystemFields, types.StringValue(v))
+		}
+		r.SlackTarget.Type = types.StringValue(string(resp.SlackTarget.Type))
+		r.SlackTarget.URL = types.StringValue(resp.SlackTarget.URL)
+	}
+	if resp.SMTPTarget != nil {
+		r.SMTPTarget = &tfTypes.SMTPTarget{}
+		if resp.SMTPTarget.EncryptionOption != nil {
+			r.SMTPTarget.EncryptionOption = types.StringValue(string(*resp.SMTPTarget.EncryptionOption))
+		} else {
+			r.SMTPTarget.EncryptionOption = types.StringNull()
+		}
+		r.SMTPTarget.From = types.StringValue(resp.SMTPTarget.From)
+		r.SMTPTarget.Host = types.StringValue(resp.SMTPTarget.Host)
+		r.SMTPTarget.ID = types.StringValue(resp.SMTPTarget.ID)
+		r.ID = r.SMTPTarget.ID
+		r.SMTPTarget.Password = types.StringPointerValue(resp.SMTPTarget.Password)
+		r.SMTPTarget.Port = types.Int64Value(resp.SMTPTarget.Port)
+		r.SMTPTarget.SystemFields = make([]types.String, 0, len(resp.SMTPTarget.SystemFields))
+		for _, v := range resp.SMTPTarget.SystemFields {
+			r.SMTPTarget.SystemFields = append(r.SMTPTarget.SystemFields, types.StringValue(v))
+		}
+		if resp.SMTPTarget.TLS == nil {
+			r.SMTPTarget.TLS = nil
+		} else {
+			r.SMTPTarget.TLS = &tfTypes.TLSConfiguration{}
+			if resp.SMTPTarget.TLS.MaxVersion != nil {
+				r.SMTPTarget.TLS.MaxVersion = types.StringValue(string(*resp.SMTPTarget.TLS.MaxVersion))
+			} else {
+				r.SMTPTarget.TLS.MaxVersion = types.StringNull()
+			}
+			if resp.SMTPTarget.TLS.MinVersion != nil {
+				r.SMTPTarget.TLS.MinVersion = types.StringValue(string(*resp.SMTPTarget.TLS.MinVersion))
+			} else {
+				r.SMTPTarget.TLS.MinVersion = types.StringNull()
+			}
+			r.SMTPTarget.TLS.RejectUnauthorized = types.BoolPointerValue(resp.SMTPTarget.TLS.RejectUnauthorized)
+		}
+		r.SMTPTarget.Type = types.StringValue(string(resp.SMTPTarget.Type))
+		r.SMTPTarget.Username = types.StringPointerValue(resp.SMTPTarget.Username)
+	}
+	if resp.SnsTarget != nil {
+		r.SnsTarget = &tfTypes.SnsTarget{}
+		r.SnsTarget.Allowlist = make([]types.String, 0, len(resp.SnsTarget.Allowlist))
+		for _, v := range resp.SnsTarget.Allowlist {
+			r.SnsTarget.Allowlist = append(r.SnsTarget.Allowlist, types.StringValue(v))
+		}
+		r.SnsTarget.AssumeRoleArn = types.StringPointerValue(resp.SnsTarget.AssumeRoleArn)
+		r.SnsTarget.AssumeRoleExternalID = types.StringPointerValue(resp.SnsTarget.AssumeRoleExternalID)
+		r.SnsTarget.AwsAPIKey = types.StringPointerValue(resp.SnsTarget.AwsAPIKey)
+		if resp.SnsTarget.AwsAuthenticationMethod != nil {
+			r.SnsTarget.AwsAuthenticationMethod = types.StringValue(string(*resp.SnsTarget.AwsAuthenticationMethod))
+		} else {
+			r.SnsTarget.AwsAuthenticationMethod = types.StringNull()
+		}
+		r.SnsTarget.AwsSecretKey = types.StringPointerValue(resp.SnsTarget.AwsSecretKey)
+		if resp.SnsTarget.DestinationType != nil {
+			r.SnsTarget.DestinationType = types.StringValue(string(*resp.SnsTarget.DestinationType))
+		} else {
+			r.SnsTarget.DestinationType = types.StringNull()
+		}
+		r.SnsTarget.Endpoint = types.StringPointerValue(resp.SnsTarget.Endpoint)
+		r.SnsTarget.ID = types.StringValue(resp.SnsTarget.ID)
+		r.ID = r.SnsTarget.ID
+		r.SnsTarget.MessageGroupID = types.StringPointerValue(resp.SnsTarget.MessageGroupID)
+		r.SnsTarget.PhoneNumber = types.StringPointerValue(resp.SnsTarget.PhoneNumber)
+		r.SnsTarget.Region = types.StringValue(resp.SnsTarget.Region)
+		r.SnsTarget.SystemFields = make([]types.String, 0, len(resp.SnsTarget.SystemFields))
+		for _, v := range resp.SnsTarget.SystemFields {
+			r.SnsTarget.SystemFields = append(r.SnsTarget.SystemFields, types.StringValue(v))
+		}
+		r.SnsTarget.TopicArn = types.StringPointerValue(resp.SnsTarget.TopicArn)
+		if resp.SnsTarget.TopicType != nil {
+			r.SnsTarget.TopicType = types.StringValue(string(*resp.SnsTarget.TopicType))
+		} else {
+			r.SnsTarget.TopicType = types.StringNull()
+		}
+		r.SnsTarget.Type = types.StringValue(string(resp.SnsTarget.Type))
+	}
+	if resp.WebhookTarget != nil {
+		r.WebhookTarget = &tfTypes.WebhookTarget{}
+		if resp.WebhookTarget.AuthType != nil {
+			r.WebhookTarget.AuthType = types.StringValue(string(*resp.WebhookTarget.AuthType))
+		} else {
+			r.WebhookTarget.AuthType = types.StringNull()
+		}
+		r.WebhookTarget.Format = types.StringValue(string(resp.WebhookTarget.Format))
+		r.WebhookTarget.ID = types.StringValue(resp.WebhookTarget.ID)
+		r.ID = r.WebhookTarget.ID
+		r.WebhookTarget.Method = types.StringValue(string(resp.WebhookTarget.Method))
+		r.WebhookTarget.Password = types.StringPointerValue(resp.WebhookTarget.Password)
+		r.WebhookTarget.SystemFields = make([]types.String, 0, len(resp.WebhookTarget.SystemFields))
+		for _, v := range resp.WebhookTarget.SystemFields {
+			r.WebhookTarget.SystemFields = append(r.WebhookTarget.SystemFields, types.StringValue(v))
+		}
+		r.WebhookTarget.Token = types.StringPointerValue(resp.WebhookTarget.Token)
+		r.WebhookTarget.Type = types.StringValue(string(resp.WebhookTarget.Type))
+		r.WebhookTarget.URL = types.StringValue(resp.WebhookTarget.URL)
+		r.WebhookTarget.Username = types.StringPointerValue(resp.WebhookTarget.Username)
 	}
 
 	return diags

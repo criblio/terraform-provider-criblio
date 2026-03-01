@@ -30,10 +30,10 @@ func (c *CreateGlobalVariableRequest) GetGlobalVar() shared.GlobalVar {
 
 // CreateGlobalVariableResponseBody - a list of Global Variable objects
 type CreateGlobalVariableResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (c *CreateGlobalVariableResponseBody) GetItems() []map[string]any {
+func (c *CreateGlobalVariableResponseBody) GetItems() []shared.GlobalVar {
 	if c == nil {
 		return nil
 	}

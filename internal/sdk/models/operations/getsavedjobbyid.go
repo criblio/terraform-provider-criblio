@@ -30,10 +30,10 @@ func (g *GetSavedJobByIDRequest) GetGroupID() string {
 
 // GetSavedJobByIDResponseBody - a list of Collector objects
 type GetSavedJobByIDResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.InputCollector `json:"items,omitempty"`
 }
 
-func (g *GetSavedJobByIDResponseBody) GetItems() []map[string]any {
+func (g *GetSavedJobByIDResponseBody) GetItems() []shared.InputCollector {
 	if g == nil {
 		return nil
 	}

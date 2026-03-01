@@ -39,10 +39,10 @@ func (u *UpdateOutputByIDRequest) GetOutput() shared.Output {
 
 // UpdateOutputByIDResponseBody - a list of Output objects
 type UpdateOutputByIDResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.Output `json:"items,omitempty"`
 }
 
-func (u *UpdateOutputByIDResponseBody) GetItems() []map[string]any {
+func (u *UpdateOutputByIDResponseBody) GetItems() []shared.Output {
 	if u == nil {
 		return nil
 	}

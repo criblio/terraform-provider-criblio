@@ -57,11 +57,7 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
 - `group_id` (String) group Id
 - `id` (String) Unique ID to PATCH for pack
-- `pack` (String) pack ID to POST. Changing this forces replacement because the pipeline is scoped to a pack and cannot be moved in place.
-
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+- `pack` (String) pack ID to POST. Requires replacement if changed.
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
@@ -81,7 +77,6 @@ Optional:
 Required:
 
 - `conf` (String) Function-specific configuration as a JSON object. Different functions require different configuration fields.
-- `id` (String) Function ID
 
 Optional:
 
@@ -90,67 +85,17 @@ Optional:
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
 - `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
 - `group_id` (String) Group ID
+- `id` (String) Function ID. Not Null
 
 
 <a id="nestedatt--conf--groups"></a>
 ### Nested Schema for `conf.groups`
 
-Required:
-
-- `name` (String)
-
 Optional:
 
 - `description` (String) Short description of this group
 - `disabled` (Boolean) Whether this group is disabled
-
-
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--items--comments))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--groups))
-- `id` (String) Routes ID
-- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--items--routes))
-
-<a id="nestedatt--items--comments"></a>
-### Nested Schema for `items.comments`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `comment` (String) Optional, short description of this Route's purpose
-
-
-<a id="nestedatt--items--groups"></a>
-### Nested Schema for `items.groups`
-
-Read-Only:
-
-- `description` (String) Short description of this group
-- `disabled` (Boolean) Whether this group is disabled
-- `name` (String)
-
-
-<a id="nestedatt--items--routes"></a>
-### Nested Schema for `items.routes`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `description` (String)
-- `disabled` (Boolean) Disable this routing rule
-- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false
-- `filter` (String) JavaScript expression to select data to route. Default: "true"
-- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true
-- `id` (String)
-- `name` (String)
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
-- `pipeline` (String) Pipeline to send the matching data to
+- `name` (String) Not Null
 
 ## Import
 

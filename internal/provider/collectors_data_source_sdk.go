@@ -4,26 +4,1388 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseBody(ctx context.Context, resp *operations.ListCollectorsResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = nil
+		r.Items = []tfTypes.InputCollector{}
+
 		for _, itemsItem := range resp.Items {
-			var items map[string]jsontypes.Normalized
-			if len(itemsItem) > 0 {
-				items = make(map[string]jsontypes.Normalized, len(itemsItem))
-				for key, value := range itemsItem {
-					result, _ := json.Marshal(value)
-					items[key] = jsontypes.NewNormalizedValue(string(result))
+			var items tfTypes.InputCollector
+
+			if itemsItem.InputCollectorAzureBlob != nil {
+				items.InputCollectorAzureBlob = &tfTypes.InputCollectorAzureBlob{}
+				if itemsItem.InputCollectorAzureBlob.Collector.Conf == nil {
+					items.InputCollectorAzureBlob.Collector.Conf = nil
+				} else {
+					items.InputCollectorAzureBlob.Collector.Conf = &tfTypes.InputCollectorAzureBlobConf{}
+					if itemsItem.InputCollectorAzureBlob.Collector.Conf.AuthType != nil {
+						items.InputCollectorAzureBlob.Collector.Conf.AuthType = types.StringValue(string(*itemsItem.InputCollectorAzureBlob.Collector.Conf.AuthType))
+					} else {
+						items.InputCollectorAzureBlob.Collector.Conf.AuthType = types.StringNull()
+					}
+					items.InputCollectorAzureBlob.Collector.Conf.ConnectionString = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Collector.Conf.ConnectionString)
+					items.InputCollectorAzureBlob.Collector.Conf.ContainerName = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Collector.Conf.ContainerName)
+					items.InputCollectorAzureBlob.Collector.Conf.Extractors = []tfTypes.InputCollectorAzureBlobExtractor{}
+
+					for _, extractorsItem := range itemsItem.InputCollectorAzureBlob.Collector.Conf.Extractors {
+						var extractors tfTypes.InputCollectorAzureBlobExtractor
+
+						extractors.Expression = types.StringPointerValue(extractorsItem.Expression)
+						extractors.Key = types.StringPointerValue(extractorsItem.Key)
+						extractors.Pattern = types.StringPointerValue(extractorsItem.Pattern)
+
+						items.InputCollectorAzureBlob.Collector.Conf.Extractors = append(items.InputCollectorAzureBlob.Collector.Conf.Extractors, extractors)
+					}
+					items.InputCollectorAzureBlob.Collector.Conf.MaxBatchSize = types.Int64PointerValue(itemsItem.InputCollectorAzureBlob.Collector.Conf.MaxBatchSize)
+					items.InputCollectorAzureBlob.Collector.Conf.Path = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Collector.Conf.Path)
+					items.InputCollectorAzureBlob.Collector.Conf.Recurse = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.Collector.Conf.Recurse)
+					items.InputCollectorAzureBlob.Collector.Conf.StorageAccountName = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Collector.Conf.StorageAccountName)
 				}
+				items.InputCollectorAzureBlob.Collector.Type = types.StringValue(string(itemsItem.InputCollectorAzureBlob.Collector.Type))
+				items.InputCollectorAzureBlob.Environment = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Environment)
+				items.InputCollectorAzureBlob.ID = types.StringValue(itemsItem.InputCollectorAzureBlob.ID)
+				items.InputCollectorAzureBlob.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.IgnoreGroupJobsLimit)
+				if itemsItem.InputCollectorAzureBlob.Input == nil {
+					items.InputCollectorAzureBlob.Input = nil
+				} else {
+					items.InputCollectorAzureBlob.Input = &tfTypes.InputCollectorAzureBlobInput{}
+					items.InputCollectorAzureBlob.Input.BreakerRulesets = make([]types.String, 0, len(itemsItem.InputCollectorAzureBlob.Input.BreakerRulesets))
+					for _, v := range itemsItem.InputCollectorAzureBlob.Input.BreakerRulesets {
+						items.InputCollectorAzureBlob.Input.BreakerRulesets = append(items.InputCollectorAzureBlob.Input.BreakerRulesets, types.StringValue(v))
+					}
+					items.InputCollectorAzureBlob.Input.Metadata = []tfTypes.InputCollectorAzureBlobMetadatum{}
+
+					for _, metadataItem := range itemsItem.InputCollectorAzureBlob.Input.Metadata {
+						var metadata tfTypes.InputCollectorAzureBlobMetadatum
+
+						metadata.Name = types.StringValue(metadataItem.Name)
+						metadata.Value = types.StringValue(metadataItem.Value)
+
+						items.InputCollectorAzureBlob.Input.Metadata = append(items.InputCollectorAzureBlob.Input.Metadata, metadata)
+					}
+					items.InputCollectorAzureBlob.Input.Output = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Input.Output)
+					items.InputCollectorAzureBlob.Input.Pipeline = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Input.Pipeline)
+					if itemsItem.InputCollectorAzureBlob.Input.Preprocess == nil {
+						items.InputCollectorAzureBlob.Input.Preprocess = nil
+					} else {
+						items.InputCollectorAzureBlob.Input.Preprocess = &tfTypes.InputCollectorAzureBlobPreprocess{}
+						items.InputCollectorAzureBlob.Input.Preprocess.Args = make([]types.String, 0, len(itemsItem.InputCollectorAzureBlob.Input.Preprocess.Args))
+						for _, v := range itemsItem.InputCollectorAzureBlob.Input.Preprocess.Args {
+							items.InputCollectorAzureBlob.Input.Preprocess.Args = append(items.InputCollectorAzureBlob.Input.Preprocess.Args, types.StringValue(v))
+						}
+						items.InputCollectorAzureBlob.Input.Preprocess.Command = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Input.Preprocess.Command)
+						items.InputCollectorAzureBlob.Input.Preprocess.Disabled = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.Input.Preprocess.Disabled)
+					}
+					items.InputCollectorAzureBlob.Input.SendToRoutes = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.Input.SendToRoutes)
+					items.InputCollectorAzureBlob.Input.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputCollectorAzureBlob.Input.StaleChannelFlushMs)
+					items.InputCollectorAzureBlob.Input.ThrottleRatePerSec = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Input.ThrottleRatePerSec)
+					if itemsItem.InputCollectorAzureBlob.Input.Type != nil {
+						items.InputCollectorAzureBlob.Input.Type = types.StringValue(string(*itemsItem.InputCollectorAzureBlob.Input.Type))
+					} else {
+						items.InputCollectorAzureBlob.Input.Type = types.StringNull()
+					}
+				}
+				items.InputCollectorAzureBlob.RemoveFields = make([]types.String, 0, len(itemsItem.InputCollectorAzureBlob.RemoveFields))
+				for _, v := range itemsItem.InputCollectorAzureBlob.RemoveFields {
+					items.InputCollectorAzureBlob.RemoveFields = append(items.InputCollectorAzureBlob.RemoveFields, types.StringValue(v))
+				}
+				items.InputCollectorAzureBlob.ResumeOnBoot = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.ResumeOnBoot)
+				if itemsItem.InputCollectorAzureBlob.SavedState == nil {
+					items.InputCollectorAzureBlob.SavedState = nil
+				} else {
+					items.InputCollectorAzureBlob.SavedState = &tfTypes.InputCollectorAzureBlobSavedState{}
+				}
+				if itemsItem.InputCollectorAzureBlob.Schedule == nil {
+					items.InputCollectorAzureBlob.Schedule = nil
+				} else {
+					items.InputCollectorAzureBlob.Schedule = &tfTypes.InputCollectorAzureBlobSchedule{}
+					items.InputCollectorAzureBlob.Schedule.CronSchedule = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.CronSchedule)
+					items.InputCollectorAzureBlob.Schedule.Enabled = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Enabled)
+					items.InputCollectorAzureBlob.Schedule.MaxConcurrentRuns = types.Float64PointerValue(itemsItem.InputCollectorAzureBlob.Schedule.MaxConcurrentRuns)
+					items.InputCollectorAzureBlob.Schedule.ResumeMissed = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.ResumeMissed)
+					if itemsItem.InputCollectorAzureBlob.Schedule.Run == nil {
+						items.InputCollectorAzureBlob.Schedule.Run = nil
+					} else {
+						items.InputCollectorAzureBlob.Schedule.Run = &tfTypes.InputCollectorAzureBlobRunSettings{}
+						items.InputCollectorAzureBlob.Schedule.Run.Earliest = types.Float64PointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.Earliest)
+						items.InputCollectorAzureBlob.Schedule.Run.Expression = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.Expression)
+						items.InputCollectorAzureBlob.Schedule.Run.JobTimeout = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.JobTimeout)
+						items.InputCollectorAzureBlob.Schedule.Run.Latest = types.Float64PointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.Latest)
+						if itemsItem.InputCollectorAzureBlob.Schedule.Run.LogLevel != nil {
+							items.InputCollectorAzureBlob.Schedule.Run.LogLevel = types.StringValue(string(*itemsItem.InputCollectorAzureBlob.Schedule.Run.LogLevel))
+						} else {
+							items.InputCollectorAzureBlob.Schedule.Run.LogLevel = types.StringNull()
+						}
+						items.InputCollectorAzureBlob.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.MaxTaskReschedule)
+						items.InputCollectorAzureBlob.Schedule.Run.MaxTaskSize = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.MaxTaskSize)
+						items.InputCollectorAzureBlob.Schedule.Run.MinTaskSize = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.MinTaskSize)
+						if itemsItem.InputCollectorAzureBlob.Schedule.Run.Mode != nil {
+							items.InputCollectorAzureBlob.Schedule.Run.Mode = types.StringValue(string(*itemsItem.InputCollectorAzureBlob.Schedule.Run.Mode))
+						} else {
+							items.InputCollectorAzureBlob.Schedule.Run.Mode = types.StringNull()
+						}
+						items.InputCollectorAzureBlob.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.RescheduleDroppedTasks)
+						if itemsItem.InputCollectorAzureBlob.Schedule.Run.StateTracking == nil {
+							items.InputCollectorAzureBlob.Schedule.Run.StateTracking = nil
+						} else {
+							items.InputCollectorAzureBlob.Schedule.Run.StateTracking = &tfTypes.InputCollectorAzureBlobStateTracking{}
+							items.InputCollectorAzureBlob.Schedule.Run.StateTracking.Enabled = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.StateTracking.Enabled)
+							items.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateMergeExpression = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateMergeExpression)
+							items.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateUpdateExpression = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Run.StateTracking.StateUpdateExpression)
+						}
+						if itemsItem.InputCollectorAzureBlob.Schedule.Run.TimeRangeType != nil {
+							items.InputCollectorAzureBlob.Schedule.Run.TimeRangeType = types.StringValue(string(*itemsItem.InputCollectorAzureBlob.Schedule.Run.TimeRangeType))
+						} else {
+							items.InputCollectorAzureBlob.Schedule.Run.TimeRangeType = types.StringNull()
+						}
+						if itemsItem.InputCollectorAzureBlob.Schedule.Run.TimeWarning == nil {
+							items.InputCollectorAzureBlob.Schedule.Run.TimeWarning = nil
+						} else {
+							items.InputCollectorAzureBlob.Schedule.Run.TimeWarning = &tfTypes.InputCollectorAzureBlobTimeWarning{}
+						}
+					}
+					items.InputCollectorAzureBlob.Schedule.Skippable = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.Schedule.Skippable)
+				}
+				items.InputCollectorAzureBlob.Streamtags = make([]types.String, 0, len(itemsItem.InputCollectorAzureBlob.Streamtags))
+				for _, v := range itemsItem.InputCollectorAzureBlob.Streamtags {
+					items.InputCollectorAzureBlob.Streamtags = append(items.InputCollectorAzureBlob.Streamtags, types.StringValue(v))
+				}
+				items.InputCollectorAzureBlob.TTL = types.StringPointerValue(itemsItem.InputCollectorAzureBlob.TTL)
+				items.InputCollectorAzureBlob.WorkerAffinity = types.BoolPointerValue(itemsItem.InputCollectorAzureBlob.WorkerAffinity)
 			}
+			if itemsItem.InputCollectorCriblLake != nil {
+				items.InputCollectorCriblLake = &tfTypes.InputCollectorCriblLake{}
+				if itemsItem.InputCollectorCriblLake.Collector.Conf == nil {
+					items.InputCollectorCriblLake.Collector.Conf = nil
+				} else {
+					items.InputCollectorCriblLake.Collector.Conf = &tfTypes.InputCollectorCriblLakeConf{}
+					items.InputCollectorCriblLake.Collector.Conf.Dataset = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Collector.Conf.Dataset)
+				}
+				items.InputCollectorCriblLake.Collector.Type = types.StringValue(string(itemsItem.InputCollectorCriblLake.Collector.Type))
+				items.InputCollectorCriblLake.Environment = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Environment)
+				items.InputCollectorCriblLake.ID = types.StringValue(itemsItem.InputCollectorCriblLake.ID)
+				items.InputCollectorCriblLake.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.IgnoreGroupJobsLimit)
+				if itemsItem.InputCollectorCriblLake.Input == nil {
+					items.InputCollectorCriblLake.Input = nil
+				} else {
+					items.InputCollectorCriblLake.Input = &tfTypes.InputCollectorCriblLakeInput{}
+					items.InputCollectorCriblLake.Input.BreakerRulesets = make([]types.String, 0, len(itemsItem.InputCollectorCriblLake.Input.BreakerRulesets))
+					for _, v := range itemsItem.InputCollectorCriblLake.Input.BreakerRulesets {
+						items.InputCollectorCriblLake.Input.BreakerRulesets = append(items.InputCollectorCriblLake.Input.BreakerRulesets, types.StringValue(v))
+					}
+					items.InputCollectorCriblLake.Input.Metadata = []tfTypes.InputCollectorCriblLakeMetadatum{}
+
+					for _, metadataItem1 := range itemsItem.InputCollectorCriblLake.Input.Metadata {
+						var metadata1 tfTypes.InputCollectorCriblLakeMetadatum
+
+						metadata1.Name = types.StringValue(metadataItem1.Name)
+						metadata1.Value = types.StringValue(metadataItem1.Value)
+
+						items.InputCollectorCriblLake.Input.Metadata = append(items.InputCollectorCriblLake.Input.Metadata, metadata1)
+					}
+					items.InputCollectorCriblLake.Input.Output = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Input.Output)
+					items.InputCollectorCriblLake.Input.Pipeline = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Input.Pipeline)
+					if itemsItem.InputCollectorCriblLake.Input.Preprocess == nil {
+						items.InputCollectorCriblLake.Input.Preprocess = nil
+					} else {
+						items.InputCollectorCriblLake.Input.Preprocess = &tfTypes.InputCollectorCriblLakePreprocess{}
+						items.InputCollectorCriblLake.Input.Preprocess.Args = make([]types.String, 0, len(itemsItem.InputCollectorCriblLake.Input.Preprocess.Args))
+						for _, v := range itemsItem.InputCollectorCriblLake.Input.Preprocess.Args {
+							items.InputCollectorCriblLake.Input.Preprocess.Args = append(items.InputCollectorCriblLake.Input.Preprocess.Args, types.StringValue(v))
+						}
+						items.InputCollectorCriblLake.Input.Preprocess.Command = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Input.Preprocess.Command)
+						items.InputCollectorCriblLake.Input.Preprocess.Disabled = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.Input.Preprocess.Disabled)
+					}
+					items.InputCollectorCriblLake.Input.SendToRoutes = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.Input.SendToRoutes)
+					items.InputCollectorCriblLake.Input.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputCollectorCriblLake.Input.StaleChannelFlushMs)
+					items.InputCollectorCriblLake.Input.ThrottleRatePerSec = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Input.ThrottleRatePerSec)
+					if itemsItem.InputCollectorCriblLake.Input.Type != nil {
+						items.InputCollectorCriblLake.Input.Type = types.StringValue(string(*itemsItem.InputCollectorCriblLake.Input.Type))
+					} else {
+						items.InputCollectorCriblLake.Input.Type = types.StringNull()
+					}
+				}
+				items.InputCollectorCriblLake.RemoveFields = make([]types.String, 0, len(itemsItem.InputCollectorCriblLake.RemoveFields))
+				for _, v := range itemsItem.InputCollectorCriblLake.RemoveFields {
+					items.InputCollectorCriblLake.RemoveFields = append(items.InputCollectorCriblLake.RemoveFields, types.StringValue(v))
+				}
+				items.InputCollectorCriblLake.ResumeOnBoot = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.ResumeOnBoot)
+				if itemsItem.InputCollectorCriblLake.SavedState == nil {
+					items.InputCollectorCriblLake.SavedState = nil
+				} else {
+					items.InputCollectorCriblLake.SavedState = &tfTypes.InputCollectorCriblLakeSavedState{}
+				}
+				if itemsItem.InputCollectorCriblLake.Schedule == nil {
+					items.InputCollectorCriblLake.Schedule = nil
+				} else {
+					items.InputCollectorCriblLake.Schedule = &tfTypes.InputCollectorCriblLakeSchedule{}
+					items.InputCollectorCriblLake.Schedule.CronSchedule = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Schedule.CronSchedule)
+					items.InputCollectorCriblLake.Schedule.Enabled = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Enabled)
+					items.InputCollectorCriblLake.Schedule.MaxConcurrentRuns = types.Float64PointerValue(itemsItem.InputCollectorCriblLake.Schedule.MaxConcurrentRuns)
+					items.InputCollectorCriblLake.Schedule.ResumeMissed = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.Schedule.ResumeMissed)
+					if itemsItem.InputCollectorCriblLake.Schedule.Run == nil {
+						items.InputCollectorCriblLake.Schedule.Run = nil
+					} else {
+						items.InputCollectorCriblLake.Schedule.Run = &tfTypes.InputCollectorCriblLakeRunSettings{}
+						items.InputCollectorCriblLake.Schedule.Run.Earliest = types.Float64PointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.Earliest)
+						items.InputCollectorCriblLake.Schedule.Run.Expression = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.Expression)
+						items.InputCollectorCriblLake.Schedule.Run.JobTimeout = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.JobTimeout)
+						items.InputCollectorCriblLake.Schedule.Run.Latest = types.Float64PointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.Latest)
+						if itemsItem.InputCollectorCriblLake.Schedule.Run.LogLevel != nil {
+							items.InputCollectorCriblLake.Schedule.Run.LogLevel = types.StringValue(string(*itemsItem.InputCollectorCriblLake.Schedule.Run.LogLevel))
+						} else {
+							items.InputCollectorCriblLake.Schedule.Run.LogLevel = types.StringNull()
+						}
+						items.InputCollectorCriblLake.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.MaxTaskReschedule)
+						items.InputCollectorCriblLake.Schedule.Run.MaxTaskSize = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.MaxTaskSize)
+						items.InputCollectorCriblLake.Schedule.Run.MinTaskSize = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.MinTaskSize)
+						if itemsItem.InputCollectorCriblLake.Schedule.Run.Mode != nil {
+							items.InputCollectorCriblLake.Schedule.Run.Mode = types.StringValue(string(*itemsItem.InputCollectorCriblLake.Schedule.Run.Mode))
+						} else {
+							items.InputCollectorCriblLake.Schedule.Run.Mode = types.StringNull()
+						}
+						items.InputCollectorCriblLake.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.RescheduleDroppedTasks)
+						if itemsItem.InputCollectorCriblLake.Schedule.Run.StateTracking == nil {
+							items.InputCollectorCriblLake.Schedule.Run.StateTracking = nil
+						} else {
+							items.InputCollectorCriblLake.Schedule.Run.StateTracking = &tfTypes.InputCollectorCriblLakeStateTracking{}
+							items.InputCollectorCriblLake.Schedule.Run.StateTracking.Enabled = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.StateTracking.Enabled)
+							items.InputCollectorCriblLake.Schedule.Run.StateTracking.StateMergeExpression = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.StateTracking.StateMergeExpression)
+							items.InputCollectorCriblLake.Schedule.Run.StateTracking.StateUpdateExpression = types.StringPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Run.StateTracking.StateUpdateExpression)
+						}
+						if itemsItem.InputCollectorCriblLake.Schedule.Run.TimeRangeType != nil {
+							items.InputCollectorCriblLake.Schedule.Run.TimeRangeType = types.StringValue(string(*itemsItem.InputCollectorCriblLake.Schedule.Run.TimeRangeType))
+						} else {
+							items.InputCollectorCriblLake.Schedule.Run.TimeRangeType = types.StringNull()
+						}
+						if itemsItem.InputCollectorCriblLake.Schedule.Run.TimeWarning == nil {
+							items.InputCollectorCriblLake.Schedule.Run.TimeWarning = nil
+						} else {
+							items.InputCollectorCriblLake.Schedule.Run.TimeWarning = &tfTypes.InputCollectorCriblLakeTimeWarning{}
+						}
+					}
+					items.InputCollectorCriblLake.Schedule.Skippable = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.Schedule.Skippable)
+				}
+				items.InputCollectorCriblLake.Streamtags = make([]types.String, 0, len(itemsItem.InputCollectorCriblLake.Streamtags))
+				for _, v := range itemsItem.InputCollectorCriblLake.Streamtags {
+					items.InputCollectorCriblLake.Streamtags = append(items.InputCollectorCriblLake.Streamtags, types.StringValue(v))
+				}
+				items.InputCollectorCriblLake.TTL = types.StringPointerValue(itemsItem.InputCollectorCriblLake.TTL)
+				items.InputCollectorCriblLake.WorkerAffinity = types.BoolPointerValue(itemsItem.InputCollectorCriblLake.WorkerAffinity)
+			}
+			if itemsItem.InputCollectorDatabase != nil {
+				items.InputCollectorDatabase = &tfTypes.InputCollectorDatabase{}
+				if itemsItem.InputCollectorDatabase.Collector.Conf == nil {
+					items.InputCollectorDatabase.Collector.Conf = nil
+				} else {
+					items.InputCollectorDatabase.Collector.Conf = &tfTypes.InputCollectorDatabaseConf{}
+					items.InputCollectorDatabase.Collector.Conf.ConnectionID = types.StringPointerValue(itemsItem.InputCollectorDatabase.Collector.Conf.ConnectionID)
+					items.InputCollectorDatabase.Collector.Conf.Query = types.StringPointerValue(itemsItem.InputCollectorDatabase.Collector.Conf.Query)
+					items.InputCollectorDatabase.Collector.Conf.QueryValidationEnabled = types.BoolPointerValue(itemsItem.InputCollectorDatabase.Collector.Conf.QueryValidationEnabled)
+				}
+				items.InputCollectorDatabase.Collector.Type = types.StringValue(string(itemsItem.InputCollectorDatabase.Collector.Type))
+				items.InputCollectorDatabase.Environment = types.StringPointerValue(itemsItem.InputCollectorDatabase.Environment)
+				items.InputCollectorDatabase.ID = types.StringValue(itemsItem.InputCollectorDatabase.ID)
+				items.InputCollectorDatabase.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputCollectorDatabase.IgnoreGroupJobsLimit)
+				if itemsItem.InputCollectorDatabase.Input == nil {
+					items.InputCollectorDatabase.Input = nil
+				} else {
+					items.InputCollectorDatabase.Input = &tfTypes.InputCollectorDatabaseInput{}
+					items.InputCollectorDatabase.Input.BreakerRulesets = make([]types.String, 0, len(itemsItem.InputCollectorDatabase.Input.BreakerRulesets))
+					for _, v := range itemsItem.InputCollectorDatabase.Input.BreakerRulesets {
+						items.InputCollectorDatabase.Input.BreakerRulesets = append(items.InputCollectorDatabase.Input.BreakerRulesets, types.StringValue(v))
+					}
+					items.InputCollectorDatabase.Input.Metadata = []tfTypes.InputCollectorDatabaseMetadatum{}
+
+					for _, metadataItem2 := range itemsItem.InputCollectorDatabase.Input.Metadata {
+						var metadata2 tfTypes.InputCollectorDatabaseMetadatum
+
+						metadata2.Name = types.StringValue(metadataItem2.Name)
+						metadata2.Value = types.StringValue(metadataItem2.Value)
+
+						items.InputCollectorDatabase.Input.Metadata = append(items.InputCollectorDatabase.Input.Metadata, metadata2)
+					}
+					items.InputCollectorDatabase.Input.Output = types.StringPointerValue(itemsItem.InputCollectorDatabase.Input.Output)
+					items.InputCollectorDatabase.Input.Pipeline = types.StringPointerValue(itemsItem.InputCollectorDatabase.Input.Pipeline)
+					if itemsItem.InputCollectorDatabase.Input.Preprocess == nil {
+						items.InputCollectorDatabase.Input.Preprocess = nil
+					} else {
+						items.InputCollectorDatabase.Input.Preprocess = &tfTypes.InputCollectorDatabasePreprocess{}
+						items.InputCollectorDatabase.Input.Preprocess.Args = make([]types.String, 0, len(itemsItem.InputCollectorDatabase.Input.Preprocess.Args))
+						for _, v := range itemsItem.InputCollectorDatabase.Input.Preprocess.Args {
+							items.InputCollectorDatabase.Input.Preprocess.Args = append(items.InputCollectorDatabase.Input.Preprocess.Args, types.StringValue(v))
+						}
+						items.InputCollectorDatabase.Input.Preprocess.Command = types.StringPointerValue(itemsItem.InputCollectorDatabase.Input.Preprocess.Command)
+						items.InputCollectorDatabase.Input.Preprocess.Disabled = types.BoolPointerValue(itemsItem.InputCollectorDatabase.Input.Preprocess.Disabled)
+					}
+					items.InputCollectorDatabase.Input.SendToRoutes = types.BoolPointerValue(itemsItem.InputCollectorDatabase.Input.SendToRoutes)
+					items.InputCollectorDatabase.Input.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputCollectorDatabase.Input.StaleChannelFlushMs)
+					items.InputCollectorDatabase.Input.ThrottleRatePerSec = types.StringPointerValue(itemsItem.InputCollectorDatabase.Input.ThrottleRatePerSec)
+					if itemsItem.InputCollectorDatabase.Input.Type != nil {
+						items.InputCollectorDatabase.Input.Type = types.StringValue(string(*itemsItem.InputCollectorDatabase.Input.Type))
+					} else {
+						items.InputCollectorDatabase.Input.Type = types.StringNull()
+					}
+				}
+				items.InputCollectorDatabase.RemoveFields = make([]types.String, 0, len(itemsItem.InputCollectorDatabase.RemoveFields))
+				for _, v := range itemsItem.InputCollectorDatabase.RemoveFields {
+					items.InputCollectorDatabase.RemoveFields = append(items.InputCollectorDatabase.RemoveFields, types.StringValue(v))
+				}
+				items.InputCollectorDatabase.ResumeOnBoot = types.BoolPointerValue(itemsItem.InputCollectorDatabase.ResumeOnBoot)
+				if itemsItem.InputCollectorDatabase.SavedState == nil {
+					items.InputCollectorDatabase.SavedState = nil
+				} else {
+					items.InputCollectorDatabase.SavedState = &tfTypes.InputCollectorDatabaseSavedState{}
+				}
+				if itemsItem.InputCollectorDatabase.Schedule == nil {
+					items.InputCollectorDatabase.Schedule = nil
+				} else {
+					items.InputCollectorDatabase.Schedule = &tfTypes.InputCollectorDatabaseSchedule{}
+					items.InputCollectorDatabase.Schedule.CronSchedule = types.StringPointerValue(itemsItem.InputCollectorDatabase.Schedule.CronSchedule)
+					items.InputCollectorDatabase.Schedule.Enabled = types.BoolPointerValue(itemsItem.InputCollectorDatabase.Schedule.Enabled)
+					items.InputCollectorDatabase.Schedule.MaxConcurrentRuns = types.Float64PointerValue(itemsItem.InputCollectorDatabase.Schedule.MaxConcurrentRuns)
+					items.InputCollectorDatabase.Schedule.ResumeMissed = types.BoolPointerValue(itemsItem.InputCollectorDatabase.Schedule.ResumeMissed)
+					if itemsItem.InputCollectorDatabase.Schedule.Run == nil {
+						items.InputCollectorDatabase.Schedule.Run = nil
+					} else {
+						items.InputCollectorDatabase.Schedule.Run = &tfTypes.InputCollectorDatabaseRunSettings{}
+						items.InputCollectorDatabase.Schedule.Run.Earliest = types.Float64PointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.Earliest)
+						items.InputCollectorDatabase.Schedule.Run.Expression = types.StringPointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.Expression)
+						items.InputCollectorDatabase.Schedule.Run.JobTimeout = types.StringPointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.JobTimeout)
+						items.InputCollectorDatabase.Schedule.Run.Latest = types.Float64PointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.Latest)
+						if itemsItem.InputCollectorDatabase.Schedule.Run.LogLevel != nil {
+							items.InputCollectorDatabase.Schedule.Run.LogLevel = types.StringValue(string(*itemsItem.InputCollectorDatabase.Schedule.Run.LogLevel))
+						} else {
+							items.InputCollectorDatabase.Schedule.Run.LogLevel = types.StringNull()
+						}
+						items.InputCollectorDatabase.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.MaxTaskReschedule)
+						items.InputCollectorDatabase.Schedule.Run.MaxTaskSize = types.StringPointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.MaxTaskSize)
+						items.InputCollectorDatabase.Schedule.Run.MinTaskSize = types.StringPointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.MinTaskSize)
+						if itemsItem.InputCollectorDatabase.Schedule.Run.Mode != nil {
+							items.InputCollectorDatabase.Schedule.Run.Mode = types.StringValue(string(*itemsItem.InputCollectorDatabase.Schedule.Run.Mode))
+						} else {
+							items.InputCollectorDatabase.Schedule.Run.Mode = types.StringNull()
+						}
+						items.InputCollectorDatabase.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.RescheduleDroppedTasks)
+						if itemsItem.InputCollectorDatabase.Schedule.Run.StateTracking == nil {
+							items.InputCollectorDatabase.Schedule.Run.StateTracking = nil
+						} else {
+							items.InputCollectorDatabase.Schedule.Run.StateTracking = &tfTypes.InputCollectorDatabaseStateTracking{}
+							items.InputCollectorDatabase.Schedule.Run.StateTracking.Enabled = types.BoolPointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.StateTracking.Enabled)
+							items.InputCollectorDatabase.Schedule.Run.StateTracking.StateMergeExpression = types.StringPointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.StateTracking.StateMergeExpression)
+							items.InputCollectorDatabase.Schedule.Run.StateTracking.StateUpdateExpression = types.StringPointerValue(itemsItem.InputCollectorDatabase.Schedule.Run.StateTracking.StateUpdateExpression)
+						}
+						if itemsItem.InputCollectorDatabase.Schedule.Run.TimeRangeType != nil {
+							items.InputCollectorDatabase.Schedule.Run.TimeRangeType = types.StringValue(string(*itemsItem.InputCollectorDatabase.Schedule.Run.TimeRangeType))
+						} else {
+							items.InputCollectorDatabase.Schedule.Run.TimeRangeType = types.StringNull()
+						}
+						if itemsItem.InputCollectorDatabase.Schedule.Run.TimeWarning == nil {
+							items.InputCollectorDatabase.Schedule.Run.TimeWarning = nil
+						} else {
+							items.InputCollectorDatabase.Schedule.Run.TimeWarning = &tfTypes.InputCollectorDatabaseTimeWarning{}
+						}
+					}
+					items.InputCollectorDatabase.Schedule.Skippable = types.BoolPointerValue(itemsItem.InputCollectorDatabase.Schedule.Skippable)
+				}
+				items.InputCollectorDatabase.Streamtags = make([]types.String, 0, len(itemsItem.InputCollectorDatabase.Streamtags))
+				for _, v := range itemsItem.InputCollectorDatabase.Streamtags {
+					items.InputCollectorDatabase.Streamtags = append(items.InputCollectorDatabase.Streamtags, types.StringValue(v))
+				}
+				items.InputCollectorDatabase.TTL = types.StringPointerValue(itemsItem.InputCollectorDatabase.TTL)
+				items.InputCollectorDatabase.WorkerAffinity = types.BoolPointerValue(itemsItem.InputCollectorDatabase.WorkerAffinity)
+			}
+			if itemsItem.InputCollectorGCS != nil {
+				items.InputCollectorGCS = &tfTypes.InputCollectorGCS{}
+				if itemsItem.InputCollectorGCS.Collector.Conf == nil {
+					items.InputCollectorGCS.Collector.Conf = nil
+				} else {
+					items.InputCollectorGCS.Collector.Conf = &tfTypes.InputCollectorGCSConf{}
+					if itemsItem.InputCollectorGCS.Collector.Conf.AuthType != nil {
+						items.InputCollectorGCS.Collector.Conf.AuthType = types.StringValue(string(*itemsItem.InputCollectorGCS.Collector.Conf.AuthType))
+					} else {
+						items.InputCollectorGCS.Collector.Conf.AuthType = types.StringNull()
+					}
+					items.InputCollectorGCS.Collector.Conf.Bucket = types.StringPointerValue(itemsItem.InputCollectorGCS.Collector.Conf.Bucket)
+					items.InputCollectorGCS.Collector.Conf.Extractors = []tfTypes.InputCollectorGCSExtractor{}
+
+					for _, extractorsItem1 := range itemsItem.InputCollectorGCS.Collector.Conf.Extractors {
+						var extractors1 tfTypes.InputCollectorGCSExtractor
+
+						extractors1.Expression = types.StringPointerValue(extractorsItem1.Expression)
+						extractors1.Key = types.StringPointerValue(extractorsItem1.Key)
+						extractors1.Pattern = types.StringPointerValue(extractorsItem1.Pattern)
+
+						items.InputCollectorGCS.Collector.Conf.Extractors = append(items.InputCollectorGCS.Collector.Conf.Extractors, extractors1)
+					}
+					items.InputCollectorGCS.Collector.Conf.MaxBatchSize = types.Int64PointerValue(itemsItem.InputCollectorGCS.Collector.Conf.MaxBatchSize)
+					items.InputCollectorGCS.Collector.Conf.Path = types.StringPointerValue(itemsItem.InputCollectorGCS.Collector.Conf.Path)
+					items.InputCollectorGCS.Collector.Conf.Recurse = types.BoolPointerValue(itemsItem.InputCollectorGCS.Collector.Conf.Recurse)
+					items.InputCollectorGCS.Collector.Conf.ServiceAccountCredentials = types.StringPointerValue(itemsItem.InputCollectorGCS.Collector.Conf.ServiceAccountCredentials)
+				}
+				items.InputCollectorGCS.Collector.Type = types.StringValue(string(itemsItem.InputCollectorGCS.Collector.Type))
+				items.InputCollectorGCS.Environment = types.StringPointerValue(itemsItem.InputCollectorGCS.Environment)
+				items.InputCollectorGCS.ID = types.StringValue(itemsItem.InputCollectorGCS.ID)
+				items.InputCollectorGCS.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputCollectorGCS.IgnoreGroupJobsLimit)
+				if itemsItem.InputCollectorGCS.Input == nil {
+					items.InputCollectorGCS.Input = nil
+				} else {
+					items.InputCollectorGCS.Input = &tfTypes.InputCollectorGCSInput{}
+					items.InputCollectorGCS.Input.BreakerRulesets = make([]types.String, 0, len(itemsItem.InputCollectorGCS.Input.BreakerRulesets))
+					for _, v := range itemsItem.InputCollectorGCS.Input.BreakerRulesets {
+						items.InputCollectorGCS.Input.BreakerRulesets = append(items.InputCollectorGCS.Input.BreakerRulesets, types.StringValue(v))
+					}
+					items.InputCollectorGCS.Input.Metadata = []tfTypes.InputCollectorGCSMetadatum{}
+
+					for _, metadataItem3 := range itemsItem.InputCollectorGCS.Input.Metadata {
+						var metadata3 tfTypes.InputCollectorGCSMetadatum
+
+						metadata3.Name = types.StringValue(metadataItem3.Name)
+						metadata3.Value = types.StringValue(metadataItem3.Value)
+
+						items.InputCollectorGCS.Input.Metadata = append(items.InputCollectorGCS.Input.Metadata, metadata3)
+					}
+					items.InputCollectorGCS.Input.Output = types.StringPointerValue(itemsItem.InputCollectorGCS.Input.Output)
+					items.InputCollectorGCS.Input.Pipeline = types.StringPointerValue(itemsItem.InputCollectorGCS.Input.Pipeline)
+					if itemsItem.InputCollectorGCS.Input.Preprocess == nil {
+						items.InputCollectorGCS.Input.Preprocess = nil
+					} else {
+						items.InputCollectorGCS.Input.Preprocess = &tfTypes.InputCollectorGCSPreprocess{}
+						items.InputCollectorGCS.Input.Preprocess.Args = make([]types.String, 0, len(itemsItem.InputCollectorGCS.Input.Preprocess.Args))
+						for _, v := range itemsItem.InputCollectorGCS.Input.Preprocess.Args {
+							items.InputCollectorGCS.Input.Preprocess.Args = append(items.InputCollectorGCS.Input.Preprocess.Args, types.StringValue(v))
+						}
+						items.InputCollectorGCS.Input.Preprocess.Command = types.StringPointerValue(itemsItem.InputCollectorGCS.Input.Preprocess.Command)
+						items.InputCollectorGCS.Input.Preprocess.Disabled = types.BoolPointerValue(itemsItem.InputCollectorGCS.Input.Preprocess.Disabled)
+					}
+					items.InputCollectorGCS.Input.SendToRoutes = types.BoolPointerValue(itemsItem.InputCollectorGCS.Input.SendToRoutes)
+					items.InputCollectorGCS.Input.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputCollectorGCS.Input.StaleChannelFlushMs)
+					items.InputCollectorGCS.Input.ThrottleRatePerSec = types.StringPointerValue(itemsItem.InputCollectorGCS.Input.ThrottleRatePerSec)
+					if itemsItem.InputCollectorGCS.Input.Type != nil {
+						items.InputCollectorGCS.Input.Type = types.StringValue(string(*itemsItem.InputCollectorGCS.Input.Type))
+					} else {
+						items.InputCollectorGCS.Input.Type = types.StringNull()
+					}
+				}
+				items.InputCollectorGCS.RemoveFields = make([]types.String, 0, len(itemsItem.InputCollectorGCS.RemoveFields))
+				for _, v := range itemsItem.InputCollectorGCS.RemoveFields {
+					items.InputCollectorGCS.RemoveFields = append(items.InputCollectorGCS.RemoveFields, types.StringValue(v))
+				}
+				items.InputCollectorGCS.ResumeOnBoot = types.BoolPointerValue(itemsItem.InputCollectorGCS.ResumeOnBoot)
+				if itemsItem.InputCollectorGCS.SavedState == nil {
+					items.InputCollectorGCS.SavedState = nil
+				} else {
+					items.InputCollectorGCS.SavedState = &tfTypes.InputCollectorGCSSavedState{}
+				}
+				if itemsItem.InputCollectorGCS.Schedule == nil {
+					items.InputCollectorGCS.Schedule = nil
+				} else {
+					items.InputCollectorGCS.Schedule = &tfTypes.InputCollectorGCSSchedule{}
+					items.InputCollectorGCS.Schedule.CronSchedule = types.StringPointerValue(itemsItem.InputCollectorGCS.Schedule.CronSchedule)
+					items.InputCollectorGCS.Schedule.Enabled = types.BoolPointerValue(itemsItem.InputCollectorGCS.Schedule.Enabled)
+					items.InputCollectorGCS.Schedule.MaxConcurrentRuns = types.Float64PointerValue(itemsItem.InputCollectorGCS.Schedule.MaxConcurrentRuns)
+					items.InputCollectorGCS.Schedule.ResumeMissed = types.BoolPointerValue(itemsItem.InputCollectorGCS.Schedule.ResumeMissed)
+					if itemsItem.InputCollectorGCS.Schedule.Run == nil {
+						items.InputCollectorGCS.Schedule.Run = nil
+					} else {
+						items.InputCollectorGCS.Schedule.Run = &tfTypes.InputCollectorGCSRunSettings{}
+						items.InputCollectorGCS.Schedule.Run.Earliest = types.Float64PointerValue(itemsItem.InputCollectorGCS.Schedule.Run.Earliest)
+						items.InputCollectorGCS.Schedule.Run.Expression = types.StringPointerValue(itemsItem.InputCollectorGCS.Schedule.Run.Expression)
+						items.InputCollectorGCS.Schedule.Run.JobTimeout = types.StringPointerValue(itemsItem.InputCollectorGCS.Schedule.Run.JobTimeout)
+						items.InputCollectorGCS.Schedule.Run.Latest = types.Float64PointerValue(itemsItem.InputCollectorGCS.Schedule.Run.Latest)
+						if itemsItem.InputCollectorGCS.Schedule.Run.LogLevel != nil {
+							items.InputCollectorGCS.Schedule.Run.LogLevel = types.StringValue(string(*itemsItem.InputCollectorGCS.Schedule.Run.LogLevel))
+						} else {
+							items.InputCollectorGCS.Schedule.Run.LogLevel = types.StringNull()
+						}
+						items.InputCollectorGCS.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputCollectorGCS.Schedule.Run.MaxTaskReschedule)
+						items.InputCollectorGCS.Schedule.Run.MaxTaskSize = types.StringPointerValue(itemsItem.InputCollectorGCS.Schedule.Run.MaxTaskSize)
+						items.InputCollectorGCS.Schedule.Run.MinTaskSize = types.StringPointerValue(itemsItem.InputCollectorGCS.Schedule.Run.MinTaskSize)
+						if itemsItem.InputCollectorGCS.Schedule.Run.Mode != nil {
+							items.InputCollectorGCS.Schedule.Run.Mode = types.StringValue(string(*itemsItem.InputCollectorGCS.Schedule.Run.Mode))
+						} else {
+							items.InputCollectorGCS.Schedule.Run.Mode = types.StringNull()
+						}
+						items.InputCollectorGCS.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(itemsItem.InputCollectorGCS.Schedule.Run.RescheduleDroppedTasks)
+						if itemsItem.InputCollectorGCS.Schedule.Run.StateTracking == nil {
+							items.InputCollectorGCS.Schedule.Run.StateTracking = nil
+						} else {
+							items.InputCollectorGCS.Schedule.Run.StateTracking = &tfTypes.InputCollectorGCSStateTracking{}
+							items.InputCollectorGCS.Schedule.Run.StateTracking.Enabled = types.BoolPointerValue(itemsItem.InputCollectorGCS.Schedule.Run.StateTracking.Enabled)
+							items.InputCollectorGCS.Schedule.Run.StateTracking.StateMergeExpression = types.StringPointerValue(itemsItem.InputCollectorGCS.Schedule.Run.StateTracking.StateMergeExpression)
+							items.InputCollectorGCS.Schedule.Run.StateTracking.StateUpdateExpression = types.StringPointerValue(itemsItem.InputCollectorGCS.Schedule.Run.StateTracking.StateUpdateExpression)
+						}
+						if itemsItem.InputCollectorGCS.Schedule.Run.TimeRangeType != nil {
+							items.InputCollectorGCS.Schedule.Run.TimeRangeType = types.StringValue(string(*itemsItem.InputCollectorGCS.Schedule.Run.TimeRangeType))
+						} else {
+							items.InputCollectorGCS.Schedule.Run.TimeRangeType = types.StringNull()
+						}
+						if itemsItem.InputCollectorGCS.Schedule.Run.TimeWarning == nil {
+							items.InputCollectorGCS.Schedule.Run.TimeWarning = nil
+						} else {
+							items.InputCollectorGCS.Schedule.Run.TimeWarning = &tfTypes.InputCollectorGCSTimeWarning{}
+						}
+					}
+					items.InputCollectorGCS.Schedule.Skippable = types.BoolPointerValue(itemsItem.InputCollectorGCS.Schedule.Skippable)
+				}
+				items.InputCollectorGCS.Streamtags = make([]types.String, 0, len(itemsItem.InputCollectorGCS.Streamtags))
+				for _, v := range itemsItem.InputCollectorGCS.Streamtags {
+					items.InputCollectorGCS.Streamtags = append(items.InputCollectorGCS.Streamtags, types.StringValue(v))
+				}
+				items.InputCollectorGCS.TTL = types.StringPointerValue(itemsItem.InputCollectorGCS.TTL)
+				items.InputCollectorGCS.WorkerAffinity = types.BoolPointerValue(itemsItem.InputCollectorGCS.WorkerAffinity)
+			}
+			if itemsItem.InputCollectorHealthCheck != nil {
+				items.InputCollectorHealthCheck = &tfTypes.InputCollectorHealthCheck{}
+				if itemsItem.InputCollectorHealthCheck.Collector.Conf == nil {
+					items.InputCollectorHealthCheck.Collector.Conf = nil
+				} else {
+					items.InputCollectorHealthCheck.Collector.Conf = &tfTypes.InputCollectorHealthCheckConf{}
+					if itemsItem.InputCollectorHealthCheck.Collector.Conf.Authentication != nil {
+						items.InputCollectorHealthCheck.Collector.Conf.Authentication = types.StringValue(string(*itemsItem.InputCollectorHealthCheck.Collector.Conf.Authentication))
+					} else {
+						items.InputCollectorHealthCheck.Collector.Conf.Authentication = types.StringNull()
+					}
+					if itemsItem.InputCollectorHealthCheck.Collector.Conf.CollectMethod != nil {
+						items.InputCollectorHealthCheck.Collector.Conf.CollectMethod = types.StringValue(string(*itemsItem.InputCollectorHealthCheck.Collector.Conf.CollectMethod))
+					} else {
+						items.InputCollectorHealthCheck.Collector.Conf.CollectMethod = types.StringNull()
+					}
+					items.InputCollectorHealthCheck.Collector.Conf.CollectURL = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Collector.Conf.CollectURL)
+					items.InputCollectorHealthCheck.Collector.Conf.CredentialsSecret = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Collector.Conf.CredentialsSecret)
+					items.InputCollectorHealthCheck.Collector.Conf.Password = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Collector.Conf.Password)
+					items.InputCollectorHealthCheck.Collector.Conf.RejectUnauthorized = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.Collector.Conf.RejectUnauthorized)
+					items.InputCollectorHealthCheck.Collector.Conf.Timeout = types.Int64PointerValue(itemsItem.InputCollectorHealthCheck.Collector.Conf.Timeout)
+					items.InputCollectorHealthCheck.Collector.Conf.Username = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Collector.Conf.Username)
+				}
+				items.InputCollectorHealthCheck.Collector.Type = types.StringValue(string(itemsItem.InputCollectorHealthCheck.Collector.Type))
+				items.InputCollectorHealthCheck.Environment = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Environment)
+				items.InputCollectorHealthCheck.ID = types.StringValue(itemsItem.InputCollectorHealthCheck.ID)
+				items.InputCollectorHealthCheck.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.IgnoreGroupJobsLimit)
+				if itemsItem.InputCollectorHealthCheck.Input == nil {
+					items.InputCollectorHealthCheck.Input = nil
+				} else {
+					items.InputCollectorHealthCheck.Input = &tfTypes.InputCollectorHealthCheckInput{}
+					items.InputCollectorHealthCheck.Input.BreakerRulesets = make([]types.String, 0, len(itemsItem.InputCollectorHealthCheck.Input.BreakerRulesets))
+					for _, v := range itemsItem.InputCollectorHealthCheck.Input.BreakerRulesets {
+						items.InputCollectorHealthCheck.Input.BreakerRulesets = append(items.InputCollectorHealthCheck.Input.BreakerRulesets, types.StringValue(v))
+					}
+					items.InputCollectorHealthCheck.Input.Metadata = []tfTypes.InputCollectorHealthCheckMetadatum{}
+
+					for _, metadataItem4 := range itemsItem.InputCollectorHealthCheck.Input.Metadata {
+						var metadata4 tfTypes.InputCollectorHealthCheckMetadatum
+
+						metadata4.Name = types.StringValue(metadataItem4.Name)
+						metadata4.Value = types.StringValue(metadataItem4.Value)
+
+						items.InputCollectorHealthCheck.Input.Metadata = append(items.InputCollectorHealthCheck.Input.Metadata, metadata4)
+					}
+					items.InputCollectorHealthCheck.Input.Output = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Input.Output)
+					items.InputCollectorHealthCheck.Input.Pipeline = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Input.Pipeline)
+					if itemsItem.InputCollectorHealthCheck.Input.Preprocess == nil {
+						items.InputCollectorHealthCheck.Input.Preprocess = nil
+					} else {
+						items.InputCollectorHealthCheck.Input.Preprocess = &tfTypes.InputCollectorHealthCheckPreprocess{}
+						items.InputCollectorHealthCheck.Input.Preprocess.Args = make([]types.String, 0, len(itemsItem.InputCollectorHealthCheck.Input.Preprocess.Args))
+						for _, v := range itemsItem.InputCollectorHealthCheck.Input.Preprocess.Args {
+							items.InputCollectorHealthCheck.Input.Preprocess.Args = append(items.InputCollectorHealthCheck.Input.Preprocess.Args, types.StringValue(v))
+						}
+						items.InputCollectorHealthCheck.Input.Preprocess.Command = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Input.Preprocess.Command)
+						items.InputCollectorHealthCheck.Input.Preprocess.Disabled = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.Input.Preprocess.Disabled)
+					}
+					items.InputCollectorHealthCheck.Input.SendToRoutes = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.Input.SendToRoutes)
+					items.InputCollectorHealthCheck.Input.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputCollectorHealthCheck.Input.StaleChannelFlushMs)
+					items.InputCollectorHealthCheck.Input.ThrottleRatePerSec = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Input.ThrottleRatePerSec)
+					if itemsItem.InputCollectorHealthCheck.Input.Type != nil {
+						items.InputCollectorHealthCheck.Input.Type = types.StringValue(string(*itemsItem.InputCollectorHealthCheck.Input.Type))
+					} else {
+						items.InputCollectorHealthCheck.Input.Type = types.StringNull()
+					}
+				}
+				items.InputCollectorHealthCheck.RemoveFields = make([]types.String, 0, len(itemsItem.InputCollectorHealthCheck.RemoveFields))
+				for _, v := range itemsItem.InputCollectorHealthCheck.RemoveFields {
+					items.InputCollectorHealthCheck.RemoveFields = append(items.InputCollectorHealthCheck.RemoveFields, types.StringValue(v))
+				}
+				items.InputCollectorHealthCheck.ResumeOnBoot = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.ResumeOnBoot)
+				if itemsItem.InputCollectorHealthCheck.SavedState == nil {
+					items.InputCollectorHealthCheck.SavedState = nil
+				} else {
+					items.InputCollectorHealthCheck.SavedState = &tfTypes.InputCollectorHealthCheckSavedState{}
+				}
+				if itemsItem.InputCollectorHealthCheck.Schedule == nil {
+					items.InputCollectorHealthCheck.Schedule = nil
+				} else {
+					items.InputCollectorHealthCheck.Schedule = &tfTypes.InputCollectorHealthCheckSchedule{}
+					items.InputCollectorHealthCheck.Schedule.CronSchedule = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.CronSchedule)
+					items.InputCollectorHealthCheck.Schedule.Enabled = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Enabled)
+					items.InputCollectorHealthCheck.Schedule.MaxConcurrentRuns = types.Float64PointerValue(itemsItem.InputCollectorHealthCheck.Schedule.MaxConcurrentRuns)
+					items.InputCollectorHealthCheck.Schedule.ResumeMissed = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.ResumeMissed)
+					if itemsItem.InputCollectorHealthCheck.Schedule.Run == nil {
+						items.InputCollectorHealthCheck.Schedule.Run = nil
+					} else {
+						items.InputCollectorHealthCheck.Schedule.Run = &tfTypes.InputCollectorHealthCheckRunSettings{}
+						items.InputCollectorHealthCheck.Schedule.Run.Earliest = types.Float64PointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.Earliest)
+						items.InputCollectorHealthCheck.Schedule.Run.Expression = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.Expression)
+						items.InputCollectorHealthCheck.Schedule.Run.JobTimeout = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.JobTimeout)
+						items.InputCollectorHealthCheck.Schedule.Run.Latest = types.Float64PointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.Latest)
+						if itemsItem.InputCollectorHealthCheck.Schedule.Run.LogLevel != nil {
+							items.InputCollectorHealthCheck.Schedule.Run.LogLevel = types.StringValue(string(*itemsItem.InputCollectorHealthCheck.Schedule.Run.LogLevel))
+						} else {
+							items.InputCollectorHealthCheck.Schedule.Run.LogLevel = types.StringNull()
+						}
+						items.InputCollectorHealthCheck.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.MaxTaskReschedule)
+						items.InputCollectorHealthCheck.Schedule.Run.MaxTaskSize = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.MaxTaskSize)
+						items.InputCollectorHealthCheck.Schedule.Run.MinTaskSize = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.MinTaskSize)
+						if itemsItem.InputCollectorHealthCheck.Schedule.Run.Mode != nil {
+							items.InputCollectorHealthCheck.Schedule.Run.Mode = types.StringValue(string(*itemsItem.InputCollectorHealthCheck.Schedule.Run.Mode))
+						} else {
+							items.InputCollectorHealthCheck.Schedule.Run.Mode = types.StringNull()
+						}
+						items.InputCollectorHealthCheck.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.RescheduleDroppedTasks)
+						if itemsItem.InputCollectorHealthCheck.Schedule.Run.StateTracking == nil {
+							items.InputCollectorHealthCheck.Schedule.Run.StateTracking = nil
+						} else {
+							items.InputCollectorHealthCheck.Schedule.Run.StateTracking = &tfTypes.InputCollectorHealthCheckStateTracking{}
+							items.InputCollectorHealthCheck.Schedule.Run.StateTracking.Enabled = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.StateTracking.Enabled)
+							items.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateMergeExpression = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateMergeExpression)
+							items.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateUpdateExpression = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Run.StateTracking.StateUpdateExpression)
+						}
+						if itemsItem.InputCollectorHealthCheck.Schedule.Run.TimeRangeType != nil {
+							items.InputCollectorHealthCheck.Schedule.Run.TimeRangeType = types.StringValue(string(*itemsItem.InputCollectorHealthCheck.Schedule.Run.TimeRangeType))
+						} else {
+							items.InputCollectorHealthCheck.Schedule.Run.TimeRangeType = types.StringNull()
+						}
+						if itemsItem.InputCollectorHealthCheck.Schedule.Run.TimeWarning == nil {
+							items.InputCollectorHealthCheck.Schedule.Run.TimeWarning = nil
+						} else {
+							items.InputCollectorHealthCheck.Schedule.Run.TimeWarning = &tfTypes.InputCollectorHealthCheckTimeWarning{}
+						}
+					}
+					items.InputCollectorHealthCheck.Schedule.Skippable = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.Schedule.Skippable)
+				}
+				items.InputCollectorHealthCheck.Streamtags = make([]types.String, 0, len(itemsItem.InputCollectorHealthCheck.Streamtags))
+				for _, v := range itemsItem.InputCollectorHealthCheck.Streamtags {
+					items.InputCollectorHealthCheck.Streamtags = append(items.InputCollectorHealthCheck.Streamtags, types.StringValue(v))
+				}
+				items.InputCollectorHealthCheck.TTL = types.StringPointerValue(itemsItem.InputCollectorHealthCheck.TTL)
+				items.InputCollectorHealthCheck.WorkerAffinity = types.BoolPointerValue(itemsItem.InputCollectorHealthCheck.WorkerAffinity)
+			}
+			if itemsItem.InputCollectorRest != nil {
+				items.InputCollectorRest = &tfTypes.InputCollectorRest{}
+				if itemsItem.InputCollectorRest.Collector.Conf == nil {
+					items.InputCollectorRest.Collector.Conf = nil
+				} else {
+					items.InputCollectorRest.Collector.Conf = &tfTypes.InputCollectorRestConf{}
+					if itemsItem.InputCollectorRest.Collector.Conf.Scheduling == nil {
+						items.InputCollectorRest.Collector.Conf.Scheduling = nil
+					} else {
+						items.InputCollectorRest.Collector.Conf.Scheduling = &tfTypes.InternalScheduling{}
+						if itemsItem.InputCollectorRest.Collector.Conf.Scheduling.StateTracking == nil {
+							items.InputCollectorRest.Collector.Conf.Scheduling.StateTracking = nil
+						} else {
+							items.InputCollectorRest.Collector.Conf.Scheduling.StateTracking = &tfTypes.SchedulingStateTracking{}
+						}
+					}
+					if itemsItem.InputCollectorRest.Collector.Conf.Authentication != nil {
+						items.InputCollectorRest.Collector.Conf.Authentication = types.StringValue(string(*itemsItem.InputCollectorRest.Collector.Conf.Authentication))
+					} else {
+						items.InputCollectorRest.Collector.Conf.Authentication = types.StringNull()
+					}
+					items.InputCollectorRest.Collector.Conf.AuthHeaderExpr = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.AuthHeaderExpr)
+					items.InputCollectorRest.Collector.Conf.AuthHeaderKey = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.AuthHeaderKey)
+					items.InputCollectorRest.Collector.Conf.AuthRequestHeaders = []tfTypes.AuthRequestHeader{}
+
+					for _, authRequestHeadersItem := range itemsItem.InputCollectorRest.Collector.Conf.AuthRequestHeaders {
+						var authRequestHeaders tfTypes.AuthRequestHeader
+
+						authRequestHeaders.Name = types.StringPointerValue(authRequestHeadersItem.Name)
+						authRequestHeaders.Value = types.StringPointerValue(authRequestHeadersItem.Value)
+
+						items.InputCollectorRest.Collector.Conf.AuthRequestHeaders = append(items.InputCollectorRest.Collector.Conf.AuthRequestHeaders, authRequestHeaders)
+					}
+					items.InputCollectorRest.Collector.Conf.AuthRequestParams = []tfTypes.AuthRequestParam{}
+
+					for _, authRequestParamsItem := range itemsItem.InputCollectorRest.Collector.Conf.AuthRequestParams {
+						var authRequestParams tfTypes.AuthRequestParam
+
+						authRequestParams.Name = types.StringPointerValue(authRequestParamsItem.Name)
+						authRequestParams.Value = types.StringPointerValue(authRequestParamsItem.Value)
+
+						items.InputCollectorRest.Collector.Conf.AuthRequestParams = append(items.InputCollectorRest.Collector.Conf.AuthRequestParams, authRequestParams)
+					}
+					items.InputCollectorRest.Collector.Conf.CaptureHeaders = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.CaptureHeaders)
+					items.InputCollectorRest.Collector.Conf.ClientSecretParamName = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.ClientSecretParamName)
+					if itemsItem.InputCollectorRest.Collector.Conf.CollectMethod != nil {
+						items.InputCollectorRest.Collector.Conf.CollectMethod = types.StringValue(string(*itemsItem.InputCollectorRest.Collector.Conf.CollectMethod))
+					} else {
+						items.InputCollectorRest.Collector.Conf.CollectMethod = types.StringNull()
+					}
+					items.InputCollectorRest.Collector.Conf.CollectRequestHeaders = []tfTypes.CollectRequestHeader{}
+
+					for _, collectRequestHeadersItem := range itemsItem.InputCollectorRest.Collector.Conf.CollectRequestHeaders {
+						var collectRequestHeaders tfTypes.CollectRequestHeader
+
+						collectRequestHeaders.Name = types.StringPointerValue(collectRequestHeadersItem.Name)
+						collectRequestHeaders.Value = types.StringPointerValue(collectRequestHeadersItem.Value)
+
+						items.InputCollectorRest.Collector.Conf.CollectRequestHeaders = append(items.InputCollectorRest.Collector.Conf.CollectRequestHeaders, collectRequestHeaders)
+					}
+					items.InputCollectorRest.Collector.Conf.CollectRequestParams = []tfTypes.CollectRequestParam{}
+
+					for _, collectRequestParamsItem := range itemsItem.InputCollectorRest.Collector.Conf.CollectRequestParams {
+						var collectRequestParams tfTypes.CollectRequestParam
+
+						collectRequestParams.Name = types.StringPointerValue(collectRequestParamsItem.Name)
+						collectRequestParams.Value = types.StringPointerValue(collectRequestParamsItem.Value)
+
+						items.InputCollectorRest.Collector.Conf.CollectRequestParams = append(items.InputCollectorRest.Collector.Conf.CollectRequestParams, collectRequestParams)
+					}
+					items.InputCollectorRest.Collector.Conf.CollectURL = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.CollectURL)
+					items.InputCollectorRest.Collector.Conf.CredentialsSecret = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.CredentialsSecret)
+					items.InputCollectorRest.Collector.Conf.DecodeURL = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.DecodeURL)
+					items.InputCollectorRest.Collector.Conf.DisableTimeFilter = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.DisableTimeFilter)
+					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody)
+					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField)
+					if itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod != nil {
+						items.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod = types.StringValue(string(*itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod))
+					} else {
+						items.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod = types.StringNull()
+					}
+					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders = []tfTypes.DiscoverRequestHeader{}
+
+					for _, discoverRequestHeadersItem := range itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders {
+						var discoverRequestHeaders tfTypes.DiscoverRequestHeader
+
+						discoverRequestHeaders.Name = types.StringPointerValue(discoverRequestHeadersItem.Name)
+						discoverRequestHeaders.Value = types.StringPointerValue(discoverRequestHeadersItem.Value)
+
+						items.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders = append(items.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders, discoverRequestHeaders)
+					}
+					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverType = types.StringValue(string(itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverType))
+					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL)
+					items.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode)
+					items.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.FormatResultCode)
+					items.InputCollectorRest.Collector.Conf.Discovery.ItemList = make([]types.String, 0, len(itemsItem.InputCollectorRest.Collector.Conf.Discovery.ItemList))
+					for _, v := range itemsItem.InputCollectorRest.Collector.Conf.Discovery.ItemList {
+						items.InputCollectorRest.Collector.Conf.Discovery.ItemList = append(items.InputCollectorRest.Collector.Conf.Discovery.ItemList, types.StringValue(v))
+					}
+					items.InputCollectorRest.Collector.Conf.Discovery.ManualDiscoverResult = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.ManualDiscoverResult)
+					if itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination == nil {
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination = nil
+					} else {
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination = &tfTypes.PaginationConfig{}
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute = make([]types.String, 0, len(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute))
+						for _, v := range itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute {
+							items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute = append(items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute, types.StringValue(v))
+						}
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Size)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.SizeField)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.TotalRecordField)
+						if itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type != nil {
+							items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type = types.StringValue(string(*itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type))
+						} else {
+							items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type = types.StringNull()
+						}
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.ZeroIndexed)
+					}
+					items.InputCollectorRest.Collector.Conf.LoginBody = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.LoginBody)
+					items.InputCollectorRest.Collector.Conf.LoginURL = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.LoginURL)
+					if itemsItem.InputCollectorRest.Collector.Conf.Pagination == nil {
+						items.InputCollectorRest.Collector.Conf.Pagination = nil
+					} else {
+						items.InputCollectorRest.Collector.Conf.Pagination = &tfTypes.PaginationConfig{}
+						items.InputCollectorRest.Collector.Conf.Pagination.Attribute = make([]types.String, 0, len(itemsItem.InputCollectorRest.Collector.Conf.Pagination.Attribute))
+						for _, v := range itemsItem.InputCollectorRest.Collector.Conf.Pagination.Attribute {
+							items.InputCollectorRest.Collector.Conf.Pagination.Attribute = append(items.InputCollectorRest.Collector.Conf.Pagination.Attribute, types.StringValue(v))
+						}
+						items.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr)
+						items.InputCollectorRest.Collector.Conf.Pagination.Limit = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.Limit)
+						items.InputCollectorRest.Collector.Conf.Pagination.LimitField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.LimitField)
+						items.InputCollectorRest.Collector.Conf.Pagination.MaxPages = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.MaxPages)
+						items.InputCollectorRest.Collector.Conf.Pagination.Offset = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.Offset)
+						items.InputCollectorRest.Collector.Conf.Pagination.OffsetField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.OffsetField)
+						items.InputCollectorRest.Collector.Conf.Pagination.PageField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.PageField)
+						items.InputCollectorRest.Collector.Conf.Pagination.Size = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.Size)
+						items.InputCollectorRest.Collector.Conf.Pagination.SizeField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.SizeField)
+						items.InputCollectorRest.Collector.Conf.Pagination.TotalRecordField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.TotalRecordField)
+						if itemsItem.InputCollectorRest.Collector.Conf.Pagination.Type != nil {
+							items.InputCollectorRest.Collector.Conf.Pagination.Type = types.StringValue(string(*itemsItem.InputCollectorRest.Collector.Conf.Pagination.Type))
+						} else {
+							items.InputCollectorRest.Collector.Conf.Pagination.Type = types.StringNull()
+						}
+						items.InputCollectorRest.Collector.Conf.Pagination.ZeroIndexed = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.ZeroIndexed)
+					}
+					items.InputCollectorRest.Collector.Conf.Password = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Password)
+					items.InputCollectorRest.Collector.Conf.RejectUnauthorized = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.RejectUnauthorized)
+					if itemsItem.InputCollectorRest.Collector.Conf.RetryRules == nil {
+						items.InputCollectorRest.Collector.Conf.RetryRules = nil
+					} else {
+						items.InputCollectorRest.Collector.Conf.RetryRules = &tfTypes.RetryRulesConfiguration{}
+						items.InputCollectorRest.Collector.Conf.RetryRules.Codes = make([]types.Int64, 0, len(itemsItem.InputCollectorRest.Collector.Conf.RetryRules.Codes))
+						for _, v := range itemsItem.InputCollectorRest.Collector.Conf.RetryRules.Codes {
+							items.InputCollectorRest.Collector.Conf.RetryRules.Codes = append(items.InputCollectorRest.Collector.Conf.RetryRules.Codes, types.Int64Value(v))
+						}
+						items.InputCollectorRest.Collector.Conf.RetryRules.EnableHeader = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.RetryRules.EnableHeader)
+						items.InputCollectorRest.Collector.Conf.RetryRules.Interval = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.RetryRules.Interval)
+						items.InputCollectorRest.Collector.Conf.RetryRules.Limit = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.RetryRules.Limit)
+						items.InputCollectorRest.Collector.Conf.RetryRules.MaxIntervalMs = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.RetryRules.MaxIntervalMs)
+						items.InputCollectorRest.Collector.Conf.RetryRules.Multiplier = types.Float64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.RetryRules.Multiplier)
+						items.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectReset = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectReset)
+						items.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectTimeout = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.RetryRules.RetryConnectTimeout)
+						items.InputCollectorRest.Collector.Conf.RetryRules.RetryHeaderName = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.RetryRules.RetryHeaderName)
+						if itemsItem.InputCollectorRest.Collector.Conf.RetryRules.Type != nil {
+							items.InputCollectorRest.Collector.Conf.RetryRules.Type = types.StringValue(string(*itemsItem.InputCollectorRest.Collector.Conf.RetryRules.Type))
+						} else {
+							items.InputCollectorRest.Collector.Conf.RetryRules.Type = types.StringNull()
+						}
+					}
+					items.InputCollectorRest.Collector.Conf.SafeHeaders = make([]types.String, 0, len(itemsItem.InputCollectorRest.Collector.Conf.SafeHeaders))
+					for _, v := range itemsItem.InputCollectorRest.Collector.Conf.SafeHeaders {
+						items.InputCollectorRest.Collector.Conf.SafeHeaders = append(items.InputCollectorRest.Collector.Conf.SafeHeaders, types.StringValue(v))
+					}
+					items.InputCollectorRest.Collector.Conf.Timeout = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Timeout)
+					items.InputCollectorRest.Collector.Conf.Token = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Token)
+					items.InputCollectorRest.Collector.Conf.TokenRespAttribute = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.TokenRespAttribute)
+					items.InputCollectorRest.Collector.Conf.TokenSecret = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.TokenSecret)
+					items.InputCollectorRest.Collector.Conf.Username = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Username)
+					items.InputCollectorRest.Collector.Conf.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.UseRoundRobinDNS)
+				}
+				items.InputCollectorRest.Collector.Type = types.StringValue(string(itemsItem.InputCollectorRest.Collector.Type))
+				items.InputCollectorRest.Environment = types.StringPointerValue(itemsItem.InputCollectorRest.Environment)
+				items.InputCollectorRest.ID = types.StringValue(itemsItem.InputCollectorRest.ID)
+				items.InputCollectorRest.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputCollectorRest.IgnoreGroupJobsLimit)
+				if itemsItem.InputCollectorRest.Input == nil {
+					items.InputCollectorRest.Input = nil
+				} else {
+					items.InputCollectorRest.Input = &tfTypes.InputCollectorRestInput{}
+					items.InputCollectorRest.Input.BreakerRulesets = make([]types.String, 0, len(itemsItem.InputCollectorRest.Input.BreakerRulesets))
+					for _, v := range itemsItem.InputCollectorRest.Input.BreakerRulesets {
+						items.InputCollectorRest.Input.BreakerRulesets = append(items.InputCollectorRest.Input.BreakerRulesets, types.StringValue(v))
+					}
+					items.InputCollectorRest.Input.Metadata = []tfTypes.InputCollectorRestMetadatum{}
+
+					for _, metadataItem5 := range itemsItem.InputCollectorRest.Input.Metadata {
+						var metadata5 tfTypes.InputCollectorRestMetadatum
+
+						metadata5.Name = types.StringValue(metadataItem5.Name)
+						metadata5.Value = types.StringValue(metadataItem5.Value)
+
+						items.InputCollectorRest.Input.Metadata = append(items.InputCollectorRest.Input.Metadata, metadata5)
+					}
+					items.InputCollectorRest.Input.Output = types.StringPointerValue(itemsItem.InputCollectorRest.Input.Output)
+					items.InputCollectorRest.Input.Pipeline = types.StringPointerValue(itemsItem.InputCollectorRest.Input.Pipeline)
+					if itemsItem.InputCollectorRest.Input.Preprocess == nil {
+						items.InputCollectorRest.Input.Preprocess = nil
+					} else {
+						items.InputCollectorRest.Input.Preprocess = &tfTypes.InputCollectorRestPreprocess{}
+						items.InputCollectorRest.Input.Preprocess.Args = make([]types.String, 0, len(itemsItem.InputCollectorRest.Input.Preprocess.Args))
+						for _, v := range itemsItem.InputCollectorRest.Input.Preprocess.Args {
+							items.InputCollectorRest.Input.Preprocess.Args = append(items.InputCollectorRest.Input.Preprocess.Args, types.StringValue(v))
+						}
+						items.InputCollectorRest.Input.Preprocess.Command = types.StringPointerValue(itemsItem.InputCollectorRest.Input.Preprocess.Command)
+						items.InputCollectorRest.Input.Preprocess.Disabled = types.BoolPointerValue(itemsItem.InputCollectorRest.Input.Preprocess.Disabled)
+					}
+					items.InputCollectorRest.Input.SendToRoutes = types.BoolPointerValue(itemsItem.InputCollectorRest.Input.SendToRoutes)
+					items.InputCollectorRest.Input.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputCollectorRest.Input.StaleChannelFlushMs)
+					items.InputCollectorRest.Input.ThrottleRatePerSec = types.StringPointerValue(itemsItem.InputCollectorRest.Input.ThrottleRatePerSec)
+					if itemsItem.InputCollectorRest.Input.Type != nil {
+						items.InputCollectorRest.Input.Type = types.StringValue(string(*itemsItem.InputCollectorRest.Input.Type))
+					} else {
+						items.InputCollectorRest.Input.Type = types.StringNull()
+					}
+				}
+				items.InputCollectorRest.RemoveFields = make([]types.String, 0, len(itemsItem.InputCollectorRest.RemoveFields))
+				for _, v := range itemsItem.InputCollectorRest.RemoveFields {
+					items.InputCollectorRest.RemoveFields = append(items.InputCollectorRest.RemoveFields, types.StringValue(v))
+				}
+				items.InputCollectorRest.ResumeOnBoot = types.BoolPointerValue(itemsItem.InputCollectorRest.ResumeOnBoot)
+				if itemsItem.InputCollectorRest.SavedState == nil {
+					items.InputCollectorRest.SavedState = nil
+				} else {
+					items.InputCollectorRest.SavedState = &tfTypes.InputCollectorRestSavedState{}
+				}
+				if itemsItem.InputCollectorRest.Schedule == nil {
+					items.InputCollectorRest.Schedule = nil
+				} else {
+					items.InputCollectorRest.Schedule = &tfTypes.InputCollectorRestSchedule{}
+					items.InputCollectorRest.Schedule.CronSchedule = types.StringPointerValue(itemsItem.InputCollectorRest.Schedule.CronSchedule)
+					items.InputCollectorRest.Schedule.Enabled = types.BoolPointerValue(itemsItem.InputCollectorRest.Schedule.Enabled)
+					items.InputCollectorRest.Schedule.MaxConcurrentRuns = types.Float64PointerValue(itemsItem.InputCollectorRest.Schedule.MaxConcurrentRuns)
+					items.InputCollectorRest.Schedule.ResumeMissed = types.BoolPointerValue(itemsItem.InputCollectorRest.Schedule.ResumeMissed)
+					if itemsItem.InputCollectorRest.Schedule.Run == nil {
+						items.InputCollectorRest.Schedule.Run = nil
+					} else {
+						items.InputCollectorRest.Schedule.Run = &tfTypes.InputCollectorRestRunSettings{}
+						items.InputCollectorRest.Schedule.Run.Earliest = types.Float64PointerValue(itemsItem.InputCollectorRest.Schedule.Run.Earliest)
+						items.InputCollectorRest.Schedule.Run.Expression = types.StringPointerValue(itemsItem.InputCollectorRest.Schedule.Run.Expression)
+						items.InputCollectorRest.Schedule.Run.JobTimeout = types.StringPointerValue(itemsItem.InputCollectorRest.Schedule.Run.JobTimeout)
+						items.InputCollectorRest.Schedule.Run.Latest = types.Float64PointerValue(itemsItem.InputCollectorRest.Schedule.Run.Latest)
+						if itemsItem.InputCollectorRest.Schedule.Run.LogLevel != nil {
+							items.InputCollectorRest.Schedule.Run.LogLevel = types.StringValue(string(*itemsItem.InputCollectorRest.Schedule.Run.LogLevel))
+						} else {
+							items.InputCollectorRest.Schedule.Run.LogLevel = types.StringNull()
+						}
+						items.InputCollectorRest.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputCollectorRest.Schedule.Run.MaxTaskReschedule)
+						items.InputCollectorRest.Schedule.Run.MaxTaskSize = types.StringPointerValue(itemsItem.InputCollectorRest.Schedule.Run.MaxTaskSize)
+						items.InputCollectorRest.Schedule.Run.MinTaskSize = types.StringPointerValue(itemsItem.InputCollectorRest.Schedule.Run.MinTaskSize)
+						if itemsItem.InputCollectorRest.Schedule.Run.Mode != nil {
+							items.InputCollectorRest.Schedule.Run.Mode = types.StringValue(string(*itemsItem.InputCollectorRest.Schedule.Run.Mode))
+						} else {
+							items.InputCollectorRest.Schedule.Run.Mode = types.StringNull()
+						}
+						items.InputCollectorRest.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(itemsItem.InputCollectorRest.Schedule.Run.RescheduleDroppedTasks)
+						if itemsItem.InputCollectorRest.Schedule.Run.StateTracking == nil {
+							items.InputCollectorRest.Schedule.Run.StateTracking = nil
+						} else {
+							items.InputCollectorRest.Schedule.Run.StateTracking = &tfTypes.InputCollectorRestRunStateTracking{}
+							items.InputCollectorRest.Schedule.Run.StateTracking.Enabled = types.BoolPointerValue(itemsItem.InputCollectorRest.Schedule.Run.StateTracking.Enabled)
+							items.InputCollectorRest.Schedule.Run.StateTracking.StateMergeExpression = types.StringPointerValue(itemsItem.InputCollectorRest.Schedule.Run.StateTracking.StateMergeExpression)
+							items.InputCollectorRest.Schedule.Run.StateTracking.StateUpdateExpression = types.StringPointerValue(itemsItem.InputCollectorRest.Schedule.Run.StateTracking.StateUpdateExpression)
+						}
+						if itemsItem.InputCollectorRest.Schedule.Run.TimeRangeType != nil {
+							items.InputCollectorRest.Schedule.Run.TimeRangeType = types.StringValue(string(*itemsItem.InputCollectorRest.Schedule.Run.TimeRangeType))
+						} else {
+							items.InputCollectorRest.Schedule.Run.TimeRangeType = types.StringNull()
+						}
+						if itemsItem.InputCollectorRest.Schedule.Run.TimeWarning == nil {
+							items.InputCollectorRest.Schedule.Run.TimeWarning = nil
+						} else {
+							items.InputCollectorRest.Schedule.Run.TimeWarning = &tfTypes.InputCollectorRestTimeWarning{}
+						}
+					}
+					items.InputCollectorRest.Schedule.Skippable = types.BoolPointerValue(itemsItem.InputCollectorRest.Schedule.Skippable)
+				}
+				items.InputCollectorRest.Streamtags = make([]types.String, 0, len(itemsItem.InputCollectorRest.Streamtags))
+				for _, v := range itemsItem.InputCollectorRest.Streamtags {
+					items.InputCollectorRest.Streamtags = append(items.InputCollectorRest.Streamtags, types.StringValue(v))
+				}
+				items.InputCollectorRest.TTL = types.StringPointerValue(itemsItem.InputCollectorRest.TTL)
+				items.InputCollectorRest.WorkerAffinity = types.BoolPointerValue(itemsItem.InputCollectorRest.WorkerAffinity)
+			}
+			if itemsItem.InputCollectorS3 != nil {
+				items.InputCollectorS3 = &tfTypes.InputCollectorS3{}
+				if itemsItem.InputCollectorS3.Collector.Conf == nil {
+					items.InputCollectorS3.Collector.Conf = nil
+				} else {
+					items.InputCollectorS3.Collector.Conf = &tfTypes.InputCollectorS3Conf{}
+					items.InputCollectorS3.Collector.Conf.AwsAPIKey = types.StringPointerValue(itemsItem.InputCollectorS3.Collector.Conf.AwsAPIKey)
+					if itemsItem.InputCollectorS3.Collector.Conf.AwsAuthenticationMethod != nil {
+						items.InputCollectorS3.Collector.Conf.AwsAuthenticationMethod = types.StringValue(string(*itemsItem.InputCollectorS3.Collector.Conf.AwsAuthenticationMethod))
+					} else {
+						items.InputCollectorS3.Collector.Conf.AwsAuthenticationMethod = types.StringNull()
+					}
+					items.InputCollectorS3.Collector.Conf.AwsSecret = types.StringPointerValue(itemsItem.InputCollectorS3.Collector.Conf.AwsSecret)
+					items.InputCollectorS3.Collector.Conf.AwsSecretKey = types.StringPointerValue(itemsItem.InputCollectorS3.Collector.Conf.AwsSecretKey)
+					items.InputCollectorS3.Collector.Conf.Bucket = types.StringPointerValue(itemsItem.InputCollectorS3.Collector.Conf.Bucket)
+					items.InputCollectorS3.Collector.Conf.Extractors = []tfTypes.InputCollectorS3Extractor{}
+
+					for _, extractorsItem2 := range itemsItem.InputCollectorS3.Collector.Conf.Extractors {
+						var extractors2 tfTypes.InputCollectorS3Extractor
+
+						extractors2.Expression = types.StringPointerValue(extractorsItem2.Expression)
+						extractors2.Key = types.StringPointerValue(extractorsItem2.Key)
+						extractors2.Pattern = types.StringPointerValue(extractorsItem2.Pattern)
+
+						items.InputCollectorS3.Collector.Conf.Extractors = append(items.InputCollectorS3.Collector.Conf.Extractors, extractors2)
+					}
+					items.InputCollectorS3.Collector.Conf.MaxBatchSize = types.Int64PointerValue(itemsItem.InputCollectorS3.Collector.Conf.MaxBatchSize)
+					items.InputCollectorS3.Collector.Conf.Path = types.StringPointerValue(itemsItem.InputCollectorS3.Collector.Conf.Path)
+					items.InputCollectorS3.Collector.Conf.Recurse = types.BoolPointerValue(itemsItem.InputCollectorS3.Collector.Conf.Recurse)
+					items.InputCollectorS3.Collector.Conf.Region = types.StringPointerValue(itemsItem.InputCollectorS3.Collector.Conf.Region)
+				}
+				items.InputCollectorS3.Collector.Type = types.StringValue(string(itemsItem.InputCollectorS3.Collector.Type))
+				items.InputCollectorS3.Environment = types.StringPointerValue(itemsItem.InputCollectorS3.Environment)
+				items.InputCollectorS3.ID = types.StringValue(itemsItem.InputCollectorS3.ID)
+				items.InputCollectorS3.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputCollectorS3.IgnoreGroupJobsLimit)
+				if itemsItem.InputCollectorS3.Input == nil {
+					items.InputCollectorS3.Input = nil
+				} else {
+					items.InputCollectorS3.Input = &tfTypes.InputCollectorS3Input{}
+					items.InputCollectorS3.Input.BreakerRulesets = make([]types.String, 0, len(itemsItem.InputCollectorS3.Input.BreakerRulesets))
+					for _, v := range itemsItem.InputCollectorS3.Input.BreakerRulesets {
+						items.InputCollectorS3.Input.BreakerRulesets = append(items.InputCollectorS3.Input.BreakerRulesets, types.StringValue(v))
+					}
+					items.InputCollectorS3.Input.Metadata = []tfTypes.InputCollectorS3Metadatum{}
+
+					for _, metadataItem6 := range itemsItem.InputCollectorS3.Input.Metadata {
+						var metadata6 tfTypes.InputCollectorS3Metadatum
+
+						metadata6.Name = types.StringValue(metadataItem6.Name)
+						metadata6.Value = types.StringValue(metadataItem6.Value)
+
+						items.InputCollectorS3.Input.Metadata = append(items.InputCollectorS3.Input.Metadata, metadata6)
+					}
+					items.InputCollectorS3.Input.Output = types.StringPointerValue(itemsItem.InputCollectorS3.Input.Output)
+					items.InputCollectorS3.Input.Pipeline = types.StringPointerValue(itemsItem.InputCollectorS3.Input.Pipeline)
+					if itemsItem.InputCollectorS3.Input.Preprocess == nil {
+						items.InputCollectorS3.Input.Preprocess = nil
+					} else {
+						items.InputCollectorS3.Input.Preprocess = &tfTypes.InputCollectorS3Preprocess{}
+						items.InputCollectorS3.Input.Preprocess.Args = make([]types.String, 0, len(itemsItem.InputCollectorS3.Input.Preprocess.Args))
+						for _, v := range itemsItem.InputCollectorS3.Input.Preprocess.Args {
+							items.InputCollectorS3.Input.Preprocess.Args = append(items.InputCollectorS3.Input.Preprocess.Args, types.StringValue(v))
+						}
+						items.InputCollectorS3.Input.Preprocess.Command = types.StringPointerValue(itemsItem.InputCollectorS3.Input.Preprocess.Command)
+						items.InputCollectorS3.Input.Preprocess.Disabled = types.BoolPointerValue(itemsItem.InputCollectorS3.Input.Preprocess.Disabled)
+					}
+					items.InputCollectorS3.Input.SendToRoutes = types.BoolPointerValue(itemsItem.InputCollectorS3.Input.SendToRoutes)
+					items.InputCollectorS3.Input.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputCollectorS3.Input.StaleChannelFlushMs)
+					items.InputCollectorS3.Input.ThrottleRatePerSec = types.StringPointerValue(itemsItem.InputCollectorS3.Input.ThrottleRatePerSec)
+					if itemsItem.InputCollectorS3.Input.Type != nil {
+						items.InputCollectorS3.Input.Type = types.StringValue(string(*itemsItem.InputCollectorS3.Input.Type))
+					} else {
+						items.InputCollectorS3.Input.Type = types.StringNull()
+					}
+				}
+				items.InputCollectorS3.RemoveFields = make([]types.String, 0, len(itemsItem.InputCollectorS3.RemoveFields))
+				for _, v := range itemsItem.InputCollectorS3.RemoveFields {
+					items.InputCollectorS3.RemoveFields = append(items.InputCollectorS3.RemoveFields, types.StringValue(v))
+				}
+				items.InputCollectorS3.ResumeOnBoot = types.BoolPointerValue(itemsItem.InputCollectorS3.ResumeOnBoot)
+				if itemsItem.InputCollectorS3.SavedState == nil {
+					items.InputCollectorS3.SavedState = nil
+				} else {
+					items.InputCollectorS3.SavedState = &tfTypes.InputCollectorS3SavedState{}
+				}
+				if itemsItem.InputCollectorS3.Schedule == nil {
+					items.InputCollectorS3.Schedule = nil
+				} else {
+					items.InputCollectorS3.Schedule = &tfTypes.InputCollectorS3Schedule{}
+					items.InputCollectorS3.Schedule.CronSchedule = types.StringPointerValue(itemsItem.InputCollectorS3.Schedule.CronSchedule)
+					items.InputCollectorS3.Schedule.Enabled = types.BoolPointerValue(itemsItem.InputCollectorS3.Schedule.Enabled)
+					items.InputCollectorS3.Schedule.MaxConcurrentRuns = types.Float64PointerValue(itemsItem.InputCollectorS3.Schedule.MaxConcurrentRuns)
+					items.InputCollectorS3.Schedule.ResumeMissed = types.BoolPointerValue(itemsItem.InputCollectorS3.Schedule.ResumeMissed)
+					if itemsItem.InputCollectorS3.Schedule.Run == nil {
+						items.InputCollectorS3.Schedule.Run = nil
+					} else {
+						items.InputCollectorS3.Schedule.Run = &tfTypes.InputCollectorS3RunSettings{}
+						items.InputCollectorS3.Schedule.Run.Earliest = types.Float64PointerValue(itemsItem.InputCollectorS3.Schedule.Run.Earliest)
+						items.InputCollectorS3.Schedule.Run.Expression = types.StringPointerValue(itemsItem.InputCollectorS3.Schedule.Run.Expression)
+						items.InputCollectorS3.Schedule.Run.JobTimeout = types.StringPointerValue(itemsItem.InputCollectorS3.Schedule.Run.JobTimeout)
+						items.InputCollectorS3.Schedule.Run.Latest = types.Float64PointerValue(itemsItem.InputCollectorS3.Schedule.Run.Latest)
+						if itemsItem.InputCollectorS3.Schedule.Run.LogLevel != nil {
+							items.InputCollectorS3.Schedule.Run.LogLevel = types.StringValue(string(*itemsItem.InputCollectorS3.Schedule.Run.LogLevel))
+						} else {
+							items.InputCollectorS3.Schedule.Run.LogLevel = types.StringNull()
+						}
+						items.InputCollectorS3.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputCollectorS3.Schedule.Run.MaxTaskReschedule)
+						items.InputCollectorS3.Schedule.Run.MaxTaskSize = types.StringPointerValue(itemsItem.InputCollectorS3.Schedule.Run.MaxTaskSize)
+						items.InputCollectorS3.Schedule.Run.MinTaskSize = types.StringPointerValue(itemsItem.InputCollectorS3.Schedule.Run.MinTaskSize)
+						if itemsItem.InputCollectorS3.Schedule.Run.Mode != nil {
+							items.InputCollectorS3.Schedule.Run.Mode = types.StringValue(string(*itemsItem.InputCollectorS3.Schedule.Run.Mode))
+						} else {
+							items.InputCollectorS3.Schedule.Run.Mode = types.StringNull()
+						}
+						items.InputCollectorS3.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(itemsItem.InputCollectorS3.Schedule.Run.RescheduleDroppedTasks)
+						if itemsItem.InputCollectorS3.Schedule.Run.StateTracking == nil {
+							items.InputCollectorS3.Schedule.Run.StateTracking = nil
+						} else {
+							items.InputCollectorS3.Schedule.Run.StateTracking = &tfTypes.InputCollectorS3StateTracking{}
+							items.InputCollectorS3.Schedule.Run.StateTracking.Enabled = types.BoolPointerValue(itemsItem.InputCollectorS3.Schedule.Run.StateTracking.Enabled)
+							items.InputCollectorS3.Schedule.Run.StateTracking.StateMergeExpression = types.StringPointerValue(itemsItem.InputCollectorS3.Schedule.Run.StateTracking.StateMergeExpression)
+							items.InputCollectorS3.Schedule.Run.StateTracking.StateUpdateExpression = types.StringPointerValue(itemsItem.InputCollectorS3.Schedule.Run.StateTracking.StateUpdateExpression)
+						}
+						if itemsItem.InputCollectorS3.Schedule.Run.TimeRangeType != nil {
+							items.InputCollectorS3.Schedule.Run.TimeRangeType = types.StringValue(string(*itemsItem.InputCollectorS3.Schedule.Run.TimeRangeType))
+						} else {
+							items.InputCollectorS3.Schedule.Run.TimeRangeType = types.StringNull()
+						}
+						if itemsItem.InputCollectorS3.Schedule.Run.TimeWarning == nil {
+							items.InputCollectorS3.Schedule.Run.TimeWarning = nil
+						} else {
+							items.InputCollectorS3.Schedule.Run.TimeWarning = &tfTypes.InputCollectorS3TimeWarning{}
+						}
+					}
+					items.InputCollectorS3.Schedule.Skippable = types.BoolPointerValue(itemsItem.InputCollectorS3.Schedule.Skippable)
+				}
+				items.InputCollectorS3.Streamtags = make([]types.String, 0, len(itemsItem.InputCollectorS3.Streamtags))
+				for _, v := range itemsItem.InputCollectorS3.Streamtags {
+					items.InputCollectorS3.Streamtags = append(items.InputCollectorS3.Streamtags, types.StringValue(v))
+				}
+				items.InputCollectorS3.TTL = types.StringPointerValue(itemsItem.InputCollectorS3.TTL)
+				items.InputCollectorS3.WorkerAffinity = types.BoolPointerValue(itemsItem.InputCollectorS3.WorkerAffinity)
+			}
+			if itemsItem.InputCollectorScript != nil {
+				items.InputCollectorScript = &tfTypes.InputCollectorScript{}
+				if itemsItem.InputCollectorScript.Collector.Conf == nil {
+					items.InputCollectorScript.Collector.Conf = nil
+				} else {
+					items.InputCollectorScript.Collector.Conf = &tfTypes.InputCollectorScriptConf{}
+					items.InputCollectorScript.Collector.Conf.CollectScript = types.StringPointerValue(itemsItem.InputCollectorScript.Collector.Conf.CollectScript)
+					items.InputCollectorScript.Collector.Conf.DiscoverScript = types.StringPointerValue(itemsItem.InputCollectorScript.Collector.Conf.DiscoverScript)
+					items.InputCollectorScript.Collector.Conf.Shell = types.StringPointerValue(itemsItem.InputCollectorScript.Collector.Conf.Shell)
+				}
+				items.InputCollectorScript.Collector.Type = types.StringValue(string(itemsItem.InputCollectorScript.Collector.Type))
+				items.InputCollectorScript.Environment = types.StringPointerValue(itemsItem.InputCollectorScript.Environment)
+				items.InputCollectorScript.ID = types.StringValue(itemsItem.InputCollectorScript.ID)
+				items.InputCollectorScript.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputCollectorScript.IgnoreGroupJobsLimit)
+				if itemsItem.InputCollectorScript.Input == nil {
+					items.InputCollectorScript.Input = nil
+				} else {
+					items.InputCollectorScript.Input = &tfTypes.InputCollectorScriptInput{}
+					items.InputCollectorScript.Input.BreakerRulesets = make([]types.String, 0, len(itemsItem.InputCollectorScript.Input.BreakerRulesets))
+					for _, v := range itemsItem.InputCollectorScript.Input.BreakerRulesets {
+						items.InputCollectorScript.Input.BreakerRulesets = append(items.InputCollectorScript.Input.BreakerRulesets, types.StringValue(v))
+					}
+					items.InputCollectorScript.Input.Metadata = []tfTypes.InputCollectorScriptMetadatum{}
+
+					for _, metadataItem7 := range itemsItem.InputCollectorScript.Input.Metadata {
+						var metadata7 tfTypes.InputCollectorScriptMetadatum
+
+						metadata7.Name = types.StringValue(metadataItem7.Name)
+						metadata7.Value = types.StringValue(metadataItem7.Value)
+
+						items.InputCollectorScript.Input.Metadata = append(items.InputCollectorScript.Input.Metadata, metadata7)
+					}
+					items.InputCollectorScript.Input.Output = types.StringPointerValue(itemsItem.InputCollectorScript.Input.Output)
+					items.InputCollectorScript.Input.Pipeline = types.StringPointerValue(itemsItem.InputCollectorScript.Input.Pipeline)
+					if itemsItem.InputCollectorScript.Input.Preprocess == nil {
+						items.InputCollectorScript.Input.Preprocess = nil
+					} else {
+						items.InputCollectorScript.Input.Preprocess = &tfTypes.InputCollectorScriptPreprocess{}
+						items.InputCollectorScript.Input.Preprocess.Args = make([]types.String, 0, len(itemsItem.InputCollectorScript.Input.Preprocess.Args))
+						for _, v := range itemsItem.InputCollectorScript.Input.Preprocess.Args {
+							items.InputCollectorScript.Input.Preprocess.Args = append(items.InputCollectorScript.Input.Preprocess.Args, types.StringValue(v))
+						}
+						items.InputCollectorScript.Input.Preprocess.Command = types.StringPointerValue(itemsItem.InputCollectorScript.Input.Preprocess.Command)
+						items.InputCollectorScript.Input.Preprocess.Disabled = types.BoolPointerValue(itemsItem.InputCollectorScript.Input.Preprocess.Disabled)
+					}
+					items.InputCollectorScript.Input.SendToRoutes = types.BoolPointerValue(itemsItem.InputCollectorScript.Input.SendToRoutes)
+					items.InputCollectorScript.Input.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputCollectorScript.Input.StaleChannelFlushMs)
+					items.InputCollectorScript.Input.ThrottleRatePerSec = types.StringPointerValue(itemsItem.InputCollectorScript.Input.ThrottleRatePerSec)
+					if itemsItem.InputCollectorScript.Input.Type != nil {
+						items.InputCollectorScript.Input.Type = types.StringValue(string(*itemsItem.InputCollectorScript.Input.Type))
+					} else {
+						items.InputCollectorScript.Input.Type = types.StringNull()
+					}
+				}
+				items.InputCollectorScript.RemoveFields = make([]types.String, 0, len(itemsItem.InputCollectorScript.RemoveFields))
+				for _, v := range itemsItem.InputCollectorScript.RemoveFields {
+					items.InputCollectorScript.RemoveFields = append(items.InputCollectorScript.RemoveFields, types.StringValue(v))
+				}
+				items.InputCollectorScript.ResumeOnBoot = types.BoolPointerValue(itemsItem.InputCollectorScript.ResumeOnBoot)
+				if itemsItem.InputCollectorScript.SavedState == nil {
+					items.InputCollectorScript.SavedState = nil
+				} else {
+					items.InputCollectorScript.SavedState = &tfTypes.InputCollectorScriptSavedState{}
+				}
+				if itemsItem.InputCollectorScript.Schedule == nil {
+					items.InputCollectorScript.Schedule = nil
+				} else {
+					items.InputCollectorScript.Schedule = &tfTypes.InputCollectorScriptSchedule{}
+					items.InputCollectorScript.Schedule.CronSchedule = types.StringPointerValue(itemsItem.InputCollectorScript.Schedule.CronSchedule)
+					items.InputCollectorScript.Schedule.Enabled = types.BoolPointerValue(itemsItem.InputCollectorScript.Schedule.Enabled)
+					items.InputCollectorScript.Schedule.MaxConcurrentRuns = types.Float64PointerValue(itemsItem.InputCollectorScript.Schedule.MaxConcurrentRuns)
+					items.InputCollectorScript.Schedule.ResumeMissed = types.BoolPointerValue(itemsItem.InputCollectorScript.Schedule.ResumeMissed)
+					if itemsItem.InputCollectorScript.Schedule.Run == nil {
+						items.InputCollectorScript.Schedule.Run = nil
+					} else {
+						items.InputCollectorScript.Schedule.Run = &tfTypes.InputCollectorScriptRunSettings{}
+						items.InputCollectorScript.Schedule.Run.Earliest = types.Float64PointerValue(itemsItem.InputCollectorScript.Schedule.Run.Earliest)
+						items.InputCollectorScript.Schedule.Run.Expression = types.StringPointerValue(itemsItem.InputCollectorScript.Schedule.Run.Expression)
+						items.InputCollectorScript.Schedule.Run.JobTimeout = types.StringPointerValue(itemsItem.InputCollectorScript.Schedule.Run.JobTimeout)
+						items.InputCollectorScript.Schedule.Run.Latest = types.Float64PointerValue(itemsItem.InputCollectorScript.Schedule.Run.Latest)
+						if itemsItem.InputCollectorScript.Schedule.Run.LogLevel != nil {
+							items.InputCollectorScript.Schedule.Run.LogLevel = types.StringValue(string(*itemsItem.InputCollectorScript.Schedule.Run.LogLevel))
+						} else {
+							items.InputCollectorScript.Schedule.Run.LogLevel = types.StringNull()
+						}
+						items.InputCollectorScript.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputCollectorScript.Schedule.Run.MaxTaskReschedule)
+						items.InputCollectorScript.Schedule.Run.MaxTaskSize = types.StringPointerValue(itemsItem.InputCollectorScript.Schedule.Run.MaxTaskSize)
+						items.InputCollectorScript.Schedule.Run.MinTaskSize = types.StringPointerValue(itemsItem.InputCollectorScript.Schedule.Run.MinTaskSize)
+						if itemsItem.InputCollectorScript.Schedule.Run.Mode != nil {
+							items.InputCollectorScript.Schedule.Run.Mode = types.StringValue(string(*itemsItem.InputCollectorScript.Schedule.Run.Mode))
+						} else {
+							items.InputCollectorScript.Schedule.Run.Mode = types.StringNull()
+						}
+						items.InputCollectorScript.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(itemsItem.InputCollectorScript.Schedule.Run.RescheduleDroppedTasks)
+						if itemsItem.InputCollectorScript.Schedule.Run.StateTracking == nil {
+							items.InputCollectorScript.Schedule.Run.StateTracking = nil
+						} else {
+							items.InputCollectorScript.Schedule.Run.StateTracking = &tfTypes.InputCollectorScriptStateTracking{}
+							items.InputCollectorScript.Schedule.Run.StateTracking.Enabled = types.BoolPointerValue(itemsItem.InputCollectorScript.Schedule.Run.StateTracking.Enabled)
+							items.InputCollectorScript.Schedule.Run.StateTracking.StateMergeExpression = types.StringPointerValue(itemsItem.InputCollectorScript.Schedule.Run.StateTracking.StateMergeExpression)
+							items.InputCollectorScript.Schedule.Run.StateTracking.StateUpdateExpression = types.StringPointerValue(itemsItem.InputCollectorScript.Schedule.Run.StateTracking.StateUpdateExpression)
+						}
+						if itemsItem.InputCollectorScript.Schedule.Run.TimeRangeType != nil {
+							items.InputCollectorScript.Schedule.Run.TimeRangeType = types.StringValue(string(*itemsItem.InputCollectorScript.Schedule.Run.TimeRangeType))
+						} else {
+							items.InputCollectorScript.Schedule.Run.TimeRangeType = types.StringNull()
+						}
+						if itemsItem.InputCollectorScript.Schedule.Run.TimeWarning == nil {
+							items.InputCollectorScript.Schedule.Run.TimeWarning = nil
+						} else {
+							items.InputCollectorScript.Schedule.Run.TimeWarning = &tfTypes.InputCollectorScriptTimeWarning{}
+						}
+					}
+					items.InputCollectorScript.Schedule.Skippable = types.BoolPointerValue(itemsItem.InputCollectorScript.Schedule.Skippable)
+				}
+				items.InputCollectorScript.Streamtags = make([]types.String, 0, len(itemsItem.InputCollectorScript.Streamtags))
+				for _, v := range itemsItem.InputCollectorScript.Streamtags {
+					items.InputCollectorScript.Streamtags = append(items.InputCollectorScript.Streamtags, types.StringValue(v))
+				}
+				items.InputCollectorScript.TTL = types.StringPointerValue(itemsItem.InputCollectorScript.TTL)
+				items.InputCollectorScript.WorkerAffinity = types.BoolPointerValue(itemsItem.InputCollectorScript.WorkerAffinity)
+			}
+			if itemsItem.InputCollectorSplunk != nil {
+				items.InputCollectorSplunk = &tfTypes.InputCollectorSplunk{}
+				if itemsItem.InputCollectorSplunk.Collector.Conf == nil {
+					items.InputCollectorSplunk.Collector.Conf = nil
+				} else {
+					items.InputCollectorSplunk.Collector.Conf = &tfTypes.InputCollectorSplunkConf{}
+					if itemsItem.InputCollectorSplunk.Collector.Conf.Authentication != nil {
+						items.InputCollectorSplunk.Collector.Conf.Authentication = types.StringValue(string(*itemsItem.InputCollectorSplunk.Collector.Conf.Authentication))
+					} else {
+						items.InputCollectorSplunk.Collector.Conf.Authentication = types.StringNull()
+					}
+					items.InputCollectorSplunk.Collector.Conf.CredentialsSecret = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.CredentialsSecret)
+					items.InputCollectorSplunk.Collector.Conf.DisableTimeFilter = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.DisableTimeFilter)
+					items.InputCollectorSplunk.Collector.Conf.Earliest = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.Earliest)
+					items.InputCollectorSplunk.Collector.Conf.Endpoint = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.Endpoint)
+					items.InputCollectorSplunk.Collector.Conf.HandleEscapedChars = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.HandleEscapedChars)
+					items.InputCollectorSplunk.Collector.Conf.Latest = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.Latest)
+					if itemsItem.InputCollectorSplunk.Collector.Conf.OutputMode != nil {
+						items.InputCollectorSplunk.Collector.Conf.OutputMode = types.StringValue(string(*itemsItem.InputCollectorSplunk.Collector.Conf.OutputMode))
+					} else {
+						items.InputCollectorSplunk.Collector.Conf.OutputMode = types.StringNull()
+					}
+					items.InputCollectorSplunk.Collector.Conf.Password = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.Password)
+					items.InputCollectorSplunk.Collector.Conf.RejectUnauthorized = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.RejectUnauthorized)
+					items.InputCollectorSplunk.Collector.Conf.Search = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.Search)
+					items.InputCollectorSplunk.Collector.Conf.SearchHead = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.SearchHead)
+					items.InputCollectorSplunk.Collector.Conf.Timeout = types.Int64PointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.Timeout)
+					items.InputCollectorSplunk.Collector.Conf.Token = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.Token)
+					items.InputCollectorSplunk.Collector.Conf.TokenSecret = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.TokenSecret)
+					items.InputCollectorSplunk.Collector.Conf.Username = types.StringPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.Username)
+					items.InputCollectorSplunk.Collector.Conf.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Collector.Conf.UseRoundRobinDNS)
+				}
+				items.InputCollectorSplunk.Collector.Type = types.StringValue(string(itemsItem.InputCollectorSplunk.Collector.Type))
+				items.InputCollectorSplunk.Environment = types.StringPointerValue(itemsItem.InputCollectorSplunk.Environment)
+				items.InputCollectorSplunk.ID = types.StringValue(itemsItem.InputCollectorSplunk.ID)
+				items.InputCollectorSplunk.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputCollectorSplunk.IgnoreGroupJobsLimit)
+				if itemsItem.InputCollectorSplunk.Input == nil {
+					items.InputCollectorSplunk.Input = nil
+				} else {
+					items.InputCollectorSplunk.Input = &tfTypes.InputCollectorSplunkInput{}
+					items.InputCollectorSplunk.Input.BreakerRulesets = make([]types.String, 0, len(itemsItem.InputCollectorSplunk.Input.BreakerRulesets))
+					for _, v := range itemsItem.InputCollectorSplunk.Input.BreakerRulesets {
+						items.InputCollectorSplunk.Input.BreakerRulesets = append(items.InputCollectorSplunk.Input.BreakerRulesets, types.StringValue(v))
+					}
+					items.InputCollectorSplunk.Input.Metadata = []tfTypes.InputCollectorSplunkMetadatum{}
+
+					for _, metadataItem8 := range itemsItem.InputCollectorSplunk.Input.Metadata {
+						var metadata8 tfTypes.InputCollectorSplunkMetadatum
+
+						metadata8.Name = types.StringValue(metadataItem8.Name)
+						metadata8.Value = types.StringValue(metadataItem8.Value)
+
+						items.InputCollectorSplunk.Input.Metadata = append(items.InputCollectorSplunk.Input.Metadata, metadata8)
+					}
+					items.InputCollectorSplunk.Input.Output = types.StringPointerValue(itemsItem.InputCollectorSplunk.Input.Output)
+					items.InputCollectorSplunk.Input.Pipeline = types.StringPointerValue(itemsItem.InputCollectorSplunk.Input.Pipeline)
+					if itemsItem.InputCollectorSplunk.Input.Preprocess == nil {
+						items.InputCollectorSplunk.Input.Preprocess = nil
+					} else {
+						items.InputCollectorSplunk.Input.Preprocess = &tfTypes.InputCollectorSplunkPreprocess{}
+						items.InputCollectorSplunk.Input.Preprocess.Args = make([]types.String, 0, len(itemsItem.InputCollectorSplunk.Input.Preprocess.Args))
+						for _, v := range itemsItem.InputCollectorSplunk.Input.Preprocess.Args {
+							items.InputCollectorSplunk.Input.Preprocess.Args = append(items.InputCollectorSplunk.Input.Preprocess.Args, types.StringValue(v))
+						}
+						items.InputCollectorSplunk.Input.Preprocess.Command = types.StringPointerValue(itemsItem.InputCollectorSplunk.Input.Preprocess.Command)
+						items.InputCollectorSplunk.Input.Preprocess.Disabled = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Input.Preprocess.Disabled)
+					}
+					items.InputCollectorSplunk.Input.SendToRoutes = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Input.SendToRoutes)
+					items.InputCollectorSplunk.Input.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputCollectorSplunk.Input.StaleChannelFlushMs)
+					items.InputCollectorSplunk.Input.ThrottleRatePerSec = types.StringPointerValue(itemsItem.InputCollectorSplunk.Input.ThrottleRatePerSec)
+					if itemsItem.InputCollectorSplunk.Input.Type != nil {
+						items.InputCollectorSplunk.Input.Type = types.StringValue(string(*itemsItem.InputCollectorSplunk.Input.Type))
+					} else {
+						items.InputCollectorSplunk.Input.Type = types.StringNull()
+					}
+				}
+				items.InputCollectorSplunk.RemoveFields = make([]types.String, 0, len(itemsItem.InputCollectorSplunk.RemoveFields))
+				for _, v := range itemsItem.InputCollectorSplunk.RemoveFields {
+					items.InputCollectorSplunk.RemoveFields = append(items.InputCollectorSplunk.RemoveFields, types.StringValue(v))
+				}
+				items.InputCollectorSplunk.ResumeOnBoot = types.BoolPointerValue(itemsItem.InputCollectorSplunk.ResumeOnBoot)
+				if itemsItem.InputCollectorSplunk.SavedState == nil {
+					items.InputCollectorSplunk.SavedState = nil
+				} else {
+					items.InputCollectorSplunk.SavedState = &tfTypes.InputCollectorSplunkSavedState{}
+				}
+				if itemsItem.InputCollectorSplunk.Schedule == nil {
+					items.InputCollectorSplunk.Schedule = nil
+				} else {
+					items.InputCollectorSplunk.Schedule = &tfTypes.InputCollectorSplunkSchedule{}
+					items.InputCollectorSplunk.Schedule.CronSchedule = types.StringPointerValue(itemsItem.InputCollectorSplunk.Schedule.CronSchedule)
+					items.InputCollectorSplunk.Schedule.Enabled = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Schedule.Enabled)
+					items.InputCollectorSplunk.Schedule.MaxConcurrentRuns = types.Float64PointerValue(itemsItem.InputCollectorSplunk.Schedule.MaxConcurrentRuns)
+					items.InputCollectorSplunk.Schedule.ResumeMissed = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Schedule.ResumeMissed)
+					if itemsItem.InputCollectorSplunk.Schedule.Run == nil {
+						items.InputCollectorSplunk.Schedule.Run = nil
+					} else {
+						items.InputCollectorSplunk.Schedule.Run = &tfTypes.InputCollectorSplunkRunSettings{}
+						items.InputCollectorSplunk.Schedule.Run.Earliest = types.Float64PointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.Earliest)
+						items.InputCollectorSplunk.Schedule.Run.Expression = types.StringPointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.Expression)
+						items.InputCollectorSplunk.Schedule.Run.JobTimeout = types.StringPointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.JobTimeout)
+						items.InputCollectorSplunk.Schedule.Run.Latest = types.Float64PointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.Latest)
+						if itemsItem.InputCollectorSplunk.Schedule.Run.LogLevel != nil {
+							items.InputCollectorSplunk.Schedule.Run.LogLevel = types.StringValue(string(*itemsItem.InputCollectorSplunk.Schedule.Run.LogLevel))
+						} else {
+							items.InputCollectorSplunk.Schedule.Run.LogLevel = types.StringNull()
+						}
+						items.InputCollectorSplunk.Schedule.Run.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.MaxTaskReschedule)
+						items.InputCollectorSplunk.Schedule.Run.MaxTaskSize = types.StringPointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.MaxTaskSize)
+						items.InputCollectorSplunk.Schedule.Run.MinTaskSize = types.StringPointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.MinTaskSize)
+						if itemsItem.InputCollectorSplunk.Schedule.Run.Mode != nil {
+							items.InputCollectorSplunk.Schedule.Run.Mode = types.StringValue(string(*itemsItem.InputCollectorSplunk.Schedule.Run.Mode))
+						} else {
+							items.InputCollectorSplunk.Schedule.Run.Mode = types.StringNull()
+						}
+						items.InputCollectorSplunk.Schedule.Run.RescheduleDroppedTasks = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.RescheduleDroppedTasks)
+						if itemsItem.InputCollectorSplunk.Schedule.Run.StateTracking == nil {
+							items.InputCollectorSplunk.Schedule.Run.StateTracking = nil
+						} else {
+							items.InputCollectorSplunk.Schedule.Run.StateTracking = &tfTypes.InputCollectorSplunkStateTracking{}
+							items.InputCollectorSplunk.Schedule.Run.StateTracking.Enabled = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.StateTracking.Enabled)
+							items.InputCollectorSplunk.Schedule.Run.StateTracking.StateMergeExpression = types.StringPointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.StateTracking.StateMergeExpression)
+							items.InputCollectorSplunk.Schedule.Run.StateTracking.StateUpdateExpression = types.StringPointerValue(itemsItem.InputCollectorSplunk.Schedule.Run.StateTracking.StateUpdateExpression)
+						}
+						if itemsItem.InputCollectorSplunk.Schedule.Run.TimeRangeType != nil {
+							items.InputCollectorSplunk.Schedule.Run.TimeRangeType = types.StringValue(string(*itemsItem.InputCollectorSplunk.Schedule.Run.TimeRangeType))
+						} else {
+							items.InputCollectorSplunk.Schedule.Run.TimeRangeType = types.StringNull()
+						}
+						if itemsItem.InputCollectorSplunk.Schedule.Run.TimeWarning == nil {
+							items.InputCollectorSplunk.Schedule.Run.TimeWarning = nil
+						} else {
+							items.InputCollectorSplunk.Schedule.Run.TimeWarning = &tfTypes.InputCollectorSplunkTimeWarning{}
+						}
+					}
+					items.InputCollectorSplunk.Schedule.Skippable = types.BoolPointerValue(itemsItem.InputCollectorSplunk.Schedule.Skippable)
+				}
+				items.InputCollectorSplunk.Streamtags = make([]types.String, 0, len(itemsItem.InputCollectorSplunk.Streamtags))
+				for _, v := range itemsItem.InputCollectorSplunk.Streamtags {
+					items.InputCollectorSplunk.Streamtags = append(items.InputCollectorSplunk.Streamtags, types.StringValue(v))
+				}
+				items.InputCollectorSplunk.TTL = types.StringPointerValue(itemsItem.InputCollectorSplunk.TTL)
+				items.InputCollectorSplunk.WorkerAffinity = types.BoolPointerValue(itemsItem.InputCollectorSplunk.WorkerAffinity)
+			}
+
 			r.Items = append(r.Items, items)
 		}
 	}

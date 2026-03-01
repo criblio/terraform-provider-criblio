@@ -30,6 +30,14 @@ func (d *DeleteEventBreakerRulesetByIDRequest) GetID() string {
 
 // DeleteEventBreakerRulesetByIDResponseBody - a list of Event Breaker Ruleset objects
 type DeleteEventBreakerRulesetByIDResponseBody struct {
+	Items []shared.EventBreakerRuleset `json:"items,omitempty"`
+}
+
+func (d *DeleteEventBreakerRulesetByIDResponseBody) GetItems() []shared.EventBreakerRuleset {
+	if d == nil {
+		return nil
+	}
+	return d.Items
 }
 
 type DeleteEventBreakerRulesetByIDResponse struct {

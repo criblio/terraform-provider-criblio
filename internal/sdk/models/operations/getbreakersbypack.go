@@ -36,12 +36,12 @@ func (g *GetBreakersByPackRequest) GetEventBreakerRuleset() *shared.EventBreaker
 	return g.EventBreakerRuleset
 }
 
-// GetBreakersByPackResponseBody - a list of Routes objects
+// GetBreakersByPackResponseBody - a list of Event Breaker Ruleset objects within a Pack
 type GetBreakersByPackResponseBody struct {
-	Items []shared.Routes `json:"items,omitempty"`
+	Items []shared.EventBreakerRuleset `json:"items,omitempty"`
 }
 
-func (g *GetBreakersByPackResponseBody) GetItems() []shared.Routes {
+func (g *GetBreakersByPackResponseBody) GetItems() []shared.EventBreakerRuleset {
 	if g == nil {
 		return nil
 	}
@@ -55,7 +55,7 @@ type GetBreakersByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Routes objects
+	// a list of Event Breaker Ruleset objects within a Pack
 	Object *GetBreakersByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

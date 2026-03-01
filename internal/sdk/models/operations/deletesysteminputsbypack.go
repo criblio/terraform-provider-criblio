@@ -37,12 +37,12 @@ func (d *DeleteSystemInputsByPackRequest) GetID() string {
 	return d.ID
 }
 
-// DeleteSystemInputsByPackResponseBody - a list of Pipeline objects
+// DeleteSystemInputsByPackResponseBody - a list of Input objects
 type DeleteSystemInputsByPackResponseBody struct {
-	Items []shared.Pipeline `json:"items,omitempty"`
+	Items []shared.Input `json:"items,omitempty"`
 }
 
-func (d *DeleteSystemInputsByPackResponseBody) GetItems() []shared.Pipeline {
+func (d *DeleteSystemInputsByPackResponseBody) GetItems() []shared.Input {
 	if d == nil {
 		return nil
 	}
@@ -56,7 +56,7 @@ type DeleteSystemInputsByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Pipeline objects
+	// a list of Input objects
 	Object *DeleteSystemInputsByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

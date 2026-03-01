@@ -4,10 +4,8 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -16,72 +14,33 @@ func (r *PackLookupsDataSourceModel) RefreshFromOperationsGetSystemLookupsByPack
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Items = []tfTypes.Routes{}
+		r.Items = []tfTypes.LookupFile{}
 
 		for _, itemsItem := range resp.Items {
-			var items tfTypes.Routes
+			var items tfTypes.LookupFile
 
-			items.Comments = []tfTypes.Comment{}
-
-			for _, commentsItem := range itemsItem.Comments {
-				var comments tfTypes.Comment
-
-				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
-				}
-				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-
-				items.Comments = append(items.Comments, comments)
+			items.Content = types.StringPointerValue(itemsItem.Content)
+			items.Description = types.StringPointerValue(itemsItem.Description)
+			items.ID = types.StringValue(itemsItem.ID)
+			if itemsItem.Mode != nil {
+				items.Mode = types.StringValue(string(*itemsItem.Mode))
+			} else {
+				items.Mode = types.StringNull()
 			}
-			if len(itemsItem.Groups) > 0 {
-				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
-				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
-					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
-					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
-
-					items.Groups[routesGroupsKey] = routesGroupsResult
+			if itemsItem.PendingTask == nil {
+				items.PendingTask = nil
+			} else {
+				items.PendingTask = &tfTypes.PendingTask{}
+				items.PendingTask.Error = types.StringPointerValue(itemsItem.PendingTask.Error)
+				items.PendingTask.ID = types.StringPointerValue(itemsItem.PendingTask.ID)
+				if itemsItem.PendingTask.Type != nil {
+					items.PendingTask.Type = types.StringValue(string(*itemsItem.PendingTask.Type))
+				} else {
+					items.PendingTask.Type = types.StringNull()
 				}
 			}
-			items.ID = types.StringPointerValue(itemsItem.ID)
-			items.Routes = []tfTypes.RoutesRoute{}
-
-			for _, routesItem := range itemsItem.Routes {
-				var routes tfTypes.RoutesRoute
-
-				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
-				}
-				routes.Description = types.StringPointerValue(routesItem.Description)
-				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
-				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
-				routes.Filter = types.StringPointerValue(routesItem.Filter)
-				routes.Final = types.BoolPointerValue(routesItem.Final)
-				routes.ID = types.StringPointerValue(routesItem.ID)
-				routes.Name = types.StringValue(routesItem.Name)
-				if routesItem.Output == nil {
-					routes.Output = jsontypes.NewNormalizedNull()
-				} else {
-					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
-				}
-				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = jsontypes.NewNormalizedNull()
-				} else {
-					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
-				}
-				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-
-				items.Routes = append(items.Routes, routes)
-			}
+			items.Tags = types.StringPointerValue(itemsItem.Tags)
+			items.Version = types.StringPointerValue(itemsItem.Version)
 
 			r.Items = append(r.Items, items)
 		}

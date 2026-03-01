@@ -413,8 +413,6 @@ func (r *RoutesResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		Description:            types.StringValue(""),
 		EnableOutputExpression: types.BoolValue(false),
 	}
-	// Set output to devnull destination ID
-	defaultRoute.Output = jsontypes.NewNormalizedValue(`"devnull"`)
 	data.Routes = []tfTypes.RoutesRoute{defaultRoute}
 
 	request, requestDiags := data.ToOperationsCreateRoutesByGroupIDRequest(ctx)

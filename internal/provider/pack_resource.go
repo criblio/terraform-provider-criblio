@@ -14,6 +14,8 @@ import (
 	"path/filepath"
 	"strings"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
+	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -84,28 +86,34 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Description: `Requires replacement if changed.`,
 			},
 			"author": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.UseStateForUnknown(),
+					speakeasy_stringplanmodifier.PreferState(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Pack author (from pack metadata). Preserved from state when not configured.`,
 			},
 			"description": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.UseStateForUnknown(),
+					speakeasy_stringplanmodifier.PreferState(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Pack description (from pack metadata). When filename is set, this comes from the pack file and cannot be overridden; omit from config to avoid drift.`,
 			},
 			"disabled": schema.BoolAttribute{
 				Optional: true,
 			},
 			"display_name": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.UseStateForUnknown(),
+					speakeasy_stringplanmodifier.PreferState(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Pack display name (from pack metadata). When filename is set, this comes from the pack file and cannot be overridden; omit from config to avoid drift.`,
 			},
 			"exports": schema.ListAttribute{
 				Optional: true,
@@ -117,7 +125,7 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"filename": schema.StringAttribute{
 				Optional: true,
-				Description: `Local .crbl file path to upload. File is uploaded (PUT) then the pack is installed or updated in place (PATCH); changing filename updates the existing pack rather than replacing it. If set, description and display_name are ignored and the pack file's metadata is used.`,
+				Description: `Local .crbl file path to upload. File is uploaded (PUT) then the pack is installed or updated in place (PATCH); changing filename updates the existing pack rather than replacing it. When set, description and display_name come from the pack file—omit them from config to avoid drift.`,
 			},
 			"force": schema.BoolAttribute{
 				Optional: true,
@@ -150,6 +158,9 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.PreferState(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"author": schema.StringAttribute{
@@ -223,11 +234,13 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"min_log_stream_version": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.UseStateForUnknown(),
+					speakeasy_stringplanmodifier.PreferState(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Min LogStream version (from pack metadata). Preserved from state when not configured.`,
 			},
 			"outputs": schema.Float64Attribute{
 				Optional: true,
@@ -237,8 +250,12 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Description: `Requires replacement if changed.`,
 			},
 			"source": schema.StringAttribute{
-				Optional:    true,
-				Description: `body string required Pack source`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.PreferState(),
+				},
+				Description: `Pack source path (from pack metadata). Preserved from state when not configured.`,
 			},
 			"spec": schema.StringAttribute{
 				Optional:    true,
@@ -246,51 +263,41 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"tags": schema.SingleNestedAttribute{
 				Optional: true,
+				Computed: true,
 				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplaceIfConfigured(),
+					objectplanmodifier.UseStateForUnknown(),
 				},
 				Attributes: map[string]schema.Attribute{
 					"data_type": schema.ListAttribute{
-						Required: true,
-						PlanModifiers: []planmodifier.List{
-							listplanmodifier.RequiresReplaceIfConfigured(),
-						},
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `Requires replacement if changed.`,
+						Description: `Pack data_type tags (from pack metadata).`,
 					},
 					"domain": schema.ListAttribute{
-						Required: true,
-						PlanModifiers: []planmodifier.List{
-							listplanmodifier.RequiresReplaceIfConfigured(),
-						},
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `Requires replacement if changed.`,
+						Description: `Pack domain tags (from pack metadata).`,
 					},
 					"streamtags": schema.ListAttribute{
-						Required: true,
-						PlanModifiers: []planmodifier.List{
-							listplanmodifier.RequiresReplaceIfConfigured(),
-						},
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `Requires replacement if changed.`,
+						Description: `Pack streamtags (from pack metadata).`,
 					},
 					"technology": schema.ListAttribute{
-						Required: true,
-						PlanModifiers: []planmodifier.List{
-							listplanmodifier.RequiresReplaceIfConfigured(),
-						},
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `Requires replacement if changed.`,
+						Description: `Pack technology tags (from pack metadata).`,
 					},
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Pack tags (from pack metadata). Changes are reflected in state from the API; no replacement.`,
 			},
 			"version": schema.StringAttribute{
 				Optional: true,
+				Computed: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.UseStateForUnknown(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Pack version (from pack metadata). Changes are reflected in state from the API; no replacement.`,
 			},
 		},
 	}
@@ -462,6 +469,27 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 				}
 			}
 		}
+		// Sync metadata (description, display_name, etc.) from config via pack/settings.
+		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+			resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", patchErr))
+			return
+		}
+		getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
+		resp.Diagnostics.Append(getDiags...)
+		if !resp.Diagnostics.HasError() {
+			getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
+			if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
+				resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
+				preservePackMetadataFromConfig(ctx, data, plan)
+			}
+		}
+		if !resp.Diagnostics.HasError() {
+			resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+			if !resp.Diagnostics.HasError() {
+				resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+				return
+			}
+		}
 	} else {
 		res, err := r.client.Packs.CreatePacks(ctx, *request)
 		if err != nil {
@@ -484,6 +512,11 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 			return
 		}
 		resp.Diagnostics.Append(data.RefreshFromOperationsCreatePacksResponseBody(ctx, res.Object)...)
+		// Sync metadata (description, display_name, etc.) from config via pack/settings.
+		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+			resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", patchErr))
+			return
+		}
 	}
 
 	if resp.Diagnostics.HasError() {
@@ -522,6 +555,7 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, res1.Object)...)
+	preservePackMetadataFromConfig(ctx, data, plan)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -585,7 +619,18 @@ func (r *PackResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
+	// Preserve metadata from state before refresh (API returns pack file values; config may have overrides).
+	savedDesc, savedDisplay, savedVersion := data.Description, data.DisplayName, data.Version
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, res.Object)...)
+	if !savedDesc.IsNull() && !savedDesc.IsUnknown() {
+		data.Description = savedDesc
+	}
+	if !savedDisplay.IsNull() && !savedDisplay.IsUnknown() {
+		data.DisplayName = savedDisplay
+	}
+	if !savedVersion.IsNull() && !savedVersion.IsUnknown() {
+		data.Version = savedVersion
+	}
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -672,24 +717,61 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	// PATCH requires source; set from uploaded value first, then data.Source/data.Filename
+	// PATCH requires source; set from uploaded value first, then plan (data), then state. Track if source came from plan—when only from state we must not call pack PATCH (API expects a real pack file path; state may hold pack id or path that is not a server file).
+	sourceFromPlan := false
 	if uploadedSource != "" {
 		request.Source = &uploadedSource
 	} else if request.Source == nil || *request.Source == "" {
 		if !data.Source.IsNull() && !data.Source.IsUnknown() && data.Source.ValueString() != "" {
 			s := data.Source.ValueString()
 			request.Source = &s
+			sourceFromPlan = true
 		}
 		if (request.Source == nil || *request.Source == "") && !data.Filename.IsNull() && !data.Filename.IsUnknown() && data.Filename.ValueString() != "" {
 			s := data.Filename.ValueString()
 			request.Source = &s
+			sourceFromPlan = true
+		}
+		if request.Source == nil || *request.Source == "" {
+			var stateData PackResourceModel
+			stateDiags := req.State.Get(ctx, &stateData)
+			if !stateDiags.HasError() && !stateData.Source.IsNull() && !stateData.Source.IsUnknown() && stateData.Source.ValueString() != "" {
+				s := stateData.Source.ValueString()
+				request.Source = &s
+			}
 		}
 	}
+	// When only metadata changed (no upload, no source in plan or state): update via PACK /pack/settings only; do not call PATCH (API requires source).
 	if uploadedSource == "" && (request.Source == nil || *request.Source == "") {
-		resp.Diagnostics.AddError(
-			"Missing source for pack update",
-			"The API requires the source parameter. Set filename to a local .crbl file path so the provider can upload it and set source, or ensure the pack resource has source set (e.g. from a previous apply).",
-		)
+		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+			resp.Diagnostics.AddError("failure to update pack settings", patchErr.Error())
+			return
+		}
+		// Refresh state from API and save
+		getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
+		resp.Diagnostics.Append(getDiags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
+		if getErr != nil {
+			resp.Diagnostics.AddError("failure to invoke API", getErr.Error())
+			return
+		}
+		if getRes == nil || getRes.StatusCode != 200 || getRes.Object == nil {
+			resp.Diagnostics.AddError("unexpected response from API", "GET pack after settings update failed")
+			return
+		}
+		resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
+		preservePackMetadataFromConfig(ctx, data, plan)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 		return
 	}
 	// Why UI succeeds: UI sends POST with body { items: [{ id, source (full path), version, warnings }], count: 1 }
@@ -731,24 +813,116 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 				getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 				resp.Diagnostics.Append(getDiags...)
 				if !resp.Diagnostics.HasError() {
-				getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
-				if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
-					patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: &operations.UpdatePacksByIDResponseBody{Items: getRes.Object.Items}}
+					getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
+					if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
+						patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: &operations.UpdatePacksByIDResponseBody{Items: getRes.Object.Items}}
+					}
 				}
+			}
+		}
+		// Sync metadata (description, display_name, etc.) from config via pack/settings after install.
+		if patchRes != nil {
+			if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+				resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", patchErr))
+				return
+			}
+			// Refresh from GET so state reflects the updated metadata from pack/settings.
+			getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
+			resp.Diagnostics.Append(getDiags...)
+			if !resp.Diagnostics.HasError() {
+				getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
+					if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
+						resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
+						preservePackMetadataFromConfig(ctx, data, plan)
+						if !resp.Diagnostics.HasError() {
+							resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+						if !resp.Diagnostics.HasError() {
+							resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+							return
+						}
+					}
 				}
 			}
 		}
 	} else {
+		// Sync metadata via pack/settings when plan has author/description/etc.
+		if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); err != nil {
+			resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", err))
+			return
+		}
+		// Do not call pack PATCH when source came only from state: API treats source as a server file path and returns 500 ENOENT for pack id. Metadata-only path: patchPackSettings + GET.
+		if request.Source == nil || *request.Source == "" || !sourceFromPlan {
+			getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
+			resp.Diagnostics.Append(getDiags...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+			getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
+			if getErr != nil {
+				resp.Diagnostics.AddError("failure to invoke API", getErr.Error())
+				return
+			}
+			if getRes == nil || getRes.StatusCode != 200 || getRes.Object == nil {
+				resp.Diagnostics.AddError("unexpected response from API", "GET pack after settings update failed")
+				return
+			}
+			resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
+			preservePackMetadataFromConfig(ctx, data, plan)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+			resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+			resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+			return
+		}
+		// Source from plan: use custom PATCH that sends source in query string.
 		sourceVal := *request.Source
-		request.Source = &sourceVal
-		var err error
-		patchRes, err = r.client.Packs.UpdatePacksByID(ctx, *request)
+		shortName := shortNameForPatch(sourceVal)
+		if shortName == "" {
+			shortName = sourceVal
+		}
+		body, err := r.patchPackByIDWithSource(ctx, data.GroupID.ValueString(), data.ID.ValueString(), shortName, request.Disabled)
 		if err != nil {
 			resp.Diagnostics.AddError("failure to invoke API", err.Error())
-			if patchRes != nil && patchRes.RawResponse != nil {
-				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(patchRes.RawResponse))
-			}
 			return
+		}
+		if body != nil {
+			patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: body}
+		} else {
+			getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
+			resp.Diagnostics.Append(getDiags...)
+			if !resp.Diagnostics.HasError() {
+				getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
+				if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
+					patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: &operations.UpdatePacksByIDResponseBody{Items: getRes.Object.Items}}
+				}
+			}
+		}
+		// Sync metadata after pack PATCH (PATCH may reinstall from source and reset metadata).
+		if patchRes != nil {
+			if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+				resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", patchErr))
+				return
+			}
+			getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
+			resp.Diagnostics.Append(getDiags...)
+			if !resp.Diagnostics.HasError() {
+				getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
+				if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
+					resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
+					preservePackMetadataFromConfig(ctx, data, plan)
+					if !resp.Diagnostics.HasError() {
+						resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+						if !resp.Diagnostics.HasError() {
+							resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+							return
+						}
+					}
+				}
+			}
 		}
 	}
 	if patchRes == nil {
@@ -1224,6 +1398,147 @@ func (r *PackResource) patchPackByIDWithSource(ctx context.Context, groupID, pac
 		}
 	}
 	return &operations.UpdatePacksByIDResponseBody{Items: out.Items}, nil
+}
+
+// preservePackMetadataFromConfig restores description, display_name, version from config into data
+// after a GET refresh. The pack/settings API may not persist metadata; GET returns pack file values.
+// Preserving config ensures Terraform state matches config and avoids drift.
+func preservePackMetadataFromConfig(ctx context.Context, data *PackResourceModel, plan types.Object) {
+	var planData PackResourceModel
+	if diags := plan.As(ctx, &planData, basetypes.ObjectAsOptions{UnhandledNullAsEmpty: true, UnhandledUnknownAsEmpty: true}); diags.HasError() {
+		return
+	}
+	if !planData.Description.IsNull() && !planData.Description.IsUnknown() {
+		data.Description = planData.Description
+	}
+	if !planData.DisplayName.IsNull() && !planData.DisplayName.IsUnknown() {
+		data.DisplayName = planData.DisplayName
+	}
+	if !planData.Version.IsNull() && !planData.Version.IsUnknown() {
+		data.Version = planData.Version
+	}
+}
+
+// patchPackSettings sends PATCH to /api/v1/m/{groupID}/p/{packID}/pack/settings to update pack metadata
+// (version, author, description, displayName, tags) without replacing the pack. Used when only metadata changes.
+func (r *PackResource) patchPackSettings(ctx context.Context, groupID, packID string, data *PackResourceModel) error {
+	listReq := operations.GetPacksByGroupRequest{GroupID: groupID}
+	listRes, _ := r.client.Packs.GetPacksByGroup(ctx, listReq)
+	var baseURL string
+	var authHeader string
+	if listRes != nil && listRes.RawResponse != nil && listRes.RawResponse.Request != nil {
+		originalReq := listRes.RawResponse.Request
+		if originalReq.URL != nil && originalReq.URL.Host != "" {
+			scheme := originalReq.URL.Scheme
+			if scheme == "" {
+				scheme = "https"
+			}
+			baseURL = fmt.Sprintf("%s://%s", scheme, originalReq.URL.Host)
+		}
+		if baseURL == "" && originalReq.Host != "" {
+			baseURL = fmt.Sprintf("https://%s", originalReq.Host)
+		}
+		if authVal := originalReq.Header.Get("Authorization"); authVal != "" {
+			authHeader = authVal
+		}
+	}
+	if baseURL == "" {
+		getReq := operations.GetPacksByIDRequest{GroupID: groupID, ID: "_dummy_", Disabled: nil}
+		getRes, _ := r.client.Packs.GetPacksByID(ctx, getReq)
+		if getRes != nil && getRes.RawResponse != nil && getRes.RawResponse.Request != nil {
+			orig := getRes.RawResponse.Request
+			if orig.URL != nil && orig.URL.Host != "" {
+				scheme := orig.URL.Scheme
+				if scheme == "" {
+					scheme = "https"
+				}
+				baseURL = fmt.Sprintf("%s://%s", scheme, orig.URL.Host)
+			}
+			if authHeader == "" {
+				authHeader = orig.Header.Get("Authorization")
+			}
+		}
+	}
+	if baseURL == "" {
+		return fmt.Errorf("failed to extract base URL for PATCH pack/settings")
+	}
+	path := fmt.Sprintf("/api/v1/m/%s/p/%s/pack/settings", groupID, packID)
+	rawURL := baseURL + path
+
+	tags := map[string]interface{}{}
+	if data.Tags != nil {
+		dataType := make([]string, 0, len(data.Tags.DataType))
+		for _, v := range data.Tags.DataType {
+			dataType = append(dataType, v.ValueString())
+		}
+		domain := make([]string, 0, len(data.Tags.Domain))
+		for _, v := range data.Tags.Domain {
+			domain = append(domain, v.ValueString())
+		}
+		streamtags := make([]string, 0, len(data.Tags.Streamtags))
+		for _, v := range data.Tags.Streamtags {
+			streamtags = append(streamtags, v.ValueString())
+		}
+		technology := make([]string, 0, len(data.Tags.Technology))
+		for _, v := range data.Tags.Technology {
+			technology = append(technology, v.ValueString())
+		}
+		tags["dataType"] = dataType
+		tags["domain"] = domain
+		tags["streamtags"] = streamtags
+		tags["technology"] = technology
+	}
+	displayName := data.ID.ValueString()
+	if !data.DisplayName.IsNull() && !data.DisplayName.IsUnknown() {
+		displayName = data.DisplayName.ValueString()
+	}
+	// API requires version in package object
+	version := "0.0.0"
+	if !data.Version.IsNull() && !data.Version.IsUnknown() {
+		version = data.Version.ValueString()
+	} else if len(data.Items) > 0 && !data.Items[0].Version.IsNull() && !data.Items[0].Version.IsUnknown() {
+		version = data.Items[0].Version.ValueString()
+	}
+	packageObj := map[string]interface{}{
+		"displayName": displayName,
+		"tags":        tags,
+		"version":     version,
+	}
+	if !data.Author.IsNull() && !data.Author.IsUnknown() {
+		packageObj["author"] = data.Author.ValueString()
+	}
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		packageObj["description"] = data.Description.ValueString()
+	}
+	if !data.MinLogStreamVersion.IsNull() && !data.MinLogStreamVersion.IsUnknown() {
+		packageObj["minLogStreamVersion"] = data.MinLogStreamVersion.ValueString()
+	}
+	body := map[string]interface{}{"package": packageObj}
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return fmt.Errorf("failed to marshal pack/settings body: %v", err)
+	}
+	req, err := http.NewRequestWithContext(ctx, "PATCH", rawURL, bytes.NewReader(bodyBytes))
+	if err != nil {
+		return fmt.Errorf("failed to create PATCH pack/settings request: %v", err)
+	}
+	if authHeader != "" {
+		req.Header.Set("Authorization", authHeader)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("User-Agent", "terraform-provider-criblio")
+	client := &http.Client{}
+	httpRes, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("pack/settings PATCH request failed: %v", err)
+	}
+	defer httpRes.Body.Close()
+	if httpRes.StatusCode != 200 {
+		resBody, _ := io.ReadAll(httpRes.Body)
+		return fmt.Errorf("pack/settings PATCH failed with status %d: %s", httpRes.StatusCode, string(resBody))
+	}
+	return nil
 }
 
 func (r *PackResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

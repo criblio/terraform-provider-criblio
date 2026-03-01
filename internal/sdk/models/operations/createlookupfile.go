@@ -11,7 +11,7 @@ type CreateLookupFileRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// New LookupFile object
-	LookupFile shared.LookupFile `request:"mediaType=application/json"`
+	LookupFile shared.LookupFileInput `request:"mediaType=application/json"`
 }
 
 func (c *CreateLookupFileRequest) GetGroupID() string {
@@ -21,15 +21,23 @@ func (c *CreateLookupFileRequest) GetGroupID() string {
 	return c.GroupID
 }
 
-func (c *CreateLookupFileRequest) GetLookupFile() shared.LookupFile {
+func (c *CreateLookupFileRequest) GetLookupFile() shared.LookupFileInput {
 	if c == nil {
-		return shared.LookupFile{}
+		return shared.LookupFileInput{}
 	}
 	return c.LookupFile
 }
 
 // CreateLookupFileResponseBody - a list of LookupFile objects
 type CreateLookupFileResponseBody struct {
+	Items []shared.LookupFile `json:"items,omitempty"`
+}
+
+func (c *CreateLookupFileResponseBody) GetItems() []shared.LookupFile {
+	if c == nil {
+		return nil
+	}
+	return c.Items
 }
 
 type CreateLookupFileResponse struct {

@@ -12,7 +12,12 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/config"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/exclusions"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/export"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/generator"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/version"
 	"github.com/spf13/cobra"
@@ -44,6 +49,8 @@ func NewImportCommand() *cobra.Command {
 		include     []string
 		exclude     []string
 		group       []string
+		flat        bool // if true, use flat layout (output-dir/<type>/); default is group-by (output-dir/<group_id>/<type>/)
+		parallel    int
 		dryRun      bool
 		verbose     bool
 		serverURL   string
@@ -89,7 +96,10 @@ func NewImportCommand() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("build registry: %w", err)
 			}
-			results, err := discovery.Discover(ctx, sdkClient, reg, include, exclude, group)
+			excludeMerged := append([]string{}, exclude...)
+			excludeMerged = append(excludeMerged, exclusions.NoExportTypes...)
+			fmt.Fprintln(c.ErrOrStderr(), "Discovering resources...")
+			results, err := discovery.Discover(ctx, sdkClient, reg, include, excludeMerged, group)
 			if err != nil {
 				return fmt.Errorf("discovery: %w", err)
 			}
@@ -120,16 +130,55 @@ func NewImportCommand() *cobra.Command {
 			if firstErr != nil {
 				return fmt.Errorf("discovery failed for one or more resource types: %w", firstErr)
 			}
-			// TODO: generate HCL + import blocks from results, write to outputDir
-			_ = outputDir
+			groupIDs, err := discovery.GetGroupIDs(ctx, sdkClient, group)
+			if err != nil {
+				return fmt.Errorf("get group IDs: %w", err)
+			}
+			discoveredTotal := 0
+			for _, r := range results {
+				if r.Err == nil && r.Count > 0 {
+					discoveredTotal += r.Count
+				}
+			}
+			fmt.Fprintf(c.ErrOrStderr(), "Found %d resources. Exporting...\n", discoveredTotal)
+			progress := func(format string, args ...interface{}) {
+				fmt.Fprintf(c.ErrOrStderr(), "  "+format+"\n", args...)
+			}
+			exportResult, exportErr := export.ToResourceItems(ctx, sdkClient, reg, results, groupIDs, parallel, progress)
+			exportResult.DiscoveredTotal = discoveredTotal
+			if exportErr != nil {
+				fmt.Fprintln(c.ErrOrStderr(), "Warning:", exportErr.Error())
+			}
+			if len(exportResult.Items) == 0 {
+				if exportErr != nil {
+					return fmt.Errorf("export: %w", exportErr)
+				}
+				fmt.Fprintln(c.OutOrStdout(), "No resources to export. Run with --dry-run to see resource counts by type.")
+				return nil
+			}
+			fmt.Fprintf(c.ErrOrStderr(), "Writing Terraform files to %s...\n", outputDir)
+			opts := hcl.DefaultResourceBlockOptions()
+			if flat {
+				if err := generator.WriteAllModuleDirectories(outputDir, exportResult.Items, opts, progress); err != nil {
+					return fmt.Errorf("write modules: %w", err)
+				}
+			} else {
+				if err := generator.WriteAllModuleDirectoriesByGroup(outputDir, exportResult.Items, opts, progress); err != nil {
+					return fmt.Errorf("write modules: %w", err)
+				}
+			}
+			fmt.Fprintf(c.OutOrStdout(), "Wrote Terraform HCL and import blocks to %s (%d resources)\n", outputDir, len(exportResult.Items))
+			printExportSummary(c, exportResult, verbose)
 			return nil
 		},
 	}
 
 	imp.Flags().StringVar(&outputDir, "output-dir", defaultOutputDir, "Output directory for generated Terraform")
 	imp.Flags().StringSliceVar(&include, "include", nil, "Resource types to include (e.g. criblio_source, criblio_pipeline). If set, only these types are discovered; otherwise all discoverable types are used.")
-	imp.Flags().StringSliceVar(&exclude, "exclude", nil, "Resource types to exclude (e.g. criblio_notification). Excluded types are omitted from discovery and export.")
+	imp.Flags().StringSliceVar(&exclude, "exclude", nil, "Resource types to omit (e.g. criblio_notification). Omitted types are skipped in discovery and export.")
 	imp.Flags().StringSliceVar(&group, "group", nil, "Restrict discovery and export to these groups only. Use group ID (e.g. default) or label (e.g. 'default (stream)'). Can be repeated. Empty = all groups.")
+	imp.Flags().BoolVar(&flat, "flat", false, "Use flat layout: <output-dir>/<type>/ instead of <output-dir>/<group_id>/<type>/ (default groups by worker group/fleet).")
+	imp.Flags().IntVar(&parallel, "parallel", 5, "Max concurrent API calls during export (default 5).")
 	imp.Flags().BoolVar(&dryRun, "dry-run", false, "Preview resource counts and types only; no conversion or file writes. Uses List* API only (no Get*ByID).")
 	imp.Flags().BoolVar(&verbose, "verbose", false, "Enable debug logging")
 
@@ -239,6 +288,44 @@ func printDryRunPreview(cmd *cobra.Command, results []discovery.Result, groupFil
 	fmt.Fprintf(out, ", %d resources\n", totalResources)
 }
 
+
+// printExportSummary prints why some resources were not exported (list skips and convert skips).
+func printExportSummary(cmd *cobra.Command, res *export.ExportResult, verbose bool) {
+	if res == nil {
+		return
+	}
+	out := cmd.OutOrStdout()
+	exported := len(res.Items)
+	total := res.DiscoveredTotal
+	unexported := total - exported
+	if total > 0 && exported != total {
+		fmt.Fprintf(out, "Exported %d of %d discovered resources (%d unexported).\n", exported, total, unexported)
+	}
+	if len(res.ListSkipped) > 0 {
+		listCount := 0
+		for _, s := range res.ListSkipped {
+			listCount += s.Count
+		}
+		fmt.Fprintf(out, "Skipped at list: %d type(s), %d resources\n", len(res.ListSkipped), listCount)
+		for _, s := range res.ListSkipped {
+			if s.Count > 0 {
+				fmt.Fprintf(out, "  %s: %s (%d resources)\n", s.TypeName, s.Reason, s.Count)
+			} else {
+				fmt.Fprintf(out, "  %s: %s\n", s.TypeName, s.Reason)
+			}
+		}
+	}
+	if len(res.ConvertSkipped) > 0 {
+		if verbose {
+			for _, msg := range res.ConvertSkipped {
+				fmt.Fprintf(out, "  %s\n", msg)
+			}
+		} else {
+			fmt.Fprintf(out, "Use --verbose for more details.\n")
+		}
+	}
+}
+
 // shortenError returns a single-line, truncated error message for user-facing output.
 func shortenError(err error, maxLen int) string {
 	if err == nil {
@@ -293,7 +380,7 @@ func buildRegistry(ctx context.Context) (*registry.Registry, error) {
 	}
 	p := provider.New(ver)()
 	constructors := p.Resources(ctx)
-	return registry.NewFromResources(ctx, constructors, registry.MetadataFromProvider(), nil)
+	return registry.NewFromResources(ctx, constructors, registry.MetadataFromProvider(), nil, converter.OneOfBlockNamesFromModel)
 }
 
 // ValidateImportFlags returns an error if include and exclude overlap.

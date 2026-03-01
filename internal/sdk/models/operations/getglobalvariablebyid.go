@@ -30,10 +30,10 @@ func (g *GetGlobalVariableByIDRequest) GetGroupID() string {
 
 // GetGlobalVariableByIDResponseBody - a list of Global Variable objects
 type GetGlobalVariableByIDResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (g *GetGlobalVariableByIDResponseBody) GetItems() []map[string]any {
+func (g *GetGlobalVariableByIDResponseBody) GetItems() []shared.GlobalVar {
 	if g == nil {
 		return nil
 	}

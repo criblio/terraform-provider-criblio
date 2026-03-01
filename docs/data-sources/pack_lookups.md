@@ -38,43 +38,19 @@ data "criblio_pack_lookups" "my_packlookups" {
 
 Read-Only:
 
-- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--items--comments))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--groups))
-- `id` (String) Routes ID
-- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--items--routes))
-
-<a id="nestedatt--items--comments"></a>
-### Nested Schema for `items.comments`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `comment` (String) Optional, short description of this Route's purpose
-
-
-<a id="nestedatt--items--groups"></a>
-### Nested Schema for `items.groups`
-
-Read-Only:
-
-- `description` (String) Short description of this group
-- `disabled` (Boolean) Whether this group is disabled
-- `name` (String)
-
-
-<a id="nestedatt--items--routes"></a>
-### Nested Schema for `items.routes`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
+- `content` (String) File content.
 - `description` (String)
-- `disabled` (Boolean) Disable this routing rule
-- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below
-- `filter` (String) JavaScript expression to select data to route
-- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it
 - `id` (String)
-- `name` (String)
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
-- `pipeline` (String) Pipeline to send the matching data to
+- `mode` (String)
+- `pending_task` (Attributes) (see [below for nested schema](#nestedatt--items--pending_task))
+- `tags` (String) One or more tags related to this lookup. Optional.
+- `version` (String) Unique string generated for each modification of this lookup
+
+<a id="nestedatt--items--pending_task"></a>
+### Nested Schema for `items.pending_task`
+
+Read-Only:
+
+- `error` (String) Error message if task has failed
+- `id` (String) Task ID (generated).
+- `type` (String) Task type

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/generator"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -14,7 +15,7 @@ func TestNewFromResources_discoversFromProvider(t *testing.T) {
 	p := provider.New("test")()
 	constructors := p.Resources(ctx)
 
-	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil, nil)
 	require.NoError(t, err)
 	require.NotNil(t, reg)
 	assert.Greater(t, reg.Len(), 0, "registry should contain at least one resource type")
@@ -27,7 +28,7 @@ func TestNewFromResources_containsMVPResourceTypes(t *testing.T) {
 	p := provider.New("test")()
 	constructors := p.Resources(ctx)
 
-	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil, nil)
 	require.NoError(t, err)
 
 	// MVP Terraform resource types that must be present (per provider Resources())
@@ -58,7 +59,7 @@ func TestNewFromResources_terraformTypeNamesMatchProvider(t *testing.T) {
 	p := provider.New("test")()
 	constructors := p.Resources(ctx)
 
-	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil, nil)
 	require.NoError(t, err)
 
 	// All type names must be prefixed with provider type
@@ -73,7 +74,7 @@ func TestNewFromResources_eachEntryHasModelType(t *testing.T) {
 	p := provider.New("test")()
 	constructors := p.Resources(ctx)
 
-	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil, nil)
 	require.NoError(t, err)
 
 	for _, e := range reg.Entries() {
@@ -88,7 +89,7 @@ func TestRegistry_ByTypeName(t *testing.T) {
 	p := provider.New("test")()
 	constructors := p.Resources(ctx)
 
-	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil, nil)
 	require.NoError(t, err)
 
 	e, ok := reg.ByTypeName("criblio_source")
@@ -105,7 +106,7 @@ func TestRegistry_TypeNames_and_Entries_consistent(t *testing.T) {
 	p := provider.New("test")()
 	constructors := p.Resources(ctx)
 
-	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil, nil)
 	require.NoError(t, err)
 
 	names := reg.TypeNames()
@@ -124,7 +125,7 @@ func TestNewFromResources_derivedMetadata(t *testing.T) {
 	p := provider.New("test")()
 	constructors := p.Resources(ctx)
 
-	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil, nil)
 	require.NoError(t, err)
 
 	// Source: Inputs.ListInput, GetInputByID, JSON group_id+id
@@ -155,7 +156,7 @@ func TestNewFromResources_derivedMetadata(t *testing.T) {
 	require.True(t, ok)
 	assert.Equal(t, "ListLookupFile", e.ListMethod)
 	assert.Equal(t, "GetLookupFileByID", e.GetMethod)
-	assert.Equal(t, "group_id", e.ImportIDFormat)
+	assert.Equal(t, "json:group_id,id", e.ImportIDFormat)
 }
 
 // TestImportMetadata_inSyncWithProvider ensures every resource type in the
@@ -167,7 +168,7 @@ func TestImportMetadata_inSyncWithProvider(t *testing.T) {
 	p := provider.New("test")()
 	constructors := p.Resources(ctx)
 
-	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil, nil)
 	require.NoError(t, err)
 
 	metadata := ImportMetadata()
@@ -198,7 +199,7 @@ func TestNewFromResources_staticOverridesReplaceDerived(t *testing.T) {
 		},
 	}
 
-	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), overrides)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), overrides, nil)
 	require.NoError(t, err)
 
 	// Override ListMethod and ImportIDFormat; GetMethod stays derived
@@ -214,4 +215,39 @@ func TestNewFromResources_staticOverridesReplaceDerived(t *testing.T) {
 	assert.Equal(t, "ListPipeline", e.ListMethod, "unchanged")
 	assert.Equal(t, "GetPipelineByIDCustom", e.GetMethod, "override should replace derived GetMethod")
 	assert.Equal(t, "json:group_id,id", e.ImportIDFormat, "unchanged")
+}
+
+// TestImportIDFormat_buildsValidImportID verifies JIRA AC: Import IDs are formatted
+// correctly per resource type. For types with ImportIDFormat set, BuildImportID
+// produces a valid import ID string.
+func TestImportIDFormat_buildsValidImportID(t *testing.T) {
+	ctx := context.Background()
+	p := provider.New("test")()
+	constructors := p.Resources(ctx)
+	reg, err := NewFromResources(ctx, constructors, MetadataFromProvider(), nil, nil)
+	require.NoError(t, err)
+
+	tests := []struct {
+		typeName    string
+		identifiers map[string]string
+		wantContain []string // substrings that must appear in the built ID
+	}{
+		{"criblio_source", map[string]string{"group_id": "default", "id": "input-1"}, []string{"group_id", "id", "default", "input-1"}},
+		{"criblio_pipeline", map[string]string{"group_id": "default", "id": "pipeline-1"}, []string{"group_id", "id", "default", "pipeline-1"}},
+		{"criblio_notification", map[string]string{"id": "notif-1"}, []string{"notif-1"}},
+		{"criblio_lookup_file", map[string]string{"group_id": "default", "id": "model_relative_entropy_top_domains.csv"}, []string{"group_id", "id", "default", "model_relative_entropy_top_domains.csv"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.typeName, func(t *testing.T) {
+			e, ok := reg.ByTypeName(tt.typeName)
+			require.True(t, ok)
+			require.NotEmpty(t, e.ImportIDFormat, "%s must have ImportIDFormat for import", tt.typeName)
+			id, err := generator.BuildImportID(e.ImportIDFormat, tt.identifiers)
+			require.NoError(t, err)
+			assert.NotEmpty(t, id)
+			for _, sub := range tt.wantContain {
+				assert.Contains(t, id, sub, "import ID should contain %q", sub)
+			}
+		})
+	}
 }

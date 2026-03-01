@@ -19,3 +19,5 @@ tests/e2e/import.tf
 sbom-*.json 
 .gocache/
 .cursor/
+tf*
+go.work*

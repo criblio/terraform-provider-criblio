@@ -30,6 +30,14 @@ func (c *CreateEventBreakerRulesetRequest) GetEventBreakerRuleset() shared.Event
 
 // CreateEventBreakerRulesetResponseBody - a list of Event Breaker Ruleset objects
 type CreateEventBreakerRulesetResponseBody struct {
+	Items []shared.EventBreakerRuleset `json:"items,omitempty"`
+}
+
+func (c *CreateEventBreakerRulesetResponseBody) GetItems() []shared.EventBreakerRuleset {
+	if c == nil {
+		return nil
+	}
+	return c.Items
 }
 
 type CreateEventBreakerRulesetResponse struct {
