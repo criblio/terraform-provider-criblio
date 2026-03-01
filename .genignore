@@ -10,6 +10,7 @@ internal/provider/packbreakers_resource.go
 internal/provider/packbreakers_resource_sdk.go
 internal/provider/packbreakers_data_source.go
 internal/provider/packbreakers_data_source_sdk.go
+internal/provider/packroutes_resource.go
 internal/provider/pipeline_resource.go
 internal/provider/packsource_resource_sdk.go
 internal/provider/pipeline_resource_sdk.go

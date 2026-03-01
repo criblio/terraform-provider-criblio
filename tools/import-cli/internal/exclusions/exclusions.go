@@ -13,6 +13,7 @@ var NoExportTypes = []string{
 	"criblio_lookup_file",                  // Control Plane API may not return content; UI uses different endpoint (knowledge/lookups).
 	"criblio_mapping_ruleset",              // List API is on root CriblIo (GetAdminProductsMappingsByProduct), not a service; no standard discovery.
 	"criblio_pack_lookups",                 // Same as lookup_file; content often missing from API response.
+	"criblio_search_usage_group",          // API returns null/empty for rules; required attr causes import/plan issues.
 	"criblio_workspace",                    // No list/get API in SDK; workspace is implicit from config.
 }
 

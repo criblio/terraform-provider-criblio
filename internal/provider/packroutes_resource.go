@@ -515,6 +515,12 @@ func (r *PackRoutesResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
+	// Populate routes from Items[0] so state matches API (criblio_routes does this via RefreshFromSharedRoutes).
+	// Pack API returns Items; configurable Routes must be set from Items[0].Routes to avoid plan drift.
+	if len(data.Items) > 0 {
+		data.Routes = packRoutesFromItems(data.Items[0].Routes)
+	}
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -653,6 +659,29 @@ func (r *PackRoutesResource) Delete(ctx context.Context, req resource.DeleteRequ
 		return
 	}
 
+}
+
+// packRoutesFromItems converts Items[0].Routes (RoutesRoute with ID) to configurable Routes (RoutesRoute1 without ID).
+func packRoutesFromItems(routes []tfTypes.RoutesRoute) []tfTypes.RoutesRoute1 {
+	if len(routes) == 0 {
+		return nil
+	}
+	out := make([]tfTypes.RoutesRoute1, 0, len(routes))
+	for _, rr := range routes {
+		out = append(out, tfTypes.RoutesRoute1{
+			AdditionalProperties:   rr.AdditionalProperties,
+			Description:            rr.Description,
+			Disabled:               rr.Disabled,
+			EnableOutputExpression: rr.EnableOutputExpression,
+			Filter:                 rr.Filter,
+			Final:                  rr.Final,
+			Name:                   rr.Name,
+			Output:                 rr.Output,
+			OutputExpression:       rr.OutputExpression,
+			Pipeline:               rr.Pipeline,
+		})
+	}
+	return out
 }
 
 func (r *PackRoutesResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

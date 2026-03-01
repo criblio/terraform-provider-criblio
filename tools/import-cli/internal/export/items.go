@@ -165,6 +165,7 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	}
 	// criblio_group requires product (stream|edge); provider model may not set it from API. Use product from idMap (we set it in ListGroupIdentifiersAndItems).
 	// Emit streamtags = [] explicitly when empty so config matches state (API returns []).
+	// ApplyGroupDefaults populates description, is_fleet, on_prem, tags, type, etc. from model to avoid plan drift.
 	if typeName == "criblio_group" {
 		if idMap["product"] != "" {
 			attrs["product"] = hcl.Value{Kind: hcl.KindString, String: idMap["product"]}
@@ -172,6 +173,7 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 		if _, has := attrs["streamtags"]; !has || attrs["streamtags"].IsNull() {
 			attrs["streamtags"] = hcl.Value{Kind: hcl.KindList, List: []hcl.Value{}}
 		}
+		custom.ApplyGroupDefaults(attrs, model)
 	}
 	if typeName == "criblio_appscope_config" {
 		custom.ApplyAppscopeConfigDefaults(attrs)

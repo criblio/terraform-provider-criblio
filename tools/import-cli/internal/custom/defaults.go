@@ -3,6 +3,7 @@ package custom
 import (
 	"encoding/json"
 
+	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 )
 
@@ -153,6 +154,70 @@ func parseJSONListOfObjects(s string) []hcl.Value {
 		out = append(out, hcl.Value{Kind: hcl.KindMap, Map: obj})
 	}
 	return out
+}
+
+// ApplyGroupDefaults populates criblio_group attrs from the model when API returns values
+// (description, is_fleet, on_prem, tags, type, etc.) so generated HCL matches state and avoids plan drift.
+func ApplyGroupDefaults(attrs map[string]hcl.Value, model interface{}) {
+	gm, ok := model.(*provider.GroupResourceModel)
+	if !ok || gm == nil {
+		return
+	}
+	setStr := func(attr, s string) {
+		if s != "" {
+			attrs[attr] = hcl.Value{Kind: hcl.KindString, String: s}
+		}
+	}
+	setBool := func(attr string, b bool) {
+		attrs[attr] = hcl.Value{Kind: hcl.KindBool, Bool: b}
+	}
+	setNum := func(attr string, n float64) {
+		attrs[attr] = hcl.Value{Kind: hcl.KindNumber, Number: n}
+	}
+	if !gm.Description.IsNull() && !gm.Description.IsUnknown() {
+		setStr("description", gm.Description.ValueString())
+	}
+	if !gm.IsFleet.IsNull() && !gm.IsFleet.IsUnknown() {
+		setBool("is_fleet", gm.IsFleet.ValueBool())
+	}
+	if !gm.OnPrem.IsNull() && !gm.OnPrem.IsUnknown() {
+		setBool("on_prem", gm.OnPrem.ValueBool())
+	}
+	if !gm.Tags.IsNull() && !gm.Tags.IsUnknown() {
+		setStr("tags", gm.Tags.ValueString())
+	}
+	if !gm.Type.IsNull() && !gm.Type.IsUnknown() {
+		setStr("type", gm.Type.ValueString())
+	}
+	if !gm.WorkerRemoteAccess.IsNull() && !gm.WorkerRemoteAccess.IsUnknown() {
+		setBool("worker_remote_access", gm.WorkerRemoteAccess.ValueBool())
+	}
+	if !gm.MaxWorkerAge.IsNull() && !gm.MaxWorkerAge.IsUnknown() && gm.MaxWorkerAge.ValueString() != "" {
+		setStr("max_worker_age", gm.MaxWorkerAge.ValueString())
+	}
+	if !gm.Name.IsNull() && !gm.Name.IsUnknown() && gm.Name.ValueString() != "" {
+		setStr("name", gm.Name.ValueString())
+	}
+	if !gm.EstimatedIngestRate.IsNull() && !gm.EstimatedIngestRate.IsUnknown() {
+		setNum("estimated_ingest_rate", gm.EstimatedIngestRate.ValueFloat64())
+	}
+	if !gm.Provisioned.IsNull() && !gm.Provisioned.IsUnknown() {
+		setBool("provisioned", gm.Provisioned.ValueBool())
+	}
+	if gm.Cloud != nil && !gm.Cloud.Provider.IsNull() && !gm.Cloud.Provider.IsUnknown() {
+		if cloud, ok := attrs["cloud"]; ok && cloud.Kind == hcl.KindMap && cloud.Map != nil {
+			cloud.Map["provider"] = hcl.Value{Kind: hcl.KindString, String: gm.Cloud.Provider.ValueString()}
+			if !gm.Cloud.Region.IsNull() && !gm.Cloud.Region.IsUnknown() {
+				cloud.Map["region"] = hcl.Value{Kind: hcl.KindString, String: gm.Cloud.Region.ValueString()}
+			}
+			attrs["cloud"] = cloud
+		} else if !gm.Cloud.Region.IsNull() && !gm.Cloud.Region.IsUnknown() {
+			attrs["cloud"] = hcl.Value{Kind: hcl.KindMap, Map: map[string]hcl.Value{
+				"provider": {Kind: hcl.KindString, String: gm.Cloud.Provider.ValueString()},
+				"region":   {Kind: hcl.KindString, String: gm.Cloud.Region.ValueString()},
+			}}
+		}
+	}
 }
 
 // ApplyProjectDefaults sets required attribute defaults for criblio_project so generated HCL
