@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"regexp"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
@@ -267,6 +268,101 @@ func TestWriteRootFiles_creates_import_with_module_prefix_by_group(t *testing.T)
 	importBytes, _ := os.ReadFile(importPath)
 	importStr := string(importBytes)
 	assert.Contains(t, importStr, "to = module.default_pipeline.criblio_pipeline.p1")
+}
+
+func TestWriteRootFiles_creates_tfvars_example_when_variables_present(t *testing.T) {
+	tmp := t.TempDir()
+	infos := []RootModuleInfo{
+		{Name: "source", Path: "./source", Variables: []string{"secret_xxx_value", "source_default_in_splunk_hec_token"}},
+	}
+	items := []ResourceItem{
+		{TypeName: "criblio_source", Name: "s1", ImportID: `{"group_id":"default","id":"s1"}`, GroupID: "default"},
+	}
+	err := WriteRootFiles(tmp, infos, items, false)
+	require.NoError(t, err)
+	variablesPath := filepath.Join(tmp, "variables.tf")
+	tfvarsExamplePath := filepath.Join(tmp, "terraform.tfvars.example")
+	require.FileExists(t, variablesPath)
+	require.FileExists(t, tfvarsExamplePath)
+	tfvarsBytes, _ := os.ReadFile(tfvarsExamplePath)
+	tfvarsStr := string(tfvarsBytes)
+	assert.Contains(t, tfvarsStr, `secret_xxx_value = ""`)
+	assert.Contains(t, tfvarsStr, `source_default_in_splunk_hec_token = ""`)
+	assert.Contains(t, tfvarsStr, "Copy to terraform.tfvars")
+}
+
+// TestWriteRootFiles_provider_has_placeholders validates JIRA AC: Provider block generated with placeholders.
+func TestWriteRootFiles_provider_has_placeholders(t *testing.T) {
+	tmp := t.TempDir()
+	infos := []RootModuleInfo{{Name: "pipeline", Path: "./pipeline"}}
+	items := []ResourceItem{{TypeName: "criblio_pipeline", Name: "p1", ImportID: `{"group_id":"default","id":"p1"}`, GroupID: "default"}}
+	err := WriteRootFiles(tmp, infos, items, false)
+	require.NoError(t, err)
+	providersBytes, _ := os.ReadFile(filepath.Join(tmp, "providers.tf"))
+	providersStr := string(providersBytes)
+	// Placeholders must be present (commented)
+	assert.Contains(t, providersStr, "YOUR_ORG_ID")
+	assert.Contains(t, providersStr, "YOUR_WORKSPACE_ID")
+	assert.Contains(t, providersStr, "organization_id")
+	assert.Contains(t, providersStr, "workspace_id")
+	// No uncommented sensitive values - organization_id/workspace_id should be commented
+	assert.Contains(t, providersStr, "# organization_id")
+	assert.Contains(t, providersStr, "# workspace_id")
+}
+
+// TestWriteRootFiles_readme_has_setup_and_warnings validates JIRA AC: README includes setup steps and warnings.
+func TestWriteRootFiles_readme_has_setup_and_warnings(t *testing.T) {
+	tmp := t.TempDir()
+	infos := []RootModuleInfo{{Name: "pipeline", Path: "./pipeline"}}
+	items := []ResourceItem{{TypeName: "criblio_pipeline", Name: "p1", ImportID: `{"group_id":"default","id":"p1"}`, GroupID: "default"}}
+	err := WriteRootFiles(tmp, infos, items, false)
+	require.NoError(t, err)
+	readmePath := filepath.Join(tmp, "README.md")
+	require.FileExists(t, readmePath)
+	readmeBytes, _ := os.ReadFile(readmePath)
+	readmeStr := string(readmeBytes)
+	// Setup steps
+	assert.Contains(t, readmeStr, "## Setup Steps")
+	assert.Contains(t, readmeStr, "terraform init")
+	assert.Contains(t, readmeStr, "terraform plan")
+	assert.Contains(t, readmeStr, "Configure provider authentication")
+	assert.Contains(t, readmeStr, "Environment variables")
+	// Warnings
+	assert.Contains(t, readmeStr, "## Warnings")
+	assert.Contains(t, readmeStr, "Do not commit secrets")
+	assert.Contains(t, readmeStr, ".gitignore")
+	assert.Contains(t, readmeStr, "Provider credentials")
+	// Documentation
+	assert.Contains(t, readmeStr, "## Documentation")
+	assert.Contains(t, readmeStr, "registry.terraform.io/providers/criblio")
+}
+
+// TestWriteRootFiles_no_secrets_leaked validates JIRA AC: No secrets leaked in generated files.
+func TestWriteRootFiles_no_secrets_leaked(t *testing.T) {
+	tmp := t.TempDir()
+	infos := []RootModuleInfo{
+		{Name: "source", Path: "./source", Variables: []string{"secret_xxx_value"}},
+	}
+	items := []ResourceItem{
+		{TypeName: "criblio_source", Name: "s1", ImportID: `{"group_id":"default","id":"s1"}`, GroupID: "default"},
+	}
+	err := WriteRootFiles(tmp, infos, items, false)
+	require.NoError(t, err)
+	// providers.tf: no uncommented credentials (placeholders only; sensitive attrs must be commented)
+	providersBytes, _ := os.ReadFile(filepath.Join(tmp, "providers.tf"))
+	providersStr := string(providersBytes)
+	// Match line with uncommented organization_id/workspace_id/bearer_auth/client_secret assignment
+	uncommentedSensitive := regexp.MustCompile(`(?m)^[^#]*\b(organization_id|workspace_id|bearer_auth|client_secret)\s*=`)
+	matches := uncommentedSensitive.FindString(providersStr)
+	assert.Empty(t, matches, "providers.tf must not have uncommented sensitive attributes")
+	// terraform.tfvars.example: only empty placeholder values
+	tfvarsBytes, _ := os.ReadFile(filepath.Join(tmp, "terraform.tfvars.example"))
+	tfvarsStr := string(tfvarsBytes)
+	assert.Contains(t, tfvarsStr, `= ""`)
+	// variables.tf: declares variables but no default values (secrets come from tfvars/env)
+	variablesBytes, _ := os.ReadFile(filepath.Join(tmp, "variables.tf"))
+	variablesStr := string(variablesBytes)
+	assert.NotRegexp(t, `default\s*=\s*"[^"]+"`, variablesStr, "variables must not have non-empty default values")
 }
 
 func TestRootModuleInfosFromItems(t *testing.T) {

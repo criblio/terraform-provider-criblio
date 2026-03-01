@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	ptypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
@@ -54,9 +55,24 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 		}
 		return routesVal
 	}
+	// normalizeRouteDescriptions sets description to null when empty string so config matches provider state (null vs "" drift).
+	normalizeRouteDescriptions := func(routesVal hcl.Value) hcl.Value {
+		if routesVal.Kind != hcl.KindList {
+			return routesVal
+		}
+		for i := range routesVal.List {
+			if routesVal.List[i].Kind == hcl.KindMap && routesVal.List[i].Map != nil {
+				if v, ok := routesVal.List[i].Map["description"]; ok && v.Kind == hcl.KindString && v.String == "" {
+					routesVal.List[i].Map["description"] = hcl.Value{Kind: hcl.KindNull}
+				}
+			}
+		}
+		return routesVal
+	}
 	if r.TypeName == "criblio_routes" {
 		if pm, ok := model.(*provider.RoutesResourceModel); ok && attrs["routes"].Kind != hcl.KindNull {
-			attrs["routes"] = injectRoutesAdditionalProperties(pm.Routes, attrs["routes"])
+			routesVal := injectRoutesAdditionalProperties(pm.Routes, attrs["routes"])
+			attrs["routes"] = normalizeRouteDescriptions(routesVal)
 		}
 	}
 	if r.TypeName == "criblio_pack_routes" {
@@ -68,7 +84,7 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 			routesAttrs, err := hcl.ModelToValue(&routesWrap, opts)
 			if err == nil && routesAttrs["routes"].Kind != hcl.KindNull {
 				routesVal := injectRoutesAdditionalProperties(pm.Items[0].Routes, routesAttrs["routes"])
-				attrs["routes"] = routesVal
+				attrs["routes"] = normalizeRouteDescriptions(routesVal)
 			}
 		}
 	}
@@ -149,6 +165,16 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if r.TypeName == "criblio_secret" {
 		// value is sensitive; description, tags may be computed.
 		it.LifecycleIgnoreChanges = []string{"description", "tags", "value"}
+	}
+	if r.TypeName == "criblio_pack_destination" {
+		// OneOf block structure may differ slightly from provider Read (e.g. optional nulls).
+		// Ignore the output block we emit to suppress drift.
+		for k := range attrs {
+			if strings.HasPrefix(k, "output_") {
+				it.LifecycleIgnoreChanges = []string{k}
+				break
+			}
+		}
 	}
 	return &it, ""
 }

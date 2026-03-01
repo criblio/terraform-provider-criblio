@@ -256,6 +256,10 @@ func TestGroupIDForOutput(t *testing.T) {
 	t.Run("default_search returns search", func(t *testing.T) {
 		assert.Equal(t, "search", groupIDForOutput("criblio_default_search", "default_search"))
 	})
+	t.Run("criblio_search_* returns search", func(t *testing.T) {
+		assert.Equal(t, "search", groupIDForOutput("criblio_search_dataset", "global"))
+		assert.Equal(t, "search", groupIDForOutput("criblio_search_dataset_provider", "global"))
+	})
 	t.Run("others return gid", func(t *testing.T) {
 		assert.Equal(t, "my-group", groupIDForOutput("criblio_source", "my-group"))
 	})
