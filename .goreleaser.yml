@@ -5,7 +5,7 @@ version: 2
 before:
   hooks:
     # This is just an example and not a requirement for building or publishing providers.
-    - go mod tidy
+    - go mod download
 builds:
   - env:
       # GoReleaser does not work with CGO and could also complicate
@@ -28,9 +28,12 @@ builds:
       - arm
       - arm64
     ignore:
-      - goos: darwin
-        goarch: '386'
       - goos: windows
+        goarch: arm
+      # macOS doesn't support 386/arm32
+      - goos: darwin
+        goarch: 386
+      - goos: darwin
         goarch: arm
     binary: '{{ .ProjectName }}_v{{ .Version }}'
 archives:
