@@ -1,19 +1,19 @@
 workflowVersion: 1.0.0
-speakeasyVersion: 1.658.2
+speakeasyVersion: 1.736.1
 sources:
-    Cribl Control Plane and Management API:
-        inputs:
-            - location: openapi.yml
-            - location: openapi-mgmt.yml
-        overlays:
-            - location: .speakeasy/entity-mapping-overlay.yml
-        registry:
-            location: registry.speakeasyapi.dev/cribl/cribl/cribl-control-plane-and-management-api
+  Cribl Control Plane and Management API:
+    inputs:
+      - location: openapi.yml
+      - location: openapi-mgmt.yml
+    overlays:
+      - location: .speakeasy/entity-mapping-overlay.yml
+    registry:
+      location: registry.speakeasyapi.dev/cribl/cribl/cribl-control-plane-and-management-api
 targets:
-    cribl-io:
-        target: terraform
-        source: Cribl Control Plane and Management API
-        publish:
-            terraform:
-                gpgPrivateKey: $terraform_gpg_private_key
-                gpgPassPhrase: $terraform_gpg_passphrase
+  cribl-io:
+    target: terraform
+    source: Cribl Control Plane and Management API
+    publish:
+      terraform:
+        gpgPrivateKey: $terraform_gpg_private_key
+        gpgPassPhrase: $terraform_gpg_passphrase
