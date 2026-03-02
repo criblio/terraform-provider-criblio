@@ -4404,17 +4404,8 @@ resource "criblio_pack_source" "my_packsource" {
 - `input_wiz_webhook` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook))
 - `input_zscaler_hec` (Attributes) (see [below for nested schema](#nestedatt--input_zscaler_hec))
 
-### Read-Only
-
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
-
 <a id="nestedatt--input_appscope"></a>
 ### Nested Schema for `input_appscope`
-
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "appscope"
 
 Optional:
 
@@ -4429,6 +4420,7 @@ Optional:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `filter` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--filter))
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
+- `id` (String) Unique ID for this input. Not Null
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to establish a connection. Default: "/.*/"
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_appscope--metadata))
@@ -4445,18 +4437,16 @@ Optional:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--tls))
+- `type` (String) Not Null; must be "appscope"
 - `unix_socket_path` (String) Path to the UNIX domain socket to listen on. Default: "$CRIBL_HOME/state/appscope.sock"
 - `unix_socket_perms` (String) Permissions to set for socket e.g., 777. If empty, falls back to the runtime user's default permissions.
 
 <a id="nestedatt--input_appscope--connections"></a>
 ### Nested Schema for `input_appscope.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
@@ -4471,24 +4461,21 @@ Optional:
 <a id="nestedatt--input_appscope--filter--allow"></a>
 ### Nested Schema for `input_appscope.filter.allow`
 
-Required:
-
-- `config` (String) Choose a config to apply to processes that match the process name and/or argument.
-- `procname` (String) Specify the name of a process or family of processes.
-
 Optional:
 
 - `arg` (String) Specify a string to substring-match against process command-line.
+- `config` (String) Choose a config to apply to processes that match the process name and/or argument. Not Null
+- `procname` (String) Specify the name of a process or family of processes. Not Null
 
 
 
 <a id="nestedatt--input_appscope--metadata"></a>
 ### Nested Schema for `input_appscope.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_appscope--persistence"></a>
@@ -4540,11 +4527,6 @@ Optional:
 <a id="nestedatt--input_azure_blob"></a>
 ### Nested Schema for `input_azure_blob`
 
-Required:
-
-- `queue_name` (String) The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myQueue-${C.vars.myVar}`
-- `type` (String) must be "azure_blob"
-
 Optional:
 
 - `auth_type` (String) Default: "manual"; must be one of ["manual", "secret", "clientSecret", "clientCert"]
@@ -4569,6 +4551,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_azure_blob--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
+- `queue_name` (String) The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myQueue-${C.vars.myVar}`. Not Null
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `service_period_secs` (Number) The duration (in seconds) which pollers should be validated and restarted if exited. Default: 5
 - `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors. Default: false
@@ -4577,35 +4560,33 @@ Optional:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tenant_id` (String) The service principal's tenant ID
 - `text_secret` (String) Select or create a stored text secret
+- `type` (String) Not Null; must be "azure_blob"
 - `visibility_timeout` (Number) The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a ReceiveMessage request. Default: 600
 
 <a id="nestedatt--input_azure_blob--certificate"></a>
 ### Nested Schema for `input_azure_blob.certificate`
 
-Required:
+Optional:
 
-- `certificate_name` (String) The certificate you registered as credentials for your app in the Azure portal
+- `certificate_name` (String) The certificate you registered as credentials for your app in the Azure portal. Not Null
 
 
 <a id="nestedatt--input_azure_blob--connections"></a>
 ### Nested Schema for `input_azure_blob.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_azure_blob--metadata"></a>
 ### Nested Schema for `input_azure_blob.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_azure_blob--pq"></a>
@@ -4626,12 +4607,6 @@ Optional:
 <a id="nestedatt--input_cloudflare_hec"></a>
 ### Nested Schema for `input_cloudflare_hec`
 
-Required:
-
-- `hec_api` (String) Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint.
-- `port` (Number) Port to listen on
-- `type` (String) must be "cloudflare_hec"
-
 Optional:
 
 - `access_control_allow_headers` (List of String) HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.
@@ -4648,6 +4623,7 @@ Optional:
 - `enable_health_check` (String) Parsed as JSON.
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction. Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `hec_api` (String) Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint. Not Null
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses). Default: "0.0.0.0"
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist. Default: "/.*/"
@@ -4657,6 +4633,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to every event. May be overridden by fields added at the token or request level. (see [below for nested schema](#nestedatt--input_cloudflare_hec--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -4665,6 +4642,7 @@ Optional:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec--tls))
+- `type` (String) Not Null; must be "cloudflare_hec"
 
 <a id="nestedatt--input_cloudflare_hec--auth_tokens"></a>
 ### Nested Schema for `input_cloudflare_hec.auth_tokens`
@@ -4682,32 +4660,29 @@ Optional:
 <a id="nestedatt--input_cloudflare_hec--auth_tokens--metadata"></a>
 ### Nested Schema for `input_cloudflare_hec.auth_tokens.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 
 <a id="nestedatt--input_cloudflare_hec--connections"></a>
 ### Nested Schema for `input_cloudflare_hec.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_cloudflare_hec--metadata"></a>
 ### Nested Schema for `input_cloudflare_hec.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_cloudflare_hec--pq"></a>
@@ -4751,16 +4726,13 @@ Optional:
 <a id="nestedatt--input_collection"></a>
 ### Nested Schema for `input_collection`
 
-Required:
-
-- `id` (String) Unique ID for this input
-
 Optional:
 
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_collection--connections))
 - `disabled` (Boolean) Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `id` (String) Unique ID for this input. Not Null
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collection--metadata))
 - `output` (String) Destination to send results to
 - `pipeline` (String) Pipeline to process results
@@ -4776,22 +4748,19 @@ Optional:
 <a id="nestedatt--input_collection--connections"></a>
 ### Nested Schema for `input_collection.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_collection--metadata"></a>
 ### Nested Schema for `input_collection.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_collection--pq"></a>
@@ -4822,16 +4791,13 @@ Optional:
 <a id="nestedatt--input_confluent_cloud"></a>
 ### Nested Schema for `input_confluent_cloud`
 
-Required:
-
-- `brokers` (List of String) List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092
-
 Optional:
 
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request. Default: 10000
 - `auto_commit_interval` (Number) How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `auto_commit_threshold` (Number) How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details. Default: 2
+- `brokers` (List of String) List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092. Not Null
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully. Default: 10000
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_confluent_cloud--connections))
 - `description` (String)
@@ -4877,12 +4843,9 @@ Default: 30000
 <a id="nestedatt--input_confluent_cloud--connections"></a>
 ### Nested Schema for `input_confluent_cloud.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
@@ -4931,10 +4894,10 @@ Default: true
 <a id="nestedatt--input_confluent_cloud--metadata"></a>
 ### Nested Schema for `input_confluent_cloud.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_confluent_cloud--pq"></a>
@@ -4983,11 +4946,6 @@ Default: true
 <a id="nestedatt--input_cribl"></a>
 ### Nested Schema for `input_cribl`
 
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "cribl"
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cribl--connections))
@@ -4995,32 +4953,31 @@ Optional:
 - `disabled` (Boolean) Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `filter` (String)
+- `id` (String) Unique ID for this input. Not Null
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `type` (String) Not Null; must be "cribl"
 
 <a id="nestedatt--input_cribl--connections"></a>
 ### Nested Schema for `input_cribl.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_cribl--metadata"></a>
 ### Nested Schema for `input_cribl.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_cribl--pq"></a>
@@ -5040,10 +4997,6 @@ Optional:
 
 <a id="nestedatt--input_cribl_http"></a>
 ### Nested Schema for `input_cribl_http`
-
-Required:
-
-- `port` (Number) Port to listen on
 
 Optional:
 
@@ -5065,6 +5018,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl_http--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_http--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -5077,22 +5031,19 @@ Optional:
 <a id="nestedatt--input_cribl_http--connections"></a>
 ### Nested Schema for `input_cribl_http.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_cribl_http--metadata"></a>
 ### Nested Schema for `input_cribl_http.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_cribl_http--pq"></a>
@@ -5131,10 +5082,6 @@ Optional:
 <a id="nestedatt--input_cribl_lake_http"></a>
 ### Nested Schema for `input_cribl_lake_http`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100
@@ -5155,6 +5102,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl_lake_http--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -5167,22 +5115,19 @@ Optional:
 <a id="nestedatt--input_cribl_lake_http--connections"></a>
 ### Nested Schema for `input_cribl_lake_http.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_cribl_lake_http--metadata"></a>
 ### Nested Schema for `input_cribl_lake_http.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_cribl_lake_http--pq"></a>
@@ -5221,10 +5166,6 @@ Optional:
 <a id="nestedatt--input_cribl_tcp"></a>
 ### Nested Schema for `input_cribl_tcp`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cribl_tcp--connections))
@@ -5238,6 +5179,7 @@ Optional:
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl_tcp--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_tcp--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
@@ -5251,22 +5193,19 @@ Optional:
 <a id="nestedatt--input_cribl_tcp--connections"></a>
 ### Nested Schema for `input_cribl_tcp.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_cribl_tcp--metadata"></a>
 ### Nested Schema for `input_cribl_tcp.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_cribl_tcp--pq"></a>
@@ -5305,11 +5244,6 @@ Optional:
 <a id="nestedatt--input_criblmetrics"></a>
 ### Nested Schema for `input_criblmetrics`
 
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "criblmetrics"
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_criblmetrics--connections))
@@ -5317,6 +5251,7 @@ Optional:
 - `disabled` (Boolean) Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `full_fidelity` (Boolean) Include granular metrics. Disabling this will drop the following metrics events: `cribl.logstream.host.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.index.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.source.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.sourcetype.(in_bytes,in_events,out_bytes,out_events)`. Default: true
+- `id` (String) Unique ID for this input. Not Null
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_criblmetrics--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_criblmetrics--pq))
@@ -5324,26 +5259,24 @@ Optional:
 - `prefix` (String) A prefix that is applied to the metrics provided by Cribl Stream. Default: "cribl.logstream."
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `type` (String) Not Null; must be "criblmetrics"
 
 <a id="nestedatt--input_criblmetrics--connections"></a>
 ### Nested Schema for `input_criblmetrics.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_criblmetrics--metadata"></a>
 ### Nested Schema for `input_criblmetrics.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_criblmetrics--pq"></a>
@@ -5363,11 +5296,6 @@ Optional:
 
 <a id="nestedatt--input_crowdstrike"></a>
 ### Nested Schema for `input_crowdstrike`
-
-Required:
-
-- `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
-- `type` (String) must be "crowdstrike"
 
 Optional:
 
@@ -5401,6 +5329,7 @@ Optional:
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike--preprocess))
 - `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
+- `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`. Not Null
 - `region` (String) AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
@@ -5411,6 +5340,7 @@ Optional:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tag_after_processing` (String) must be one of ["false", "true"]
+- `type` (String) Not Null; must be "crowdstrike"
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 21600
 
 <a id="nestedatt--input_crowdstrike--checkpointing"></a>
@@ -5425,22 +5355,19 @@ Optional:
 <a id="nestedatt--input_crowdstrike--connections"></a>
 ### Nested Schema for `input_crowdstrike.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_crowdstrike--metadata"></a>
 ### Nested Schema for `input_crowdstrike.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_crowdstrike--pq"></a>
@@ -5471,10 +5398,6 @@ Optional:
 <a id="nestedatt--input_datadog_agent"></a>
 ### Nested Schema for `input_datadog_agent`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100
@@ -5495,6 +5418,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_datadog_agent--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `proxy_mode` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--proxy_mode))
@@ -5508,22 +5432,19 @@ Optional:
 <a id="nestedatt--input_datadog_agent--connections"></a>
 ### Nested Schema for `input_datadog_agent.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_datadog_agent--metadata"></a>
 ### Nested Schema for `input_datadog_agent.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_datadog_agent--pq"></a>
@@ -5571,11 +5492,6 @@ Optional:
 <a id="nestedatt--input_datagen"></a>
 ### Nested Schema for `input_datagen`
 
-Required:
-
-- `samples` (Attributes List) (see [below for nested schema](#nestedatt--input_datagen--samples))
-- `type` (String) must be "datagen"
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_datagen--connections))
@@ -5587,40 +5503,27 @@ Optional:
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_datagen--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
+- `samples` (Attributes List) Not Null (see [below for nested schema](#nestedatt--input_datagen--samples))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
-
-<a id="nestedatt--input_datagen--samples"></a>
-### Nested Schema for `input_datagen.samples`
-
-Required:
-
-- `sample` (String)
-
-Optional:
-
-- `events_per_sec` (Number) Maximum number of events to generate per second per Worker Node. Defaults to 10. Default: 10
-
+- `type` (String) Not Null; must be "datagen"
 
 <a id="nestedatt--input_datagen--connections"></a>
 ### Nested Schema for `input_datagen.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_datagen--metadata"></a>
 ### Nested Schema for `input_datagen.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_datagen--pq"></a>
@@ -5635,6 +5538,15 @@ Optional:
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc. Default: "5GB"
 - `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. Default: "always"; must be one of ["smart", "always"]
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
+
+
+<a id="nestedatt--input_datagen--samples"></a>
+### Nested Schema for `input_datagen.samples`
+
+Optional:
+
+- `events_per_sec` (Number) Maximum number of events to generate per second per Worker Node. Defaults to 10. Default: 10
+- `sample` (String) Not Null
 
 
 
@@ -5693,22 +5605,19 @@ Optional:
 <a id="nestedatt--input_edge_prometheus--connections"></a>
 ### Nested Schema for `input_edge_prometheus.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_edge_prometheus--metadata"></a>
 ### Nested Schema for `input_edge_prometheus.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_edge_prometheus--persistence"></a>
@@ -5726,13 +5635,10 @@ Optional:
 <a id="nestedatt--input_edge_prometheus--pod_filter"></a>
 ### Nested Schema for `input_edge_prometheus.pod_filter`
 
-Required:
-
-- `filter` (String) JavaScript expression applied to pods objects. Return 'true' to include it.
-
 Optional:
 
 - `description` (String) Optional description of this rule's purpose
+- `filter` (String) JavaScript expression applied to pods objects. Return 'true' to include it. Not Null
 
 
 <a id="nestedatt--input_edge_prometheus--pq"></a>
@@ -5752,24 +5658,18 @@ Optional:
 <a id="nestedatt--input_edge_prometheus--search_filter"></a>
 ### Nested Schema for `input_edge_prometheus.search_filter`
 
-Required:
-
-- `name` (String) Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list
-
 Optional:
 
+- `name` (String) Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list. Not Null
 - `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned. Default: []
 
 
 <a id="nestedatt--input_edge_prometheus--targets"></a>
 ### Nested Schema for `input_edge_prometheus.targets`
 
-Required:
-
-- `host` (String) Name of host from which to pull metrics.
-
 Optional:
 
+- `host` (String) Name of host from which to pull metrics. Not Null
 - `path` (String) Path to use when collecting metrics from discovered targets. Default: "/metrics"
 - `port` (Number) The port number in the metrics URL for discovered targets. Default: 9090
 - `protocol` (String) Protocol to use when collecting metrics. Default: "http"; must be one of ["http", "https"]
@@ -5778,10 +5678,6 @@ Optional:
 
 <a id="nestedatt--input_elastic"></a>
 ### Nested Schema for `input_elastic`
-
-Required:
-
-- `port` (Number) Port to listen on
 
 Optional:
 
@@ -5810,6 +5706,7 @@ Optional:
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_elastic--metadata))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `proxy_mode` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--proxy_mode))
@@ -5824,34 +5721,28 @@ Optional:
 <a id="nestedatt--input_elastic--connections"></a>
 ### Nested Schema for `input_elastic.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_elastic--extra_http_headers"></a>
 ### Nested Schema for `input_elastic.extra_http_headers`
 
-Required:
-
-- `value` (String)
-
 Optional:
 
 - `name` (String)
+- `value` (String) Not Null
 
 
 <a id="nestedatt--input_elastic--metadata"></a>
 ### Nested Schema for `input_elastic.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_elastic--pq"></a>
@@ -5903,16 +5794,13 @@ Optional:
 <a id="nestedatt--input_eventhub"></a>
 ### Nested Schema for `input_eventhub`
 
-Required:
-
-- `brokers` (List of String) List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.
-
 Optional:
 
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request. Default: 10000
 - `auto_commit_interval` (Number) How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `auto_commit_threshold` (Number) How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details. Default: 2
+- `brokers` (List of String) List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies. Not Null
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully. Default: 10000
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_eventhub--connections))
 - `description` (String)
@@ -5957,22 +5845,19 @@ Default: 30000
 <a id="nestedatt--input_eventhub--connections"></a>
 ### Nested Schema for `input_eventhub.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_eventhub--metadata"></a>
 ### Nested Schema for `input_eventhub.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_eventhub--pq"></a>
@@ -6011,14 +5896,10 @@ Optional:
 <a id="nestedatt--input_exec"></a>
 ### Nested Schema for `input_exec`
 
-Required:
-
-- `command` (String) Command to execute; supports Bourne shell (or CMD on Windows) syntax
-- `type` (String) must be "exec"
-
 Optional:
 
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `command` (String) Command to execute; supports Bourne shell (or CMD on Windows) syntax. Not Null
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_exec--connections))
 - `cron_schedule` (String) Cron schedule to execute the command on. Default: "* * * * *"
 - `description` (String)
@@ -6035,26 +5916,24 @@ Optional:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `type` (String) Not Null; must be "exec"
 
 <a id="nestedatt--input_exec--connections"></a>
 ### Nested Schema for `input_exec.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_exec--metadata"></a>
 ### Nested Schema for `input_exec.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_exec--pq"></a>
@@ -6075,11 +5954,6 @@ Optional:
 <a id="nestedatt--input_file"></a>
 ### Nested Schema for `input_file`
 
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "file"
-
 Optional:
 
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
@@ -6093,6 +5967,7 @@ Optional:
 - `filenames` (List of String) The full path of discovered files are matched against this wildcard list. Default: ["*/log/*","*log"]
 - `force_text` (Boolean) Forces files containing binary data to be streamed as text. Default: false
 - `hash_len` (Number) Length of file header bytes to use in hash for unique file identification. Default: 256
+- `id` (String) Unique ID for this input. Not Null
 - `idle_timeout` (Number) Time, in seconds, before an idle file is closed. Default: 300
 - `include_unidentifiable_binary` (Boolean) Stream binary files as Base64-encoded chunks. Default: false
 - `interval` (Number) Time, in seconds, between scanning for files. Default: 10
@@ -6108,26 +5983,24 @@ Optional:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `suppress_missing_path_errors` (Boolean) Default: false
 - `tail_only` (Boolean) Read only new entries at the end of all files discovered at next startup. @{product} will then read newly discovered files from the head. Disable this to resume reading all files from head. Default: false
+- `type` (String) Not Null; must be "file"
 
 <a id="nestedatt--input_file--connections"></a>
 ### Nested Schema for `input_file.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_file--metadata"></a>
 ### Nested Schema for `input_file.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_file--pq"></a>
@@ -6147,10 +6020,6 @@ Optional:
 
 <a id="nestedatt--input_firehose"></a>
 ### Nested Schema for `input_firehose`
-
-Required:
-
-- `port` (Number) Port to listen on
 
 Optional:
 
@@ -6172,6 +6041,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_firehose--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_firehose--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -6184,22 +6054,19 @@ Optional:
 <a id="nestedatt--input_firehose--connections"></a>
 ### Nested Schema for `input_firehose.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_firehose--metadata"></a>
 ### Nested Schema for `input_firehose.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_firehose--pq"></a>
@@ -6238,11 +6105,6 @@ Optional:
 <a id="nestedatt--input_google_pubsub"></a>
 ### Nested Schema for `input_google_pubsub`
 
-Required:
-
-- `subscription_name` (String) ID of the subscription to use when receiving events
-- `topic_name` (String) ID of the topic to receive events from
-
 Optional:
 
 - `concurrency` (Number) How many streams to pull messages from at one time. Doubling the value doubles the number of messages this Source pulls from the topic (if available), while consuming more CPU and memory. Defaults to 5. Default: 5
@@ -6266,27 +6128,26 @@ Optional:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `subscription_name` (String) ID of the subscription to use when receiving events. Not Null
+- `topic_name` (String) ID of the topic to receive events from. Not Null
 - `type` (String) must be "google_pubsub"
 
 <a id="nestedatt--input_google_pubsub--connections"></a>
 ### Nested Schema for `input_google_pubsub.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_google_pubsub--metadata"></a>
 ### Nested Schema for `input_google_pubsub.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_google_pubsub--pq"></a>
@@ -6306,10 +6167,6 @@ Optional:
 
 <a id="nestedatt--input_grafana"></a>
 ### Nested Schema for `input_grafana`
-
-Required:
-
-- `port` (Number) Port to listen on
 
 Optional:
 
@@ -6332,6 +6189,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_grafana--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `prometheus_api` (String) Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' (Loki) must be configured. Default: "/api/prom/push"
@@ -6346,12 +6204,9 @@ Optional:
 <a id="nestedatt--input_grafana--connections"></a>
 ### Nested Schema for `input_grafana.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
@@ -6378,29 +6233,29 @@ Optional:
 <a id="nestedatt--input_grafana--loki_auth--oauth_headers"></a>
 ### Nested Schema for `input_grafana.loki_auth.oauth_headers`
 
-Required:
+Optional:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) OAuth header name. Not Null
+- `value` (String) OAuth header value. Not Null
 
 
 <a id="nestedatt--input_grafana--loki_auth--oauth_params"></a>
 ### Nested Schema for `input_grafana.loki_auth.oauth_params`
 
-Required:
+Optional:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) OAuth parameter name. Not Null
+- `value` (String) OAuth parameter value. Not Null
 
 
 
 <a id="nestedatt--input_grafana--metadata"></a>
 ### Nested Schema for `input_grafana.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_grafana--pq"></a>
@@ -6440,19 +6295,19 @@ Optional:
 <a id="nestedatt--input_grafana--prometheus_auth--oauth_headers"></a>
 ### Nested Schema for `input_grafana.prometheus_auth.oauth_headers`
 
-Required:
+Optional:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) OAuth header name. Not Null
+- `value` (String) OAuth header value. Not Null
 
 
 <a id="nestedatt--input_grafana--prometheus_auth--oauth_params"></a>
 ### Nested Schema for `input_grafana.prometheus_auth.oauth_params`
 
-Required:
+Optional:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) OAuth parameter name. Not Null
+- `value` (String) OAuth parameter value. Not Null
 
 
 
@@ -6478,10 +6333,6 @@ Optional:
 <a id="nestedatt--input_http"></a>
 ### Nested Schema for `input_http`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100
@@ -6505,6 +6356,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_http--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_http--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -6519,44 +6371,38 @@ Optional:
 <a id="nestedatt--input_http--auth_tokens_ext"></a>
 ### Nested Schema for `input_http.auth_tokens_ext`
 
-Required:
-
-- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
-
 Optional:
 
 - `description` (String)
 - `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_http--auth_tokens_ext--metadata))
+- `token` (String) Shared secret to be provided by any client (Authorization: <token>). Not Null
 
 <a id="nestedatt--input_http--auth_tokens_ext--metadata"></a>
 ### Nested Schema for `input_http.auth_tokens_ext.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 
 <a id="nestedatt--input_http--connections"></a>
 ### Nested Schema for `input_http.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_http--metadata"></a>
 ### Nested Schema for `input_http.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_http--pq"></a>
@@ -6595,10 +6441,6 @@ Optional:
 <a id="nestedatt--input_http_raw"></a>
 ### Nested Schema for `input_http_raw`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100
@@ -6623,6 +6465,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_http_raw--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -6636,44 +6479,38 @@ Optional:
 <a id="nestedatt--input_http_raw--auth_tokens_ext"></a>
 ### Nested Schema for `input_http_raw.auth_tokens_ext`
 
-Required:
-
-- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
-
 Optional:
 
 - `description` (String)
 - `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext--metadata))
+- `token` (String) Shared secret to be provided by any client (Authorization: <token>). Not Null
 
 <a id="nestedatt--input_http_raw--auth_tokens_ext--metadata"></a>
 ### Nested Schema for `input_http_raw.auth_tokens_ext.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 
 <a id="nestedatt--input_http_raw--connections"></a>
 ### Nested Schema for `input_http_raw.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_http_raw--metadata"></a>
 ### Nested Schema for `input_http_raw.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_http_raw--pq"></a>
@@ -6712,10 +6549,6 @@ Optional:
 <a id="nestedatt--input_journal_files"></a>
 ### Nested Schema for `input_journal_files`
 
-Required:
-
-- `path` (String) Directory path to search for journals. Environment variables will be resolved, e.g. $CRIBL_EDGE_FS_ROOT/var/log/journal/$MACHINE_ID.
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_journal_files--connections))
@@ -6728,6 +6561,7 @@ Optional:
 - `journals` (List of String) The full path of discovered journals are matched against this wildcard list. Default: ["system"]
 - `max_age_dur` (String) The maximum log message age, in duration form (e.g,: 60s, 4h, 3d, 1w).  Default of no value will apply no max age filters.
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_journal_files--metadata))
+- `path` (String) Directory path to search for journals. Environment variables will be resolved, e.g. $CRIBL_EDGE_FS_ROOT/var/log/journal/$MACHINE_ID. Not Null
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_journal_files--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
@@ -6739,22 +6573,19 @@ Optional:
 <a id="nestedatt--input_journal_files--connections"></a>
 ### Nested Schema for `input_journal_files.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_journal_files--metadata"></a>
 ### Nested Schema for `input_journal_files.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_journal_files--pq"></a>
@@ -6774,22 +6605,15 @@ Optional:
 <a id="nestedatt--input_journal_files--rules"></a>
 ### Nested Schema for `input_journal_files.rules`
 
-Required:
-
-- `filter` (String) JavaScript expression applied to Journal objects. Return 'true' to include it.
-
 Optional:
 
 - `description` (String) Optional description of this rule's purpose
+- `filter` (String) JavaScript expression applied to Journal objects. Return 'true' to include it. Not Null
 
 
 
 <a id="nestedatt--input_kafka"></a>
 ### Nested Schema for `input_kafka`
-
-Required:
-
-- `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).
 
 Optional:
 
@@ -6797,6 +6621,7 @@ Optional:
 - `auto_commit_interval` (Number) How often to commit offsets. If both this and Offset commit threshold are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `auto_commit_threshold` (Number) How many events are needed to trigger an offset commit. If both this and Offset commit interval are set, @{product} commits offsets when either condition is met. If both are empty, @{product} commits offsets after each batch.
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details. Default: 2
+- `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092). Not Null
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully. Default: 10000
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_kafka--connections))
 - `description` (String)
@@ -6842,12 +6667,9 @@ Default: 30000
 <a id="nestedatt--input_kafka--connections"></a>
 ### Nested Schema for `input_kafka.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
@@ -6896,10 +6718,10 @@ Default: true
 <a id="nestedatt--input_kafka--metadata"></a>
 ### Nested Schema for `input_kafka.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_kafka--pq"></a>
@@ -6948,11 +6770,6 @@ Default: true
 <a id="nestedatt--input_kinesis"></a>
 ### Nested Schema for `input_kinesis`
 
-Required:
-
-- `region` (String) Region where the Kinesis stream is located
-- `stream_name` (String) Kinesis Data Stream to read data from
-
 Optional:
 
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
@@ -6978,6 +6795,7 @@ Optional:
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_kinesis--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
+- `region` (String) Region where the Kinesis stream is located. Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
@@ -6985,6 +6803,7 @@ Optional:
 - `shard_expr` (String) A JavaScript expression to be called with each shardId for the stream. If the expression evaluates to a truthy value, the shard will be processed. Default: "true"
 - `shard_iterator_type` (String) Location at which to start reading a shard for the first time. Default: "TRIM_HORIZON"; must be one of ["TRIM_HORIZON", "LATEST"]
 - `signature_version` (String) Signature version to use for signing Kinesis stream requests. Default: "v4"; must be one of ["v2", "v4"]
+- `stream_name` (String) Kinesis Data Stream to read data from. Not Null
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `type` (String) must be "kinesis"
 - `verify_kpl_check_sums` (Boolean) Verify Kinesis Producer Library (KPL) event checksums. Default: false
@@ -6992,22 +6811,19 @@ Optional:
 <a id="nestedatt--input_kinesis--connections"></a>
 ### Nested Schema for `input_kinesis.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_kinesis--metadata"></a>
 ### Nested Schema for `input_kinesis.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_kinesis--pq"></a>
@@ -7028,17 +6844,13 @@ Optional:
 <a id="nestedatt--input_kube_events"></a>
 ### Nested Schema for `input_kube_events`
 
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "kube_events"
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_kube_events--connections))
 - `description` (String)
 - `disabled` (Boolean) Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `id` (String) Unique ID for this input. Not Null
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kube_events--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_kube_events--pq))
@@ -7046,26 +6858,24 @@ Optional:
 - `rules` (Attributes List) Filtering on event fields (see [below for nested schema](#nestedatt--input_kube_events--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `type` (String) Not Null; must be "kube_events"
 
 <a id="nestedatt--input_kube_events--connections"></a>
 ### Nested Schema for `input_kube_events.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_kube_events--metadata"></a>
 ### Nested Schema for `input_kube_events.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_kube_events--pq"></a>
@@ -7085,23 +6895,15 @@ Optional:
 <a id="nestedatt--input_kube_events--rules"></a>
 ### Nested Schema for `input_kube_events.rules`
 
-Required:
-
-- `filter` (String) JavaScript expression applied to Kubernetes objects. Return 'true' to include it.
-
 Optional:
 
 - `description` (String) Optional description of this rule's purpose
+- `filter` (String) JavaScript expression applied to Kubernetes objects. Return 'true' to include it. Not Null
 
 
 
 <a id="nestedatt--input_kube_logs"></a>
 ### Nested Schema for `input_kube_logs`
-
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "kube_logs"
 
 Optional:
 
@@ -7111,6 +6913,7 @@ Optional:
 - `disabled` (Boolean) Default: false
 - `enable_load_balancing` (Boolean) Load balance traffic across all Worker Processes. Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `id` (String) Unique ID for this input. Not Null
 - `interval` (Number) Time, in seconds, between checks for new containers. Default is 15 secs. Default: 15
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kube_logs--metadata))
 - `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_kube_logs--persistence))
@@ -7122,26 +6925,24 @@ Optional:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `timestamps` (Boolean) For use when containers do not emit a timestamp, prefix each line of output with a timestamp. If you enable this setting, you can use the Kubernetes Logs Event Breaker and the kubernetes_logs Pre-processing Pipeline to remove them from the events after the timestamps are extracted. Default: false
+- `type` (String) Not Null; must be "kube_logs"
 
 <a id="nestedatt--input_kube_logs--connections"></a>
 ### Nested Schema for `input_kube_logs.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_kube_logs--metadata"></a>
 ### Nested Schema for `input_kube_logs.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_kube_logs--persistence"></a>
@@ -7173,23 +6974,15 @@ Optional:
 <a id="nestedatt--input_kube_logs--rules"></a>
 ### Nested Schema for `input_kube_logs.rules`
 
-Required:
-
-- `filter` (String) JavaScript expression applied to Pod objects. Return 'true' to include it.
-
 Optional:
 
 - `description` (String) Optional description of this rule's purpose
+- `filter` (String) JavaScript expression applied to Pod objects. Return 'true' to include it. Not Null
 
 
 
 <a id="nestedatt--input_kube_metrics"></a>
 ### Nested Schema for `input_kube_metrics`
-
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "kube_metrics"
 
 Optional:
 
@@ -7197,6 +6990,7 @@ Optional:
 - `description` (String)
 - `disabled` (Boolean) Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `id` (String) Unique ID for this input. Not Null
 - `interval` (Number) Time, in seconds, between consecutive metrics collections. Default is 15 secs. Default: 15
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kube_metrics--metadata))
 - `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_kube_metrics--persistence))
@@ -7206,26 +7000,24 @@ Optional:
 - `rules` (Attributes List) Add rules to decide which Kubernetes objects to generate metrics for. Events are generated if no rules are given or of all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_kube_metrics--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `type` (String) Not Null; must be "kube_metrics"
 
 <a id="nestedatt--input_kube_metrics--connections"></a>
 ### Nested Schema for `input_kube_metrics.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_kube_metrics--metadata"></a>
 ### Nested Schema for `input_kube_metrics.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_kube_metrics--persistence"></a>
@@ -7258,22 +7050,15 @@ Optional:
 <a id="nestedatt--input_kube_metrics--rules"></a>
 ### Nested Schema for `input_kube_metrics.rules`
 
-Required:
-
-- `filter` (String) JavaScript expression applied to Kubernetes objects. Return 'true' to include it.
-
 Optional:
 
 - `description` (String) Optional description of this rule's purpose
+- `filter` (String) JavaScript expression applied to Kubernetes objects. Return 'true' to include it. Not Null
 
 
 
 <a id="nestedatt--input_loki"></a>
 ### Nested Schema for `input_loki`
-
-Required:
-
-- `port` (Number) Port to listen on
 
 Optional:
 
@@ -7302,6 +7087,7 @@ Optional:
 - `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_loki--oauth_params))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_loki--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -7321,40 +7107,37 @@ Optional:
 <a id="nestedatt--input_loki--connections"></a>
 ### Nested Schema for `input_loki.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_loki--metadata"></a>
 ### Nested Schema for `input_loki.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_loki--oauth_headers"></a>
 ### Nested Schema for `input_loki.oauth_headers`
 
-Required:
+Optional:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) OAuth header name. Not Null
+- `value` (String) OAuth header value. Not Null
 
 
 <a id="nestedatt--input_loki--oauth_params"></a>
 ### Nested Schema for `input_loki.oauth_params`
 
-Required:
+Optional:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) OAuth parameter name. Not Null
+- `value` (String) OAuth parameter value. Not Null
 
 
 <a id="nestedatt--input_loki--pq"></a>
@@ -7393,10 +7176,6 @@ Optional:
 <a id="nestedatt--input_metrics"></a>
 ### Nested Schema for `input_metrics`
 
-Required:
-
-- `type` (String) must be "metrics"
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_metrics--connections))
@@ -7416,28 +7195,26 @@ Optional:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_metrics--tls))
+- `type` (String) Not Null; must be "metrics"
 - `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
 <a id="nestedatt--input_metrics--connections"></a>
 ### Nested Schema for `input_metrics.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_metrics--metadata"></a>
 ### Nested Schema for `input_metrics.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_metrics--pq"></a>
@@ -7499,22 +7276,19 @@ Optional:
 <a id="nestedatt--input_model_driven_telemetry--connections"></a>
 ### Nested Schema for `input_model_driven_telemetry.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_model_driven_telemetry--metadata"></a>
 ### Nested Schema for `input_model_driven_telemetry.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_model_driven_telemetry--pq"></a>
@@ -7552,11 +7326,6 @@ Optional:
 <a id="nestedatt--input_msk"></a>
 ### Nested Schema for `input_msk`
 
-Required:
-
-- `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).
-- `region` (String) Region where the MSK cluster is located
-
 Optional:
 
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
@@ -7569,6 +7338,7 @@ Optional:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details. Default: 2
+- `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092). Not Null
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully. Default: 10000
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_msk--connections))
 - `description` (String)
@@ -7600,6 +7370,7 @@ Default: 3000
     If the timeout is exceeded, the coordinator broker will remove the worker from the group.
     See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 Default: 60000
+- `region` (String) Region where the MSK cluster is located. Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request. Default: 60000
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
@@ -7619,12 +7390,9 @@ Default: 30000
 <a id="nestedatt--input_msk--connections"></a>
 ### Nested Schema for `input_msk.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
@@ -7673,10 +7441,10 @@ Default: true
 <a id="nestedatt--input_msk--metadata"></a>
 ### Nested Schema for `input_msk.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_msk--pq"></a>
@@ -7746,22 +7514,19 @@ Optional:
 <a id="nestedatt--input_netflow--connections"></a>
 ### Nested Schema for `input_netflow.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_netflow--metadata"></a>
 ### Nested Schema for `input_netflow.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_netflow--pq"></a>
@@ -7782,13 +7547,9 @@ Optional:
 <a id="nestedatt--input_office365_mgmt"></a>
 ### Nested Schema for `input_office365_mgmt`
 
-Required:
-
-- `app_id` (String) Office 365 Azure Application ID
-- `tenant_id` (String) Office 365 Azure Tenant ID
-
 Optional:
 
+- `app_id` (String) Office 365 Azure Application ID. Not Null
 - `auth_type` (String) Enter client secret directly, or select a stored secret. Default: "manual"; must be one of ["manual", "secret"]
 - `client_secret` (String) Office 365 Azure client secret
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_office365_mgmt--connections))
@@ -7811,6 +7572,7 @@ Optional:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_mgmt--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `tenant_id` (String) Office 365 Azure Tenant ID. Not Null
 - `text_secret` (String) Select or create a stored text secret
 - `timeout` (Number) HTTP request inactivity timeout, use 0 to disable. Default: 300
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector. Default: "4h"
@@ -7819,37 +7581,31 @@ Optional:
 <a id="nestedatt--input_office365_mgmt--connections"></a>
 ### Nested Schema for `input_office365_mgmt.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_office365_mgmt--content_config"></a>
 ### Nested Schema for `input_office365_mgmt.content_config`
 
-Required:
-
-- `content_type` (String) Office 365 Management Activity API Content Type
-- `enabled` (Boolean)
-- `interval` (Number) Interval, in minutes, between polls
-- `log_level` (String) must be one of ["error", "warn", "info", "debug"]
-
 Optional:
 
+- `content_type` (String) Office 365 Management Activity API Content Type. Not Null
 - `description` (String) If interval type is minutes the value entered must evenly divisible by 60 or save will fail
+- `enabled` (Boolean) Not Null
+- `interval` (Number) Interval, in minutes, between polls. Not Null
+- `log_level` (String) Not Null; must be one of ["error", "warn", "info", "debug"]
 
 
 <a id="nestedatt--input_office365_mgmt--metadata"></a>
 ### Nested Schema for `input_office365_mgmt.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_office365_mgmt--pq"></a>
@@ -7929,36 +7685,30 @@ Optional:
 <a id="nestedatt--input_office365_msg_trace--cert_options"></a>
 ### Nested Schema for `input_office365_msg_trace.cert_options`
 
-Required:
-
-- `cert_path` (String) Path to the certificate to use. Certificate should be in PEM format. Can reference $ENV_VARS.
-- `priv_key_path` (String) Path to the private key to use. Key should be in PEM format. Can reference $ENV_VARS.
-
 Optional:
 
+- `cert_path` (String) Path to the certificate to use. Certificate should be in PEM format. Can reference $ENV_VARS. Not Null
 - `certificate_name` (String) The name of the predefined certificate.
 - `passphrase` (String) Passphrase to use to decrypt the private key.
+- `priv_key_path` (String) Path to the private key to use. Key should be in PEM format. Can reference $ENV_VARS. Not Null
 
 
 <a id="nestedatt--input_office365_msg_trace--connections"></a>
 ### Nested Schema for `input_office365_msg_trace.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_office365_msg_trace--metadata"></a>
 ### Nested Schema for `input_office365_msg_trace.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_office365_msg_trace--pq"></a>
@@ -7994,13 +7744,9 @@ Optional:
 <a id="nestedatt--input_office365_service"></a>
 ### Nested Schema for `input_office365_service`
 
-Required:
-
-- `app_id` (String) Office 365 Azure Application ID
-- `tenant_id` (String) Office 365 Azure Tenant ID
-
 Optional:
 
+- `app_id` (String) Office 365 Azure Application ID. Not Null
 - `auth_type` (String) Enter client secret directly, or select a stored secret. Default: "manual"; must be one of ["manual", "secret"]
 - `client_secret` (String) Office 365 Azure client secret
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_office365_service--connections))
@@ -8021,6 +7767,7 @@ Optional:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_service--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `tenant_id` (String) Office 365 Azure Tenant ID. Not Null
 - `text_secret` (String) Select or create a stored text secret
 - `timeout` (Number) HTTP request inactivity timeout, use 0 to disable. Default: 300
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector. Default: "4h"
@@ -8029,12 +7776,9 @@ Optional:
 <a id="nestedatt--input_office365_service--connections"></a>
 ### Nested Schema for `input_office365_service.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
@@ -8053,10 +7797,10 @@ Optional:
 <a id="nestedatt--input_office365_service--metadata"></a>
 ### Nested Schema for `input_office365_service.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_office365_service--pq"></a>
@@ -8144,40 +7888,37 @@ Optional:
 <a id="nestedatt--input_open_telemetry--connections"></a>
 ### Nested Schema for `input_open_telemetry.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_open_telemetry--metadata"></a>
 ### Nested Schema for `input_open_telemetry.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_open_telemetry--oauth_headers"></a>
 ### Nested Schema for `input_open_telemetry.oauth_headers`
 
-Required:
+Optional:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) OAuth header name. Not Null
+- `value` (String) OAuth header value. Not Null
 
 
 <a id="nestedatt--input_open_telemetry--oauth_params"></a>
 ### Nested Schema for `input_open_telemetry.oauth_params`
 
-Required:
+Optional:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) OAuth parameter name. Not Null
+- `value` (String) OAuth parameter value. Not Null
 
 
 <a id="nestedatt--input_open_telemetry--pq"></a>
@@ -8266,22 +8007,19 @@ Optional:
 <a id="nestedatt--input_prometheus--connections"></a>
 ### Nested Schema for `input_prometheus.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_prometheus--metadata"></a>
 ### Nested Schema for `input_prometheus.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_prometheus--pq"></a>
@@ -8301,22 +8039,15 @@ Optional:
 <a id="nestedatt--input_prometheus--search_filter"></a>
 ### Nested Schema for `input_prometheus.search_filter`
 
-Required:
-
-- `name` (String) Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list
-
 Optional:
 
+- `name` (String) Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list. Not Null
 - `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned. Default: []
 
 
 
 <a id="nestedatt--input_prometheus_rw"></a>
 ### Nested Schema for `input_prometheus_rw`
-
-Required:
-
-- `port` (Number) Port to listen on
 
 Optional:
 
@@ -8344,6 +8075,7 @@ Optional:
 - `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_prometheus_rw--oauth_params))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus_rw--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `prometheus_api` (String) Absolute path on which to listen for Prometheus requests. Defaults to /write, which will expand as: http://<your‑upstream‑URL>:<your‑port>/write. Default: "/write"
@@ -8364,40 +8096,37 @@ Optional:
 <a id="nestedatt--input_prometheus_rw--connections"></a>
 ### Nested Schema for `input_prometheus_rw.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_prometheus_rw--metadata"></a>
 ### Nested Schema for `input_prometheus_rw.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_prometheus_rw--oauth_headers"></a>
 ### Nested Schema for `input_prometheus_rw.oauth_headers`
 
-Required:
+Optional:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) OAuth header name. Not Null
+- `value` (String) OAuth header value. Not Null
 
 
 <a id="nestedatt--input_prometheus_rw--oauth_params"></a>
 ### Nested Schema for `input_prometheus_rw.oauth_params`
 
-Required:
+Optional:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) OAuth parameter name. Not Null
+- `value` (String) OAuth parameter value. Not Null
 
 
 <a id="nestedatt--input_prometheus_rw--pq"></a>
@@ -8436,10 +8165,6 @@ Optional:
 <a id="nestedatt--input_raw_udp"></a>
 ### Nested Schema for `input_raw_udp`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_raw_udp--connections))
@@ -8453,6 +8178,7 @@ Optional:
 - `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP. Default: 1000
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_raw_udp--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_raw_udp--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
@@ -8464,22 +8190,19 @@ Optional:
 <a id="nestedatt--input_raw_udp--connections"></a>
 ### Nested Schema for `input_raw_udp.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_raw_udp--metadata"></a>
 ### Nested Schema for `input_raw_udp.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_raw_udp--pq"></a>
@@ -8499,11 +8222,6 @@ Optional:
 
 <a id="nestedatt--input_s3"></a>
 ### Nested Schema for `input_s3`
-
-Required:
-
-- `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
-- `type` (String) must be "s3"
 
 Optional:
 
@@ -8539,6 +8257,7 @@ Optional:
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_s3--preprocess))
 - `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
+- `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`. Not Null
 - `region` (String) AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
@@ -8549,6 +8268,7 @@ Optional:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tag_after_processing` (Boolean) Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions. Default: false
+- `type` (String) Not Null; must be "s3"
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600
 
 <a id="nestedatt--input_s3--checkpointing"></a>
@@ -8563,22 +8283,19 @@ Optional:
 <a id="nestedatt--input_s3--connections"></a>
 ### Nested Schema for `input_s3.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_s3--metadata"></a>
 ### Nested Schema for `input_s3.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_s3--pq"></a>
@@ -8608,11 +8325,6 @@ Optional:
 
 <a id="nestedatt--input_s3_inventory"></a>
 ### Nested Schema for `input_s3_inventory`
-
-Required:
-
-- `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
-- `type` (String) must be "s3_inventory"
 
 Optional:
 
@@ -8649,6 +8361,7 @@ Optional:
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_s3_inventory--preprocess))
 - `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
+- `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`. Not Null
 - `region` (String) AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
@@ -8659,6 +8372,7 @@ Optional:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tag_after_processing` (String) must be one of ["false", "true"]
+- `type` (String) Not Null; must be "s3_inventory"
 - `validate_inventory_files` (Boolean) If set to Yes, each inventory file in the manifest will be validated against its checksum. Defaults to false. Default: false
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600
 
@@ -8674,22 +8388,19 @@ Optional:
 <a id="nestedatt--input_s3_inventory--connections"></a>
 ### Nested Schema for `input_s3_inventory.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_s3_inventory--metadata"></a>
 ### Nested Schema for `input_s3_inventory.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_s3_inventory--pq"></a>
@@ -8719,11 +8430,6 @@ Optional:
 
 <a id="nestedatt--input_security_lake"></a>
 ### Nested Schema for `input_security_lake`
-
-Required:
-
-- `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
-- `type` (String) must be "security_lake"
 
 Optional:
 
@@ -8759,6 +8465,7 @@ Optional:
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_security_lake--preprocess))
 - `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
+- `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`. Not Null
 - `region` (String) AWS Region where the S3 bucket and SQS queue are located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance. Default: true
@@ -8769,6 +8476,7 @@ Optional:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tag_after_processing` (String) must be one of ["false", "true"]
+- `type` (String) Not Null; must be "security_lake"
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours). Default: 600
 
 <a id="nestedatt--input_security_lake--checkpointing"></a>
@@ -8783,22 +8491,19 @@ Optional:
 <a id="nestedatt--input_security_lake--connections"></a>
 ### Nested Schema for `input_security_lake.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_security_lake--metadata"></a>
 ### Nested Schema for `input_security_lake.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_security_lake--pq"></a>
@@ -8855,22 +8560,19 @@ Optional:
 <a id="nestedatt--input_snmp--connections"></a>
 ### Nested Schema for `input_snmp.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_snmp--metadata"></a>
 ### Nested Schema for `input_snmp.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_snmp--pq"></a>
@@ -8899,14 +8601,11 @@ Optional:
 <a id="nestedatt--input_snmp--snmp_v3_auth--v3_users"></a>
 ### Nested Schema for `input_snmp.snmp_v3_auth.v3_users`
 
-Required:
-
-- `name` (String)
-
 Optional:
 
 - `auth_key` (String) Parsed as JSON.
 - `auth_protocol` (String) Default: "none"; must be one of ["none", "md5", "sha", "sha224", "sha256", "sha384", "sha512"]
+- `name` (String) Not Null
 - `priv_protocol` (String) Default: "none"; Parsed as JSON.
 
 
@@ -8914,10 +8613,6 @@ Optional:
 
 <a id="nestedatt--input_splunk"></a>
 ### Nested Schema for `input_splunk`
-
-Required:
-
-- `port` (Number) Port to listen on
 
 Optional:
 
@@ -8938,6 +8633,7 @@ Optional:
 - `max_s2_sversion` (String) The highest S2S protocol version to advertise during handshake. Default: "v3"; must be one of ["v3", "v4"]
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_splunk--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_splunk--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
@@ -8953,34 +8649,28 @@ Optional:
 <a id="nestedatt--input_splunk--auth_tokens"></a>
 ### Nested Schema for `input_splunk.auth_tokens`
 
-Required:
-
-- `token` (String) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
-
 Optional:
 
 - `description` (String)
+- `token` (String) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. Not Null
 
 
 <a id="nestedatt--input_splunk--connections"></a>
 ### Nested Schema for `input_splunk.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_splunk--metadata"></a>
 ### Nested Schema for `input_splunk.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_splunk--pq"></a>
@@ -9019,10 +8709,6 @@ Optional:
 <a id="nestedatt--input_splunk_hec"></a>
 ### Nested Schema for `input_splunk_hec`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `access_control_allow_headers` (List of String) Optionally, list HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.
@@ -9050,6 +8736,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to every event. Overrides fields added at the token or request level. See [the Source documentation](https://docs.cribl.io/stream/sources-splunk-hec/#fields) for more info. (see [below for nested schema](#nestedatt--input_splunk_hec--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_hec--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -9066,10 +8753,6 @@ Optional:
 <a id="nestedatt--input_splunk_hec--auth_tokens"></a>
 ### Nested Schema for `input_splunk_hec.auth_tokens`
 
-Required:
-
-- `token` (String) Parsed as JSON.
-
 Optional:
 
 - `allowed_indexes_at_token` (List of String) Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.
@@ -9077,37 +8760,35 @@ Optional:
 - `description` (String) Optional token description
 - `enabled` (Boolean) Default: true
 - `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_splunk_hec--auth_tokens--metadata))
+- `token` (String) Not Null; Parsed as JSON.
 - `token_secret` (String) Parsed as JSON.
 
 <a id="nestedatt--input_splunk_hec--auth_tokens--metadata"></a>
 ### Nested Schema for `input_splunk_hec.auth_tokens.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 
 <a id="nestedatt--input_splunk_hec--connections"></a>
 ### Nested Schema for `input_splunk_hec.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_splunk_hec--metadata"></a>
 ### Nested Schema for `input_splunk_hec.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_splunk_hec--pq"></a>
@@ -9146,10 +8827,6 @@ Optional:
 <a id="nestedatt--input_splunk_search"></a>
 ### Nested Schema for `input_splunk_search`
 
-Required:
-
-- `search` (String) Enter Splunk search here. Examples: 'index=myAppLogs level=error channel=myApp' OR '| mstats avg(myStat) as myStat WHERE index=myStatsIndex.'
-
 Optional:
 
 - `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`. Default: "`Bearer ${token}`"
@@ -9185,6 +8862,7 @@ Optional:
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA (such as self-signed certificates). Default: false
 - `request_timeout` (Number) HTTP request inactivity timeout. Use 0 for no timeout. Default: 0
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_search--retry_rules))
+- `search` (String) Enter Splunk search here. Examples: 'index=myAppLogs level=error channel=myApp' OR '| mstats avg(myStat) as myStat WHERE index=myStatsIndex.'. Not Null
 - `search_head` (String) Search head base URL. Can be an expression. Default is https://localhost:8089. Default: "https://localhost:8089"
 - `secret` (String) Secret parameter value to pass in request body
 - `secret_param_name` (String) Secret parameter name to pass in request body
@@ -9203,58 +8881,55 @@ Optional:
 <a id="nestedatt--input_splunk_search--connections"></a>
 ### Nested Schema for `input_splunk_search.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_splunk_search--endpoint_headers"></a>
 ### Nested Schema for `input_splunk_search.endpoint_headers`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings. Not Null
 
 
 <a id="nestedatt--input_splunk_search--endpoint_params"></a>
 ### Nested Schema for `input_splunk_search.endpoint_params`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings. Not Null
 
 
 <a id="nestedatt--input_splunk_search--metadata"></a>
 ### Nested Schema for `input_splunk_search.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_splunk_search--oauth_headers"></a>
 ### Nested Schema for `input_splunk_search.oauth_headers`
 
-Required:
+Optional:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) OAuth header name. Not Null
+- `value` (String) OAuth header value. Not Null
 
 
 <a id="nestedatt--input_splunk_search--oauth_params"></a>
 ### Nested Schema for `input_splunk_search.oauth_params`
 
-Required:
+Optional:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) OAuth parameter name. Not Null
+- `value` (String) OAuth parameter value. Not Null
 
 
 <a id="nestedatt--input_splunk_search--pq"></a>
@@ -9290,10 +8965,6 @@ Optional:
 <a id="nestedatt--input_sqs"></a>
 ### Nested Schema for `input_sqs`
 
-Required:
-
-- `queue_name` (String) The name, URL, or ARN of the SQS queue to read events from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can only be evaluated at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
-
 Optional:
 
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
@@ -9319,6 +8990,7 @@ Optional:
 - `poll_timeout` (Number) How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts. Default: 10
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_sqs--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
+- `queue_name` (String) The name, URL, or ARN of the SQS queue to read events from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can only be evaluated at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`. Not Null
 - `queue_type` (String) The queue type used (or created). Default: "standard"; must be one of ["standard", "fifo"]
 - `region` (String) AWS Region where the SQS queue is located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates. Default: true
@@ -9332,22 +9004,19 @@ Optional:
 <a id="nestedatt--input_sqs--connections"></a>
 ### Nested Schema for `input_sqs.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_sqs--metadata"></a>
 ### Nested Schema for `input_sqs.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_sqs--pq"></a>
@@ -9375,11 +9044,6 @@ Optional:
 
 <a id="nestedatt--input_syslog--input_syslog_syslog1"></a>
 ### Nested Schema for `input_syslog.input_syslog_syslog1`
-
-Required:
-
-- `type` (String) must be "syslog"
-- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
 
 Optional:
 
@@ -9413,27 +9077,26 @@ Optional:
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info. Default: "local"
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog1--tls))
+- `type` (String) Not Null; must be "syslog"
+- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP. Not Null
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
 <a id="nestedatt--input_syslog--input_syslog_syslog1--connections"></a>
 ### Nested Schema for `input_syslog.input_syslog_syslog1.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_syslog--input_syslog_syslog1--metadata"></a>
 ### Nested Schema for `input_syslog.input_syslog_syslog1.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_syslog--input_syslog_syslog1--pq"></a>
@@ -9472,11 +9135,6 @@ Optional:
 <a id="nestedatt--input_syslog--input_syslog_syslog2"></a>
 ### Nested Schema for `input_syslog.input_syslog_syslog2`
 
-Required:
-
-- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
-- `type` (String) must be "syslog"
-
 Optional:
 
 - `allow_non_standard_app_name` (Boolean) Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages. Default: false
@@ -9506,30 +9164,29 @@ Optional:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable. Default: 0
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424. Default: true
+- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP. Not Null
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info. Default: "local"
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2--tls))
+- `type` (String) Not Null; must be "syslog"
 - `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
 <a id="nestedatt--input_syslog--input_syslog_syslog2--connections"></a>
 ### Nested Schema for `input_syslog.input_syslog_syslog2.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_syslog--input_syslog_syslog2--metadata"></a>
 ### Nested Schema for `input_syslog.input_syslog_syslog2.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_syslog--input_syslog_syslog2--pq"></a>
@@ -9569,11 +9226,6 @@ Optional:
 <a id="nestedatt--input_system_metrics"></a>
 ### Nested Schema for `input_system_metrics`
 
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "system_metrics"
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_system_metrics--connections))
@@ -9582,6 +9234,7 @@ Optional:
 - `disabled` (Boolean) Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host))
+- `id` (String) Unique ID for this input. Not Null
 - `interval` (Number) Time, in seconds, between consecutive metric collections. Default is 10 seconds. Default: 10
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_system_metrics--metadata))
 - `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--persistence))
@@ -9591,16 +9244,14 @@ Optional:
 - `process` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--process))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `type` (String) Not Null; must be "system_metrics"
 
 <a id="nestedatt--input_system_metrics--connections"></a>
 ### Nested Schema for `input_system_metrics.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
@@ -9620,9 +9271,9 @@ Optional:
 <a id="nestedatt--input_system_metrics--container--filters"></a>
 ### Nested Schema for `input_system_metrics.container.filters`
 
-Required:
+Optional:
 
-- `expr` (String)
+- `expr` (String) Not Null
 
 
 
@@ -9703,10 +9354,10 @@ Optional:
 <a id="nestedatt--input_system_metrics--metadata"></a>
 ### Nested Schema for `input_system_metrics.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_system_metrics--persistence"></a>
@@ -9746,25 +9397,17 @@ Optional:
 <a id="nestedatt--input_system_metrics--process--sets"></a>
 ### Nested Schema for `input_system_metrics.process.sets`
 
-Required:
-
-- `filter` (String)
-- `name` (String)
-
 Optional:
 
+- `filter` (String) Not Null
 - `include_children` (Boolean) Default: false
+- `name` (String) Not Null
 
 
 
 
 <a id="nestedatt--input_system_state"></a>
 ### Nested Schema for `input_system_state`
-
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "system_state"
 
 Optional:
 
@@ -9774,6 +9417,7 @@ Optional:
 - `disable_native_module` (Boolean) Enable to use built-in tools (PowerShell) to collect events instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab). Default: false
 - `disabled` (Boolean) Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `id` (String) Unique ID for this input. Not Null
 - `interval` (Number) Time, in seconds, between consecutive state collections. Default is 300 seconds (5 minutes). Default: 300
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_system_state--metadata))
 - `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--persistence))
@@ -9782,6 +9426,7 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `type` (String) Not Null; must be "system_state"
 
 <a id="nestedatt--input_system_state--collectors"></a>
 ### Nested Schema for `input_system_state.collectors`
@@ -9892,22 +9537,19 @@ Optional:
 <a id="nestedatt--input_system_state--connections"></a>
 ### Nested Schema for `input_system_state.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_system_state--metadata"></a>
 ### Nested Schema for `input_system_state.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_system_state--persistence"></a>
@@ -9941,10 +9583,6 @@ Optional:
 <a id="nestedatt--input_tcp"></a>
 ### Nested Schema for `input_tcp`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate. Default: "manual"; must be one of ["manual", "secret"]
@@ -9961,6 +9599,7 @@ Optional:
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_tcp--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_tcp--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_tcp--preprocess))
@@ -9976,22 +9615,19 @@ Optional:
 <a id="nestedatt--input_tcp--connections"></a>
 ### Nested Schema for `input_tcp.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_tcp--metadata"></a>
 ### Nested Schema for `input_tcp.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_tcp--pq"></a>
@@ -10040,10 +9676,6 @@ Optional:
 <a id="nestedatt--input_tcpjson"></a>
 ### Nested Schema for `input_tcpjson`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `auth_token` (String) Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted. Default: ""
@@ -10060,6 +9692,7 @@ Optional:
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited. Default: 1000
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_tcpjson--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_tcpjson--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
@@ -10074,22 +9707,19 @@ Optional:
 <a id="nestedatt--input_tcpjson--connections"></a>
 ### Nested Schema for `input_tcpjson.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_tcpjson--metadata"></a>
 ### Nested Schema for `input_tcpjson.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_tcpjson--pq"></a>
@@ -10128,10 +9758,6 @@ Optional:
 <a id="nestedatt--input_wef"></a>
 ### Nested Schema for `input_wef`
 
-Required:
-
-- `subscriptions` (Attributes List) Subscriptions to events on forwarding endpoints (see [below for nested schema](#nestedatt--input_wef--subscriptions))
-
 Optional:
 
 - `allow_machine_id_mismatch` (Boolean) Allow events to be ingested even if their MachineID does not match the client certificate CN. Default: false
@@ -10162,60 +9788,26 @@ Optional:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0. Default: 0
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `subscriptions` (Attributes List) Subscriptions to events on forwarding endpoints. Not Null (see [below for nested schema](#nestedatt--input_wef--subscriptions))
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_wef--tls))
 - `type` (String) must be "wef"
-
-<a id="nestedatt--input_wef--subscriptions"></a>
-### Nested Schema for `input_wef.subscriptions`
-
-Required:
-
-- `id` (String)
-- `subscription_name` (String)
-
-Optional:
-
-- `batch_timeout` (Number) Interval (in seconds) over which the endpoint should collect events before sending them to Stream. Default: 60
-- `compress` (Boolean) Receive compressed events from the source. Default: true
-- `content_format` (String) Content format in which the endpoint should deliver events. Default: "Raw"; must be one of ["Raw", "RenderedText"]
-- `heartbeat_interval` (Number) Maximum time (in seconds) between endpoint checkins before considering it unavailable. Default: 60
-- `locale` (String) The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US". Default: "en-US"
-- `metadata` (Attributes List) Fields to add to events ingested under this subscription (see [below for nested schema](#nestedatt--input_wef--subscriptions--metadata))
-- `query_selector` (String) Default: "simple"; must be one of ["simple", "xml"]
-- `read_existing_events` (Boolean) Newly subscribed endpoints will send previously existing events. Disable to receive new events only. Default: false
-- `send_bookmarks` (Boolean) Keep track of which events have been received, resuming from that point after a re-subscription. This setting takes precedence over 'Read existing events'. See [Cribl Docs](https://docs.cribl.io/stream/sources-wef/#subscriptions) for more details. Default: true
-- `targets` (List of String) The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com. Default: ["*"]
-- `version` (String) Version UUID for this subscription. If any subscription parameters are modified, this value will change.
-
-<a id="nestedatt--input_wef--subscriptions--metadata"></a>
-### Nested Schema for `input_wef.subscriptions.metadata`
-
-Required:
-
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-
-
 
 <a id="nestedatt--input_wef--connections"></a>
 ### Nested Schema for `input_wef.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_wef--metadata"></a>
 ### Nested Schema for `input_wef.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_wef--pq"></a>
@@ -10232,17 +9824,42 @@ Optional:
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>. Default: "$CRIBL_HOME/state/queues"
 
 
-<a id="nestedatt--input_wef--tls"></a>
-### Nested Schema for `input_wef.tls`
-
-Required:
-
-- `ca_path` (String) Server path containing CA certificates (in PEM format) to use. Can reference $ENV_VARS. If multiple certificates are present in a .pem, each must directly certify the one preceding it.
-- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
+<a id="nestedatt--input_wef--subscriptions"></a>
+### Nested Schema for `input_wef.subscriptions`
 
 Optional:
 
+- `batch_timeout` (Number) Interval (in seconds) over which the endpoint should collect events before sending them to Stream. Default: 60
+- `compress` (Boolean) Receive compressed events from the source. Default: true
+- `content_format` (String) Content format in which the endpoint should deliver events. Default: "Raw"; must be one of ["Raw", "RenderedText"]
+- `heartbeat_interval` (Number) Maximum time (in seconds) between endpoint checkins before considering it unavailable. Default: 60
+- `id` (String) Not Null
+- `locale` (String) The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US". Default: "en-US"
+- `metadata` (Attributes List) Fields to add to events ingested under this subscription (see [below for nested schema](#nestedatt--input_wef--subscriptions--metadata))
+- `query_selector` (String) Default: "simple"; must be one of ["simple", "xml"]
+- `read_existing_events` (Boolean) Newly subscribed endpoints will send previously existing events. Disable to receive new events only. Default: false
+- `send_bookmarks` (Boolean) Keep track of which events have been received, resuming from that point after a re-subscription. This setting takes precedence over 'Read existing events'. See [Cribl Docs](https://docs.cribl.io/stream/sources-wef/#subscriptions) for more details. Default: true
+- `subscription_name` (String) Not Null
+- `targets` (List of String) The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com. Default: ["*"]
+- `version` (String) Version UUID for this subscription. If any subscription parameters are modified, this value will change.
+
+<a id="nestedatt--input_wef--subscriptions--metadata"></a>
+### Nested Schema for `input_wef.subscriptions.metadata`
+
+Optional:
+
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
+
+
+
+<a id="nestedatt--input_wef--tls"></a>
+### Nested Schema for `input_wef.tls`
+
+Optional:
+
+- `ca_path` (String) Server path containing CA certificates (in PEM format) to use. Can reference $ENV_VARS. If multiple certificates are present in a .pem, each must directly certify the one preceding it. Not Null
+- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS. Not Null
 - `certificate_name` (String) Name of the predefined certificate
 - `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute. Default: "/.*/"
 - `disabled` (Boolean) Enable TLS. Default: false
@@ -10253,6 +9870,7 @@ Optional:
 - `ocsp_check_fail_close` (Boolean) If enabled, checks will fail on any OCSP error. Otherwise, checks will fail only when a certificate is revoked, ignoring other errors. Default: false
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `principal` (String) Parsed as JSON.
+- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS. Not Null
 - `reject_unauthorized` (Boolean) Required for WEF certificate authentication. Default: true
 - `request_cert` (Boolean) Required for WEF certificate authentication. Default: true
 
@@ -10260,10 +9878,6 @@ Optional:
 
 <a id="nestedatt--input_win_event_logs"></a>
 ### Nested Schema for `input_win_event_logs`
-
-Required:
-
-- `type` (String) must be "win_event_logs"
 
 Optional:
 
@@ -10285,26 +9899,24 @@ Optional:
 - `read_mode` (String) Read all stored and future event logs, or only future events. Default: "oldest"; must be one of ["oldest", "newest"]
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `type` (String) Not Null; must be "win_event_logs"
 
 <a id="nestedatt--input_win_event_logs--connections"></a>
 ### Nested Schema for `input_win_event_logs.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_win_event_logs--metadata"></a>
 ### Nested Schema for `input_win_event_logs.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_win_event_logs--pq"></a>
@@ -10325,11 +9937,6 @@ Optional:
 <a id="nestedatt--input_windows_metrics"></a>
 ### Nested Schema for `input_windows_metrics`
 
-Required:
-
-- `id` (String) Unique ID for this input
-- `type` (String) must be "windows_metrics"
-
 Optional:
 
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_windows_metrics--connections))
@@ -10338,6 +9945,7 @@ Optional:
 - `disabled` (Boolean) Default: false
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--host))
+- `id` (String) Unique ID for this input. Not Null
 - `interval` (Number) Time, in seconds, between consecutive metric collections. Default is 10 seconds. Default: 10
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_windows_metrics--metadata))
 - `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--persistence))
@@ -10347,16 +9955,14 @@ Optional:
 - `process` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--process))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations. Default: true
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
+- `type` (String) Not Null; must be "windows_metrics"
 
 <a id="nestedatt--input_windows_metrics--connections"></a>
 ### Nested Schema for `input_windows_metrics.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
@@ -10434,10 +10040,10 @@ Optional:
 <a id="nestedatt--input_windows_metrics--metadata"></a>
 ### Nested Schema for `input_windows_metrics.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_windows_metrics--persistence"></a>
@@ -10477,14 +10083,11 @@ Optional:
 <a id="nestedatt--input_windows_metrics--process--sets"></a>
 ### Nested Schema for `input_windows_metrics.process.sets`
 
-Required:
-
-- `filter` (String)
-- `name` (String)
-
 Optional:
 
+- `filter` (String) Not Null
 - `include_children` (Boolean) Default: false
+- `name` (String) Not Null
 
 
 
@@ -10492,15 +10095,12 @@ Optional:
 <a id="nestedatt--input_wiz"></a>
 ### Nested Schema for `input_wiz`
 
-Required:
-
-- `auth_url` (String) The authentication URL to generate an OAuth token
-- `client_id` (String) The client ID of the Wiz application
-
 Optional:
 
 - `auth_audience_override` (String) The audience to use when requesting an OAuth token for a custom auth URL. When not specified, `wiz-api` will be used.
 - `auth_type` (String) Enter client secret directly, or select a stored secret. Default: "manual"; must be one of ["manual", "secret"]
+- `auth_url` (String) The authentication URL to generate an OAuth token. Not Null
+- `client_id` (String) The client ID of the Wiz application. Not Null
 - `client_secret` (String) The client secret of the Wiz application
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_wiz--connections))
 - `content_config` (Attributes List) (see [below for nested schema](#nestedatt--input_wiz--content_config))
@@ -10527,35 +10127,29 @@ Optional:
 <a id="nestedatt--input_wiz--connections"></a>
 ### Nested Schema for `input_wiz.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_wiz--content_config"></a>
 ### Nested Schema for `input_wiz.content_config`
 
-Required:
-
-- `content_type` (String) The name of the Wiz query
-
 Optional:
 
 - `content_description` (String)
+- `content_type` (String) The name of the Wiz query. Not Null
 - `enabled` (Boolean) Default: false
 
 
 <a id="nestedatt--input_wiz--metadata"></a>
 ### Nested Schema for `input_wiz.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_wiz--pq"></a>
@@ -10591,11 +10185,6 @@ Optional:
 <a id="nestedatt--input_wiz_webhook"></a>
 ### Nested Schema for `input_wiz_webhook`
 
-Required:
-
-- `port` (Number) Port to listen on
-- `type` (String) must be "wiz_webhook"
-
 Optional:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc. Default: 100
@@ -10620,6 +10209,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_wiz_webhook--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -10628,48 +10218,43 @@ Optional:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines. Default: 10000
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--tls))
+- `type` (String) Not Null; must be "wiz_webhook"
 
 <a id="nestedatt--input_wiz_webhook--auth_tokens_ext"></a>
 ### Nested Schema for `input_wiz_webhook.auth_tokens_ext`
-
-Required:
-
-- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
 
 Optional:
 
 - `description` (String)
 - `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_wiz_webhook--auth_tokens_ext--metadata))
+- `token` (String) Shared secret to be provided by any client (Authorization: <token>). Not Null
 
 <a id="nestedatt--input_wiz_webhook--auth_tokens_ext--metadata"></a>
 ### Nested Schema for `input_wiz_webhook.auth_tokens_ext.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 
 <a id="nestedatt--input_wiz_webhook--connections"></a>
 ### Nested Schema for `input_wiz_webhook.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_wiz_webhook--metadata"></a>
 ### Nested Schema for `input_wiz_webhook.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_wiz_webhook--pq"></a>
@@ -10713,10 +10298,6 @@ Optional:
 <a id="nestedatt--input_zscaler_hec"></a>
 ### Nested Schema for `input_zscaler_hec`
 
-Required:
-
-- `port` (Number) Port to listen on
-
 Optional:
 
 - `access_control_allow_headers` (List of String) Optionally, list HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.
@@ -10743,6 +10324,7 @@ Optional:
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited). Default: 0
 - `metadata` (Attributes List) Fields to add to every event. May be overridden by fields added at the token or request level. (see [below for nested schema](#nestedatt--input_zscaler_hec--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on. Not Null
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--input_zscaler_hec--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers). Default: false
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable. Default: 0
@@ -10755,10 +10337,6 @@ Optional:
 <a id="nestedatt--input_zscaler_hec--auth_tokens"></a>
 ### Nested Schema for `input_zscaler_hec.auth_tokens`
 
-Required:
-
-- `token` (String) Parsed as JSON.
-
 Optional:
 
 - `allowed_indexes_at_token` (List of String) Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.
@@ -10766,37 +10344,35 @@ Optional:
 - `description` (String)
 - `enabled` (Boolean) Default: true
 - `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_zscaler_hec--auth_tokens--metadata))
+- `token` (String) Not Null; Parsed as JSON.
 - `token_secret` (String) Parsed as JSON.
 
 <a id="nestedatt--input_zscaler_hec--auth_tokens--metadata"></a>
 ### Nested Schema for `input_zscaler_hec.auth_tokens.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 
 <a id="nestedatt--input_zscaler_hec--connections"></a>
 ### Nested Schema for `input_zscaler_hec.connections`
 
-Required:
-
-- `output` (String)
-
 Optional:
 
+- `output` (String) Not Null
 - `pipeline` (String)
 
 
 <a id="nestedatt--input_zscaler_hec--metadata"></a>
 ### Nested Schema for `input_zscaler_hec.metadata`
 
-Required:
+Optional:
 
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+- `name` (String) Not Null
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
 
 
 <a id="nestedatt--input_zscaler_hec--pq"></a>
@@ -10829,92 +10405,6 @@ Optional:
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (String) Parsed as JSON.
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs. Default: false
-
-
-
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
-
-Read-Only:
-
-- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--items--comments))
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--conf))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--groups))
-- `id` (String)
-- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--items--routes))
-
-<a id="nestedatt--items--comments"></a>
-### Nested Schema for `items.comments`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `comment` (String) Optional, short description of this Route's purpose
-
-
-<a id="nestedatt--items--conf"></a>
-### Nested Schema for `items.conf`
-
-Read-Only:
-
-- `async_func_timeout` (Number) Time (in ms) to wait for an async function to complete processing of a data item
-- `description` (String)
-- `functions` (Attributes List) List of Functions to pass data through (see [below for nested schema](#nestedatt--items--conf--functions))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--items--conf--groups))
-- `output` (String) The output destination for events processed by this Pipeline. Default: "default"
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}. Default: []
-
-<a id="nestedatt--items--conf--functions"></a>
-### Nested Schema for `items.conf.functions`
-
-Read-Only:
-
-- `conf` (Map of String) Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.
-- `description` (String) Simple description of this step
-- `disabled` (Boolean) If true, data will not be pushed through this function
-- `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
-- `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
-- `group_id` (String) Group ID
-- `id` (String) Function ID
-
-
-<a id="nestedatt--items--conf--groups"></a>
-### Nested Schema for `items.conf.groups`
-
-Read-Only:
-
-- `description` (String) Short description of this group
-- `disabled` (Boolean) Whether this group is disabled
-- `name` (String)
-
-
-
-<a id="nestedatt--items--groups"></a>
-### Nested Schema for `items.groups`
-
-Read-Only:
-
-- `description` (String) Short description of this group
-- `disabled` (Boolean) Whether this group is disabled
-- `name` (String)
-
-
-<a id="nestedatt--items--routes"></a>
-### Nested Schema for `items.routes`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `description` (String)
-- `disabled` (Boolean) Disable this routing rule
-- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below. Default: false
-- `filter` (String) JavaScript expression to select data to route. Default: "true"
-- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it. Default: true
-- `id` (String)
-- `name` (String)
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
-- `pipeline` (String) Pipeline to send the matching data to
 
 ## Import
 

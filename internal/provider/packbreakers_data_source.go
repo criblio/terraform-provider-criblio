@@ -7,11 +7,13 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -30,10 +32,14 @@ type PackBreakersDataSource struct {
 
 // PackBreakersDataSourceModel describes the data model.
 type PackBreakersDataSourceModel struct {
-	GroupID types.String     `tfsdk:"group_id"`
-	ID      types.String     `tfsdk:"id"`
-	Items   []tfTypes.Routes `tfsdk:"items"`
-	Pack    types.String     `tfsdk:"pack"`
+	Description  types.String                      `tfsdk:"description"`
+	GroupID      types.String                      `tfsdk:"group_id"`
+	ID           types.String                      `tfsdk:"id"`
+	Lib          types.String                      `tfsdk:"lib"`
+	MinRawLength types.Float64                     `tfsdk:"min_raw_length"`
+	Pack         types.String                      `tfsdk:"pack"`
+	Rules        []tfTypes.EventBreakerRulesetRule `tfsdk:"rules"`
+	Tags         types.String                      `tfsdk:"tags"`
 }
 
 // Metadata returns the data source type name.
@@ -47,6 +53,9 @@ func (r *PackBreakersDataSource) Schema(ctx context.Context, req datasource.Sche
 		MarkdownDescription: "PackBreakers DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
@@ -54,108 +63,130 @@ func (r *PackBreakersDataSource) Schema(ctx context.Context, req datasource.Sche
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET for pack`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"comments": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"comment": schema.StringAttribute{
-										Computed:    true,
-										Description: `Optional, short description of this Route's purpose`,
-									},
-								},
-							},
-							Description: `Comments`,
-						},
-						"groups": schema.MapNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										Computed:    true,
-										Description: `Short description of this group`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Whether this group is disabled`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Routes ID`,
-						},
-						"routes": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Disable this routing rule`,
-									},
-									"enable_output_expression": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below`,
-									},
-									"filter": schema.StringAttribute{
-										Computed:    true,
-										Description: `JavaScript expression to select data to route`,
-									},
-									"final": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it`,
-									},
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"output": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"output_expression": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"pipeline": schema.StringAttribute{
-										Computed:    true,
-										Description: `Pipeline to send the matching data to`,
-									},
-								},
-							},
-							Description: `Pipeline routing rules`,
-						},
-					},
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`).String()),
 				},
+			},
+			"lib": schema.StringAttribute{
+				Computed: true,
+			},
+			"min_raw_length": schema.Float64Attribute{
+				Computed:    true,
+				Description: `The  minimum number of characters in _raw to determine which rule to use`,
 			},
 			"pack": schema.StringAttribute{
 				Required:    true,
 				Description: `pack ID to POST`,
+			},
+			"rules": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"condition": schema.StringAttribute{
+							Computed:    true,
+							Description: `JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events.`,
+						},
+						"delimiter": schema.StringAttribute{
+							Computed:    true,
+							Description: `Field delimiter used for CSV parsing when type is "csv".`,
+						},
+						"delimiter_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `Regex used to split header fields when type is "header".`,
+						},
+						"disabled": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Disable this breaker rule (enabled by default)`,
+						},
+						"escape_char": schema.StringAttribute{
+							Computed:    true,
+							Description: `Escape character used for CSV parsing when type is "csv".`,
+						},
+						"event_breaker_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction.`,
+						},
+						"fields": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										Computed: true,
+									},
+									"value": schema.StringAttribute{
+										Computed:    true,
+										Description: `The JavaScript expression used to compute the field's value (can be constant)`,
+									},
+								},
+							},
+							Description: `Key-value pairs to be added to each event`,
+						},
+						"fields_line_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `Regex that identifies and captures the fields line when type is "header".`,
+						},
+						"header_line_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `Regex used to identify header lines when type is "header".`,
+						},
+						"max_event_bytes": schema.Float64Attribute{
+							Computed:    true,
+							Description: `The maximum number of bytes in an event before it is flushed to the pipelines`,
+						},
+						"name": schema.StringAttribute{
+							Computed: true,
+						},
+						"parser_enabled": schema.BoolAttribute{
+							Computed: true,
+						},
+						"quote_char": schema.StringAttribute{
+							Computed:    true,
+							Description: `Quote character used for CSV parsing when type is "csv".`,
+						},
+						"should_use_data_raw": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event.`,
+						},
+						"timestamp": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"format": schema.StringAttribute{
+									Computed: true,
+								},
+								"length": schema.Float64Attribute{
+									Computed: true,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+							Description: `Auto, manual format (strptime), or current time`,
+						},
+						"timestamp_anchor_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction.`,
+						},
+						"timestamp_earliest": schema.StringAttribute{
+							Computed:    true,
+							Description: `The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time.`,
+						},
+						"timestamp_latest": schema.StringAttribute{
+							Computed:    true,
+							Description: `The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time.`,
+						},
+						"timestamp_timezone": schema.StringAttribute{
+							Computed:    true,
+							Description: `Timezone to assign to timestamps without timezone info`,
+						},
+						"type": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+				Description: `A list of rules that will be applied, in order, to the input data stream`,
+			},
+			"tags": schema.StringAttribute{
+				Computed: true,
 			},
 		},
 	}

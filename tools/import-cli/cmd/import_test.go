@@ -138,11 +138,9 @@ func TestImportCommand_ValidConfigInitializesClient(t *testing.T) {
 	errOut := &bytes.Buffer{}
 	root.SetOut(out)
 	root.SetErr(errOut)
-	// Exclude cloud-only and on-prem-unsupported types so discovery does not error against mock on-prem server.
-	root.SetArgs([]string{"import", "--server-url", server.URL, "--dry-run",
-		"--exclude", "criblio_cribl_lake_house", "--exclude", "criblio_cribl_lake_dataset",
-		"--exclude", "criblio_search_dashboard", "--exclude", "criblio_search_dashboard_category",
-		"--exclude", "criblio_search_macro", "--exclude", "criblio_search_saved_query"})
+	// Use --include criblio_group so discovery only hits endpoints the mock supports (groups).
+	// On-prem mode blocks many lib/search endpoints; criblio_group uses /products/*/groups which the mock handles.
+	root.SetArgs([]string{"import", "--server-url", server.URL, "--dry-run", "--include", "criblio_group"})
 	err := root.Execute()
 	if err != nil {
 		t.Logf("stderr: %s", errOut.String())
@@ -179,7 +177,8 @@ func TestImportCommand_DryRun_IncludeFilter(t *testing.T) {
 	errOut := &bytes.Buffer{}
 	root.SetOut(out)
 	root.SetErr(errOut)
-	root.SetArgs([]string{"import", "--dry-run", "--include", "criblio_source", "--include", "criblio_pipeline", "--exclude", "criblio_cribl_lake_house", "--exclude", "criblio_cribl_lake_dataset"})
+	// Use criblio_group; mock returns 2 groups. Other types fail on-prem (lib/search endpoints blocked).
+	root.SetArgs([]string{"import", "--dry-run", "--include", "criblio_group"})
 	err := root.Execute()
 	if err != nil {
 		t.Logf("stderr: %s", errOut.String())
@@ -190,8 +189,8 @@ func TestImportCommand_DryRun_IncludeFilter(t *testing.T) {
 	stderr := errOut.String()
 	assert.Contains(t, stderr, "Preview:", "dry-run should print preview")
 	assert.Contains(t, stderr, "Total:", "dry-run should print total line")
-	// Mock returns empty lists, so both included types have count 0 and are not shown (only non-zero types are listed).
-	assert.Contains(t, stderr, "Total: 0 resource types", "with empty mock, only 0 types are shown (criblio_source and criblio_pipeline have 0 count)")
+	assert.Contains(t, stderr, "criblio_group:", "--include criblio_group should list that type")
+	assert.Contains(t, stderr, "2", "mock returns 2 groups for criblio_group")
 }
 
 // TestImportCommand_DryRun_ExcludeFilter verifies --exclude omits listed resource types.
@@ -217,10 +216,8 @@ func TestImportCommand_DryRun_ExcludeFilter(t *testing.T) {
 	errOut := &bytes.Buffer{}
 	root.SetOut(out)
 	root.SetErr(errOut)
-	root.SetArgs([]string{"import", "--dry-run", "--exclude", "criblio_source",
-		"--exclude", "criblio_cribl_lake_house", "--exclude", "criblio_cribl_lake_dataset",
-		"--exclude", "criblio_search_dashboard", "--exclude", "criblio_search_dashboard_category",
-		"--exclude", "criblio_search_macro", "--exclude", "criblio_search_saved_query"})
+	// Include only criblio_group (mock supports it), exclude criblio_source so it does not appear.
+	root.SetArgs([]string{"import", "--dry-run", "--include", "criblio_group", "--exclude", "criblio_source"})
 	err := root.Execute()
 	if err != nil {
 		t.Logf("stderr: %s", errOut.String())

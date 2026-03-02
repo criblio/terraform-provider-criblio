@@ -8,12 +8,16 @@ import (
 
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/config"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 )
 
 // NewFromConfig builds a Cribl SDK client from the resolved config.
+// Uses a capture transport for search list endpoints so the CLI can parse list
+// responses when the SDK fails to unmarshal (e.g. cribl_lake union type).
 func NewFromConfig(cfg *config.Config) (*sdk.CriblIo, error) {
 	applyConfigToEnv(cfg)
-	return sdk.New(sdk.WithClient(&http.Client{})), nil
+	transport := &custom.SearchListTransport{Base: http.DefaultTransport}
+	return sdk.New(sdk.WithClient(&http.Client{Transport: transport})), nil
 }
 
 // applyConfigToEnv sets CRIBL_* environment variables from the config.

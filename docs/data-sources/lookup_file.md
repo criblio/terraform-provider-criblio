@@ -14,7 +14,8 @@ LookupFile DataSource
 
 ```terraform
 data "criblio_lookup_file" "my_lookupfile" {
-  group_id = "Cribl"
+  group_id = "myExistingGroupId"
+  id       = "myNewLookupIdToCRUD"
 }
 ```
 
@@ -24,3 +25,22 @@ data "criblio_lookup_file" "my_lookupfile" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `id` (String) Unique ID to GET
+
+### Read-Only
+
+- `content` (String) File content.
+- `description` (String)
+- `mode` (String)
+- `pending_task` (Attributes) (see [below for nested schema](#nestedatt--pending_task))
+- `tags` (String) One or more tags related to this lookup. Optional.
+- `version` (String) Unique string generated for each modification of this lookup
+
+<a id="nestedatt--pending_task"></a>
+### Nested Schema for `pending_task`
+
+Read-Only:
+
+- `error` (String) Error message if task has failed
+- `id` (String) Task ID (generated).
+- `type` (String) Task type

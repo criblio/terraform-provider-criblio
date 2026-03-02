@@ -30,10 +30,10 @@ func (g *GetInputByIDRequest) GetGroupID() string {
 
 // GetInputByIDResponseBody - a list of Input objects
 type GetInputByIDResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.Input `json:"items,omitempty"`
 }
 
-func (g *GetInputByIDResponseBody) GetItems() []map[string]any {
+func (g *GetInputByIDResponseBody) GetItems() []shared.Input {
 	if g == nil {
 		return nil
 	}

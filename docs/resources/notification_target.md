@@ -113,59 +113,46 @@ resource "criblio_notification_target" "my_notificationtarget" {
 - `sns_target` (Attributes) (see [below for nested schema](#nestedatt--sns_target))
 - `webhook_target` (Attributes) (see [below for nested schema](#nestedatt--webhook_target))
 
-### Read-Only
-
-- `items` (List of Map of String)
-
 <a id="nestedatt--pager_duty_target"></a>
 ### Nested Schema for `pager_duty_target`
-
-Required:
-
-- `id` (String) Unique ID for this notification target
-- `routing_key` (String) 32-character integration key for an integration on a service or global ruleset
-- `type` (String) must be "pager_duty"
 
 Optional:
 
 - `class` (String) Optional, default class value
 - `component` (String) Optional, default component value. Default: "logstream"
 - `group` (String) Optional, default group value
+- `id` (String) Unique ID for this notification target. Not Null
+- `routing_key` (String) 32-character integration key for an integration on a service or global ruleset. Not Null
 - `severity` (String) Default value for message severity. Defaults to info. The __severity value, if set, will overwrite this. Default: "info"; must be one of ["info", "warning", "error", "critical"]
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
+- `type` (String) Not Null; must be "pager_duty"
 
 
 <a id="nestedatt--slack_target"></a>
 ### Nested Schema for `slack_target`
 
-Required:
-
-- `id` (String) Unique ID for this notification target
-- `type` (String) must be "slack"
-- `url` (String) Slack's Incoming Webhook URL
-
 Optional:
 
+- `id` (String) Unique ID for this notification target. Not Null
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
+- `type` (String) Not Null; must be "slack"
+- `url` (String) Slack's Incoming Webhook URL. Not Null
 
 
 <a id="nestedatt--smtp_target"></a>
 ### Nested Schema for `smtp_target`
 
-Required:
-
-- `from` (String) Email address to send from
-- `host` (String) SMTP server hostname
-- `id` (String) Unique ID for this notification target
-- `port` (Number) SMTP server port
-- `type` (String) must be "smtp"
-
 Optional:
 
 - `encryption_option` (String) Encryption method for SMTP. Default: "NONE"; must be one of ["NONE", "STARTTLS", "SSL"]
+- `from` (String) Email address to send from. Not Null
+- `host` (String) SMTP server hostname. Not Null
+- `id` (String) Unique ID for this notification target. Not Null
 - `password` (String) SMTP authentication password
+- `port` (Number) SMTP server port. Not Null
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
 - `tls` (Attributes) TLS configuration options (see [below for nested schema](#nestedatt--smtp_target--tls))
+- `type` (String) Not Null; must be "smtp"
 - `username` (String) SMTP authentication username
 
 <a id="nestedatt--smtp_target--tls"></a>
@@ -182,12 +169,6 @@ Optional:
 <a id="nestedatt--sns_target"></a>
 ### Nested Schema for `sns_target`
 
-Required:
-
-- `id` (String) Unique ID for this notification target
-- `region` (String) AWS region
-- `type` (String) must be "sns"
-
 Optional:
 
 - `allowlist` (List of String) Wildcard list of allowed phone numbers. This is not enforced if the notification is sent to topic. Default: []
@@ -198,30 +179,30 @@ Optional:
 - `aws_secret_key` (String) AWS secret key
 - `destination_type` (String) The type of destination to send notifications to. Default: "topic"; must be one of ["phoneNumber", "topic"]
 - `endpoint` (String) SNS endpoint URL
+- `id` (String) Unique ID for this notification target. Not Null
 - `message_group_id` (String) Message group ID for FIFO topics
 - `phone_number` (String) The default phone number to send the notification to. This value can be overridden by the notification event __phoneNumber field.
+- `region` (String) AWS region. Not Null
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
 - `topic_arn` (String) The default ARN of the SNS topic to send notifications to
 - `topic_type` (String) Type of the topic selected in AWS SNS. Default: "fifo"; must be one of ["standard", "fifo"]
+- `type` (String) Not Null; must be "sns"
 
 
 <a id="nestedatt--webhook_target"></a>
 ### Nested Schema for `webhook_target`
 
-Required:
-
-- `format` (String) Format of the webhook payload. must be one of ["ndjson", "json_array", "custom"]
-- `id` (String) Unique ID for this notification target
-- `method` (String) HTTP method to use for the webhook. must be one of ["POST", "PATCH", "PUT"]
-- `type` (String) must be "webhook"
-- `url` (String) URL to send the webhook to
-
 Optional:
 
 - `auth_type` (String) Authentication method for the webhook. Default: "none"; must be one of ["none", "token", "basic"]
+- `format` (String) Format of the webhook payload. Not Null; must be one of ["ndjson", "json_array", "custom"]
+- `id` (String) Unique ID for this notification target. Not Null
+- `method` (String) HTTP method to use for the webhook. Not Null; must be one of ["POST", "PATCH", "PUT"]
 - `password` (String) Basic authentication password
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. Default: ["cribl_host"]
 - `token` (String) Authentication token
+- `type` (String) Not Null; must be "webhook"
+- `url` (String) URL to send the webhook to. Not Null
 - `username` (String) Basic authentication username
 
 ## Import

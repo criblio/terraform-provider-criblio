@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *ParserLibEntryDataSourceModel) RefreshFromOperationsListParserResponseBody(ctx context.Context, resp *operations.ListParserResponseBody) diag.Diagnostics {
+func (r *ParserLibEntryDataSourceModel) RefreshFromOperationsGetParserByIDResponseBody(ctx context.Context, resp *operations.GetParserByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -46,13 +46,17 @@ func (r *ParserLibEntryDataSourceModel) RefreshFromSharedParserLibEntry(ctx cont
 	return diags
 }
 
-func (r *ParserLibEntryDataSourceModel) ToOperationsListParserRequest(ctx context.Context) (*operations.ListParserRequest, diag.Diagnostics) {
+func (r *ParserLibEntryDataSourceModel) ToOperationsGetParserByIDRequest(ctx context.Context) (*operations.GetParserByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListParserRequest{
+	out := operations.GetParserByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

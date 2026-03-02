@@ -55,7 +55,8 @@ func (r *ParserLibEntryDataSource) Schema(ctx context.Context, req datasource.Sc
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Required:    true,
+				Description: `Unique ID to GET`,
 			},
 			"lib": schema.StringAttribute{
 				Computed: true,
@@ -110,13 +111,13 @@ func (r *ParserLibEntryDataSource) Read(ctx context.Context, req datasource.Read
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListParserRequest(ctx)
+	request, requestDiags := data.ToOperationsGetParserByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Parsers.ListParser(ctx, *request)
+	res, err := r.client.Parsers.GetParserByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -136,7 +137,7 @@ func (r *ParserLibEntryDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListParserResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetParserByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

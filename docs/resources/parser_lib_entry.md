@@ -47,12 +47,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_parser_lib_entry.my_criblio_parser_lib_entry
-  id = "Cribl"
+  id = jsonencode({
+    group_id = "Cribl"
+    id = "parser-json"
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_parser_lib_entry.my_criblio_parser_lib_entry "Cribl"
+terraform import criblio_parser_lib_entry.my_criblio_parser_lib_entry '{"group_id": "Cribl", "id": "parser-json"}'
 ```

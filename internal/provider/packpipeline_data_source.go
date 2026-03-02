@@ -30,10 +30,10 @@ type PackPipelineDataSource struct {
 
 // PackPipelineDataSourceModel describes the data model.
 type PackPipelineDataSourceModel struct {
-	GroupID types.String     `tfsdk:"group_id"`
-	ID      types.String     `tfsdk:"id"`
-	Items   []tfTypes.Routes `tfsdk:"items"`
-	Pack    types.String     `tfsdk:"pack"`
+	Conf    tfTypes.PipelineConf `tfsdk:"conf"`
+	GroupID types.String         `tfsdk:"group_id"`
+	ID      types.String         `tfsdk:"id"`
+	Pack    types.String         `tfsdk:"pack"`
 }
 
 // Metadata returns the data source type name.
@@ -47,6 +47,82 @@ func (r *PackPipelineDataSource) Schema(ctx context.Context, req datasource.Sche
 		MarkdownDescription: "PackPipeline DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"conf": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"async_func_timeout": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
+					},
+					"description": schema.StringAttribute{
+						Computed: true,
+					},
+					"functions": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"conf": schema.MapAttribute{
+									Computed:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Simple description of this step`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If true, data will not be pushed through this function`,
+								},
+								"filter": schema.StringAttribute{
+									Computed:    true,
+									Description: `Filter that selects data to be fed through this Function`,
+								},
+								"final": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
+								},
+								"group_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Group ID`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Function ID`,
+								},
+							},
+						},
+						Description: `List of Functions to pass data through`,
+					},
+					"groups": schema.MapNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Short description of this group`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether this group is disabled`,
+								},
+								"name": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+					},
+					"output": schema.StringAttribute{
+						Computed:    true,
+						Description: `The output destination for events processed by this Pipeline`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}`,
+					},
+				},
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `group Id`,
@@ -54,104 +130,6 @@ func (r *PackPipelineDataSource) Schema(ctx context.Context, req datasource.Sche
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET for pack`,
-			},
-			"items": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"comments": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"comment": schema.StringAttribute{
-										Computed:    true,
-										Description: `Optional, short description of this Route's purpose`,
-									},
-								},
-							},
-							Description: `Comments`,
-						},
-						"groups": schema.MapNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"description": schema.StringAttribute{
-										Computed:    true,
-										Description: `Short description of this group`,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Whether this group is disabled`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Routes ID`,
-						},
-						"routes": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"additional_properties": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"disabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Disable this routing rule`,
-									},
-									"enable_output_expression": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Enable to use a JavaScript expression that evaluates to the name of the Description below`,
-									},
-									"filter": schema.StringAttribute{
-										Computed:    true,
-										Description: `JavaScript expression to select data to route`,
-									},
-									"final": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Flag to control whether the event gets consumed by this Route (Final), or cloned into it`,
-									},
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"output": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"output_expression": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
-										Description: `Parsed as JSON.`,
-									},
-									"pipeline": schema.StringAttribute{
-										Computed:    true,
-										Description: `Pipeline to send the matching data to`,
-									},
-								},
-							},
-							Description: `Pipeline routing rules`,
-						},
-					},
-				},
 			},
 			"pack": schema.StringAttribute{
 				Required:    true,

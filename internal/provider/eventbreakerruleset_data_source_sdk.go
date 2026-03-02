@@ -4,9 +4,95 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
+
+func (r *EventBreakerRulesetDataSourceModel) RefreshFromOperationsGetEventBreakerRulesetByIDResponseBody(ctx context.Context, resp *operations.GetEventBreakerRulesetByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedEventBreakerRuleset(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *EventBreakerRulesetDataSourceModel) RefreshFromSharedEventBreakerRuleset(ctx context.Context, resp *shared.EventBreakerRuleset) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	if resp.Lib != nil {
+		r.Lib = types.StringValue(string(*resp.Lib))
+	} else {
+		r.Lib = types.StringNull()
+	}
+	r.MinRawLength = types.Float64PointerValue(resp.MinRawLength)
+	r.Rules = []tfTypes.EventBreakerRulesetRule{}
+
+	for _, rulesItem := range resp.Rules {
+		var rules tfTypes.EventBreakerRulesetRule
+
+		rules.Condition = types.StringPointerValue(rulesItem.Condition)
+		rules.Delimiter = types.StringPointerValue(rulesItem.Delimiter)
+		rules.DelimiterRegex = types.StringPointerValue(rulesItem.DelimiterRegex)
+		rules.Disabled = types.BoolPointerValue(rulesItem.Disabled)
+		rules.EscapeChar = types.StringPointerValue(rulesItem.EscapeChar)
+		rules.EventBreakerRegex = types.StringPointerValue(rulesItem.EventBreakerRegex)
+		rules.Fields = []tfTypes.Field{}
+
+		for _, fieldsItem := range rulesItem.Fields {
+			var fields tfTypes.Field
+
+			fields.Name = types.StringPointerValue(fieldsItem.Name)
+			fields.Value = types.StringValue(fieldsItem.Value)
+
+			rules.Fields = append(rules.Fields, fields)
+		}
+		rules.FieldsLineRegex = types.StringPointerValue(rulesItem.FieldsLineRegex)
+		rules.HeaderLineRegex = types.StringPointerValue(rulesItem.HeaderLineRegex)
+		rules.MaxEventBytes = types.Float64PointerValue(rulesItem.MaxEventBytes)
+		rules.Name = types.StringValue(rulesItem.Name)
+		rules.ParserEnabled = types.BoolPointerValue(rulesItem.ParserEnabled)
+		rules.QuoteChar = types.StringPointerValue(rulesItem.QuoteChar)
+		rules.ShouldUseDataRaw = types.BoolPointerValue(rulesItem.ShouldUseDataRaw)
+		rules.Timestamp.Format = types.StringPointerValue(rulesItem.Timestamp.Format)
+		rules.Timestamp.Length = types.Float64PointerValue(rulesItem.Timestamp.Length)
+		if rulesItem.Timestamp.Type != nil {
+			rules.Timestamp.Type = types.StringValue(string(*rulesItem.Timestamp.Type))
+		} else {
+			rules.Timestamp.Type = types.StringNull()
+		}
+		rules.TimestampAnchorRegex = types.StringPointerValue(rulesItem.TimestampAnchorRegex)
+		rules.TimestampEarliest = types.StringPointerValue(rulesItem.TimestampEarliest)
+		rules.TimestampLatest = types.StringPointerValue(rulesItem.TimestampLatest)
+		rules.TimestampTimezone = types.StringPointerValue(rulesItem.TimestampTimezone)
+		if rulesItem.Type != nil {
+			rules.Type = types.StringValue(string(*rulesItem.Type))
+		} else {
+			rules.Type = types.StringNull()
+		}
+
+		r.Rules = append(r.Rules, rules)
+	}
+	r.Tags = types.StringPointerValue(resp.Tags)
+
+	return diags
+}
 
 func (r *EventBreakerRulesetDataSourceModel) ToOperationsGetEventBreakerRulesetByIDRequest(ctx context.Context) (*operations.GetEventBreakerRulesetByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics

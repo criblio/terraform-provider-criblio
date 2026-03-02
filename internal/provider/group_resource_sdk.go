@@ -31,6 +31,26 @@ func (r *GroupResourceModel) RefreshFromOperationsCreateProductsGroupsByProductR
 	return diags
 }
 
+func (r *GroupResourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ctx context.Context, resp *operations.GetGroupsByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedConfigGroup(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *GroupResourceModel) RefreshFromOperationsUpdateGroupsByIDResponseBody(ctx context.Context, resp *operations.UpdateGroupsByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 

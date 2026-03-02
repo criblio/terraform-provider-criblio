@@ -5,11 +5,15 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -28,8 +32,13 @@ type EventBreakerRulesetDataSource struct {
 
 // EventBreakerRulesetDataSourceModel describes the data model.
 type EventBreakerRulesetDataSourceModel struct {
-	GroupID types.String `tfsdk:"group_id"`
-	ID      types.String `tfsdk:"id"`
+	Description  types.String                      `tfsdk:"description"`
+	GroupID      types.String                      `tfsdk:"group_id"`
+	ID           types.String                      `tfsdk:"id"`
+	Lib          types.String                      `tfsdk:"lib"`
+	MinRawLength types.Float64                     `tfsdk:"min_raw_length"`
+	Rules        []tfTypes.EventBreakerRulesetRule `tfsdk:"rules"`
+	Tags         types.String                      `tfsdk:"tags"`
 }
 
 // Metadata returns the data source type name.
@@ -43,6 +52,9 @@ func (r *EventBreakerRulesetDataSource) Schema(ctx context.Context, req datasour
 		MarkdownDescription: "EventBreakerRuleset DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
@@ -50,6 +62,126 @@ func (r *EventBreakerRulesetDataSource) Schema(ctx context.Context, req datasour
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`).String()),
+				},
+			},
+			"lib": schema.StringAttribute{
+				Computed: true,
+			},
+			"min_raw_length": schema.Float64Attribute{
+				Computed:    true,
+				Description: `The  minimum number of characters in _raw to determine which rule to use`,
+			},
+			"rules": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"condition": schema.StringAttribute{
+							Computed:    true,
+							Description: `JavaScript expression applied to the beginning of a file or object, to determine whether the rule applies to all contained events.`,
+						},
+						"delimiter": schema.StringAttribute{
+							Computed:    true,
+							Description: `Field delimiter used for CSV parsing when type is "csv".`,
+						},
+						"delimiter_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `Regex used to split header fields when type is "header".`,
+						},
+						"disabled": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Disable this breaker rule (enabled by default)`,
+						},
+						"escape_char": schema.StringAttribute{
+							Computed:    true,
+							Description: `Escape character used for CSV parsing when type is "csv".`,
+						},
+						"event_breaker_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `The regex to match before attempting event breaker extraction. Use $ (end-of-string anchor) to prevent extraction.`,
+						},
+						"fields": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										Computed: true,
+									},
+									"value": schema.StringAttribute{
+										Computed:    true,
+										Description: `The JavaScript expression used to compute the field's value (can be constant)`,
+									},
+								},
+							},
+							Description: `Key-value pairs to be added to each event`,
+						},
+						"fields_line_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `Regex that identifies and captures the fields line when type is "header".`,
+						},
+						"header_line_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `Regex used to identify header lines when type is "header".`,
+						},
+						"max_event_bytes": schema.Float64Attribute{
+							Computed:    true,
+							Description: `The maximum number of bytes in an event before it is flushed to the pipelines`,
+						},
+						"name": schema.StringAttribute{
+							Computed: true,
+						},
+						"parser_enabled": schema.BoolAttribute{
+							Computed: true,
+						},
+						"quote_char": schema.StringAttribute{
+							Computed:    true,
+							Description: `Quote character used for CSV parsing when type is "csv".`,
+						},
+						"should_use_data_raw": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event.`,
+						},
+						"timestamp": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"format": schema.StringAttribute{
+									Computed: true,
+								},
+								"length": schema.Float64Attribute{
+									Computed: true,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+							Description: `Auto, manual format (strptime), or current time`,
+						},
+						"timestamp_anchor_regex": schema.StringAttribute{
+							Computed:    true,
+							Description: `The regex to match before attempting timestamp extraction. Use $ (end-of-string anchor) to prevent extraction.`,
+						},
+						"timestamp_earliest": schema.StringAttribute{
+							Computed:    true,
+							Description: `The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time.`,
+						},
+						"timestamp_latest": schema.StringAttribute{
+							Computed:    true,
+							Description: `The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time.`,
+						},
+						"timestamp_timezone": schema.StringAttribute{
+							Computed:    true,
+							Description: `Timezone to assign to timestamps without timezone info`,
+						},
+						"type": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+				Description: `A list of rules that will be applied, in order, to the input data stream`,
+			},
+			"tags": schema.StringAttribute{
+				Computed: true,
 			},
 		},
 	}
@@ -117,6 +249,11 @@ func (r *EventBreakerRulesetDataSource) Read(ctx context.Context, req datasource
 	}
 	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetEventBreakerRulesetByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
 

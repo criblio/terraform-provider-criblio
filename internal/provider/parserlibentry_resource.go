@@ -3,7 +3,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -189,13 +191,13 @@ func (r *ParserLibEntryResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListParserRequest(ctx)
+	request, requestDiags := data.ToOperationsGetParserByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Parsers.ListParser(ctx, *request)
+	res, err := r.client.Parsers.GetParserByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -219,7 +221,7 @@ func (r *ParserLibEntryResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListParserResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetParserByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -329,5 +331,26 @@ func (r *ParserLibEntryResource) Delete(ctx context.Context, req resource.Delete
 }
 
 func (r *ParserLibEntryResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), req.ID)...)
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		GroupID string `json:"group_id"`
+		ID      string `json:"id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"group_id": "Cribl", "id": "parser-json"}': `+err.Error())
+		return
+	}
+
+	if len(data.GroupID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	if len(data.ID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"parser-json"`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 }

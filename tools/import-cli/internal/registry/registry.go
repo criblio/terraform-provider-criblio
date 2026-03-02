@@ -34,6 +34,14 @@ type Entry struct {
 	// ImportIDFormat describes the Terraform import ID format, matching provider ImportState.
 	// Examples: "json:group_id,id", "id", "json:group_id,id,pack". Empty if not known.
 	ImportIDFormat string
+	// OneOf configures oneOf-style resources; when set, export emits a type-specific block from Items.
+	OneOf *OneOfConfig
+	// RefreshFromMethod overrides the RefreshFrom* method name used when converting Get response to model. Empty = derive from GetMethod.
+	RefreshFromMethod string
+	// ListItemIDMethod is the method name on list items to get the ID (e.g. "GetKeyID"). Empty = use GetID or map "id"/"Id".
+	ListItemIDMethod string
+	// ListUseGroupIDAsItemID when true: when list is called per-group and the item has no id, use the group ID as the identifier.
+	ListUseGroupIDAsItemID bool
 }
 
 // EntryOverride provides static overrides for derived SDK/list/get/ImportID metadata.
@@ -59,7 +67,8 @@ func MetadataFromProvider() map[string]ResourceMetadata {
 // NewFromResources discovers resource types by calling each resource constructor
 // and reading Metadata. Terraform type names and model type names come from the
 // provider. metadata is from ImportMetadata(); overrides replace those values when set.
-func NewFromResources(ctx context.Context, constructors []func() resource.Resource, metadata map[string]ResourceMetadata, overrides map[string]EntryOverride) (*Registry, error) {
+// oneOfBlockNamesFromModel is optional; when set it is used to populate SupportedBlockNames for oneOf resources from the provider model (e.g. converter.OneOfBlockNamesFromModel).
+func NewFromResources(ctx context.Context, constructors []func() resource.Resource, metadata map[string]ResourceMetadata, overrides map[string]EntryOverride, oneOfBlockNamesFromModel func(string) ([]string, error)) (*Registry, error) {
 	byTypeName := make(map[string]Entry)
 	var entries []Entry
 
@@ -83,6 +92,18 @@ func NewFromResources(ctx context.Context, constructors []func() resource.Resour
 			e.ListMethod = meta.ListMethod
 			e.GetMethod = meta.GetMethod
 			e.ImportIDFormat = meta.ImportIDFormat
+			e.OneOf = meta.OneOf
+			e.RefreshFromMethod = meta.RefreshFromMethod
+			e.ListItemIDMethod = meta.ListItemIDMethod
+			e.ListUseGroupIDAsItemID = meta.ListUseGroupIDAsItemID
+			// Populate OneOf.SupportedBlockNames from provider model when callback provided.
+			if oneOfBlockNamesFromModel != nil && meta.OneOf != nil && modelTypeName != "" {
+				if names, err := oneOfBlockNamesFromModel(modelTypeName); err == nil && len(names) > 0 {
+					oneOfCopy := *meta.OneOf
+					oneOfCopy.SupportedBlockNames = names
+					e.OneOf = &oneOfCopy
+				}
+			}
 		}
 		if o, ok := overrides[typeName]; ok {
 			if o.SDKService != "" {

@@ -7,9 +7,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
+	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
@@ -22,6 +25,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -45,8 +49,10 @@ type CollectorResource struct {
 
 // CollectorResourceModel describes the resource data model.
 type CollectorResourceModel struct {
+	Environment               types.String                       `tfsdk:"environment"`
 	GroupID                   types.String                       `tfsdk:"group_id"`
 	ID                        types.String                       `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
+	IgnoreGroupJobsLimit      types.Bool                         `tfsdk:"ignore_group_jobs_limit"`
 	InputCollectorAzureBlob   *tfTypes.InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob" tfPlanOnly:"true"`
 	InputCollectorCriblLake   *tfTypes.InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake" tfPlanOnly:"true"`
 	InputCollectorDatabase    *tfTypes.InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database" tfPlanOnly:"true"`
@@ -56,7 +62,9 @@ type CollectorResourceModel struct {
 	InputCollectorS3          *tfTypes.InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3" tfPlanOnly:"true"`
 	InputCollectorScript      *tfTypes.InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script" tfPlanOnly:"true"`
 	InputCollectorSplunk      *tfTypes.InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk" tfPlanOnly:"true"`
-	Items                     []map[string]jsontypes.Normalized  `tfsdk:"items"`
+	ResumeOnBoot              types.Bool                         `tfsdk:"resume_on_boot"`
+	TTL                       types.String                       `tfsdk:"ttl"`
+	WorkerAffinity            types.Bool                         `tfsdk:"worker_affinity"`
 }
 
 func (r *CollectorResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -67,6 +75,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Collector Resource",
 		Attributes: map[string]schema.Attribute{
+			"environment": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
@@ -75,16 +89,27 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Required:    true,
 				Description: `The id of this collector instance`,
 			},
+			"ignore_group_jobs_limit": schema.BoolAttribute{
+				Computed:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `Default: false`,
+			},
 			"input_collector_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collector": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"conf": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									custom_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"auth_type": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["manual", "secret", "clientSecret", "clientCert"]`,
 										Validators: []validator.String{
@@ -97,26 +122,35 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"connection_string": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Azure storage account Connection String`,
 									},
 									"container_name": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Azure container to collect from`,
 									},
 									"extractors": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
 											Attributes: map[string]schema.Attribute{
 												"expression": schema.StringAttribute{
+													Computed:    true,
 													Optional:    true,
 													Description: `JavaScript expression to compute the value from the path`,
 												},
 												"key": schema.StringAttribute{
+													Computed:    true,
 													Optional:    true,
 													Description: `Name of the extracted field`,
 												},
 												"pattern": schema.StringAttribute{
+													Computed:    true,
 													Optional:    true,
 													Description: `Regex pattern to match paths (alternative to key/expression)`,
 												},
@@ -124,39 +158,58 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_batch_size": schema.Int64Attribute{
+										Computed: true,
 										Optional: true,
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
 									},
 									"path": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Directory where data will be collected`,
 									},
 									"recurse": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"storage_account_name": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "azureblob"`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be "azureblob"`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf(
 										"azureblob",
 									),
 								},
 							},
 						},
+						Description: `Not Null`,
+						Validators: []validator.Object{
+							speakeasy_objectvalidators.NotNull(),
+						},
 					},
 					"environment": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -165,45 +218,68 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: false`,
 					},
 					"input": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Computed:    true,
+											Optional:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
@@ -266,11 +342,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
 								Computed:    true,
@@ -279,6 +363,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Enable to configure scheduling for this Collector`,
 							},
@@ -298,6 +383,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
@@ -389,6 +475,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
@@ -398,9 +485,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"state_update_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
@@ -419,6 +508,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Time warning configuration`,
 									},
@@ -441,9 +531,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -470,33 +563,54 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collector": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"conf": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									custom_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"dataset": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Lake dataset to collect data from`,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "cribllake"`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be "cribllake"`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf(
 										"cribllake",
 									),
 								},
 							},
 						},
+						Description: `Not Null`,
+						Validators: []validator.Object{
+							speakeasy_objectvalidators.NotNull(),
+						},
 					},
 					"environment": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -505,45 +619,68 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: false`,
 					},
 					"input": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Computed:    true,
+											Optional:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
@@ -606,11 +743,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
 								Computed:    true,
@@ -619,6 +764,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Enable to configure scheduling for this Collector`,
 							},
@@ -638,6 +784,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
@@ -729,6 +876,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
@@ -738,9 +886,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"state_update_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
@@ -759,6 +909,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Time warning configuration`,
 									},
@@ -781,9 +932,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -810,38 +964,61 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collector": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"conf": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									custom_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"connection_id": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Select an existing Database Connection`,
 									},
 									"query": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Query string for selecting data from the database`,
 									},
 									"query_validation_enabled": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "database"`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be "database"`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf("database"),
 								},
 							},
 						},
+						Description: `Not Null`,
+						Validators: []validator.Object{
+							speakeasy_objectvalidators.NotNull(),
+						},
 					},
 					"environment": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -850,45 +1027,68 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: false`,
 					},
 					"input": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Computed:    true,
+											Optional:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
@@ -951,11 +1151,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
 								Computed:    true,
@@ -964,6 +1172,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Enable to configure scheduling for this Collector`,
 							},
@@ -983,6 +1192,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
@@ -1074,6 +1284,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
@@ -1083,9 +1294,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"state_update_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
@@ -1104,6 +1317,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Time warning configuration`,
 									},
@@ -1126,9 +1340,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -1155,12 +1372,18 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collector": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"conf": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									custom_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"auth_type": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["manual", "secret", "clientSecret", "clientCert"]`,
 										Validators: []validator.String{
@@ -1173,22 +1396,30 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"bucket": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `GCS Bucket from which to collect data`,
 									},
 									"extractors": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
 											Attributes: map[string]schema.Attribute{
 												"expression": schema.StringAttribute{
+													Computed:    true,
 													Optional:    true,
 													Description: `JavaScript expression to compute the value from the path`,
 												},
 												"key": schema.StringAttribute{
+													Computed:    true,
 													Optional:    true,
 													Description: `Name of the extracted field`,
 												},
 												"pattern": schema.StringAttribute{
+													Computed:    true,
 													Optional:    true,
 													Description: `Regex pattern to match paths (alternative to key/expression)`,
 												},
@@ -1196,37 +1427,56 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_batch_size": schema.Int64Attribute{
+										Computed: true,
 										Optional: true,
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
 									},
 									"path": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Directory where data will be collected`,
 									},
 									"recurse": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"service_account_credentials": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "gcs"`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be "gcs"`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf("gcs"),
 								},
 							},
 						},
+						Description: `Not Null`,
+						Validators: []validator.Object{
+							speakeasy_objectvalidators.NotNull(),
+						},
 					},
 					"environment": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -1235,45 +1485,68 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: false`,
 					},
 					"input": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Computed:    true,
+											Optional:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
@@ -1336,11 +1609,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
 								Computed:    true,
@@ -1349,6 +1630,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Enable to configure scheduling for this Collector`,
 							},
@@ -1368,6 +1650,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
@@ -1459,6 +1742,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
@@ -1468,9 +1752,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"state_update_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
@@ -1489,6 +1775,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Time warning configuration`,
 									},
@@ -1511,9 +1798,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -1540,12 +1830,18 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collector": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"conf": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									custom_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"authentication": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
 										Validators: []validator.String{
@@ -1566,6 +1862,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"collect_method": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["get", "post", "post_with_body", "other"]`,
 										Validators: []validator.String{
@@ -1578,45 +1875,66 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"collect_url": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `URL to use for the Collect operation`,
 									},
 									"credentials_secret": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"password": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"timeout": schema.Int64Attribute{
+										Computed: true,
 										Optional: true,
 										Validators: []validator.Int64{
 											int64validator.AtMost(1800),
 										},
 									},
 									"username": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "healthcheck"`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be "healthcheck"`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf(
 										"healthcheck",
 									),
 								},
 							},
 						},
+						Description: `Not Null`,
+						Validators: []validator.Object{
+							speakeasy_objectvalidators.NotNull(),
+						},
 					},
 					"environment": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -1625,45 +1943,68 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: false`,
 					},
 					"input": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Computed:    true,
+											Optional:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
@@ -1726,11 +2067,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
 								Computed:    true,
@@ -1739,6 +2088,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Enable to configure scheduling for this Collector`,
 							},
@@ -1758,6 +2108,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
@@ -1849,6 +2200,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
@@ -1858,9 +2210,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"state_update_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
@@ -1879,6 +2233,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Time warning configuration`,
 									},
@@ -1901,9 +2256,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -1930,46 +2288,66 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collector": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"conf": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									custom_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"auth_header_expr": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Expression for auth header value`,
 									},
 									"auth_header_key": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Header key for authentication`,
 									},
 									"auth_request_headers": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
+													Computed: true,
 													Optional: true,
 												},
 												"value": schema.StringAttribute{
+													Computed: true,
 													Optional: true,
 												},
 											},
 										},
 									},
 									"auth_request_params": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
+													Computed: true,
 													Optional: true,
 												},
 												"value": schema.StringAttribute{
+													Computed: true,
 													Optional: true,
 												},
 											},
 										},
 									},
 									"authentication": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
 										Validators: []validator.String{
@@ -1996,9 +2374,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Default: false`,
 									},
 									"client_secret_param_name": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"collect_method": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["get", "post", "post_with_body", "other"]`,
 										Validators: []validator.String{
@@ -2011,36 +2391,50 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"collect_request_headers": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
+													Computed: true,
 													Optional: true,
 												},
 												"value": schema.StringAttribute{
+													Computed: true,
 													Optional: true,
 												},
 											},
 										},
 									},
 									"collect_request_params": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
 											Attributes: map[string]schema.Attribute{
 												"name": schema.StringAttribute{
+													Computed: true,
 													Optional: true,
 												},
 												"value": schema.StringAttribute{
+													Computed: true,
 													Optional: true,
 												},
 											},
 										},
 									},
 									"collect_url": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `URL to use for the Collect operation`,
 									},
 									"credentials_secret": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"decode_url": schema.BoolAttribute{
@@ -2050,18 +2444,23 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Default: false`,
 									},
 									"disable_time_filter": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"discovery": schema.SingleNestedAttribute{
-										Required: true,
+										Computed: true,
+										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"discover_body": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"discover_data_field": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"discover_method": schema.StringAttribute{
+												Computed:    true,
 												Optional:    true,
 												Description: `protocol used for http discovery, required for 'http' type. must be one of ["get", "post", "post_with_body", "other"]`,
 												Validators: []validator.String{
@@ -2074,28 +2473,40 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												},
 											},
 											"discover_request_headers": schema.ListNestedAttribute{
+												Computed: true,
 												Optional: true,
 												NestedObject: schema.NestedAttributeObject{
+													Validators: []validator.Object{
+														speakeasy_objectvalidators.NotNull(),
+													},
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
+															Computed: true,
 															Optional: true,
 														},
 														"value": schema.StringAttribute{
+															Computed: true,
 															Optional: true,
 														},
 													},
 												},
 											},
 											"discover_request_params": schema.ListNestedAttribute{
+												Computed: true,
 												Optional: true,
 												NestedObject: schema.NestedAttributeObject{
+													Validators: []validator.Object{
+														speakeasy_objectvalidators.NotNull(),
+													},
 													Attributes: map[string]schema.Attribute{},
 												},
 											},
 											"discover_type": schema.StringAttribute{
-												Required:    true,
-												Description: `must be one of ["http", "json", "list", "none"]`,
+												Computed:    true,
+												Optional:    true,
+												Description: `Not Null; must be one of ["http", "json", "list", "none"]`,
 												Validators: []validator.String{
+													speakeasy_stringvalidators.NotNull(),
 													stringvalidator.OneOf(
 														"http",
 														"json",
@@ -2105,6 +2516,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												},
 											},
 											"discover_url": schema.StringAttribute{
+												Computed:    true,
 												Optional:    true,
 												Description: `URL to hit for rest type collectors, required for 'http' discoverType`,
 											},
@@ -2115,25 +2527,31 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"format_result_code": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"item_list": schema.ListAttribute{
+												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 												Description: `comma separated list of strings to return from discovery section required for 'list' discoverType`,
 											},
 											"manual_discover_result": schema.StringAttribute{
+												Computed:    true,
 												Optional:    true,
 												Description: `json payload to return manually, required for 'json' discoverType`,
 											},
 											"pagination": schema.SingleNestedAttribute{
+												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"attribute": schema.ListAttribute{
+														Computed:    true,
 														Optional:    true,
 														ElementType: types.StringType,
 													},
 													"last_page_expr": schema.StringAttribute{
+														Computed: true,
 														Optional: true,
 													},
 													"limit": schema.Int64Attribute{
@@ -2143,6 +2561,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														Description: `Default: 100`,
 													},
 													"limit_field": schema.StringAttribute{
+														Computed: true,
 														Optional: true,
 													},
 													"max_pages": schema.Int64Attribute{
@@ -2152,12 +2571,15 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														Description: `Default: 0`,
 													},
 													"offset": schema.Int64Attribute{
+														Computed: true,
 														Optional: true,
 													},
 													"offset_field": schema.StringAttribute{
+														Computed: true,
 														Optional: true,
 													},
 													"page_field": schema.StringAttribute{
+														Computed: true,
 														Optional: true,
 													},
 													"size": schema.Int64Attribute{
@@ -2167,9 +2589,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														Description: `Default: 50`,
 													},
 													"size_field": schema.StringAttribute{
+														Computed: true,
 														Optional: true,
 													},
 													"total_record_field": schema.StringAttribute{
+														Computed: true,
 														Optional: true,
 													},
 													"type": schema.StringAttribute{
@@ -2195,23 +2619,32 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												},
 											},
 										},
+										Description: `Not Null`,
+										Validators: []validator.Object{
+											speakeasy_objectvalidators.NotNull(),
+										},
 									},
 									"login_body": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Body content for login request`,
 									},
 									"login_url": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `URL for authentication login`,
 									},
 									"pagination": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"attribute": schema.ListAttribute{
+												Computed:    true,
 												Optional:    true,
 												ElementType: types.StringType,
 											},
 											"last_page_expr": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"limit": schema.Int64Attribute{
@@ -2221,6 +2654,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: 100`,
 											},
 											"limit_field": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"max_pages": schema.Int64Attribute{
@@ -2230,12 +2664,15 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: 0`,
 											},
 											"offset": schema.Int64Attribute{
+												Computed: true,
 												Optional: true,
 											},
 											"offset_field": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"page_field": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"size": schema.Int64Attribute{
@@ -2245,9 +2682,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: 50`,
 											},
 											"size_field": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"total_record_field": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"type": schema.StringAttribute{
@@ -2273,12 +2712,15 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"password": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"retry_rules": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"codes": schema.ListAttribute{
@@ -2354,55 +2796,79 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"safe_headers": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 									},
 									"scheduling": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"state_tracking": schema.SingleNestedAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
 									},
 									"timeout": schema.Int64Attribute{
+										Computed: true,
 										Optional: true,
 										Validators: []validator.Int64{
 											int64validator.AtMost(1800),
 										},
 									},
 									"token": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"token_resp_attribute": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Attribute name for token in response`,
 									},
 									"token_secret": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"use_round_robin_dns": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"username": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "rest"`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be "rest"`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf("rest"),
 								},
 							},
 						},
+						Description: `Not Null`,
+						Validators: []validator.Object{
+							speakeasy_objectvalidators.NotNull(),
+						},
 					},
 					"environment": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -2411,45 +2877,68 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: false`,
 					},
 					"input": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Computed:    true,
+											Optional:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
@@ -2512,11 +3001,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
 								Computed:    true,
@@ -2525,6 +3022,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Enable to configure scheduling for this Collector`,
 							},
@@ -2544,6 +3042,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
@@ -2635,6 +3134,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
@@ -2644,9 +3144,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"state_update_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
@@ -2665,6 +3167,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Time warning configuration`,
 									},
@@ -2687,9 +3190,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -2716,15 +3222,22 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collector": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"conf": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									custom_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"aws_api_key": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"aws_authentication_method": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["auto", "manual", "secret"]`,
 										Validators: []validator.String{
@@ -2736,28 +3249,38 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"aws_secret": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"aws_secret_key": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"bucket": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `S3 Bucket from which to collect data`,
 									},
 									"extractors": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
 											Attributes: map[string]schema.Attribute{
 												"expression": schema.StringAttribute{
+													Computed:    true,
 													Optional:    true,
 													Description: `JavaScript expression to compute the value from the path`,
 												},
 												"key": schema.StringAttribute{
+													Computed:    true,
 													Optional:    true,
 													Description: `Name of the extracted field`,
 												},
 												"pattern": schema.StringAttribute{
+													Computed:    true,
 													Optional:    true,
 													Description: `Regex pattern to match paths (alternative to key/expression)`,
 												},
@@ -2765,38 +3288,57 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"max_batch_size": schema.Int64Attribute{
+										Computed: true,
 										Optional: true,
 										Validators: []validator.Int64{
 											int64validator.AtLeast(1),
 										},
 									},
 									"path": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Directory where data will be collected`,
 									},
 									"recurse": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"region": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `AWS region from which to retrieve data`,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "s3"`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be "s3"`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf("s3"),
 								},
 							},
 						},
+						Description: `Not Null`,
+						Validators: []validator.Object{
+							speakeasy_objectvalidators.NotNull(),
+						},
 					},
 					"environment": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -2805,45 +3347,68 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: false`,
 					},
 					"input": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Computed:    true,
+											Optional:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
@@ -2906,11 +3471,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
 								Computed:    true,
@@ -2919,6 +3492,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Enable to configure scheduling for this Collector`,
 							},
@@ -2938,6 +3512,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
@@ -3029,6 +3604,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
@@ -3038,9 +3614,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"state_update_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
@@ -3059,6 +3637,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Time warning configuration`,
 									},
@@ -3081,9 +3660,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -3110,36 +3692,59 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collector": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"conf": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									custom_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"collect_script": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"discover_script": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"shell": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "script"`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be "script"`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf("script"),
 								},
 							},
 						},
+						Description: `Not Null`,
+						Validators: []validator.Object{
+							speakeasy_objectvalidators.NotNull(),
+						},
 					},
 					"environment": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -3148,45 +3753,68 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: false`,
 					},
 					"input": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Computed:    true,
+											Optional:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
@@ -3249,11 +3877,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
 								Computed:    true,
@@ -3262,6 +3898,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Enable to configure scheduling for this Collector`,
 							},
@@ -3281,6 +3918,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
@@ -3372,6 +4010,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
@@ -3381,9 +4020,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"state_update_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
@@ -3402,6 +4043,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Time warning configuration`,
 									},
@@ -3424,9 +4066,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -3453,12 +4098,18 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"collector": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"conf": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									custom_objectplanmodifier.PreferState(),
+								},
 								Attributes: map[string]schema.Attribute{
 									"authentication": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]`,
 										Validators: []validator.String{
@@ -3479,27 +4130,34 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"credentials_secret": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"disable_time_filter": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"earliest": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Earliest time boundary for the search`,
 									},
 									"endpoint": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `REST API endpoint used to create a search`,
 									},
 									"handle_escaped_chars": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"latest": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Latest time boundary for the search`,
 									},
 									"output_mode": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `must be one of ["csv", "json"]`,
 										Validators: []validator.String{
@@ -3510,53 +4168,77 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"password": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"reject_unauthorized": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"search": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Splunk search query`,
 									},
 									"search_head": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Search head base URL`,
 									},
 									"timeout": schema.Int64Attribute{
+										Computed: true,
 										Optional: true,
 										Validators: []validator.Int64{
 											int64validator.AtMost(1800),
 										},
 									},
 									"token": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"token_secret": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"use_round_robin_dns": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
 									},
 									"username": schema.StringAttribute{
+										Computed: true,
 										Optional: true,
 									},
 								},
 							},
 							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "splunk"`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Not Null; must be "splunk"`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf("splunk"),
 								},
 							},
 						},
+						Description: `Not Null`,
+						Validators: []validator.Object{
+							speakeasy_objectvalidators.NotNull(),
+						},
 					},
 					"environment": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 					},
 					"id": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"ignore_group_jobs_limit": schema.BoolAttribute{
 						Computed:    true,
@@ -3565,45 +4247,68 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: false`,
 					},
 					"input": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `A list of event-breaking rulesets that will be applied, in order, to the input data stream`,
 							},
 							"metadata": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
 								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"name": schema.StringAttribute{
-											Required: true,
+											Computed:    true,
+											Optional:    true,
+											Description: `Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											Computed:    true,
+											Optional:    true,
+											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
 										},
 									},
 								},
 								Description: `Fields to add to events from this input`,
 							},
 							"output": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Destination to send results to`,
 							},
 							"pipeline": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Pipeline to process results`,
 							},
 							"preprocess": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"args": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Arguments to be added to the custom command`,
 									},
 									"command": schema.StringAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Command to feed the data through (via stdin) and process its output (stdout)`,
 									},
@@ -3666,11 +4371,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Default: true`,
 					},
 					"saved_state": schema.SingleNestedAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Description: `Saved state for the collector`,
 					},
 					"schedule": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							custom_objectplanmodifier.PreferState(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
 								Computed:    true,
@@ -3679,6 +4392,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `A cron schedule on which to run this job. Default: "*/5 * * * *"`,
 							},
 							"enabled": schema.BoolAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Enable to configure scheduling for this Collector`,
 							},
@@ -3698,6 +4412,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Description: `Resume missed scheduled runs. Default: false`,
 							},
 							"run": schema.SingleNestedAttribute{
+								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"earliest": schema.Float64Attribute{
@@ -3789,6 +4504,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										Description: `Reschedule tasks that failed with non-fatal errors. Default: true`,
 									},
 									"state_tracking": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"enabled": schema.BoolAttribute{
@@ -3798,9 +4514,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Description: `Default: false`,
 											},
 											"state_merge_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 											"state_update_expression": schema.StringAttribute{
+												Computed: true,
 												Optional: true,
 											},
 										},
@@ -3819,6 +4537,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"time_warning": schema.SingleNestedAttribute{
+										Computed:    true,
 										Optional:    true,
 										Description: `Time warning configuration`,
 									},
@@ -3841,9 +4560,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Description: `Tags for filtering and grouping. Default: []`,
 					},
 					"ttl": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`4h`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`4h`),
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.PreferState(),
+						},
 						Description: `Default: "4h"`,
 					},
 					"worker_affinity": schema.BoolAttribute{
@@ -3866,11 +4588,23 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 					}...),
 				},
 			},
-			"items": schema.ListAttribute{
+			"resume_on_boot": schema.BoolAttribute{
+				Computed:    true,
+				Default:     booldefault.StaticBool(true),
+				Description: `Default: true`,
+			},
+			"ttl": schema.StringAttribute{
 				Computed: true,
-				ElementType: types.MapType{
-					ElemType: jsontypes.NormalizedType{},
+				Default:  stringdefault.StaticString(`4h`),
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
 				},
+				Description: `Default: "4h"`,
+			},
+			"worker_affinity": schema.BoolAttribute{
+				Computed:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
 			},
 		},
 	}
@@ -3894,6 +4628,209 @@ func (r *CollectorResource) Configure(ctx context.Context, req resource.Configur
 	}
 
 	r.client = client
+}
+
+// collectorPreferStateBackup holds input and schedule values that RefreshFrom
+// restores when the API returns nil, so they can be re-applied after refreshPlan
+// overwrites them with empty.
+type collectorPreferStateBackup struct {
+	InputRest, ScheduleRest                       interface{}
+	InputScript, ScheduleScript                   interface{}
+	InputSplunk, ScheduleSplunk                   interface{}
+	InputS3, ScheduleS3                           interface{}
+	InputAzureBlob, ScheduleAzureBlob             interface{}
+	InputCriblLake, ScheduleCriblLake             interface{}
+	InputDatabase, ScheduleDatabase               interface{}
+	InputGCS, ScheduleGCS                         interface{}
+	InputHealthCheck, ScheduleHealthCheck         interface{}
+}
+
+func collectorPreservePreferStateFields(data *CollectorResourceModel) *collectorPreferStateBackup {
+	saved := &collectorPreferStateBackup{}
+	if data.InputCollectorRest != nil {
+		saved.InputRest, saved.ScheduleRest = data.InputCollectorRest.Input, data.InputCollectorRest.Schedule
+	}
+	if data.InputCollectorScript != nil {
+		saved.InputScript, saved.ScheduleScript = data.InputCollectorScript.Input, data.InputCollectorScript.Schedule
+	}
+	if data.InputCollectorSplunk != nil {
+		saved.InputSplunk, saved.ScheduleSplunk = data.InputCollectorSplunk.Input, data.InputCollectorSplunk.Schedule
+	}
+	if data.InputCollectorS3 != nil {
+		saved.InputS3, saved.ScheduleS3 = data.InputCollectorS3.Input, data.InputCollectorS3.Schedule
+	}
+	if data.InputCollectorAzureBlob != nil {
+		saved.InputAzureBlob, saved.ScheduleAzureBlob = data.InputCollectorAzureBlob.Input, data.InputCollectorAzureBlob.Schedule
+	}
+	if data.InputCollectorCriblLake != nil {
+		saved.InputCriblLake, saved.ScheduleCriblLake = data.InputCollectorCriblLake.Input, data.InputCollectorCriblLake.Schedule
+	}
+	if data.InputCollectorDatabase != nil {
+		saved.InputDatabase, saved.ScheduleDatabase = data.InputCollectorDatabase.Input, data.InputCollectorDatabase.Schedule
+	}
+	if data.InputCollectorGCS != nil {
+		saved.InputGCS, saved.ScheduleGCS = data.InputCollectorGCS.Input, data.InputCollectorGCS.Schedule
+	}
+	if data.InputCollectorHealthCheck != nil {
+		saved.InputHealthCheck, saved.ScheduleHealthCheck = data.InputCollectorHealthCheck.Input, data.InputCollectorHealthCheck.Schedule
+	}
+	return saved
+}
+
+// collectorEnsureDefaultInputAndSchedule populates input and schedule with empty
+// default structs when both API and plan return nil. This prevents drift when
+// the user doesn't configure these optional PreferState fields.
+func collectorEnsureDefaultInputAndSchedule(data *CollectorResourceModel) {
+	if data.InputCollectorRest != nil {
+		if data.InputCollectorRest.Input == nil {
+			data.InputCollectorRest.Input = &tfTypes.InputCollectorRestInput{}
+		}
+		if data.InputCollectorRest.Schedule == nil {
+			data.InputCollectorRest.Schedule = &tfTypes.InputCollectorRestSchedule{}
+		}
+	}
+	if data.InputCollectorScript != nil {
+		if data.InputCollectorScript.Input == nil {
+			data.InputCollectorScript.Input = &tfTypes.InputCollectorScriptInput{}
+		}
+		if data.InputCollectorScript.Schedule == nil {
+			data.InputCollectorScript.Schedule = &tfTypes.InputCollectorScriptSchedule{}
+		}
+	}
+	if data.InputCollectorSplunk != nil {
+		if data.InputCollectorSplunk.Input == nil {
+			data.InputCollectorSplunk.Input = &tfTypes.InputCollectorSplunkInput{}
+		}
+		if data.InputCollectorSplunk.Schedule == nil {
+			data.InputCollectorSplunk.Schedule = &tfTypes.InputCollectorSplunkSchedule{}
+		}
+	}
+	if data.InputCollectorS3 != nil {
+		if data.InputCollectorS3.Input == nil {
+			data.InputCollectorS3.Input = &tfTypes.InputCollectorS3Input{}
+		}
+		if data.InputCollectorS3.Schedule == nil {
+			data.InputCollectorS3.Schedule = &tfTypes.InputCollectorS3Schedule{}
+		}
+	}
+	if data.InputCollectorAzureBlob != nil {
+		if data.InputCollectorAzureBlob.Input == nil {
+			data.InputCollectorAzureBlob.Input = &tfTypes.InputCollectorAzureBlobInput{}
+		}
+		if data.InputCollectorAzureBlob.Schedule == nil {
+			data.InputCollectorAzureBlob.Schedule = &tfTypes.InputCollectorAzureBlobSchedule{}
+		}
+	}
+	if data.InputCollectorCriblLake != nil {
+		if data.InputCollectorCriblLake.Input == nil {
+			data.InputCollectorCriblLake.Input = &tfTypes.InputCollectorCriblLakeInput{}
+		}
+		if data.InputCollectorCriblLake.Schedule == nil {
+			data.InputCollectorCriblLake.Schedule = &tfTypes.InputCollectorCriblLakeSchedule{}
+		}
+	}
+	if data.InputCollectorDatabase != nil {
+		if data.InputCollectorDatabase.Input == nil {
+			data.InputCollectorDatabase.Input = &tfTypes.InputCollectorDatabaseInput{}
+		}
+		if data.InputCollectorDatabase.Schedule == nil {
+			data.InputCollectorDatabase.Schedule = &tfTypes.InputCollectorDatabaseSchedule{}
+		}
+	}
+	if data.InputCollectorGCS != nil {
+		if data.InputCollectorGCS.Input == nil {
+			data.InputCollectorGCS.Input = &tfTypes.InputCollectorGCSInput{}
+		}
+		if data.InputCollectorGCS.Schedule == nil {
+			data.InputCollectorGCS.Schedule = &tfTypes.InputCollectorGCSSchedule{}
+		}
+	}
+	if data.InputCollectorHealthCheck != nil {
+		if data.InputCollectorHealthCheck.Input == nil {
+			data.InputCollectorHealthCheck.Input = &tfTypes.InputCollectorHealthCheckInput{}
+		}
+		if data.InputCollectorHealthCheck.Schedule == nil {
+			data.InputCollectorHealthCheck.Schedule = &tfTypes.InputCollectorHealthCheckSchedule{}
+		}
+	}
+}
+
+func collectorRestorePreferStateFields(data *CollectorResourceModel, saved *collectorPreferStateBackup) {
+	if saved == nil {
+		return
+	}
+	if data.InputCollectorRest != nil {
+		if data.InputCollectorRest.Input == nil && saved.InputRest != nil {
+			data.InputCollectorRest.Input = saved.InputRest.(*tfTypes.InputCollectorRestInput)
+		}
+		if data.InputCollectorRest.Schedule == nil && saved.ScheduleRest != nil {
+			data.InputCollectorRest.Schedule = saved.ScheduleRest.(*tfTypes.InputCollectorRestSchedule)
+		}
+	}
+	if data.InputCollectorScript != nil {
+		if data.InputCollectorScript.Input == nil && saved.InputScript != nil {
+			data.InputCollectorScript.Input = saved.InputScript.(*tfTypes.InputCollectorScriptInput)
+		}
+		if data.InputCollectorScript.Schedule == nil && saved.ScheduleScript != nil {
+			data.InputCollectorScript.Schedule = saved.ScheduleScript.(*tfTypes.InputCollectorScriptSchedule)
+		}
+	}
+	if data.InputCollectorSplunk != nil {
+		if data.InputCollectorSplunk.Input == nil && saved.InputSplunk != nil {
+			data.InputCollectorSplunk.Input = saved.InputSplunk.(*tfTypes.InputCollectorSplunkInput)
+		}
+		if data.InputCollectorSplunk.Schedule == nil && saved.ScheduleSplunk != nil {
+			data.InputCollectorSplunk.Schedule = saved.ScheduleSplunk.(*tfTypes.InputCollectorSplunkSchedule)
+		}
+	}
+	if data.InputCollectorS3 != nil {
+		if data.InputCollectorS3.Input == nil && saved.InputS3 != nil {
+			data.InputCollectorS3.Input = saved.InputS3.(*tfTypes.InputCollectorS3Input)
+		}
+		if data.InputCollectorS3.Schedule == nil && saved.ScheduleS3 != nil {
+			data.InputCollectorS3.Schedule = saved.ScheduleS3.(*tfTypes.InputCollectorS3Schedule)
+		}
+	}
+	if data.InputCollectorAzureBlob != nil {
+		if data.InputCollectorAzureBlob.Input == nil && saved.InputAzureBlob != nil {
+			data.InputCollectorAzureBlob.Input = saved.InputAzureBlob.(*tfTypes.InputCollectorAzureBlobInput)
+		}
+		if data.InputCollectorAzureBlob.Schedule == nil && saved.ScheduleAzureBlob != nil {
+			data.InputCollectorAzureBlob.Schedule = saved.ScheduleAzureBlob.(*tfTypes.InputCollectorAzureBlobSchedule)
+		}
+	}
+	if data.InputCollectorCriblLake != nil {
+		if data.InputCollectorCriblLake.Input == nil && saved.InputCriblLake != nil {
+			data.InputCollectorCriblLake.Input = saved.InputCriblLake.(*tfTypes.InputCollectorCriblLakeInput)
+		}
+		if data.InputCollectorCriblLake.Schedule == nil && saved.ScheduleCriblLake != nil {
+			data.InputCollectorCriblLake.Schedule = saved.ScheduleCriblLake.(*tfTypes.InputCollectorCriblLakeSchedule)
+		}
+	}
+	if data.InputCollectorDatabase != nil {
+		if data.InputCollectorDatabase.Input == nil && saved.InputDatabase != nil {
+			data.InputCollectorDatabase.Input = saved.InputDatabase.(*tfTypes.InputCollectorDatabaseInput)
+		}
+		if data.InputCollectorDatabase.Schedule == nil && saved.ScheduleDatabase != nil {
+			data.InputCollectorDatabase.Schedule = saved.ScheduleDatabase.(*tfTypes.InputCollectorDatabaseSchedule)
+		}
+	}
+	if data.InputCollectorGCS != nil {
+		if data.InputCollectorGCS.Input == nil && saved.InputGCS != nil {
+			data.InputCollectorGCS.Input = saved.InputGCS.(*tfTypes.InputCollectorGCSInput)
+		}
+		if data.InputCollectorGCS.Schedule == nil && saved.ScheduleGCS != nil {
+			data.InputCollectorGCS.Schedule = saved.ScheduleGCS.(*tfTypes.InputCollectorGCSSchedule)
+		}
+	}
+	if data.InputCollectorHealthCheck != nil {
+		if data.InputCollectorHealthCheck.Input == nil && saved.InputHealthCheck != nil {
+			data.InputCollectorHealthCheck.Input = saved.InputHealthCheck.(*tfTypes.InputCollectorHealthCheckInput)
+		}
+		if data.InputCollectorHealthCheck.Schedule == nil && saved.ScheduleHealthCheck != nil {
+			data.InputCollectorHealthCheck.Schedule = saved.ScheduleHealthCheck.(*tfTypes.InputCollectorHealthCheckSchedule)
+		}
+	}
 }
 
 func (r *CollectorResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -3946,11 +4883,15 @@ func (r *CollectorResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 
+	collectorEnsureDefaultInputAndSchedule(data)
+	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	collectorRestorePreferStateFields(data, saved)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -4010,6 +4951,8 @@ func (r *CollectorResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
+	collectorEnsureDefaultInputAndSchedule(data)
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -4060,11 +5003,15 @@ func (r *CollectorResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 
+	collectorEnsureDefaultInputAndSchedule(data)
+	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	collectorRestorePreferStateFields(data, saved)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

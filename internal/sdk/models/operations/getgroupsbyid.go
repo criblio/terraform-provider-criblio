@@ -30,6 +30,14 @@ func (g *GetGroupsByIDRequest) GetFields() *string {
 
 // GetGroupsByIDResponseBody - a list of ConfigGroup objects
 type GetGroupsByIDResponseBody struct {
+	Items []shared.ConfigGroup `json:"items,omitempty"`
+}
+
+func (g *GetGroupsByIDResponseBody) GetItems() []shared.ConfigGroup {
+	if g == nil {
+		return nil
+	}
+	return g.Items
 }
 
 type GetGroupsByIDResponse struct {

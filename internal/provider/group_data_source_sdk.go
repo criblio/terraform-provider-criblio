@@ -4,9 +4,70 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
+
+func (r *GroupDataSourceModel) RefreshFromOperationsGetGroupsByIDResponseBody(ctx context.Context, resp *operations.GetGroupsByIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedConfigGroup(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *GroupDataSourceModel) RefreshFromSharedConfigGroup(ctx context.Context, resp *shared.ConfigGroup) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp.Cloud == nil {
+		r.Cloud = nil
+	} else {
+		r.Cloud = &tfTypes.ConfigGroupCloud{}
+		if resp.Cloud.Provider != nil {
+			r.Cloud.Provider = types.StringValue(string(*resp.Cloud.Provider))
+		} else {
+			r.Cloud.Provider = types.StringNull()
+		}
+		r.Cloud.Region = types.StringValue(resp.Cloud.Region)
+	}
+	r.Description = types.StringPointerValue(resp.Description)
+	r.EstimatedIngestRate = types.Float64PointerValue(resp.EstimatedIngestRate)
+	r.ID = types.StringValue(resp.ID)
+	r.Inherits = types.StringPointerValue(resp.Inherits)
+	r.IsFleet = types.BoolPointerValue(resp.IsFleet)
+	r.MaxWorkerAge = types.StringPointerValue(resp.MaxWorkerAge)
+	r.Name = types.StringPointerValue(resp.Name)
+	r.OnPrem = types.BoolPointerValue(resp.OnPrem)
+	r.Provisioned = types.BoolPointerValue(resp.Provisioned)
+	r.Streamtags = make([]types.String, 0, len(resp.Streamtags))
+	for _, v := range resp.Streamtags {
+		r.Streamtags = append(r.Streamtags, types.StringValue(v))
+	}
+	r.Tags = types.StringPointerValue(resp.Tags)
+	if resp.Type != nil {
+		r.Type = types.StringValue(string(*resp.Type))
+	} else {
+		r.Type = types.StringNull()
+	}
+	r.WorkerRemoteAccess = types.BoolPointerValue(resp.WorkerRemoteAccess)
+
+	return diags
+}
 
 func (r *GroupDataSourceModel) ToOperationsGetGroupsByIDRequest(ctx context.Context) (*operations.GetGroupsByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics

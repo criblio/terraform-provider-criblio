@@ -16,76 +16,8 @@ import (
 func (r *PackPipelineResourceModel) RefreshFromOperationsCreatePipelineByPackResponseBody(ctx context.Context, resp *operations.CreatePipelineByPackResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.Routes{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.Routes
-
-			items.Comments = []tfTypes.Comment{}
-
-			for _, commentsItem := range itemsItem.Comments {
-				var comments tfTypes.Comment
-
-				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
-				}
-				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-
-				items.Comments = append(items.Comments, comments)
-			}
-			if len(itemsItem.Groups) > 0 {
-				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
-				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
-					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
-					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
-
-					items.Groups[routesGroupsKey] = routesGroupsResult
-				}
-			}
-			items.ID = types.StringPointerValue(itemsItem.ID)
-			items.Routes = []tfTypes.RoutesRoute{}
-
-			for _, routesItem := range itemsItem.Routes {
-				var routes tfTypes.RoutesRoute
-
-				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
-				}
-				routes.Description = types.StringPointerValue(routesItem.Description)
-				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
-				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
-				routes.Filter = types.StringPointerValue(routesItem.Filter)
-				routes.Final = types.BoolPointerValue(routesItem.Final)
-				routes.ID = types.StringPointerValue(routesItem.ID)
-				routes.Name = types.StringValue(routesItem.Name)
-				if routesItem.Output == nil {
-					routes.Output = jsontypes.NewNormalizedNull()
-				} else {
-					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
-				}
-				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = jsontypes.NewNormalizedNull()
-				} else {
-					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
-				}
-				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-
-				items.Routes = append(items.Routes, routes)
-			}
-
-			r.Items = append(r.Items, items)
-		}
+	if resp != nil && len(resp.Items) > 0 {
+		diags.Append(r.RefreshFromSharedPipeline(ctx, &resp.Items[0])...)
 	}
 
 	return diags
@@ -94,76 +26,8 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsCreatePipelineByPackRes
 func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackWithIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.Routes{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.Routes
-
-			items.Comments = []tfTypes.Comment{}
-
-			for _, commentsItem := range itemsItem.Comments {
-				var comments tfTypes.Comment
-
-				if commentsItem.AdditionalProperties == nil {
-					comments.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult, _ := json.Marshal(commentsItem.AdditionalProperties)
-					comments.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
-				}
-				comments.Comment = types.StringPointerValue(commentsItem.Comment)
-
-				items.Comments = append(items.Comments, comments)
-			}
-			if len(itemsItem.Groups) > 0 {
-				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Groups))
-				for routesGroupsKey, routesGroupsValue := range itemsItem.Groups {
-					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
-					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
-
-					items.Groups[routesGroupsKey] = routesGroupsResult
-				}
-			}
-			items.ID = types.StringPointerValue(itemsItem.ID)
-			items.Routes = []tfTypes.RoutesRoute{}
-
-			for _, routesItem := range itemsItem.Routes {
-				var routes tfTypes.RoutesRoute
-
-				if routesItem.AdditionalProperties == nil {
-					routes.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult1, _ := json.Marshal(routesItem.AdditionalProperties)
-					routes.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult1))
-				}
-				routes.Description = types.StringPointerValue(routesItem.Description)
-				routes.Disabled = types.BoolPointerValue(routesItem.Disabled)
-				routes.EnableOutputExpression = types.BoolPointerValue(routesItem.EnableOutputExpression)
-				routes.Filter = types.StringPointerValue(routesItem.Filter)
-				routes.Final = types.BoolPointerValue(routesItem.Final)
-				routes.ID = types.StringPointerValue(routesItem.ID)
-				routes.Name = types.StringValue(routesItem.Name)
-				if routesItem.Output == nil {
-					routes.Output = jsontypes.NewNormalizedNull()
-				} else {
-					outputResult, _ := json.Marshal(routesItem.Output)
-					routes.Output = jsontypes.NewNormalizedValue(string(outputResult))
-				}
-				if routesItem.OutputExpression == nil {
-					routes.OutputExpression = jsontypes.NewNormalizedNull()
-				} else {
-					outputExpressionResult, _ := json.Marshal(routesItem.OutputExpression)
-					routes.OutputExpression = jsontypes.NewNormalizedValue(string(outputExpressionResult))
-				}
-				routes.Pipeline = types.StringValue(routesItem.Pipeline)
-
-				items.Routes = append(items.Routes, routes)
-			}
-
-			r.Items = append(r.Items, items)
-		}
+	if resp != nil && len(resp.Items) > 0 {
+		diags.Append(r.RefreshFromSharedPipeline(ctx, &resp.Items[0])...)
 	}
 
 	return diags
@@ -172,35 +36,8 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackWithI
 func (r *PackPipelineResourceModel) RefreshFromOperationsUpdatePipelineByPackAndIDResponseBody(ctx context.Context, resp *operations.UpdatePipelineByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		r.Items = []tfTypes.Routes{}
-
-		for _, itemsItem := range resp.Items {
-			var items tfTypes.Routes
-
-			itemsPriorData := items
-			itemsPriorData1 := items
-			if len(itemsItem.Conf.Groups) > 0 {
-				items.Groups = make(map[string]tfTypes.RoutesGroups, len(itemsItem.Conf.Groups))
-				for routesGroupsKey, routesGroupsValue := range itemsItem.Conf.Groups {
-					var routesGroupsResult tfTypes.RoutesGroups
-					routesGroupsResult.Description = types.StringPointerValue(routesGroupsValue.Description)
-					routesGroupsResult.Disabled = types.BoolPointerValue(routesGroupsValue.Disabled)
-					routesGroupsResult.Name = types.StringValue(routesGroupsValue.Name)
-
-					items.Groups[routesGroupsKey] = routesGroupsResult
-				}
-			}
-			items.Comments = itemsPriorData1.Comments
-			items.ID = itemsPriorData1.ID
-			items.Routes = itemsPriorData1.Routes
-			items.ID = types.StringValue(itemsItem.ID)
-			items.Comments = itemsPriorData.Comments
-			items.Groups = itemsPriorData.Groups
-			items.Routes = itemsPriorData.Routes
-
-			r.Items = append(r.Items, items)
-		}
+	if resp != nil && len(resp.Items) > 0 {
+		diags.Append(r.RefreshFromSharedPipeline(ctx, &resp.Items[0])...)
 	}
 
 	return diags

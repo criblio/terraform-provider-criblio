@@ -38,18 +38,21 @@ resource "criblio_search_usage_group" "my_searchusagegroup" {
 - `enabled` (Boolean)
 - `users_count` (Number)
 
-### Read-Only
+## Import
 
-- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+Import is supported using the following syntax:
 
-<a id="nestedatt--items"></a>
-### Nested Schema for `items`
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
 
-Read-Only:
+```terraform
+import {
+  to = criblio_search_usage_group.my_criblio_search_usage_group
+  id = "platform"
+}
+```
 
-- `coordinator_heap_memory_limit` (Number)
-- `description` (String)
-- `enabled` (Boolean)
-- `id` (String)
-- `rules` (String) Parsed as JSON.
-- `users_count` (Number)
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+```shell
+terraform import criblio_search_usage_group.my_criblio_search_usage_group "platform"
+```

@@ -30,10 +30,10 @@ func (c *CreateNotificationTargetRequest) GetNotificationTarget() shared.Notific
 
 // CreateNotificationTargetResponseBody - a list of NotificationTarget objects
 type CreateNotificationTargetResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.NotificationTarget `json:"items,omitempty"`
 }
 
-func (c *CreateNotificationTargetResponseBody) GetItems() []map[string]any {
+func (c *CreateNotificationTargetResponseBody) GetItems() []shared.NotificationTarget {
 	if c == nil {
 		return nil
 	}

@@ -48,10 +48,10 @@ func (u *UpdateGlobalVariableLibVarsByPackAndIDRequest) GetGlobalVar() shared.Gl
 
 // UpdateGlobalVariableLibVarsByPackAndIDResponseBody - a list of Global Variable objects
 type UpdateGlobalVariableLibVarsByPackAndIDResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.GlobalVar `json:"items,omitempty"`
 }
 
-func (u *UpdateGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []map[string]any {
+func (u *UpdateGlobalVariableLibVarsByPackAndIDResponseBody) GetItems() []shared.GlobalVar {
 	if u == nil {
 		return nil
 	}

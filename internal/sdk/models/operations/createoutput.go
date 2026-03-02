@@ -39,10 +39,10 @@ func (c *CreateOutputRequest) GetOutput() shared.Output {
 
 // CreateOutputResponseBody - a list of Output objects
 type CreateOutputResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.Output `json:"items,omitempty"`
 }
 
-func (c *CreateOutputResponseBody) GetItems() []map[string]any {
+func (c *CreateOutputResponseBody) GetItems() []shared.Output {
 	if c == nil {
 		return nil
 	}

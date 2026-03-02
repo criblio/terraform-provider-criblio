@@ -13,7 +13,7 @@ type CreateSystemLookupsByPackRequest struct {
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Pipeline object to be updated in specified Project
-	LookupFile shared.LookupFile `request:"mediaType=application/json"`
+	LookupFile shared.LookupFileInput `request:"mediaType=application/json"`
 }
 
 func (c *CreateSystemLookupsByPackRequest) GetPack() string {
@@ -30,19 +30,19 @@ func (c *CreateSystemLookupsByPackRequest) GetGroupID() string {
 	return c.GroupID
 }
 
-func (c *CreateSystemLookupsByPackRequest) GetLookupFile() shared.LookupFile {
+func (c *CreateSystemLookupsByPackRequest) GetLookupFile() shared.LookupFileInput {
 	if c == nil {
-		return shared.LookupFile{}
+		return shared.LookupFileInput{}
 	}
 	return c.LookupFile
 }
 
-// CreateSystemLookupsByPackResponseBody - a list of Routes objects
+// CreateSystemLookupsByPackResponseBody - Created LookupFile within a Pack
 type CreateSystemLookupsByPackResponseBody struct {
-	Items []shared.Routes `json:"items,omitempty"`
+	Items []shared.LookupFile `json:"items,omitempty"`
 }
 
-func (c *CreateSystemLookupsByPackResponseBody) GetItems() []shared.Routes {
+func (c *CreateSystemLookupsByPackResponseBody) GetItems() []shared.LookupFile {
 	if c == nil {
 		return nil
 	}
@@ -56,7 +56,7 @@ type CreateSystemLookupsByPackResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// a list of Routes objects
+	// Created LookupFile within a Pack
 	Object *CreateSystemLookupsByPackResponseBody
 	// Unexpected error
 	Error *shared.Error

@@ -13,6 +13,7 @@ type Library string
 const (
 	LibraryCustom      Library = "custom"
 	LibraryCriblCustom Library = "cribl-custom"
+	LibraryCribl       Library = "cribl"
 )
 
 func (e Library) ToPointer() *Library {
@@ -27,6 +28,8 @@ func (e *Library) UnmarshalJSON(data []byte) error {
 	case "custom":
 		fallthrough
 	case "cribl-custom":
+		fallthrough
+	case "cribl":
 		*e = Library(v)
 		return nil
 	default:

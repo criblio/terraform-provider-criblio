@@ -39,10 +39,10 @@ func (u *UpdateInputByIDRequest) GetInput() shared.Input {
 
 // UpdateInputByIDResponseBody - a list of Input objects
 type UpdateInputByIDResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.Input `json:"items,omitempty"`
 }
 
-func (u *UpdateInputByIDResponseBody) GetItems() []map[string]any {
+func (u *UpdateInputByIDResponseBody) GetItems() []shared.Input {
 	if u == nil {
 		return nil
 	}

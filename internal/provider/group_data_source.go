@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -28,8 +29,21 @@ type GroupDataSource struct {
 
 // GroupDataSourceModel describes the data model.
 type GroupDataSourceModel struct {
-	Fields types.String `queryParam:"style=form,explode=true,name=fields" tfsdk:"fields"`
-	ID     types.String `tfsdk:"id"`
+	Cloud               *tfTypes.ConfigGroupCloud `tfsdk:"cloud"`
+	Description         types.String              `tfsdk:"description"`
+	EstimatedIngestRate types.Float64             `tfsdk:"estimated_ingest_rate"`
+	Fields              types.String              `queryParam:"style=form,explode=true,name=fields" tfsdk:"fields"`
+	ID                  types.String              `tfsdk:"id"`
+	Inherits            types.String              `tfsdk:"inherits"`
+	IsFleet             types.Bool                `tfsdk:"is_fleet"`
+	MaxWorkerAge        types.String              `tfsdk:"max_worker_age"`
+	Name                types.String              `tfsdk:"name"`
+	OnPrem              types.Bool                `tfsdk:"on_prem"`
+	Provisioned         types.Bool                `tfsdk:"provisioned"`
+	Streamtags          []types.String            `tfsdk:"streamtags"`
+	Tags                types.String              `tfsdk:"tags"`
+	Type                types.String              `tfsdk:"type"`
+	WorkerRemoteAccess  types.Bool                `tfsdk:"worker_remote_access"`
 }
 
 // Metadata returns the data source type name.
@@ -43,6 +57,23 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 		MarkdownDescription: "Group DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"cloud": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"provider": schema.StringAttribute{
+						Computed: true,
+					},
+					"region": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
+			"estimated_ingest_rate": schema.Float64Attribute{
+				Computed: true,
+			},
 			"fields": schema.StringAttribute{
 				Optional:    true,
 				Description: `fields to add to results: git.commit, git.localChanges, git.log`,
@@ -50,6 +81,39 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Group id`,
+			},
+			"inherits": schema.StringAttribute{
+				Computed: true,
+			},
+			"is_fleet": schema.BoolAttribute{
+				Computed: true,
+			},
+			"max_worker_age": schema.StringAttribute{
+				Computed:    true,
+				Description: `This is only configurable for hybrid worker groups.`,
+			},
+			"name": schema.StringAttribute{
+				Computed: true,
+			},
+			"on_prem": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether this is an on-premises group. Cannot be true when cloud is set.`,
+			},
+			"provisioned": schema.BoolAttribute{
+				Computed: true,
+			},
+			"streamtags": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+			},
+			"tags": schema.StringAttribute{
+				Computed: true,
+			},
+			"type": schema.StringAttribute{
+				Computed: true,
+			},
+			"worker_remote_access": schema.BoolAttribute{
+				Computed: true,
 			},
 		},
 	}
@@ -117,6 +181,11 @@ func (r *GroupDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 	}
 	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
 

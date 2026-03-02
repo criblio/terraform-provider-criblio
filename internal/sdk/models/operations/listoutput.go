@@ -21,10 +21,10 @@ func (l *ListOutputRequest) GetGroupID() string {
 
 // ListOutputResponseBody - a list of Output objects
 type ListOutputResponseBody struct {
-	Items []map[string]any `json:"items,omitempty"`
+	Items []shared.Output `json:"items,omitempty"`
 }
 
-func (l *ListOutputResponseBody) GetItems() []map[string]any {
+func (l *ListOutputResponseBody) GetItems() []shared.Output {
 	if l == nil {
 		return nil
 	}

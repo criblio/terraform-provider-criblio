@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: a6274ea862a070f9ab337b17e929bade
+  docChecksum: 77328c3a97f3f20aebaec3625b2d0c97
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.107
-  configChecksum: 8dc0ae337ec1a3d373d39adbf7af7498
+  releaseVersion: 1.20.133
+  configChecksum: 0c8a11a6651b6f7be98820616835b25c
   published: true
 features:
   terraform:
@@ -207,6 +207,8 @@ generatedFiles:
   - examples/resources/criblio_search_saved_query/import-by-string-id.tf
   - examples/resources/criblio_search_saved_query/import.sh
   - examples/resources/criblio_search_saved_query/resource.tf
+  - examples/resources/criblio_search_usage_group/import-by-string-id.tf
+  - examples/resources/criblio_search_usage_group/import.sh
   - examples/resources/criblio_search_usage_group/resource.tf
   - examples/resources/criblio_secret/import-by-string-id.tf
   - examples/resources/criblio_secret/import.sh
@@ -246,8 +248,6 @@ generatedFiles:
   - internal/provider/certificates_data_source_sdk.go
   - internal/provider/collector_data_source.go
   - internal/provider/collector_data_source_sdk.go
-  - internal/provider/collector_resource.go
-  - internal/provider/collector_resource_sdk.go
   - internal/provider/collectors_data_source.go
   - internal/provider/collectors_data_source_sdk.go
   - internal/provider/commit_resource.go
@@ -310,7 +310,6 @@ generatedFiles:
   - internal/provider/lookupfile_data_source.go
   - internal/provider/lookupfile_data_source_sdk.go
   - internal/provider/lookupfile_resource.go
-  - internal/provider/lookupfile_resource_sdk.go
   - internal/provider/mappingruleset_data_source.go
   - internal/provider/mappingruleset_data_source_sdk.go
   - internal/provider/mappingruleset_resource.go
@@ -329,10 +328,6 @@ generatedFiles:
   - internal/provider/notificationtargets_data_source_sdk.go
   - internal/provider/pack_data_source.go
   - internal/provider/pack_data_source_sdk.go
-  - internal/provider/packbreakers_data_source.go
-  - internal/provider/packbreakers_data_source_sdk.go
-  - internal/provider/packbreakers_resource.go
-  - internal/provider/packbreakers_resource_sdk.go
   - internal/provider/packdestination_data_source.go
   - internal/provider/packdestination_data_source_sdk.go
   - internal/provider/packdestination_resource.go
@@ -342,9 +337,9 @@ generatedFiles:
   - internal/provider/packlookups_resource.go
   - internal/provider/packlookups_resource_sdk.go
   - internal/provider/packpipeline_data_source.go
-  - internal/provider/packpipeline_data_source_sdk.go
   - internal/provider/packroutes_data_source.go
   - internal/provider/packroutes_data_source_sdk.go
+  - internal/provider/packroutes_resource.go
   - internal/provider/packroutes_resource_sdk.go
   - internal/provider/packsource_data_source.go
   - internal/provider/packsource_data_source_sdk.go
@@ -414,15 +409,12 @@ generatedFiles:
   - internal/provider/searchusagegroup_data_source.go
   - internal/provider/searchusagegroup_data_source_sdk.go
   - internal/provider/searchusagegroup_resource.go
-  - internal/provider/searchusagegroup_resource_sdk.go
   - internal/provider/secret_data_source.go
   - internal/provider/secret_data_source_sdk.go
   - internal/provider/secret_resource.go
   - internal/provider/secret_resource_sdk.go
   - internal/provider/source_data_source.go
   - internal/provider/source_data_source_sdk.go
-  - internal/provider/source_resource.go
-  - internal/provider/source_resource_sdk.go
   - internal/provider/sources_data_source.go
   - internal/provider/sources_data_source_sdk.go
   - internal/provider/subscription_data_source.go
@@ -567,6 +559,7 @@ generatedFiles:
   - internal/provider/types/http_header.go
   - internal/provider/types/indexer_discovery_configs.go
   - internal/provider/types/ingest_if_not_exist.go
+  - internal/provider/types/input.go
   - internal/provider/types/input_appscope.go
   - internal/provider/types/input_appscope_connection.go
   - internal/provider/types/input_appscope_filter.go
@@ -592,6 +585,7 @@ generatedFiles:
   - internal/provider/types/input_collection_metadatum.go
   - internal/provider/types/input_collection_pq.go
   - internal/provider/types/input_collection_preprocess.go
+  - internal/provider/types/input_collector.go
   - internal/provider/types/input_collector_azure_blob.go
   - internal/provider/types/input_collector_azure_blob_collector.go
   - internal/provider/types/input_collector_azure_blob_conf.go
@@ -1057,6 +1051,7 @@ generatedFiles:
   - internal/provider/types/logged_in_users.go
   - internal/provider/types/loki_auth_oauth_header.go
   - internal/provider/types/loki_auth_oauth_param.go
+  - internal/provider/types/lookup_file.go
   - internal/provider/types/mapping_ruleset.go
   - internal/provider/types/mapping_ruleset_conf.go
   - internal/provider/types/mapping_ruleset_function_conf.go
@@ -1068,8 +1063,10 @@ generatedFiles:
   - internal/provider/types/meta_provider.go
   - internal/provider/types/ms_graph_account_config.go
   - internal/provider/types/mtls_settings.go
+  - internal/provider/types/notification_target.go
   - internal/provider/types/notifications.go
   - internal/provider/types/okta_account_config.go
+  - internal/provider/types/output.go
   - internal/provider/types/output_azure_blob.go
   - internal/provider/types/output_azure_blob_certificate.go
   - internal/provider/types/output_azure_blob_key_value_metadatum.go
@@ -1362,6 +1359,7 @@ generatedFiles:
   - internal/provider/types/pager_duty_target.go
   - internal/provider/types/pagination_config.go
   - internal/provider/types/panel_query_definition.go
+  - internal/provider/types/pending_task.go
   - internal/provider/types/pipeline_conf.go
   - internal/provider/types/pipeline_groups.go
   - internal/provider/types/pod_filter.go
@@ -1375,7 +1373,6 @@ generatedFiles:
   - internal/provider/types/resource_type_label.go
   - internal/provider/types/retry_rules_configuration.go
   - internal/provider/types/routes.go
-  - internal/provider/types/routes1.go
   - internal/provider/types/routes_groups.go
   - internal/provider/types/routes_route.go
   - internal/provider/types/routes_route1.go
@@ -1450,7 +1447,6 @@ generatedFiles:
   - internal/provider/types/upgrade_group_settings.go
   - internal/provider/types/upgrade_package_urls.go
   - internal/provider/types/upgrade_settings.go
-  - internal/provider/types/usage_group.go
   - internal/provider/types/users_and_groups.go
   - internal/provider/types/v3_user.go
   - internal/provider/types/warm_pool_size.go
@@ -2266,7 +2262,7 @@ generatedFiles:
   - internal/sdk/models/shared/loggerconfig.go
   - internal/sdk/models/shared/loggerentry.go
   - internal/sdk/models/shared/logininfo.go
-  - internal/sdk/models/shared/lookupfile.go
+  - internal/sdk/models/shared/lookupfileinput.go
   - internal/sdk/models/shared/lookupversions.go
   - internal/sdk/models/shared/mappingruleset.go
   - internal/sdk/models/shared/mappingrulesetfunctionconf.go
@@ -3483,7 +3479,7 @@ examples:
         application/json: {"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getPipelineByPackAndId:
@@ -3669,7 +3665,7 @@ examples:
         application/json: {"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "splunk", "conf": {"searchHead": "https://splunk.example.com", "search": "index=main sourcetype=syslog | stats count", "earliest": "-24h", "latest": "now", "endpoint": "/services/search/jobs", "outputMode": "json", "authentication": "token", "timeout": 60, "useRoundRobinDns": false, "disableTimeFilter": false, "rejectUnauthorized": true, "handleEscapedChars": true, "username": "splunkUser", "password": "splunkPassword", "credentialsSecret": "splunkCredentialsSecret", "token": "splunkBearerToken", "tokenSecret": "splunkBearerTokenSecret"}}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "splunk", "conf": {"searchHead": "https://splunk.example.com", "search": "index=main sourcetype=syslog | stats count", "earliest": "-24h", "latest": "now", "endpoint": "/services/search/jobs", "outputMode": "json", "authentication": "token", "timeout": 60, "useRoundRobinDns": false, "disableTimeFilter": false, "rejectUnauthorized": true, "handleEscapedChars": true, "username": "splunkUser", "password": "splunkPassword", "credentialsSecret": "splunkCredentialsSecret", "token": "splunkBearerToken", "tokenSecret": "splunkBearerTokenSecret"}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSavedJobById:
@@ -3680,7 +3676,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "cribllake", "conf": {"dataset": "my-dataset"}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSavedJobById:
@@ -3806,7 +3802,7 @@ examples:
     speakeasy-default-list-notification-target:
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPagerDutyTarget", "type": "pager_duty", "systemFields": ["cribl_host", "cribl_pipe"], "routingKey": "0123456789abcdef0123456789abcdef", "group": "oncall-team", "class": "incident-class", "component": "webserver", "severity": "critical"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createNotificationTarget:
@@ -3818,7 +3814,7 @@ examples:
         application/json: {"id": "<id>", "type": "webhook", "systemFields": ["cribl_host"], "url": "https://physical-plumber.info/", "format": "json_array", "method": "PUT", "authType": "none"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myWebhookTarget", "type": "webhook", "systemFields": ["cribl_host", "cribl_pipe"], "url": "https://hooks.example.com/webhook", "format": "ndjson", "method": "POST", "authType": "token", "token": "myWebhookSecretToken", "username": "webhookUser", "password": "webhookPass"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getNotificationTargetById:
@@ -3828,7 +3824,7 @@ examples:
           id: "nt-slack-prod"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPagerDutyTarget", "type": "pager_duty", "systemFields": ["cribl_host", "cribl_pipe"], "routingKey": "0123456789abcdef0123456789abcdef", "group": "oncall-team", "class": "incident-class", "component": "webserver", "severity": "critical"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateNotificationTargetById:
@@ -3840,7 +3836,7 @@ examples:
         application/json: {"id": "<id>", "type": "sns", "systemFields": ["cribl_host"], "region": "<value>", "allowlist": [], "destinationType": "topic", "topicType": "fifo"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "mySnsTarget", "type": "sns", "systemFields": ["cribl_host", "cribl_pipe"], "awsAuthenticationMethod": "manual", "assumeRoleArn": "arn:aws:iam::123456789012:role/MyRole", "assumeRoleExternalId": "external-id-123", "awsApiKey": "AKIAIOSFODNN7EXAMPLE", "awsSecretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "region": "us-east-1", "endpoint": "https://sns.us-east-1.amazonaws.com", "allowlist": ["+15551234567", "+15559876543"], "destinationType": "topic", "phoneNumber": "+15557654321", "topicArn": "arn:aws:sns:us-east-1:123456789012:my-topic", "topicType": "fifo", "messageGroupId": "my-message-group-id"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteNotificationTargetById:
@@ -3850,7 +3846,7 @@ examples:
           id: "nt-slack-prod"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myPagerDutyTarget", "type": "pager_duty", "systemFields": ["cribl_host", "cribl_pipe"], "routingKey": "0123456789abcdef0123456789abcdef", "group": "oncall-team", "class": "incident-class", "component": "webserver", "severity": "critical"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listNotification:
@@ -4779,7 +4775,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "countries.csv", "description": "Country code to name lookup", "tags": "geo,reference", "version": "v1.2.3", "content": "US,United States\nCA,Canada", "mode": "memory", "pendingTask": {"id": "task-1234", "type": "IMPORT", "error": "File parsing failed"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createLookupFile:
@@ -4791,7 +4787,7 @@ examples:
         application/json: {"id": "countries.csv", "description": "Country code to name lookup", "tags": "geo,reference", "content": "US,United States\nCA,Canada", "mode": "memory"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "countries.csv", "description": "Country code to name lookup", "tags": "geo,reference", "version": "v1.2.3", "content": "US,United States\nCA,Canada", "mode": "memory", "pendingTask": {"id": "task-1234", "type": "IMPORT", "error": "File parsing failed"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateLookupFile:
@@ -4814,7 +4810,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "countries.csv", "description": "Country code to name lookup", "tags": "geo,reference", "version": "v1.2.3", "content": "US,United States\nCA,Canada", "mode": "memory", "pendingTask": {"id": "task-1234", "type": "IMPORT", "error": "File parsing failed"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateLookupFileById:
@@ -4827,7 +4823,7 @@ examples:
         application/json: {"id": "countries.csv", "description": "Country code to name lookup", "tags": "geo,reference", "content": "US,United States\nCA,Canada", "mode": "memory"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "countries.csv", "description": "Country code to name lookup", "tags": "geo,reference", "version": "v1.2.3", "content": "US,United States\nCA,Canada", "mode": "memory", "pendingTask": {"id": "task-1234", "type": "IMPORT", "error": "File parsing failed"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteLookupFileById:
@@ -4838,7 +4834,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "countries.csv", "description": "Country code to name lookup", "tags": "geo,reference", "version": "v1.2.3", "content": "US,United States\nCA,Canada", "mode": "memory", "pendingTask": {"id": "task-1234", "type": "IMPORT", "error": "File parsing failed"}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listParser:
@@ -5352,7 +5348,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createEventBreakerRuleset:
@@ -5364,7 +5360,7 @@ examples:
         application/json: {"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getEventBreakerRulesetById:
@@ -5375,7 +5371,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateEventBreakerRulesetById:
@@ -5388,7 +5384,7 @@ examples:
         application/json: {"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteEventBreakerRulesetById:
@@ -5399,7 +5395,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariable:
@@ -5423,7 +5419,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariableById:
@@ -5434,7 +5430,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateGlobalVariableById:
@@ -5447,7 +5443,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteGlobalVariableById:
@@ -5458,7 +5454,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariableLibVarsByPack:
@@ -5484,7 +5480,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getGlobalVariableLibVarsByPackAndId:
@@ -5496,7 +5492,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateGlobalVariableLibVarsByPackAndId:
@@ -5510,7 +5506,7 @@ examples:
         application/json: {"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteGlobalVariableLibVarsByPackAndId:
@@ -5522,7 +5518,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "test_var", "lib": "custom", "description": "This is a test var.", "type": "number", "value": "100", "tags": "test", "args": [{"type": "number", "name": "val"}, {"type": "number", "name": "precision"}, {"type": "number", "name": "test"}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   listHmacFunction:
@@ -5589,7 +5585,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "o365-service", "type": "office365_service", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["prod", "o365"], "connections": [{"pipeline": "parse/o365", "output": "datalake"}], "pq": {"mode": "smart", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "128 MB", "maxSize": "20GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "planType": "enterprise_gcc", "tenantId": "11111111-2222-3333-4444-555555555555", "appId": "99999999-aaaa-bbbb-cccc-111111111111", "timeout": 300, "keepAliveTime": 30, "jobTimeout": "15m", "maxMissedKeepAlives": 3, "ttl": "4h", "ignoreGroupJobsLimit": false, "metadata": [{"name": "source", "value": "\"office365_service\""}], "contentConfig": [{"contentType": "Current Status", "description": "Poll interval minutes (1-60)", "interval": 15, "logLevel": "info", "enabled": false}, {"contentType": "Messages", "description": "Poll interval minutes (1-60)", "interval": 15, "logLevel": "info", "enabled": false}], "retryRules": {"type": "backoff", "interval": 1000, "limit": 5, "multiplier": 2, "codes": [429, 500, 503], "enableHeader": true, "retryConnectTimeout": true, "retryConnectReset": true}, "authType": "manual", "description": "Office 365 Service Health collector", "clientSecret": "$${{secret:o365_client_secret}", "textSecret": "o365-client-secret"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createInput:
@@ -5603,7 +5599,7 @@ examples:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 301.76, "ipWhitelistRegex": "/.*/", "maxActiveCxn": 1000, "socketIdleTimeout": 0, "socketEndingMaxWait": 30, "socketMaxLifespan": 0, "enableProxyHeader": false, "staleChannelFlushMs": 10000, "enableHeader": false, "authType": "manual"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "wef-listener", "type": "wef", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["windows", "wef"], "connections": [{"pipeline": "default", "output": "s3-wef"}], "pq": {"mode": "always", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "100 MB", "maxSize": "10GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "host": "0.0.0.0", "port": 5986, "authMethod": "clientCert", "tls": {"disabled": false, "rejectUnauthorized": true, "requestCert": true, "certificateName": "wef-cert", "privKeyPath": "/etc/ssl/private/server.key", "passphrase": "***REDACTED***", "certPath": "/etc/ssl/certs/server.crt", "caPath": "/etc/ssl/certs/ca-bundle.crt", "commonNameRegex": "^WEF-CLIENT-.*$", "minVersion": "TLSv1.2", "maxVersion": "TLSv1.3", "ocspCheck": false, "ocspCheckFailClose": false}, "maxActiveReq": 512, "maxRequestsPerSocket": 0, "enableProxyHeader": true, "captureHeaders": true, "keepAliveTimeout": 60, "enableHealthCheck": true, "ipAllowlistRegex": "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$", "ipDenylistRegex": "^192\\.168\\.1\\.\\d{1,3}$", "socketTimeout": 60, "caFingerprint": "9A:4F:2B:8E:1D:3C:A7:5B:9E:0F:11:22:33:44:55:66:77:88:99:AA", "keytab": "/etc/krb5.keytab", "principal": "HTTP/wef.example.com@EXAMPLE.COM", "allowMachineIdMismatch": false, "subscriptions": [{"id": "default-subscription", "subscriptionName": "Security", "version": "7f0c2f2e-1c3b-4d2a-9d6e-5a1b2c3d4e5f", "contentFormat": "Raw", "heartbeatInterval": 60, "batchTimeout": 30, "readExistingEvents": false, "sendBookmarks": true, "compress": true, "targets": ["wef1.corp.local", "*.corp.local"], "locale": "en-US", "querySelector": "simple", "metadata": [{"name": "subscription", "value": "\"wef-security\""}]}], "metadata": [{"name": "source", "value": "\"wef\""}], "description": "Receive Windows Event Forwarding (WEF) over HTTPS", "logFingerprintMismatch": true}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getInputById:
@@ -5614,7 +5610,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "journal-files", "type": "journal_files", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["systemd", "journald"], "connections": [{"pipeline": "default", "output": "s3-journald"}], "pq": {"mode": "always", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "100 MB", "maxSize": "10GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "path": "/var/log/journal", "interval": 10, "journals": ["system", "user-*.journal"], "rules": [{"filter": "severity <= 4", "description": "Allow log messages having 'emergency', 'alert', 'critical', 'error', or 'warning' priority"}], "currentBoot": true, "maxAgeDur": "24h", "metadata": [{"name": "source", "value": "\"journal_files\""}], "description": "Ingest systemd journal files from disk"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateInputById:
@@ -5627,7 +5623,7 @@ examples:
         application/json: {"id": "<id>", "type": "kube_events", "disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "rules": []}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "windows-metrics", "type": "windows_metrics", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["windows", "metrics"], "connections": [{"pipeline": "default", "output": "s3-main"}], "pq": {"mode": "always", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "100 MB", "maxSize": "10GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "interval": 10, "host": {"mode": "basic", "custom": {"system": {"mode": "basic", "detail": true}, "cpu": {"mode": "basic", "perCpu": true, "detail": true, "time": true}, "memory": {"mode": "basic", "detail": true}, "network": {"mode": "basic", "devices": ["Ethernet*", "!Loopback*"], "perInterface": true, "detail": true}, "disk": {"mode": "all", "volumes": ["{\"C\":null}", "!E:"], "perVolume": true}}}, "process": {"sets": [{"name": "IIS worker processes", "filter": "name == \"w3wp.exe\"", "includeChildren": true}]}, "metadata": [{"name": "source", "value": "\"windows_metrics\""}], "persistence": {"enable": true, "timeWindow": "10m", "maxDataSize": "4GB", "maxDataTime": "4d", "compress": "gzip", "destPath": "/var/lib/cribl/state/windows_metrics"}, "disableNativeModule": false, "description": "Collect Windows performance counters and spool to disk"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteInputById:
@@ -5638,7 +5634,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "file-watcher", "type": "file", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["filesystem", "logs"], "connections": [{"pipeline": "default", "output": "s3-logs"}], "pq": {"mode": "always", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "100 MB", "maxSize": "10GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "mode": "auto", "interval": 10, "filenames": ["/var/log/*.log", "/opt/app/logs/*log"], "tailOnly": true, "idleTimeout": 600, "maxAgeDur": "3d", "checkFileModTime": true, "forceText": false, "hashLen": 256, "metadata": [{"name": "source", "value": "\"file\""}], "breakerRulesets": ["multiline-java"], "staleChannelFlushMs": 1500, "description": "Watch local files and tail new content", "path": "/var/log", "depth": 2, "suppressMissingPathErrors": true, "deleteFiles": false, "includeUnidentifiableBinary": true}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createInputHecTokenById:
@@ -5692,7 +5688,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "filesystem-out", "type": "filesystem", "pipeline": "default", "systemFields": ["cribl_pipe"], "environment": "main", "streamtags": ["filesystem", "prod"], "destPath": "/var/log/cribl/out", "stagePath": "/var/log/cribl/stage", "addIdToStagePath": true, "removeEmptyDirs": true, "partitionExpr": "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d') + '/host=' + host", "format": "json", "baseFileName": "`CriblOut`", "fileNameSuffix": ".json.gz", "maxFileSizeMB": 64, "maxFileOpenTimeSec": 300, "maxFileIdleTimeSec": 30, "maxOpenFiles": 200, "headerLine": "timestamp,host,message", "writeHighWaterMark": 256, "onBackpressure": "block", "deadletterEnabled": true, "onDiskFullBackpressure": "block", "description": "Write events to local filesystem with daily partitioning", "compress": "gzip", "compressionLevel": "normal", "automaticSchema": true, "parquetVersion": "PARQUET_2_6", "parquetDataPageVersion": "DATA_PAGE_V2", "parquetRowGroupLength": 10000, "parquetPageSize": "4MB", "shouldLogInvalidRows": true, "keyValueMetadata": [{"key": "team", "value": "platform"}, {"key": "environment", "value": "prod"}], "enableStatistics": true, "enableWritePageIndex": true, "enablePageChecksum": true, "emptyDirCleanupSec": 600, "deadletterPath": "/var/lib/cribl/state/outputs/dead-letter", "maxRetryNum": 20}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createOutput:
@@ -5706,7 +5702,7 @@ examples:
         application/json: {"type": "elastic", "systemFields": ["cribl_pipe"], "streamtags": [], "loadBalanced": true, "index": "<value>", "concurrency": 5, "maxPayloadSizeKB": 4096, "maxPayloadEvents": 0, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 1, "failedRequestLoggingMode": "none", "safeHeaders": [], "responseRetrySettings": [], "responseHonorRetryAfterHeader": false, "extraParams": [{"name": "filter_path", "value": "errors,items.*.error,items.*._index,items.*.status"}], "elasticVersion": "auto", "includeDocId": false, "writeAction": "create", "retryPartialErrors": false, "onBackpressure": "block", "useRoundRobinDns": false, "excludeSelf": false, "dnsResolvePeriodSec": 600, "loadBalanceStatsPeriodSec": 300, "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "newrelic_events_prod", "type": "newrelic_events", "pipeline": "main", "systemFields": ["cribl_pipe", "cribl_breaker"], "environment": "main", "streamtags": ["prod", "newrelic"], "region": "US", "accountId": "12345678", "eventType": "CriblCustomEvent", "concurrency": 8, "maxPayloadSizeKB": 512, "maxPayloadEvents": 500, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 2, "extraHttpHeaders": [{"name": "X-Request-ID", "value": "123e4567-e89b-12d3-a456-426614174000"}], "useRoundRobinDns": true, "failedRequestLoggingMode": "payloadAndHeaders", "safeHeaders": ["content-type", "x-request-id"], "responseRetrySettings": [{"httpStatus": 429, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 30000}], "timeoutRetrySettings": {"timeoutRetry": true, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 30000}, "responseHonorRetryAfterHeader": true, "onBackpressure": "block", "authType": "secret", "description": "Send custom events to New Relic Events API", "customUrl": "https://insights-collector.newrelic.com/v1/accounts/12345678/events", "pqMaxFileSize": "100 MB", "pqMaxSize": "10GB", "pqPath": "/opt/cribl/state/queues", "pqCompress": "gzip", "pqOnBackpressure": "block", "pqMode": "backpressure", "pqControls": {}, "apiKey": "NRAK-0123456789abcdef0123456789abcdef", "textSecret": "newrelic_api_key"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getOutputById:
@@ -5717,7 +5713,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "loki_logs_prod", "type": "loki", "pipeline": "main", "systemFields": ["cribl_host", "cribl_wp"], "environment": "main", "streamtags": ["prod", "loki"], "url": "https://loki.example.com/loki/api/v1/push", "message": "_raw", "messageFormat": "protobuf", "labels": [{"name": "host", "value": "web-01"}, {"name": "app", "value": "web"}], "authType": "token", "concurrency": 2, "maxPayloadSizeKB": 2048, "maxPayloadEvents": 1000, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 10, "extraHttpHeaders": [{"name": "X-Request-ID", "value": "123e4567-e89b-12d3-a456-426614174000"}], "useRoundRobinDns": true, "failedRequestLoggingMode": "payloadAndHeaders", "safeHeaders": ["content-type", "x-request-id"], "responseRetrySettings": [{"httpStatus": 429, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 30000}], "timeoutRetrySettings": {"timeoutRetry": true, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 30000}, "responseHonorRetryAfterHeader": true, "onBackpressure": "block", "totalMemoryLimitKB": 51200, "description": "Send logs to Loki with labels and batching", "compress": true, "token": "12345:glc_abcd1234", "textSecret": "grafana_loki_token", "username": "12345", "password": "glc_abcd1234", "credentialsSecret": "grafana_loki_credentials", "pqMaxFileSize": "100 MB", "pqMaxSize": "10GB", "pqPath": "/opt/cribl/state/queues", "pqCompress": "gzip", "pqOnBackpressure": "block", "pqMode": "backpressure", "pqControls": {}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateOutputById:
@@ -5730,7 +5726,7 @@ examples:
         application/json: {"type": "signalfx", "systemFields": ["cribl_pipe"], "streamtags": [], "authType": "manual", "realm": "us0", "concurrency": 5, "maxPayloadSizeKB": 4096, "maxPayloadEvents": 0, "compress": true, "rejectUnauthorized": true, "timeoutSec": 30, "flushPeriodSec": 1, "useRoundRobinDns": false, "failedRequestLoggingMode": "none", "safeHeaders": [], "responseRetrySettings": [], "responseHonorRetryAfterHeader": false, "onBackpressure": "block", "pqMaxFileSize": "1 MB", "pqMaxSize": "5GB", "pqPath": "$CRIBL_HOME/state/queues", "pqCompress": "none", "pqOnBackpressure": "block", "pqMode": "error"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "filesystem-out", "type": "filesystem", "pipeline": "default", "systemFields": ["cribl_pipe"], "environment": "main", "streamtags": ["filesystem", "prod"], "destPath": "/var/log/cribl/out", "stagePath": "/var/log/cribl/stage", "addIdToStagePath": true, "removeEmptyDirs": true, "partitionExpr": "C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d') + '/host=' + host", "format": "json", "baseFileName": "`CriblOut`", "fileNameSuffix": ".json.gz", "maxFileSizeMB": 64, "maxFileOpenTimeSec": 300, "maxFileIdleTimeSec": 30, "maxOpenFiles": 200, "headerLine": "timestamp,host,message", "writeHighWaterMark": 256, "onBackpressure": "block", "deadletterEnabled": true, "onDiskFullBackpressure": "block", "description": "Write events to local filesystem with daily partitioning", "compress": "gzip", "compressionLevel": "normal", "automaticSchema": true, "parquetVersion": "PARQUET_2_6", "parquetDataPageVersion": "DATA_PAGE_V2", "parquetRowGroupLength": 10000, "parquetPageSize": "4MB", "shouldLogInvalidRows": true, "keyValueMetadata": [{"key": "team", "value": "platform"}, {"key": "environment", "value": "prod"}], "enableStatistics": true, "enableWritePageIndex": true, "enablePageChecksum": true, "emptyDirCleanupSec": 600, "deadletterPath": "/var/lib/cribl/state/outputs/dead-letter", "maxRetryNum": 20}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteOutputById:
@@ -5741,7 +5737,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "dynatrace_otlp_export", "type": "dynatrace_otlp", "pipeline": "main", "systemFields": ["cribl_pipe", "cribl_breaker"], "environment": "main", "streamtags": ["prod", "dynatrace"], "protocol": "http", "endpoint": "https://abc123.live.dynatrace.com/api/v2/otlp", "otlpVersion": "1.3.1", "compress": "gzip", "httpCompress": "gzip", "httpTracesEndpointOverride": "https://abc123.live.dynatrace.com/api/v2/otlp/v1/traces", "httpMetricsEndpointOverride": "https://abc123.live.dynatrace.com/api/v2/otlp/v1/metrics", "httpLogsEndpointOverride": "https://abc123.live.dynatrace.com/api/v2/otlp/v1/logs", "metadata": [{"key": "x-tenant-id", "value": "acme-prod"}], "concurrency": 5, "maxPayloadSizeKB": 2048, "timeoutSec": 30, "flushPeriodSec": 2, "failedRequestLoggingMode": "payloadAndHeaders", "connectionTimeout": 10000, "keepAliveTime": 30, "keepAlive": true, "endpointType": "saas", "tokenSecret": "dynatrace_otlp_token", "authTokenName": "Authorization", "onBackpressure": "block", "description": "Send OTLP logs and metrics to Dynatrace SaaS", "rejectUnauthorized": true, "useRoundRobinDns": true, "extraHttpHeaders": [{"name": "Api-Token", "value": "dt0c01.XXXX.YYYYZZZZ"}], "safeHeaders": ["content-type", "api-token"], "responseRetrySettings": [{"httpStatus": 429, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 30000}], "timeoutRetrySettings": {"timeoutRetry": true, "initialBackoff": 1000, "backoffRate": 2, "maxBackoff": 30000}, "responseHonorRetryAfterHeader": true, "pqMaxFileSize": "100 MB", "pqMaxSize": "10GB", "pqPath": "/opt/cribl/state/queues", "pqCompress": "gzip", "pqOnBackpressure": "block", "pqMode": "backpressure", "pqControls": {}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteOutputPqById:
@@ -7321,7 +7317,7 @@ examples:
           fields: "git.commit,git.localChanges"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"cloud": {"provider": "aws", "region": "us-east-1"}, "configVersion": "v12", "deployingWorkerCount": 3, "description": "Production Edge configuration group", "estimatedIngestRate": 500000, "git": {"commit": "1a2b3c4d5e6f", "localChanges": 0, "log": [{"author_email": "dev@acme.com", "author_name": "Acme Dev", "date": "2025-10-06T12:00:00Z", "hash": "1a2b3c4d5e6f7g8h9i0j", "message": "Deploy config for prod edge group", "short": "1a2b3c4"}]}, "id": "config-group-prod-edge", "incompatibleWorkerCount": 0, "inherits": "base-config", "isFleet": false, "isSearch": false, "lookupDeployments": [{"context": "prod", "lookups": [{"deployedVersion": "v3", "file": "lookups/ip_to_region.csv", "version": "v4"}]}], "name": "Prod Edge", "onPrem": true, "provisioned": true, "streamtags": ["prod", "edge"], "tags": "environment=prod,team=platform", "upgradeVersion": "6.0.1", "workerCount": 12, "workerRemoteAccess": true, "maxWorkerAge": "1h"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteGroupsById:
@@ -7488,7 +7484,7 @@ examples:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "host": "0.0.0.0", "port": 4317, "maxActiveReq": 256, "maxRequestsPerSocket": 0, "requestTimeout": 0, "socketTimeout": 0, "keepAliveTimeout": 15, "enableHealthCheck": false, "ipAllowlistRegex": "/.*/", "ipDenylistRegex": "/^$/", "protocol": "grpc", "extractSpans": false, "extractMetrics": false, "otlpVersion": "0.10.0", "authType": "none", "maxActiveCxn": 1000, "authHeaderExpr": "`Bearer ${token}`", "tokenTimeoutSecs": 3600, "extractLogs": false}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "sqs-events", "type": "sqs", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["aws", "sqs"], "connections": [{"pipeline": "default", "output": "s3-raw"}], "pq": {"mode": "always", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "100 MB", "maxSize": "10GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "queueName": "https://sqs.us-east-1.amazonaws.com/123456789012/events-queue", "queueType": "standard", "awsAccountId": "123456789012", "createQueue": false, "awsAuthenticationMethod": "auto", "awsSecretKey": "***REDACTED***", "region": "us-east-1", "endpoint": "https://sqs.us-east-1.amazonaws.com", "signatureVersion": "v4", "reuseConnections": true, "rejectUnauthorized": true, "enableAssumeRole": true, "assumeRoleArn": "arn:aws:iam::123456789012:role/cribl-sqs-access", "assumeRoleExternalId": "cribl-external-123", "durationSeconds": 3600, "maxMessages": 10, "visibilityTimeout": 300, "metadata": [{"name": "source", "value": "\"sqs\""}], "pollTimeout": 10, "description": "Ingest SQS messages", "awsApiKey": "AKIAIOSFODNN7EXAMPLE", "awsSecret": "aws-credentials-secret", "numReceivers": 4}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateSystemInputsByPack:
@@ -7504,7 +7500,7 @@ examples:
         application/json: {"id": "<id>", "type": "collection", "disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "staleChannelFlushMs": 10000, "throttleRatePerSec": "0"}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "collect-nginx", "type": "collection", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["prod", "nginx"], "connections": [{"pipeline": "parse/nginx", "output": "datalake"}], "pq": {"mode": "smart", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "128 MB", "maxSize": "20GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "breakerRulesets": ["access-logs-v1"], "staleChannelFlushMs": 15000, "preprocess": {"disabled": true, "command": "jq", "args": ["-c", ".message |= upcase"]}, "throttleRatePerSec": "10 MB", "metadata": [{"name": "source", "value": "\"collection\""}], "output": "datalake"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteSystemInputsByPack:
@@ -7518,7 +7514,7 @@ examples:
         application/json: {"disabled": false, "sendToRoutes": true, "pqEnabled": false, "streamtags": [], "queueName": "<value>", "queueType": "standard", "createQueue": false, "awsAuthenticationMethod": "auto", "signatureVersion": "v4", "reuseConnections": true, "rejectUnauthorized": true, "enableAssumeRole": false, "durationSeconds": 3600, "maxMessages": 10, "visibilityTimeout": 600, "pollTimeout": 10, "numReceivers": 3}
       responses:
         "200":
-          application/json: {"items": [{"id": "main", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {}}, {"filter": "true", "id": "serialize", "conf": {}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
+          application/json: {"items": [{"id": "file-watcher", "type": "file", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["filesystem", "logs"], "connections": [{"pipeline": "default", "output": "s3-logs"}], "pq": {"mode": "always", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "100 MB", "maxSize": "10GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "mode": "auto", "interval": 10, "filenames": ["/var/log/*.log", "/opt/app/logs/*log"], "tailOnly": true, "idleTimeout": 600, "maxAgeDur": "3d", "checkFileModTime": true, "forceText": false, "hashLen": 256, "metadata": [{"name": "source", "value": "\"file\""}], "breakerRulesets": ["multiline-java"], "staleChannelFlushMs": 1500, "description": "Watch local files and tail new content", "path": "/var/log", "depth": 2, "suppressMissingPathErrors": true, "deleteFiles": false, "includeUnidentifiableBinary": true}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemOutputsByPack:
@@ -7635,7 +7631,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getPipelinesByPackWithId:
@@ -7647,7 +7643,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "conf": {"asyncFuncTimeout": 5000, "output": "OutputSplunk", "description": "Main pipeline for app logs", "streamtags": ["prod", "app"], "functions": [{"filter": "_raw != null", "id": "eval", "conf": {"addFields": {"env": "prod"}}}, {"filter": "true", "id": "serialize", "conf": {"format": "json"}}], "groups": {"default": {"name": "Default Group", "description": "Core pipeline functions", "disabled": false}}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemInputsByPack:
@@ -7658,7 +7654,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "splunk-hec-listener", "type": "splunk_hec", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["prod", "splunk"], "connections": [{"pipeline": "parse/splunk", "output": "datalake"}], "pq": {"mode": "smart", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "128 MB", "maxSize": "20GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "host": "0.0.0.0", "port": 8088, "authTokens": [{"authType": "manual", "token": "secret-token-1", "enabled": true, "description": "Token for HEC webhooks", "allowedIndexesAtToken": ["main"], "metadata": [{"name": "sourcetype", "value": "\"http:hec\""}]}], "tls": {"disabled": true, "certificateName": "splunk-hec-cert", "privKeyPath": "/etc/ssl/private/server.key", "passphrase": "$${{secret:hec_key_pass}", "certPath": "/etc/ssl/certs/server.crt", "caPath": "/etc/ssl/certs/ca.pem", "requestCert": false, "minVersion": "TLSv1.2", "maxVersion": "TLSv1.3"}, "maxActiveReq": 512, "maxRequestsPerSocket": 1000, "enableProxyHeader": false, "captureHeaders": true, "activityLogSampleRate": 10, "requestTimeout": 30, "socketTimeout": 60, "keepAliveTimeout": 30, "ipAllowlistRegex": "^10\\.0\\.\\d{1,3}\\.\\d{1,3}$", "ipDenylistRegex": "^192\\.168\\.0\\.\\d{1,3}$", "splunkHecAPI": "/services/collector", "metadata": [{"name": "source", "value": "\"hec\""}], "allowedIndexes": ["main", "metrics"], "splunkHecAcks": false, "breakerRulesets": ["access-logs-v1", "syslog-breaker"], "staleChannelFlushMs": 15000, "useFwdTimezone": true, "dropControlFields": true, "extractMetrics": true, "accessControlAllowOrigin": ["https://app.example.com", "https://grafana.example.com"], "accessControlAllowHeaders": ["Authorization", "Content-Type"], "emitTokenMetrics": true, "description": "Splunk HEC listener for webhooks"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemOutputsByPack:
@@ -7682,7 +7678,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "mode": "memory"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createSystemLookupsByPack:
@@ -7695,7 +7691,7 @@ examples:
         application/json: {"id": "countries.csv", "description": "Country code to name lookup", "tags": "geo,reference", "content": "US,United States\nCA,Canada", "mode": "memory"}
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "mode": "memory"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemLookupsByPackAndId:
@@ -7707,7 +7703,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "mode": "memory"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getBreakersByPack:
@@ -7720,7 +7716,7 @@ examples:
         application/json: {"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "lib": "custom", "minRawLength": 512}]}
         "500":
           application/json: {"message": "This is my error message string"}
   createBreakersByPack:
@@ -7729,11 +7725,13 @@ examples:
         path:
           pack: "myExistingPackId"
           groupId: "myExistingGroupId"
+        query:
+          id: "myUniquePackBreakersIdToCRUD"
       requestBody:
         application/json: {"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getBreakersByPackAndId:
@@ -7745,7 +7743,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "lib": "custom", "minRawLength": 512}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateBreakersByPackAndId:
@@ -7759,7 +7757,7 @@ examples:
         application/json: {"id": "access-logs-v1", "lib": "custom", "description": "Break HTTP access logs into events", "tags": "nginx,access,prod", "minRawLength": 512, "rules": [{"name": "nginx-access", "condition": "/GET|POST|PUT|DELETE/.test(_raw)", "type": "regex", "delimiterRegex": "/\\t/", "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/", "headerLineRegex": "/^#/", "delimiter": ",", "quoteChar": "\"", "escapeChar": "\\", "timestampAnchorRegex": "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/", "eventBreakerRegex": "/\\n(?=\\S)/", "timestamp": {"type": "format", "length": 150, "format": "%d/%b/%Y:%H:%M:%S %z"}, "timestampTimezone": "UTC", "timestampEarliest": "-90days", "timestampLatest": "+1day", "maxEventBytes": 65536, "fields": [{"name": "source", "value": "\"nginx_access\""}, {"name": "sourcetype", "value": "\"nginx:access\""}], "disabled": false, "parserEnabled": false, "shouldUseDataRaw": false}]}
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "default", "lib": "custom", "minRawLength": 512}]}
         "500":
           application/json: {"message": "This is my error message string"}
   readRoutesByPackAndId:
@@ -7796,7 +7794,7 @@ examples:
           groupId: "Cribl"
       responses:
         "200":
-          application/json: {"items": [{"id": "default", "routes": [{"name": "Errors to Splunk", "filter": "level == 'error'", "pipeline": "main", "enableOutputExpression": false, "final": true}, {"name": "Warnings to Lake", "filter": "level == 'warning'", "pipeline": "lake", "enableOutputExpression": false, "final": true}], "groups": {"default": {"name": "Default Group", "description": "Primary routing rules", "disabled": false}}, "comments": [{"comment": "Ensure error routes run before warning routes"}]}]}
+          application/json: {"items": [{"id": "o365-mgmt", "type": "office365_mgmt", "disabled": false, "pipeline": "default", "sendToRoutes": true, "environment": "main", "pqEnabled": false, "streamtags": ["prod", "o365"], "connections": [{"pipeline": "parse/o365", "output": "datalake"}], "pq": {"mode": "smart", "maxBufferSize": 5000, "commitFrequency": 100, "maxFileSize": "128 MB", "maxSize": "20GB", "path": "/opt/cribl/state/queues", "compress": "gzip"}, "planType": "enterprise_gcc", "tenantId": "11111111-2222-3333-4444-555555555555", "appId": "99999999-aaaa-bbbb-cccc-111111111111", "timeout": 300, "keepAliveTime": 30, "jobTimeout": "15m", "maxMissedKeepAlives": 3, "ttl": "4h", "ignoreGroupJobsLimit": false, "metadata": [{"name": "source", "value": "\"office365_mgmt\""}], "publisherIdentifier": "my-company-cribl", "contentConfig": [{"contentType": "Active Directory", "description": "Poll interval minutes (1-60)", "interval": 15, "logLevel": "info", "enabled": false}, {"contentType": "Exchange", "description": "Poll interval minutes (1-60)", "interval": 15, "logLevel": "info", "enabled": false}, {"contentType": "SharePoint", "description": "Poll interval minutes (1-60)", "interval": 15, "logLevel": "info", "enabled": false}, {"contentType": "General", "description": "Poll interval minutes (1-60)", "interval": 15, "logLevel": "info", "enabled": false}, {"contentType": "DLP", "description": "Poll interval minutes (1-60)", "interval": 15, "logLevel": "info", "enabled": false}], "ingestionLag": 90, "retryRules": {"type": "backoff", "interval": 1000, "limit": 5, "multiplier": 2, "codes": [429, 500, 503], "enableHeader": true, "retryConnectTimeout": true, "retryConnectReset": true}, "authType": "manual", "description": "Office 365 Management API collector", "clientSecret": "$${{secret:o365_client_secret}", "textSecret": "o365-client-secret"}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getSystemOutputsByPackAndId:
@@ -7996,7 +7994,7 @@ examples:
           groupId: "default"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "healthcheck", "conf": {"collectUrl": "https://api.example.com/health", "collectMethod": "get", "authentication": "none", "timeout": 10, "rejectUnauthorized": true, "username": "healthUser", "password": "healthPassword", "credentialsSecret": "healthCredSecret"}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   updateCollectorById:
@@ -8009,7 +8007,7 @@ examples:
         application/json: {"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "gcs", "conf": {"serviceAccountCredentials": "***REDACTED***", "bucket": "my-gcs-bucket", "path": "logs/2025/10/", "authType": "manual", "recurse": true, "extractors": [{}], "maxBatchSize": 200}}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "gcs", "conf": {"serviceAccountCredentials": "***REDACTED***", "bucket": "my-gcs-bucket", "path": "logs/2025/10/", "authType": "manual", "recurse": true, "extractors": [{"pattern": ".*.csv"}], "maxBatchSize": 200}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   deleteCollectorById:
@@ -8020,7 +8018,7 @@ examples:
           groupId: "myExistingGroupId"
       responses:
         "200":
-          application/json: {}
+          application/json: {"items": [{"id": "myInputCollectorJobId", "type": "collection", "ttl": "2h", "ignoreGroupJobsLimit": false, "removeFields": ["field1", "field2"], "resumeOnBoot": true, "environment": "production", "savedState": {}, "schedule": {"enabled": true, "cronSchedule": "0 * * * *", "maxConcurrentRuns": 2, "skippable": false, "resumeMissed": true, "run": {"rescheduleDroppedTasks": true, "maxTaskReschedule": 3, "logLevel": "debug", "jobTimeout": "30m", "mode": "list", "timeRangeType": "relative", "earliest": 0, "latest": 10, "expression": "true", "minTaskSize": "1GB", "maxTaskSize": "10GB", "timeWarning": {}, "stateTracking": {"stateUpdateExpression": "state = state + 1", "stateMergeExpression": "merge(state,newState)", "enabled": true}}}, "streamtags": ["tag1", "tag2"], "workerAffinity": false, "input": {"type": "collection", "breakerRulesets": ["rule1", "rule2"], "staleChannelFlushMs": 20000, "sendToRoutes": true, "preprocess": {"disabled": true, "command": "cat", "args": ["--flag", "value"]}, "throttleRatePerSec": "42 MB", "metadata": [{"name": "source", "value": "app"}], "pipeline": "defaultPipeline", "output": "defaultDestination"}, "collector": {"type": "healthcheck", "conf": {"collectUrl": "https://api.example.com/health", "collectMethod": "get", "authentication": "none", "timeout": 10, "rejectUnauthorized": true, "username": "healthUser", "password": "healthPassword", "credentialsSecret": "healthCredSecret"}}}]}
         "500":
           application/json: {"message": "This is my error message string"}
   getRoutesByGroupId:

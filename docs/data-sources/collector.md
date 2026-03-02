@@ -29,4 +29,1355 @@ data "criblio_collector" "my_collector" {
 
 ### Read-Only
 
-- `items` (List of Map of String)
+- `environment` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input_collector_azure_blob` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob))
+- `input_collector_cribl_lake` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake))
+- `input_collector_database` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database))
+- `input_collector_gcs` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs))
+- `input_collector_health_check` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check))
+- `input_collector_rest` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest))
+- `input_collector_s3` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3))
+- `input_collector_script` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script))
+- `input_collector_splunk` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk))
+- `resume_on_boot` (Boolean)
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_azure_blob"></a>
+### Nested Schema for `input_collector_azure_blob`
+
+Read-Only:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector))
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--input))
+- `remove_fields` (List of String)
+- `resume_on_boot` (Boolean)
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_azure_blob--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_azure_blob--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_azure_blob--collector"></a>
+### Nested Schema for `input_collector_azure_blob.collector`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf))
+- `type` (String)
+
+<a id="nestedatt--input_collector_azure_blob--collector--conf"></a>
+### Nested Schema for `input_collector_azure_blob.collector.conf`
+
+Read-Only:
+
+- `auth_type` (String)
+- `connection_string` (String) Azure storage account Connection String
+- `container_name` (String) Azure container to collect from
+- `extractors` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_azure_blob--collector--conf--extractors))
+- `max_batch_size` (Number)
+- `path` (String) Directory where data will be collected
+- `recurse` (Boolean)
+- `storage_account_name` (String)
+
+<a id="nestedatt--input_collector_azure_blob--collector--conf--extractors"></a>
+### Nested Schema for `input_collector_azure_blob.collector.conf.extractors`
+
+Read-Only:
+
+- `expression` (String) JavaScript expression to compute the value from the path
+- `key` (String) Name of the extracted field
+- `pattern` (String) Regex pattern to match paths (alternative to key/expression)
+
+
+
+
+<a id="nestedatt--input_collector_azure_blob--input"></a>
+### Nested Schema for `input_collector_azure_blob.input`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_azure_blob--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--input_collector_azure_blob--input--metadata"></a>
+### Nested Schema for `input_collector_azure_blob.input.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_azure_blob--input--preprocess"></a>
+### Nested Schema for `input_collector_azure_blob.input.preprocess`
+
+Read-Only:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_azure_blob--saved_state"></a>
+### Nested Schema for `input_collector_azure_blob.saved_state`
+
+
+<a id="nestedatt--input_collector_azure_blob--schedule"></a>
+### Nested Schema for `input_collector_azure_blob.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+
+<a id="nestedatt--input_collector_azure_blob--schedule--run"></a>
+### Nested Schema for `input_collector_azure_blob.schedule.run`
+
+Read-Only:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (Number) Latest time to collect data for the selected timezone
+- `log_level` (String) Level at which to set task logging
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_azure_blob--schedule--run--state_tracking))
+- `time_range_type` (String)
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_azure_blob--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_azure_blob--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_azure_blob.schedule.run.state_tracking`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_azure_blob--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_azure_blob.schedule.run.time_warning`
+
+
+
+
+
+<a id="nestedatt--input_collector_cribl_lake"></a>
+### Nested Schema for `input_collector_cribl_lake`
+
+Read-Only:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector))
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--input))
+- `remove_fields` (List of String)
+- `resume_on_boot` (Boolean)
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_cribl_lake--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_cribl_lake--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_cribl_lake--collector"></a>
+### Nested Schema for `input_collector_cribl_lake.collector`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector--conf))
+- `type` (String)
+
+<a id="nestedatt--input_collector_cribl_lake--collector--conf"></a>
+### Nested Schema for `input_collector_cribl_lake.collector.conf`
+
+Read-Only:
+
+- `dataset` (String) Lake dataset to collect data from
+
+
+
+<a id="nestedatt--input_collector_cribl_lake--input"></a>
+### Nested Schema for `input_collector_cribl_lake.input`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_cribl_lake--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--input_collector_cribl_lake--input--metadata"></a>
+### Nested Schema for `input_collector_cribl_lake.input.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_cribl_lake--input--preprocess"></a>
+### Nested Schema for `input_collector_cribl_lake.input.preprocess`
+
+Read-Only:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_cribl_lake--saved_state"></a>
+### Nested Schema for `input_collector_cribl_lake.saved_state`
+
+
+<a id="nestedatt--input_collector_cribl_lake--schedule"></a>
+### Nested Schema for `input_collector_cribl_lake.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+
+<a id="nestedatt--input_collector_cribl_lake--schedule--run"></a>
+### Nested Schema for `input_collector_cribl_lake.schedule.run`
+
+Read-Only:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (Number) Latest time to collect data for the selected timezone
+- `log_level` (String) Level at which to set task logging
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_cribl_lake--schedule--run--state_tracking))
+- `time_range_type` (String)
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_cribl_lake--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_cribl_lake--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_cribl_lake.schedule.run.state_tracking`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_cribl_lake--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_cribl_lake.schedule.run.time_warning`
+
+
+
+
+
+<a id="nestedatt--input_collector_database"></a>
+### Nested Schema for `input_collector_database`
+
+Read-Only:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--collector))
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--input))
+- `remove_fields` (List of String)
+- `resume_on_boot` (Boolean)
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_database--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_database--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_database--collector"></a>
+### Nested Schema for `input_collector_database.collector`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--collector--conf))
+- `type` (String)
+
+<a id="nestedatt--input_collector_database--collector--conf"></a>
+### Nested Schema for `input_collector_database.collector.conf`
+
+Read-Only:
+
+- `connection_id` (String) Select an existing Database Connection
+- `query` (String) Query string for selecting data from the database
+- `query_validation_enabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_database--input"></a>
+### Nested Schema for `input_collector_database.input`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_database--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--input_collector_database--input--metadata"></a>
+### Nested Schema for `input_collector_database.input.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_database--input--preprocess"></a>
+### Nested Schema for `input_collector_database.input.preprocess`
+
+Read-Only:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_database--saved_state"></a>
+### Nested Schema for `input_collector_database.saved_state`
+
+
+<a id="nestedatt--input_collector_database--schedule"></a>
+### Nested Schema for `input_collector_database.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+
+<a id="nestedatt--input_collector_database--schedule--run"></a>
+### Nested Schema for `input_collector_database.schedule.run`
+
+Read-Only:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (Number) Latest time to collect data for the selected timezone
+- `log_level` (String) Level at which to set task logging
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_database--schedule--run--state_tracking))
+- `time_range_type` (String)
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_database--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_database--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_database.schedule.run.state_tracking`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_database--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_database.schedule.run.time_warning`
+
+
+
+
+
+<a id="nestedatt--input_collector_gcs"></a>
+### Nested Schema for `input_collector_gcs`
+
+Read-Only:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--collector))
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--input))
+- `remove_fields` (List of String)
+- `resume_on_boot` (Boolean)
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_gcs--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_gcs--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_gcs--collector"></a>
+### Nested Schema for `input_collector_gcs.collector`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--collector--conf))
+- `type` (String)
+
+<a id="nestedatt--input_collector_gcs--collector--conf"></a>
+### Nested Schema for `input_collector_gcs.collector.conf`
+
+Read-Only:
+
+- `auth_type` (String)
+- `bucket` (String) GCS Bucket from which to collect data
+- `extractors` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_gcs--collector--conf--extractors))
+- `max_batch_size` (Number)
+- `path` (String) Directory where data will be collected
+- `recurse` (Boolean)
+- `service_account_credentials` (String)
+
+<a id="nestedatt--input_collector_gcs--collector--conf--extractors"></a>
+### Nested Schema for `input_collector_gcs.collector.conf.extractors`
+
+Read-Only:
+
+- `expression` (String) JavaScript expression to compute the value from the path
+- `key` (String) Name of the extracted field
+- `pattern` (String) Regex pattern to match paths (alternative to key/expression)
+
+
+
+
+<a id="nestedatt--input_collector_gcs--input"></a>
+### Nested Schema for `input_collector_gcs.input`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_gcs--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--input_collector_gcs--input--metadata"></a>
+### Nested Schema for `input_collector_gcs.input.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_gcs--input--preprocess"></a>
+### Nested Schema for `input_collector_gcs.input.preprocess`
+
+Read-Only:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_gcs--saved_state"></a>
+### Nested Schema for `input_collector_gcs.saved_state`
+
+
+<a id="nestedatt--input_collector_gcs--schedule"></a>
+### Nested Schema for `input_collector_gcs.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_gcs--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+
+<a id="nestedatt--input_collector_gcs--schedule--run"></a>
+### Nested Schema for `input_collector_gcs.schedule.run`
+
+Read-Only:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (Number) Latest time to collect data for the selected timezone
+- `log_level` (String) Level at which to set task logging
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_gcs--schedule--run--state_tracking))
+- `time_range_type` (String)
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_gcs--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_gcs--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_gcs.schedule.run.state_tracking`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_gcs--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_gcs.schedule.run.time_warning`
+
+
+
+
+
+<a id="nestedatt--input_collector_health_check"></a>
+### Nested Schema for `input_collector_health_check`
+
+Read-Only:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--collector))
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--input))
+- `remove_fields` (List of String)
+- `resume_on_boot` (Boolean)
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_health_check--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_health_check--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_health_check--collector"></a>
+### Nested Schema for `input_collector_health_check.collector`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--collector--conf))
+- `type` (String)
+
+<a id="nestedatt--input_collector_health_check--collector--conf"></a>
+### Nested Schema for `input_collector_health_check.collector.conf`
+
+Read-Only:
+
+- `authentication` (String)
+- `collect_method` (String)
+- `collect_url` (String) URL to use for the Collect operation
+- `credentials_secret` (String)
+- `password` (String)
+- `reject_unauthorized` (Boolean)
+- `timeout` (Number)
+- `username` (String)
+
+
+
+<a id="nestedatt--input_collector_health_check--input"></a>
+### Nested Schema for `input_collector_health_check.input`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_health_check--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--input_collector_health_check--input--metadata"></a>
+### Nested Schema for `input_collector_health_check.input.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_health_check--input--preprocess"></a>
+### Nested Schema for `input_collector_health_check.input.preprocess`
+
+Read-Only:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_health_check--saved_state"></a>
+### Nested Schema for `input_collector_health_check.saved_state`
+
+
+<a id="nestedatt--input_collector_health_check--schedule"></a>
+### Nested Schema for `input_collector_health_check.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_health_check--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+
+<a id="nestedatt--input_collector_health_check--schedule--run"></a>
+### Nested Schema for `input_collector_health_check.schedule.run`
+
+Read-Only:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (Number) Latest time to collect data for the selected timezone
+- `log_level` (String) Level at which to set task logging
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_health_check--schedule--run--state_tracking))
+- `time_range_type` (String)
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_health_check--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_health_check--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_health_check.schedule.run.state_tracking`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_health_check--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_health_check.schedule.run.time_warning`
+
+
+
+
+
+<a id="nestedatt--input_collector_rest"></a>
+### Nested Schema for `input_collector_rest`
+
+Read-Only:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector))
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--input))
+- `remove_fields` (List of String)
+- `resume_on_boot` (Boolean)
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_rest--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_rest--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_rest--collector"></a>
+### Nested Schema for `input_collector_rest.collector`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf))
+- `type` (String)
+
+<a id="nestedatt--input_collector_rest--collector--conf"></a>
+### Nested Schema for `input_collector_rest.collector.conf`
+
+Read-Only:
+
+- `auth_header_expr` (String) Expression for auth header value
+- `auth_header_key` (String) Header key for authentication
+- `auth_request_headers` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--auth_request_headers))
+- `auth_request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--auth_request_params))
+- `authentication` (String)
+- `capture_headers` (Boolean)
+- `client_secret_param_name` (String)
+- `collect_method` (String)
+- `collect_request_headers` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--collect_request_headers))
+- `collect_request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--collect_request_params))
+- `collect_url` (String) URL to use for the Collect operation
+- `credentials_secret` (String)
+- `decode_url` (Boolean)
+- `disable_time_filter` (Boolean)
+- `discovery` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery))
+- `login_body` (String) Body content for login request
+- `login_url` (String) URL for authentication login
+- `pagination` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--pagination))
+- `password` (String)
+- `reject_unauthorized` (Boolean)
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--retry_rules))
+- `safe_headers` (List of String)
+- `scheduling` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--scheduling))
+- `timeout` (Number)
+- `token` (String)
+- `token_resp_attribute` (String) Attribute name for token in response
+- `token_secret` (String)
+- `use_round_robin_dns` (Boolean)
+- `username` (String)
+
+<a id="nestedatt--input_collector_rest--collector--conf--auth_request_headers"></a>
+### Nested Schema for `input_collector_rest.collector.conf.auth_request_headers`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--auth_request_params"></a>
+### Nested Schema for `input_collector_rest.collector.conf.auth_request_params`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--collect_request_headers"></a>
+### Nested Schema for `input_collector_rest.collector.conf.collect_request_headers`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--collect_request_params"></a>
+### Nested Schema for `input_collector_rest.collector.conf.collect_request_params`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--discovery"></a>
+### Nested Schema for `input_collector_rest.collector.conf.discovery`
+
+Read-Only:
+
+- `discover_body` (String)
+- `discover_data_field` (String)
+- `discover_method` (String) protocol used for http discovery, required for 'http' type
+- `discover_request_headers` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_headers))
+- `discover_request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--discover_request_params))
+- `discover_type` (String)
+- `discover_url` (String) URL to hit for rest type collectors, required for 'http' discoverType
+- `enable_discover_code` (Boolean)
+- `format_result_code` (String)
+- `item_list` (List of String) comma separated list of strings to return from discovery section required for 'list' discoverType
+- `manual_discover_result` (String) json payload to return manually, required for 'json' discoverType
+- `pagination` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--discovery--pagination))
+
+<a id="nestedatt--input_collector_rest--collector--conf--discovery--discover_request_headers"></a>
+### Nested Schema for `input_collector_rest.collector.conf.discovery.discover_request_headers`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--discovery--discover_request_params"></a>
+### Nested Schema for `input_collector_rest.collector.conf.discovery.discover_request_params`
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--discovery--pagination"></a>
+### Nested Schema for `input_collector_rest.collector.conf.discovery.pagination`
+
+Read-Only:
+
+- `attribute` (List of String)
+- `last_page_expr` (String)
+- `limit` (Number)
+- `limit_field` (String)
+- `max_pages` (Number)
+- `offset` (Number)
+- `offset_field` (String)
+- `page_field` (String)
+- `size` (Number)
+- `size_field` (String)
+- `total_record_field` (String)
+- `type` (String)
+- `zero_indexed` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--pagination"></a>
+### Nested Schema for `input_collector_rest.collector.conf.pagination`
+
+Read-Only:
+
+- `attribute` (List of String)
+- `last_page_expr` (String)
+- `limit` (Number)
+- `limit_field` (String)
+- `max_pages` (Number)
+- `offset` (Number)
+- `offset_field` (String)
+- `page_field` (String)
+- `size` (Number)
+- `size_field` (String)
+- `total_record_field` (String)
+- `type` (String)
+- `zero_indexed` (Boolean)
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--retry_rules"></a>
+### Nested Schema for `input_collector_rest.collector.conf.retry_rules`
+
+Read-Only:
+
+- `codes` (List of Number)
+- `enable_header` (Boolean)
+- `interval` (Number)
+- `limit` (Number)
+- `max_interval_ms` (Number)
+- `multiplier` (Number)
+- `retry_connect_reset` (Boolean)
+- `retry_connect_timeout` (Boolean)
+- `retry_header_name` (String)
+- `type` (String)
+
+
+<a id="nestedatt--input_collector_rest--collector--conf--scheduling"></a>
+### Nested Schema for `input_collector_rest.collector.conf.scheduling`
+
+Read-Only:
+
+- `state_tracking` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--scheduling--state_tracking))
+
+<a id="nestedatt--input_collector_rest--collector--conf--scheduling--state_tracking"></a>
+### Nested Schema for `input_collector_rest.collector.conf.scheduling.state_tracking`
+
+
+
+
+
+<a id="nestedatt--input_collector_rest--input"></a>
+### Nested Schema for `input_collector_rest.input`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_rest--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--input_collector_rest--input--metadata"></a>
+### Nested Schema for `input_collector_rest.input.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_rest--input--preprocess"></a>
+### Nested Schema for `input_collector_rest.input.preprocess`
+
+Read-Only:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_rest--saved_state"></a>
+### Nested Schema for `input_collector_rest.saved_state`
+
+
+<a id="nestedatt--input_collector_rest--schedule"></a>
+### Nested Schema for `input_collector_rest.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+
+<a id="nestedatt--input_collector_rest--schedule--run"></a>
+### Nested Schema for `input_collector_rest.schedule.run`
+
+Read-Only:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (Number) Latest time to collect data for the selected timezone
+- `log_level` (String) Level at which to set task logging
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_rest--schedule--run--state_tracking))
+- `time_range_type` (String)
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_rest--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_rest--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_rest.schedule.run.state_tracking`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_rest--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_rest.schedule.run.time_warning`
+
+
+
+
+
+<a id="nestedatt--input_collector_s3"></a>
+### Nested Schema for `input_collector_s3`
+
+Read-Only:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--collector))
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--input))
+- `remove_fields` (List of String)
+- `resume_on_boot` (Boolean)
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_s3--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_s3--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_s3--collector"></a>
+### Nested Schema for `input_collector_s3.collector`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--collector--conf))
+- `type` (String)
+
+<a id="nestedatt--input_collector_s3--collector--conf"></a>
+### Nested Schema for `input_collector_s3.collector.conf`
+
+Read-Only:
+
+- `aws_api_key` (String)
+- `aws_authentication_method` (String)
+- `aws_secret` (String)
+- `aws_secret_key` (String)
+- `bucket` (String) S3 Bucket from which to collect data
+- `extractors` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_s3--collector--conf--extractors))
+- `max_batch_size` (Number)
+- `path` (String) Directory where data will be collected
+- `recurse` (Boolean)
+- `region` (String) AWS region from which to retrieve data
+
+<a id="nestedatt--input_collector_s3--collector--conf--extractors"></a>
+### Nested Schema for `input_collector_s3.collector.conf.extractors`
+
+Read-Only:
+
+- `expression` (String) JavaScript expression to compute the value from the path
+- `key` (String) Name of the extracted field
+- `pattern` (String) Regex pattern to match paths (alternative to key/expression)
+
+
+
+
+<a id="nestedatt--input_collector_s3--input"></a>
+### Nested Schema for `input_collector_s3.input`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_s3--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--input_collector_s3--input--metadata"></a>
+### Nested Schema for `input_collector_s3.input.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_s3--input--preprocess"></a>
+### Nested Schema for `input_collector_s3.input.preprocess`
+
+Read-Only:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_s3--saved_state"></a>
+### Nested Schema for `input_collector_s3.saved_state`
+
+
+<a id="nestedatt--input_collector_s3--schedule"></a>
+### Nested Schema for `input_collector_s3.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+
+<a id="nestedatt--input_collector_s3--schedule--run"></a>
+### Nested Schema for `input_collector_s3.schedule.run`
+
+Read-Only:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (Number) Latest time to collect data for the selected timezone
+- `log_level` (String) Level at which to set task logging
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_s3--schedule--run--state_tracking))
+- `time_range_type` (String)
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_s3--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_s3--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_s3.schedule.run.state_tracking`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_s3--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_s3.schedule.run.time_warning`
+
+
+
+
+
+<a id="nestedatt--input_collector_script"></a>
+### Nested Schema for `input_collector_script`
+
+Read-Only:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--collector))
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--input))
+- `remove_fields` (List of String)
+- `resume_on_boot` (Boolean)
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_script--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_script--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_script--collector"></a>
+### Nested Schema for `input_collector_script.collector`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--collector--conf))
+- `type` (String)
+
+<a id="nestedatt--input_collector_script--collector--conf"></a>
+### Nested Schema for `input_collector_script.collector.conf`
+
+Read-Only:
+
+- `collect_script` (String)
+- `discover_script` (String)
+- `shell` (String)
+
+
+
+<a id="nestedatt--input_collector_script--input"></a>
+### Nested Schema for `input_collector_script.input`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_script--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--input_collector_script--input--metadata"></a>
+### Nested Schema for `input_collector_script.input.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_script--input--preprocess"></a>
+### Nested Schema for `input_collector_script.input.preprocess`
+
+Read-Only:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_script--saved_state"></a>
+### Nested Schema for `input_collector_script.saved_state`
+
+
+<a id="nestedatt--input_collector_script--schedule"></a>
+### Nested Schema for `input_collector_script.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+
+<a id="nestedatt--input_collector_script--schedule--run"></a>
+### Nested Schema for `input_collector_script.schedule.run`
+
+Read-Only:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (Number) Latest time to collect data for the selected timezone
+- `log_level` (String) Level at which to set task logging
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_script--schedule--run--state_tracking))
+- `time_range_type` (String)
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_script--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_script--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_script.schedule.run.state_tracking`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_script--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_script.schedule.run.time_warning`
+
+
+
+
+
+<a id="nestedatt--input_collector_splunk"></a>
+### Nested Schema for `input_collector_splunk`
+
+Read-Only:
+
+- `collector` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--collector))
+- `environment` (String)
+- `id` (String)
+- `ignore_group_jobs_limit` (Boolean)
+- `input` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--input))
+- `remove_fields` (List of String)
+- `resume_on_boot` (Boolean)
+- `saved_state` (Attributes) Saved state for the collector (see [below for nested schema](#nestedatt--input_collector_splunk--saved_state))
+- `schedule` (Attributes) Configuration for a scheduled job (see [below for nested schema](#nestedatt--input_collector_splunk--schedule))
+- `streamtags` (List of String) Tags for filtering and grouping
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+
+<a id="nestedatt--input_collector_splunk--collector"></a>
+### Nested Schema for `input_collector_splunk.collector`
+
+Read-Only:
+
+- `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--collector--conf))
+- `type` (String)
+
+<a id="nestedatt--input_collector_splunk--collector--conf"></a>
+### Nested Schema for `input_collector_splunk.collector.conf`
+
+Read-Only:
+
+- `authentication` (String)
+- `credentials_secret` (String)
+- `disable_time_filter` (Boolean)
+- `earliest` (String) Earliest time boundary for the search
+- `endpoint` (String) REST API endpoint used to create a search
+- `handle_escaped_chars` (Boolean)
+- `latest` (String) Latest time boundary for the search
+- `output_mode` (String)
+- `password` (String)
+- `reject_unauthorized` (Boolean)
+- `search` (String) Splunk search query
+- `search_head` (String) Search head base URL
+- `timeout` (Number)
+- `token` (String)
+- `token_secret` (String)
+- `use_round_robin_dns` (Boolean)
+- `username` (String)
+
+
+
+<a id="nestedatt--input_collector_splunk--input"></a>
+### Nested Schema for `input_collector_splunk.input`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collector_splunk--input--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--input--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--input_collector_splunk--input--metadata"></a>
+### Nested Schema for `input_collector_splunk.input.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--input_collector_splunk--input--preprocess"></a>
+### Nested Schema for `input_collector_splunk.input.preprocess`
+
+Read-Only:
+
+- `args` (List of String) Arguments to be added to the custom command
+- `command` (String) Command to feed the data through (via stdin) and process its output (stdout)
+- `disabled` (Boolean)
+
+
+
+<a id="nestedatt--input_collector_splunk--saved_state"></a>
+### Nested Schema for `input_collector_splunk.saved_state`
+
+
+<a id="nestedatt--input_collector_splunk--schedule"></a>
+### Nested Schema for `input_collector_splunk.schedule`
+
+Read-Only:
+
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `enabled` (Boolean) Enable to configure scheduling for this Collector
+- `max_concurrent_runs` (Number) The maximum number of instances of this scheduled job that may be running at any time
+- `resume_missed` (Boolean) Resume missed scheduled runs
+- `run` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk--schedule--run))
+- `skippable` (Boolean) Skippable jobs can be delayed, up to their next run time, if the system is hitting concurrency limits
+
+<a id="nestedatt--input_collector_splunk--schedule--run"></a>
+### Nested Schema for `input_collector_splunk.schedule.run`
+
+Read-Only:
+
+- `earliest` (Number) Earliest time to collect data for the selected timezone
+- `expression` (String) A filter for tokens in the provided collect path and/or the events being collected
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (Number) Latest time to collect data for the selected timezone
+- `log_level` (String) Level at which to set task logging
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `max_task_size` (String) Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB, you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
+- `min_task_size` (String) Limits the bundle size for small tasks. For example, if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
+- `mode` (String) Job run mode. Preview will either return up to N matching results, or will run until capture time T is reached. Discovery will gather the list of files to turn into streaming tasks, without running the data collection job. Full Run will run the collection job.
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `state_tracking` (Attributes) State tracking configuration (see [below for nested schema](#nestedatt--input_collector_splunk--schedule--run--state_tracking))
+- `time_range_type` (String)
+- `time_warning` (Attributes) Time warning configuration (see [below for nested schema](#nestedatt--input_collector_splunk--schedule--run--time_warning))
+
+<a id="nestedatt--input_collector_splunk--schedule--run--state_tracking"></a>
+### Nested Schema for `input_collector_splunk.schedule.run.state_tracking`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `state_merge_expression` (String)
+- `state_update_expression` (String)
+
+
+<a id="nestedatt--input_collector_splunk--schedule--run--time_warning"></a>
+### Nested Schema for `input_collector_splunk.schedule.run.time_warning`

@@ -30,7 +30,7 @@ func (r *ParserLibEntryResourceModel) RefreshFromOperationsCreateParserResponseB
 	return diags
 }
 
-func (r *ParserLibEntryResourceModel) RefreshFromOperationsListParserResponseBody(ctx context.Context, resp *operations.ListParserResponseBody) diag.Diagnostics {
+func (r *ParserLibEntryResourceModel) RefreshFromOperationsGetParserByIDResponseBody(ctx context.Context, resp *operations.GetParserByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -124,13 +124,17 @@ func (r *ParserLibEntryResourceModel) ToOperationsDeleteParserByIDRequest(ctx co
 	return &out, diags
 }
 
-func (r *ParserLibEntryResourceModel) ToOperationsListParserRequest(ctx context.Context) (*operations.ListParserRequest, diag.Diagnostics) {
+func (r *ParserLibEntryResourceModel) ToOperationsGetParserByIDRequest(ctx context.Context) (*operations.GetParserByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListParserRequest{
+	out := operations.GetParserByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

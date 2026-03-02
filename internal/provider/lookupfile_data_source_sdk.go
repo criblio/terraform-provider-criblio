@@ -4,17 +4,73 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *LookupFileDataSourceModel) ToOperationsListLookupFileRequest(ctx context.Context) (*operations.ListLookupFileRequest, diag.Diagnostics) {
+func (r *LookupFileDataSourceModel) RefreshFromOperationsGetLookupFileByIDResponseBody(ctx context.Context, resp *operations.GetLookupFileByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
+
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
+		diags.Append(r.RefreshFromSharedLookupFile(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *LookupFileDataSourceModel) RefreshFromSharedLookupFile(ctx context.Context, resp *shared.LookupFile) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Content = types.StringPointerValue(resp.Content)
+	r.Description = types.StringPointerValue(resp.Description)
+	r.ID = types.StringValue(resp.ID)
+	if resp.Mode != nil {
+		r.Mode = types.StringValue(string(*resp.Mode))
+	} else {
+		r.Mode = types.StringNull()
+	}
+	if resp.PendingTask == nil {
+		r.PendingTask = nil
+	} else {
+		r.PendingTask = &tfTypes.PendingTask{}
+		r.PendingTask.Error = types.StringPointerValue(resp.PendingTask.Error)
+		r.PendingTask.ID = types.StringPointerValue(resp.PendingTask.ID)
+		if resp.PendingTask.Type != nil {
+			r.PendingTask.Type = types.StringValue(string(*resp.PendingTask.Type))
+		} else {
+			r.PendingTask.Type = types.StringNull()
+		}
+	}
+	r.Tags = types.StringPointerValue(resp.Tags)
+	r.Version = types.StringPointerValue(resp.Version)
+
+	return diags
+}
+
+func (r *LookupFileDataSourceModel) ToOperationsGetLookupFileByIDRequest(ctx context.Context) (*operations.GetLookupFileByIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
 
-	out := operations.ListLookupFileRequest{
+	out := operations.GetLookupFileByIDRequest{
+		ID:      id,
 		GroupID: groupID,
 	}
 

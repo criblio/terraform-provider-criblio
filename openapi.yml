@@ -213,6 +213,7 @@ components:
             - scheduledSearch
           example: "collection"
         ttl:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Time to live
           description: Time to keep the job's artifacts on disk after job completion. This
@@ -257,6 +258,7 @@ components:
             empty, will be enabled everywhere.
           example: "dev"
         schedule:
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           title: Schedule
           description: Configuration for a scheduled job
@@ -554,6 +556,7 @@ components:
             - scheduledSearch
           example: "executor"
         ttl:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Time to live
           description: Time to keep the job's artifacts on disk after job completion. This
@@ -770,6 +773,7 @@ components:
             - scheduledSearch
           example: "scheduledSearch"
         ttl:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Time to live
           description: Time to keep the job's artifacts on disk after job completion. This
@@ -981,8 +985,9 @@ components:
           x-speakeasy-terraform-ignore: true
           example: "collection"
         ttl:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
-          default: 4h
+          default: "4h"
           example: "2h"
         ignoreGroupJobsLimit:
           type: boolean
@@ -1003,16 +1008,19 @@ components:
           default: true
           example: true
         environment:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Environment
           example: "production"
         savedState:
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           title: Saved state
           description: Saved state for the collector
           default: {}
           example: {}
         schedule:
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           title: Schedule
           description: Configuration for a scheduled job
@@ -1165,6 +1173,7 @@ components:
           example: false
         # Input Configuration
         input:
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           properties:
             type:
@@ -1289,6 +1298,7 @@ components:
                   enum: [script]
                   example: "script"
                 conf:
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     shell:
@@ -1317,6 +1327,7 @@ components:
                   enum: [splunk]
                   example: "splunk"
                 conf:
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     searchHead:
@@ -1410,6 +1421,7 @@ components:
                   enum: [rest]
                   example: "rest"
                 conf:
+                  x-speakeasy-plan-modifiers: PreferState
                   required: [discovery]
                   type: object
                   properties:
@@ -1539,6 +1551,11 @@ components:
                             title: Parameter value
                             example: "100"
                       example: [{"name": "limit", "value": "100"}]
+                      collectBody:
+                        type: string
+                        title: Collect body
+                        description: Body content for the collect request, used with the post_with_body collect method
+                        example: '{"filter":"status=active"}'
                     # Request Configuration
                     timeout:
                       type: integer
@@ -1736,6 +1753,7 @@ components:
                   enum: [s3]
                   example: "s3"
                 conf:
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     bucket:
@@ -1816,6 +1834,7 @@ components:
                   enum: [azureblob]
                   example: "azureblob"
                 conf:
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     containerName:
@@ -1888,6 +1907,7 @@ components:
                   enum: [cribllake]
                   example: "cribllake"
                 conf:
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     dataset:
@@ -1909,6 +1929,7 @@ components:
                   enum: [database]
                   example: "database"
                 conf:
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     connectionId:
@@ -1939,6 +1960,7 @@ components:
                   enum: [gcs]
                   example: "gcs"
                 conf:
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     serviceAccountCredentials:
@@ -2006,6 +2028,7 @@ components:
                   enum: [healthcheck]
                   example: "healthcheck"
                 conf:
+                  x-speakeasy-plan-modifiers: PreferState
                   type: object
                   properties:
                     collectUrl:
@@ -2366,6 +2389,7 @@ components:
           enum: [webhook]
           example: "webhook"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -2432,6 +2456,7 @@ components:
           enum: [pager_duty]
           example: "pager_duty"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -2487,6 +2512,7 @@ components:
           enum: [slack]
           example: "slack"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -2519,6 +2545,7 @@ components:
           enum: [sns]
           example: "sns"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -2624,6 +2651,7 @@ components:
           enum: [smtp]
           example: "smtp"
         systemFields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: "System fields"
           description: "Fields to automatically add to events, such as cribl_pipe. Supports wildcards."
@@ -3192,8 +3220,10 @@ components:
           type: string
           example: "myUsageGroupId"
         rules:
+          x-speakeasy-plan-modifiers: PreferState
           $ref: "#/components/schemas/LimitRuleDefinitions"
         usersCount:
+          x-speakeasy-plan-modifiers: PreferState
           type: number
           example: 1
       required:
@@ -3281,6 +3311,7 @@ components:
           description: Dataset provider type, set automatically from the dataset provider
           example: "cribl_lake"
         metadata:
+          x-speakeasy-param-suppress-computed-diff: true
           $ref: '#/components/schemas/DatasetMetadata'
           example:
             earliest: "2025-09-30T13:41:44Z"
@@ -3327,6 +3358,7 @@ components:
           description: Type of the provider
           example: "generic"
         description:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           description: Description of the provider
           example: "my generic provider description"
@@ -5804,29 +5836,35 @@ components:
         - id
       properties:
         id:
+          x-speakeasy-plan-modifiers: PreferState
           title: Filename
           type: string
           pattern: ^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$
           example: "countries.csv"
         description:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Description
           example: "Country code to name lookup"
         tags:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Tags
           description: One or more tags related to this lookup. Optional.
           example: "geo,reference"
         version:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           description: Unique string generated for each modification of this lookup
           readOnly: true
           example: "v1.2.3"
         content:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           description: File content.
           example: "US,United States\nCA,Canada"
         mode:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Mode
           default: memory
@@ -5835,6 +5873,7 @@ components:
             - disk
           example: "memory"
         pendingTask:
+          x-speakeasy-plan-modifiers: PreferState
           type: object
           readOnly: true
           properties:
@@ -7001,22 +7040,27 @@ components:
           pattern: ^[a-zA-Z0-9\-_ ]+$
           example: access-logs-v1
         lib:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Library
           enum:
             - custom
             - cribl-custom
+            - cribl
           default: custom
           example: custom
         description:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Description
           example: Break HTTP access logs into events
         tags:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Tags
           example: nginx,access,prod
         minRawLength:
+          x-speakeasy-param-suppress-computed-diff: true
           type: number
           title: Min raw length
           description: The  minimum number of characters in _raw to determine which rule
@@ -7026,6 +7070,7 @@ components:
           maximum: 100000
           example: 512
         rules:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Rules
           description: A list of rules that will be applied, in order, to the input data
@@ -7194,6 +7239,7 @@ components:
                 maximum: 134217728
                 example: 65536
               fields:
+                x-speakeasy-param-suppress-computed-diff: true
                 title: Fields
                 description: Key-value pairs to be added to each event
                 type: array
@@ -8059,15 +8105,18 @@ components:
           description: Global variable name.
           example: "test_var"
         lib:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Library
           example: "custom"
         description:
+          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Description
           description: Brief description of this variable. Optional.
           example: "This is a test var."
         type:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Type
           enum:
@@ -8083,11 +8132,13 @@ components:
           description: Type of variable
           example: number
         value:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Value
           description: Value of variable
           example: 100
         tags:
+          x-speakeasy-param-suppress-computed-diff: true
           type: string
           title: Tags
           description: One or more tags related to this variable. Optional.
@@ -9791,6 +9842,7 @@ components:
           description: Port to listen on
           example: 8088
         authTokens:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Auth tokens
           description: "Shared secrets to be provided by any client (Authorization:
@@ -18635,6 +18687,7 @@ components:
           description: Port to listen on
           example: 8088
         authTokens:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Auth tokens
           description: "Shared secrets to be provided by any client (Authorization:
@@ -30776,6 +30829,7 @@ components:
           maximum: 65535
           description: Port to listen on
         authTokens:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Auth tokens
           description: "Shared secrets to be provided by any client (Authorization:
@@ -31166,6 +31220,7 @@ components:
           maximum: 65535
           description: Port to listen on
         authTokens:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Auth tokens
           description: "Shared secrets to be provided by any client (Authorization:
@@ -58434,27 +58489,32 @@ components:
           type: string
           example: eval
         description:
+          x-speakeasy-param-suppress-computed-diff: true
           title: Description
           description: Simple description of this step
           type: string
           example: Parse and enrich fields
         disabled:
+          x-speakeasy-param-suppress-computed-diff: true
           title: Disabled
           description: If true, data will not be pushed through this function
           type: boolean
           example: false
         final:
+          x-speakeasy-param-suppress-computed-diff: true
           title: Final
           description: If enabled, stops the results of this Function from being passed to
             the downstream Functions
           type: boolean
           example: false
         conf:
+          x-speakeasy-param-suppress-computed-diff: true
           type: object
           title: Function-specific configs
           description: Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.
           additionalProperties: true
         groupId:
+          x-speakeasy-param-suppress-computed-diff: true
           title: Group ID
           description: Group ID
           type: string
@@ -58475,6 +58535,7 @@ components:
           additionalProperties: false
           properties:
             asyncFuncTimeout:
+              x-speakeasy-param-suppress-computed-diff: true
               type: integer
               title: Async function timeout (ms)
               description: Time (in ms) to wait for an async function to complete processing
@@ -58489,6 +58550,7 @@ components:
               default: default
               example: OutputSplunk
             description:
+              x-speakeasy-param-suppress-computed-diff: true
               title: Description
               type: string
               example: Main pipeline for app logs
@@ -58503,6 +58565,7 @@ components:
                 - prod
                 - app
             functions:
+              x-speakeasy-param-suppress-computed-diff: true
               title: Functions
               description: List of Functions to pass data through
               type: array
@@ -58519,6 +58582,7 @@ components:
                   conf:
                     format: json
             groups:
+              x-speakeasy-param-suppress-computed-diff: true
               type: object
               additionalProperties:
                 type: object
@@ -58575,6 +58639,7 @@ components:
           title: Route name
           example: Errors to Splunk
         disabled:
+          x-speakeasy-param-suppress-computed-diff: true
           type: boolean
           title: Disabled
           description: Disable this routing rule
@@ -58622,6 +58687,7 @@ components:
           description: Routes ID
           example: default
         routes:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Route
           description: Pipeline routing rules
@@ -64754,6 +64820,7 @@ components:
           default: "/^/"
           example: "/\\n{2,}/"
         fields:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           items:
             $ref: "#/components/schemas/EventBreakerRuleFields"
@@ -67272,10 +67339,10 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
-                      type: object
-                      additionalProperties: true
+                      $ref: "#/components/schemas/InputCollector"
         "401":
           description: Unauthorized
         "500":
@@ -67635,10 +67702,10 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
-                      type: object
-                      additionalProperties: true
+                      $ref: "#/components/schemas/NotificationTarget"
         "401":
           description: Unauthorized
         "500":
@@ -69307,7 +69374,6 @@ paths:
         - usage-groups
       summary: Get a list of UsageGroup objects
       description: Get a list of UsageGroup objects
-      x-speakeasy-entity-operation: SearchUsageGroup#get
       responses:
         &a41
         "200":
@@ -69323,6 +69389,7 @@ paths:
                     description: number of items present in the items array
                   items:
                     type: array
+                    x-speakeasy-param-suppress-computed-diff: true
                     items:
                       $ref: "#/components/schemas/UsageGroup"
         "401":
@@ -69353,6 +69420,7 @@ paths:
       tags: *a40
       summary: Get UsageGroup by ID
       description: Get UsageGroup by ID
+      x-speakeasy-entity-operation: SearchUsageGroup#get
       parameters:
         - name: id
           in: path
@@ -69515,6 +69583,7 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
                       $ref: "#/components/schemas/GenericProvider"
@@ -69614,6 +69683,7 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
                       $ref: "#/components/schemas/GenericDataset"
@@ -70075,7 +70145,6 @@ paths:
       responses: *a63
   "/m/{groupId}/system/lookups":
     get:
-      x-speakeasy-entity-operation: LookupFile#get
       parameters:
         - name: groupId
           in: path
@@ -70105,9 +70174,9 @@ paths:
                     description: number of items present in the items array
                   items:
                     type: array
+                    x-speakeasy-param-suppress-computed-diff: true
                     items:
                       $ref: "#/components/schemas/LookupFile"
-                    x-speakeasy-ignore: true
         "401":
           description: Unauthorized
         "500":
@@ -70144,6 +70213,7 @@ paths:
       tags: *a65
       summary: Get LookupFile by ID
       description: Get LookupFile by ID
+      x-speakeasy-entity-operation: LookupFile#get
       parameters:
         - name: id
           in: path
@@ -70212,7 +70282,6 @@ paths:
       responses: *a66
   "/m/{groupId}/lib/parsers":
     get:
-      x-speakeasy-entity-operation: ParserLibEntry#get
       parameters:
         - name: groupId
           in: path
@@ -70280,6 +70349,7 @@ paths:
       tags: *a68
       summary: Get Parser by ID
       description: Get Parser by ID
+      x-speakeasy-entity-operation: ParserLibEntry#get
       parameters:
         - name: id
           in: path
@@ -71639,9 +71709,9 @@ paths:
                     description: number of items present in the items array
                   items:
                     type: array
+                    x-speakeasy-param-suppress-computed-diff: true
                     items:
                       $ref: "#/components/schemas/EventBreakerRuleset"
-                    x-speakeasy-ignore: true
               example:
                 count: 1
                 items:
@@ -71772,6 +71842,7 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
                       $ref: "#/components/schemas/GlobalVar"
@@ -71838,10 +71909,10 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
-                      type: object
-                      additionalProperties: true
+                      $ref: "#/components/schemas/GlobalVar"
         "401":
           description: Unauthorized
         "500":
@@ -72246,10 +72317,10 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
-                      type: object
-                      additionalProperties: true
+                      $ref: "#/components/schemas/Input"
         "401":
           description: Unauthorized
         "500":
@@ -72637,10 +72708,10 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
-                      type: object
-                      additionalProperties: true
+                      $ref: "#/components/schemas/Output"
         "401":
           description: Unauthorized
         "500":
@@ -73388,6 +73459,7 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
                       $ref: "#/components/schemas/Routes"
@@ -73544,7 +73616,31 @@ paths:
       tags: *a135
       summary: Get a list of Pipeline objects within a Pack
       description: Get a list of Pipeline objects within a Pack
-      responses: *a136
+      responses:
+        "200":
+          description: a list of Pipeline objects within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Pipeline"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       parameters:
         - name: pack
           in: path
@@ -73576,7 +73672,30 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Pipeline"
-      responses: *a136
+      responses:
+        "200":
+          description: Created Pipeline within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Pipeline"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       parameters:
         - name: pack
           in: path
@@ -73600,7 +73719,30 @@ paths:
       summary: Get a list of Pipelines by ID within a Pack
       description: Get a list of Pipeline by ID within a Pack
       x-speakeasy-entity-operation: PackPipeline#get
-      responses: *a136
+      responses:
+        "200":
+          description: Pipeline object within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Pipeline"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       parameters:
         - name: pack
           in: path
@@ -73674,7 +73816,32 @@ paths:
       tags: *a135
       summary: Get a list of inputs within a Pack
       description: Get a list of inputs within a Pack
-      responses: *a136
+      responses:
+        &packSourceResp
+        "200":
+          description: a list of Input objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Input"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       parameters:
         - name: pack
           in: path
@@ -73706,7 +73873,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Input"
-      responses: *a127
+      responses: *packSourceResp
       parameters:
         - name: pack
           in: path
@@ -73736,7 +73903,7 @@ paths:
       tags: *a135
       summary: Get input source by ID within a Pack
       description: Get input source by ID within a Pack
-      responses: *a136
+      responses: *packSourceResp
       parameters:
         - name: id
           in: path
@@ -73772,7 +73939,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Input"
-      responses: *a127
+      responses: *packSourceResp
       parameters:
         - name: pack
           in: path
@@ -73807,7 +73974,7 @@ paths:
       tags: *a126
       summary: Delete input source a Pack
       description: Delete input source a Pack
-      responses: *a127
+      responses: *packSourceResp
       parameters:
         - name: pack
           in: path
@@ -74038,7 +74205,31 @@ paths:
       tags: *a135
       summary: Get a list of lookup objects within a Pack
       description: Get a list of lookups objects within a Pack
-      responses: *a136
+      responses:
+        "200":
+          description: a list of LookupFile objects within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LookupFile"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       parameters:
         - name: pack
           in: path
@@ -74063,7 +74254,30 @@ paths:
       tags: *a135
       summary: Create a lookup objects within a Pack
       description: Get a lookups objects within a Pack
-      responses: *a136
+      responses:
+        "200":
+          description: Created LookupFile within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LookupFile"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       requestBody:
         description: Pipeline object to be updated in specified Project
         required: true
@@ -74096,7 +74310,30 @@ paths:
       tags: *a135
       summary: Get list of lookups by ID within a Pack
       description: Get list of lookups by ID within a Pack
-      responses: *a136
+      responses:
+        "200":
+          description: LookupFile object within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LookupFile"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       parameters:
         - name: id
           in: path
@@ -74198,7 +74435,31 @@ paths:
       tags: *a135
       summary: Get a list of breakers within a Pack
       description: Get a list of breakers within a Pack
-      responses: *a136
+      responses:
+        "200":
+          description: a list of Event Breaker Ruleset objects within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EventBreakerRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       requestBody:
         content:
           application/json:
@@ -74227,7 +74488,31 @@ paths:
       tags: *a135
       summary: Create a breaker within a Pack
       description: Get a breaker within a Pack
-      responses: *a136
+      responses:
+        "200":
+          description: Created Event Breaker Ruleset within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EventBreakerRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       requestBody:
         description: Pipeline object to be updated in specified Project
         required: true
@@ -74260,7 +74545,31 @@ paths:
       summary: Get list of breakers by ID within a Pack
       description: Get list of breakers by ID within a Pack
       x-speakeasy-entity-operation: PackBreakers#get
-      responses: *a136
+      responses:
+        "200":
+          description: Event Breaker Ruleset object within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EventBreakerRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       parameters:
         - name: id
           in: path
@@ -74299,7 +74608,31 @@ paths:
               $ref: "#/components/schemas/EventBreakerRuleset"
             example:
               name: "Syslog breaker (updated)"
-      responses: *a136
+      responses:
+        "200":
+          description: Event Breaker Ruleset object within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    x-speakeasy-ignore: true
+                    type: integer
+                    description: number of items present in the items array
+                  items:
+                    x-speakeasy-param-suppress-computed-diff: true
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EventBreakerRuleset"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       parameters:
         - name: id
           in: path
@@ -83588,9 +83921,9 @@ paths:
                     description: number of items present in the items array
                   items:
                     type: array
+                    x-speakeasy-param-suppress-computed-diff: true
                     items:
                       $ref: "#/components/schemas/ConfigGroup"
-                    x-speakeasy-ignore: true
               example:
                 count: 1
                 items:

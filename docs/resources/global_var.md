@@ -47,17 +47,13 @@ resource "criblio_global_var" "my_globalvar" {
 - `type` (String) Type of variable. Default: "any"; must be one of ["string", "number", "encryptedString", "boolean", "array", "object", "expression", "any"]
 - `value` (String) Value of variable
 
-### Read-Only
-
-- `items` (List of Map of String)
-
 <a id="nestedatt--args"></a>
 ### Nested Schema for `args`
 
-Required:
+Optional:
 
-- `name` (String) Argument name
-- `type` (String) Argument type (e.g. number, string)
+- `name` (String) Argument name. Not Null
+- `type` (String) Argument type (e.g. number, string). Not Null
 
 ## Import
 

@@ -38,6 +38,20 @@ resource "criblio_lookup_file" "my_lookupfile" {
 - `mode` (String) Default: "memory"; must be one of ["memory", "disk"]
 - `tags` (String) One or more tags related to this lookup. Optional.
 
+### Read-Only
+
+- `pending_task` (Attributes) (see [below for nested schema](#nestedatt--pending_task))
+- `version` (String) Unique string generated for each modification of this lookup
+
+<a id="nestedatt--pending_task"></a>
+### Nested Schema for `pending_task`
+
+Read-Only:
+
+- `error` (String) Error message if task has failed
+- `id` (String) Task ID (generated).
+- `type` (String) Task type
+
 ## Import
 
 Import is supported using the following syntax:
@@ -47,12 +61,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_lookup_file.my_criblio_lookup_file
-  id = "Cribl"
+  id = jsonencode({
+    group_id = "myExistingGroupId"
+    id = "myNewLookupIdToCRUD"
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_lookup_file.my_criblio_lookup_file "Cribl"
+terraform import criblio_lookup_file.my_criblio_lookup_file '{"group_id": "myExistingGroupId", "id": "myNewLookupIdToCRUD"}'
 ```

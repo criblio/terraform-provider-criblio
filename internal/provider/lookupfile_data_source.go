@@ -5,11 +5,15 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -28,7 +32,14 @@ type LookupFileDataSource struct {
 
 // LookupFileDataSourceModel describes the data model.
 type LookupFileDataSourceModel struct {
-	GroupID types.String `tfsdk:"group_id"`
+	Content     types.String         `tfsdk:"content"`
+	Description types.String         `tfsdk:"description"`
+	GroupID     types.String         `tfsdk:"group_id"`
+	ID          types.String         `tfsdk:"id"`
+	Mode        types.String         `tfsdk:"mode"`
+	PendingTask *tfTypes.PendingTask `tfsdk:"pending_task"`
+	Tags        types.String         `tfsdk:"tags"`
+	Version     types.String         `tfsdk:"version"`
 }
 
 // Metadata returns the data source type name.
@@ -42,9 +53,51 @@ func (r *LookupFileDataSource) Schema(ctx context.Context, req datasource.Schema
 		MarkdownDescription: "LookupFile DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"content": schema.StringAttribute{
+				Computed:    true,
+				Description: `File content.`,
+			},
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+			},
+			"id": schema.StringAttribute{
+				Required:    true,
+				Description: `Unique ID to GET`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
+				},
+			},
+			"mode": schema.StringAttribute{
+				Computed: true,
+			},
+			"pending_task": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"error": schema.StringAttribute{
+						Computed:    true,
+						Description: `Error message if task has failed`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Task ID (generated).`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Task type`,
+					},
+				},
+			},
+			"tags": schema.StringAttribute{
+				Computed:    true,
+				Description: `One or more tags related to this lookup. Optional.`,
+			},
+			"version": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique string generated for each modification of this lookup`,
 			},
 		},
 	}
@@ -88,13 +141,13 @@ func (r *LookupFileDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListLookupFileRequest(ctx)
+	request, requestDiags := data.ToOperationsGetLookupFileByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Lookups.ListLookupFile(ctx, *request)
+	res, err := r.client.Lookups.GetLookupFileByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -112,6 +165,11 @@ func (r *LookupFileDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	}
 	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetLookupFileByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
 

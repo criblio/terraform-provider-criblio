@@ -132,6 +132,28 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx co
 
 			r.Items = append(r.Items, items)
 		}
+		// Populate top-level attributes from items[0] so state matches config after import.
+		// The import CLI flattens items[0] to top-level; without this, Terraform sees a change
+		// and triggers replacement (RequiresReplaceIfConfigured) for author, description, etc.
+		if len(r.Items) > 0 {
+			first := r.Items[0]
+			r.Author = first.Author
+			r.Description = first.Description
+			r.DisplayName = first.DisplayName
+			r.MinLogStreamVersion = first.MinLogStreamVersion
+			r.Source = first.Source
+			r.Version = first.Version
+			if first.Tags != nil {
+				r.Tags = &tfTypes.PackRequestBodyTags{
+					DataType:   first.Tags.DataType,
+					Domain:     first.Tags.Domain,
+					Streamtags: first.Tags.Streamtags,
+					Technology: first.Tags.Technology,
+				}
+			} else {
+				r.Tags = nil
+			}
+		}
 	}
 
 	return diags

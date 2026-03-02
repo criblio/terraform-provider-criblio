@@ -5,12 +5,15 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -29,9 +32,14 @@ type GlobalVarDataSource struct {
 
 // GlobalVarDataSourceModel describes the data model.
 type GlobalVarDataSourceModel struct {
-	GroupID types.String                      `tfsdk:"group_id"`
-	ID      types.String                      `tfsdk:"id"`
-	Items   []map[string]jsontypes.Normalized `tfsdk:"items"`
+	Args        []tfTypes.Arg `tfsdk:"args"`
+	Description types.String  `tfsdk:"description"`
+	GroupID     types.String  `tfsdk:"group_id"`
+	ID          types.String  `tfsdk:"id"`
+	Lib         types.String  `tfsdk:"lib"`
+	Tags        types.String  `tfsdk:"tags"`
+	Type        types.String  `tfsdk:"type"`
+	Value       types.String  `tfsdk:"value"`
 }
 
 // Metadata returns the data source type name.
@@ -45,6 +53,26 @@ func (r *GlobalVarDataSource) Schema(ctx context.Context, req datasource.SchemaR
 		MarkdownDescription: "GlobalVar DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"args": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							Computed:    true,
+							Description: `Argument name`,
+						},
+						"type": schema.StringAttribute{
+							Computed:    true,
+							Description: `Argument type (e.g. number, string)`,
+						},
+					},
+				},
+				Description: `Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).`,
+			},
+			"description": schema.StringAttribute{
+				Computed:    true,
+				Description: `Brief description of this variable. Optional.`,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
@@ -52,12 +80,24 @@ func (r *GlobalVarDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique ID to GET`,
-			},
-			"items": schema.ListAttribute{
-				Computed: true,
-				ElementType: types.MapType{
-					ElemType: jsontypes.NormalizedType{},
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
+			},
+			"lib": schema.StringAttribute{
+				Computed: true,
+			},
+			"tags": schema.StringAttribute{
+				Computed:    true,
+				Description: `One or more tags related to this variable. Optional.`,
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `Type of variable`,
+			},
+			"value": schema.StringAttribute{
+				Computed:    true,
+				Description: `Value of variable`,
 			},
 		},
 	}
