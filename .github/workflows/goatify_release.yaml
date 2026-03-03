@@ -26,8 +26,6 @@ jobs:
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
-          # Skip homebrew until criblio/homebrew-tap exists and HOMEBREW_TAP_TOKEN is set
-          args: release --config .goreleaser-goatify.yml --clean --skip=homebrew
+          args: release --config .goreleaser-goatify.yml --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}

@@ -46,17 +46,5 @@ changelog:
       - "^test:"
       - "^chore:"
 
-homebrew_casks:
-  - name: goatify
-    repository:
-      owner: criblio
-      name: homebrew-tap
-      branch: main
-      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-    homepage: "https://github.com/criblio/terraform-provider-criblio"
-    description: "Export Cribl configurations to Terraform HCL"
-    url:
-      verified: "github.com/criblio/terraform-provider-criblio/releases/download"
-
 release:
   name_template: "goatify {{ .Version }}"
