@@ -27,9 +27,9 @@ jobs:
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
           # Use v0.0.1-goatify format: valid semver, no collision with provider v0.0.1
-          # Don't push - GoReleaser creates the release; GitHub creates the tag via API
           GORELEASER_TAG="v${TAG#goatify-v}-goatify"
           git tag "$GORELEASER_TAG"
+          git push origin "$GORELEASER_TAG"
           echo "GORELEASER_CURRENT_TAG=$GORELEASER_TAG" >> $GITHUB_ENV
           # Display version (0.0.1) for release name and artifacts; only when triggered by goatify-v* tag
           if [[ "$TAG" == goatify-v* ]]; then
