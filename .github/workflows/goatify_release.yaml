@@ -23,6 +23,11 @@ jobs:
           go-version-file: 'go.mod'
           cache: true
 
+      - name: Set tag for GoReleaser
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "GORELEASER_CURRENT_TAG=${TAG#goatify-}" >> $GITHUB_ENV
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
