@@ -53,7 +53,7 @@ func TestDiscover_AllSupportedTypesListed(t *testing.T) {
 	reg := mustBuildRegistry(t, ctx)
 	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
 
-	results, err := Discover(ctx, client, reg, nil, nil, nil)
+	results, err := Discover(ctx, client, reg, nil, nil, nil, false)
 	require.NoError(t, err)
 
 	// Every registry entry gets a result (types without list method show count 0).
@@ -84,7 +84,7 @@ func TestDiscover_IncludeExcludeFilter(t *testing.T) {
 	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
 
 	// Only criblio_source and criblio_pipeline
-	results, err := Discover(ctx, client, reg, []string{"criblio_source", "criblio_pipeline"}, nil, nil)
+	results, err := Discover(ctx, client, reg, []string{"criblio_source", "criblio_pipeline"}, nil, nil, false)
 	require.NoError(t, err)
 	assert.Len(t, results, 2)
 	names := make(map[string]bool)
@@ -95,7 +95,7 @@ func TestDiscover_IncludeExcludeFilter(t *testing.T) {
 	assert.True(t, names["criblio_pipeline"])
 
 	// Exclude criblio_source
-	results, err = Discover(ctx, client, reg, nil, []string{"criblio_source"}, nil)
+	results, err = Discover(ctx, client, reg, nil, []string{"criblio_source"}, nil, false)
 	require.NoError(t, err)
 	for _, r := range results {
 		assert.NotEqual(t, "criblio_source", r.TypeName, "omitted type should not appear")
@@ -110,7 +110,7 @@ func TestDiscover_SDKErrorsSurfacedWithResourceContext(t *testing.T) {
 	reg := mustBuildRegistry(t, ctx)
 	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
 
-	results, err := Discover(ctx, client, reg, []string{"criblio_source"}, nil, nil)
+	results, err := Discover(ctx, client, reg, []string{"criblio_source"}, nil, nil, false)
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	r := results[0]
@@ -130,7 +130,7 @@ func TestDiscover_EmptyIncludeNoDiscoverableTypes(t *testing.T) {
 	client := sdk.New(sdk.WithServerURL(server.URL), sdk.WithClient(server.Client()))
 
 	// Include only a type that doesn't exist
-	results, err := Discover(ctx, client, reg, []string{"criblio_nonexistent"}, nil, nil)
+	results, err := Discover(ctx, client, reg, []string{"criblio_nonexistent"}, nil, nil, false)
 	require.NoError(t, err)
 	assert.Empty(t, results)
 }

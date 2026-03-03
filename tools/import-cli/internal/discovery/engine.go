@@ -112,7 +112,8 @@ type Result struct {
 // available so list requests (e.g. /m/{groupId}/...) succeed; falls back to
 // ["default"] if the groups API is unavailable.
 // groupFilter restricts to specific groups (by ID or label e.g. "default (stream)"); empty = all groups.
-func Discover(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, include, exclude, groupFilter []string) ([]Result, error) {
+// onPrem: when true, exclude default_search from groupIDs (all m/default_search/* endpoints are restricted on on-prem).
+func Discover(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, include, exclude, groupFilter []string, onPrem bool) ([]Result, error) {
 	includeSet := sliceToSet(include)
 	excludeSet := sliceToSet(exclude)
 
@@ -134,10 +135,13 @@ func Discover(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, 
 	groupIDs = append(groupIDs, streamIDs...)
 	groupIDs = append(groupIDs, edgeIDs...)
 	if len(groupIDs) == 0 && len(groupFilter) == 0 {
-		groupIDs = fallbackGroupIDs()
+		groupIDs = fallbackGroupIDs(onPrem)
 	} else {
 		// Always include "default" and "default_search" so resources under those groups (e.g. certificates, lookups, parser_lib_entry) are discovered.
 		groupIDs = ensureDefaultGroups(groupIDs)
+	}
+	if onPrem {
+		groupIDs = filterOutDefaultSearch(groupIDs)
 	}
 	// Map group ID -> label for PerGroupCounts (stream and edge).
 	idToLabel := make(map[string]string)
@@ -382,7 +386,8 @@ func inSet(s string, m map[string]struct{}) bool {
 
 // GetGroupIDs returns group IDs used for list/export (stream + edge, filtered by groupFilter).
 // Same logic as inside Discover. Use when exporting so list and get calls use the same groups.
-func GetGroupIDs(ctx context.Context, client *sdk.CriblIo, groupFilter []string) ([]string, error) {
+// onPrem: when true, exclude default_search (m/default_search/* restricted on on-prem).
+func GetGroupIDs(ctx context.Context, client *sdk.CriblIo, groupFilter []string, onPrem bool) ([]string, error) {
 	streamIDs, streamNames, err := fetchGroupsByProduct(ctx, client, operations.GetProductsGroupsByProductProductStream)
 	if err != nil {
 		return nil, fmt.Errorf("fetch stream groups: %w", err)
@@ -397,12 +402,26 @@ func GetGroupIDs(ctx context.Context, client *sdk.CriblIo, groupFilter []string)
 	groupIDs = append(groupIDs, streamIDs...)
 	groupIDs = append(groupIDs, edgeIDs...)
 	if len(groupIDs) == 0 && len(groupFilter) == 0 {
-		groupIDs = fallbackGroupIDs()
+		groupIDs = fallbackGroupIDs(onPrem)
 	} else {
 		// Always include "default" and "default_search" so resources under those groups are listed.
 		groupIDs = ensureDefaultGroups(groupIDs)
 	}
+	if onPrem {
+		groupIDs = filterOutDefaultSearch(groupIDs)
+	}
 	return groupIDs, nil
+}
+
+// filterOutDefaultSearch removes default_search from groupIDs. Used when on-prem since m/default_search/* is restricted.
+func filterOutDefaultSearch(groupIDs []string) []string {
+	out := make([]string, 0, len(groupIDs))
+	for _, gid := range groupIDs {
+		if gid != "default_search" {
+			out = append(out, gid)
+		}
+	}
+	return out
 }
 
 // ensureDefaultGroups prepends "default" and "default_search" to groupIDs if not already present,
@@ -437,8 +456,12 @@ func ensureDefaultGroups(groupIDs []string) []string {
 // fallbackGroupIDs returns group IDs to try when the groups API returned none.
 // Uses "default", "default_search" (search/parser resources), and, if set, CRIBL_WORKSPACE_ID
 // (e.g. cloud workspace "main") so list calls like /m/{groupId}/lib/grok succeed.
-func fallbackGroupIDs() []string {
-	ids := []string{"default", "default_search"}
+// onPrem: when true, omit default_search (restricted on on-prem).
+func fallbackGroupIDs(onPrem bool) []string {
+	ids := []string{"default"}
+	if !onPrem {
+		ids = append(ids, "default_search")
+	}
 	if w := os.Getenv("CRIBL_WORKSPACE_ID"); w != "" && w != "default" && w != "default_search" {
 		ids = append(ids, w)
 	}

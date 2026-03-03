@@ -14,8 +14,6 @@ builds:
     binary: goatify
     env:
       - CGO_ENABLED=0
-      - GOMAXPROCS=1
-      - GOMEMLIMIT=512MiB
     flags:
       - -trimpath
     ldflags:
