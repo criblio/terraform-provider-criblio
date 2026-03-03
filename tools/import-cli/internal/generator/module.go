@@ -330,7 +330,6 @@ func WriteAllModuleDirectoriesWithLayout(baseDir string, items []ResourceItem, o
 		if err := WriteRootFiles(baseDir, RootModuleInfosFromItemsByGroup(rootItems), rootItems, true); err != nil {
 			return fmt.Errorf("write root files: %w", err)
 		}
-		removeImportTfFromModuleDirs(baseDir)
 		return nil
 	}
 	byType := make(map[string][]ResourceItem)
@@ -360,7 +359,6 @@ func WriteAllModuleDirectoriesWithLayout(baseDir string, items []ResourceItem, o
 	if err := WriteRootFiles(baseDir, RootModuleInfosFromItems(rootItems), rootItems, false); err != nil {
 		return fmt.Errorf("write root files: %w", err)
 	}
-	removeImportTfFromModuleDirs(baseDir)
 	return nil
 }
 
@@ -368,22 +366,6 @@ func WriteAllModuleDirectoriesWithLayout(baseDir string, items []ResourceItem, o
 // Items must all have the same TypeName.
 func WriteGroupTypeDirectory(baseDir, groupID string, items []ResourceItem, opts *hcl.ResourceBlockOptions) error {
 	return WriteModuleDirectoryWithFSAndGroup(DefaultFS, baseDir, items, opts, groupID)
-}
-
-// removeImportTfFromModuleDirs removes import.tf from all subdirectories of baseDir.
-// Terraform only allows import blocks in the root module; having import.tf in child
-// module dirs (e.g. default/group/, stream-leaders/group/) causes "Unsupported block type" errors.
-func removeImportTfFromModuleDirs(baseDir string) {
-	_ = filepath.Walk(baseDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return nil
-		}
-		if info.IsDir() && path != baseDir {
-			importPath := filepath.Join(path, "import.tf")
-			_ = os.Remove(importPath)
-		}
-		return nil
-	})
 }
 
 // removeStaleFlatDirs removes flat type directories (e.g. baseDir/pipeline/) when using group-by layout,
