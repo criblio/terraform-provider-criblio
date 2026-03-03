@@ -21,6 +21,9 @@ unit-test:
 unit-test-import-cli:
 	go test -v ./tools/import-cli/...
 
+integration-test-import-cli: build-import-cli
+	go test -v -tags=integration ./tools/import-cli/integration/...
+
 build-import-cli:
 	go build -o goatify ./tools/import-cli
 

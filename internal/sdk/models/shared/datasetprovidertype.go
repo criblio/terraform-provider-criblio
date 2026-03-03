@@ -10,29 +10,30 @@ import (
 type ID string
 
 const (
-	IDPrometheus           ID = "prometheus"
-	IDCriblLake            ID = "cribl_lake"
-	IDS3                   ID = "s3"
-	IDGcs                  ID = "gcs"
-	IDAzureBlob            ID = "azure_blob"
-	IDCriblLeader          ID = "cribl_leader"
 	IDCriblEdge            ID = "cribl_edge"
-	IDAmazonSecurityLake   ID = "amazon_security_lake"
-	IDAPIHTTP              ID = "api_http"
-	IDAPIAws               ID = "api_aws"
+	IDCriblLeader          ID = "cribl_leader"
+	IDCriblMeta            ID = "cribl_meta"
+	IDS3                   ID = "s3"
+	IDAzureBlob            ID = "azure_blob"
+	IDGcs                  ID = "gcs"
 	IDAPIAzure             ID = "api_azure"
+	IDAPIAws               ID = "api_aws"
 	IDAPIGcp               ID = "api_gcp"
-	IDAPIGoogleWorkspace   ID = "api_google_workspace"
-	IDAPIMsgraph           ID = "api_msgraph"
-	IDAPIOkta              ID = "api_okta"
-	IDAPITailscale         ID = "api_tailscale"
+	IDAPIHTTP              ID = "api_http"
 	IDAPIZoom              ID = "api_zoom"
+	IDAPIOkta              ID = "api_okta"
+	IDAPIMsgraph           ID = "api_msgraph"
+	IDCriblLake            ID = "cribl_lake"
+	IDCriblLocal           ID = "cribl_local"
+	IDAmazonSecurityLake   ID = "amazon_security_lake"
+	IDAPIGoogleWorkspace   ID = "api_google_workspace"
+	IDAPITailscale         ID = "api_tailscale"
 	IDAPIOpensearch        ID = "api_opensearch"
 	IDAPIElasticsearch     ID = "api_elasticsearch"
 	IDAPIAzureDataExplorer ID = "api_azure_data_explorer"
+	IDPrometheus           ID = "prometheus"
 	IDSnowflake            ID = "snowflake"
 	IDClickhouse           ID = "clickhouse"
-	IDCriblMeta            ID = "cribl_meta"
 )
 
 func (e ID) ToPointer() *ID {
@@ -44,39 +45,41 @@ func (e *ID) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "prometheus":
-		fallthrough
-	case "cribl_lake":
-		fallthrough
-	case "s3":
-		fallthrough
-	case "gcs":
-		fallthrough
-	case "azure_blob":
+	case "cribl_edge":
 		fallthrough
 	case "cribl_leader":
 		fallthrough
-	case "cribl_edge":
+	case "cribl_meta":
 		fallthrough
-	case "amazon_security_lake":
+	case "s3":
 		fallthrough
-	case "api_http":
+	case "azure_blob":
 		fallthrough
-	case "api_aws":
+	case "gcs":
 		fallthrough
 	case "api_azure":
 		fallthrough
+	case "api_aws":
+		fallthrough
 	case "api_gcp":
 		fallthrough
-	case "api_google_workspace":
+	case "api_http":
 		fallthrough
-	case "api_msgraph":
+	case "api_zoom":
 		fallthrough
 	case "api_okta":
 		fallthrough
-	case "api_tailscale":
+	case "api_msgraph":
 		fallthrough
-	case "api_zoom":
+	case "cribl_lake":
+		fallthrough
+	case "cribl_local":
+		fallthrough
+	case "amazon_security_lake":
+		fallthrough
+	case "api_google_workspace":
+		fallthrough
+	case "api_tailscale":
 		fallthrough
 	case "api_opensearch":
 		fallthrough
@@ -84,11 +87,11 @@ func (e *ID) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "api_azure_data_explorer":
 		fallthrough
+	case "prometheus":
+		fallthrough
 	case "snowflake":
 		fallthrough
 	case "clickhouse":
-		fallthrough
-	case "cribl_meta":
 		*e = ID(v)
 		return nil
 	default:

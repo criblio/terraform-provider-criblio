@@ -169,8 +169,6 @@ jobs:
 
   unit_test_import_cli:
     runs-on: ubuntu-latest
-    needs: changes
-    if: needs.changes.outputs.tools == 'true'
     steps:
       - uses: actions/checkout@v4.2.2
 
@@ -181,6 +179,31 @@ jobs:
 
       - name: Run import-cli Unit Tests
         run: make unit-test-import-cli
+
+  integration_test_import_cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.1.7"
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Run import-cli Integration Tests
+        env:
+          CRIBL_ORGANIZATION_ID: "beautiful-nguyen-y8y4azd"
+          CRIBL_WORKSPACE_ID: "main"
+          CRIBL_CLOUD_DOMAIN: "cribl-playground.cloud"
+          CRIBL_CLIENT_ID: ${{ secrets.CRIBL_CLIENT_ID }}
+          CRIBL_CLIENT_SECRET: ${{ secrets.CRIBL_CLIENT_SECRET }}
+        run: |
+          make build-import-cli
+          go test -v -tags=integration ./tools/import-cli/integration/...
 
   speakeasy_test:
     runs-on: ubuntu-latest
