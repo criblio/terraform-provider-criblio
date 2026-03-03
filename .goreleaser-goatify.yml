@@ -31,10 +31,10 @@ builds:
 
 archives:
   - formats: [zip]
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    name_template: "{{ .ProjectName }}_{{ or .Env.GOATIFY_VERSION .Version }}_{{ .Os }}_{{ .Arch }}"
 
 checksum:
-  name_template: "{{ .ProjectName }}_{{ .Version }}_SHA256SUMS"
+  name_template: "{{ .ProjectName }}_{{ or .Env.GOATIFY_VERSION .Version }}_SHA256SUMS"
   algorithm: sha256
 
 changelog:
@@ -47,4 +47,4 @@ changelog:
       - "^chore:"
 
 release:
-  name_template: "goatify {{ .Version }}"
+  name_template: "goatify {{ or .Env.GOATIFY_VERSION .Version }}"
