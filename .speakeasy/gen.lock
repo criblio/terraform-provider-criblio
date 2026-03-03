@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 77328c3a97f3f20aebaec3625b2d0c97
+  docChecksum: af76da6f11b20d99a515ffa6e11728a9
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.133
-  configChecksum: 0c8a11a6651b6f7be98820616835b25c
+  releaseVersion: 1.20.135
+  configChecksum: 6a511df06576753a81c0681d412f540d
   published: true
 features:
   terraform:
@@ -339,8 +339,6 @@ generatedFiles:
   - internal/provider/packpipeline_data_source.go
   - internal/provider/packroutes_data_source.go
   - internal/provider/packroutes_data_source_sdk.go
-  - internal/provider/packroutes_resource.go
-  - internal/provider/packroutes_resource_sdk.go
   - internal/provider/packsource_data_source.go
   - internal/provider/packsource_data_source_sdk.go
   - internal/provider/packsource_resource.go

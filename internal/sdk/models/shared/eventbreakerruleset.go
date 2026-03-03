@@ -48,6 +48,7 @@ const (
 	EventBreakerTypeCsv           EventBreakerType = "csv"
 	EventBreakerTypeAwsCloudtrail EventBreakerType = "aws_cloudtrail"
 	EventBreakerTypeAwsVpcflow    EventBreakerType = "aws_vpcflow"
+	EventBreakerTypeAzureFlowlog  EventBreakerType = "azure_flowlog"
 )
 
 func (e EventBreakerType) ToPointer() *EventBreakerType {
@@ -74,6 +75,8 @@ func (e *EventBreakerType) UnmarshalJSON(data []byte) error {
 	case "aws_cloudtrail":
 		fallthrough
 	case "aws_vpcflow":
+		fallthrough
+	case "azure_flowlog":
 		*e = EventBreakerType(v)
 		return nil
 	default:

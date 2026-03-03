@@ -374,7 +374,7 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow"]`,
+							Description: `Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow", "azure_flowlog"]`,
 							Validators: []validator.String{
 								stringvalidator.OneOf(
 									"regex",
@@ -385,6 +385,7 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 									"csv",
 									"aws_cloudtrail",
 									"aws_vpcflow",
+									"azure_flowlog",
 								),
 							},
 						},

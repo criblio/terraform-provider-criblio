@@ -21,3 +21,4 @@ sbom-*.json
 .cursor/
 tf*
 go.work*
+dist/*

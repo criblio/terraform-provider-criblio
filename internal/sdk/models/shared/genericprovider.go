@@ -2102,10 +2102,11 @@ func (u *GenericProvider) UnmarshalJSON(data []byte) error {
 		u.S3Provider = s3Provider
 		u.Type = GenericProviderTypeS3Provider
 		return nil
-	case "cribl_leader":
+	case "cribl_leader", "cribl_local":
+		// cribl_local has same structure as cribl_leader (id, type, description); API returns cribl_local for local Cribl sources
 		criblLeaderProvider := new(CriblLeaderProvider)
 		if err := utils.UnmarshalJSON(data, &criblLeaderProvider, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Type == cribl_leader) type CriblLeaderProvider within GenericProvider: %w", string(data), err)
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == %s) type CriblLeaderProvider within GenericProvider: %w", string(data), dis.Type, err)
 		}
 
 		u.CriblLeaderProvider = criblLeaderProvider

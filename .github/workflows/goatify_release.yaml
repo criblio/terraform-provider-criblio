@@ -1,0 +1,31 @@
+# Goatify CLI release workflow. Triggers on tags: goatify-v0.0.1, goatify-v0.0.2, etc.
+name: Goatify Release
+
+on:
+  push:
+    tags:
+      - 'goatify-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v4.0.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          args: release --config .goreleaser-goatify.yml --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

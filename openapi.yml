@@ -3256,29 +3256,30 @@ components:
         id:
           type: string
           enum:
-            - prometheus
-            - cribl_lake
-            - s3
-            - gcs
-            - azure_blob
-            - cribl_leader
             - cribl_edge
-            - amazon_security_lake
-            - api_http
-            - api_aws
+            - cribl_leader
+            - cribl_meta
+            - s3
+            - azure_blob
+            - gcs
             - api_azure
+            - api_aws
             - api_gcp
-            - api_google_workspace
-            - api_msgraph
-            - api_okta
-            - api_tailscale
+            - api_http
             - api_zoom
+            - api_okta
+            - api_msgraph
+            - cribl_lake
+            - cribl_local
+            - amazon_security_lake
+            - api_google_workspace
+            - api_tailscale
             - api_opensearch
             - api_elasticsearch
             - api_azure_data_explorer
+            - prometheus
             - snowflake
             - clickhouse
-            - cribl_meta
           example: "cribl_meta"
         locality:
           $ref: "#/components/schemas/OriginConfig"
@@ -7129,6 +7130,7 @@ components:
                   - csv
                   - aws_cloudtrail
                   - aws_vpcflow
+                  - azure_flowlog
                 default: regex
                 example: regex
               delimiterRegex:

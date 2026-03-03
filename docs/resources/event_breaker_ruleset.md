@@ -96,7 +96,7 @@ Optional:
 - `timestamp_earliest` (String) The earliest timestamp value allowed relative to now. Example: -42years. Parsed values prior to this date will be set to current time. Default: "-420weeks"
 - `timestamp_latest` (String) The latest timestamp value allowed relative to now. Example: +42days. Parsed values after this date will be set to current time. Default: "+1week"
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info. Default: "local"
-- `type` (String) Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow"]
+- `type` (String) Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow", "azure_flowlog"]
 
 <a id="nestedatt--rules--fields"></a>
 ### Nested Schema for `rules.fields`

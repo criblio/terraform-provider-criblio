@@ -1,0 +1,50 @@
+# GoReleaser config for goatify CLI. Triggered by tags: goatify-v0.0.1, goatify-v0.0.2, etc.
+version: 2
+
+project_name: goatify
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: goatify
+    dir: .
+    main: ./tools/import-cli
+    binary: goatify
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+
+archives:
+  - formats: [zip]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_SHA256SUMS"
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+
+release:
+  name_template: "goatify {{ .Version }}"
