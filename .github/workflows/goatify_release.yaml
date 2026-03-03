@@ -26,6 +26,6 @@ jobs:
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
-          args: release --config .goreleaser-goatify.yml --clean
+          args: release --config .goreleaser-goatify.yml --clean --parallelism=1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
