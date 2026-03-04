@@ -23,9 +23,22 @@ jobs:
           go-version-file: 'go.mod'
           cache: true
 
+      - name: Prepare tag for GoReleaser
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          # Use v0.0.1-goatify format: valid semver, no collision with provider v0.0.1
+          GORELEASER_TAG="v${TAG#goatify-v}-goatify"
+          git tag "$GORELEASER_TAG"
+          git push origin "$GORELEASER_TAG"
+          echo "GORELEASER_CURRENT_TAG=$GORELEASER_TAG" >> $GITHUB_ENV
+          # Display version (0.0.1) for release name and artifacts; only when triggered by goatify-v* tag
+          if [[ "$TAG" == goatify-v* ]]; then
+            echo "GOATIFY_VERSION=${TAG#goatify-v}" >> $GITHUB_ENV
+          fi
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
-          args: release --config .goreleaser-goatify.yml --clean --parallelism=1
+          args: release --config .goreleaser-goatify.yml --clean -p 1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

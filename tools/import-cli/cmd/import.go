@@ -96,10 +96,11 @@ func NewImportCommand() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("build registry: %w", err)
 			}
+			onPrem := cfg.Get(config.KeyOnpremServerURL) != ""
 			excludeMerged := append([]string{}, exclude...)
 			excludeMerged = append(excludeMerged, exclusions.NoExportTypes...)
 			fmt.Fprintln(c.ErrOrStderr(), "Discovering resources...")
-			results, err := discovery.Discover(ctx, sdkClient, reg, include, excludeMerged, group)
+			results, err := discovery.Discover(ctx, sdkClient, reg, include, excludeMerged, group, onPrem)
 			if err != nil {
 				return fmt.Errorf("discovery: %w", err)
 			}
@@ -109,6 +110,9 @@ func NewImportCommand() *cobra.Command {
 				var firstErr error
 				for _, r := range results {
 					if r.Err != nil && firstErr == nil {
+						if onPrem && isOnPremUnsupportedError(r.Err) {
+							continue // skip: expected for on-prem (search, lake, etc. not supported)
+						}
 						firstErr = r.Err
 					}
 				}
@@ -117,10 +121,14 @@ func NewImportCommand() *cobra.Command {
 				}
 				return nil
 			}
-			// Surface SDK errors with resource context; fail if any discovery failed
+			// Surface SDK errors with resource context; fail if any discovery failed.
+			// On-prem: "not supported for on-prem" errors are expected (search, lake, etc.) and are skipped.
 			var firstErr error
 			for _, r := range results {
 				if r.Err != nil {
+					if onPrem && isOnPremUnsupportedError(r.Err) {
+						continue // skip: expected for on-prem
+					}
 					fmt.Fprintln(c.ErrOrStderr(), r.Err.Error())
 					if firstErr == nil {
 						firstErr = r.Err
@@ -130,7 +138,7 @@ func NewImportCommand() *cobra.Command {
 			if firstErr != nil {
 				return fmt.Errorf("discovery failed for one or more resource types: %w", firstErr)
 			}
-			groupIDs, err := discovery.GetGroupIDs(ctx, sdkClient, group)
+			groupIDs, err := discovery.GetGroupIDs(ctx, sdkClient, group, onPrem)
 			if err != nil {
 				return fmt.Errorf("get group IDs: %w", err)
 			}
@@ -168,7 +176,7 @@ func NewImportCommand() *cobra.Command {
 				}
 			}
 			fmt.Fprintf(c.OutOrStdout(), "Wrote Terraform HCL and import blocks to %s (%d resources)\n", outputDir, len(exportResult.Items))
-			printExportSummary(c, exportResult, verbose)
+			printExportSummary(c, exportResult, verbose, onPrem)
 			return nil
 		},
 	}
@@ -290,7 +298,8 @@ func printDryRunPreview(cmd *cobra.Command, results []discovery.Result, groupFil
 
 
 // printExportSummary prints why some resources were not exported (list skips and convert skips).
-func printExportSummary(cmd *cobra.Command, res *export.ExportResult, verbose bool) {
+// When onPrem is true, skips due to "not supported for on-prem" are summarized in one line instead of listing each type.
+func printExportSummary(cmd *cobra.Command, res *export.ExportResult, verbose bool, onPrem bool) {
 	if res == nil {
 		return
 	}
@@ -301,7 +310,7 @@ func printExportSummary(cmd *cobra.Command, res *export.ExportResult, verbose bo
 	if total > 0 && exported != total {
 		fmt.Fprintf(out, "Exported %d of %d discovered resources (%d unexported).\n", exported, total, unexported)
 	}
-	if len(res.ListSkipped) > 0 {
+	if len(res.ListSkipped) > 0 && !onPrem {
 		listCount := 0
 		for _, s := range res.ListSkipped {
 			listCount += s.Count
@@ -381,6 +390,19 @@ func buildRegistry(ctx context.Context) (*registry.Registry, error) {
 	p := provider.New(ver)()
 	constructors := p.Resources(ctx)
 	return registry.NewFromResources(ctx, constructors, registry.MetadataFromProvider(), nil, converter.OneOfBlockNamesFromModel)
+}
+
+// isOnPremUnsupportedError reports whether err is an expected/skip-worthy error on on-prem.
+// Includes: hook's "not supported for on-prem"; 403 enterprise feature (e.g. projects, subscriptions).
+// Import-cli skips these during discovery and continues.
+func isOnPremUnsupportedError(err error) bool {
+	if err == nil {
+		return false
+	}
+	s := err.Error()
+	return strings.Contains(s, "not supported for on-prem") ||
+		strings.Contains(s, "enterprise feature") ||
+		strings.Contains(s, "Status 403")
 }
 
 // ValidateImportFlags returns an error if include and exclude overlap.

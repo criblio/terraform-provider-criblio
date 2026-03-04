@@ -7,6 +7,7 @@ on:
   push:
     tags:
       - 'v*'
+      - '!*-goatify'   # exclude v0.0.1-goatify (created by goatify release)
   workflow_dispatch:
 
 # Releases need permission to read and write the repository contents.
