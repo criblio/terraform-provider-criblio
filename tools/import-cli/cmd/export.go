@@ -42,8 +42,8 @@ func (f *logFilterWriter) Write(p []byte) (n int, err error) {
 	return f.w.Write(p)
 }
 
-// NewImportCommand returns the import subcommand.
-func NewImportCommand() *cobra.Command {
+// NewExportCommand returns the export subcommand.
+func NewExportCommand() *cobra.Command {
 	var (
 		outputDir   string
 		include     []string
@@ -63,13 +63,13 @@ func NewImportCommand() *cobra.Command {
 	cfg.BindEnv()
 
 	appName := version.AppNameOrDefault()
-	imp := &cobra.Command{
-		Use:   "import",
+	exp := &cobra.Command{
+		Use:   "export",
 		Short: "Generate Terraform HCL and import blocks from Cribl resources",
 		Long:  "Reads resources from Cribl and writes Terraform HCL plus import blocks so you can run terraform import.",
-		Example: "  " + appName + " import --dry-run\n  " + appName + " import --server-url https://cribl.example.com --output-dir ./tf",
+		Example: "  " + appName + " export --dry-run\n  " + appName + " export --server-url https://cribl.example.com --output-dir ./tf",
 		RunE: func(c *cobra.Command, args []string) error {
-			if err := ValidateImportFlags(include, exclude); err != nil {
+			if err := ValidateExportFlags(include, exclude); err != nil {
 				return err
 			}
 			if err := cfg.LoadCredentialsFile(); err != nil {
@@ -181,25 +181,25 @@ func NewImportCommand() *cobra.Command {
 		},
 	}
 
-	imp.Flags().StringVar(&outputDir, "output-dir", defaultOutputDir, "Output directory for generated Terraform")
-	imp.Flags().StringSliceVar(&include, "include", nil, "Resource types to include (e.g. criblio_source, criblio_pipeline). If set, only these types are discovered; otherwise all discoverable types are used.")
-	imp.Flags().StringSliceVar(&exclude, "exclude", nil, "Resource types to omit (e.g. criblio_notification). Omitted types are skipped in discovery and export.")
-	imp.Flags().StringSliceVar(&group, "group", nil, "Restrict discovery and export to these groups only. Use group ID (e.g. default) or label (e.g. 'default (stream)'). Can be repeated. Empty = all groups.")
-	imp.Flags().BoolVar(&flat, "flat", false, "Use flat layout: <output-dir>/<type>/ instead of <output-dir>/<group_id>/<type>/ (default groups by worker group/fleet).")
-	imp.Flags().IntVar(&parallel, "parallel", 5, "Max concurrent API calls during export (default 5).")
-	imp.Flags().BoolVar(&dryRun, "dry-run", false, "Preview resource counts and types only; no conversion or file writes. Uses List* API only (no Get*ByID).")
-	imp.Flags().BoolVar(&verbose, "verbose", false, "Enable debug logging")
+	exp.Flags().StringVar(&outputDir, "output-dir", defaultOutputDir, "Output directory for generated Terraform")
+	exp.Flags().StringSliceVar(&include, "include", nil, "Resource types to include (e.g. criblio_source, criblio_pipeline). If set, only these types are discovered; otherwise all discoverable types are used.")
+	exp.Flags().StringSliceVar(&exclude, "exclude", nil, "Resource types to omit (e.g. criblio_notification). Omitted types are skipped in discovery and export.")
+	exp.Flags().StringSliceVar(&group, "group", nil, "Restrict discovery and export to these groups only. Use group ID (e.g. default) or label (e.g. 'default (stream)'). Can be repeated. Empty = all groups.")
+	exp.Flags().BoolVar(&flat, "flat", false, "Use flat layout: <output-dir>/<type>/ instead of <output-dir>/<group_id>/<type>/ (default groups by worker group/fleet).")
+	exp.Flags().IntVar(&parallel, "parallel", 5, "Max concurrent API calls during export (default 5).")
+	exp.Flags().BoolVar(&dryRun, "dry-run", false, "Preview resource counts and types only; no conversion or file writes. Uses List* API only (no Get*ByID).")
+	exp.Flags().BoolVar(&verbose, "verbose", false, "Enable debug logging")
 
-	imp.Flags().StringVar(&serverURL, "server-url", "", "On-prem base URL")
-	imp.Flags().StringVar(&orgID, "org-id", "", "Cribl org identifier")
-	imp.Flags().StringVar(&workspaceID, "workspace-id", "", "Workspace identifier")
-	imp.Flags().StringVar(&cloudDomain, "cloud-domain", "", "Cloud domain override")
-	_ = cfg.BindPFlag(config.KeyOnpremServerURL, imp.Flags().Lookup("server-url"))
-	_ = cfg.BindPFlag(config.KeyOrganizationID, imp.Flags().Lookup("org-id"))
-	_ = cfg.BindPFlag(config.KeyWorkspaceID, imp.Flags().Lookup("workspace-id"))
-	_ = cfg.BindPFlag(config.KeyCloudDomain, imp.Flags().Lookup("cloud-domain"))
+	exp.Flags().StringVar(&serverURL, "server-url", "", "On-prem base URL")
+	exp.Flags().StringVar(&orgID, "org-id", "", "Cribl org identifier")
+	exp.Flags().StringVar(&workspaceID, "workspace-id", "", "Workspace identifier")
+	exp.Flags().StringVar(&cloudDomain, "cloud-domain", "", "Cloud domain override")
+	_ = cfg.BindPFlag(config.KeyOnpremServerURL, exp.Flags().Lookup("server-url"))
+	_ = cfg.BindPFlag(config.KeyOrganizationID, exp.Flags().Lookup("org-id"))
+	_ = cfg.BindPFlag(config.KeyWorkspaceID, exp.Flags().Lookup("workspace-id"))
+	_ = cfg.BindPFlag(config.KeyCloudDomain, exp.Flags().Lookup("cloud-domain"))
 
-	return imp
+	return exp
 }
 
 // printDryRunPreview prints resource types and counts only. Used for --dry-run.
@@ -359,7 +359,7 @@ func shortenError(err error, maxLen int) string {
 
 // printResolvedConfig prints the resolved config (no secrets) for verbose mode.
 func printResolvedConfig(cmd *cobra.Command, cfg *config.Config) {
-	out := cmd.OutOrStderr()
+	out := cmd.ErrOrStderr()
 	serverURL := cfg.Get(config.KeyOnpremServerURL)
 	if serverURL != "" {
 		fmt.Fprintf(out, "server_url: %s (on-prem)\n", serverURL)
@@ -405,8 +405,8 @@ func isOnPremUnsupportedError(err error) bool {
 		strings.Contains(s, "Status 403")
 }
 
-// ValidateImportFlags returns an error if include and exclude overlap.
-func ValidateImportFlags(include, exclude []string) error {
+// ValidateExportFlags returns an error if include and exclude overlap.
+func ValidateExportFlags(include, exclude []string) error {
 	excludeSet := make(map[string]struct{})
 	for _, t := range exclude {
 		excludeSet[strings.TrimSpace(t)] = struct{}{}
