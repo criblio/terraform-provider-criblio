@@ -26,7 +26,7 @@ func TestRootCommand_SubcommandRegistration(t *testing.T) {
 	for i, c := range subs {
 		names[i] = c.Use
 	}
-	assert.Contains(t, names, "import")
+	assert.Contains(t, names, "export")
 	assert.Contains(t, names, "version")
 }
 
@@ -43,19 +43,19 @@ func TestRootCommand_Execute(t *testing.T) {
 			name:     "no args shows help",
 			args:     []string{},
 			wantErr:  false,
-			contains: []string{"Usage", "Available Commands", "import", "version"},
+			contains: []string{"Usage", "Available Commands", "export", "version"},
 		},
 		{
 			name:     "root --help",
 			args:     []string{"--help"},
 			wantErr:  false,
-			contains: []string{"Usage", "Available Commands", "import", "version"},
+			contains: []string{"Usage", "Available Commands", "export", "version"},
 		},
 		{
-			name:     "import --help",
-			args:     []string{"import", "--help"},
+			name:     "export --help",
+			args:     []string{"export", "--help"},
 			wantErr:  false,
-			contains: []string{"import", "Usage"},
+			contains: []string{"export", "Usage"},
 		},
 		{
 			name:     "version prints build info",
@@ -104,9 +104,9 @@ func TestRootCommand_HelpIncludesCommandDescriptionsAndExamples(t *testing.T) {
 
 	// Command descriptions: root Short and subcommand names
 	assert.Contains(t, help, "Export Cribl", "root --help should include command description")
-	assert.Contains(t, help, "import", "root --help should list import command")
+	assert.Contains(t, help, "export", "root --help should list export command")
 	assert.Contains(t, help, "version", "root --help should list version command")
 
 	// Example usage must render
-	assert.Contains(t, help, "import --dry-run", "root --help should show example usage")
+	assert.Contains(t, help, "export --dry-run", "root --help should show example usage")
 }

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: af76da6f11b20d99a515ffa6e11728a9
+  docChecksum: 8844b47932a447408fc6b424c75bfc8e
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.135
-  configChecksum: 6a511df06576753a81c0681d412f540d
+  releaseVersion: 1.20.138
+  configChecksum: a2ff9327123a0b85794007ec22ce81e4
   published: true
 features:
   terraform:
@@ -513,6 +513,7 @@ generatedFiles:
   - internal/provider/types/cribl_leader_dataset.go
   - internal/provider/types/cribl_leader_dataset_extra_path.go
   - internal/provider/types/cribl_leader_provider.go
+  - internal/provider/types/cribl_search_provider.go
   - internal/provider/types/dashboard_element.go
   - internal/provider/types/dashboard_element_input.go
   - internal/provider/types/dashboard_element_union.go

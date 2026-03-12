@@ -43,6 +43,7 @@ data "criblio_search_dataset_provider" "my_searchdatasetprovider" {
 - `azure_blob_provider` (Attributes) (see [below for nested schema](#nestedatt--azure_blob_provider))
 - `click_house_provider` (Attributes) (see [below for nested schema](#nestedatt--click_house_provider))
 - `cribl_leader_provider` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_provider))
+- `cribl_search_provider` (Attributes) (see [below for nested schema](#nestedatt--cribl_search_provider))
 - `description` (String) Description of the provider
 - `edge_provider` (Attributes) (see [below for nested schema](#nestedatt--edge_provider))
 - `gcs_provider` (Attributes) (see [below for nested schema](#nestedatt--gcs_provider))
@@ -348,6 +349,16 @@ Read-Only:
 
 <a id="nestedatt--cribl_leader_provider"></a>
 ### Nested Schema for `cribl_leader_provider`
+
+Read-Only:
+
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider
+- `type` (String) Type of the provider
+
+
+<a id="nestedatt--cribl_search_provider"></a>
+### Nested Schema for `cribl_search_provider`
 
 Read-Only:
 

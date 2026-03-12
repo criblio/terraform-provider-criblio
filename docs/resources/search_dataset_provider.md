@@ -14,17 +14,16 @@ SearchDatasetProvider Resource
 
 ```terraform
 resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
-  api_okta_provider = {
-    account_configs = [
-      {
-        api_token       = "00aBcDefGhIjKlMnOpQrStUvWxYz123456"
-        domain_endpoint = "https://dev-123456.okta.com"
-        name            = "okta-account-1"
-      }
-    ]
-    description = "my generic provider description"
-    id          = "myUniqueGenericProviderId"
-    type        = "generic"
+  prometheus_provider = {
+    auth_type       = "basic"
+    description     = "my generic provider description"
+    endpoint        = "https://prometheus.example.com"
+    id              = "myUniqueGenericProviderId"
+    max_concurrency = 10
+    password        = "prom_pass"
+    token           = "prometheusBearerToken123"
+    type            = "generic"
+    username        = "prom_user"
   }
 }
 ```
@@ -50,6 +49,7 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
 - `azure_blob_provider` (Attributes) (see [below for nested schema](#nestedatt--azure_blob_provider))
 - `click_house_provider` (Attributes) (see [below for nested schema](#nestedatt--click_house_provider))
 - `cribl_leader_provider` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_provider))
+- `cribl_search_provider` (Attributes) (see [below for nested schema](#nestedatt--cribl_search_provider))
 - `edge_provider` (Attributes) (see [below for nested schema](#nestedatt--edge_provider))
 - `gcs_provider` (Attributes) (see [below for nested schema](#nestedatt--gcs_provider))
 - `meta_provider` (Attributes) (see [below for nested schema](#nestedatt--meta_provider))
@@ -359,6 +359,16 @@ Optional:
 
 <a id="nestedatt--cribl_leader_provider"></a>
 ### Nested Schema for `cribl_leader_provider`
+
+Optional:
+
+- `description` (String) Description of the provider
+- `id` (String) Unique identifier for the provider. Not Null
+- `type` (String) Type of the provider. Not Null
+
+
+<a id="nestedatt--cribl_search_provider"></a>
+### Nested Schema for `cribl_search_provider`
 
 Optional:
 
