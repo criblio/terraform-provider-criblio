@@ -25,6 +25,7 @@ const (
 	IDAPIMsgraph           ID = "api_msgraph"
 	IDCriblLake            ID = "cribl_lake"
 	IDCriblLocal           ID = "cribl_local"
+	IDCriblSearch          ID = "cribl_search"
 	IDAmazonSecurityLake   ID = "amazon_security_lake"
 	IDAPIGoogleWorkspace   ID = "api_google_workspace"
 	IDAPITailscale         ID = "api_tailscale"
@@ -74,6 +75,8 @@ func (e *ID) UnmarshalJSON(data []byte) error {
 	case "cribl_lake":
 		fallthrough
 	case "cribl_local":
+		fallthrough
+	case "cribl_search":
 		fallthrough
 	case "amazon_security_lake":
 		fallthrough

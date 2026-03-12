@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
@@ -57,6 +58,7 @@ type SearchDatasetProviderResourceModel struct {
 	AzureBlobProvider            *tfTypes.AzureBlobProvider            `queryParam:"inline" tfsdk:"azure_blob_provider" tfPlanOnly:"true"`
 	ClickHouseProvider           *tfTypes.ClickHouseProvider           `queryParam:"inline" tfsdk:"click_house_provider" tfPlanOnly:"true"`
 	CriblLeaderProvider          *tfTypes.CriblLeaderProvider          `queryParam:"inline" tfsdk:"cribl_leader_provider" tfPlanOnly:"true"`
+	CriblSearchProvider          *tfTypes.CriblSearchProvider          `queryParam:"inline" tfsdk:"cribl_search_provider" tfPlanOnly:"true"`
 	Description                  types.String                          `tfsdk:"description"`
 	EdgeProvider                 *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"edge_provider" tfPlanOnly:"true"`
 	GcsProvider                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs_provider" tfPlanOnly:"true"`
@@ -161,6 +163,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -239,6 +242,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -340,6 +344,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -422,6 +427,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -504,6 +510,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -595,6 +602,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -693,6 +701,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -783,6 +792,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -861,6 +871,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -951,6 +962,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -1049,6 +1061,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -1190,6 +1203,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -1241,6 +1255,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -1372,6 +1387,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -1449,6 +1465,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -1500,6 +1517,63 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
+						path.MatchRelative().AtParent().AtName("edge_provider"),
+						path.MatchRelative().AtParent().AtName("gcs_provider"),
+						path.MatchRelative().AtParent().AtName("meta_provider"),
+						path.MatchRelative().AtParent().AtName("prometheus_provider"),
+						path.MatchRelative().AtParent().AtName("s3_provider"),
+						path.MatchRelative().AtParent().AtName("snowflake_provider"),
+					}...),
+				},
+			},
+			"cribl_search_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					custom_objectplanmodifier.PreferState(),
+				},
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Unique identifier for the provider. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Type of the provider. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("api_aws_provider"),
+						path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+						path.MatchRelative().AtParent().AtName("api_azure_provider"),
+						path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+						path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+						path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+						path.MatchRelative().AtParent().AtName("apihttp_provider"),
+						path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+						path.MatchRelative().AtParent().AtName("api_okta_provider"),
+						path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+						path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+						path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+						path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+						path.MatchRelative().AtParent().AtName("click_house_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -1624,6 +1698,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
 						path.MatchRelative().AtParent().AtName("prometheus_provider"),
@@ -1682,6 +1757,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("prometheus_provider"),
@@ -1776,6 +1852,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -1916,6 +1993,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -2009,6 +2087,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -2169,6 +2248,7 @@ func (r *SearchDatasetProviderResource) Read(ctx context.Context, req resource.R
 func (r *SearchDatasetProviderResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var data *SearchDatasetProviderResourceModel
 	var plan types.Object
+	var stateItem types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -2178,6 +2258,24 @@ func (r *SearchDatasetProviderResource) Update(ctx context.Context, req resource
 	merge(ctx, req, resp, &data)
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	// cribl_search providers (e.g. lakehouse) are read-only; skip API call to avoid marshal error
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateItem)...)
+	if !resp.Diagnostics.HasError() {
+		var state SearchDatasetProviderResourceModel
+		resp.Diagnostics.Append(stateItem.As(ctx, &state, basetypes.ObjectAsOptions{
+			UnhandledNullAsEmpty:    true,
+			UnhandledUnknownAsEmpty: true,
+		})...)
+		if !resp.Diagnostics.HasError() &&
+			(state.CriblSearchProvider != nil || state.Type.ValueString() == "cribl_search") {
+			resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+			if !resp.Diagnostics.HasError() {
+				resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+			}
+			return
+		}
 	}
 
 	request, requestDiags := data.ToOperationsUpdateDatasetProviderByIDRequest(ctx)

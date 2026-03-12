@@ -25,9 +25,10 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 1.20.135
+  version: 1.20.138
   additionalDataSources: []
-  additionalDependencies: {}
+  additionalDependencies:
+    github.com/hashicorp/terraform-plugin-framework: v1.19.0
   additionalEphemeralResources: []
   additionalProviderAttributes:
     httpHeaders: ""
