@@ -234,6 +234,7 @@ jobs:
   staticcheck_test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4.2.2
       - uses: actions/setup-go@v4.3.0
         with:
           go-version-file: 'go.mod'
