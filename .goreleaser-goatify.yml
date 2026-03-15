@@ -1,7 +1,7 @@
 # GoReleaser config for goatify CLI. Triggered by tags: goatify-v0.0.1, goatify-v0.0.2, etc.
 version: 2
 
-project_name: cribl-terraform-bulk-exporter
+project_name: cribl-tf-config-exporter
 
 before:
   hooks:
@@ -11,7 +11,7 @@ builds:
   - id: goatify
     dir: .
     main: ./tools/import-cli
-    binary: cribl-terraform-bulk-exporter
+    binary: cribl-tf-config-exporter
     env:
       - CGO_ENABLED=0
     flags:
@@ -47,4 +47,4 @@ changelog:
       - "^chore:"
 
 release:
-  name_template: "cribl-terraform-bulk-exporter {{ or .Env.GOATIFY_VERSION .Version }}"
+  name_template: "cribl-tf-config-exporter {{ or .Env.GOATIFY_VERSION .Version }}"
