@@ -12,9 +12,9 @@ func NewRootCommand() *cobra.Command {
 		Use:   appName,
 		Short: "Export Cribl config to Terraform HCL and generate import blocks",
 		Long:  "Export Cribl configuration to Terraform HCL and generate import blocks so you can run terraform import. Supports Cribl Cloud and on-prem; authentication via environment variables or credentials file.",
-		Example: "  " + appName + " import --dry-run\n  " + appName + " import --output-dir ./tf",
+		Example: "  " + appName + " export --dry-run\n  " + appName + " export --output-dir ./tf",
 	}
-	root.AddCommand(NewImportCommand())
+	root.AddCommand(NewExportCommand())
 	root.AddCommand(NewVersionCommand())
 	return root
 }

@@ -3271,6 +3271,7 @@ components:
             - api_msgraph
             - cribl_lake
             - cribl_local
+            - cribl_search
             - amazon_security_lake
             - api_google_workspace
             - api_tailscale
@@ -3384,6 +3385,7 @@ components:
         - $ref: '#/components/schemas/AwsSecurityLakeProvider'
         - $ref: '#/components/schemas/S3Provider'
         - $ref: '#/components/schemas/CriblLeaderProvider'
+        - $ref: '#/components/schemas/CriblSearchProvider'
         - $ref: '#/components/schemas/MetaProvider'
         - $ref: '#/components/schemas/EdgeProvider'
         - $ref: '#/components/schemas/AzureBlobProvider'
@@ -4298,6 +4300,15 @@ components:
               type: string
               enum: [cribl_leader]
               example: "cribl_leader"
+    CriblSearchProvider:
+      allOf:
+        - $ref: '#/components/schemas/Provider'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum: [cribl_search]
+              example: "cribl_search"
     MetaDataset:
       allOf:
         - $ref: '#/components/schemas/Dataset'

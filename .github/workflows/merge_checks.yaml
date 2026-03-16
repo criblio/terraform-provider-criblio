@@ -189,6 +189,8 @@ jobs:
         with:
           # Import blocks require Terraform 1.5+; 1.1.7 reports "Unsupported block type"
           terraform_version: "1.5.0"
+          # Preserve Terraform exit codes (0=no changes, 1=error, 2=changes). Default wrapper converts non-zero to 1.
+          terraform_wrapper: false
 
       - uses: actions/setup-go@v4.0.0
         with:
@@ -233,7 +235,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-go@v4.3.0
+        with:
+          go-version-file: 'go.mod'
+          cache: true
       - uses: dominikh/staticcheck-action@v1.3.1
         with:
           checks: inherit,-ST1000
+          install-go: false
 

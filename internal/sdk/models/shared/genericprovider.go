@@ -366,6 +366,45 @@ func (c *CriblLeaderProvider) GetDescription() *string {
 	return c.Description
 }
 
+// CriblSearchProvider - Provider for searching data from Cribl sources (e.g. lakehouse)
+type CriblSearchProvider struct {
+	ID          string  `json:"id"`
+	Type        string  `json:"type"`
+	Description *string `json:"description,omitempty"`
+}
+
+func (c CriblSearchProvider) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CriblSearchProvider) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"id", "type"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *CriblSearchProvider) GetID() string {
+	if c == nil {
+		return ""
+	}
+	return c.ID
+}
+
+func (c *CriblSearchProvider) GetType() string {
+	if c == nil {
+		return ""
+	}
+	return c.Type
+}
+
+func (c *CriblSearchProvider) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
 // S3ProviderAuthenticationMethod - AWS authentication method
 type S3ProviderAuthenticationMethod string
 
@@ -1640,6 +1679,7 @@ const (
 	GenericProviderTypeAwsSecurityLakeProvider      GenericProviderType = "AwsSecurityLakeProvider"
 	GenericProviderTypeS3Provider                   GenericProviderType = "S3Provider"
 	GenericProviderTypeCriblLeaderProvider          GenericProviderType = "CriblLeaderProvider"
+	GenericProviderTypeCriblSearchProvider          GenericProviderType = "CriblSearchProvider"
 	GenericProviderTypeMetaProvider                 GenericProviderType = "MetaProvider"
 	GenericProviderTypeEdgeProvider                 GenericProviderType = "EdgeProvider"
 	GenericProviderTypeAzureBlobProvider            GenericProviderType = "AzureBlobProvider"
@@ -1665,6 +1705,7 @@ type GenericProvider struct {
 	AwsSecurityLakeProvider      *AwsSecurityLakeProvider      `queryParam:"inline,name=GenericProvider"`
 	S3Provider                   *S3Provider                   `queryParam:"inline,name=GenericProvider"`
 	CriblLeaderProvider          *CriblLeaderProvider          `queryParam:"inline,name=GenericProvider"`
+	CriblSearchProvider          *CriblSearchProvider          `queryParam:"inline,name=GenericProvider"`
 	MetaProvider                 *MetaProvider                 `queryParam:"inline,name=GenericProvider"`
 	EdgeProvider                 *EdgeProvider                 `queryParam:"inline,name=GenericProvider"`
 	AzureBlobProvider            *AzureBlobProvider            `queryParam:"inline,name=GenericProvider"`
@@ -2112,6 +2153,15 @@ func (u *GenericProvider) UnmarshalJSON(data []byte) error {
 		u.CriblLeaderProvider = criblLeaderProvider
 		u.Type = GenericProviderTypeCriblLeaderProvider
 		return nil
+	case "cribl_search":
+		criblSearchProvider := new(CriblSearchProvider)
+		if err := utils.UnmarshalJSON(data, &criblSearchProvider, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == cribl_search) type CriblSearchProvider within GenericProvider: %w", string(data), err)
+		}
+
+		u.CriblSearchProvider = criblSearchProvider
+		u.Type = GenericProviderTypeCriblSearchProvider
+		return nil
 	case "cribl_meta":
 		metaProvider := new(MetaProvider)
 		if err := utils.UnmarshalJSON(data, &metaProvider, "", true, nil); err != nil {
@@ -2224,6 +2274,10 @@ func (u GenericProvider) MarshalJSON() ([]byte, error) {
 
 	if u.CriblLeaderProvider != nil {
 		return utils.MarshalJSON(u.CriblLeaderProvider, "", true)
+	}
+
+	if u.CriblSearchProvider != nil {
+		return utils.MarshalJSON(u.CriblSearchProvider, "", true)
 	}
 
 	if u.MetaProvider != nil {

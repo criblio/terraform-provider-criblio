@@ -45,6 +45,7 @@ type SearchDatasetProviderDataSourceModel struct {
 	AzureBlobProvider            *tfTypes.AzureBlobProvider            `queryParam:"inline" tfsdk:"azure_blob_provider" tfPlanOnly:"true"`
 	ClickHouseProvider           *tfTypes.ClickHouseProvider           `queryParam:"inline" tfsdk:"click_house_provider" tfPlanOnly:"true"`
 	CriblLeaderProvider          *tfTypes.CriblLeaderProvider          `queryParam:"inline" tfsdk:"cribl_leader_provider" tfPlanOnly:"true"`
+	CriblSearchProvider          *tfTypes.CriblSearchProvider          `queryParam:"inline" tfsdk:"cribl_search_provider" tfPlanOnly:"true"`
 	Description                  types.String                          `tfsdk:"description"`
 	EdgeProvider                 *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"edge_provider" tfPlanOnly:"true"`
 	GcsProvider                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs_provider" tfPlanOnly:"true"`
@@ -630,6 +631,23 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 				},
 			},
 			"cribl_leader_provider": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"cribl_search_provider": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{

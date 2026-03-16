@@ -130,9 +130,9 @@ func TestIntegration_FullFlow_Cloud(t *testing.T) {
 	_, err = os.Stat(binaryPath)
 	require.NoError(t, err, "binary should exist")
 
-	// Step 2: goatify import --dry-run
-	t.Log("Step 2: goatify import --dry-run")
-	dryRunCmd := exec.Command(binaryPath, "import", "--dry-run", "--include", "criblio_group",
+	// Step 2: export --dry-run
+	t.Log("Step 2: export --dry-run")
+	dryRunCmd := exec.Command(binaryPath, "export", "--dry-run", "--include", "criblio_group",
 		"--org-id", orgID, "--workspace-id", workspaceID, "--cloud-domain", cloudDomain)
 	dryRunCmd.Dir = tmpDir
 	dryRunCmd.Env = env
@@ -144,17 +144,17 @@ func TestIntegration_FullFlow_Cloud(t *testing.T) {
 	require.Contains(t, dryRunBuf.String(), "Preview:", "stderr should contain Preview")
 	require.Contains(t, dryRunBuf.String(), "criblio_", "stderr should list resource types")
 
-	// Step 3: goatify import (criblio_group only)
-	t.Log("Step 3: goatify import (criblio_group)")
-	importCmd := exec.Command(binaryPath, "import", "--include", "criblio_group", "--output-dir", outputDir,
+	// Step 3: export (criblio_group only)
+	t.Log("Step 3: export (criblio_group)")
+	exportCmd := exec.Command(binaryPath, "export", "--include", "criblio_group", "--output-dir", outputDir,
 		"--org-id", orgID, "--workspace-id", workspaceID, "--cloud-domain", cloudDomain)
-	importCmd.Dir = tmpDir
-	importCmd.Env = env
-	var importBuf bytes.Buffer
-	importCmd.Stdout = io.MultiWriter(&importBuf, os.Stdout)
-	importCmd.Stderr = io.MultiWriter(&importBuf, os.Stderr)
-	err = importCmd.Run()
-	require.NoError(t, err, "import should succeed: %s", importBuf.String())
+	exportCmd.Dir = tmpDir
+	exportCmd.Env = env
+	var exportBuf bytes.Buffer
+	exportCmd.Stdout = io.MultiWriter(&exportBuf, os.Stdout)
+	exportCmd.Stderr = io.MultiWriter(&exportBuf, os.Stderr)
+	err = exportCmd.Run()
+	require.NoError(t, err, "export should succeed: %s", exportBuf.String())
 
 	// Validate output structure: import.tf, providers.tf, main.tf at root; at least one module dir with main.tf
 	require.FileExists(t, filepath.Join(outputDir, "import.tf"), "import.tf should exist")
@@ -270,9 +270,9 @@ func TestIntegration_FullExport_Cloud(t *testing.T) {
 	err := buildCmd.Run()
 	require.NoError(t, err, "build goatify: %s", buildBuf.String())
 
-	// Step 2: goatify import --dry-run (full, no --include)
-	t.Log("Step 2: goatify import --dry-run (full export)")
-	dryRunCmd := exec.Command(binaryPath, "import", "--dry-run",
+	// Step 2: export --dry-run (full, no --include)
+	t.Log("Step 2: export --dry-run (full export)")
+	dryRunCmd := exec.Command(binaryPath, "export", "--dry-run",
 		"--org-id", orgID, "--workspace-id", workspaceID, "--cloud-domain", cloudDomain)
 	dryRunCmd.Dir = tmpDir
 	dryRunCmd.Env = env
@@ -283,17 +283,17 @@ func TestIntegration_FullExport_Cloud(t *testing.T) {
 	require.NoError(t, err, "dry-run should succeed")
 	require.Contains(t, dryRunBuf.String(), "Preview:", "stderr should contain Preview")
 
-	// Step 3: goatify import (full export, no --include)
-	t.Log("Step 3: goatify import (full export)")
-	importCmd := exec.Command(binaryPath, "import", "--output-dir", outputDir,
+	// Step 3: export (full export, no --include)
+	t.Log("Step 3: export (full export)")
+	exportCmd := exec.Command(binaryPath, "export", "--output-dir", outputDir,
 		"--org-id", orgID, "--workspace-id", workspaceID, "--cloud-domain", cloudDomain)
-	importCmd.Dir = tmpDir
-	importCmd.Env = env
-	var importBuf bytes.Buffer
-	importCmd.Stdout = io.MultiWriter(&importBuf, os.Stdout)
-	importCmd.Stderr = io.MultiWriter(&importBuf, os.Stderr)
-	err = importCmd.Run()
-	require.NoError(t, err, "import should succeed: %s", importBuf.String())
+	exportCmd.Dir = tmpDir
+	exportCmd.Env = env
+	var exportBuf bytes.Buffer
+	exportCmd.Stdout = io.MultiWriter(&exportBuf, os.Stdout)
+	exportCmd.Stderr = io.MultiWriter(&exportBuf, os.Stderr)
+	err = exportCmd.Run()
+	require.NoError(t, err, "export should succeed: %s", exportBuf.String())
 
 	// Validate output structure
 	require.FileExists(t, filepath.Join(outputDir, "import.tf"), "import.tf should exist")

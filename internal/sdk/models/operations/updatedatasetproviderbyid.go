@@ -100,6 +100,10 @@ func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderCriblLeaderProvider
 	return u.GetGenericProvider().CriblLeaderProvider
 }
 
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderCriblSearchProvider() *shared.CriblSearchProvider {
+	return u.GetGenericProvider().CriblSearchProvider
+}
+
 func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderMetaProvider() *shared.MetaProvider {
 	return u.GetGenericProvider().MetaProvider
 }

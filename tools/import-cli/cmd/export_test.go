@@ -42,52 +42,52 @@ func criblMockServer(t *testing.T) *httptest.Server {
 	}))
 }
 
-func TestImportCommand_Help_ShowsAllFlags(t *testing.T) {
+func TestExportCommand_Help_ShowsAllFlags(t *testing.T) {
 	t.Parallel()
 	root := cmd.NewRootCommand()
 	out := &bytes.Buffer{}
 	root.SetOut(out)
 	root.SetErr(out)
-	root.SetArgs([]string{"import", "--help"})
+	root.SetArgs([]string{"export", "--help"})
 	err := root.Execute()
 	require.NoError(t, err)
 	help := out.String()
 
-	// All supported flags (goatify import --help)
-	assert.Contains(t, help, "--output-dir", "import --help should document --output-dir")
-	assert.Contains(t, help, "--include", "import --help should document --include")
-	assert.Contains(t, help, "--exclude", "import --help should document --exclude")
-	assert.Contains(t, help, "--dry-run", "import --help should document --dry-run")
-	assert.Contains(t, help, "--verbose", "import --help should document --verbose")
-	assert.Contains(t, help, "--server-url", "import --help should document --server-url")
-	assert.Contains(t, help, "--org-id", "import --help should document --org-id")
-	assert.Contains(t, help, "--workspace-id", "import --help should document --workspace-id")
-	assert.Contains(t, help, "--cloud-domain", "import --help should document --cloud-domain")
+	// All supported flags (export --help)
+	assert.Contains(t, help, "--output-dir", "export --help should document --output-dir")
+	assert.Contains(t, help, "--include", "export --help should document --include")
+	assert.Contains(t, help, "--exclude", "export --help should document --exclude")
+	assert.Contains(t, help, "--dry-run", "export --help should document --dry-run")
+	assert.Contains(t, help, "--verbose", "export --help should document --verbose")
+	assert.Contains(t, help, "--server-url", "export --help should document --server-url")
+	assert.Contains(t, help, "--org-id", "export --help should document --org-id")
+	assert.Contains(t, help, "--workspace-id", "export --help should document --workspace-id")
+	assert.Contains(t, help, "--cloud-domain", "export --help should document --cloud-domain")
 
 	// Description of --dry-run (preview only; no file writes; List* only)
-	assert.Contains(t, help, "Preview", "import --help should describe --dry-run (Preview resources)")
-	assert.Contains(t, help, "dry-run", "import --help should document --dry-run")
+	assert.Contains(t, help, "Preview", "export --help should describe --dry-run (Preview resources)")
+	assert.Contains(t, help, "dry-run", "export --help should document --dry-run")
 	// --include and --exclude filters work as documented
-	assert.Contains(t, help, "include", "import --help should document --include filter")
-	assert.Contains(t, help, "exclude", "import --help should document --exclude filter")
+	assert.Contains(t, help, "include", "export --help should document --include filter")
+	assert.Contains(t, help, "exclude", "export --help should document --exclude filter")
 }
 
-func TestImportCommand_Help_ShowsExampleUsage(t *testing.T) {
+func TestExportCommand_Help_ShowsExampleUsage(t *testing.T) {
 	t.Parallel()
 	root := cmd.NewRootCommand()
 	out := &bytes.Buffer{}
 	root.SetOut(out)
 	root.SetErr(out)
-	root.SetArgs([]string{"import", "--help"})
+	root.SetArgs([]string{"export", "--help"})
 	err := root.Execute()
 	require.NoError(t, err)
 	help := out.String()
 	// Example commands must render (no regressions in CLI UX)
-	assert.Contains(t, help, "import --dry-run", "import --help should show example usage")
-	assert.Contains(t, help, "import --server-url", "import --help should show example with --server-url")
+	assert.Contains(t, help, "export --dry-run", "export --help should show example usage")
+	assert.Contains(t, help, "export --server-url", "export --help should show example with --server-url")
 }
 
-func TestImportCommand_DefaultBehavior(t *testing.T) {
+func TestExportCommand_DefaultBehavior(t *testing.T) {
 	// Run without credentials so we hit validation and never call the API.
 	origHome := os.Getenv("HOME")
 	origCribl := os.Getenv("CRIBL_ONPREM_SERVER_URL")
@@ -110,13 +110,13 @@ func TestImportCommand_DefaultBehavior(t *testing.T) {
 	errOut := &bytes.Buffer{}
 	root.SetOut(out)
 	root.SetErr(errOut)
-	root.SetArgs([]string{"import"})
+	root.SetArgs([]string{"export"})
 	err := root.Execute()
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "no valid configuration")
 }
 
-func TestImportCommand_ValidConfigInitializesClient(t *testing.T) {
+func TestExportCommand_ValidConfigInitializesClient(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
 
@@ -140,7 +140,7 @@ func TestImportCommand_ValidConfigInitializesClient(t *testing.T) {
 	root.SetErr(errOut)
 	// Use --include criblio_group so discovery only hits endpoints the mock supports (groups).
 	// On-prem mode blocks many lib/search endpoints; criblio_group uses /products/*/groups which the mock handles.
-	root.SetArgs([]string{"import", "--server-url", server.URL, "--dry-run", "--include", "criblio_group"})
+	root.SetArgs([]string{"export", "--server-url", server.URL, "--dry-run", "--include", "criblio_group"})
 	err := root.Execute()
 	if err != nil {
 		t.Logf("stderr: %s", errOut.String())
@@ -154,8 +154,8 @@ func TestImportCommand_ValidConfigInitializesClient(t *testing.T) {
 	assert.Contains(t, stderr, "criblio_", "dry-run should list at least one resource type")
 }
 
-// TestImportCommand_DryRun_IncludeFilter verifies --include limits output to listed resource types.
-func TestImportCommand_DryRun_IncludeFilter(t *testing.T) {
+// TestExportCommand_DryRun_IncludeFilter verifies --include limits output to listed resource types.
+func TestExportCommand_DryRun_IncludeFilter(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
 
@@ -178,7 +178,7 @@ func TestImportCommand_DryRun_IncludeFilter(t *testing.T) {
 	root.SetOut(out)
 	root.SetErr(errOut)
 	// Use criblio_group; mock returns 2 groups. Other types fail on-prem (lib/search endpoints blocked).
-	root.SetArgs([]string{"import", "--dry-run", "--include", "criblio_group"})
+	root.SetArgs([]string{"export", "--dry-run", "--include", "criblio_group"})
 	err := root.Execute()
 	if err != nil {
 		t.Logf("stderr: %s", errOut.String())
@@ -193,8 +193,8 @@ func TestImportCommand_DryRun_IncludeFilter(t *testing.T) {
 	assert.Contains(t, stderr, "2", "mock returns 2 groups for criblio_group")
 }
 
-// TestImportCommand_DryRun_ExcludeFilter verifies --exclude omits listed resource types.
-func TestImportCommand_DryRun_ExcludeFilter(t *testing.T) {
+// TestExportCommand_DryRun_ExcludeFilter verifies --exclude omits listed resource types.
+func TestExportCommand_DryRun_ExcludeFilter(t *testing.T) {
 	server := criblMockServer(t)
 	defer server.Close()
 
@@ -217,7 +217,7 @@ func TestImportCommand_DryRun_ExcludeFilter(t *testing.T) {
 	root.SetOut(out)
 	root.SetErr(errOut)
 	// Include only criblio_group (mock supports it), exclude criblio_source so it does not appear.
-	root.SetArgs([]string{"import", "--dry-run", "--include", "criblio_group", "--exclude", "criblio_source"})
+	root.SetArgs([]string{"export", "--dry-run", "--include", "criblio_group", "--exclude", "criblio_source"})
 	err := root.Execute()
 	if err != nil {
 		t.Logf("stderr: %s", errOut.String())
@@ -230,14 +230,14 @@ func TestImportCommand_DryRun_ExcludeFilter(t *testing.T) {
 	assert.Contains(t, stderr, "Preview:", "dry-run should print preview")
 }
 
-func TestImportCommand_Validation_IncludeExcludeOverlap(t *testing.T) {
+func TestExportCommand_Validation_IncludeExcludeOverlap(t *testing.T) {
 	t.Parallel()
 	root := cmd.NewRootCommand()
 	out := &bytes.Buffer{}
 	errOut := &bytes.Buffer{}
 	root.SetOut(out)
 	root.SetErr(errOut)
-	root.SetArgs([]string{"import", "--include", "sources", "--exclude", "sources"})
+	root.SetArgs([]string{"export", "--include", "sources", "--exclude", "sources"})
 	err := root.Execute()
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "cannot be in both")
@@ -245,7 +245,7 @@ func TestImportCommand_Validation_IncludeExcludeOverlap(t *testing.T) {
 	assert.Contains(t, err.Error(), "--exclude")
 }
 
-func TestValidateImportFlags(t *testing.T) {
+func TestValidateExportFlags(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name    string
@@ -261,7 +261,7 @@ func TestValidateImportFlags(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			err := cmd.ValidateImportFlags(tt.include, tt.exclude)
+			err := cmd.ValidateExportFlags(tt.include, tt.exclude)
 			if tt.wantErr {
 				require.Error(t, err)
 				return

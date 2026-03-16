@@ -357,6 +357,15 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.CriblLeaderProvider.Type = types.StringValue(resp.CriblLeaderProvider.Type)
 		r.Type = r.CriblLeaderProvider.Type
 	}
+	if resp.CriblSearchProvider != nil {
+		r.CriblSearchProvider = &tfTypes.CriblSearchProvider{}
+		r.CriblSearchProvider.Description = types.StringPointerValue(resp.CriblSearchProvider.Description)
+		r.Description = r.CriblSearchProvider.Description
+		r.CriblSearchProvider.ID = types.StringValue(resp.CriblSearchProvider.ID)
+		r.ID = r.CriblSearchProvider.ID
+		r.CriblSearchProvider.Type = types.StringValue(resp.CriblSearchProvider.Type)
+		r.Type = r.CriblSearchProvider.Type
+	}
 	if resp.EdgeProvider != nil {
 		r.EdgeProvider = &tfTypes.EdgeProvider{}
 		r.EdgeProvider.Description = types.StringPointerValue(resp.EdgeProvider.Description)
@@ -1432,6 +1441,29 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			CriblLeaderProvider: criblLeaderProvider,
 		}
 	}
+	var criblSearchProvider *shared.CriblSearchProvider
+	if r.CriblSearchProvider != nil {
+		var idCriblSearch string
+		idCriblSearch = r.CriblSearchProvider.ID.ValueString()
+		var typeCriblSearch string
+		typeCriblSearch = r.CriblSearchProvider.Type.ValueString()
+		descCriblSearch := new(string)
+		if !r.CriblSearchProvider.Description.IsUnknown() && !r.CriblSearchProvider.Description.IsNull() {
+			*descCriblSearch = r.CriblSearchProvider.Description.ValueString()
+		} else {
+			descCriblSearch = nil
+		}
+		criblSearchProvider = &shared.CriblSearchProvider{
+			ID:          idCriblSearch,
+			Type:        typeCriblSearch,
+			Description: descCriblSearch,
+		}
+	}
+	if criblSearchProvider != nil {
+		out = shared.GenericProvider{
+			CriblSearchProvider: criblSearchProvider,
+		}
+	}
 	var metaProvider *shared.MetaProvider
 	if r.MetaProvider != nil {
 		var id18 string
@@ -1601,6 +1633,17 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 	if gcsProvider != nil {
 		out = shared.GenericProvider{
 			GcsProvider: gcsProvider,
+		}
+	}
+
+	// Fallback: when plan has cribl_search_provider = null (e.g. config omits it) but resource is cribl_search type,
+	// build minimal CriblSearchProvider to avoid "all fields are null" marshal error. cribl_search providers are read-only.
+	if r.CriblSearchProvider == nil && r.Type.ValueString() == "cribl_search" && r.ID.ValueString() != "" {
+		out = shared.GenericProvider{
+			CriblSearchProvider: &shared.CriblSearchProvider{
+				ID:   r.ID.ValueString(),
+				Type: "cribl_search",
+			},
 		}
 	}
 
