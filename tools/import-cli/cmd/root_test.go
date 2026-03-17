@@ -13,7 +13,7 @@ func TestNewRootCommand(t *testing.T) {
 	t.Parallel()
 	root := cmd.NewRootCommand()
 	require.NotNil(t, root)
-	assert.Equal(t, "goatify", root.Use)
+	assert.Equal(t, "cribl-tf-config-exporter", root.Use)
 	assert.NotEmpty(t, root.Short)
 }
 
@@ -89,7 +89,7 @@ func TestRootCommand_Execute(t *testing.T) {
 	}
 }
 
-// TestRootCommand_HelpIncludesCommandDescriptionsAndExamples verifies goatify --help
+// TestRootCommand_HelpIncludesCommandDescriptionsAndExamples verifies cribl-tf-config-exporter --help
 // includes command descriptions and example usage (CLI UX stability).
 func TestRootCommand_HelpIncludesCommandDescriptionsAndExamples(t *testing.T) {
 	t.Parallel()

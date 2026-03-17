@@ -9,10 +9,10 @@ var (
 	AppName string
 )
 
-// AppNameOrDefault returns AppName if set, otherwise "goatify".
+// AppNameOrDefault returns AppName if set, otherwise "cribl-tf-config-exporter".
 func AppNameOrDefault() string {
 	if AppName != "" {
 		return AppName
 	}
-	return "goatify"
+	return "cribl-tf-config-exporter"
 }
