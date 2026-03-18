@@ -5,6 +5,8 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"strings"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -113,8 +115,8 @@ func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Contex
 func (r *PackPipelineResourceModel) ToOperationsCreatePipelineByPackRequest(ctx context.Context) (*operations.CreatePipelineByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var pack string
-	pack = r.Pack.ValueString()
+	// API normalizes pack IDs to lowercase; pack path is case-sensitive.
+	pack := strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -138,8 +140,8 @@ func (r *PackPipelineResourceModel) ToOperationsCreatePipelineByPackRequest(ctx 
 func (r *PackPipelineResourceModel) ToOperationsGetPipelinesByPackWithIDRequest(ctx context.Context) (*operations.GetPipelinesByPackWithIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var pack string
-	pack = r.Pack.ValueString()
+	// API normalizes pack IDs to lowercase; pack path is case-sensitive.
+	pack := strings.ToLower(r.Pack.ValueString())
 
 	var id string
 	id = r.ID.ValueString()
@@ -162,8 +164,8 @@ func (r *PackPipelineResourceModel) ToOperationsUpdatePipelineByPackAndIDRequest
 	var id string
 	id = r.ID.ValueString()
 
-	var pack string
-	pack = r.Pack.ValueString()
+	// API normalizes pack IDs to lowercase; pack path is case-sensitive.
+	pack := strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()

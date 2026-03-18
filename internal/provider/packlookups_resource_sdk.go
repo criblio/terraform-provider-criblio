@@ -4,6 +4,8 @@ package provider
 
 import (
 	"context"
+	"strings"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -129,7 +131,7 @@ func (r *PackLookupsResourceModel) ToOperationsCreateSystemLookupsByPackAndIDReq
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -155,7 +157,7 @@ func (r *PackLookupsResourceModel) ToOperationsCreateSystemLookupsByPackRequest(
 	var diags diag.Diagnostics
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -183,7 +185,7 @@ func (r *PackLookupsResourceModel) ToOperationsDeleteSystemLookupsByPackAndIDReq
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -204,7 +206,7 @@ func (r *PackLookupsResourceModel) ToOperationsGetSystemLookupsByPackAndIDReques
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()

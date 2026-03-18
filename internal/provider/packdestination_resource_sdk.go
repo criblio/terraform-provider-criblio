@@ -5,6 +5,8 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"strings"
+
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -17,7 +19,7 @@ func (r *PackDestinationResourceModel) ToOperationsCreatePackOutputRequest(ctx c
 	groupID = r.GroupID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var id string
 	id = r.ID.ValueString()
@@ -49,7 +51,7 @@ func (r *PackDestinationResourceModel) ToOperationsDeletePackOutputByIDRequest(c
 	groupID = r.GroupID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	out := operations.DeletePackOutputByIDRequest{
 		ID:      id,
@@ -70,7 +72,7 @@ func (r *PackDestinationResourceModel) ToOperationsGetPackOutputByIDRequest(ctx 
 	groupID = r.GroupID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	out := operations.GetPackOutputByIDRequest{
 		ID:      id,
@@ -91,7 +93,7 @@ func (r *PackDestinationResourceModel) ToOperationsUpdatePackOutputByIDRequest(c
 	groupID = r.GroupID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	output, outputDiags := r.ToSharedOutput(ctx)
 	diags.Append(outputDiags...)

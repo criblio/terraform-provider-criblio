@@ -5,6 +5,8 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"strings"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -173,7 +175,7 @@ func (r *PackRoutesResourceModel) ToOperationsCreateRoutesByPackRequest(ctx cont
 	var diags diag.Diagnostics
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -199,7 +201,7 @@ func (r *PackRoutesResourceModel) ToOperationsGetRoutesByPackRequest(ctx context
 	var diags diag.Diagnostics
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()

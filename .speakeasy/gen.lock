@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 8844b47932a447408fc6b424c75bfc8e
+  docChecksum: 834d6e911c3dcfe12f3c59d9c7103129
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.138
-  configChecksum: a2ff9327123a0b85794007ec22ce81e4
+  releaseVersion: 1.20.140
+  configChecksum: 81d172c4db83b93d294018a2b4bffbe3
   published: true
 features:
   terraform:
@@ -329,23 +329,15 @@ generatedFiles:
   - internal/provider/pack_data_source.go
   - internal/provider/pack_data_source_sdk.go
   - internal/provider/packdestination_data_source.go
-  - internal/provider/packdestination_data_source_sdk.go
   - internal/provider/packdestination_resource.go
-  - internal/provider/packdestination_resource_sdk.go
   - internal/provider/packlookups_data_source.go
-  - internal/provider/packlookups_data_source_sdk.go
   - internal/provider/packlookups_resource.go
-  - internal/provider/packlookups_resource_sdk.go
   - internal/provider/packpipeline_data_source.go
   - internal/provider/packroutes_data_source.go
-  - internal/provider/packroutes_data_source_sdk.go
   - internal/provider/packsource_data_source.go
-  - internal/provider/packsource_data_source_sdk.go
   - internal/provider/packsource_resource.go
   - internal/provider/packvars_data_source.go
-  - internal/provider/packvars_data_source_sdk.go
   - internal/provider/packvars_resource.go
-  - internal/provider/packvars_resource_sdk.go
   - internal/provider/parquetschema_data_source.go
   - internal/provider/parquetschema_data_source_sdk.go
   - internal/provider/parquetschema_resource.go

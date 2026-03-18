@@ -5,6 +5,8 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"strings"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -83,8 +85,8 @@ func (r *PackPipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Cont
 func (r *PackPipelineDataSourceModel) ToOperationsGetPipelinesByPackWithIDRequest(ctx context.Context) (*operations.GetPipelinesByPackWithIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var pack string
-	pack = r.Pack.ValueString()
+	// API normalizes pack IDs to lowercase; pack path is case-sensitive.
+	pack := strings.ToLower(r.Pack.ValueString())
 
 	var id string
 	id = r.ID.ValueString()
