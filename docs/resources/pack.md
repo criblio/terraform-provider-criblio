@@ -62,10 +62,10 @@ resource "criblio_pack" "my_pack" {
 ### Optional
 
 - `allow_custom_functions` (Boolean) Requires replacement if changed.
-- `author` (String) Pack author (from pack metadata). Preserved from state when not configured.
-- `description` (String) Pack description (from pack metadata). When filename is set, this comes from the pack file and cannot be overridden; omit from config to avoid drift.
+- `author` (String) Pack author (from pack metadata). Config changes are applied via pack/settings PATCH.
+- `description` (String) Pack description (from pack metadata). Config changes are applied via pack/settings PATCH.
 - `disabled` (Boolean)
-- `display_name` (String) Pack display name (from pack metadata). When filename is set, this comes from the pack file and cannot be overridden; omit from config to avoid drift.
+- `display_name` (String) Pack display name (from pack metadata). Config changes are applied via pack/settings PATCH.
 - `exports` (List of String) Requires replacement if changed.
 - `filename` (String) Local .crbl file path to upload. File is uploaded (PUT) then the pack is installed or updated in place (PATCH); changing filename updates the existing pack rather than replacing it. When set, description and display_name come from the pack file—omit them from config to avoid drift.
 - `force` (Boolean) Requires replacement if changed.

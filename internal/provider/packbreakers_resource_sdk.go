@@ -4,6 +4,8 @@ package provider
 
 import (
 	"context"
+	"strings"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -138,7 +140,7 @@ func (r *PackBreakersResourceModel) ToOperationsCreateBreakersByPackRequest(ctx 
 	var diags diag.Diagnostics
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -166,7 +168,7 @@ func (r *PackBreakersResourceModel) ToOperationsDeleteBreakersByPackAndIDRequest
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -187,7 +189,7 @@ func (r *PackBreakersResourceModel) ToOperationsGetBreakersByPackAndIDRequest(ct
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -208,7 +210,7 @@ func (r *PackBreakersResourceModel) ToOperationsUpdateBreakersByPackAndIDRequest
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = r.Pack.ValueString()
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()

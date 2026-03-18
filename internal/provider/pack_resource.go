@@ -90,18 +90,16 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
-					speakeasy_stringplanmodifier.PreferState(),
 				},
-				Description: `Pack author (from pack metadata). Preserved from state when not configured.`,
+				Description: `Pack author (from pack metadata). Config changes are applied via pack/settings PATCH.`,
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
-					speakeasy_stringplanmodifier.PreferState(),
 				},
-				Description: `Pack description (from pack metadata). When filename is set, this comes from the pack file and cannot be overridden; omit from config to avoid drift.`,
+				Description: `Pack description (from pack metadata). Config changes are applied via pack/settings PATCH.`,
 			},
 			"disabled": schema.BoolAttribute{
 				Optional: true,
@@ -111,9 +109,8 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
-					speakeasy_stringplanmodifier.PreferState(),
 				},
-				Description: `Pack display name (from pack metadata). When filename is set, this comes from the pack file and cannot be overridden; omit from config to avoid drift.`,
+				Description: `Pack display name (from pack metadata). Config changes are applied via pack/settings PATCH.`,
 			},
 			"exports": schema.ListAttribute{
 				Optional: true,
@@ -421,6 +418,7 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		checkReq, checkDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 		resp.Diagnostics.Append(checkDiags...)
 		if !resp.Diagnostics.HasError() {
+			checkReq.ID = effectivePackIDForAPI(data)
 			checkRes, checkErr := r.client.Packs.GetPacksByID(ctx, *checkReq)
 			if checkErr == nil && checkRes != nil && checkRes.StatusCode == 200 {
 				packExists = true
@@ -462,6 +460,7 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 				getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 				resp.Diagnostics.Append(getDiags...)
 				if !resp.Diagnostics.HasError() {
+					getReq.ID = effectivePackIDForAPI(data)
 					getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
 					if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
 						resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
@@ -470,13 +469,14 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 			}
 		}
 		// Sync metadata (description, display_name, etc.) from config via pack/settings.
-		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), effectivePackIDForAPI(data), data); patchErr != nil {
 			resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", patchErr))
 			return
 		}
 		getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 		resp.Diagnostics.Append(getDiags...)
 		if !resp.Diagnostics.HasError() {
+			getReq.ID = effectivePackIDForAPI(data)
 			getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
 			if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
 				resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
@@ -513,7 +513,7 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		}
 		resp.Diagnostics.Append(data.RefreshFromOperationsCreatePacksResponseBody(ctx, res.Object)...)
 		// Sync metadata (description, display_name, etc.) from config via pack/settings.
-		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), effectivePackIDForAPI(data), data); patchErr != nil {
 			resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", patchErr))
 			return
 		}
@@ -534,6 +534,8 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	// Use server's pack ID (e.g. lowercase) after Create; GET /packs/{id} is case-sensitive.
+	request1.ID = effectivePackIDForAPI(data)
 	res1, err := r.client.Packs.GetPacksByID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -595,6 +597,7 @@ func (r *PackResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.ID = effectivePackIDForAPI(data)
 	res, err := r.client.Packs.GetPacksByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -743,7 +746,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	}
 	// When only metadata changed (no upload, no source in plan or state): update via PACK /pack/settings only; do not call PATCH (API requires source).
 	if uploadedSource == "" && (request.Source == nil || *request.Source == "") {
-		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), effectivePackIDForAPI(data), data); patchErr != nil {
 			resp.Diagnostics.AddError("failure to update pack settings", patchErr.Error())
 			return
 		}
@@ -753,6 +756,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		if resp.Diagnostics.HasError() {
 			return
 		}
+		getReq.ID = effectivePackIDForAPI(data)
 		getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
 		if getErr != nil {
 			resp.Diagnostics.AddError("failure to invoke API", getErr.Error())
@@ -813,6 +817,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 				getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 				resp.Diagnostics.Append(getDiags...)
 				if !resp.Diagnostics.HasError() {
+					getReq.ID = effectivePackIDForAPI(data)
 					getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
 					if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
 						patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: &operations.UpdatePacksByIDResponseBody{Items: getRes.Object.Items}}
@@ -822,7 +827,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		}
 		// Sync metadata (description, display_name, etc.) from config via pack/settings after install.
 		if patchRes != nil {
-			if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+			if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), effectivePackIDForAPI(data), data); patchErr != nil {
 				resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", patchErr))
 				return
 			}
@@ -830,6 +835,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 			resp.Diagnostics.Append(getDiags...)
 			if !resp.Diagnostics.HasError() {
+				getReq.ID = effectivePackIDForAPI(data)
 				getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
 					if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
 						resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
@@ -846,7 +852,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		}
 	} else {
 		// Sync metadata via pack/settings when plan has author/description/etc.
-		if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); err != nil {
+		if err := r.patchPackSettings(ctx, data.GroupID.ValueString(), effectivePackIDForAPI(data), data); err != nil {
 			resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", err))
 			return
 		}
@@ -857,6 +863,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			if resp.Diagnostics.HasError() {
 				return
 			}
+			getReq.ID = effectivePackIDForAPI(data)
 			getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
 			if getErr != nil {
 				resp.Diagnostics.AddError("failure to invoke API", getErr.Error())
@@ -895,6 +902,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 			resp.Diagnostics.Append(getDiags...)
 			if !resp.Diagnostics.HasError() {
+				getReq.ID = effectivePackIDForAPI(data)
 				getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
 				if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
 					patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: &operations.UpdatePacksByIDResponseBody{Items: getRes.Object.Items}}
@@ -903,13 +911,14 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		}
 		// Sync metadata after pack PATCH (PATCH may reinstall from source and reset metadata).
 		if patchRes != nil {
-			if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), data.ID.ValueString(), data); patchErr != nil {
+			if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), effectivePackIDForAPI(data), data); patchErr != nil {
 				resp.Diagnostics.AddError("pack settings sync failed", fmt.Sprintf("Could not update pack metadata via pack/settings: %v", patchErr))
 				return
 			}
 			getReq, getDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 			resp.Diagnostics.Append(getDiags...)
 			if !resp.Diagnostics.HasError() {
+				getReq.ID = effectivePackIDForAPI(data)
 				getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
 				if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
 					resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
@@ -958,6 +967,7 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1.ID = effectivePackIDForAPI(data)
 	res1, err := r.client.Packs.GetPacksByID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -1018,6 +1028,8 @@ func (r *PackResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	// API expects server's pack ID (lowercase); DELETE /packs/{id} is case-sensitive.
+	request.ID = effectivePackIDForAPI(data)
 	res, err := r.client.Packs.DeletePacksByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -1186,6 +1198,16 @@ func fullSourcePath(source string) string {
 		return source
 	}
 	return "file:/opt/cribl_config/state/packs/" + source
+}
+
+// effectivePackIDForAPI returns the pack ID to use for pack API calls (GetPacksByID, pack/settings, etc.).
+// The Cribl API normalizes pack IDs (e.g. to lowercase) when creating; these endpoints are case-sensitive.
+// When Items is populated from an install response, use Items[0].ID; otherwise use lowercase of config id.
+func effectivePackIDForAPI(data *PackResourceModel) string {
+	if len(data.Items) > 0 && !data.Items[0].ID.IsNull() && !data.Items[0].ID.IsUnknown() {
+		return data.Items[0].ID.ValueString()
+	}
+	return strings.ToLower(data.ID.ValueString())
 }
 
 // shortNameForPatch returns the source value for PATCH: API expects only the filename (e.g. "billing_pipeline.W3avtlR.crbl");
