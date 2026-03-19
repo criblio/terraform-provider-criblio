@@ -5,8 +5,8 @@ management:
   docVersion: 4.14.0
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
-  releaseVersion: 1.20.140
-  configChecksum: 81d172c4db83b93d294018a2b4bffbe3
+  releaseVersion: 1.20.144
+  configChecksum: 0e042c2e28d7955eee62bb58f8f48cc1
   published: true
 features:
   terraform:
@@ -8229,3 +8229,4 @@ examples:
           application/json: {"message": "This is my error message string"}
 examplesVersion: 1.0.2
 generatedTests: {}
+trackedFiles: {}
