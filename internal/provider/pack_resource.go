@@ -738,16 +738,28 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		if request.Source == nil || *request.Source == "" {
 			var stateData PackResourceModel
 			stateDiags := req.State.Get(ctx, &stateData)
-			if !stateDiags.HasError() && !stateData.Source.IsNull() && !stateData.Source.IsUnknown() && stateData.Source.ValueString() != "" {
-				s := stateData.Source.ValueString()
-				request.Source = &s
+			if !stateDiags.HasError() {
+				// Prefer top-level source; fall back to Items[0].Source (API populates both from GET response)
+				if !stateData.Source.IsNull() && !stateData.Source.IsUnknown() && stateData.Source.ValueString() != "" {
+					s := stateData.Source.ValueString()
+					request.Source = &s
+				} else if len(stateData.Items) > 0 && !stateData.Items[0].Source.IsNull() && !stateData.Items[0].Source.IsUnknown() && stateData.Items[0].Source.ValueString() != "" {
+					s := stateData.Items[0].Source.ValueString()
+					request.Source = &s
+				}
 			}
 		}
 	}
 	// When only metadata changed (no upload, no source in plan or state): update via PACK /pack/settings only; do not call PATCH (API requires source).
 	if uploadedSource == "" && (request.Source == nil || *request.Source == "") {
 		if patchErr := r.patchPackSettings(ctx, data.GroupID.ValueString(), effectivePackIDForAPI(data), data); patchErr != nil {
-			resp.Diagnostics.AddError("failure to update pack settings", patchErr.Error())
+			errMsg := patchErr.Error()
+			if strings.Contains(errMsg, "source") || strings.Contains(errMsg, "Missing") {
+				resp.Diagnostics.AddError("Missing source for pack update",
+					"The API requires the source parameter. Set filename to a local .crbl file path so the provider can upload it and set source, or ensure the pack resource has source set (e.g. from a previous apply). Original error: "+errMsg)
+			} else {
+				resp.Diagnostics.AddError("failure to update pack settings", errMsg)
+			}
 			return
 		}
 		// Refresh state from API and save
@@ -1208,6 +1220,24 @@ func effectivePackIDForAPI(data *PackResourceModel) string {
 		return data.Items[0].ID.ValueString()
 	}
 	return strings.ToLower(data.ID.ValueString())
+}
+
+// resolvePackIDForAPI returns the pack ID the API expects. Cribl 4.17.0+ normalizes pack IDs to
+// lowercase; pre-4.17.0 packs may retain mixed-case. Does case-insensitive lookup against the packs
+// list and returns the actual server ID, or lowercase of configPackID if not found. Used by
+// pack-scoped resources (pack_pipeline, pack_source, pack_vars, etc.) to support both behaviors.
+func resolvePackIDForAPI(ctx context.Context, client *sdk.CriblIo, groupID, configPackID string) string {
+	listReq := operations.GetPacksByGroupRequest{GroupID: groupID}
+	listRes, err := client.Packs.GetPacksByGroup(ctx, listReq)
+	if err != nil || listRes == nil || listRes.Object == nil {
+		return strings.ToLower(configPackID)
+	}
+	for _, item := range listRes.Object.Items {
+		if strings.EqualFold(item.ID, configPackID) {
+			return item.ID
+		}
+	}
+	return strings.ToLower(configPackID)
 }
 
 // shortNameForPatch returns the source value for PATCH: API expects only the filename (e.g. "billing_pipeline.W3avtlR.crbl");
