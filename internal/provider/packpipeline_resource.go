@@ -245,6 +245,7 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.CreatePipelineByPack(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -269,6 +270,7 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 				if resp.Diagnostics.HasError() {
 					return
 				}
+				updateRequest.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 				updateRes, updateErr := r.client.Pipelines.UpdatePipelineByPackAndID(ctx, *updateRequest)
 				if updateErr != nil {
 					resp.Diagnostics.AddError("failure to invoke API", updateErr.Error())
@@ -326,6 +328,7 @@ skipCreate:
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res1, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -386,6 +389,7 @@ func (r *PackPipelineResource) Read(ctx context.Context, req resource.ReadReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -440,6 +444,7 @@ func (r *PackPipelineResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Pipelines.UpdatePipelineByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -477,6 +482,7 @@ func (r *PackPipelineResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res1, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
